@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ระบบจัดการสารวัตรนักเรียน (Admin Portal) | โรงเรียนเดชะปัตตนยานุกูล</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Google Fonts: Plus Jakarta Sans + Outfit + Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Diego Minimalist Swiss Agency Design System -->
+  <link rel="stylesheet" href="css/diego.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+
+  <style>
+    /* Admin Specific Dashboard Styles */
+    body {
+      background: #f8fafc;
+      color: var(--dg-text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--dg-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .admin-nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--dg-text-primary);
+    }
+
+    .admin-brand img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .admin-brand-text {
+      font-family: var(--dg-font-sans);
+      font-weight: 850;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-badge {
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 750;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .admin-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-main {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+      flex: 1;
+    }
+
+    /* Tabs Bar */
+    .admin-tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--dg-border);
+      margin-bottom: 32px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .admin-tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 20px;
+      font-family: var(--dg-font-sans);
+      font-size: 0.95rem;
+      font-weight: 750;
+      color: var(--dg-text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .admin-tab-btn:hover {
+      color: var(--dg-text-primary);
+    }
+
+    .admin-tab-btn.active {
+      color: var(--dg-black);
+      border-bottom-color: var(--dg-black);
+    }
+
+    .admin-tab-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Tab Content Panes */
+    .admin-pane {
+      display: none;
+      animation: dgPaneFade 0.25s ease-out;
+    }
+
+    .admin-pane.active {
+      display: block;
+    }
+
+    @keyframes dgPaneFade {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .admin-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .admin-section-title h2 {
+      font-family: var(--dg-font-sans);
+      font-size: 1.6rem;
+      font-weight: 850;
+      letter-spacing: -0.025em;
+      margin: 0 0 6px;
+      color: var(--dg-text-primary);
+    }
+
+    .admin-section-title p {
+      font-size: 0.9rem;
+      color: var(--dg-text-secondary);
+      margin: 0;
+    }
+
+    /* Cards & Tables */
+    .admin-card {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: var(--dg-radius-md);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .admin-card-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--dg-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fafafa;
+    }
+
+    .admin-card-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-card-body {
+      padding: 24px;
+    }
+
+    /* Grid for News Items */
+    .admin-grid-news {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 22px;
+    }
+
+    .admin-news-item-card {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .admin-news-item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .admin-news-thumb {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #e2e8f0;
+      display: block;
+    }
+
+    .admin-news-item-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .admin-news-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--dg-text-muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .admin-news-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin: 0 0 8px;
+      line-height: 1.4;
+      color: var(--dg-text-primary);
+    }
+
+    .admin-news-desc {
+      font-size: 0.84rem;
+      color: var(--dg-text-secondary);
+      line-height: 1.5;
+      margin: 0 0 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .admin-news-links-indicator {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .link-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .link-tag.has-fb { background: #eff6ff; color: #1d4ed8; }
+    .link-tag.has-ig { background: #fdf2f8; color: #be185d; }
+    .link-tag.has-photo { background: #fefce8; color: #a16207; }
+    .link-tag.no-link { background: #f1f5f9; color: #94a3b8; text-decoration: line-through; }
+
+    .admin-card-actions {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--dg-border);
+      padding-top: 12px;
+    }
+
+    /* Table for Calendar Events */
+    .admin-table-wrap {
+      overflow-x: auto;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .admin-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 750;
+      color: var(--dg-text-muted);
+      border-bottom: 1px solid var(--dg-border);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .admin-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--dg-border);
+      vertical-align: middle;
+    }
+
+    .admin-table tr:hover td {
+      background: #fafafa;
+    }
+
+    /* PIN Lock Screen */
+    .pin-overlay {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pin-box {
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      padding: 40px 32px;
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: var(--dg-radius-lg);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+    }
+
+    .pin-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: #0f172a;
+    }
+
+    .pin-input {
+      font-family: var(--dg-font-sans);
+      font-size: 1.8rem;
+      font-weight: 850;
+      letter-spacing: 0.3em;
+      text-align: center;
+      width: 100%;
+      padding: 12px;
+      margin: 18px 0;
+      border: 2px solid var(--dg-border);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .pin-input:focus {
+      border-color: #0f172a;
+    }
+
+    /* Toast notification */
+    .admin-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      z-index: 10000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .admin-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .admin-main {
+        padding: 20px 16px 60px;
+      }
+      .admin-grid-news {
+        grid-template-columns: 1fr;
+      }
+      .admin-nav-actions span {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============ PIN AUTH OVERLAY ============ -->
+  <div class="pin-overlay" id="pinOverlay">
+    <div class="pin-box">
+      <div class="pin-icon">
+        <i data-lucide="shield-alert" style="width: 32px; height: 32px;"></i>
+      </div>
+      <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 850; margin: 0 0 6px;">ระบบควบคุมสารวัตรนักเรียน</h2>
+      <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0 0 16px;">กรุณากรอกรหัส PIN ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
+      
+      <form id="pinAuthForm" onsubmit="handlePinLogin(event)">
+        <input type="password" id="adminPinInput" class="pin-input" maxlength="8" placeholder="••••" autofocus required />
+        <div id="pinErrorMsg" style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
+        <button type="submit" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 12px;">
+          <span>เข้าสู่ระบบ (Sign In)</span>
+          <i data-lucide="arrow-right"></i>
+        </button>
+      </form>
+      <div style="margin-top: 18px;">
+        <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
+          <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
+        </a>
+      </div>
+      <div style="margin-top: 14px; font-size: 0.75rem; color: var(--dg-text-muted);">
+        (รหัสเริ่มต้น: <strong>2569</strong> สามารถเปลี่ยนได้ในการตั้งค่า)
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ADMIN TOPBAR ============ -->
+  <header class="admin-navbar">
+    <div class="admin-nav-inner">
+      <a href="admin.html" class="admin-brand">
+        <img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo" />
+        <span class="admin-brand-text">
+          SARAWAT <span class="admin-badge">ADMIN PORTAL</span>
+        </span>
+      </a>
+
+      <div class="admin-nav-actions">
+        <a href="index.html" target="_blank" class="dg-btn-outline" style="padding: 8px 14px; font-size: 0.84rem;">
+          <i data-lucide="external-link"></i>
+          <span>ดูหน้าเว็บจริง</span>
+        </a>
+        <button type="button" onclick="handleLogout()" class="dg-btn-outline" style="padding: 8px 14px; font-size: 0.84rem; color: #ef4444; border-color: #fee2e2;">
+          <i data-lucide="log-out"></i>
+          <span>ออกจากระบบ</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ MAIN DASHBOARD ============ -->
+  <main class="admin-main">
+    <!-- Tabs Header -->
+    <div class="admin-tabs">
+      <button type="button" class="admin-tab-btn active" data-tab="tab-news">
+        <i data-lucide="newspaper"></i>
+        <span>ข่าวสารและกิจกรรม</span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="tab-calendar">
+        <i data-lucide="calendar"></i>
+        <span>ตารางกิจกรรมโรงเรียน</span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="tab-settings">
+        <i data-lucide="sliders"></i>
+        <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
+      </button>
+      <button type="button" class="admin-tab-btn" data-tab="tab-backup">
+        <i data-lucide="hard-drive"></i>
+        <span>สำรอง & นำเข้าข้อมูล (JSON)</span>
+      </button>
+    </div>
+
+    <!-- ==========================================
+         TAB 1: NEWS & ACTIVITIES
+         ========================================== -->
+    <div class="admin-pane active" id="tab-news">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <h2>จัดการข่าวสารและกิจกรรม (News & Activities)</h2>
+          <p>ข้อมูลที่แก้ไขที่นี่จะแสดงผลบนหน้าแรก (index.html) ในส่วน News & Live Activities ทันที</p>
+        </div>
+        <div>
+          <button type="button" class="dg-btn-black" onclick="openAddNewsModal()">
+            <i data-lucide="plus"></i>
+            <span>เพิ่มข่าวสารใหม่</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- News Items Grid -->
+      <div class="admin-grid-news" id="adminNewsGrid">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 2: SCHOOL CALENDAR & AGENDA
+         ========================================== -->
+    <div class="admin-pane" id="tab-calendar">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <h2>จัดการตารางกิจกรรมและปฏิทิน (School Agenda)</h2>
+          <p>ควบคุมกิจกรรมเด่น (Featured Next-Up) และรายการกิจกรรมทั้งหมดบนหน้าแรก</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="dg-btn-outline" onclick="openEditFeaturedModal()">
+            <i data-lucide="star"></i>
+            <span>แก้ไขกิจกรรมเด่น (Next-Up)</span>
+          </button>
+          <button type="button" class="dg-btn-black" onclick="openAddEventModal()">
+            <i data-lucide="plus"></i>
+            <span>เพิ่มกิจกรรมในตาราง</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Featured Event Card Preview -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3><i data-lucide="zap" style="color: #f59e0b;"></i> กิจกรรมเด่นปัจจุบัน (Featured Upcoming Event)</h3>
+          <button type="button" class="dg-btn-sm-outline" onclick="openEditFeaturedModal()">แก้ไขกิจกรรมเด่น</button>
+        </div>
+        <div class="admin-card-body" id="featuredEventPreviewBox">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Events List Table -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3><i data-lucide="list"></i> รายการกิจกรรมในตารางทั้งหมด</h3>
+          <span style="font-size: 0.8rem; color: var(--dg-text-muted);" id="eventsCountBadge">0 รายการ</span>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 120px;">วันที่</th>
+                <th style="width: 140px;">หมวดหมู่</th>
+                <th>ชื่องาน / กิจกรรม</th>
+                <th>เวลา & สถานที่</th>
+                <th style="width: 100px;">สถานะ</th>
+                <th style="width: 140px; text-align: right;">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="adminEventsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 3: SYSTEM SETTINGS & DUTY COUNTER
+         ========================================== -->
+    <div class="admin-pane" id="tab-settings">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <h2>ตั้งค่าระบบ & เวลาปฏิบัติหน้าที่ (System Settings)</h2>
+          <p>ปรับแต่งวันเริ่มต้นนับเวลาปฏิบัติหน้าที่ (Duty Uptime) และรหัสความปลอดภัย</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+        <!-- Duty Start Date Settings -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i data-lucide="clock"></i> กำหนดวันเริ่มต้นปฏิบัติหน้าที่ (Uptime Start)</h3>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px;">
+              ตัวเลขนับเวลาสดบนหน้าแรก (เดือน, วัน, ชั่วโมง, นาที, วินาที) จะคำนวณจากวัน-เวลาที่กำหนดนี้
+            </p>
+            <form onsubmit="handleSaveUptimeDate(event)">
+              <div class="dg-form-group" style="margin-bottom: 14px;">
+                <label>วันและเวลาเริ่มต้นปฏิบัติหน้าที่</label>
+                <input type="datetime-local" id="settingsDutyStartDate" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 18px;">
+                <label>ข้อความระบุวันที่ (แสดงบนหน้าเว็บ)</label>
+                <input type="text" id="settingsDutyDateLabel" placeholder="เช่น เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;" />
+              </div>
+              <button type="submit" class="dg-btn-black">บันทึกวันปฏิบัติหน้าที่</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Admin PIN Change -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i data-lucide="key"></i> เปลี่ยนรหัส PIN ผู้ดูแลระบบ (Admin PIN)</h3>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px;">
+              ใช้สำหรับเข้าใช้งานหน้า Admin Portal (admin.html) เพื่อความปลอดภัยของข้อมูล
+            </p>
+            <form onsubmit="handleChangePin(event)">
+              <div class="dg-form-group" style="margin-bottom: 14px;">
+                <label>รหัส PIN ปัจจุบัน</label>
+                <input type="password" id="settingsCurrentPin" required placeholder="••••" style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 18px;">
+                <label>รหัส PIN ใหม่ (4-8 หลัก)</label>
+                <input type="password" id="settingsNewPin" required maxlength="8" placeholder="เช่น 2569" style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
+              </div>
+              <button type="submit" class="dg-btn-black">เปลี่ยนรหัสผ่าน PIN</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 4: BACKUP & SYNC (EXPORT/IMPORT JSON)
+         ========================================== -->
+    <div class="admin-pane" id="tab-backup">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <h2>สำรองและนำเข้าข้อมูล (Data Backup & Synchronization)</h2>
+          <p>เนื่องจากเว็บดีพลอยบน Vercel แบบ Static Web ข้อมูลจะถูกบันทึกในเบราว์เซอร์ คุณสามารถสำรองข้อมูลเป็นไฟล์ JSON เพื่อนำไปเปิดในเครื่องอื่น หรือเก็บไว้เป็นชุดข้อมูลสำรองได้ตลอดเวลา</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+        <!-- Export -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i data-lucide="download"></i> ส่งออกข้อมูลสำรอง (Export JSON)</h3>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 20px;">
+              ดาวน์โหลดข้อมูลข่าวสาร กิจกรรม ตารางงาน และการตั้งค่าทั้งหมดลงในไฟล์ <code>sarawat_data_backup.json</code>
+            </p>
+            <button type="button" class="dg-btn-black" onclick="handleExportJson()">
+              <i data-lucide="download"></i>
+              <span>ดาวน์โหลดไฟล์สำรองข้อมูล</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Import -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i data-lucide="upload"></i> นำเข้าข้อมูลสำรอง (Import JSON)</h3>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 16px;">
+              เลือกไฟล์ JSON ที่เคยสำรองไว้เพื่อกู้คืนข้อมูลหรืออัปเดตข้อมูลชุดใหม่
+            </p>
+            <input type="file" id="importJsonFileInput" accept=".json" style="margin-bottom: 16px; width: 100%;" />
+            <button type="button" class="dg-btn-outline" onclick="handleImportJson()">
+              <i data-lucide="upload"></i>
+              <span>กู้คืนข้อมูลจากไฟล์</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Reset to Defaults -->
+        <div class="admin-card" style="border-color: #fecaca;">
+          <div class="admin-card-header" style="background: #fff5f5; color: #dc2626;">
+            <h3><i data-lucide="alert-triangle"></i> รีเซ็ตเป็นค่าเริ่มต้นจากโรงเรียน</h3>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 20px;">
+              หากต้องการล้างข้อมูลที่แก้ไขทั้งหมด และโหลดข้อมูลมาตรฐานตั้งต้นของสารวัตรนักเรียนปี 2569 กลับมา
+            </p>
+            <button type="button" class="dg-btn-outline" style="color: #dc2626; border-color: #fca5a5;" onclick="handleResetDefaults()">
+              <i data-lucide="refresh-cw"></i>
+              <span>รีเซ็ตข้อมูลทั้งหมดกลับสู่ค่าเริ่มต้น</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================
+       MODAL 1: NEWS ADD / EDIT
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminNewsModal">
+    <div class="dg-modal-box">
+      <div class="dg-modal-header">
+        <h3 id="adminNewsModalTitle">เพิ่มข่าวสารและกิจกรรมใหม่</h3>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminNewsModal')">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <form id="adminNewsForm" onsubmit="handleSaveNews(event)" class="dg-modal-form">
+        <input type="hidden" id="adminNewsId" />
+        <div class="dg-form-group">
+          <label>หัวข้อข่าวสาร/กิจกรรม *</label>
+          <input type="text" id="adminNewsTitle" required placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" />
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>วันที่จัดกิจกรรม *</label>
+            <input type="text" id="adminNewsDate" required placeholder="เช่น 28 ก.ย. 2569" />
+          </div>
+          <div class="dg-form-group">
+            <label>หมวดหมู่ / แท็ก</label>
+            <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา" />
+          </div>
+        </div>
+        <div class="dg-form-group">
+          <label>รายละเอียดกิจกรรม *</label>
+          <textarea id="adminNewsDesc" rows="3" required placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
+        </div>
+        <div class="dg-form-group">
+          <label>ภาพหน้าปก (เลือกไฟล์ภาพจากคอมพิวเตอร์/มือถือ)</label>
+          <input type="file" id="adminNewsImgFile" accept="image/*" />
+          <input type="hidden" id="adminNewsImgBase64" />
+          <div id="adminNewsImgPreviewWrap" style="display: none; margin-top: 8px;">
+            <img id="adminNewsImgPreview" src="" alt="Preview" style="max-height: 130px; border-radius: 6px; border: 1px solid var(--dg-border); object-fit: cover;" />
+          </div>
+        </div>
+        <div class="dg-form-group">
+          <label>ลิงก์โพสต์ Facebook</label>
+          <input type="url" id="adminNewsFb" placeholder="https://www.facebook.com/..." />
+        </div>
+        <div class="dg-form-group">
+          <label>ลิงก์โพสต์ Instagram</label>
+          <input type="url" id="adminNewsIg" placeholder="https://www.instagram.com/p/..." />
+        </div>
+        <div class="dg-form-group">
+          <label>ลิงก์อัลบั้ม Google Photos</label>
+          <input type="url" id="adminNewsPhoto" placeholder="https://photos.google.com/share/..." />
+        </div>
+        <div class="dg-modal-actions">
+          <button type="button" class="dg-btn-outline" onclick="closeModal('adminNewsModal')">ยกเลิก</button>
+          <button type="submit" class="dg-btn-black">บันทึกข่าวสาร</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 2: CALENDAR EVENT ADD / EDIT
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminEventModal">
+    <div class="dg-modal-box">
+      <div class="dg-modal-header">
+        <h3 id="adminEventModalTitle">เพิ่มกิจกรรมในตาราง</h3>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminEventModal')">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <form id="adminEventForm" onsubmit="handleSaveEvent(event)" class="dg-modal-form">
+        <input type="hidden" id="adminEventId" />
+        <div class="dg-form-group">
+          <label>ชื่อกิจกรรม / โครงการ *</label>
+          <input type="text" id="adminEventTitle" required placeholder="เช่น ประเพณีวันลอยกระทง สืบสานวัฒนธรรม" />
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>วันที่ (เลขวัน) *</label>
+            <input type="text" id="adminEventDay" required placeholder="เช่น 15 หรือ 25-29" />
+          </div>
+          <div class="dg-form-group">
+            <label>เดือน & ปี *</label>
+            <input type="text" id="adminEventMonth" required placeholder="เช่น พ.ย. 67" />
+          </div>
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>วันในสัปดาห์</label>
+            <input type="text" id="adminEventWeekday" placeholder="เช่น ศุกร์ หรือ จ.-ศ." />
+          </div>
+          <div class="dg-form-group">
+            <label>หมวดหมู่กิจกรรม *</label>
+            <select id="adminEventCategory" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;">
+              <option value="ceremony">พิธีการ & ประเพณี (ceremony)</option>
+              <option value="academic">วิชาการ & วันสอบ (academic)</option>
+              <option value="sports">กีฬา & ชุมนุม (sports)</option>
+              <option value="prefect">ภารกิจสารวัตร (prefect)</option>
+            </select>
+          </div>
+        </div>
+        <div class="dg-form-group">
+          <label>ป้ายหมวดหมู่ภาษาไทย</label>
+          <input type="text" id="adminEventCatLabel" placeholder="เช่น ประเพณี & วัฒนธรรม" />
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>เวลาจัดกิจกรรม</label>
+            <input type="text" id="adminEventTime" placeholder="เช่น 08:30 - 15:30 น." />
+          </div>
+          <div class="dg-form-group">
+            <label>สถานที่จัด</label>
+            <input type="text" id="adminEventLocation" placeholder="เช่น ลานกิจกรรมอเนกประสงค์" />
+          </div>
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>กลุ่มเป้าหมาย / ผู้เข้าร่วม</label>
+            <input type="text" id="adminEventAudience" placeholder="เช่น นักเรียน ม.1 - ม.6" />
+          </div>
+          <div class="dg-form-group">
+            <label>ป้ายสถานะ (Tag)</label>
+            <input type="text" id="adminEventStatusTag" placeholder="เช่น กำลังมาถึง, สำคัญมาก" />
+          </div>
+        </div>
+        <div class="dg-form-group">
+          <label>ข้อปฏิบัติ & ภารกิจสารวัตรนักเรียน</label>
+          <textarea id="adminEventNote" rows="2" placeholder="สารวัตรนักเรียนประจำจุดดูแลความปลอดภัย..."></textarea>
+        </div>
+        <div class="dg-form-group">
+          <label>ลิงก์ Google Calendar (ถ้ามี)</label>
+          <input type="url" id="adminEventGcal" placeholder="https://calendar.google.com/..." />
+        </div>
+        <div class="dg-modal-actions">
+          <button type="button" class="dg-btn-outline" onclick="closeModal('adminEventModal')">ยกเลิก</button>
+          <button type="submit" class="dg-btn-black">บันทึกกิจกรรม</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ MODAL 3: EDIT FEATURED UPCOMING EVENT ============ -->
+  <div class="dg-modal-backdrop" id="adminFeaturedModal">
+    <div class="dg-modal-box">
+      <div class="dg-modal-header">
+        <h3>แก้ไขกิจกรรมเด่น (Featured Next-Up Banner)</h3>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminFeaturedModal')">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <form id="adminFeaturedForm" onsubmit="handleSaveFeatured(event)" class="dg-modal-form">
+        <div class="dg-form-group">
+          <label>ชื่อกิจกรรมเด่น *</label>
+          <input type="text" id="adminFeaturedTitle" required placeholder="เช่น การแข่งขันกรีฑาและกีฬาสีภายใน เดชะเกมส์" />
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>วันที่ (เช่น 12-14) *</label>
+            <input type="text" id="adminFeaturedDay" required placeholder="12-14" />
+          </div>
+          <div class="dg-form-group">
+            <label>เดือน (เช่น พ.ย. 67) *</label>
+            <input type="text" id="adminFeaturedMonth" required placeholder="พ.ย. 67" />
+          </div>
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>ป้ายกล่องวัน (เช่น เร็วๆ นี้)</label>
+            <input type="text" id="adminFeaturedBadgeTag" placeholder="เร็วๆ นี้ (NEXT UP)" />
+          </div>
+          <div class="dg-form-group">
+            <label>ป้ายหมวดหมู่</label>
+            <input type="text" id="adminFeaturedCategory" placeholder="กิจกรรมสำคัญ • กีฬาสีภายใน" />
+          </div>
+        </div>
+        <div class="dg-form-row">
+          <div class="dg-form-group">
+            <label>เวลา</label>
+            <input type="text" id="adminFeaturedTime" placeholder="07:30 - 16:30 น." />
+          </div>
+          <div class="dg-form-group">
+            <label>สถานที่</label>
+            <input type="text" id="adminFeaturedLocation" placeholder="สนามกีฬาและโรงยิมฯ โรงเรียนเดชะปัตตนยานุกูล" />
+          </div>
+        </div>
+        <div class="dg-form-group">
+          <label>ผู้เข้าร่วม</label>
+          <input type="text" id="adminFeaturedAudience" placeholder="นักเรียน ม.1 - ม.6 และคณะครูอาจารย์" />
+        </div>
+        <div class="dg-form-group">
+          <label>คำอธิบายกิจกรรม & ภารกิจสารวัตร</label>
+          <textarea id="adminFeaturedDesc" rows="3" placeholder="มหกรรมกีฬาแห่งความสามัคคี..."></textarea>
+        </div>
+        <div class="dg-form-group">
+          <label>ลิงก์ Google Calendar</label>
+          <input type="url" id="adminFeaturedGcal" placeholder="https://calendar.google.com/..." />
+        </div>
+        <div class="dg-modal-actions">
+          <button type="button" class="dg-btn-outline" onclick="closeModal('adminFeaturedModal')">ยกเลิก</button>
+          <button type="submit" class="dg-btn-black">บันทึกกิจกรรมเด่น</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div class="admin-toast" id="adminToast">
+    <i data-lucide="check-circle" style="color: #22c55e;"></i>
+    <span id="adminToastMsg">บันทึกข้อมูลเรียบร้อยแล้ว</span>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // ==========================================================
+    // DEFAULT DATA CONSTANTS
+    // ==========================================================
+    const DEFAULT_NEWS_ITEMS = [
+      {
+        id: 'news-1',
+        title: 'พิธีแต่งตั้งและมอบปลอกแขนสารวัตรนักเรียน ประจำปีการศึกษา 2569',
+        date: '23 พ.ค. 2569',
+        tag: 'พิธีการสำคัญ',
+        image: 'assets/images/activity-ceremony.jpg',
+        desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-2',
+        title: 'โครงการรณรงค์วินัยจราจรและเสริมสร้างความปลอดภัยหน้าโรงเรียน',
+        date: '12 มิ.ย. 2569',
+        tag: 'ความปลอดภัย',
+        image: 'assets/images/activity-inspection.jpg',
+        desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-3',
+        title: 'กิจกรรมจิตอาสาพัฒนาสิ่งแวดล้อมและพื้นที่ส่วนรวมโรงเรียน',
+        date: '08 ก.ค. 2569',
+        tag: 'จิตอาสา',
+        image: 'assets/images/activity-volunteer.jpg',
+        desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-4',
+        title: 'การประชุมเชิงปฏิบัติการอบรมภาวะผู้นำและทักษะไกล่เกลี่ยเชิงบวก',
+        date: '19 ส.ค. 2569',
+        tag: 'อบรมพัฒนา',
+        image: 'assets/images/activity-training.jpg',
+        desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-5',
+        title: 'การเตรียมความพร้อมดูแลความสงบเรียบร้อยในสัปดาห์กีฬาสีเดชะฯ 2569',
+        date: '25 ก.ย. 2569',
+        tag: 'กิจกรรมโรงเรียน',
+        image: 'assets/images/hero-assembly.jpg',
+        desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      }
+    ];
+
+    const DEFAULT_FEATURED_EVENT = {
+      day: '12-14',
+      month: 'พ.ย. 67',
+      tag: 'เร็วๆ นี้ (NEXT UP)',
+      category: 'กิจกรรมสำคัญ • กีฬาสีภายใน',
+      title: 'การแข่งขันกรีฑาและกีฬาสีภายใน "เดชะเกมส์ ประจำปีการศึกษา 2567"',
+      time: '07:30 - 16:30 น. (ตลอด 3 วัน)',
+      location: 'สนามกีฬาและโรงยิมฯ โรงเรียนเดชะปัตตนยานุกูล',
+      audience: 'นักเรียน ม.1 - ม.6 และคณะครูอาจารย์',
+      desc: 'มหกรรมกีฬาแห่งความสามัคคี ขบวนพาเหรด การประกวดกองเชียร์และเชียร์ลีดเดอร์ ภารกิจสารวัตร: ประจำการดูแลความปลอดภัย ตรวจระเบียบทางเข้า-ออก และอำนวยความสะดวกการจราจรตลอดการจัดงาน',
+      gcalUrl: 'https://calendar.google.com/'
+    };
+
+    const DEFAULT_CALENDAR_EVENTS = [
+      {
+        id: 'evt-1',
+        day: '15',
+        month: 'พ.ย. 67',
+        weekday: 'ศุกร์',
+        category: 'ceremony',
+        categoryLabel: 'ประเพณี & วัฒนธรรม',
+        title: 'ประเพณีวันลอยกระทง สืบสานวัฒนธรรม และจิตอาสารักษ์สิ่งแวดล้อม',
+        time: '13:00 - 16:30 น.',
+        location: 'ลานกิจกรรมอเนกประสงค์ และรอบคูเมืองโรงเรียน',
+        audience: 'สมาชิกทุกระดับชั้น',
+        note: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ',
+        statusTag: 'กำลังมาถึง',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-2',
+        day: '25-29',
+        month: 'พ.ย. 67',
+        weekday: 'จ.-ศ.',
+        category: 'academic',
+        categoryLabel: 'วิชาการ & วันสอบ',
+        title: 'การประเมินผลและสอบวัดผลกลางภาคเรียนที่ 2/2567 (Midterm Exams)',
+        time: '08:30 - 15:30 น.',
+        location: 'อาคารเรียน 1, 2, 3, 4 ทุกห้องสอบ',
+        audience: 'นักเรียน ม.1 - ม.6 ทุกคน',
+        note: 'แต่งกายชุดนักเรียนถูกระเบียบ 100% สารวัตรนักเรียนดูแลความเงียบสงบในบริเวณเขตสอบและจัดระเบียบยานพาหนะ',
+        statusTag: 'สำคัญมาก',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-3',
+        day: '07',
+        month: 'ธ.ค. 67',
+        weekday: 'เสาร์',
+        category: 'prefect',
+        categoryLabel: 'ภารกิจสารวัตร • ค่ายพัฒนาภาวะผู้นำ',
+        title: 'ค่ายอบรมเสริมสร้างภาวะผู้นำและทักษะจิตอาสาสารวัตรนักเรียน รุ่นที่ 15',
+        time: '08:30 - 16:30 น.',
+        location: 'ห้องประชุมรวงผึ้ง และลานกิจกรรม',
+        audience: 'คณะสารวัตรนักเรียน และแกนนำจิตอาสา',
+        note: 'การฝึกอบรมการระงับเหตุฉุกเฉิน กฎหมายเยาวชนเบื้องต้น การปฐมพยาบาล CPR และการบริหารระบบ SI-ROSTER',
+        statusTag: 'เฉพาะสารวัตร',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-4',
+        day: '18',
+        month: 'ธ.ค. 67',
+        weekday: 'พุธ',
+        category: 'academic',
+        categoryLabel: 'วิชาการ & เปิดบ้านโรงเรียน',
+        title: 'มหกรรมเปิดบ้านวิชาการ "Decha Open House & Exhibition 2024"',
+        time: '08:00 - 15:30 น.',
+        location: 'ลานโดมอเนกประสงค์ และหอประชุมใหญ่',
+        audience: 'นักเรียน ผู้ปกครอง และบุคคลภายนอก',
+        note: 'นิทรรศการผลงาน 8 กลุ่มสาระ สารวัตรนักเรียนประจำจุดต้อนรับ ประชาสัมพันธ์ และจัดการจราจรบริเวณหน้าโรงเรียน',
+        statusTag: 'บุคคลภายนอกเข้าได้',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-5',
+        day: '27',
+        month: 'ธ.ค. 67',
+        weekday: 'ศุกร์',
+        category: 'ceremony',
+        categoryLabel: 'พิธีการ & ประเพณี',
+        title: 'กิจกรรมส่งท้ายปีเก่า ต้อนรับปีใหม่ 2568 และทำบุญตักบาตรข้าวสารอาหารแห้ง',
+        time: '07:00 - 12:00 น.',
+        location: 'ลานธรรม และสนามหน้าเสาธง',
+        audience: 'นักเรียนและบุคลากรทุกท่าน',
+        note: 'แต่งกายชุดผ้าไทยหรือชุดสุภาพ สารวัตรนักเรียนดูแลแถวตักบาตรและอำนวยความสะดวกครูอาวุโส',
+        statusTag: 'วันสุดท้ายก่อนหยุดยาว',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-6',
+        day: '17-21',
+        month: 'ก.พ. 68',
+        weekday: 'จ.-ศ.',
+        category: 'academic',
+        categoryLabel: 'วิชาการ & วันสอบ',
+        title: 'การสอบวัดผลปลายภาคเรียนที่ 2/2567 (Final Examination)',
+        time: '08:30 - 15:30 น.',
+        location: 'ทุกอาคารเรียน',
+        audience: 'นักเรียน ม.1 - ม.6 ทุกระดับชั้น',
+        note: 'ตรวจสอบระเบียบการแต่งกาย ทรงผม และอุปกรณ์สอบเข้มงวด สารวัตรนักเรียนประจำการเต็มกำลังทุกอาคารสอบ',
+        statusTag: 'สิ้นสุดปีการศึกษา',
+        gcalUrl: 'https://calendar.google.com/'
+      }
+    ];
+
+    // ==========================================================
+    // PIN AUTHENTICATION
+    // ==========================================================
+    function checkAuth() {
+      const isAuth = sessionStorage.getItem('sarawat_admin_auth');
+      const overlay = document.getElementById('pinOverlay');
+      if (isAuth === 'true') {
+        overlay.style.display = 'none';
+      } else {
+        overlay.style.display = 'flex';
+      }
+    }
+
+    function handlePinLogin(e) {
+      e.preventDefault();
+      const input = document.getElementById('adminPinInput').value;
+      const currentPin = localStorage.getItem('dg_sarawat_admin_pin') || '2569';
+      const errMsg = document.getElementById('pinErrorMsg');
+
+      if (input === currentPin) {
+        sessionStorage.setItem('sarawat_admin_auth', 'true');
+        document.getElementById('pinOverlay').style.display = 'none';
+        showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับผู้ดูแลระบบ!');
+        initDashboard();
+      } else {
+        errMsg.style.display = 'block';
+        document.getElementById('adminPinInput').value = '';
+        document.getElementById('adminPinInput').focus();
+      }
+    }
+
+    function handleLogout() {
+      if (confirm('คุณต้องการออกจากระบบ Admin ใช่หรือไม่?')) {
+        sessionStorage.removeItem('sarawat_admin_auth');
+        window.location.reload();
+      }
+    }
+
+    function handleChangePin(e) {
+      e.preventDefault();
+      const currentPin = localStorage.getItem('dg_sarawat_admin_pin') || '2569';
+      const curInput = document.getElementById('settingsCurrentPin').value;
+      const newInput = document.getElementById('settingsNewPin').value;
+
+      if (curInput !== currentPin) {
+        alert('รหัส PIN ปัจจุบันไม่ถูกต้อง!');
+        return;
+      }
+      if (newInput.length < 4) {
+        alert('รหัส PIN ใหม่ต้องมีอย่างน้อย 4 หลัก!');
+        return;
+      }
+
+      localStorage.setItem('dg_sarawat_admin_pin', newInput);
+      showToast('เปลี่ยนรหัส PIN เรียบร้อยแล้ว!');
+      e.target.reset();
+    }
+
+    // ==========================================================
+    // DATA ACCESS HELPERS
+    // ==========================================================
+    function getNews() {
+      try {
+        const d = localStorage.getItem('dg_sarawat_news_items');
+        if (d) return JSON.parse(d);
+      } catch (err) {}
+      return DEFAULT_NEWS_ITEMS;
+    }
+
+    function saveNews(data) {
+      localStorage.setItem('dg_sarawat_news_items', JSON.stringify(data));
+    }
+
+    function getEvents() {
+      try {
+        const d = localStorage.getItem('dg_sarawat_calendar_events');
+        if (d) return JSON.parse(d);
+      } catch (err) {}
+      return DEFAULT_CALENDAR_EVENTS;
+    }
+
+    function saveEvents(data) {
+      localStorage.setItem('dg_sarawat_calendar_events', JSON.stringify(data));
+    }
+
+    function getFeatured() {
+      try {
+        const d = localStorage.getItem('dg_sarawat_featured_event');
+        if (d) return JSON.parse(d);
+      } catch (err) {}
+      return DEFAULT_FEATURED_EVENT;
+    }
+
+    function saveFeatured(data) {
+      localStorage.setItem('dg_sarawat_featured_event', JSON.stringify(data));
+    }
+
+    // ==========================================================
+    // TAB NAVIGATION
+    // ==========================================================
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const tabId = btn.getAttribute('data-tab');
+        const targetPane = document.getElementById(tabId);
+        if (targetPane) targetPane.classList.add('active');
+      });
+    });
+
+    // ==========================================================
+    // RENDER: NEWS SECTION
+    // ==========================================================
+    function renderAdminNews() {
+      const grid = document.getElementById('adminNewsGrid');
+      const items = getNews();
+
+      if (!grid) return;
+      if (items.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--dg-text-muted);">ยังไม่มีรายการข่าวสาร กดปุ่ม "เพิ่มข่าวสารใหม่" เพื่อเริ่มต้น</div>';
+        return;
+      }
+
+      grid.innerHTML = items.map(item => `
+        <div class="admin-news-item-card" data-id="${item.id}">
+          <img src="${item.image}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" />
+          <div class="admin-news-item-body">
+            <div class="admin-news-meta">
+              <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; color: #0f172a; font-weight: 700;">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+              <span>${escapeHtml(item.date || '')}</span>
+            </div>
+            <h4 class="admin-news-title">${escapeHtml(item.title)}</h4>
+            <p class="admin-news-desc">${escapeHtml(item.desc)}</p>
+
+            <div class="admin-news-links-indicator">
+              <span class="link-tag ${item.fbUrl ? 'has-fb' : 'no-link'}">FB</span>
+              <span class="link-tag ${item.igUrl ? 'has-ig' : 'no-link'}">IG</span>
+              <span class="link-tag ${item.photoUrl ? 'has-photo' : 'no-link'}">Google Photos</span>
+            </div>
+
+            <div class="admin-card-actions">
+              <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')" style="flex: 1; justify-content: center;">
+                <i data-lucide="edit"></i>
+                <span>แก้ไข</span>
+              </button>
+              <button type="button" class="dg-btn-sm-outline" onclick="handleDeleteNews('${item.id}')" style="color: #ef4444; border-color: #fee2e2;">
+                <i data-lucide="trash-2"></i>
+                <span>ลบ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openAddNewsModal() {
+      document.getElementById('adminNewsModalTitle').textContent = 'เพิ่มข่าวสารและกิจกรรมใหม่';
+      document.getElementById('adminNewsId').value = '';
+      document.getElementById('adminNewsForm').reset();
+      document.getElementById('adminNewsImgBase64').value = '';
+      document.getElementById('adminNewsImgPreviewWrap').style.display = 'none';
+      openModal('adminNewsModal');
+    }
+
+    function openEditNewsModal(id) {
+      const items = getNews();
+      const item = items.find(n => n.id === id);
+      if (!item) return;
+
+      document.getElementById('adminNewsModalTitle').textContent = 'แก้ไขข่าวสารและกิจกรรม';
+      document.getElementById('adminNewsId').value = item.id;
+      document.getElementById('adminNewsTitle').value = item.title || '';
+      document.getElementById('adminNewsDate').value = item.date || '';
+      document.getElementById('adminNewsTag').value = item.tag || '';
+      document.getElementById('adminNewsDesc').value = item.desc || '';
+      document.getElementById('adminNewsFb').value = item.fbUrl || '';
+      document.getElementById('adminNewsIg').value = item.igUrl || '';
+      document.getElementById('adminNewsPhoto').value = item.photoUrl || '';
+      document.getElementById('adminNewsImgBase64').value = item.image || '';
+
+      const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+      const previewImg = document.getElementById('adminNewsImgPreview');
+      if (item.image) {
+        previewImg.src = item.image;
+        previewWrap.style.display = 'block';
+      } else {
+        previewWrap.style.display = 'none';
+      }
+
+      openModal('adminNewsModal');
+    }
+
+    function handleSaveNews(e) {
+      e.preventDefault();
+      const id = document.getElementById('adminNewsId').value;
+      const title = document.getElementById('adminNewsTitle').value.trim();
+      const date = document.getElementById('adminNewsDate').value.trim();
+      const tag = document.getElementById('adminNewsTag').value.trim();
+      const desc = document.getElementById('adminNewsDesc').value.trim();
+      const fbUrl = document.getElementById('adminNewsFb').value.trim();
+      const igUrl = document.getElementById('adminNewsIg').value.trim();
+      const photoUrl = document.getElementById('adminNewsPhoto').value.trim();
+      const imgBase64 = document.getElementById('adminNewsImgBase64').value;
+
+      const items = getNews();
+
+      if (id) {
+        const idx = items.findIndex(n => n.id === id);
+        if (idx !== -1) {
+          items[idx] = {
+            ...items[idx],
+            title,
+            date,
+            tag,
+            desc,
+            fbUrl,
+            igUrl,
+            photoUrl,
+            image: imgBase64 || items[idx].image || 'assets/images/activity-ceremony.jpg'
+          };
+        }
+      } else {
+        const newItem = {
+          id: 'news-' + Date.now(),
+          title,
+          date,
+          tag: tag || 'กิจกรรมทั่วไป',
+          desc,
+          fbUrl,
+          igUrl,
+          photoUrl,
+          image: imgBase64 || 'assets/images/activity-ceremony.jpg'
+        };
+        items.unshift(newItem);
+      }
+
+      saveNews(items);
+      renderAdminNews();
+      closeModal('adminNewsModal');
+      showToast('บันทึกข่าวสารเรียบร้อยแล้ว');
+    }
+
+    function handleDeleteNews(id) {
+      if (!confirm('คุณต้องการลบข่าวสารนี้ใช่หรือไม่?')) return;
+      let items = getNews();
+      items = items.filter(n => n.id !== id);
+      saveNews(items);
+      renderAdminNews();
+      showToast('ลบข่าวสารเรียบร้อยแล้ว');
+    }
+
+    // ==========================================================
+    // RENDER: CALENDAR EVENTS
+    // ==========================================================
+    function renderAdminEvents() {
+      const tbody = document.getElementById('adminEventsTableBody');
+      const badge = document.getElementById('eventsCountBadge');
+      const previewBox = document.getElementById('featuredEventPreviewBox');
+
+      const events = getEvents();
+      const feat = getFeatured();
+
+      if (badge) badge.textContent = `${events.length} รายการ`;
+
+      // Render Featured Box
+      if (previewBox && feat) {
+        previewBox.innerHTML = `
+          <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+            <div style="background: #0f172a; color: #ffffff; padding: 14px 20px; border-radius: 8px; text-align: center; min-width: 90px;">
+              <div style="font-size: 1.6rem; font-weight: 850; line-height: 1;">${escapeHtml(feat.day)}</div>
+              <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.9;">${escapeHtml(feat.month)}</div>
+            </div>
+            <div style="flex: 1; min-width: 280px;">
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                <span style="background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 750; padding: 2px 8px; border-radius: 4px;">${escapeHtml(feat.category)}</span>
+                <span style="background: #e2e8f0; color: #334155; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${escapeHtml(feat.tag)}</span>
+              </div>
+              <h4 style="font-size: 1.15rem; font-weight: 850; margin: 0 0 6px;">${escapeHtml(feat.title)}</h4>
+              <p style="font-size: 0.86rem; color: var(--dg-text-secondary); margin: 0 0 8px;">${escapeHtml(feat.desc)}</p>
+              <div style="font-size: 0.8rem; color: var(--dg-text-muted); display: flex; gap: 16px; flex-wrap: wrap;">
+                <span>🕒 ${escapeHtml(feat.time)}</span>
+                <span>📍 ${escapeHtml(feat.location)}</span>
+                <span>👥 ${escapeHtml(feat.audience)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Render Events Table
+      if (tbody) {
+        if (events.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--dg-text-muted);">ยังไม่มีกิจกรรมในตาราง</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = events.map(evt => `
+          <tr>
+            <td>
+              <strong>${escapeHtml(evt.day)} ${escapeHtml(evt.month)}</strong><br>
+              <span style="font-size: 0.75rem; color: var(--dg-text-muted);">${escapeHtml(evt.weekday || '')}</span>
+            </td>
+            <td>
+              <span style="background: #f1f5f9; padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 0.78rem;">${escapeHtml(evt.categoryLabel || evt.category)}</span>
+            </td>
+            <td>
+              <strong>${escapeHtml(evt.title)}</strong><br>
+              <span style="font-size: 0.78rem; color: var(--dg-text-muted);">${escapeHtml(evt.note || '')}</span>
+            </td>
+            <td>
+              <div style="font-size: 0.82rem;">${escapeHtml(evt.time || '-')}</div>
+              <div style="font-size: 0.75rem; color: var(--dg-text-muted);">${escapeHtml(evt.location || '-')}</div>
+            </td>
+            <td>
+              <span style="font-size: 0.75rem; font-weight: 700; color: #15803d; background: #f0fdf4; padding: 3px 8px; border-radius: 4px;">${escapeHtml(evt.statusTag || 'ปกติ')}</span>
+            </td>
+            <td style="text-align: right;">
+              <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" title="แก้ไข">
+                <i data-lucide="edit"></i>
+              </button>
+              <button type="button" class="dg-btn-sm-outline" onclick="handleDeleteEvent('${evt.id}')" style="color: #ef4444; border-color: #fee2e2;" title="ลบ">
+                <i data-lucide="trash-2"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openAddEventModal() {
+      document.getElementById('adminEventModalTitle').textContent = 'เพิ่มกิจกรรมใหม่ในตาราง';
+      document.getElementById('adminEventId').value = '';
+      document.getElementById('adminEventForm').reset();
+      openModal('adminEventModal');
+    }
+
+    function openEditEventModal(id) {
+      const events = getEvents();
+      const evt = events.find(e => e.id === id);
+      if (!evt) return;
+
+      document.getElementById('adminEventModalTitle').textContent = 'แก้ไขกิจกรรมในตาราง';
+      document.getElementById('adminEventId').value = evt.id;
+      document.getElementById('adminEventTitle').value = evt.title || '';
+      document.getElementById('adminEventDay').value = evt.day || '';
+      document.getElementById('adminEventMonth').value = evt.month || '';
+      document.getElementById('adminEventWeekday').value = evt.weekday || '';
+      document.getElementById('adminEventCategory').value = evt.category || 'ceremony';
+      document.getElementById('adminEventCatLabel').value = evt.categoryLabel || '';
+      document.getElementById('adminEventTime').value = evt.time || '';
+      document.getElementById('adminEventLocation').value = evt.location || '';
+      document.getElementById('adminEventAudience').value = evt.audience || '';
+      document.getElementById('adminEventStatusTag').value = evt.statusTag || '';
+      document.getElementById('adminEventNote').value = evt.note || '';
+      document.getElementById('adminEventGcal').value = evt.gcalUrl || '';
+
+      openModal('adminEventModal');
+    }
+
+    function handleSaveEvent(e) {
+      e.preventDefault();
+      const id = document.getElementById('adminEventId').value;
+      const title = document.getElementById('adminEventTitle').value.trim();
+      const day = document.getElementById('adminEventDay').value.trim();
+      const month = document.getElementById('adminEventMonth').value.trim();
+      const weekday = document.getElementById('adminEventWeekday').value.trim();
+      const category = document.getElementById('adminEventCategory').value;
+      const categoryLabel = document.getElementById('adminEventCatLabel').value.trim() || document.getElementById('adminEventCategory').options[document.getElementById('adminEventCategory').selectedIndex].text;
+      const time = document.getElementById('adminEventTime').value.trim();
+      const location = document.getElementById('adminEventLocation').value.trim();
+      const audience = document.getElementById('adminEventAudience').value.trim();
+      const statusTag = document.getElementById('adminEventStatusTag').value.trim() || 'กำลังมาถึง';
+      const note = document.getElementById('adminEventNote').value.trim();
+      const gcalUrl = document.getElementById('adminEventGcal').value.trim() || 'https://calendar.google.com/';
+
+      const events = getEvents();
+
+      if (id) {
+        const idx = events.findIndex(e => e.id === id);
+        if (idx !== -1) {
+          events[idx] = {
+            ...events[idx],
+            title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl
+          };
+        }
+      } else {
+        const newEvt = {
+          id: 'evt-' + Date.now(),
+          title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl
+        };
+        events.push(newEvt);
+      }
+
+      saveEvents(events);
+      renderAdminEvents();
+      closeModal('adminEventModal');
+      showToast('บันทึกข้อมูลกิจกรรมเรียบร้อยแล้ว');
+    }
+
+    function handleDeleteEvent(id) {
+      if (!confirm('คุณต้องการลบกิจกรรมนี้ออกจากตารางใช่หรือไม่?')) return;
+      let events = getEvents();
+      events = events.filter(e => e.id !== id);
+      saveEvents(events);
+      renderAdminEvents();
+      showToast('ลบกิจกรรมเรียบร้อยแล้ว');
+    }
+
+    function openEditFeaturedModal() {
+      const feat = getFeatured();
+      document.getElementById('adminFeaturedTitle').value = feat.title || '';
+      document.getElementById('adminFeaturedDay').value = feat.day || '';
+      document.getElementById('adminFeaturedMonth').value = feat.month || '';
+      document.getElementById('adminFeaturedBadgeTag').value = feat.tag || '';
+      document.getElementById('adminFeaturedCategory').value = feat.category || '';
+      document.getElementById('adminFeaturedTime').value = feat.time || '';
+      document.getElementById('adminFeaturedLocation').value = feat.location || '';
+      document.getElementById('adminFeaturedAudience').value = feat.audience || '';
+      document.getElementById('adminFeaturedDesc').value = feat.desc || '';
+      document.getElementById('adminFeaturedGcal').value = feat.gcalUrl || '';
+      openModal('adminFeaturedModal');
+    }
+
+    function handleSaveFeatured(e) {
+      e.preventDefault();
+      const feat = {
+        title: document.getElementById('adminFeaturedTitle').value.trim(),
+        day: document.getElementById('adminFeaturedDay').value.trim(),
+        month: document.getElementById('adminFeaturedMonth').value.trim(),
+        tag: document.getElementById('adminFeaturedBadgeTag').value.trim() || 'เร็วๆ นี้ (NEXT UP)',
+        category: document.getElementById('adminFeaturedCategory').value.trim() || 'กิจกรรมสำคัญ',
+        time: document.getElementById('adminFeaturedTime').value.trim(),
+        location: document.getElementById('adminFeaturedLocation').value.trim(),
+        audience: document.getElementById('adminFeaturedAudience').value.trim(),
+        desc: document.getElementById('adminFeaturedDesc').value.trim(),
+        gcalUrl: document.getElementById('adminFeaturedGcal').value.trim() || 'https://calendar.google.com/'
+      };
+      saveFeatured(feat);
+      renderAdminEvents();
+      closeModal('adminFeaturedModal');
+      showToast('บันทึกกิจกรรมเด่นเรียบร้อยแล้ว');
+    }
+
+    // ==========================================================
+    // UPTIME & SYSTEM SETTINGS
+    // ==========================================================
+    function initSettings() {
+      const uptimeDate = localStorage.getItem('dg_sarawat_uptime_start') || '2026-05-23T07:00:00';
+      const dateInput = document.getElementById('settingsDutyStartDate');
+      if (dateInput) {
+        // Format for datetime-local (YYYY-MM-DDTHH:mm)
+        dateInput.value = uptimeDate.substring(0, 16);
+      }
+
+      const labelInput = document.getElementById('settingsDutyDateLabel');
+      if (labelInput) {
+        labelInput.value = localStorage.getItem('dg_sarawat_uptime_label') || 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569';
+      }
+    }
+
+    function handleSaveUptimeDate(e) {
+      e.preventDefault();
+      const d = document.getElementById('settingsDutyStartDate').value;
+      const lbl = document.getElementById('settingsDutyDateLabel').value.trim();
+
+      if (d) {
+        localStorage.setItem('dg_sarawat_uptime_start', d + ':00');
+      }
+      if (lbl) {
+        localStorage.setItem('dg_sarawat_uptime_label', lbl);
+      }
+
+      showToast('บันทึกเวลาเริ่มต้นปฏิบัติหน้าที่เรียบร้อยแล้ว');
+    }
+
+    // ==========================================================
+    // BACKUP & RESTORE (JSON EXPORT / IMPORT)
+    // ==========================================================
+    function handleExportJson() {
+      const data = {
+        version: '1.0.0',
+        exportedAt: new Date().toISOString(),
+        adminPin: localStorage.getItem('dg_sarawat_admin_pin') || '2569',
+        uptimeStart: localStorage.getItem('dg_sarawat_uptime_start') || '2026-05-23T07:00:00',
+        uptimeLabel: localStorage.getItem('dg_sarawat_uptime_label') || 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569',
+        newsItems: getNews(),
+        featuredEvent: getFeatured(),
+        calendarEvents: getEvents()
+      };
+
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `sarawat_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('ดาวน์โหลดไฟล์สำรองข้อมูลเรียบร้อยแล้ว');
+    }
+
+    function handleImportJson() {
+      const fileInput = document.getElementById('importJsonFileInput');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('กรุณาเลือกไฟล์ JSON ก่อนทำการนำเข้า');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.newsItems && Array.isArray(data.newsItems)) {
+            saveNews(data.newsItems);
+          }
+          if (data.calendarEvents && Array.isArray(data.calendarEvents)) {
+            saveEvents(data.calendarEvents);
+          }
+          if (data.featuredEvent) {
+            saveFeatured(data.featuredEvent);
+          }
+          if (data.uptimeStart) {
+            localStorage.setItem('dg_sarawat_uptime_start', data.uptimeStart);
+          }
+          if (data.uptimeLabel) {
+            localStorage.setItem('dg_sarawat_uptime_label', data.uptimeLabel);
+          }
+          if (data.adminPin) {
+            localStorage.setItem('dg_sarawat_admin_pin', data.adminPin);
+          }
+
+          initDashboard();
+          showToast('นำเข้าและกู้คืนข้อมูลสำเร็จเรียบร้อย!');
+          fileInput.value = '';
+        } catch (err) {
+          alert('ไฟล์ JSON ไม่ถูกต้องหรือไม่ตรงรูปแบบ: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function handleResetDefaults() {
+      if (!confirm('คำเตือน: คุณต้องการล้างข้อมูลที่แก้ไขทั้งหมด และรีเซ็ตกลับเป็นข้อมูลเริ่มต้นใช่หรือไม่?')) return;
+      saveNews(DEFAULT_NEWS_ITEMS);
+      saveEvents(DEFAULT_CALENDAR_EVENTS);
+      saveFeatured(DEFAULT_FEATURED_EVENT);
+      localStorage.setItem('dg_sarawat_uptime_start', '2026-05-23T07:00:00');
+      localStorage.setItem('dg_sarawat_uptime_label', 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569');
+      initDashboard();
+      showToast('รีเซ็ตข้อมูลสู่ค่าเริ่มต้นเรียบร้อยแล้ว');
+    }
+
+    // ==========================================================
+    // IMAGE UPLOAD TO BASE64 PREVIEWS
+    // ==========================================================
+    const newsImgFileInput = document.getElementById('adminNewsImgFile');
+    if (newsImgFileInput) {
+      newsImgFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            document.getElementById('adminNewsImgBase64').value = evt.target.result;
+            const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+            const previewImg = document.getElementById('adminNewsImgPreview');
+            previewImg.src = evt.target.result;
+            previewWrap.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // ==========================================================
+    // MODAL UTILITIES
+    // ==========================================================
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Close modal when clicking backdrop
+    document.querySelectorAll('.dg-modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          closeModal(backdrop.id);
+        }
+      });
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.dg-modal-backdrop.active').forEach(modal => {
+          closeModal(modal.id);
+        });
+      }
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('adminToast');
+      const msgEl = document.getElementById('adminToastMsg');
+      if (toast && msgEl) {
+        msgEl.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // ==========================================================
+    // INITIALIZATION
+    // ==========================================================
+    function initDashboard() {
+      renderAdminNews();
+      renderAdminEvents();
+      initSettings();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      checkAuth();
+      initDashboard();
+    });
+  </script>
+</body>
+
+</html>

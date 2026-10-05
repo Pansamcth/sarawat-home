@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สารวัตรนักเรียน | โรงเรียนเดชะปัตตนยานุกูล</title>
+  <meta name="description"
+    content="เว็บไซต์คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล - เสริมสร้างระเบียบวินัย ความปลอดภัย และจิตอาสาเพื่อสังคมโรงเรียนที่น่าอยู่" />
+  <meta name="keywords" content="สารวัตรนักเรียน, เดชะปัตตนยานุกูล, กิจการนักเรียน, ระเบียบวินัย, โรงเรียนเดชะ" />
+  <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+
+  <!-- Open Graph / Discord Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pansamcth.github.io/" />
+  <meta property="og:title" content="🛡️ Sarawat Portfolio - เว็บไซต์สารวัตรนักเรียน" />
+  <meta property="og:description"
+    content="เว็บไซต์ Sarawat Portfolio จัดทำขึ้นเพื่อแสดงผลงาน บทบาทหน้าที่ และกิจกรรมของคณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta property="og:image"
+    content="https://cdn.discordapp.com/attachments/1433480535862284504/1450119930610585722/image.png" />
+  <meta property="og:site_name" content="Sarawat - Dechapattanayanukul School" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="🛡️ Sarawat Portfolio - เว็บไซต์สารวัตรนักเรียน" />
+  <meta name="twitter:description"
+    content="เว็บไซต์ Sarawat Portfolio จัดทำขึ้นเพื่อแสดงผลงาน บทบาทหน้าที่ และกิจกรรมของคณะสารวัตรนักเรียน" />
+  <meta name="twitter:image"
+    content="https://cdn.discordapp.com/attachments/1433480535862284504/1450119930610585722/image.png" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Google Fonts: Plus Jakarta Sans + Outfit + Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Diego Minimalist Swiss Agency Design System -->
+  <link rel="stylesheet" href="css/diego.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+</head>
+
+<body>
+  <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
+  <div class="dg-scroll-progress" id="scrollProgress"></div>
+
+  <!-- ============ FLOATING SIDE CHAPTER NAVIGATOR ============ -->
+  <aside class="dg-side-nav" id="dgSideNav" aria-label="Section Quick Navigation">
+    <a href="#hero" class="dg-side-dot active" data-section="hero">
+      <span class="dg-side-tooltip">01 • หน้าแรก</span>
+    </a>
+    <a href="#vision" class="dg-side-dot" data-section="vision">
+      <span class="dg-side-tooltip">02 • วิสัยทัศน์ & พันธกิจ</span>
+    </a>
+    <a href="#news" class="dg-side-dot" data-section="news">
+      <span class="dg-side-tooltip">03 • ข่าวสารและกิจกรรม</span>
+    </a>
+    <a href="#operations" class="dg-side-dot" data-section="operations">
+      <span class="dg-side-tooltip">04 • รวมระบบออนไลน์</span>
+    </a>
+    <a href="#team" class="dg-side-dot" data-section="team">
+      <span class="dg-side-tooltip">05 • วิสัยทัศน์ประธาน</span>
+    </a>
+    <a href="#calendar" class="dg-side-dot" data-section="calendar">
+      <span class="dg-side-tooltip">06 • ตารางกิจกรรมโรงเรียน</span>
+    </a>
+    <a href="#faq" class="dg-side-dot" data-section="faq">
+      <span class="dg-side-tooltip">07 • คำถามที่พบบ่อย</span>
+    </a>
+    <a href="#contact" class="dg-side-dot" data-section="contact">
+      <span class="dg-side-tooltip">08 • ติดต่อเรา</span>
+    </a>
+  </aside>
+
+  <!-- ============ NAVIGATION BAR (Diego Minimalist Header) ============ -->
+  <nav class="dg-nav" id="dgNav">
+    <div class="dg-nav-container">
+      <a href="#hero" class="dg-brand">
+        <img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo" />
+        <span class="dg-brand-text">SARAWAT<sup>®</sup></span>
+      </a>
+
+      <div class="dg-nav-links" id="dgNavLinks">
+        <a href="#hero">หน้าแรก</a>
+        <a href="#vision">วิสัยทัศน์ & พันธกิจ</a>
+        <a href="#news">ข่าวสารและกิจกรรม</a>
+        <a href="#operations">รวมระบบออนไลน์</a>
+        <a href="#team">วิสัยทัศน์ประธาน</a>
+        <a href="#calendar">ตารางกิจกรรม</a>
+        <a href="#faq">คำถามที่พบบ่อย</a>
+        <a href="team.html">หน้าคณะทำงาน</a>
+      </div>
+
+      <div class="dg-nav-actions">
+        <a href="#contact" class="dg-btn-black">
+          <span>ติดต่อเรา</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+        <button class="dg-nav-toggle" id="dgNavToggle" aria-label="Toggle menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO SECTION (Diego Style Header + Sub-grid + Cinematic Image) ============ -->
+  <header class="dg-hero-section" id="hero">
+    <div class="dg-container">
+      <!-- Hero Swiss Headline -->
+      <h1 class="dg-hero-heading" data-reveal="fade">
+        <span class="dg-heading-th">สร้างสรรค์วินัย ด้วยพลังจิตอาสา</span><br>
+        <span class="dg-heading-en">We lead with purpose to protect & inspire.</span>
+      </h1>
+
+      <!-- 2-Column Subtext Layout -->
+      <div class="dg-hero-sub-grid" data-reveal="fade" data-delay="100">
+        <div class="dg-hero-sub-left">
+          สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล องค์กรตัวแทนนักเรียนผู้มุ่งมั่นสร้างสรรค์สังคมแห่งความมีวินัย ปลอดภัย และเป็นแบบอย่างที่ดี
+        </div>
+        <div class="dg-hero-sub-right">
+          <p>
+            ร่วมขับเคลื่อนรั้วเดชะปัตตนยานุกูลสู่มาตรฐานใหม่ ผ่านการดูแลความปลอดภัยอย่างใกล้ชิด การสร้างความเข้าใจ และการปฏิบัติหน้าที่ด้วยความเป็นธรรม
+          </p>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <a href="#operations" class="dg-arrow-link">
+              <span>สำรวจระบบบริการออนไลน์</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+            <!-- Hero Animated Scroll Cue -->
+            <a href="#vision" class="dg-hero-scroll-cue" id="heroScrollCue">
+              <div class="dg-mouse-pill">
+                <div class="dg-mouse-wheel"></div>
+              </div>
+              <span class="dg-scroll-cue-text">SCROLL TO EXPLORE <i data-lucide="chevron-down" style="width: 13px; height: 13px;"></i></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cinematic Full-Width Photo -->
+      <div class="dg-hero-image-wrap" data-reveal="scale">
+        <img src="assets/images/activity-teamwork.jpg" alt="การประชุมและวางแผนงานของคณะกรรมการสารวัตรนักเรียน" id="heroCinematicImg" />
+      </div>
+
+      <!-- ============ LIVE OPERATIONAL UPTIME COUNTER (Diego Swiss Minimalist Style) ============ -->
+      <div class="dg-uptime-card" id="dutyUptimeCard" data-reveal="fade">
+        <div class="dg-uptime-header">
+          <div class="dg-uptime-title-wrap">
+            <span class="dg-section-tag">PREFECT DUTY IN SERVICE • ระยะเวลาปฏิบัติหน้าที่</span>
+          </div>
+          <div class="dg-uptime-meta">
+            <span id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
+          </div>
+        </div>
+
+        <div class="dg-uptime-grid">
+          <!-- Months -->
+          <div class="dg-uptime-unit">
+            <div class="dg-uptime-val" id="uptimeMonths">00</div>
+            <div class="dg-uptime-name">เดือน</div>
+            <div class="dg-uptime-subname">MONTHS</div>
+          </div>
+          <!-- Days -->
+          <div class="dg-uptime-unit">
+            <div class="dg-uptime-val" id="uptimeDays">00</div>
+            <div class="dg-uptime-name">วัน</div>
+            <div class="dg-uptime-subname">DAYS</div>
+          </div>
+          <!-- Hours -->
+          <div class="dg-uptime-unit">
+            <div class="dg-uptime-val" id="uptimeHours">00</div>
+            <div class="dg-uptime-name">ชั่วโมง</div>
+            <div class="dg-uptime-subname">HOURS</div>
+          </div>
+          <!-- Minutes -->
+          <div class="dg-uptime-unit">
+            <div class="dg-uptime-val" id="uptimeMinutes">00</div>
+            <div class="dg-uptime-name">นาที</div>
+            <div class="dg-uptime-subname">MINUTES</div>
+          </div>
+          <!-- Seconds -->
+          <div class="dg-uptime-unit is-seconds">
+            <div class="dg-uptime-val" id="uptimeSeconds">00</div>
+            <div class="dg-uptime-name">วินาที</div>
+            <div class="dg-uptime-subname">SECONDS</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission & Vision 2-Column Layout -->
+      <div class="dg-mission-vision-grid" id="vision" data-reveal="fade">
+        <div>
+          <span class="dg-mv-label">OUR MISSION • พันธกิจหลัก</span>
+          <p class="dg-mv-desc">
+            สร้างแรงบันดาลใจและเสริมสร้างวินัยผ่านการเป็นแบบอย่างที่ดี ปลูกฝังจิตสาธารณะและความรับผิดชอบต่อส่วนรวม ดูแลความสงบเรียบร้อยและความปลอดภัยตลอดเวลาในรั้วโรงเรียนเดชะปัตตนยานุกูล เพื่อให้ทุกคนเรียนรู้อย่างมีความสุข
+          </p>
+        </div>
+        <div>
+          <span class="dg-mv-label">OUR VISION • วิสัยทัศน์</span>
+          <p class="dg-mv-desc">
+            มุ่งสู่การเป็นองค์กรตัวแทนนักเรียนต้นแบบที่มีระบบการทำงานโปร่งใส ยุติธรรม ทันสมัยด้วยเทคโนโลยีดิจิทัล และเป็นที่พึ่งพาที่ไว้วางใจได้ของเพื่อนนักเรียนและคณะครูอาจารย์อย่างแท้จริง
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============ NEWS & ACTIVITIES SECTION (ข่าวสารและกิจกรรม) ============ -->
+  <section class="dg-news-section" id="news">
+    <div class="dg-container">
+      <div class="dg-news-header" data-reveal="fade">
+        <div class="dg-news-header-left">
+          <span class="dg-section-tag">NEWS & ACTIVITIES • ข่าวสารและกิจกรรม</span>
+          <h2 class="dg-section-title">
+            News & Live Activities.<br>
+            Captured in action, every day.
+          </h2>
+          <p class="dg-section-desc">
+            ติดตามภาพบรรยากาศการปฏิบัติหน้าที่ กิจกรรมสำคัญ และข่าวสารประชาสัมพันธ์ล่าสุด สามารถกดเปิดดูโพสต์ Facebook, Instagram หรืออัลบั้มภาพบน Google Photos ได้ทันที
+          </p>
+        </div>
+        <div class="dg-news-header-actions">
+          <div class="dg-news-carousel-nav">
+            <button class="dg-carousel-btn" id="newsPrevBtn" type="button" aria-label="ข่าวก่อนหน้า" title="ข่าวก่อนหน้า">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <button class="dg-carousel-btn" id="newsNextBtn" type="button" aria-label="ข่าวถัดไป" title="ข่าวถัดไป">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel / Grid Track -->
+      <div class="dg-news-track-wrap" id="newsTrackWrap">
+        <div class="dg-news-track" id="newsCardsTrack">
+          <!-- Rendered dynamically by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INTEGRATED OPERATIONS SECTION (3 Essential Digital Services) ============ -->
+  <section class="dg-ops-section" id="operations">
+    <div class="dg-container">
+      <div class="dg-section-header" data-reveal="fade">
+        <span class="dg-section-tag">ONLINE SERVICES • รวมระบบปฏิบัติการ</span>
+        <h2 class="dg-section-title">
+          Digital Operations. Integrated<br>
+          for speed, safety, & trust.
+        </h2>
+        <p class="dg-section-desc">
+          รวมระบบปฏิบัติการออนไลน์ไว้ในที่เดียว แยกการประมวลผลเพื่อความรวดเร็ว ปลอดภัย และโปร่งใส เข้าถึงได้ทุกที่ทุกเวลา
+        </p>
+      </div>
+
+      <div class="dg-ops-grid">
+        <!-- Card 1: Emergency -->
+        <div class="dg-ops-card theme-emergency" data-reveal="scale" data-delay="0" onclick="openModal('emergencyModal')">
+          <div>
+            <div class="dg-ops-icon-box">
+              <i data-lucide="megaphone"></i>
+            </div>
+            <h3>แจ้งเหตุฉุกเฉิน</h3>
+            <p>
+              แจ้งพฤติกรรมไม่เหมาะสม ทะเลาะวิวาท อุบัติเหตุ หรือเหตุการณ์ฉุกเฉิน พร้อมระบบพิกัดภายในโรงเรียน
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>เปิดระบบแจ้งเหตุด่วน</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- Card 2: Anonymous Complaints -->
+        <div class="dg-ops-card theme-complaint" data-reveal="scale" data-delay="120" onclick="openModal('complaintModal')">
+          <div>
+            <div class="dg-ops-icon-box">
+              <i data-lucide="scale"></i>
+            </div>
+            <h3>ร้องเรียนการทำงาน</h3>
+            <p>
+              สะท้อนข้อคิดเห็นหรือร้องเรียนการปฏิบัติหน้าที่ ข้อมูลจะถูกปิดบังตัวตน 100% ส่งตรงถึงครูที่ปรึกษา
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>ส่งข้อร้องเรียนลับ</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- Card 3: SI-ROSTER (The Green Featured Link Card) -->
+        <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer"
+          class="dg-ops-card theme-roster" data-reveal="scale" data-delay="240">
+          <div>
+            <div class="dg-ops-icon-box">
+              <i data-lucide="calendar-check"></i>
+            </div>
+            <h3>ระบบลงหน้าที่ (SI-ROSTER)</h3>
+            <p>
+              ตรวจสอบตารางเวร จุดตรวจ และบันทึกเวลาปฏิบัติหน้าที่ ประจำภาคเรียนที่ 2/2567 ผ่านระบบออนไลน์
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>เข้าสู่ระบบเวร (SI-ROSTER)</span>
+            <i data-lucide="arrow-up-right"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHIEF PREFECT VISION SECTION (วิสัยทัศน์ประธานสารวัตร) ============ -->
+  <section class="dg-chief-section" id="team">
+    <div class="dg-container">
+      <div class="dg-section-header" data-reveal="fade">
+        <span class="dg-section-tag">LEADERSHIP • วิสัยทัศน์ประธาน</span>
+        <h2 class="dg-section-title">
+          Lead with Empathy.<br>
+          Discipline by Example.
+        </h2>
+        <p class="dg-section-desc">
+          วิสัยทัศน์และแนวทางการขับเคลื่อนระเบียบวินัยเชิงบวก โดยหัวหน้าสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล
+        </p>
+      </div>
+
+      <div class="dg-chief-grid">
+        <!-- Left: Chief Portrait Card -->
+        <div class="dg-chief-portrait-card" data-reveal="left">
+          <div class="dg-chief-photo-wrap">
+            <img src="assets/images/leader-chief.jpg" alt="นายสมชาย ใจดี - หัวหน้าสารวัตรนักเรียน" id="chiefPortraitImg" />
+          </div>
+          <div class="dg-chief-portrait-meta">
+            <span class="dg-chief-badge">CHIEF PREFECT • 2567-2568</span>
+            <h3 class="dg-chief-name">นายสมชาย ใจดี</h3>
+            <p class="dg-chief-role">หัวหน้าสารวัตรนักเรียน • ชั้นมัธยมศึกษาปีที่ 5/1</p>
+          </div>
+        </div>
+
+        <!-- Right: Vision Content & Commitments -->
+        <div class="dg-chief-content" data-reveal="right">
+          <blockquote class="dg-chief-quote">
+            "วินัยที่ยั่งยืน ไม่ได้เกิดจากความเกรงกลัว แต่เกิดจากความเข้าใจ ความเคารพซึ่งกันและกัน และการมีแบบอย่างที่ดีในทุกๆ วัน"
+          </blockquote>
+
+          <div class="dg-chief-pillars">
+            <!-- Pillar 1 -->
+            <div class="dg-chief-pillar-item" data-reveal="fade" data-delay="80">
+              <div class="dg-chief-pillar-icon">
+                <i data-lucide="heart-handshake"></i>
+              </div>
+              <div class="dg-chief-pillar-text">
+                <h4>มิตรภาพและความเข้าอกเข้าใจ (Empathy & Respect)</h4>
+                <p>เปลี่ยนภาพลักษณ์สารวัตรนักเรียนจากผู้บังคับกฎ สู่การเป็นเพื่อนร่วมโรงเรียนที่พร้อมรับฟัง ให้คำแนะนำ และดูแลความปลอดภัยด้วยความสุภาพ</p>
+              </div>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="dg-chief-pillar-item" data-reveal="fade" data-delay="160">
+              <div class="dg-chief-pillar-icon">
+                <i data-lucide="scale"></i>
+              </div>
+              <div class="dg-chief-pillar-text">
+                <h4>ความยุติธรรมและโปร่งใส (Integrity & Fairness)</h4>
+                <p>ปฏิบัติหน้าที่บนพื้นฐานของความเท่าเทียม ปราศจากอคติ ตรวจสอบได้ และรับฟังความคิดเห็นจากเพื่อนนักเรียนเพื่อพัฒนาโรงเรียนไปด้วยกัน</p>
+              </div>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="dg-chief-pillar-item" data-reveal="fade" data-delay="240">
+              <div class="dg-chief-pillar-icon">
+                <i data-lucide="cpu"></i>
+              </div>
+              <div class="dg-chief-pillar-text">
+                <h4>ทันสมัยด้วยระบบดิจิทัล (Digital Efficiency)</h4>
+                <p>ยกระดับการปฏิบัติงานด้วยระบบออนไลน์ เช่น SI-ROSTER และระบบแจ้งเหตุเร่งด่วน เพื่อความสะดวก รวดเร็ว และแม่นยำ</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button to Team Page -->
+          <div class="dg-chief-actions">
+            <a href="team.html" class="dg-btn-black" style="padding: 14px 28px; font-size: 0.95rem;">
+              <span>ไปยังหน้าคณะทำงาน (Meet the Team)</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+            <a href="#contact" class="dg-arrow-link">
+              <span>ส่งข้อความถึงประธาน</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACADEMIC & ACTIVITIES CALENDAR SECTION (ตารางกิจกรรมโรงเรียน) ============ -->
+  <section class="dg-calendar-section" id="calendar">
+    <div class="dg-container">
+      <div class="dg-section-header" data-reveal="fade">
+        <span class="dg-section-tag">ACADEMIC & ACTIVITIES SCHEDULE • ปฏิทินและตารางกิจกรรมโรงเรียน</span>
+        <h2 class="dg-section-title">
+          School Calendar & Agenda.<br>
+          Never miss an event.
+        </h2>
+        <p class="dg-section-desc">
+          ตรวจสอบกำหนดการ กิจกรรมสำคัญ วันสอบ และวาระงานของโรงเรียนเดชะปัตตนยานุกูล ประจำภาคเรียนที่ 2/2567 เพื่อการวางแผนและเตรียมความพร้อมร่วมกันของนักเรียน ครู และบุคลากร
+        </p>
+      </div>
+
+      <!-- Featured Upcoming Event Banner (High-Impact Next-Up) -->
+      <div class="dg-calendar-featured" id="featuredEventContainer" data-reveal="scale">
+        <div class="dg-featured-badge-col">
+          <div class="day" id="featDay">12-14</div>
+          <div class="month" id="featMonth">พ.ย. 67</div>
+          <div class="tag" id="featTag">เร็วๆ นี้ (NEXT UP)</div>
+        </div>
+        <div class="dg-featured-info">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span class="dg-event-category-badge cat-sports" id="featCategory">กิจกรรมสำคัญ • กีฬาสีภายใน</span>
+          </div>
+          <h3 id="featTitle">การแข่งขันกรีฑาและกีฬาสีภายใน "เดชะเกมส์ ประจำปีการศึกษา 2567"</h3>
+          <div class="dg-featured-meta">
+            <span id="featTime"><i data-lucide="clock"></i> 07:30 - 16:30 น. (ตลอด 3 วัน)</span>
+            <span id="featLocation"><i data-lucide="map-pin"></i> สนามกีฬาและโรงยิมฯ โรงเรียนเดชะปัตตนยานุกูล</span>
+            <span id="featAudience"><i data-lucide="users"></i> นักเรียน ม.1 - ม.6 และคณะครูอาจารย์</span>
+          </div>
+          <p class="dg-featured-desc" id="featDesc">
+            มหกรรมกีฬาแห่งความสามัคคี ขบวนพาเหรด การประกวดกองเชียร์และเชียร์ลีดเดอร์ <strong>ภารกิจสารวัตร:</strong> ประจำการดูแลความปลอดภัย ตรวจระเบียบทางเข้า-ออก และอำนวยความสะดวกการจราจรตลอดการจัดงาน
+          </p>
+        </div>
+        <div>
+          <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%B8%81%E0%B8%B5%E0%B8%AC%E0%B8%B2%E0%B8%AA%E0%B8%B5%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B9%80%E0%B8%81%E0%B8%A1%E0%B8%AA%E0%B9%8C+2567&dates=20241112T003000Z/20241114T093000Z&details=%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%81%E0%B8%82%E0%B9%88%E0%B8%87%E0%B8%82%E0%B8%B1%E0%B8%99%E0%B8%81%E0%B8%A3%E0%B8%B5%E0%B8%91%E0%B8%B2%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B8%81%E0%B8%B5%E0%B8%AC%E0%B8%B2%E0%B8%AA%E0%B8%B5%E0%B8%A0%E0%B8%B2%E0%B8%A2%E0%B9%83%E0%B8%99+%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" id="featCalLink" rel="noopener noreferrer" class="dg-btn-black" style="padding: 12px 20px; font-size: 0.88rem; white-space: nowrap;">
+            <i data-lucide="calendar-plus"></i>
+            <span>เพิ่มลง Google Cal</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Controls: Category Filters + Live Search + PDF Button -->
+      <div class="dg-calendar-controls" data-reveal="fade">
+        <div class="dg-calendar-filters" id="calendarFilters">
+          <button type="button" class="dg-filter-btn active" data-category="all">ทั้งหมด (All Events)</button>
+          <button type="button" class="dg-filter-btn" data-category="ceremony">พิธีการ & ประเพณี</button>
+          <button type="button" class="dg-filter-btn" data-category="academic">วิชาการ & วันสอบ</button>
+          <button type="button" class="dg-filter-btn" data-category="sports">กีฬา & ชุมนุม</button>
+          <button type="button" class="dg-filter-btn" data-category="prefect">ภารกิจสารวัตร</button>
+        </div>
+
+        <div class="dg-calendar-search-wrap">
+          <div class="dg-calendar-search">
+            <i data-lucide="search"></i>
+            <input type="text" id="eventSearchInput" placeholder="ค้นหากิจกรรม เช่น วันสอบ, กีฬาสี, ปีใหม่..." autocomplete="off" />
+          </div>
+          <button type="button" onclick="alert('ดาวน์โหลดปฏิทินการศึกษาประจำภาคเรียนที่ 2/2567 (PDF) เรียบร้อยแล้ว')" class="dg-btn-sm-outline" title="ดาวน์โหลดปฏิทินฉบับเต็ม">
+            <i data-lucide="download"></i>
+            <span>ปฏิทิน PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Events List (Swiss Ledger Style) -->
+      <div class="dg-events-list" id="eventsListContainer">
+        <!-- Event 1 -->
+        <div class="dg-event-card" data-category="ceremony" data-keywords="ลอยกระทง ประเพณี จิตอาสา วัฒนธรรม สิ่งแวดล้อม" data-reveal="fade" data-delay="60">
+          <div class="dg-event-date-box">
+            <span class="day-num">15</span>
+            <span class="month-str">พ.ย. 67</span>
+            <span class="weekday-str">ศุกร์</span>
+          </div>
+          <div class="dg-event-details">
+            <div class="dg-event-header-row">
+              <span class="dg-event-category-badge cat-ceremony">ประเพณี & วัฒนธรรม</span>
+              <h4 class="dg-event-title">ประเพณีวันลอยกระทง สืบสานวัฒนธรรม และจิตอาสารักษ์สิ่งแวดล้อม</h4>
+            </div>
+            <div class="dg-event-info-bar">
+              <span><i data-lucide="clock"></i> 13:00 - 16:30 น.</span>
+              <span><i data-lucide="map-pin"></i> ลานกิจกรรมอเนกประสงค์ และรอบคูเมืองโรงเรียน</span>
+              <span><i data-lucide="users"></i> สมาชิกทุกระดับชั้น</span>
+            </div>
+            <p class="dg-event-prefect-note">
+              <strong>ข้อปฏิบัติ & สารวัตร:</strong> ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ
+            </p>
+          </div>
+          <div class="dg-event-action-col">
+            <span class="dg-event-status-tag">กำลังมาถึง</span>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%A5%E0%B8%AD%E0%B8%A2%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B8%87+%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%AF&dates=20241115T060000Z/20241115T093000Z&details=%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%9E%E0%B8%93%E0%B8%B5%E0%B8%A7%E0%B8%B1%E0%B8%99%E0%B8%A5%E0%B8%AD%E0%B8%A2%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B8%87+%E0%B8%A3%E0%B8%A3.%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+              <i data-lucide="calendar-plus"></i>
+              <span>บันทึก</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Event 2 -->
+        <div class="dg-event-card" data-category="academic" data-keywords="สอบ กลางภาค วิชาการ ข้อสอบ midterm exam" data-reveal="fade" data-delay="100">
+          <div class="dg-event-date-box">
+            <span class="day-num">25-29</span>
+            <span class="month-str">พ.ย. 67</span>
+            <span class="weekday-str">จ.-ศ.</span>
+          </div>
+          <div class="dg-event-details">
+            <div class="dg-event-header-row">
+              <span class="dg-event-category-badge cat-academic">วิชาการ & วันสอบ</span>
+              <h4 class="dg-event-title">การประเมินผลและสอบวัดผลกลางภาคเรียนที่ 2/2567 (Midterm Exams)</h4>
+            </div>
+            <div class="dg-event-info-bar">
+              <span><i data-lucide="clock"></i> 08:30 - 15:30 น.</span>
+              <span><i data-lucide="map-pin"></i> อาคารเรียน 1, 2, 3, 4 ทุกห้องสอบ</span>
+              <span><i data-lucide="users"></i> นักเรียน ม.1 - ม.6 ทุกคน</span>
+            </div>
+            <p class="dg-event-prefect-note">
+              <strong>ข้อปฏิบัติ & สารวัตร:</strong> แต่งกายชุดนักเรียนถูกระเบียบ 100% สารวัตรนักเรียนดูแลความเงียบสงบในบริเวณเขตสอบและจัดระเบียบยานพาหนะ
+            </p>
+          </div>
+          <div class="dg-event-action-col">
+            <span class="dg-event-status-tag">สำคัญมาก</span>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%81%E0%B8%A5%E0%B8%B2%E0%B8%87%E0%B8%A0%E0%B8%B2%E0%B8%84+2/2567+%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%AF&dates=20241125T013000Z/20241129T083000Z&details=%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9C%E0%B8%A5%E0%B8%81%E0%B8%A5%E0%B8%B2%E0%B8%87%E0%B8%A0%E0%B8%B2%E0%B8%84%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88+2/2567&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+              <i data-lucide="calendar-plus"></i>
+              <span>บันทึก</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Event 3 -->
+        <div class="dg-event-card" data-category="prefect" data-keywords="สารวัตร อบรม ค่าย ผู้นำ จิตอาสา วินัย prefect camp" data-reveal="fade" data-delay="140">
+          <div class="dg-event-date-box">
+            <span class="day-num">07</span>
+            <span class="month-str">ธ.ค. 67</span>
+            <span class="weekday-str">เสาร์</span>
+          </div>
+          <div class="dg-event-details">
+            <div class="dg-event-header-row">
+              <span class="dg-event-category-badge cat-prefect">ภารกิจสารวัตร • ค่ายพัฒนาภาวะผู้นำ</span>
+              <h4 class="dg-event-title">ค่ายอบรมเสริมสร้างภาวะผู้นำและทักษะจิตอาสาสารวัตรนักเรียน รุ่นที่ 15</h4>
+            </div>
+            <div class="dg-event-info-bar">
+              <span><i data-lucide="clock"></i> 08:30 - 16:30 น.</span>
+              <span><i data-lucide="map-pin"></i> ห้องประชุมรวงผึ้ง และลานกิจกรรม</span>
+              <span><i data-lucide="users"></i> คณะสารวัตรนักเรียน และแกนนำจิตอาสา</span>
+            </div>
+            <p class="dg-event-prefect-note">
+              <strong>ข้อปฏิบัติ & สารวัตร:</strong> การฝึกอบรมการระงับเหตุฉุกเฉิน กฎหมายเยาวชนเบื้องต้น การปฐมพยาบาล CPR และการบริหารระบบ SI-ROSTER
+            </p>
+          </div>
+          <div class="dg-event-action-col">
+            <span class="dg-event-status-tag">เฉพาะสารวัตร</span>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B8%A2%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A1%E0%B8%AA%E0%B8%B2%E0%B8%A3%E0%B8%A7%E0%B8%B1%E0%B8%95%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99+%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99+15&dates=20241207T013000Z/20241207T093000Z&details=%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B8%A2%E0%B8%AD%E0%B8%9A%E0%B8%A3%E0%B8%A1%E0%B8%A0%E0%B8%B2%E0%B8%A7%E0%B8%B0%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B8%99%E0%B8%B3%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B8%97%E0%B8%B1%E0%B8%81%E0%B8%A9%E0%B8%B0%E0%B8%88%E0%B8%B4%E0%B8%95%E0%B8%AD%E0%B8%B2%E0%B8%AA%E0%B8%B2%E0%B8%AA%E0%B8%B2%E0%B8%A3%E0%B8%A7%E0%B8%B1%E0%B8%95%E0%B8%A3%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+              <i data-lucide="calendar-plus"></i>
+              <span>บันทึก</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Event 4 -->
+        <div class="dg-event-card" data-category="academic" data-keywords="open house เปิดบ้าน วิชาการ นิทรรศการ แนะแนว ผลงาน" data-reveal="fade" data-delay="180">
+          <div class="dg-event-date-box">
+            <span class="day-num">18</span>
+            <span class="month-str">ธ.ค. 67</span>
+            <span class="weekday-str">พุธ</span>
+          </div>
+          <div class="dg-event-details">
+            <div class="dg-event-header-row">
+              <span class="dg-event-category-badge cat-academic">วิชาการ & เปิดบ้านโรงเรียน</span>
+              <h4 class="dg-event-title">มหกรรมเปิดบ้านวิชาการ "Decha Open House & Exhibition 2024"</h4>
+            </div>
+            <div class="dg-event-info-bar">
+              <span><i data-lucide="clock"></i> 08:00 - 15:30 น.</span>
+              <span><i data-lucide="map-pin"></i> ลานโดมอเนกประสงค์ และหอประชุมใหญ่</span>
+              <span><i data-lucide="users"></i> นักเรียน ผู้ปกครอง และบุคคลภายนอก</span>
+            </div>
+            <p class="dg-event-prefect-note">
+              <strong>ข้อปฏิบัติ & สารวัตร:</strong> นิทรรศการผลงาน 8 กลุ่มสาระ สารวัตรนักเรียนประจำจุดต้อนรับ ประชาสัมพันธ์ และจัดการจราจรบริเวณหน้าโรงเรียน
+            </p>
+          </div>
+          <div class="dg-event-action-col">
+            <span class="dg-event-status-tag">บุคคลภายนอกเข้าได้</span>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Decha+Open+House+%26+Exhibition+2024&dates=20241218T010000Z/20241218T083000Z&details=%E0%B8%A1%E0%B8%Props%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B9%80%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%A7%E0%B8%B4%E0%B8%87%E0%B8%B2%E0%B8%81%E0%B8%B2%E0%B8%A3+%E0%B8%A3%E0%B8%A3.%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+              <i data-lucide="calendar-plus"></i>
+              <span>บันทึก</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Event 5 -->
+        <div class="dg-event-card" data-category="ceremony" data-keywords="ปีใหม่ ตักบาตร ทำบุญ วันหยุด ส่งท้ายปี new year" data-reveal="fade" data-delay="220">
+          <div class="dg-event-date-box">
+            <span class="day-num">27</span>
+            <span class="month-str">ธ.ค. 67</span>
+            <span class="weekday-str">ศุกร์</span>
+          </div>
+          <div class="dg-event-details">
+            <div class="dg-event-header-row">
+              <span class="dg-event-category-badge cat-ceremony">พิธีการ & ประเพณี</span>
+              <h4 class="dg-event-title">กิจกรรมส่งท้ายปีเก่า ต้อนรับปีใหม่ 2568 และทำบุญตักบาตรข้าวสารอาหารแห้ง</h4>
+            </div>
+            <div class="dg-event-info-bar">
+              <span><i data-lucide="clock"></i> 07:00 - 12:00 น.</span>
+              <span><i data-lucide="map-pin"></i> ลานธรรม และสนามหน้าเสาธง</span>
+              <span><i data-lucide="users"></i> นักเรียนและบุคลากรทุกท่าน</span>
+            </div>
+            <p class="dg-event-prefect-note">
+              <strong>ข้อปฏิบัติ & สารวัตร:</strong> แต่งกายชุดผ้าไทยหรือชุดสุภาพ สารวัตรนักเรียนดูแลแถวตักบาตรและอำนวยความสะดวกครูอาวุโส
+            </p>
+          </div>
+          <div class="dg-event-action-col">
+            <span class="dg-event-status-tag">วันสุดท้ายก่อนหยุดยาว</span>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%B8%97%E0%B8%B3%E0%B8%9A%E0%B8%B8%E0%B8%8D%E0%B8%9B%E0%B8%B5%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88+2568+%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%AF&dates=20241227T000000Z/20241227T050000Z&details=%E0%B8%81%E0%B8%B4%E0%B8%88%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%AA%E0%B9%88%E0%B8%87%E0%B8%97%E0%B9%89%E0%B8%B2%E0%B8%A2%E0%B8%9B%E0%B8%B5%E0%B9%80%E0%B8%81%E0%B9%88%E0%B8%B2%E0%B8%95%E0%B9%89%E0%B8%AD%E0%B8%99%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B8%9B%E0%B8%B5%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88+2568&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+              <i data-lucide="calendar-plus"></i>
+              <span>บันทึก</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Event 6 -->
+        <div class="dg-event-card" data-category="academic" data-keywords="สอบ ปลายภาค วิชาการ final exam ปิดเทอม" data-reveal="fade" data-delay="260">
+          <div class="dg-event-date-box">
+            <span class="day-num">17-21</span>
+            <span class="month-str">ก.พ. 68</span>
+            <span class="weekday-str">จ.-ศ.</span>
+          </div>
+          <div class="dg-event-details">
+            <div class="dg-event-header-row">
+              <span class="dg-event-category-badge cat-academic">วิชาการ & วันสอบ</span>
+              <h4 class="dg-event-title">การสอบวัดผลปลายภาคเรียนที่ 2/2567 (Final Examination)</h4>
+            </div>
+            <div class="dg-event-info-bar">
+              <span><i data-lucide="clock"></i> 08:30 - 15:30 น.</span>
+              <span><i data-lucide="map-pin"></i> ทุกอาคารเรียน</span>
+              <span><i data-lucide="users"></i> นักเรียน ม.1 - ม.6 ทุกระดับชั้น</span>
+            </div>
+            <p class="dg-event-prefect-note">
+              <strong>ข้อปฏิบัติ & สารวัตร:</strong> ตรวจสอบระเบียบการแต่งกาย ทรงผม และอุปกรณ์สอบเข้มงวด สารวัตรนักเรียนประจำการเต็มกำลังทุกอาคารสอบ
+            </p>
+          </div>
+          <div class="dg-event-action-col">
+            <span class="dg-event-status-tag">สิ้นสุดปีการศึกษา</span>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%9B%E0%B8%A5%E0%B8%B2%E0%B8%A2%E0%B8%A0%E0%B8%B2%E0%B8%84+2/2567+%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%AF&dates=20250217T013000Z/20250221T083000Z&details=%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9C%E0%B8%A5%E0%B8%9B%E0%B8%A5%E0%B8%B2%E0%B8%A2%E0%B8%A0%E0%B8%B2%E0%B8%84%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88+2/2567&location=%E0%B9%82%E0%B8%A3%E0%B8%87%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%99%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B0%E0%B8%9B%E0%B8%B1%E0%B8%95%E0%B8%95%E0%B8%99%E0%B8%A2%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%81%E0%B8%B9%E0%B8%A5" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+              <i data-lucide="calendar-plus"></i>
+              <span>บันทึก</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty Search State -->
+      <div class="dg-events-empty" id="eventsEmptyState">
+        <i data-lucide="calendar-x" style="width: 42px; height: 42px; color: var(--dg-text-muted); margin: 0 auto 12px; display: block;"></i>
+        <h4>ไม่พบกิจกรรมที่ตรงกับการค้นหา</h4>
+        <p>ลองค้นหาด้วยคำอื่น เช่น "สอบ", "กีฬาสี", "ปีใหม่" หรือคลิกเลือกหมวดหมู่ "ทั้งหมด"</p>
+      </div>
+
+      <!-- Notice Footer Bar -->
+      <div class="dg-calendar-footer-note" data-reveal="fade">
+        <div class="note-left">
+          <i data-lucide="info"></i>
+          <span><strong>หมายเหตุ:</strong> กำหนดการอาจมีการเปลี่ยนแปลงตามประกาศของกลุ่มบริหารวิชาการและกิจการนักเรียน สามารถตรวจสอบประกาศล่าสุดได้ที่หน้าเพจโรงเรียน</span>
+        </div>
+        <div>
+          <a href="https://web.facebook.com/sarawatdechaa" target="_blank" class="dg-arrow-link" style="font-size: 0.85rem;">
+            <span>ติดตามประกาศด่วนบน Facebook</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ACCORDION ("Questions? Answers." from Diego) ============ -->
+  <section class="dg-faq-section" id="faq">
+    <div class="dg-container">
+      <div class="dg-faq-grid">
+        <!-- Left: Big Title + Contact Card -->
+        <div class="dg-faq-left" data-reveal="fade">
+          <h2 class="dg-faq-title">
+            Questions?<br>
+            Answers.
+          </h2>
+          <div class="dg-faq-contact-card">
+            <p>
+              มีข้อสงสัยเกี่ยวกับการปฏิบัติงาน หรือต้องการสอบถามข้อมูลเพิ่มเติม สามารถติดต่อคณะสารวัตรได้ทันที
+            </p>
+            <a href="#contact" class="dg-btn-black">
+              <span>ติดต่อสอบถาม</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Accordion -->
+        <div class="dg-accordion-list" data-reveal="fade" data-delay="120">
+          <!-- Accordion 1 (Active by default) -->
+          <div class="dg-accordion-item active">
+            <button class="dg-accordion-trigger" type="button">
+              <span>ใครสามารถสมัครเป็นสารวัตรนักเรียนได้บ้าง?</span>
+              <div class="dg-accordion-icon">—</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                นักเรียนโรงเรียนเดชะปัตตนยานุกูลตั้งแต่ระดับชั้นมัธยมศึกษาปีที่ 1 ถึง 5 ที่มีความประพฤติเรียบร้อย มีจิตสาธารณะ และผ่านการคัดเลือกและการอบรมเสริมสร้างภาวะผู้นำจากกลุ่มงานกิจการนักเรียน
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 2 -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>การปฏิบัติหน้าที่สารวัตรจะกระทบต่อเวลาเรียนหรือไม่?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                ไม่กระทบครับ เพราะตารางเวรจะแบ่งรอบปฏิบัติหน้าที่เฉพาะช่วงก่อนเข้าแถว (07:00 - 07:45 น.), ช่วงพักกลางวัน และช่วงหลังเลิกเรียน โดยมีการจัดรอบเวรหมุนเวียนอย่างเป็นระบบผ่านระบบ SI-ROSTER เพื่อให้ทุกคนมีเวลาทบทวนบทเรียนอย่างเต็มที่
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 3 -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>หากพบเห็นเหตุการณ์ฉุกเฉินหรือพฤติกรรมไม่เหมาะสม แจ้งทางไหนได้เร็วที่สุด?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                สามารถคลิกใช้ระบบ "แจ้งเหตุฉุกเฉินออนไลน์" บนหน้าเว็บไซต์นี้ได้ทันที ข้อมูลจะส่งแจ้งเตือนด่วนไปยังศูนย์ปฏิบัติการสารวัตรนักเรียน หรือสามารถแจ้งสารวัตรที่ประจำการในจุดใกล้เคียงได้โดยตรง
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 4 -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>ระบบร้องเรียนการทำงานมีความปลอดภัยและเป็นความลับแค่ไหน?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                ระบบร้องเรียนถูกออกแบบให้นิรนาม 100% ไม่มีการบันทึกชื่อ นามสกุล หรือ IP Address ข้อความทั้งหมดจะถูกส่งตรงไปยังคุณครูกลุ่มงานกิจการนักเรียนโดยตรง เพื่อการตรวจสอบที่โปร่งใส ยุติธรรม และปลอดภัยต่อผู้แจ้ง
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 5 -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>ระบบลงหน้าที่ (SI-ROSTER) คืออะไร?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                SI-ROSTER เป็นระบบจัดการตารางเวรออนไลน์ของสารวัตรนักเรียน ช่วยให้เจ้าหน้าที่ทุกคนตรวจสอบจุดประจำการ บันทึกเวลาเข้าเวร และประสานงานสลับเวรได้อย่างเป็นระเบียบและโปร่งใส
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRE-FOOTER CTA & FOOTER ============ -->
+  <footer class="dg-footer" id="contact">
+    <div class="dg-container">
+      <!-- Pre-Footer CTA (Exact Diego Layout) -->
+      <div class="dg-pre-footer-grid" data-reveal="fade">
+        <div>
+          <h2 class="dg-pre-footer-title">
+            Have any questions<br>
+            in your mind!
+          </h2>
+          <a href="https://web.facebook.com/sarawatdechaa" target="_blank" class="dg-arrow-link">
+            <span>ส่งข้อความหาเราผ่าน Facebook</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 3-Column Footer Links -->
+        <div class="dg-footer-columns">
+          <div class="dg-footer-col">
+            <h5>ส่วนสำคัญ</h5>
+            <a href="#hero">หน้าหลัก (Homepage)</a>
+            <a href="#vision">วิสัยทัศน์ & พันธกิจ</a>
+            <a href="#operations">รวมระบบออนไลน์</a>
+            <a href="#team">วิสัยทัศน์ประธาน</a>
+            <a href="#calendar">ตารางกิจกรรมโรงเรียน</a>
+            <a href="team.html">หน้าคณะทำงาน</a>
+          </div>
+
+          <div class="dg-footer-col">
+            <h5>บริการออนไลน์</h5>
+            <a href="#operations" onclick="openModal('emergencyModal')">แจ้งเหตุฉุกเฉิน (Emergency)</a>
+            <a href="#operations" onclick="openModal('complaintModal')">ร้องเรียนการทำงาน (Complaint)</a>
+            <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer">ตารางเวร (SI-ROSTER)</a>
+          </div>
+
+          <div class="dg-footer-col">
+            <h5>ช่องทางติดต่อ</h5>
+            <a href="https://web.facebook.com/sarawatdechaa" target="_blank">Facebook Page</a>
+            <a href="https://www.instagram.com/sarawat_decha/" target="_blank">Instagram (@sarawat_decha)</a>
+            <a href="https://decha.ac.th" target="_blank">เว็บไซต์โรงเรียนเดชะฯ</a>
+            <a href="register.html">สมัครสารวัตรนักเรียน</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="dg-footer-bottom">
+        <div>
+          © 2568 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล. All rights reserved.
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+          <span>Designed in Diego Swiss Agency Style • Powered By <a href="https://github.com/Pansamcth" target="_blank">Rujira Wattanakitpaisal</a></span>
+          <span style="opacity: 0.3;">|</span>
+          <a href="admin.html" style="display: inline-flex; align-items: center; gap: 5px; color: var(--dg-text-muted); font-size: 0.78rem; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='var(--dg-text-muted)'" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>ระบบจัดการสารวัตร (Admin)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ MODALS FOR ONLINE OPERATIONS ============ -->
+  <!-- 1. Emergency Modal -->
+  <div class="dg-modal-backdrop" id="emergencyModal">
+    <div class="dg-modal-box">
+      <button class="dg-modal-close-btn" onclick="closeModal('emergencyModal')" aria-label="Close modal">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="dg-modal-header">
+        <div class="dg-modal-header-icon" style="background: #fee2e2; color: #dc2626;">
+          <i data-lucide="megaphone"></i>
+        </div>
+        <div class="dg-modal-header-text">
+          <h3>แจ้งเหตุฉุกเฉิน / พฤติกรรมไม่เหมาะสม</h3>
+          <p>ระบบแจ้งเตือนเร่งด่วนสู่ศูนย์ปฏิบัติการสารวัตรนักเรียน</p>
+        </div>
+      </div>
+      <form onsubmit="handleModalSubmit(event, 'ส่งข้อมูลแจ้งเหตุฉุกเฉินเรียบร้อยแล้ว ทีมสารวัตรจะเข้าตรวจสอบทันที!')">
+        <div class="dg-form-group">
+          <label>ประเภทเหตุการณ์</label>
+          <select required>
+            <option value="">-- เลือกประเภทเหตุ --</option>
+            <option value="ทะเลาะวิวาท">การทะเลาะวิวาท / ขัดแย้ง</option>
+            <option value="พฤติกรรมไม่เหมาะสม">พฤติกรรมไม่เหมาะสม / หนีเรียน</option>
+            <option value="อุบัติเหตุ">อุบัติเหตุ / อาการเจ็บป่วยกะทันหัน</option>
+            <option value="สิ่งผิดกฎระเบียบ">พกพาสิ่งผิดกฎระเบียบ / สารเสพติด</option>
+            <option value="อื่นๆ">เหตุฉุกเฉินอื่นๆ</option>
+          </select>
+        </div>
+        <div class="dg-form-group">
+          <label>สถานที่เกิดเหตุภายในโรงเรียน</label>
+          <input type="text" placeholder="เช่น บริเวณหลังอาคาร 3, ข้างโรงอาหาร, สนามกีฬา" required />
+        </div>
+        <div class="dg-form-group">
+          <label>รายละเอียดเหตุการณ์</label>
+          <textarea placeholder="อธิบายสิ่งที่พบเห็น ลักษณะบุคคล หรือเวลาที่เกิดเหตุ..." required></textarea>
+        </div>
+        <button type="submit" class="dg-modal-submit-btn" style="background: #dc2626;">
+          <i data-lucide="send"></i>
+          <span>ส่งแจ้งเหตุด่วนทันที</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Complaint Modal -->
+  <div class="dg-modal-backdrop" id="complaintModal">
+    <div class="dg-modal-box">
+      <button class="dg-modal-close-btn" onclick="closeModal('complaintModal')" aria-label="Close modal">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="dg-modal-header">
+        <div class="dg-modal-header-icon" style="background: #fef3c7; color: #d97706;">
+          <i data-lucide="scale"></i>
+        </div>
+        <div class="dg-modal-header-text">
+          <h3>ร้องเรียนการทำงานและข้อเสนอแนะ</h3>
+          <p>ข้อมูลทั้งหมดจะถูกปกปิดตัวตน 100% และส่งตรงถึงครูที่ปรึกษา</p>
+        </div>
+      </div>
+      <div
+        style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 14px; margin-bottom: 20px; font-size: 0.85rem; color: #b45309; line-height: 1.5;">
+        🛡️ ระบบรักษาความปลอดภัย: ข้อความของคุณจะไม่ระบุชื่อ หรือ IP Address เพื่อให้คุณสามารถสะท้อนความจริงได้อย่างปลอดภัยและเป็นธรรม
+      </div>
+      <form
+        onsubmit="handleModalSubmit(event, 'ส่งข้อร้องเรียนถึงครูที่ปรึกษาเรียบร้อยแล้ว ขอบคุณที่ร่วมพัฒนาการทำงานของสารวัตร!')">
+        <div class="dg-form-group">
+          <label>หัวข้อเรื่อง</label>
+          <input type="text" placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบที่ไม่เป็นธรรม" required />
+        </div>
+        <div class="dg-form-group">
+          <label>วันที่และจุดปฏิบัติงาน</label>
+          <input type="text" placeholder="เช่น วันจันทร์ที่ผ่านมา ประตูหน้าโรงเรียน" required />
+        </div>
+        <div class="dg-form-group">
+          <label>รายละเอียดข้อร้องเรียนหรือข้อเสนอแนะ</label>
+          <textarea placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใส..." required></textarea>
+        </div>
+        <button type="submit" class="dg-modal-submit-btn">
+          <i data-lucide="shield-check"></i>
+          <span>ส่งเรื่องร้องเรียน (นิรนาม)</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- ============ CIRCULAR SCROLL PROGRESS BACK-TO-TOP ============ -->
+  <button class="dg-scroll-top-btn" id="backToTop" aria-label="เลื่อนขึ้นด้านบน">
+    <svg class="dg-progress-ring" width="50" height="50" viewBox="0 0 50 50">
+      <circle class="dg-progress-ring-bg" cx="25" cy="25" r="20" />
+      <circle class="dg-progress-ring-bar" id="progressRingBar" cx="25" cy="25" r="20" />
+    </svg>
+    <div class="dg-scroll-icon-wrap">
+      <i data-lucide="arrow-up"></i>
+    </div>
+  </button>
+
+  <!-- Black Ribbon (ถวายความอาลัย) -->
+  <img src="https://nuuneoi.com/blog/884/black_ribbon_bottom_left.png" alt="ถวายความอาลัย"
+    class="black-ribbon stick-bottom stick-left" />
+
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // --- Nav scroll effect & Reading Progress Bar ---
+      const nav = document.getElementById('dgNav');
+      const scrollProgress = document.getElementById('scrollProgress');
+      const progressRingBar = document.getElementById('progressRingBar');
+      const backToTop = document.getElementById('backToTop');
+      const heroScrollCue = document.getElementById('heroScrollCue');
+
+      // Circumference for r=20 circle: 2 * PI * 20 ~= 125.66
+      const circumference = 2 * Math.PI * 20;
+      if (progressRingBar) {
+        progressRingBar.style.strokeDasharray = `${circumference}`;
+        progressRingBar.style.strokeDashoffset = `${circumference}`;
+      }
+
+      function handleScroll() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollFraction = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+        const percent = scrollFraction * 100;
+
+        // 1. Top progress bar
+        if (scrollProgress) {
+          scrollProgress.style.width = `${percent}%`;
+        }
+
+        // 2. Circular progress ring on back to top button
+        if (progressRingBar) {
+          const offset = circumference - (scrollFraction * circumference);
+          progressRingBar.style.strokeDashoffset = offset;
+        }
+
+        // 3. Back to top button visibility
+        if (backToTop) {
+          backToTop.classList.toggle('visible', scrollTop > 350);
+        }
+
+        // 4. Navbar background shift
+        if (nav) {
+          nav.classList.toggle('scrolled', scrollTop > 40);
+        }
+
+        // 5. Hero scroll cue fade
+        if (heroScrollCue) {
+          if (scrollTop > 80) {
+            heroScrollCue.classList.add('faded');
+          } else {
+            heroScrollCue.classList.remove('faded');
+          }
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+
+      // Click back to top
+      if (backToTop) {
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // --- Live Operational Uptime Counter (Dynamic from localStorage or default) ---
+      const elMonths = document.getElementById('uptimeMonths');
+      const elDays = document.getElementById('uptimeDays');
+      const elHours = document.getElementById('uptimeHours');
+      const elMinutes = document.getElementById('uptimeMinutes');
+      const elSeconds = document.getElementById('uptimeSeconds');
+
+      function updateDutyUptime() {
+        const storedStart = localStorage.getItem('dg_sarawat_uptime_start');
+        const dutyStartDate = storedStart ? new Date(storedStart) : new Date('2026-05-23T07:00:00');
+        const storedLabel = localStorage.getItem('dg_sarawat_uptime_label');
+        const labelEl = document.getElementById('dutyStartLabel');
+        if (labelEl && storedLabel) {
+          labelEl.textContent = storedLabel;
+        }
+
+        const now = new Date();
+
+        let yDiff = now.getFullYear() - dutyStartDate.getFullYear();
+        let mDiff = now.getMonth() - dutyStartDate.getMonth();
+        let dDiff = now.getDate() - dutyStartDate.getDate();
+        let hDiff = now.getHours() - dutyStartDate.getHours();
+        let minDiff = now.getMinutes() - dutyStartDate.getMinutes();
+        let sDiff = now.getSeconds() - dutyStartDate.getSeconds();
+
+        if (sDiff < 0) {
+          sDiff += 60;
+          minDiff--;
+        }
+        if (minDiff < 0) {
+          minDiff += 60;
+          hDiff--;
+        }
+        if (hDiff < 0) {
+          hDiff += 24;
+          dDiff--;
+        }
+        if (dDiff < 0) {
+          const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+          dDiff += prevMonth.getDate();
+          mDiff--;
+        }
+        if (mDiff < 0) {
+          mDiff += 12;
+          yDiff--;
+        }
+        const totalMonths = Math.max(0, (yDiff * 12) + mDiff);
+
+        if (elMonths) elMonths.textContent = String(totalMonths).padStart(2, '0');
+        if (elDays) elDays.textContent = String(Math.max(0, dDiff)).padStart(2, '0');
+        if (elHours) elHours.textContent = String(Math.max(0, hDiff)).padStart(2, '0');
+        if (elMinutes) elMinutes.textContent = String(Math.max(0, minDiff)).padStart(2, '0');
+        if (elSeconds) elSeconds.textContent = String(Math.max(0, sDiff)).padStart(2, '0');
+      }
+
+      updateDutyUptime();
+      setInterval(updateDutyUptime, 1000);
+
+      // --- Scrollspy for Navbar & Side Dot Matrix ---
+      const spySections = [
+        { id: 'hero', navLink: document.querySelector('.dg-nav-links a[href="#hero"]'), dot: document.querySelector('.dg-side-dot[data-section="hero"]') },
+        { id: 'vision', navLink: document.querySelector('.dg-nav-links a[href="#vision"]'), dot: document.querySelector('.dg-side-dot[data-section="vision"]') },
+        { id: 'news', navLink: document.querySelector('.dg-nav-links a[href="#news"]'), dot: document.querySelector('.dg-side-dot[data-section="news"]') },
+        { id: 'operations', navLink: document.querySelector('.dg-nav-links a[href="#operations"]'), dot: document.querySelector('.dg-side-dot[data-section="operations"]') },
+        { id: 'team', navLink: document.querySelector('.dg-nav-links a[href="#team"]'), dot: document.querySelector('.dg-side-dot[data-section="team"]') },
+        { id: 'calendar', navLink: document.querySelector('.dg-nav-links a[href="#calendar"]'), dot: document.querySelector('.dg-side-dot[data-section="calendar"]') },
+        { id: 'faq', navLink: document.querySelector('.dg-nav-links a[href="#faq"]'), dot: document.querySelector('.dg-side-dot[data-section="faq"]') },
+        { id: 'contact', navLink: null, dot: document.querySelector('.dg-side-dot[data-section="contact"]') }
+      ];
+
+      function updateScrollspy() {
+        const scrollPosition = window.scrollY + 220;
+        let currentId = 'hero';
+
+        for (const sec of spySections) {
+          const el = document.getElementById(sec.id);
+          if (el && el.offsetTop <= scrollPosition) {
+            currentId = sec.id;
+          }
+        }
+
+        spySections.forEach(sec => {
+          const isCurrent = sec.id === currentId;
+          if (sec.navLink) sec.navLink.classList.toggle('active', isCurrent);
+          if (sec.dot) sec.dot.classList.toggle('active', isCurrent);
+        });
+      }
+
+      window.addEventListener('scroll', updateScrollspy, { passive: true });
+      updateScrollspy();
+
+      // --- Interactive Calendar Filtering & Live Search ---
+      const filterBtns = document.querySelectorAll('.dg-filter-btn');
+      const searchInput = document.getElementById('eventSearchInput');
+      const emptyState = document.getElementById('eventsEmptyState');
+
+      let currentCategory = 'all';
+      let currentQuery = '';
+
+      function filterEvents() {
+        const eventCards = document.querySelectorAll('.dg-event-card');
+        let visibleCount = 0;
+
+        eventCards.forEach(card => {
+          const cardCat = card.getAttribute('data-category');
+          const cardKeywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+          const cardText = card.textContent.toLowerCase();
+
+          const matchesCat = currentCategory === 'all' || cardCat === currentCategory;
+          const matchesQuery = !currentQuery || cardText.includes(currentQuery) || cardKeywords.includes(currentQuery);
+
+          if (matchesCat && matchesQuery) {
+            card.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (emptyState) {
+          emptyState.classList.toggle('show', visibleCount === 0);
+        }
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategory = btn.getAttribute('data-category');
+          filterEvents();
+        });
+      });
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          currentQuery = e.target.value.trim().toLowerCase();
+          filterEvents();
+        });
+      }
+
+      // --- Scroll Reveal System (IntersectionObserver) ---
+      const revealItems = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const delay = entry.target.getAttribute('data-delay') || 0;
+              setTimeout(() => {
+                entry.target.classList.add('is-revealed');
+              }, parseInt(delay, 10));
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealItems.forEach(item => revealObserver.observe(item));
+      } else {
+        // Fallback for older browsers
+        revealItems.forEach(item => item.classList.add('is-revealed'));
+      }
+
+      // --- Subtle Parallax Depth on Images ---
+      const heroImg = document.getElementById('heroCinematicImg');
+      const chiefImg = document.getElementById('chiefPortraitImg');
+      let ticking = false;
+
+      function updateParallax() {
+        const windowHeight = window.innerHeight;
+
+        if (heroImg) {
+          const rect = heroImg.getBoundingClientRect();
+          if (rect.bottom > 0 && rect.top < windowHeight) {
+            const offset = (rect.top - windowHeight / 2) * 0.06;
+            heroImg.style.transform = `scale(1.04) translateY(${offset}px)`;
+          }
+        }
+
+        if (chiefImg) {
+          const rect = chiefImg.getBoundingClientRect();
+          if (rect.bottom > 0 && rect.top < windowHeight) {
+            const offset = (rect.top - windowHeight / 2) * 0.04;
+            chiefImg.style.transform = `scale(1.02) translateY(${offset}px)`;
+          }
+        }
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // --- 3D Interactive Card Tilt on Mousemove ---
+      const tiltCards = document.querySelectorAll('.dg-ops-card, .dg-chief-portrait-card');
+      tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -3.5;
+          const rotateY = ((x - centerX) / centerX) * 3.5;
+
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+
+      // --- Mobile menu toggle ---
+      const toggle = document.getElementById('dgNavToggle');
+      const menu = document.getElementById('dgNavLinks');
+      if (toggle && menu) {
+        toggle.addEventListener('click', () => {
+          menu.classList.toggle('active');
+          const icon = toggle.querySelector('i');
+          if (icon) {
+            icon.setAttribute('data-lucide', menu.classList.contains('active') ? 'x' : 'menu');
+            lucide.createIcons();
+          }
+        });
+
+        menu.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', () => {
+            menu.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'menu');
+              lucide.createIcons();
+            }
+          });
+        });
+      }
+
+      // --- Interactive Accordion (Diego FAQ) ---
+      const accordionItems = document.querySelectorAll('.dg-accordion-item');
+      accordionItems.forEach(item => {
+        const trigger = item.querySelector('.dg-accordion-trigger');
+        const icon = item.querySelector('.dg-accordion-icon');
+
+        trigger.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+
+          // Close all items
+          accordionItems.forEach(otherItem => {
+            otherItem.classList.remove('active');
+            const otherIcon = otherItem.querySelector('.dg-accordion-icon');
+            if (otherIcon) otherIcon.textContent = '+';
+          });
+
+          // Toggle current item
+          if (!isActive) {
+            item.classList.add('active');
+            if (icon) icon.textContent = '—';
+          }
+        });
+      });
+
+      // --- Smooth scroll for anchor links ---
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          const targetId = link.getAttribute('href');
+          if (targetId && targetId !== '#') {
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+              e.preventDefault();
+              const navHeight = nav ? nav.offsetHeight : 70;
+              window.scrollTo({
+                top: targetEl.offsetTop - navHeight,
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+
+      // Close modal when clicking backdrop
+      document.querySelectorAll('.dg-modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', (e) => {
+          if (e.target === backdrop) {
+            closeModal(backdrop.id);
+          }
+        });
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.dg-modal-backdrop.active').forEach(modal => {
+            closeModal(modal.id);
+          });
+        }
+      });
+      // --- Dynamic Calendar & News Initialization ---
+      renderFeaturedEvent();
+      renderCalendarEvents();
+      renderNewsCards();
+
+      const newsTrackWrap = document.getElementById('newsTrackWrap');
+      const newsPrevBtn = document.getElementById('newsPrevBtn');
+      const newsNextBtn = document.getElementById('newsNextBtn');
+      if (newsTrackWrap && newsPrevBtn && newsNextBtn) {
+        newsPrevBtn.addEventListener('click', () => {
+          newsTrackWrap.scrollBy({ left: -360, behavior: 'smooth' });
+        });
+        newsNextBtn.addEventListener('click', () => {
+          newsTrackWrap.scrollBy({ left: 360, behavior: 'smooth' });
+        });
+      }
+    });
+
+    // --- Modal Handler Functions ---
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleModalSubmit(e, successMsg) {
+      e.preventDefault();
+      alert(successMsg);
+      const modal = e.target.closest('.dg-modal-backdrop');
+      if (modal) {
+        closeModal(modal.id);
+      }
+      e.target.reset();
+    }
+
+    // ==========================================================
+    // NEWS & ACTIVITIES SYSTEM FUNCTIONS
+    // ==========================================================
+    const DEFAULT_NEWS_ITEMS = [
+      {
+        id: 'news-1',
+        title: 'พิธีแต่งตั้งและมอบปลอกแขนสารวัตรนักเรียน ประจำปีการศึกษา 2569',
+        date: '23 พ.ค. 2569',
+        tag: 'พิธีการสำคัญ',
+        image: 'assets/images/activity-ceremony.jpg',
+        desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-2',
+        title: 'โครงการรณรงค์วินัยจราจรและเสริมสร้างความปลอดภัยหน้าโรงเรียน',
+        date: '12 มิ.ย. 2569',
+        tag: 'ความปลอดภัย',
+        image: 'assets/images/activity-inspection.jpg',
+        desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-3',
+        title: 'กิจกรรมจิตอาสาพัฒนาสิ่งแวดล้อมและพื้นที่ส่วนรวมโรงเรียน',
+        date: '08 ก.ค. 2569',
+        tag: 'จิตอาสา',
+        image: 'assets/images/activity-volunteer.jpg',
+        desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-4',
+        title: 'การประชุมเชิงปฏิบัติการอบรมภาวะผู้นำและทักษะไกล่เกลี่ยเชิงบวก',
+        date: '19 ส.ค. 2569',
+        tag: 'อบรมพัฒนา',
+        image: 'assets/images/activity-training.jpg',
+        desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      },
+      {
+        id: 'news-5',
+        title: 'การเตรียมความพร้อมดูแลความสงบเรียบร้อยในสัปดาห์กีฬาสีเดชะฯ 2569',
+        date: '25 ก.ย. 2569',
+        tag: 'กิจกรรมโรงเรียน',
+        image: 'assets/images/hero-assembly.jpg',
+        desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
+        fbUrl: 'https://www.facebook.com/dechapattana',
+        igUrl: 'https://www.instagram.com/',
+        photoUrl: 'https://photos.google.com/'
+      }
+    ];
+
+    function getNewsData() {
+      try {
+        const stored = localStorage.getItem('dg_sarawat_news_items');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (err) {
+        console.warn('Error reading news from localStorage:', err);
+      }
+      return DEFAULT_NEWS_ITEMS;
+    }
+
+    // ==========================================================
+    // CALENDAR & AGENDA DATA & RENDERING
+    // ==========================================================
+    const DEFAULT_FEATURED_EVENT = {
+      day: '12-14',
+      month: 'พ.ย. 67',
+      tag: 'เร็วๆ นี้ (NEXT UP)',
+      category: 'กิจกรรมสำคัญ • กีฬาสีภายใน',
+      title: 'การแข่งขันกรีฑาและกีฬาสีภายใน "เดชะเกมส์ ประจำปีการศึกษา 2567"',
+      time: '07:30 - 16:30 น. (ตลอด 3 วัน)',
+      location: 'สนามกีฬาและโรงยิมฯ โรงเรียนเดชะปัตตนยานุกูล',
+      audience: 'นักเรียน ม.1 - ม.6 และคณะครูอาจารย์',
+      desc: 'มหกรรมกีฬาแห่งความสามัคคี ขบวนพาเหรด การประกวดกองเชียร์และเชียร์ลีดเดอร์ ภารกิจสารวัตร: ประจำการดูแลความปลอดภัย ตรวจระเบียบทางเข้า-ออก และอำนวยความสะดวกการจราจรตลอดการจัดงาน',
+      gcalUrl: 'https://calendar.google.com/'
+    };
+
+    const DEFAULT_CALENDAR_EVENTS = [
+      {
+        id: 'evt-1',
+        day: '15',
+        month: 'พ.ย. 67',
+        weekday: 'ศุกร์',
+        category: 'ceremony',
+        categoryLabel: 'ประเพณี & วัฒนธรรม',
+        title: 'ประเพณีวันลอยกระทง สืบสานวัฒนธรรม และจิตอาสารักษ์สิ่งแวดล้อม',
+        time: '13:00 - 16:30 น.',
+        location: 'ลานกิจกรรมอเนกประสงค์ และรอบคูเมืองโรงเรียน',
+        audience: 'สมาชิกทุกระดับชั้น',
+        note: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ',
+        statusTag: 'กำลังมาถึง',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-2',
+        day: '25-29',
+        month: 'พ.ย. 67',
+        weekday: 'จ.-ศ.',
+        category: 'academic',
+        categoryLabel: 'วิชาการ & วันสอบ',
+        title: 'การประเมินผลและสอบวัดผลกลางภาคเรียนที่ 2/2567 (Midterm Exams)',
+        time: '08:30 - 15:30 น.',
+        location: 'อาคารเรียน 1, 2, 3, 4 ทุกห้องสอบ',
+        audience: 'นักเรียน ม.1 - ม.6 ทุกคน',
+        note: 'แต่งกายชุดนักเรียนถูกระเบียบ 100% สารวัตรนักเรียนดูแลความเงียบสงบในบริเวณเขตสอบและจัดระเบียบยานพาหนะ',
+        statusTag: 'สำคัญมาก',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-3',
+        day: '07',
+        month: 'ธ.ค. 67',
+        weekday: 'เสาร์',
+        category: 'prefect',
+        categoryLabel: 'ภารกิจสารวัตร • ค่ายพัฒนาภาวะผู้นำ',
+        title: 'ค่ายอบรมเสริมสร้างภาวะผู้นำและทักษะจิตอาสาสารวัตรนักเรียน รุ่นที่ 15',
+        time: '08:30 - 16:30 น.',
+        location: 'ห้องประชุมรวงผึ้ง และลานกิจกรรม',
+        audience: 'คณะสารวัตรนักเรียน และแกนนำจิตอาสา',
+        note: 'การฝึกอบรมการระงับเหตุฉุกเฉิน กฎหมายเยาวชนเบื้องต้น การปฐมพยาบาล CPR และการบริหารระบบ SI-ROSTER',
+        statusTag: 'เฉพาะสารวัตร',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-4',
+        day: '18',
+        month: 'ธ.ค. 67',
+        weekday: 'พุธ',
+        category: 'academic',
+        categoryLabel: 'วิชาการ & เปิดบ้านโรงเรียน',
+        title: 'มหกรรมเปิดบ้านวิชาการ "Decha Open House & Exhibition 2024"',
+        time: '08:00 - 15:30 น.',
+        location: 'ลานโดมอเนกประสงค์ และหอประชุมใหญ่',
+        audience: 'นักเรียน ผู้ปกครอง และบุคคลภายนอก',
+        note: 'นิทรรศการผลงาน 8 กลุ่มสาระ สารวัตรนักเรียนประจำจุดต้อนรับ ประชาสัมพันธ์ และจัดการจราจรบริเวณหน้าโรงเรียน',
+        statusTag: 'บุคคลภายนอกเข้าได้',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-5',
+        day: '27',
+        month: 'ธ.ค. 67',
+        weekday: 'ศุกร์',
+        category: 'ceremony',
+        categoryLabel: 'พิธีการ & ประเพณี',
+        title: 'กิจกรรมส่งท้ายปีเก่า ต้อนรับปีใหม่ 2568 และทำบุญตักบาตรข้าวสารอาหารแห้ง',
+        time: '07:00 - 12:00 น.',
+        location: 'ลานธรรม และสนามหน้าเสาธง',
+        audience: 'นักเรียนและบุคลากรทุกท่าน',
+        note: 'แต่งกายชุดผ้าไทยหรือชุดสุภาพ สารวัตรนักเรียนดูแลแถวตักบาตรและอำนวยความสะดวกครูอาวุโส',
+        statusTag: 'วันสุดท้ายก่อนหยุดยาว',
+        gcalUrl: 'https://calendar.google.com/'
+      },
+      {
+        id: 'evt-6',
+        day: '17-21',
+        month: 'ก.พ. 68',
+        weekday: 'จ.-ศ.',
+        category: 'academic',
+        categoryLabel: 'วิชาการ & วันสอบ',
+        title: 'การสอบวัดผลปลายภาคเรียนที่ 2/2567 (Final Examination)',
+        time: '08:30 - 15:30 น.',
+        location: 'ทุกอาคารเรียน',
+        audience: 'นักเรียน ม.1 - ม.6 ทุกระดับชั้น',
+        note: 'ตรวจสอบระเบียบการแต่งกาย ทรงผม และอุปกรณ์สอบเข้มงวด สารวัตรนักเรียนประจำการเต็มกำลังทุกอาคารสอบ',
+        statusTag: 'สิ้นสุดปีการศึกษา',
+        gcalUrl: 'https://calendar.google.com/'
+      }
+    ];
+
+    function getCalendarData() {
+      try {
+        const stored = localStorage.getItem('dg_sarawat_calendar_events');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+      return DEFAULT_CALENDAR_EVENTS;
+    }
+
+    function renderFeaturedEvent() {
+      let feat = DEFAULT_FEATURED_EVENT;
+      try {
+        const stored = localStorage.getItem('dg_sarawat_featured_event');
+        if (stored) feat = JSON.parse(stored);
+      } catch (e) {}
+
+      const dayEl = document.getElementById('featDay');
+      const monthEl = document.getElementById('featMonth');
+      const tagEl = document.getElementById('featTag');
+      const catEl = document.getElementById('featCategory');
+      const titleEl = document.getElementById('featTitle');
+      const timeEl = document.getElementById('featTime');
+      const locEl = document.getElementById('featLocation');
+      const audEl = document.getElementById('featAudience');
+      const descEl = document.getElementById('featDesc');
+      const calLink = document.getElementById('featCalLink');
+
+      if (dayEl) dayEl.textContent = feat.day || '';
+      if (monthEl) monthEl.textContent = feat.month || '';
+      if (tagEl) tagEl.textContent = feat.tag || 'เร็วๆ นี้';
+      if (catEl) catEl.textContent = feat.category || 'กิจกรรมสำคัญ';
+      if (titleEl) titleEl.textContent = feat.title || '';
+      if (timeEl) timeEl.innerHTML = `<i data-lucide="clock"></i> ${escapeHtml(feat.time || '')}`;
+      if (locEl) locEl.innerHTML = `<i data-lucide="map-pin"></i> ${escapeHtml(feat.location || '')}`;
+      if (audEl) audEl.innerHTML = `<i data-lucide="users"></i> ${escapeHtml(feat.audience || '')}`;
+      if (descEl) descEl.innerHTML = escapeHtml(feat.desc || '');
+      if (calLink && feat.gcalUrl) calLink.href = feat.gcalUrl;
+    }
+
+    function renderCalendarEvents() {
+      const container = document.getElementById('eventsListContainer');
+      if (!container) return;
+
+      const events = getCalendarData();
+      container.innerHTML = events.map((evt, idx) => {
+        const catClass = evt.category === 'ceremony' ? 'cat-ceremony' : (evt.category === 'academic' ? 'cat-academic' : (evt.category === 'sports' ? 'cat-sports' : 'cat-prefect'));
+        const gcal = evt.gcalUrl || 'https://calendar.google.com/';
+        const keywords = `${evt.title || ''} ${evt.categoryLabel || ''} ${evt.location || ''} ${evt.note || ''}`.toLowerCase();
+
+        return `
+          <div class="dg-event-card" data-category="${escapeHtml(evt.category || 'ceremony')}" data-keywords="${escapeHtml(keywords)}" data-reveal="fade" data-delay="${(idx + 1) * 40}">
+            <div class="dg-event-date-box">
+              <span class="day-num">${escapeHtml(evt.day || '')}</span>
+              <span class="month-str">${escapeHtml(evt.month || '')}</span>
+              <span class="weekday-str">${escapeHtml(evt.weekday || '')}</span>
+            </div>
+            <div class="dg-event-details">
+              <div class="dg-event-header-row">
+                <span class="dg-event-category-badge ${catClass}">${escapeHtml(evt.categoryLabel || 'กิจกรรม')}</span>
+                <h4 class="dg-event-title">${escapeHtml(evt.title || '')}</h4>
+              </div>
+              <div class="dg-event-info-bar">
+                <span><i data-lucide="clock"></i> ${escapeHtml(evt.time || '')}</span>
+                <span><i data-lucide="map-pin"></i> ${escapeHtml(evt.location || '')}</span>
+                <span><i data-lucide="users"></i> ${escapeHtml(evt.audience || '')}</span>
+              </div>
+              <p class="dg-event-prefect-note">
+                <strong>ข้อปฏิบัติ & สารวัตร:</strong> ${escapeHtml(evt.note || '')}
+              </p>
+            </div>
+            <div class="dg-event-action-col">
+              <span class="dg-event-status-tag">${escapeHtml(evt.statusTag || 'กำลังมาถึง')}</span>
+              <a href="${gcal}" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline">
+                <i data-lucide="calendar-plus"></i>
+                <span>บันทึก</span>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // ==========================================================
+    // NEWS & ACTIVITIES RENDERING (PUBLIC VIEW)
+    // ==========================================================
+    function renderNewsCards() {
+      const track = document.getElementById('newsCardsTrack');
+      if (!track) return;
+
+      const items = getNewsData();
+      track.innerHTML = items.map((item, index) => {
+        const fbLink = item.fbUrl ? item.fbUrl : 'https://www.facebook.com/';
+        const igLink = item.igUrl ? item.igUrl : 'https://www.instagram.com/';
+        const photoLink = item.photoUrl ? item.photoUrl : 'https://photos.google.com/';
+
+        return `
+          <article class="dg-news-card" data-id="${item.id}">
+            <div class="dg-news-cover-wrap">
+              <img src="${item.image}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" />
+              <span class="dg-news-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+              <span class="dg-news-date">${escapeHtml(item.date || '')}</span>
+            </div>
+            <div class="dg-news-content">
+              <h3 class="dg-news-card-title">${escapeHtml(item.title)}</h3>
+              <p class="dg-news-card-desc">${escapeHtml(item.desc)}</p>
+              
+              <div class="dg-news-actions-row">
+                <a href="${fbLink}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-fb" title="เปิดดูโพสต์บน Facebook">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                  <span>Facebook</span>
+                </a>
+                <a href="${igLink}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-ig" title="เปิดดูโพสต์บน Instagram">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                  <span>Instagram</span>
+                </a>
+                <a href="${photoLink}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-photo" title="เปิดดูภาพเต็มบน Google Photos">
+                  <svg viewBox="0 0 24 24" width="14" height="14">
+                    <path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/>
+                    <path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/>
+                    <path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/>
+                    <path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/>
+                  </svg>
+                  <span>Google Photos</span>
+                </a>
+              </div>
+
+              <div class="dg-news-card-meta-bar">
+                <span class="dg-news-counter-tag">ACTIVITY #${index + 1}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+
+</html>
