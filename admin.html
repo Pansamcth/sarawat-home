@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="css/diego.css" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+  <link rel="icon" type="image/png" href="assets/icons/sarawat_glow.png" />
 
   <style>
     /* Admin Specific Dashboard Styles */
@@ -446,8 +446,10 @@
   <!-- ============ PIN AUTH OVERLAY ============ -->
   <div class="pin-overlay" id="pinOverlay">
     <div class="pin-box">
-      <div class="pin-icon">
-        <i data-lucide="shield-alert" style="width: 32px; height: 32px;"></i>
+      <div class="pin-icon" style="background: transparent; border: none; box-shadow: none; width: auto; height: auto; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 14px;">
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));" />
+        <span style="display: inline-block; width: 1px; height: 36px; background: #e2e8f0;"></span>
+        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo" style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));" />
       </div>
       <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 850; margin: 0 0 6px;">ระบบควบคุมสารวัตรนักเรียน</h2>
       <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0 0 16px;">กรุณากรอกรหัส PIN ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
@@ -475,7 +477,9 @@
   <header class="admin-navbar">
     <div class="admin-nav-inner">
       <a href="admin.html" class="admin-brand">
-        <img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo" />
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="width: 32px; height: 32px; object-fit: contain;" />
+        <span style="display: inline-block; width: 1px; height: 20px; background: #e2e8f0; margin: 0 2px;"></span>
+        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo" style="width: 32px; height: 32px; object-fit: contain;" />
         <span class="admin-brand-text">
           SARAWAT <span class="admin-badge">ADMIN PORTAL</span>
         </span>
@@ -724,7 +728,7 @@
   <!-- ==========================================
        MODAL 1: NEWS ADD / EDIT
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminNewsModal">
+  <div class="dg-modal-backdrop" id="adminNewsModal" style="display: none;">
     <div class="dg-modal-box">
       <div class="dg-modal-header">
         <h3 id="adminNewsModalTitle">เพิ่มข่าวสารและกิจกรรมใหม่</h3>
@@ -783,7 +787,7 @@
   <!-- ==========================================
        MODAL 2: CALENDAR EVENT ADD / EDIT
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminEventModal">
+  <div class="dg-modal-backdrop" id="adminEventModal" style="display: none;">
     <div class="dg-modal-box">
       <div class="dg-modal-header">
         <h3 id="adminEventModalTitle">เพิ่มกิจกรรมในตาราง</h3>
@@ -863,7 +867,7 @@
   </div>
 
   <!-- ============ MODAL 3: EDIT FEATURED UPCOMING EVENT ============ -->
-  <div class="dg-modal-backdrop" id="adminFeaturedModal">
+  <div class="dg-modal-backdrop" id="adminFeaturedModal" style="display: none;">
     <div class="dg-modal-box">
       <div class="dg-modal-header">
         <h3>แก้ไขกิจกรรมเด่น (Featured Next-Up Banner)</h3>

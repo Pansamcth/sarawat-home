@@ -807,23 +807,25 @@ body {
 .dg-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(6px);
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
   display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: dgModalFadeIn 0.2s ease-out;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .dg-modal-backdrop.active {
-  display: flex;
-}
-
-@keyframes dgModalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  display: flex !important;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .dg-modal-box {
@@ -834,19 +836,13 @@ body {
   max-width: 580px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
-  animation: dgModalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+  transform: translateY(15px) scale(0.98);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes dgModalScaleIn {
-  from {
-    transform: scale(0.96) translateY(10px);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
+.dg-modal-backdrop.active .dg-modal-box {
+  transform: translateY(0) scale(1);
 }
 
 .dg-modal-header {
@@ -1968,17 +1964,20 @@ body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 2000;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .dg-modal-backdrop.active {
+  display: flex !important;
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
