@@ -880,33 +880,48 @@
       <form id="adminNewsForm" onsubmit="handleSaveNews(event)" class="dg-modal-form">
         <input type="hidden" id="adminNewsId" />
         <input type="hidden" id="adminNewsDateIso" />
+        <input type="hidden" id="adminNewsEndDateIso" />
 
         <div class="dg-form-group">
           <label>หัวข้อข่าวสาร/กิจกรรม *</label>
           <input type="text" id="adminNewsTitle" required placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" />
         </div>
 
-        <!-- Date Selection: Single Native Date Picker with Pop-up & Quick Buttons -->
+        <!-- Date Selection: Start Date & Optional End Date with Live Summary -->
         <div class="dg-form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="margin: 0; font-weight: 700;">วันที่จัดกิจกรรม (กดเพื่อเปิดปฏิทินเลือกวัน) *</label>
-            <div style="display: flex; gap: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> วันที่จัดกิจกรรม *</label>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
               <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('today')">📅 วันนี้</button>
               <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('yesterday')">⏪ เมื่อวาน</button>
+              <button type="button" class="quick-pill-btn" onclick="clearNewsEndDate()" style="color: #64748b;">✖️ วันเดียว (ล้างวันสิ้นสุด)</button>
             </div>
           </div>
-          <div style="position: relative;">
-            <input 
-              type="date" 
-              id="adminNewsDatePicker" 
-              required 
-              onclick="try{this.showPicker()}catch(e){}"
-              onchange="handleNewsDatePickerChange(this.value)" 
-              style="width: 100%; padding: 11px 14px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" 
-            />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม *</span>
+              <input 
+                type="date" 
+                id="adminNewsStartDatePicker" 
+                required 
+                onclick="try{this.showPicker()}catch(e){}"
+                onchange="handleNewsDatesChange()" 
+                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" 
+              />
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
+              <input 
+                type="date" 
+                id="adminNewsEndDatePicker" 
+                onclick="try{this.showPicker()}catch(e){}"
+                onchange="handleNewsDatesChange()" 
+                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" 
+              />
+            </div>
           </div>
           <input type="hidden" id="adminNewsDate" />
-          <div class="date-helper-banner" style="margin-top: 6px;">
+          <div id="adminNewsDateBanner" class="date-helper-banner" style="margin-top: 8px;">
             <i data-lucide="calendar" style="width: 14px; height: 14px; flex-shrink: 0; color: #16a34a;"></i>
             <span>วันที่แสดงผล: <strong id="adminNewsDateLabel" style="font-weight: 800; color: #0f172a;">-</strong></span>
           </div>
@@ -1027,49 +1042,88 @@
       <form id="adminEventForm" onsubmit="handleSaveEvent(event)" class="dg-modal-form">
         <input type="hidden" id="adminEventId" />
         <input type="hidden" id="adminEventDateIso" />
+        <input type="hidden" id="adminEventEndDateIso" />
 
         <div class="dg-form-group">
           <label>ชื่อกิจกรรม / โครงการ *</label>
           <input type="text" id="adminEventTitle" required placeholder="เช่น ประเพณีวันลอยกระทง สืบสานวัฒนธรรม" />
         </div>
 
-        <!-- Date & Time Auto-Calculator for Events -->
+        <!-- Date Range & Time Auto-Calculator for Events -->
         <div class="dg-form-group" style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 1. เลือกวันที่จัดกิจกรรม</label>
-            <div style="display: flex; gap: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 1. กำหนดวันที่จัดกิจกรรม</label>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
               <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('today')">📅 วันนี้</button>
               <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('tomorrow')">⏩ พรุ่งนี้</button>
-            </div>
-          </div>
-          <input type="date" id="adminEventDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; margin-bottom: 8px; background: #ffffff;" onchange="handleEventDatePickerChange(this.value)" />
-
-          <!-- Time Picker Row (Auto-Fills Event Time) -->
-          <div style="margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 2. เลือกช่วงเวลากิจกรรม (ระบบลงเวลาให้อัตโนมัติ)</label>
-              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                <button type="button" class="quick-pill-btn" onclick="setQuickEventTime('08:30', '16:30')">เต็มวัน</button>
-                <button type="button" class="quick-pill-btn" onclick="setQuickEventTime('08:30', '12:00')">เช้า</button>
-                <button type="button" class="quick-pill-btn" onclick="setQuickEventTime('13:00', '16:30')">บ่าย</button>
-              </div>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
-              <div>
-                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาเริ่ม:</span>
-                <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeChange()" />
-              </div>
-              <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px;">ถึง</span>
-              <div>
-                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาสิ้นสุด:</span>
-                <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeChange()" />
-              </div>
+              <button type="button" class="quick-pill-btn" onclick="clearEventEndDate()" style="color: #64748b;">✖️ วันเดียว (ล้างวันสิ้นสุด)</button>
             </div>
           </div>
 
-          <div class="date-helper-banner" style="margin-top: 10px;">
-            <i data-lucide="sparkles" style="width: 14px; height: 14px; flex-shrink: 0; color: #16a34a;"></i>
-            <span>ระบบจะกรอกเลขวัน เดือน ปี และลงเวลาอัตโนมัติ (สามารถแก้ไขเพิ่มเติมได้ที่ช่องเวลาด้านล่าง)</span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม *</span>
+              <input type="date" id="adminEventStartDatePicker" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventDatesChange()" />
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
+              <input type="date" id="adminEventEndDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventDatesChange()" />
+            </div>
+          </div>
+
+          <div id="adminEventDateSummaryBanner" class="date-helper-banner" style="margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
+            <i data-lucide="calendar-check" style="width: 15px; height: 15px; flex-shrink: 0; color: #16a34a;"></i>
+            <span id="adminEventDateSummaryText">ระบบจะกรอกเลขวัน เดือน ปี และลงเวลาอัตโนมัติ</span>
+          </div>
+
+          <!-- Time Selection Section -->
+          <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 2. กำหนดเวลาจัดกิจกรรม</label>
+              <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <button type="button" class="quick-pill-btn btn-event-time-quick active" data-time-preset="เต็มวัน" onclick="setQuickEventTimePreset('เต็มวัน')">⏰ เต็มวัน</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="เช้า" onclick="setQuickEventTimePreset('เช้า')">🌅 เช้า (08:30-12:00)</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="บ่าย" onclick="setQuickEventTimePreset('บ่าย')">🌇 บ่าย (13:00-16:30)</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="เต็มวัน-เวลา" onclick="setQuickEventTimePreset('เต็มวัน-เวลา')">⏱️ ทั้งวัน (ระบุเวลา)</button>
+              </div>
+            </div>
+
+            <!-- Time Display / Status (When 'เต็มวัน' is active) -->
+            <div id="adminEventAllDayBanner" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 700; font-size: 0.92rem;">
+                <i data-lucide="sun" style="width: 18px; height: 18px; color: #16a34a;"></i>
+                <span>กิจกรรมเต็มวัน (All Day)</span>
+                <span style="font-weight: 400; font-size: 0.78rem; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">ไม่ระบุชั่วโมงเวลา</span>
+              </div>
+              <button type="button" onclick="switchToCustomEventTime()" style="background: #ffffff; border: 1px solid #bbf7d0; color: #15803d; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                <span>ระบุเวลาเริ่ม-สิ้นสุด</span>
+                <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+              </button>
+            </div>
+
+            <!-- Time Pickers (When custom hours is active) -->
+            <div id="adminEventCustomTimeWrap" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+              <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
+                <div>
+                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาเริ่ม:</span>
+                  <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeCustomChange()" />
+                </div>
+                <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px; font-weight: 700;">ถึง</span>
+                <div>
+                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาสิ้นสุด:</span>
+                  <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeCustomChange()" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Single Unified Time Text Input & Live Badge -->
+            <div style="margin-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label style="font-size: 0.78rem; font-weight: 700; color: #334155; margin: 0;">เวลาที่จะบันทึกและแสดงบนเว็บไซต์:</label>
+                <strong id="adminEventTimePreview" style="color: #15803d; font-size: 0.84rem; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">เต็มวัน</strong>
+              </div>
+              <input type="text" id="adminEventTime" value="เต็มวัน" placeholder="เช่น เต็มวัน หรือ 08:30 - 15:30 น." oninput="updateEventTimePreview(this.value)" style="width: 100%; padding: 9px 12px; font-weight: 700; color: #0f172a; border: 1.5px solid #16a34a; border-radius: 6px; background: #ffffff;" />
+            </div>
           </div>
         </div>
 
@@ -1107,18 +1161,13 @@
 
         <div class="dg-form-row">
           <div class="dg-form-group">
-            <label>เวลาจัดกิจกรรม (ระบบลงให้อัตโนมัติ หรือพิมพ์แก้ไขได้)</label>
-            <input type="text" id="adminEventTime" placeholder="เช่น 08:30 - 15:30 น." />
-          </div>
-          <div class="dg-form-group">
             <label>สถานที่จัด</label>
             <input type="text" id="adminEventLocation" placeholder="เช่น ลานกิจกรรมอเนกประสงค์" />
           </div>
-        </div>
-
-        <div class="dg-form-group">
-          <label>กลุ่มเป้าหมาย / ผู้เข้าร่วม</label>
-          <input type="text" id="adminEventAudience" placeholder="เช่น นักเรียน ม.1 - ม.6" />
+          <div class="dg-form-group">
+            <label>กลุ่มเป้าหมาย / ผู้เข้าร่วม</label>
+            <input type="text" id="adminEventAudience" placeholder="เช่น สมาชิกทุกระดับชั้น, นักเรียน ม.1 - ม.6" />
+          </div>
         </div>
 
         <div class="dg-form-group">
@@ -1146,35 +1195,85 @@
         </button>
       </div>
       <form id="adminFeaturedForm" onsubmit="handleSaveFeatured(event)" class="dg-modal-form">
+        <input type="hidden" id="adminFeaturedDateIso" />
+        <input type="hidden" id="adminFeaturedEndDateIso" />
+
         <div class="dg-form-group">
           <label>ชื่อกิจกรรมเด่น *</label>
           <input type="text" id="adminFeaturedTitle" required placeholder="เช่น การแข่งขันกรีฑาและกีฬาสีภายใน เดชะเกมส์" />
         </div>
 
         <div class="dg-form-group" style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
-          <label style="margin-bottom: 6px; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> เลือกวันที่จัดกิจกรรมเด่น (ช่วยกรอกอัตโนมัติ)</label>
-          <input type="date" id="adminFeaturedDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; margin-bottom: 8px; background: #ffffff;" onchange="handleFeaturedDatePickerChange(this.value)" />
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> กำหนดวันที่จัดกิจกรรมเด่น</label>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button type="button" class="quick-pill-btn" onclick="clearFeaturedEndDate()" style="color: #64748b;">✖️ วันเดียว (ล้างวันสิ้นสุด)</button>
+            </div>
+          </div>
 
-          <!-- Time Picker for Featured -->
-          <div style="margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> เลือกช่วงเวลา (ลงเวลาอัตโนมัติ)</label>
-              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                <button type="button" class="quick-pill-btn" onclick="setQuickFeaturedTime('08:30', '16:30')">เต็มวัน</button>
-                <button type="button" class="quick-pill-btn" onclick="setQuickFeaturedTime('08:30', '12:00')">เช้า</button>
-                <button type="button" class="quick-pill-btn" onclick="setQuickFeaturedTime('13:00', '16:30')">บ่าย</button>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม *</span>
+              <input type="date" id="adminFeaturedStartDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedDatesChange()" />
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
+              <input type="date" id="adminFeaturedEndDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedDatesChange()" />
+            </div>
+          </div>
+
+          <div id="adminFeaturedDateSummaryBanner" class="date-helper-banner" style="margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
+            <i data-lucide="calendar-check" style="width: 15px; height: 15px; flex-shrink: 0; color: #16a34a;"></i>
+            <span id="adminFeaturedDateSummaryText">ระบบจะกรอกเลขวัน เดือน ปี ให้อัตโนมัติ</span>
+          </div>
+
+          <!-- Time Selection Section for Featured -->
+          <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> กำหนดเวลาจัดกิจกรรม</label>
+              <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                <button type="button" class="quick-pill-btn btn-feat-time-quick active" data-time-preset="เต็มวัน" onclick="setQuickFeaturedTimePreset('เต็มวัน')">⏰ เต็มวัน</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="เช้า" onclick="setQuickFeaturedTimePreset('เช้า')">🌅 เช้า (08:30-12:00)</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="บ่าย" onclick="setQuickFeaturedTimePreset('บ่าย')">🌇 บ่าย (13:00-16:30)</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="เต็มวัน-เวลา" onclick="setQuickFeaturedTimePreset('เต็มวัน-เวลา')">⏱️ ทั้งวัน (ระบุเวลา)</button>
               </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
-              <div>
-                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาเริ่ม:</span>
-                <input type="time" id="adminFeaturedStartTime" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeChange()" />
+
+            <!-- Time Display / Status (When 'เต็มวัน' is active) -->
+            <div id="adminFeaturedAllDayBanner" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 700; font-size: 0.92rem;">
+                <i data-lucide="sun" style="width: 18px; height: 18px; color: #16a34a;"></i>
+                <span>กิจกรรมเต็มวัน (All Day)</span>
+                <span style="font-weight: 400; font-size: 0.78rem; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">ไม่ระบุชั่วโมงเวลา</span>
               </div>
-              <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px;">ถึง</span>
-              <div>
-                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาสิ้นสุด:</span>
-                <input type="time" id="adminFeaturedEndTime" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeChange()" />
+              <button type="button" onclick="switchToCustomFeaturedTime()" style="background: #ffffff; border: 1px solid #bbf7d0; color: #15803d; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                <span>ระบุเวลาเริ่ม-สิ้นสุด</span>
+                <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+              </button>
+            </div>
+
+            <!-- Time Pickers (When custom hours is active) -->
+            <div id="adminFeaturedCustomTimeWrap" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+              <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
+                <div>
+                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาเริ่ม:</span>
+                  <input type="time" id="adminFeaturedStartTime" value="08:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeCustomChange()" />
+                </div>
+                <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px; font-weight: 700;">ถึง</span>
+                <div>
+                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาสิ้นสุด:</span>
+                  <input type="time" id="adminFeaturedEndTime" value="16:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeCustomChange()" />
+                </div>
               </div>
+            </div>
+
+            <!-- Single Unified Time Text Input & Live Badge -->
+            <div style="margin-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label style="font-size: 0.78rem; font-weight: 700; color: #334155; margin: 0;">เวลาที่จะบันทึกและแสดงบนเว็บไซต์:</label>
+                <strong id="adminFeaturedTimePreview" style="color: #15803d; font-size: 0.84rem; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">เต็มวัน</strong>
+              </div>
+              <input type="text" id="adminFeaturedTime" value="เต็มวัน" placeholder="เช่น เต็มวัน หรือ 07:30 - 16:30 น." oninput="updateFeaturedTimePreview(this.value)" style="width: 100%; padding: 9px 12px; font-weight: 700; color: #0f172a; border: 1.5px solid #16a34a; border-radius: 6px; background: #ffffff;" />
             </div>
           </div>
         </div>
@@ -1195,17 +1294,13 @@
         </div>
         <div class="dg-form-row">
           <div class="dg-form-group">
-            <label>เวลา (ระบบลงให้อัตโนมัติ หรือแก้ไขได้)</label>
-            <input type="text" id="adminFeaturedTime" placeholder="07:30 - 16:30 น." />
-          </div>
-          <div class="dg-form-group">
             <label>สถานที่</label>
             <input type="text" id="adminFeaturedLocation" placeholder="สนามกีฬาและโรงยิมฯ โรงเรียนเดชะปัตตนยานุกูล" />
           </div>
-        </div>
-        <div class="dg-form-group">
-          <label>ผู้เข้าร่วม</label>
-          <input type="text" id="adminFeaturedAudience" placeholder="นักเรียน ม.1 - ม.6 และคณะครูอาจารย์" />
+          <div class="dg-form-group">
+            <label>ผู้เข้าร่วม</label>
+            <input type="text" id="adminFeaturedAudience" placeholder="นักเรียน ม.1 - ม.6 และคณะครูอาจารย์" />
+          </div>
         </div>
         <div class="dg-form-group">
           <label>คำอธิบายกิจกรรม & ภารกิจสารวัตร</label>
@@ -1524,19 +1619,252 @@
       return `${d} ${thaiMonth} ${thaiYear}`;
     }
 
+    const THAI_DAYS_SHORT = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+
+    /**
+     * Calculates Thai day, month, weekday, and formatted strings for an event
+     * given startIso (YYYY-MM-DD) and optional endIso (YYYY-MM-DD).
+     * If endIso is omitted, empty, or equals startIso => single day activity!
+     */
+    function calculateEventDateInfo(startIso, endIso) {
+      if (!startIso) return null;
+      const [sY, sM, sD] = startIso.split('-').map(Number);
+      const startDate = new Date(sY, sM - 1, sD);
+      const sThaiYear = sY + 543;
+      const sThaiYearShort = String(sThaiYear).slice(-2);
+      const sMonthShort = THAI_MONTHS_SHORT[sM - 1] || '';
+      const sDayStr = String(sD);
+      const sWeekdayFull = THAI_DAYS[startDate.getDay()] || '';
+      const sWeekdayShort = THAI_DAYS_SHORT[startDate.getDay()] || '';
+
+      // Check if endIso is provided, valid, and distinct from startIso
+      let hasEndDate = Boolean(endIso && endIso.trim() && endIso !== startIso);
+      let eY, eM, eD, endDate, eThaiYear, eThaiYearShort, eMonthShort, eWeekdayShort, diffDays = 1;
+
+      if (hasEndDate) {
+        const parts = endIso.split('-').map(Number);
+        eY = parts[0];
+        eM = parts[1];
+        eD = parts[2];
+        endDate = new Date(eY, eM - 1, eD);
+
+        // If end date is chronologically before start date, treat as single day
+        if (endDate.getTime() < startDate.getTime()) {
+          hasEndDate = false;
+        } else {
+          eThaiYear = eY + 543;
+          eThaiYearShort = String(eThaiYear).slice(-2);
+          eMonthShort = THAI_MONTHS_SHORT[eM - 1] || '';
+          eWeekdayShort = THAI_DAYS_SHORT[endDate.getDay()] || '';
+          const diffTime = endDate.getTime() - startDate.getTime();
+          diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          if (diffDays <= 1) hasEndDate = false;
+        }
+      }
+
+      // Case 1: Single day activity
+      if (!hasEndDate) {
+        return {
+          isRange: false,
+          day: sDayStr,
+          month: `${sMonthShort} ${sThaiYearShort}`,
+          weekday: sWeekdayFull,
+          newsDate: `${sD} ${sMonthShort} ${sThaiYear}`,
+          summary: `🎯 มีกิจกรรม 1 วัน: วันที่ ${sD} ${sMonthShort} ${sThaiYearShort} (วัน${sWeekdayFull})`,
+          dateIso: startIso,
+          endDateIso: ''
+        };
+      }
+
+      // Case 2: Multi-day activity range
+      let dayStr = '';
+      let monthStr = '';
+      let weekdayStr = `${sWeekdayShort}-${eWeekdayShort}`;
+      let newsDate = '';
+
+      if (sY === eY && sM === eM) {
+        // Same month & year: e.g. 17-21 ก.พ. 70
+        dayStr = `${sD}-${eD}`;
+        monthStr = `${sMonthShort} ${sThaiYearShort}`;
+        newsDate = `${sD} - ${eD} ${sMonthShort} ${sThaiYear}`;
+      } else if (sY === eY) {
+        // Different month, same year: e.g. 28 ก.พ. - 3 มี.ค. 70
+        dayStr = `${sD} ${sMonthShort} - ${eD} ${eMonthShort}`;
+        monthStr = `${sThaiYearShort}`;
+        newsDate = `${sD} ${sMonthShort} - ${eD} ${eMonthShort} ${sThaiYear}`;
+      } else {
+        // Different year
+        dayStr = `${sD} ${sMonthShort} ${sThaiYearShort} - ${eD} ${eMonthShort} ${sThaiYearShort}`;
+        monthStr = `${sThaiYearShort}-${eThaiYearShort}`;
+        newsDate = `${sD} ${sMonthShort} ${sThaiYear} - ${eD} ${eMonthShort} ${sThaiYear}`;
+      }
+
+      return {
+        isRange: true,
+        day: dayStr,
+        month: monthStr,
+        weekday: weekdayStr,
+        newsDate: newsDate,
+        durationDays: diffDays,
+        summary: `🎯 กิจกรรมต่อเนื่อง ${diffDays} วัน: วันที่ ${dayStr} ${monthStr} (${weekdayStr})`,
+        dateIso: startIso,
+        endDateIso: endIso
+      };
+    }
+
+    /**
+     * Infers ISO start and end dates from event day and month string
+     */
+    function inferIsoFromEvent(dayStr, monthStr) {
+      if (!dayStr || !monthStr) return { startIso: '', endIso: '' };
+      
+      let mIdx = -1;
+      for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
+        if (monthStr.includes(THAI_MONTHS_SHORT[i])) {
+          mIdx = i;
+          break;
+        }
+      }
+      if (mIdx === -1) mIdx = 0;
+
+      let year = new Date().getFullYear();
+      const yearMatch = monthStr.match(/\d+/);
+      if (yearMatch) {
+        const yVal = parseInt(yearMatch[0], 10);
+        if (yVal > 2400) year = yVal - 543;
+        else if (yVal >= 50 && yVal < 100) year = (2500 + yVal) - 543;
+        else if (yVal > 2000 && yVal < 2100) year = yVal;
+      }
+
+      const mm = String(mIdx + 1).padStart(2, '0');
+
+      const rangeMatch = String(dayStr).match(/(\d{1,2})\s*[-–]\s*(\d{1,2})/);
+      if (rangeMatch) {
+        const sD = rangeMatch[1].padStart(2, '0');
+        const eD = rangeMatch[2].padStart(2, '0');
+        return {
+          startIso: `${year}-${mm}-${sD}`,
+          endIso: `${year}-${mm}-${eD}`
+        };
+      }
+
+      const singleDayMatch = String(dayStr).match(/\d{1,2}/);
+      if (singleDayMatch) {
+        const sD = singleDayMatch[0].padStart(2, '0');
+        return {
+          startIso: `${year}-${mm}-${sD}`,
+          endIso: ''
+        };
+      }
+
+      return { startIso: '', endIso: '' };
+    }
+
+    /**
+     * Infers ISO start and end dates from news date string
+     */
+    function inferIsoFromNewsDate(dateStr) {
+      if (!dateStr || typeof dateStr !== 'string') return { startIso: '', endIso: '' };
+
+      if (dateStr.includes('-')) {
+        const parts = dateStr.split('-');
+        const left = parts[0].trim();
+        const right = parts[1].trim();
+
+        let rM = -1;
+        for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
+          if (right.includes(THAI_MONTHS_SHORT[i])) { rM = i; break; }
+        }
+        let lM = rM;
+        for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
+          if (left.includes(THAI_MONTHS_SHORT[i])) { lM = i; break; }
+        }
+
+        const yearNums = right.match(/\d{4}|\d{2}/g);
+        let year = new Date().getFullYear();
+        if (yearNums) {
+          const yVal = parseInt(yearNums[yearNums.length - 1], 10);
+          if (yVal > 2400) year = yVal - 543;
+          else if (yVal >= 50 && yVal < 100) year = (2500 + yVal) - 543;
+          else if (yVal > 2000 && yVal < 2100) year = yVal;
+        }
+
+        const lNums = left.match(/\d+/);
+        const rNums = right.match(/\d+/);
+        if (lNums && rNums && lM !== -1 && rM !== -1) {
+          const sD = lNums[0].padStart(2, '0');
+          const eD = rNums[0].padStart(2, '0');
+          const sM = String(lM + 1).padStart(2, '0');
+          const eM = String(rM + 1).padStart(2, '0');
+          return {
+            startIso: `${year}-${sM}-${sD}`,
+            endIso: `${year}-${eM}-${eD}`
+          };
+        }
+      }
+
+      let mIdx = -1;
+      for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
+        if (dateStr.includes(THAI_MONTHS_SHORT[i])) { mIdx = i; break; }
+      }
+      const nums = dateStr.match(/\d+/g);
+      if (nums && nums.length >= 2 && mIdx !== -1) {
+        const sD = nums[0].padStart(2, '0');
+        let year = new Date().getFullYear();
+        const yVal = parseInt(nums[nums.length - 1], 10);
+        if (yVal > 2400) year = yVal - 543;
+        else if (yVal >= 50 && yVal < 100) year = (2500 + yVal) - 543;
+        else if (yVal > 2000 && yVal < 2100) year = yVal;
+        const sM = String(mIdx + 1).padStart(2, '0');
+        return {
+          startIso: `${year}-${sM}-${sD}`,
+          endIso: ''
+        };
+      }
+
+      return { startIso: '', endIso: '' };
+    }
+
     // --- News Date Helpers ---
-    function handleNewsDatePickerChange(isoValue) {
+    function handleNewsDatesChange() {
+      const startIso = document.getElementById('adminNewsStartDatePicker')?.value || '';
+      let endIso = document.getElementById('adminNewsEndDatePicker')?.value || '';
       const lbl = document.getElementById('adminNewsDateLabel');
-      if (!isoValue) {
+      const hiddenDate = document.getElementById('adminNewsDate');
+      const hiddenStartIso = document.getElementById('adminNewsDateIso');
+      const hiddenEndIso = document.getElementById('adminNewsEndDateIso');
+
+      if (!startIso) {
         if (lbl) lbl.textContent = '-';
+        if (hiddenDate) hiddenDate.value = '';
+        if (hiddenStartIso) hiddenStartIso.value = '';
+        if (hiddenEndIso) hiddenEndIso.value = '';
         return;
       }
-      const formatted = formatIsoToThai(isoValue);
-      const hiddenDate = document.getElementById('adminNewsDate');
-      if (hiddenDate) hiddenDate.value = formatted;
-      const hiddenIso = document.getElementById('adminNewsDateIso');
-      if (hiddenIso) hiddenIso.value = isoValue;
-      if (lbl) lbl.textContent = formatted;
+
+      // If end date is prior to start date, reset end date
+      if (endIso && endIso < startIso) {
+        endIso = '';
+        const endPicker = document.getElementById('adminNewsEndDatePicker');
+        if (endPicker) endPicker.value = '';
+      }
+
+      const info = calculateEventDateInfo(startIso, endIso);
+      if (!info) return;
+
+      if (hiddenDate) hiddenDate.value = info.newsDate;
+      if (hiddenStartIso) hiddenStartIso.value = info.dateIso;
+      if (hiddenEndIso) hiddenEndIso.value = info.endDateIso;
+
+      if (lbl) {
+        lbl.textContent = info.isRange ? `${info.newsDate} (${info.durationDays} วัน)` : `${info.newsDate} (1 วัน)`;
+      }
+    }
+
+    function clearNewsEndDate() {
+      const endPicker = document.getElementById('adminNewsEndDatePicker');
+      if (endPicker) endPicker.value = '';
+      handleNewsDatesChange();
     }
 
     function setQuickNewsDate(type) {
@@ -1545,9 +1873,11 @@
         d.setDate(d.getDate() - 1);
       }
       const iso = d.toISOString().slice(0, 10);
-      const picker = document.getElementById('adminNewsDatePicker');
-      if (picker) picker.value = iso;
-      handleNewsDatePickerChange(iso);
+      const startPicker = document.getElementById('adminNewsStartDatePicker');
+      const endPicker = document.getElementById('adminNewsEndDatePicker');
+      if (startPicker) startPicker.value = iso;
+      if (endPicker) endPicker.value = '';
+      handleNewsDatesChange();
     }
 
     function setQuickNewsTag(tag) {
@@ -1556,56 +1886,349 @@
     }
 
     // --- Event Date & Time Helpers ---
-    function handleEventTimeChange() {
+    function highlightInput(el) {
+      if (!el) return;
+      el.style.transition = 'all 0.25s ease';
+      el.style.borderColor = '#16a34a';
+      el.style.boxShadow = '0 0 0 3px rgba(22, 163, 74, 0.25)';
+      setTimeout(() => {
+        el.style.borderColor = '';
+        el.style.boxShadow = '';
+      }, 700);
+    }
+
+    function updateEventTimePreview(val) {
+      const preview = document.getElementById('adminEventTimePreview');
+      const allDayBanner = document.getElementById('adminEventAllDayBanner');
+      const customTimeWrap = document.getElementById('adminEventCustomTimeWrap');
+      const isAllDay = !val || val === 'เต็มวัน';
+
+      if (preview) {
+        preview.textContent = val || 'เต็มวัน';
+        preview.style.color = isAllDay ? '#15803d' : '#0369a1';
+        preview.style.background = isAllDay ? '#f0fdf4' : '#f0f9ff';
+        preview.style.borderColor = isAllDay ? '#bbf7d0' : '#bae6fd';
+      }
+
+      if (allDayBanner && customTimeWrap) {
+        if (isAllDay) {
+          allDayBanner.style.display = 'flex';
+          customTimeWrap.style.display = 'none';
+        } else {
+          allDayBanner.style.display = 'none';
+          customTimeWrap.style.display = 'block';
+        }
+      }
+
+      let matched = '';
+      if (val === 'เต็มวัน') matched = 'เต็มวัน';
+      else if (val.includes('เต็มวัน')) matched = 'เต็มวัน-เวลา';
+      else if (val.includes('12:00')) matched = 'เช้า';
+      else if (val.includes('13:00')) matched = 'บ่าย';
+      document.querySelectorAll('.btn-event-time-quick').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time-preset') === matched);
+      });
+    }
+
+    function switchToCustomEventTime() {
+      const allDayBanner = document.getElementById('adminEventAllDayBanner');
+      const customTimeWrap = document.getElementById('adminEventCustomTimeWrap');
+      if (allDayBanner) allDayBanner.style.display = 'none';
+      if (customTimeWrap) customTimeWrap.style.display = 'block';
+      const startEl = document.getElementById('adminEventStartTime');
+      const endEl = document.getElementById('adminEventEndTime');
+      if (startEl && !startEl.value) startEl.value = '08:30';
+      if (endEl && !endEl.value) endEl.value = '16:30';
+      handleEventTimeCustomChange();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function updateFeaturedTimePreview(val) {
+      const preview = document.getElementById('adminFeaturedTimePreview');
+      const allDayBanner = document.getElementById('adminFeaturedAllDayBanner');
+      const customTimeWrap = document.getElementById('adminFeaturedCustomTimeWrap');
+      const isAllDay = !val || val === 'เต็มวัน';
+
+      if (preview) {
+        preview.textContent = val || 'เต็มวัน';
+        preview.style.color = isAllDay ? '#15803d' : '#0369a1';
+        preview.style.background = isAllDay ? '#f0fdf4' : '#f0f9ff';
+        preview.style.borderColor = isAllDay ? '#bbf7d0' : '#bae6fd';
+      }
+
+      if (allDayBanner && customTimeWrap) {
+        if (isAllDay) {
+          allDayBanner.style.display = 'flex';
+          customTimeWrap.style.display = 'none';
+        } else {
+          allDayBanner.style.display = 'none';
+          customTimeWrap.style.display = 'block';
+        }
+      }
+
+      let matched = '';
+      if (val === 'เต็มวัน') matched = 'เต็มวัน';
+      else if (val.includes('เต็มวัน')) matched = 'เต็มวัน-เวลา';
+      else if (val.includes('12:00')) matched = 'เช้า';
+      else if (val.includes('13:00')) matched = 'บ่าย';
+      document.querySelectorAll('.btn-feat-time-quick').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time-preset') === matched);
+      });
+    }
+
+    function switchToCustomFeaturedTime() {
+      const allDayBanner = document.getElementById('adminFeaturedAllDayBanner');
+      const customTimeWrap = document.getElementById('adminFeaturedCustomTimeWrap');
+      if (allDayBanner) allDayBanner.style.display = 'none';
+      if (customTimeWrap) customTimeWrap.style.display = 'block';
+      const startEl = document.getElementById('adminFeaturedStartTime');
+      const endEl = document.getElementById('adminFeaturedEndTime');
+      if (startEl && !startEl.value) startEl.value = '08:30';
+      if (endEl && !endEl.value) endEl.value = '16:30';
+      handleFeaturedTimeCustomChange();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function setQuickEventTimePreset(type) {
+      const startEl = document.getElementById('adminEventStartTime');
+      const endEl = document.getElementById('adminEventEndTime');
+      const timeInput = document.getElementById('adminEventTime');
+      const preview = document.getElementById('adminEventTimePreview');
+      const allDayBanner = document.getElementById('adminEventAllDayBanner');
+      const customTimeWrap = document.getElementById('adminEventCustomTimeWrap');
+
+      let val = 'เต็มวัน';
+      if (type === 'เต็มวัน' || type === 'full') {
+        val = 'เต็มวัน';
+        if (allDayBanner) allDayBanner.style.display = 'flex';
+        if (customTimeWrap) customTimeWrap.style.display = 'none';
+      } else if (type === 'เต็มวัน-เวลา' || type === 'full_time') {
+        val = 'เต็มวัน (08:30 - 16:30 น.)';
+        if (startEl) startEl.value = '08:30';
+        if (endEl) endEl.value = '16:30';
+        if (allDayBanner) allDayBanner.style.display = 'none';
+        if (customTimeWrap) customTimeWrap.style.display = 'block';
+      } else if (type === 'เช้า' || type === 'morning') {
+        val = '08:30 - 12:00 น.';
+        if (startEl) startEl.value = '08:30';
+        if (endEl) endEl.value = '12:00';
+        if (allDayBanner) allDayBanner.style.display = 'none';
+        if (customTimeWrap) customTimeWrap.style.display = 'block';
+      } else if (type === 'บ่าย' || type === 'afternoon') {
+        val = '13:00 - 16:30 น.';
+        if (startEl) startEl.value = '13:00';
+        if (endEl) endEl.value = '16:30';
+        if (allDayBanner) allDayBanner.style.display = 'none';
+        if (customTimeWrap) customTimeWrap.style.display = 'block';
+      }
+
+      if (timeInput) {
+        timeInput.value = val;
+        highlightInput(timeInput);
+      }
+      if (preview) {
+        preview.textContent = val;
+        preview.style.color = (val === 'เต็มวัน') ? '#15803d' : '#0369a1';
+        preview.style.background = (val === 'เต็มวัน') ? '#f0fdf4' : '#f0f9ff';
+        preview.style.borderColor = (val === 'เต็มวัน') ? '#bbf7d0' : '#bae6fd';
+        highlightInput(preview);
+      }
+
+      document.querySelectorAll('.btn-event-time-quick').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time-preset') === type);
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleEventTimeCustomChange() {
       const start = document.getElementById('adminEventStartTime')?.value;
       const end = document.getElementById('adminEventEndTime')?.value;
       const timeInput = document.getElementById('adminEventTime');
+      const preview = document.getElementById('adminEventTimePreview');
       if (!timeInput) return;
 
+      let val = 'เต็มวัน';
       if (start && end) {
-        timeInput.value = `${start} - ${end} น.`;
+        val = `${start} - ${end} น.`;
       } else if (start) {
-        timeInput.value = `${start} น. เป็นต้นไป`;
+        val = `${start} น. เป็นต้นไป`;
       } else if (end) {
-        timeInput.value = `จนถึง ${end} น.`;
+        val = `จนถึง ${end} น.`;
       }
+
+      timeInput.value = val;
+      if (preview) {
+        preview.textContent = val;
+        preview.style.color = '#0369a1';
+        preview.style.background = '#f0f9ff';
+        preview.style.borderColor = '#bae6fd';
+      }
+      highlightInput(timeInput);
+
+      document.querySelectorAll('.btn-event-time-quick').forEach(btn => {
+        btn.classList.remove('active');
+      });
+    }
+
+    function handleEventTimeChange() {
+      handleEventTimeCustomChange();
     }
 
     function setQuickEventTime(start, end) {
-      const startEl = document.getElementById('adminEventStartTime');
-      const endEl = document.getElementById('adminEventEndTime');
-      if (startEl) startEl.value = start;
-      if (endEl) endEl.value = end;
-      handleEventTimeChange();
+      if (start === '08:30' && end === '16:30') {
+        setQuickEventTimePreset('เต็มวัน');
+      } else if (start === '08:30' && end === '12:00') {
+        setQuickEventTimePreset('เช้า');
+      } else if (start === '13:00' && end === '16:30') {
+        setQuickEventTimePreset('บ่าย');
+      } else {
+        const startEl = document.getElementById('adminEventStartTime');
+        const endEl = document.getElementById('adminEventEndTime');
+        if (startEl) startEl.value = start;
+        if (endEl) endEl.value = end;
+        handleEventTimeCustomChange();
+      }
     }
 
-    function handleEventDatePickerChange(isoValue) {
-      if (!isoValue) return;
-      const parts = isoValue.split('-');
-      const y = parseInt(parts[0], 10);
-      const m = parseInt(parts[1], 10) - 1;
-      const d = parseInt(parts[2], 10);
-      const dateObj = new Date(y, m, d);
+    function setQuickFeaturedTimePreset(type) {
+      const startEl = document.getElementById('adminFeaturedStartTime');
+      const endEl = document.getElementById('adminFeaturedEndTime');
+      const timeInput = document.getElementById('adminFeaturedTime');
+      const preview = document.getElementById('adminFeaturedTimePreview');
+      const allDayBanner = document.getElementById('adminFeaturedAllDayBanner');
+      const customTimeWrap = document.getElementById('adminFeaturedCustomTimeWrap');
 
-      const thaiYearShort = String(y + 543).slice(-2);
-      const thaiMonth = THAI_MONTHS_SHORT[m] || '';
-      const dayStr = d < 10 ? '0' + d : String(d);
-      const weekday = THAI_DAYS[dateObj.getDay()] || '';
+      let val = 'เต็มวัน';
+      if (type === 'เต็มวัน' || type === 'full') {
+        val = 'เต็มวัน';
+        if (allDayBanner) allDayBanner.style.display = 'flex';
+        if (customTimeWrap) customTimeWrap.style.display = 'none';
+      } else if (type === 'เต็มวัน-เวลา' || type === 'full_time') {
+        val = 'เต็มวัน (08:30 - 16:30 น.)';
+        if (startEl) startEl.value = '08:30';
+        if (endEl) endEl.value = '16:30';
+        if (allDayBanner) allDayBanner.style.display = 'none';
+        if (customTimeWrap) customTimeWrap.style.display = 'block';
+      } else if (type === 'เช้า' || type === 'morning') {
+        val = '08:30 - 12:00 น.';
+        if (startEl) startEl.value = '08:30';
+        if (endEl) endEl.value = '12:00';
+        if (allDayBanner) allDayBanner.style.display = 'none';
+        if (customTimeWrap) customTimeWrap.style.display = 'block';
+      } else if (type === 'บ่าย' || type === 'afternoon') {
+        val = '13:00 - 16:30 น.';
+        if (startEl) startEl.value = '13:00';
+        if (endEl) endEl.value = '16:30';
+        if (allDayBanner) allDayBanner.style.display = 'none';
+        if (customTimeWrap) customTimeWrap.style.display = 'block';
+      }
 
-      document.getElementById('adminEventDay').value = dayStr;
-      document.getElementById('adminEventMonth').value = `${thaiMonth} ${thaiYearShort}`;
-      document.getElementById('adminEventWeekday').value = weekday;
-      document.getElementById('adminEventDateIso').value = isoValue;
+      if (timeInput) {
+        timeInput.value = val;
+        highlightInput(timeInput);
+      }
+      if (preview) {
+        preview.textContent = val;
+        preview.style.color = (val === 'เต็มวัน') ? '#15803d' : '#0369a1';
+        preview.style.background = (val === 'เต็มวัน') ? '#f0fdf4' : '#f0f9ff';
+        preview.style.borderColor = (val === 'เต็มวัน') ? '#bbf7d0' : '#bae6fd';
+        highlightInput(preview);
+      }
+
+      document.querySelectorAll('.btn-feat-time-quick').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time-preset') === type);
+      });
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleFeaturedTimeCustomChange() {
+      const start = document.getElementById('adminFeaturedStartTime')?.value;
+      const end = document.getElementById('adminFeaturedEndTime')?.value;
+      const timeInput = document.getElementById('adminFeaturedTime');
+      const preview = document.getElementById('adminFeaturedTimePreview');
+      if (!timeInput) return;
+
+      let val = 'เต็มวัน';
+      if (start && end) {
+        val = `${start} - ${end} น.`;
+      } else if (start) {
+        val = `${start} น. เป็นต้นไป`;
+      } else if (end) {
+        val = `จนถึง ${end} น.`;
+      }
+
+      timeInput.value = val;
+      if (preview) {
+        preview.textContent = val;
+        preview.style.color = '#0369a1';
+        preview.style.background = '#f0f9ff';
+        preview.style.borderColor = '#bae6fd';
+      }
+      highlightInput(timeInput);
+
+      document.querySelectorAll('.btn-feat-time-quick').forEach(btn => {
+        btn.classList.remove('active');
+      });
+    }
+
+    function handleFeaturedTimeChange() {
+      handleFeaturedTimeCustomChange();
+    }
+
+    function setQuickFeaturedTime(start, end) {
+      if (start === '08:30' && end === '16:30') {
+        setQuickFeaturedTimePreset('เต็มวัน');
+      } else if (start === '08:30' && end === '12:00') {
+        setQuickFeaturedTimePreset('เช้า');
+      } else if (start === '13:00' && end === '16:30') {
+        setQuickFeaturedTimePreset('บ่าย');
+      } else {
+        const startEl = document.getElementById('adminFeaturedStartTime');
+        const endEl = document.getElementById('adminFeaturedEndTime');
+        if (startEl) startEl.value = start;
+        if (endEl) endEl.value = end;
+        handleFeaturedTimeCustomChange();
+      }
+    }
+
+    function handleEventDatesChange() {
+      const startIso = document.getElementById('adminEventStartDatePicker')?.value || '';
+      let endIso = document.getElementById('adminEventEndDatePicker')?.value || '';
+      const summaryText = document.getElementById('adminEventDateSummaryText');
+
+      if (!startIso) return;
+
+      // If end date is prior to start date, reset end date
+      if (endIso && endIso < startIso) {
+        endIso = '';
+        const endPicker = document.getElementById('adminEventEndDatePicker');
+        if (endPicker) endPicker.value = '';
+      }
+
+      const info = calculateEventDateInfo(startIso, endIso);
+      if (!info) return;
+
+      document.getElementById('adminEventDay').value = info.day;
+      document.getElementById('adminEventMonth').value = info.month;
+      document.getElementById('adminEventWeekday').value = info.weekday;
+      document.getElementById('adminEventDateIso').value = info.dateIso;
+      document.getElementById('adminEventEndDateIso').value = info.endDateIso;
+
+      if (summaryText) {
+        summaryText.textContent = info.summary;
+      }
 
       // Auto-fill time automatically if empty
-      const startEl = document.getElementById('adminEventStartTime');
-      const endEl = document.getElementById('adminEventEndTime');
       const timeInput = document.getElementById('adminEventTime');
-      if (startEl && endEl && timeInput && !timeInput.value.trim()) {
-        if (!startEl.value) startEl.value = '08:30';
-        if (!endEl.value) endEl.value = '16:30';
-        handleEventTimeChange();
+      if (timeInput && !timeInput.value.trim()) {
+        setQuickEventTimePreset('เต็มวัน');
       }
+    }
+
+    function clearEventEndDate() {
+      const endPicker = document.getElementById('adminEventEndDatePicker');
+      if (endPicker) endPicker.value = '';
+      handleEventDatesChange();
     }
 
     function setQuickEventDate(type) {
@@ -1614,57 +2237,49 @@
         d.setDate(d.getDate() + 1);
       }
       const iso = d.toISOString().slice(0, 10);
-      const picker = document.getElementById('adminEventDatePicker');
-      if (picker) picker.value = iso;
-      handleEventDatePickerChange(iso);
+      const startPicker = document.getElementById('adminEventStartDatePicker');
+      const endPicker = document.getElementById('adminEventEndDatePicker');
+      if (startPicker) startPicker.value = iso;
+      if (endPicker) endPicker.value = '';
+      handleEventDatesChange();
     }
 
-    // --- Featured Event Date & Time Helpers ---
-    function handleFeaturedTimeChange() {
-      const start = document.getElementById('adminFeaturedStartTime')?.value;
-      const end = document.getElementById('adminFeaturedEndTime')?.value;
-      const timeInput = document.getElementById('adminFeaturedTime');
-      if (!timeInput) return;
+    function handleFeaturedDatesChange() {
+      const startIso = document.getElementById('adminFeaturedStartDatePicker')?.value || '';
+      let endIso = document.getElementById('adminFeaturedEndDatePicker')?.value || '';
+      const summaryText = document.getElementById('adminFeaturedDateSummaryText');
 
-      if (start && end) {
-        timeInput.value = `${start} - ${end} น.`;
-      } else if (start) {
-        timeInput.value = `${start} น. เป็นต้นไป`;
-      } else if (end) {
-        timeInput.value = `จนถึง ${end} น.`;
+      if (!startIso) return;
+
+      if (endIso && endIso < startIso) {
+        endIso = '';
+        const endPicker = document.getElementById('adminFeaturedEndDatePicker');
+        if (endPicker) endPicker.value = '';
       }
-    }
 
-    function setQuickFeaturedTime(start, end) {
-      const startEl = document.getElementById('adminFeaturedStartTime');
-      const endEl = document.getElementById('adminFeaturedEndTime');
-      if (startEl) startEl.value = start;
-      if (endEl) endEl.value = end;
-      handleFeaturedTimeChange();
-    }
+      const info = calculateEventDateInfo(startIso, endIso);
+      if (!info) return;
 
-    function handleFeaturedDatePickerChange(isoValue) {
-      if (!isoValue) return;
-      const parts = isoValue.split('-');
-      const y = parseInt(parts[0], 10);
-      const m = parseInt(parts[1], 10) - 1;
-      const d = parseInt(parts[2], 10);
-      const thaiYearShort = String(y + 543).slice(-2);
-      const thaiMonth = THAI_MONTHS_SHORT[m] || '';
-      const dayStr = d < 10 ? '0' + d : String(d);
+      document.getElementById('adminFeaturedDay').value = info.day;
+      document.getElementById('adminFeaturedMonth').value = info.month;
+      document.getElementById('adminFeaturedDateIso').value = info.dateIso;
+      document.getElementById('adminFeaturedEndDateIso').value = info.endDateIso;
 
-      document.getElementById('adminFeaturedDay').value = dayStr;
-      document.getElementById('adminFeaturedMonth').value = `${thaiMonth} ${thaiYearShort}`;
+      if (summaryText) {
+        summaryText.textContent = info.summary;
+      }
 
       // Auto-fill time automatically if empty
-      const startEl = document.getElementById('adminFeaturedStartTime');
-      const endEl = document.getElementById('adminFeaturedEndTime');
       const timeInput = document.getElementById('adminFeaturedTime');
-      if (startEl && endEl && timeInput && !timeInput.value.trim()) {
-        if (!startEl.value) startEl.value = '08:30';
-        if (!endEl.value) endEl.value = '16:30';
-        handleFeaturedTimeChange();
+      if (timeInput && !timeInput.value.trim()) {
+        setQuickFeaturedTimePreset('เต็มวัน');
       }
+    }
+
+    function clearFeaturedEndDate() {
+      const endPicker = document.getElementById('adminFeaturedEndDatePicker');
+      if (endPicker) endPicker.value = '';
+      handleFeaturedDatesChange();
     }
 
     // --- Image Mode Selector & Preview ---
@@ -1839,7 +2454,14 @@
         now.setHours(0, 0, 0, 0);
         const nowTs = now.getTime();
 
-        let feat = sorted.find(evt => parseDateToTimestamp(evt) >= nowTs);
+        let feat = sorted.find(evt => {
+          const startTs = parseDateToTimestamp(evt);
+          if (evt.endDateIso) {
+            const endTs = new Date(evt.endDateIso + 'T23:59:59Z').getTime();
+            if (nowTs <= endTs) return true;
+          }
+          return startTs >= nowTs;
+        });
         if (!feat) feat = sorted[0];
 
         if (feat) {
@@ -1950,8 +2572,9 @@
       document.getElementById('adminNewsImgPreviewWrap').style.display = 'none';
       document.getElementById('adminNewsUploadProgress').style.display = 'none';
 
-      // Pre-fill today's date automatically
+      // Pre-fill today's date automatically (single day)
       setQuickNewsDate('today');
+      clearNewsEndDate();
       switchImgMode('upload');
 
       openModal('adminNewsModal');
@@ -1967,6 +2590,7 @@
       document.getElementById('adminNewsTitle').value = item.title || '';
       document.getElementById('adminNewsDate').value = item.date || '';
       document.getElementById('adminNewsDateIso').value = item.dateIso || '';
+      document.getElementById('adminNewsEndDateIso').value = item.endDateIso || '';
       document.getElementById('adminNewsTag').value = item.tag || '';
       document.getElementById('adminNewsDesc').value = item.desc || '';
       document.getElementById('adminNewsFb').value = item.fbUrl || '';
@@ -1975,25 +2599,24 @@
       document.getElementById('adminNewsPhoto').value = item.photoUrl || '';
       document.getElementById('adminNewsImgBase64').value = item.image || '';
 
-      let iso = item.dateIso || '';
-      if (!iso) {
-        const ts = parseDateToTimestamp(item);
-        if (ts > 0) {
-          try {
-            iso = new Date(ts).toISOString().slice(0, 10);
-          } catch (e) {}
-        }
+      let startIso = item.dateIso || '';
+      let endIso = item.endDateIso || '';
+      if (!startIso) {
+        const inferred = inferIsoFromNewsDate(item.date);
+        startIso = inferred.startIso;
+        endIso = inferred.endIso;
       }
-      if (iso) {
-        const picker = document.getElementById('adminNewsDatePicker');
-        if (picker) picker.value = iso;
-        document.getElementById('adminNewsDateIso').value = iso;
-      }
-      const displayLabel = item.date || (iso ? formatIsoToThai(iso) : '-');
-      const lbl = document.getElementById('adminNewsDateLabel');
-      if (lbl) lbl.textContent = displayLabel;
-      if (!item.date && iso) {
-        document.getElementById('adminNewsDate').value = formatIsoToThai(iso);
+
+      const startPicker = document.getElementById('adminNewsStartDatePicker');
+      const endPicker = document.getElementById('adminNewsEndDatePicker');
+      if (startPicker) startPicker.value = startIso;
+      if (endPicker) endPicker.value = endIso;
+
+      if (startIso) {
+        handleNewsDatesChange();
+      } else {
+        const lbl = document.getElementById('adminNewsDateLabel');
+        if (lbl) lbl.textContent = item.date || '-';
       }
 
       // Hide progress
@@ -2031,15 +2654,19 @@
 
         const id = document.getElementById('adminNewsId').value;
         const title = document.getElementById('adminNewsTitle').value.trim();
-        const pickerVal = document.getElementById('adminNewsDatePicker')?.value || '';
+        const startIso = document.getElementById('adminNewsStartDatePicker')?.value || '';
+        const endIso = document.getElementById('adminNewsEndDatePicker')?.value || '';
         let date = document.getElementById('adminNewsDate').value.trim();
-        let dateIso = document.getElementById('adminNewsDateIso').value.trim();
+        let dateIso = document.getElementById('adminNewsDateIso').value.trim() || startIso;
+        let endDateIso = document.getElementById('adminNewsEndDateIso').value.trim() || endIso;
 
-        if (!date && pickerVal) {
-          date = formatIsoToThai(pickerVal);
-          dateIso = pickerVal;
-        } else if (!dateIso && pickerVal) {
-          dateIso = pickerVal;
+        if ((!date || !dateIso) && startIso) {
+          const info = calculateEventDateInfo(startIso, endIso);
+          if (info) {
+            date = info.newsDate;
+            dateIso = info.dateIso;
+            endDateIso = info.endDateIso;
+          }
         }
 
         const tag = document.getElementById('adminNewsTag').value.trim();
@@ -2051,7 +2678,7 @@
         const imgData = document.getElementById('adminNewsImgBase64').value.trim();
 
         if (!title) throw new Error('กรุณากรอกหัวข้อข่าวสาร/กิจกรรม');
-        if (!date && !pickerVal) throw new Error('กรุณาเลือกวันที่จัดกิจกรรม');
+        if (!date && !startIso) throw new Error('กรุณาเลือกวันเริ่มต้นจัดกิจกรรม');
         if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
 
         // Check image
@@ -2067,6 +2694,7 @@
               title,
               date,
               dateIso: dateIso || items[idx].dateIso || '',
+              endDateIso: endDateIso || items[idx].endDateIso || '',
               tag: tag || 'กิจกรรมทั่วไป',
               desc,
               fbUrl,
@@ -2081,7 +2709,8 @@
             id: 'news-' + Date.now(),
             title,
             date,
-            dateIso: dateIso || document.getElementById('adminNewsDatePicker')?.value || '',
+            dateIso,
+            endDateIso,
             tag: tag || 'กิจกรรมทั่วไป',
             desc,
             fbUrl,
@@ -2198,12 +2827,13 @@
       document.getElementById('adminEventModalTitle').textContent = 'เพิ่มกิจกรรมใหม่ในตาราง';
       document.getElementById('adminEventId').value = '';
       document.getElementById('adminEventForm').reset();
-      const startEl = document.getElementById('adminEventStartTime');
-      const endEl = document.getElementById('adminEventEndTime');
-      if (startEl) startEl.value = '08:30';
-      if (endEl) endEl.value = '16:30';
-      handleEventTimeChange();
+      document.getElementById('adminEventDateIso').value = '';
+      document.getElementById('adminEventEndDateIso').value = '';
+
       setQuickEventDate('today');
+      clearEventEndDate();
+      setQuickEventTimePreset('เต็มวัน');
+
       openModal('adminEventModal');
     }
 
@@ -2220,14 +2850,44 @@
       document.getElementById('adminEventWeekday').value = evt.weekday || '';
       document.getElementById('adminEventCategory').value = evt.category || 'general';
       document.getElementById('adminEventCatLabel').value = evt.categoryLabel || '';
-      document.getElementById('adminEventTime').value = evt.time || '';
       document.getElementById('adminEventLocation').value = evt.location || '';
       document.getElementById('adminEventAudience').value = evt.audience || '';
       document.getElementById('adminEventNote').value = evt.note || '';
       document.getElementById('adminEventDateIso').value = evt.dateIso || '';
+      document.getElementById('adminEventEndDateIso').value = evt.endDateIso || '';
 
-      if (evt.dateIso) {
-        document.getElementById('adminEventDatePicker').value = evt.dateIso;
+      const timeVal = evt.time || 'เต็มวัน';
+      document.getElementById('adminEventTime').value = timeVal;
+      updateEventTimePreview(timeVal);
+
+      // Match preset button if applicable
+      let matchedPreset = '';
+      if (timeVal === 'เต็มวัน') matchedPreset = 'เต็มวัน';
+      else if (timeVal.includes('เต็มวัน')) matchedPreset = 'เต็มวัน-เวลา';
+      else if (timeVal.includes('12:00')) matchedPreset = 'เช้า';
+      else if (timeVal.includes('13:00')) matchedPreset = 'บ่าย';
+
+      document.querySelectorAll('.btn-event-time-quick').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time-preset') === matchedPreset);
+      });
+
+      let startIso = evt.dateIso || '';
+      let endIso = evt.endDateIso || '';
+      if (!startIso) {
+        const inferred = inferIsoFromEvent(evt.day, evt.month);
+        startIso = inferred.startIso;
+        endIso = inferred.endIso;
+      }
+
+      const startPicker = document.getElementById('adminEventStartDatePicker');
+      const endPicker = document.getElementById('adminEventEndDatePicker');
+      if (startPicker) startPicker.value = startIso;
+      if (endPicker) endPicker.value = endIso;
+
+      if (startIso) {
+        const info = calculateEventDateInfo(startIso, endIso);
+        const summaryText = document.getElementById('adminEventDateSummaryText');
+        if (summaryText && info) summaryText.textContent = info.summary;
       }
 
       // Parse start and end time from evt.time if available
@@ -2238,8 +2898,8 @@
         startEl.value = timeMatch[1].padStart(5, '0');
         endEl.value = timeMatch[2].padStart(5, '0');
       } else if (startEl && endEl) {
-        startEl.value = '';
-        endEl.value = '';
+        startEl.value = '08:30';
+        endEl.value = '16:30';
       }
 
       openModal('adminEventModal');
@@ -2258,19 +2918,34 @@
 
         const id = document.getElementById('adminEventId').value;
         const title = document.getElementById('adminEventTitle').value.trim();
-        const day = document.getElementById('adminEventDay').value.trim();
-        const month = document.getElementById('adminEventMonth').value.trim();
-        const weekday = document.getElementById('adminEventWeekday').value.trim();
+        const startIso = document.getElementById('adminEventStartDatePicker')?.value || '';
+        const endIso = document.getElementById('adminEventEndDatePicker')?.value || '';
+        let day = document.getElementById('adminEventDay').value.trim();
+        let month = document.getElementById('adminEventMonth').value.trim();
+        let weekday = document.getElementById('adminEventWeekday').value.trim();
+        let dateIso = document.getElementById('adminEventDateIso')?.value || startIso;
+        let endDateIso = document.getElementById('adminEventEndDateIso')?.value || endIso;
+
+        if ((!day || !month || !dateIso) && startIso) {
+          const info = calculateEventDateInfo(startIso, endIso);
+          if (info) {
+            day = info.day;
+            month = info.month;
+            weekday = info.weekday;
+            dateIso = info.dateIso;
+            endDateIso = info.endDateIso;
+          }
+        }
+
         const category = document.getElementById('adminEventCategory').value;
         const categoryLabel = document.getElementById('adminEventCatLabel').value.trim() || document.getElementById('adminEventCategory').options[document.getElementById('adminEventCategory').selectedIndex].text;
-        const time = document.getElementById('adminEventTime').value.trim();
+        const time = document.getElementById('adminEventTime').value.trim() || 'เต็มวัน';
         const location = document.getElementById('adminEventLocation').value.trim();
         const audience = document.getElementById('adminEventAudience').value.trim();
         const note = document.getElementById('adminEventNote').value.trim();
-        const dateIso = document.getElementById('adminEventDateIso')?.value || '';
 
         if (!title) throw new Error('กรุณาระบุชื่อกิจกรรม');
-        if (!day || !month) throw new Error('กรุณาระบุวันที่และเดือน');
+        if (!day || !month) throw new Error('กรุณาระบุวันเริ่มต้นกิจกรรม');
 
         const events = getEvents();
 
@@ -2279,13 +2954,13 @@
           if (idx !== -1) {
             events[idx] = {
               ...events[idx],
-              title, day, month, weekday, category, categoryLabel, time, location, audience, note, dateIso
+              title, day, month, weekday, category, categoryLabel, time, location, audience, note, dateIso, endDateIso
             };
           }
         } else {
           const newEvt = {
             id: 'evt-' + Date.now(),
-            title, day, month, weekday, category, categoryLabel, time, location, audience, note, dateIso
+            title, day, month, weekday, category, categoryLabel, time, location, audience, note, dateIso, endDateIso
           };
           events.push(newEvt);
         }
@@ -2320,10 +2995,44 @@
       document.getElementById('adminFeaturedDay').value = feat.day || '';
       document.getElementById('adminFeaturedMonth').value = feat.month || '';
       document.getElementById('adminFeaturedCategory').value = feat.categoryLabel || feat.category || '';
-      document.getElementById('adminFeaturedTime').value = feat.time || '';
       document.getElementById('adminFeaturedLocation').value = feat.location || '';
       document.getElementById('adminFeaturedAudience').value = feat.audience || '';
       document.getElementById('adminFeaturedDesc').value = feat.desc || '';
+      document.getElementById('adminFeaturedDateIso').value = feat.dateIso || '';
+      document.getElementById('adminFeaturedEndDateIso').value = feat.endDateIso || '';
+
+      const featTimeVal = feat.time || 'เต็มวัน';
+      document.getElementById('adminFeaturedTime').value = featTimeVal;
+      updateFeaturedTimePreview(featTimeVal);
+
+      let matchedFeatPreset = '';
+      if (featTimeVal === 'เต็มวัน') matchedFeatPreset = 'เต็มวัน';
+      else if (featTimeVal.includes('เต็มวัน')) matchedFeatPreset = 'เต็มวัน-เวลา';
+      else if (featTimeVal.includes('12:00')) matchedFeatPreset = 'เช้า';
+      else if (featTimeVal.includes('13:00')) matchedFeatPreset = 'บ่าย';
+
+      document.querySelectorAll('.btn-feat-time-quick').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-time-preset') === matchedFeatPreset);
+      });
+
+      let startIso = feat.dateIso || '';
+      let endIso = feat.endDateIso || '';
+      if (!startIso) {
+        const inferred = inferIsoFromEvent(feat.day, feat.month);
+        startIso = inferred.startIso;
+        endIso = inferred.endIso;
+      }
+
+      const startPicker = document.getElementById('adminFeaturedStartDatePicker');
+      const endPicker = document.getElementById('adminFeaturedEndDatePicker');
+      if (startPicker) startPicker.value = startIso;
+      if (endPicker) endPicker.value = endIso;
+
+      if (startIso) {
+        const info = calculateEventDateInfo(startIso, endIso);
+        const summaryText = document.getElementById('adminFeaturedDateSummaryText');
+        if (summaryText && info) summaryText.textContent = info.summary;
+      }
 
       // Parse start and end time from feat.time if available
       const timeMatch = (feat.time || '').match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/);
@@ -2333,8 +3042,8 @@
         startEl.value = timeMatch[1].padStart(5, '0');
         endEl.value = timeMatch[2].padStart(5, '0');
       } else if (startEl && endEl) {
-        startEl.value = '';
-        endEl.value = '';
+        startEl.value = '08:30';
+        endEl.value = '16:30';
       }
 
       openModal('adminFeaturedModal');
@@ -2351,15 +3060,34 @@
           submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
         }
 
+        const startIso = document.getElementById('adminFeaturedStartDatePicker')?.value || '';
+        const endIso = document.getElementById('adminFeaturedEndDatePicker')?.value || '';
+        let day = document.getElementById('adminFeaturedDay').value.trim();
+        let month = document.getElementById('adminFeaturedMonth').value.trim();
+        let dateIso = document.getElementById('adminFeaturedDateIso')?.value || startIso;
+        let endDateIso = document.getElementById('adminFeaturedEndDateIso')?.value || endIso;
+
+        if ((!day || !month || !dateIso) && startIso) {
+          const info = calculateEventDateInfo(startIso, endIso);
+          if (info) {
+            day = info.day;
+            month = info.month;
+            dateIso = info.dateIso;
+            endDateIso = info.endDateIso;
+          }
+        }
+
         const feat = {
           title: document.getElementById('adminFeaturedTitle').value.trim(),
-          day: document.getElementById('adminFeaturedDay').value.trim(),
-          month: document.getElementById('adminFeaturedMonth').value.trim(),
+          day: day,
+          month: month,
           category: document.getElementById('adminFeaturedCategory').value.trim() || 'กิจกรรมทั่วไป',
           time: document.getElementById('adminFeaturedTime').value.trim(),
           location: document.getElementById('adminFeaturedLocation').value.trim(),
           audience: document.getElementById('adminFeaturedAudience').value.trim(),
-          desc: document.getElementById('adminFeaturedDesc').value.trim()
+          desc: document.getElementById('adminFeaturedDesc').value.trim(),
+          dateIso: dateIso,
+          endDateIso: endDateIso
         };
         saveFeatured(feat);
         renderAdminEvents();

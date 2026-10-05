@@ -1082,7 +1082,14 @@
         now.setHours(0, 0, 0, 0);
         const nowTs = now.getTime();
 
-        let feat = sorted.find(evt => parseDateToTimestamp(evt) >= nowTs);
+        let feat = sorted.find(evt => {
+          const startTs = parseDateToTimestamp(evt);
+          if (evt.endDateIso) {
+            const endTs = new Date(evt.endDateIso + 'T23:59:59Z').getTime();
+            if (nowTs <= endTs) return true;
+          }
+          return startTs >= nowTs;
+        });
         if (!feat) feat = sorted[0];
         return feat;
       }
