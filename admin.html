@@ -731,7 +731,6 @@
                 <th style="width: 140px;">หมวดหมู่</th>
                 <th>ชื่องาน / กิจกรรม</th>
                 <th>เวลา & สถานที่</th>
-                <th style="width: 100px;">สถานะ</th>
                 <th style="width: 140px; text-align: right;">จัดการ</th>
               </tr>
             </thead>
@@ -1034,19 +1033,43 @@
           <input type="text" id="adminEventTitle" required placeholder="เช่น ประเพณีวันลอยกระทง สืบสานวัฒนธรรม" />
         </div>
 
-        <!-- Date Auto-Calculator for Events -->
-        <div class="dg-form-group">
+        <!-- Date & Time Auto-Calculator for Events -->
+        <div class="dg-form-group" style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="margin: 0;">เลือกวันที่จัดกิจกรรม (ปฏิทินช่วยกรอกอัตโนมัติ)</label>
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 1. เลือกวันที่จัดกิจกรรม</label>
             <div style="display: flex; gap: 6px;">
               <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('today')">📅 วันนี้</button>
               <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('tomorrow')">⏩ พรุ่งนี้</button>
             </div>
           </div>
-          <input type="date" id="adminEventDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; margin-bottom: 6px;" onchange="handleEventDatePickerChange(this.value)" />
-          <div class="date-helper-banner">
-            <i data-lucide="calendar" style="width: 14px; height: 14px; flex-shrink: 0;"></i>
-            <span>เลือกวันที่ด้านบน ระบบจะกรอกเลขวัน เดือน-ปี และวันในสัปดาห์ด้านล่างให้อัตโนมัติทันที</span>
+          <input type="date" id="adminEventDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; margin-bottom: 8px; background: #ffffff;" onchange="handleEventDatePickerChange(this.value)" />
+
+          <!-- Time Picker Row (Auto-Fills Event Time) -->
+          <div style="margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 2. เลือกช่วงเวลากิจกรรม (ระบบลงเวลาให้อัตโนมัติ)</label>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <button type="button" class="quick-pill-btn" onclick="setQuickEventTime('08:30', '16:30')">เต็มวัน</button>
+                <button type="button" class="quick-pill-btn" onclick="setQuickEventTime('08:30', '12:00')">เช้า</button>
+                <button type="button" class="quick-pill-btn" onclick="setQuickEventTime('13:00', '16:30')">บ่าย</button>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาเริ่ม:</span>
+                <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeChange()" />
+              </div>
+              <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px;">ถึง</span>
+              <div>
+                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาสิ้นสุด:</span>
+                <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeChange()" />
+              </div>
+            </div>
+          </div>
+
+          <div class="date-helper-banner" style="margin-top: 10px;">
+            <i data-lucide="sparkles" style="width: 14px; height: 14px; flex-shrink: 0; color: #16a34a;"></i>
+            <span>ระบบจะกรอกเลขวัน เดือน ปี และลงเวลาอัตโนมัติ (สามารถแก้ไขเพิ่มเติมได้ที่ช่องเวลาด้านล่าง)</span>
           </div>
         </div>
 
@@ -1069,22 +1092,22 @@
           <div class="dg-form-group">
             <label>หมวดหมู่กิจกรรม *</label>
             <select id="adminEventCategory" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;">
-              <option value="ceremony">พิธีการ & ประเพณี (ceremony)</option>
-              <option value="academic">วิชาการ & วันสอบ (academic)</option>
-              <option value="sports">กีฬา & ชุมนุม (sports)</option>
+              <option value="general">กิจกรรมทั่วไป (general)</option>
+              <option value="affairs">กิจการนักเรียน (affairs)</option>
+              <option value="academic">วิชาการ (academic)</option>
               <option value="prefect">ภารกิจสารวัตร (prefect)</option>
             </select>
           </div>
         </div>
 
         <div class="dg-form-group">
-          <label>ป้ายหมวดหมู่ภาษาไทย</label>
-          <input type="text" id="adminEventCatLabel" placeholder="เช่น ประเพณี & วัฒนธรรม" />
+          <label>ป้ายหมวดหมู่ภาษาไทย (ถ้าเว้นว่างจะใช้ชื่อหมวดหมู่อัตโนมัติ)</label>
+          <input type="text" id="adminEventCatLabel" placeholder="เช่น กิจกรรมทั่วไป, กิจการนักเรียน" />
         </div>
 
         <div class="dg-form-row">
           <div class="dg-form-group">
-            <label>เวลาจัดกิจกรรม</label>
+            <label>เวลาจัดกิจกรรม (ระบบลงให้อัตโนมัติ หรือพิมพ์แก้ไขได้)</label>
             <input type="text" id="adminEventTime" placeholder="เช่น 08:30 - 15:30 น." />
           </div>
           <div class="dg-form-group">
@@ -1093,25 +1116,14 @@
           </div>
         </div>
 
-        <div class="dg-form-row">
-          <div class="dg-form-group">
-            <label>กลุ่มเป้าหมาย / ผู้เข้าร่วม</label>
-            <input type="text" id="adminEventAudience" placeholder="เช่น นักเรียน ม.1 - ม.6" />
-          </div>
-          <div class="dg-form-group">
-            <label>ป้ายสถานะ (Tag)</label>
-            <input type="text" id="adminEventStatusTag" placeholder="เช่น กำลังมาถึง, สำคัญมาก" />
-          </div>
+        <div class="dg-form-group">
+          <label>กลุ่มเป้าหมาย / ผู้เข้าร่วม</label>
+          <input type="text" id="adminEventAudience" placeholder="เช่น นักเรียน ม.1 - ม.6" />
         </div>
 
         <div class="dg-form-group">
           <label>ข้อปฏิบัติ & ภารกิจสารวัตรนักเรียน</label>
           <textarea id="adminEventNote" rows="2" placeholder="สารวัตรนักเรียนประจำจุดดูแลความปลอดภัย..."></textarea>
-        </div>
-
-        <div class="dg-form-group">
-          <label>ลิงก์ Google Calendar (ถ้ามี)</label>
-          <input type="url" id="adminEventGcal" placeholder="https://calendar.google.com/..." />
         </div>
 
         <div class="dg-modal-actions">
@@ -1139,9 +1151,32 @@
           <input type="text" id="adminFeaturedTitle" required placeholder="เช่น การแข่งขันกรีฑาและกีฬาสีภายใน เดชะเกมส์" />
         </div>
 
-        <div class="dg-form-group">
-          <label>เลือกวันที่จัดกิจกรรมเด่น (ช่วยกรอกอัตโนมัติ)</label>
-          <input type="date" id="adminFeaturedDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px;" onchange="handleFeaturedDatePickerChange(this.value)" />
+        <div class="dg-form-group" style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
+          <label style="margin-bottom: 6px; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> เลือกวันที่จัดกิจกรรมเด่น (ช่วยกรอกอัตโนมัติ)</label>
+          <input type="date" id="adminFeaturedDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; margin-bottom: 8px; background: #ffffff;" onchange="handleFeaturedDatePickerChange(this.value)" />
+
+          <!-- Time Picker for Featured -->
+          <div style="margin-top: 10px; border-top: 1px dashed #cbd5e1; padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> เลือกช่วงเวลา (ลงเวลาอัตโนมัติ)</label>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <button type="button" class="quick-pill-btn" onclick="setQuickFeaturedTime('08:30', '16:30')">เต็มวัน</button>
+                <button type="button" class="quick-pill-btn" onclick="setQuickFeaturedTime('08:30', '12:00')">เช้า</button>
+                <button type="button" class="quick-pill-btn" onclick="setQuickFeaturedTime('13:00', '16:30')">บ่าย</button>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาเริ่ม:</span>
+                <input type="time" id="adminFeaturedStartTime" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeChange()" />
+              </div>
+              <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px;">ถึง</span>
+              <div>
+                <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px;">เวลาสิ้นสุด:</span>
+                <input type="time" id="adminFeaturedEndTime" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeChange()" />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="dg-form-row">
@@ -1154,19 +1189,13 @@
             <input type="text" id="adminFeaturedMonth" required placeholder="พ.ย. 67" />
           </div>
         </div>
-        <div class="dg-form-row">
-          <div class="dg-form-group">
-            <label>ป้ายกล่องวัน (เช่น เร็วๆ นี้)</label>
-            <input type="text" id="adminFeaturedBadgeTag" placeholder="เร็วๆ นี้ (NEXT UP)" />
-          </div>
-          <div class="dg-form-group">
-            <label>ป้ายหมวดหมู่</label>
-            <input type="text" id="adminFeaturedCategory" placeholder="กิจกรรมสำคัญ • กีฬาสีภายใน" />
-          </div>
+        <div class="dg-form-group">
+          <label>หมวดหมู่กิจกรรมเด่น</label>
+          <input type="text" id="adminFeaturedCategory" placeholder="เช่น กิจการนักเรียน, วิชาการ" />
         </div>
         <div class="dg-form-row">
           <div class="dg-form-group">
-            <label>เวลา</label>
+            <label>เวลา (ระบบลงให้อัตโนมัติ หรือแก้ไขได้)</label>
             <input type="text" id="adminFeaturedTime" placeholder="07:30 - 16:30 น." />
           </div>
           <div class="dg-form-group">
@@ -1181,10 +1210,6 @@
         <div class="dg-form-group">
           <label>คำอธิบายกิจกรรม & ภารกิจสารวัตร</label>
           <textarea id="adminFeaturedDesc" rows="3" placeholder="มหกรรมกีฬาแห่งความสามัคคี..."></textarea>
-        </div>
-        <div class="dg-form-group">
-          <label>ลิงก์ Google Calendar</label>
-          <input type="url" id="adminFeaturedGcal" placeholder="https://calendar.google.com/..." />
         </div>
         <div class="dg-modal-actions">
           <button type="button" class="dg-btn-outline" onclick="closeModal('adminFeaturedModal')">ยกเลิก</button>
@@ -1273,14 +1298,13 @@
     const DEFAULT_FEATURED_EVENT = {
       day: '15',
       month: 'พ.ย. 69',
-      tag: 'เร็วๆ นี้ (NEXT UP)',
-      category: 'พิธีการ & ประเพณี',
+      category: 'affairs',
+      categoryLabel: 'กิจการนักเรียน',
       title: 'ประเพณีวันลอยกระทง สืบสานวัฒนธรรม และจิตอาสารักษ์สิ่งแวดล้อม',
       time: '13:00 - 16:30 น.',
       location: 'ลานกิจกรรมอเนกประสงค์ และรอบคูเมืองโรงเรียน',
       audience: 'สมาชิกทุกระดับชั้น',
-      desc: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ',
-      gcalUrl: 'https://calendar.google.com/'
+      desc: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ'
     };
 
     const DEFAULT_CALENDAR_EVENTS = [
@@ -1289,15 +1313,13 @@
         day: '15',
         month: 'พ.ย. 69',
         weekday: 'ศุกร์',
-        category: 'ceremony',
-        categoryLabel: 'ประเพณี & วัฒนธรรม',
+        category: 'affairs',
+        categoryLabel: 'กิจการนักเรียน',
         title: 'ประเพณีวันลอยกระทง สืบสานวัฒนธรรม และจิตอาสารักษ์สิ่งแวดล้อม',
         time: '13:00 - 16:30 น.',
         location: 'ลานกิจกรรมอเนกประสงค์ และรอบคูเมืองโรงเรียน',
         audience: 'สมาชิกทุกระดับชั้น',
-        note: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ',
-        statusTag: 'กำลังมาถึง',
-        gcalUrl: 'https://calendar.google.com/'
+        note: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ'
       },
       {
         id: 'evt-2',
@@ -1305,14 +1327,12 @@
         month: 'พ.ย. 69',
         weekday: 'จ.-ศ.',
         category: 'academic',
-        categoryLabel: 'วิชาการ & วันสอบ',
+        categoryLabel: 'วิชาการ',
         title: 'การประเมินผลและสอบวัดผลกลางภาคเรียนที่ 2/2569 (Midterm Exams)',
         time: '08:30 - 15:30 น.',
         location: 'อาคารเรียน 1, 2, 3, 4 ทุกห้องสอบ',
         audience: 'นักเรียน ม.1 - ม.6 ทุกคน',
-        note: 'แต่งกายชุดนักเรียนถูกระเบียบ 100% สารวัตรนักเรียนดูแลความเงียบสงบในบริเวณเขตสอบและจัดระเบียบยานพาหนะ',
-        statusTag: 'สำคัญมาก',
-        gcalUrl: 'https://calendar.google.com/'
+        note: 'แต่งกายชุดนักเรียนถูกระเบียบ 100% สารวัตรนักเรียนดูแลความเงียบสงบในบริเวณเขตสอบและจัดระเบียบยานพาหนะ'
       },
       {
         id: 'evt-3',
@@ -1320,14 +1340,12 @@
         month: 'ธ.ค. 69',
         weekday: 'เสาร์',
         category: 'prefect',
-        categoryLabel: 'ภารกิจสารวัตร • ค่ายพัฒนาภาวะผู้นำ',
+        categoryLabel: 'ภารกิจสารวัตร',
         title: 'ค่ายอบรมเสริมสร้างภาวะผู้นำและทักษะจิตอาสาสารวัตรนักเรียน รุ่นที่ 15',
         time: '08:30 - 16:30 น.',
         location: 'ห้องประชุมรวงผึ้ง และลานกิจกรรม',
         audience: 'คณะสารวัตรนักเรียน และแกนนำจิตอาสา',
-        note: 'การฝึกอบรมการระงับเหตุฉุกเฉิน กฎหมายเยาวชนเบื้องต้น การปฐมพยาบาล CPR และการบริหารระบบ SI-ROSTER',
-        statusTag: 'เฉพาะสารวัตร',
-        gcalUrl: 'https://calendar.google.com/'
+        note: 'การฝึกอบรมการระงับเหตุฉุกเฉิน กฎหมายเยาวชนเบื้องต้น การปฐมพยาบาล CPR และการบริหารระบบ SI-ROSTER'
       },
       {
         id: 'evt-4',
@@ -1335,29 +1353,25 @@
         month: 'ธ.ค. 69',
         weekday: 'พุธ',
         category: 'academic',
-        categoryLabel: 'วิชาการ & เปิดบ้านโรงเรียน',
+        categoryLabel: 'วิชาการ',
         title: 'มหกรรมเปิดบ้านวิชาการ "Decha Open House & Exhibition 2026"',
         time: '08:00 - 15:30 น.',
         location: 'ลานโดมอเนกประสงค์ และหอประชุมใหญ่',
         audience: 'นักเรียน ผู้ปกครอง และบุคคลภายนอก',
-        note: 'นิทรรศการผลงาน 8 กลุ่มสาระ สารวัตรนักเรียนประจำจุดต้อนรับ ประชาสัมพันธ์ และจัดการจราจรบริเวณหน้าโรงเรียน',
-        statusTag: 'บุคคลภายนอกเข้าได้',
-        gcalUrl: 'https://calendar.google.com/'
+        note: 'นิทรรศการผลงาน 8 กลุ่มสาระ สารวัตรนักเรียนประจำจุดต้อนรับ ประชาสัมพันธ์ และจัดการจราจรบริเวณหน้าโรงเรียน'
       },
       {
         id: 'evt-5',
         day: '27',
         month: 'ธ.ค. 69',
         weekday: 'ศุกร์',
-        category: 'ceremony',
-        categoryLabel: 'พิธีการ & ประเพณี',
+        category: 'general',
+        categoryLabel: 'กิจกรรมทั่วไป',
         title: 'กิจกรรมส่งท้ายปีเก่า ต้อนรับปีใหม่ 2570 และทำบุญตักบาตรข้าวสารอาหารแห้ง',
         time: '07:00 - 12:00 น.',
         location: 'ลานธรรม และสนามหน้าเสาธง',
         audience: 'นักเรียนและบุคลากรทุกท่าน',
-        note: 'แต่งกายชุดผ้าไทยหรือชุดสุภาพ สารวัตรนักเรียนดูแลแถวตักบาตรและอำนวยความสะดวกครูอาวุโส',
-        statusTag: 'วันสุดท้ายก่อนหยุดยาว',
-        gcalUrl: 'https://calendar.google.com/'
+        note: 'แต่งกายชุดผ้าไทยหรือชุดสุภาพ สารวัตรนักเรียนดูแลแถวตักบาตรและอำนวยความสะดวกครูอาวุโส'
       },
       {
         id: 'evt-6',
@@ -1365,14 +1379,12 @@
         month: 'ก.พ. 70',
         weekday: 'จ.-ศ.',
         category: 'academic',
-        categoryLabel: 'วิชาการ & วันสอบ',
+        categoryLabel: 'วิชาการ',
         title: 'การสอบวัดผลปลายภาคเรียนที่ 2/2569 (Final Examination)',
         time: '08:30 - 15:30 น.',
         location: 'ทุกอาคารเรียน',
         audience: 'นักเรียน ม.1 - ม.6 ทุกระดับชั้น',
-        note: 'ตรวจสอบระเบียบการแต่งกาย ทรงผม และอุปกรณ์สอบเข้มงวด สารวัตรนักเรียนประจำการเต็มกำลังทุกอาคารสอบ',
-        statusTag: 'สิ้นสุดปีการศึกษา',
-        gcalUrl: 'https://calendar.google.com/'
+        note: 'ตรวจสอบระเบียบการแต่งกาย ทรงผม และอุปกรณ์สอบเข้มงวด สารวัตรนักเรียนประจำการเต็มกำลังทุกอาคารสอบ'
       }
     ];
 
@@ -1543,7 +1555,30 @@
       if (tagInput) tagInput.value = tag;
     }
 
-    // --- Event Date Helpers ---
+    // --- Event Date & Time Helpers ---
+    function handleEventTimeChange() {
+      const start = document.getElementById('adminEventStartTime')?.value;
+      const end = document.getElementById('adminEventEndTime')?.value;
+      const timeInput = document.getElementById('adminEventTime');
+      if (!timeInput) return;
+
+      if (start && end) {
+        timeInput.value = `${start} - ${end} น.`;
+      } else if (start) {
+        timeInput.value = `${start} น. เป็นต้นไป`;
+      } else if (end) {
+        timeInput.value = `จนถึง ${end} น.`;
+      }
+    }
+
+    function setQuickEventTime(start, end) {
+      const startEl = document.getElementById('adminEventStartTime');
+      const endEl = document.getElementById('adminEventEndTime');
+      if (startEl) startEl.value = start;
+      if (endEl) endEl.value = end;
+      handleEventTimeChange();
+    }
+
     function handleEventDatePickerChange(isoValue) {
       if (!isoValue) return;
       const parts = isoValue.split('-');
@@ -1561,6 +1596,16 @@
       document.getElementById('adminEventMonth').value = `${thaiMonth} ${thaiYearShort}`;
       document.getElementById('adminEventWeekday').value = weekday;
       document.getElementById('adminEventDateIso').value = isoValue;
+
+      // Auto-fill time automatically if empty
+      const startEl = document.getElementById('adminEventStartTime');
+      const endEl = document.getElementById('adminEventEndTime');
+      const timeInput = document.getElementById('adminEventTime');
+      if (startEl && endEl && timeInput && !timeInput.value.trim()) {
+        if (!startEl.value) startEl.value = '08:30';
+        if (!endEl.value) endEl.value = '16:30';
+        handleEventTimeChange();
+      }
     }
 
     function setQuickEventDate(type) {
@@ -1572,6 +1617,30 @@
       const picker = document.getElementById('adminEventDatePicker');
       if (picker) picker.value = iso;
       handleEventDatePickerChange(iso);
+    }
+
+    // --- Featured Event Date & Time Helpers ---
+    function handleFeaturedTimeChange() {
+      const start = document.getElementById('adminFeaturedStartTime')?.value;
+      const end = document.getElementById('adminFeaturedEndTime')?.value;
+      const timeInput = document.getElementById('adminFeaturedTime');
+      if (!timeInput) return;
+
+      if (start && end) {
+        timeInput.value = `${start} - ${end} น.`;
+      } else if (start) {
+        timeInput.value = `${start} น. เป็นต้นไป`;
+      } else if (end) {
+        timeInput.value = `จนถึง ${end} น.`;
+      }
+    }
+
+    function setQuickFeaturedTime(start, end) {
+      const startEl = document.getElementById('adminFeaturedStartTime');
+      const endEl = document.getElementById('adminFeaturedEndTime');
+      if (startEl) startEl.value = start;
+      if (endEl) endEl.value = end;
+      handleFeaturedTimeChange();
     }
 
     function handleFeaturedDatePickerChange(isoValue) {
@@ -1586,6 +1655,16 @@
 
       document.getElementById('adminFeaturedDay').value = dayStr;
       document.getElementById('adminFeaturedMonth').value = `${thaiMonth} ${thaiYearShort}`;
+
+      // Auto-fill time automatically if empty
+      const startEl = document.getElementById('adminFeaturedStartTime');
+      const endEl = document.getElementById('adminFeaturedEndTime');
+      const timeInput = document.getElementById('adminFeaturedTime');
+      if (startEl && endEl && timeInput && !timeInput.value.trim()) {
+        if (!startEl.value) startEl.value = '08:30';
+        if (!endEl.value) endEl.value = '16:30';
+        handleFeaturedTimeChange();
+      }
     }
 
     // --- Image Mode Selector & Preview ---
@@ -1761,9 +1840,6 @@
         const nowTs = now.getTime();
 
         let feat = sorted.find(evt => parseDateToTimestamp(evt) >= nowTs);
-        if (!feat) {
-          feat = sorted.find(evt => (evt.statusTag || '').includes('กำลังมาถึง') || (evt.statusTag || '').includes('เร็วๆ'));
-        }
         if (!feat) feat = sorted[0];
 
         if (feat) {
@@ -1772,13 +1848,11 @@
             day: feat.day || '',
             month: feat.month || '',
             weekday: feat.weekday || '',
-            tag: feat.statusTag || 'เร็วๆ นี้ (NEXT UP)',
-            category: feat.categoryLabel || feat.category || 'กิจกรรมสำคัญ',
+            category: feat.categoryLabel || feat.category || 'กิจกรรมทั่วไป',
             time: feat.time || '',
             location: feat.location || '',
             audience: feat.audience || '',
             desc: feat.desc || feat.note || '',
-            gcalUrl: feat.gcalUrl || '',
             isAuto: true
           };
         }
@@ -2066,8 +2140,7 @@
             </div>
             <div style="flex: 1; min-width: 280px;">
               <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
-                <span style="background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 750; padding: 2px 8px; border-radius: 4px;">${escapeHtml(feat.category)}</span>
-                <span style="background: #e2e8f0; color: #334155; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${escapeHtml(feat.tag)}</span>
+                <span style="background: #f1f5f9; color: #0f172a; font-size: 0.72rem; font-weight: 750; padding: 2px 8px; border-radius: 4px; border: 1px solid #cbd5e1;">${escapeHtml(feat.categoryLabel || feat.category)}</span>
                 <span style="background: #ecfdf5; color: #047857; font-size: 0.72rem; font-weight: 750; padding: 2px 8px; border-radius: 4px; border: 1px solid #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">⚡ กิจกรรมที่จะมาถึงอัตโนมัติ</span>
               </div>
               <h4 style="font-size: 1.15rem; font-weight: 850; margin: 0 0 6px;">${escapeHtml(feat.title)}</h4>
@@ -2085,7 +2158,7 @@
       // Render Events Table
       if (tbody) {
         if (events.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px; color: var(--dg-text-muted);">ยังไม่มีกิจกรรมในตาราง</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--dg-text-muted);">ยังไม่มีกิจกรรมในตาราง</td></tr>';
           return;
         }
 
@@ -2106,9 +2179,6 @@
               <div style="font-size: 0.82rem;">${escapeHtml(evt.time || '-')}</div>
               <div style="font-size: 0.75rem; color: var(--dg-text-muted);">${escapeHtml(evt.location || '-')}</div>
             </td>
-            <td>
-              <span style="font-size: 0.75rem; font-weight: 700; color: #15803d; background: #f0fdf4; padding: 3px 8px; border-radius: 4px;">${escapeHtml(evt.statusTag || 'ปกติ')}</span>
-            </td>
             <td style="text-align: right;">
               <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" title="แก้ไข">
                 <i data-lucide="edit"></i>
@@ -2128,6 +2198,11 @@
       document.getElementById('adminEventModalTitle').textContent = 'เพิ่มกิจกรรมใหม่ในตาราง';
       document.getElementById('adminEventId').value = '';
       document.getElementById('adminEventForm').reset();
+      const startEl = document.getElementById('adminEventStartTime');
+      const endEl = document.getElementById('adminEventEndTime');
+      if (startEl) startEl.value = '08:30';
+      if (endEl) endEl.value = '16:30';
+      handleEventTimeChange();
       setQuickEventDate('today');
       openModal('adminEventModal');
     }
@@ -2143,18 +2218,28 @@
       document.getElementById('adminEventDay').value = evt.day || '';
       document.getElementById('adminEventMonth').value = evt.month || '';
       document.getElementById('adminEventWeekday').value = evt.weekday || '';
-      document.getElementById('adminEventCategory').value = evt.category || 'ceremony';
+      document.getElementById('adminEventCategory').value = evt.category || 'general';
       document.getElementById('adminEventCatLabel').value = evt.categoryLabel || '';
       document.getElementById('adminEventTime').value = evt.time || '';
       document.getElementById('adminEventLocation').value = evt.location || '';
       document.getElementById('adminEventAudience').value = evt.audience || '';
-      document.getElementById('adminEventStatusTag').value = evt.statusTag || '';
       document.getElementById('adminEventNote').value = evt.note || '';
-      document.getElementById('adminEventGcal').value = evt.gcalUrl || '';
       document.getElementById('adminEventDateIso').value = evt.dateIso || '';
 
       if (evt.dateIso) {
         document.getElementById('adminEventDatePicker').value = evt.dateIso;
+      }
+
+      // Parse start and end time from evt.time if available
+      const timeMatch = (evt.time || '').match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/);
+      const startEl = document.getElementById('adminEventStartTime');
+      const endEl = document.getElementById('adminEventEndTime');
+      if (timeMatch && startEl && endEl) {
+        startEl.value = timeMatch[1].padStart(5, '0');
+        endEl.value = timeMatch[2].padStart(5, '0');
+      } else if (startEl && endEl) {
+        startEl.value = '';
+        endEl.value = '';
       }
 
       openModal('adminEventModal');
@@ -2181,9 +2266,7 @@
         const time = document.getElementById('adminEventTime').value.trim();
         const location = document.getElementById('adminEventLocation').value.trim();
         const audience = document.getElementById('adminEventAudience').value.trim();
-        const statusTag = document.getElementById('adminEventStatusTag').value.trim() || 'กำลังมาถึง';
         const note = document.getElementById('adminEventNote').value.trim();
-        const gcalUrl = document.getElementById('adminEventGcal').value.trim() || 'https://calendar.google.com/';
         const dateIso = document.getElementById('adminEventDateIso')?.value || '';
 
         if (!title) throw new Error('กรุณาระบุชื่อกิจกรรม');
@@ -2196,13 +2279,13 @@
           if (idx !== -1) {
             events[idx] = {
               ...events[idx],
-              title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl, dateIso
+              title, day, month, weekday, category, categoryLabel, time, location, audience, note, dateIso
             };
           }
         } else {
           const newEvt = {
             id: 'evt-' + Date.now(),
-            title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl, dateIso
+            title, day, month, weekday, category, categoryLabel, time, location, audience, note, dateIso
           };
           events.push(newEvt);
         }
@@ -2236,13 +2319,24 @@
       document.getElementById('adminFeaturedTitle').value = feat.title || '';
       document.getElementById('adminFeaturedDay').value = feat.day || '';
       document.getElementById('adminFeaturedMonth').value = feat.month || '';
-      document.getElementById('adminFeaturedBadgeTag').value = feat.tag || '';
-      document.getElementById('adminFeaturedCategory').value = feat.category || '';
+      document.getElementById('adminFeaturedCategory').value = feat.categoryLabel || feat.category || '';
       document.getElementById('adminFeaturedTime').value = feat.time || '';
       document.getElementById('adminFeaturedLocation').value = feat.location || '';
       document.getElementById('adminFeaturedAudience').value = feat.audience || '';
       document.getElementById('adminFeaturedDesc').value = feat.desc || '';
-      document.getElementById('adminFeaturedGcal').value = feat.gcalUrl || '';
+
+      // Parse start and end time from feat.time if available
+      const timeMatch = (feat.time || '').match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/);
+      const startEl = document.getElementById('adminFeaturedStartTime');
+      const endEl = document.getElementById('adminFeaturedEndTime');
+      if (timeMatch && startEl && endEl) {
+        startEl.value = timeMatch[1].padStart(5, '0');
+        endEl.value = timeMatch[2].padStart(5, '0');
+      } else if (startEl && endEl) {
+        startEl.value = '';
+        endEl.value = '';
+      }
+
       openModal('adminFeaturedModal');
     }
 
@@ -2261,13 +2355,11 @@
           title: document.getElementById('adminFeaturedTitle').value.trim(),
           day: document.getElementById('adminFeaturedDay').value.trim(),
           month: document.getElementById('adminFeaturedMonth').value.trim(),
-          tag: document.getElementById('adminFeaturedBadgeTag').value.trim() || 'เร็วๆ นี้ (NEXT UP)',
-          category: document.getElementById('adminFeaturedCategory').value.trim() || 'กิจกรรมสำคัญ',
+          category: document.getElementById('adminFeaturedCategory').value.trim() || 'กิจกรรมทั่วไป',
           time: document.getElementById('adminFeaturedTime').value.trim(),
           location: document.getElementById('adminFeaturedLocation').value.trim(),
           audience: document.getElementById('adminFeaturedAudience').value.trim(),
-          desc: document.getElementById('adminFeaturedDesc').value.trim(),
-          gcalUrl: document.getElementById('adminFeaturedGcal').value.trim() || 'https://calendar.google.com/'
+          desc: document.getElementById('adminFeaturedDesc').value.trim()
         };
         saveFeatured(feat);
         renderAdminEvents();
