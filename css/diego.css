@@ -652,16 +652,26 @@ body {
 }
 
 .dg-news-date {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: rgba(17, 17, 17, 0.85);
-  color: #ffffff;
-  backdrop-filter: blur(8px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 650;
+  margin-bottom: 16px;
+  width: fit-content;
+  transition: all 0.2s ease;
+}
+
+.dg-news-date svg {
+  width: 14px;
+  height: 14px;
+  color: #64748b;
+  flex-shrink: 0;
 }
 
 /* Card Content */
@@ -698,38 +708,52 @@ body {
   flex-grow: 1;
 }
 
-/* 3 Action Buttons (FB, IG, Google Photos) */
+/* Action Buttons: Minimalist Icon-only Buttons (FB, IG, Reels, Google Photos) */
 .dg-news-actions-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.25fr;
+  display: flex;
+  align-items: center;
   gap: 8px;
   padding-top: 14px;
   border-top: 1px solid var(--dg-border);
+  flex-wrap: wrap;
+}
+
+.dg-news-actions-row:empty {
+  display: none;
+  padding-top: 0;
+  border-top: none;
 }
 
 .dg-news-btn {
+  flex: 1;
+  max-width: 64px;
+  height: 36px;
+  min-width: 38px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 6px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid var(--dg-border);
   background: var(--dg-bg-subtle);
   color: var(--dg-text-primary);
-  font-size: 0.74rem;
-  font-weight: 700;
   text-decoration: none;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dg-news-btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .dg-news-btn svg {
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.dg-news-btn:hover svg {
+  transform: scale(1.1);
 }
 
 /* Button variants */
@@ -743,6 +767,12 @@ body {
   background: #fdf2f8;
   border-color: #fbcfe8;
   color: #e1306c;
+}
+
+.dg-btn-reels:hover {
+  background: #fff1f2;
+  border-color: #fda4af;
+  color: #e11d48;
 }
 
 .dg-btn-photo:hover {
@@ -766,6 +796,24 @@ body {
   color: var(--dg-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.dg-news-bottom-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.dg-news-bottom-date svg {
+  width: 12px;
+  height: 12px;
+  color: #64748b;
+  flex-shrink: 0;
 }
 
 .dg-news-meta-actions-group {

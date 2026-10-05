@@ -305,6 +305,7 @@
 
     .link-tag.has-fb { background: #eff6ff; color: #1d4ed8; }
     .link-tag.has-ig { background: #fdf2f8; color: #be185d; }
+    .link-tag.has-reels { background: #fff1f2; color: #e11d48; }
     .link-tag.has-photo { background: #fefce8; color: #a16207; }
     .link-tag.no-link { background: #f1f5f9; color: #94a3b8; text-decoration: line-through; }
 
@@ -426,6 +427,147 @@
     .admin-toast.show {
       transform: translateY(0);
       opacity: 1;
+    }
+
+    /* Upload Progress Bar & File Optimizer */
+    .upload-progress-wrap {
+      margin-top: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 14px;
+      transition: all 0.25s ease;
+    }
+
+    .upload-file-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .upload-progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .upload-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0f172a, #2563eb);
+      border-radius: 999px;
+      transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .upload-progress-fill.complete {
+      background: linear-gradient(90deg, #16a34a, #22c55e);
+    }
+
+    .upload-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+
+    .upload-pct-badge {
+      font-weight: 850;
+      color: #0f172a;
+      background: #ffffff;
+      padding: 1px 7px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+      font-family: var(--dg-font-sans);
+    }
+
+    /* Segmented Tab Buttons for Image Source */
+    .img-mode-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .img-mode-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748b;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+      font-family: inherit;
+    }
+
+    .img-mode-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .img-mode-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Quick Pills (Date & Tags) */
+    .quick-pill-btn {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.76rem;
+      font-weight: 650;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .quick-pill-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+
+    .quick-pill-btn.active {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+
+    .date-helper-banner {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 0.78rem;
+      padding: 7px 12px;
+      border-radius: 6px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     @media (max-width: 768px) {
@@ -738,47 +880,135 @@
       </div>
       <form id="adminNewsForm" onsubmit="handleSaveNews(event)" class="dg-modal-form">
         <input type="hidden" id="adminNewsId" />
+        <input type="hidden" id="adminNewsDateIso" />
+
         <div class="dg-form-group">
           <label>หัวข้อข่าวสาร/กิจกรรม *</label>
           <input type="text" id="adminNewsTitle" required placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" />
         </div>
-        <div class="dg-form-row">
-          <div class="dg-form-group">
-            <label>วันที่จัดกิจกรรม *</label>
-            <input type="text" id="adminNewsDate" required placeholder="เช่น 28 ก.ย. 2569" />
+
+        <!-- Date Selection: Single Native Date Picker with Pop-up & Quick Buttons -->
+        <div class="dg-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin: 0; font-weight: 700;">วันที่จัดกิจกรรม (กดเพื่อเปิดปฏิทินเลือกวัน) *</label>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('today')">📅 วันนี้</button>
+              <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('yesterday')">⏪ เมื่อวาน</button>
+            </div>
           </div>
-          <div class="dg-form-group">
-            <label>หมวดหมู่ / แท็ก</label>
-            <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา" />
+          <div style="position: relative;">
+            <input 
+              type="date" 
+              id="adminNewsDatePicker" 
+              required 
+              onclick="try{this.showPicker()}catch(e){}"
+              onchange="handleNewsDatePickerChange(this.value)" 
+              style="width: 100%; padding: 11px 14px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.95rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" 
+            />
+          </div>
+          <input type="hidden" id="adminNewsDate" />
+          <div class="date-helper-banner" style="margin-top: 6px;">
+            <i data-lucide="calendar" style="width: 14px; height: 14px; flex-shrink: 0; color: #16a34a;"></i>
+            <span>วันที่แสดงผล: <strong id="adminNewsDateLabel" style="font-weight: 800; color: #0f172a;">-</strong></span>
           </div>
         </div>
+
+        <div class="dg-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin: 0;">หมวดหมู่ / แท็กกิจกรรม</label>
+            <span style="font-size: 0.72rem; color: var(--dg-text-muted);">คลิกเลือกด่วน:</span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('พิธีการสำคัญ')">พิธีการสำคัญ</button>
+            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('จิตอาสา')">จิตอาสา</button>
+            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('ความปลอดภัย')">ความปลอดภัย</button>
+            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('กิจกรรมโรงเรียน')">กิจกรรมโรงเรียน</button>
+            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('อบรมพัฒนา')">อบรมพัฒนา</button>
+          </div>
+          <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา" />
+        </div>
+
         <div class="dg-form-group">
           <label>รายละเอียดกิจกรรม *</label>
           <textarea id="adminNewsDesc" rows="3" required placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
         </div>
+
+        <!-- Image Upload Section with Dual Modes & Live Progress Bar -->
         <div class="dg-form-group">
-          <label>ภาพหน้าปก (เลือกไฟล์ภาพจากคอมพิวเตอร์/มือถือ)</label>
-          <input type="file" id="adminNewsImgFile" accept="image/*" />
+          <label>ภาพหน้าปกกิจกรรม *</label>
+          
+          <div class="img-mode-tabs">
+            <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')">
+              <i data-lucide="upload-cloud"></i>
+              <span>อัปโหลดจากเครื่อง (มีบาร์ %)</span>
+            </button>
+            <button type="button" class="img-mode-btn" id="btnImgModeUrl" onclick="switchImgMode('url')">
+              <i data-lucide="link"></i>
+              <span>วางลิงก์รูปภาพ (Image URL)</span>
+            </button>
+          </div>
+
+          <!-- Mode 1: File Upload with Live Progress Bar -->
+          <div id="panelImgUpload">
+            <input type="file" id="adminNewsImgFile" accept="image/*" style="width: 100%; padding: 10px; border: 1.5px dashed var(--dg-border); border-radius: 8px; background: #fafafa; cursor: pointer;" />
+            
+            <div id="adminNewsUploadProgress" class="upload-progress-wrap" style="display: none;">
+              <div class="upload-file-meta">
+                <span id="uploadFileName" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;">กำลังเตรียมไฟล์...</span>
+                <span id="uploadFileSize">0 KB</span>
+              </div>
+              <div class="upload-progress-bar-bg">
+                <div id="uploadProgressFill" class="upload-progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="upload-status-row">
+                <span id="uploadStatusText">กำลังประมวลผลรูปภาพ...</span>
+                <span id="uploadPercentNum" class="upload-pct-badge">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode 2: Direct Image URL -->
+          <div id="panelImgUrl" style="display: none;">
+            <input type="url" id="adminNewsImgUrl" placeholder="https://... (เช่น ลิงก์จาก Discord, ImgBB, Google Drive หรือเว็บภายนอก)" oninput="handleNewsImgUrlChange(this.value)" />
+            <small style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 4px;">รองรับลิงก์รูปภาพสาธารณะทุกประเภท (JPG, PNG, WebP)</small>
+          </div>
+
           <input type="hidden" id="adminNewsImgBase64" />
-          <div id="adminNewsImgPreviewWrap" style="display: none; margin-top: 8px;">
-            <img id="adminNewsImgPreview" src="" alt="Preview" style="max-height: 130px; border-radius: 6px; border: 1px solid var(--dg-border); object-fit: cover;" />
+
+          <!-- Live Image Preview -->
+          <div id="adminNewsImgPreviewWrap" style="display: none; margin-top: 10px;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: var(--dg-text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <span>ตัวอย่างรูปภาพที่จะแสดงผล:</span>
+              <button type="button" onclick="clearSelectedNewsImage()" style="background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; font-weight: 600;">ลบรูปภาพออก</button>
+            </div>
+            <div style="position: relative; display: inline-block;">
+              <img id="adminNewsImgPreview" src="" alt="Preview" style="max-height: 140px; max-width: 100%; border-radius: 8px; border: 1px solid var(--dg-border); object-fit: cover;" />
+            </div>
           </div>
         </div>
+
         <div class="dg-form-group">
-          <label>ลิงก์โพสต์ Facebook</label>
+          <label>ลิงก์โพสต์ Facebook (ถ้ามี)</label>
           <input type="url" id="adminNewsFb" placeholder="https://www.facebook.com/..." />
         </div>
         <div class="dg-form-group">
-          <label>ลิงก์โพสต์ Instagram</label>
+          <label>ลิงก์โพสต์ Instagram (ถ้ามี)</label>
           <input type="url" id="adminNewsIg" placeholder="https://www.instagram.com/p/..." />
         </div>
         <div class="dg-form-group">
-          <label>ลิงก์อัลบั้ม Google Photos</label>
+          <label>ลิงก์ Instagram Reels (ถ้ามี)</label>
+          <input type="url" id="adminNewsReels" placeholder="https://www.instagram.com/reel/..." />
+        </div>
+        <div class="dg-form-group">
+          <label>ลิงก์อัลบั้ม Google Photos (ถ้ามี)</label>
           <input type="url" id="adminNewsPhoto" placeholder="https://photos.google.com/share/..." />
         </div>
+
         <div class="dg-modal-actions">
           <button type="button" class="dg-btn-outline" onclick="closeModal('adminNewsModal')">ยกเลิก</button>
-          <button type="submit" class="dg-btn-black">บันทึกข่าวสาร</button>
+          <button type="submit" id="adminNewsSubmitBtn" class="dg-btn-black">
+            <span>บันทึกข่าวสาร</span>
+          </button>
         </div>
       </form>
     </div>
@@ -797,20 +1027,40 @@
       </div>
       <form id="adminEventForm" onsubmit="handleSaveEvent(event)" class="dg-modal-form">
         <input type="hidden" id="adminEventId" />
+        <input type="hidden" id="adminEventDateIso" />
+
         <div class="dg-form-group">
           <label>ชื่อกิจกรรม / โครงการ *</label>
           <input type="text" id="adminEventTitle" required placeholder="เช่น ประเพณีวันลอยกระทง สืบสานวัฒนธรรม" />
         </div>
+
+        <!-- Date Auto-Calculator for Events -->
+        <div class="dg-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin: 0;">เลือกวันที่จัดกิจกรรม (ปฏิทินช่วยกรอกอัตโนมัติ)</label>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('today')">📅 วันนี้</button>
+              <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('tomorrow')">⏩ พรุ่งนี้</button>
+            </div>
+          </div>
+          <input type="date" id="adminEventDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; margin-bottom: 6px;" onchange="handleEventDatePickerChange(this.value)" />
+          <div class="date-helper-banner">
+            <i data-lucide="calendar" style="width: 14px; height: 14px; flex-shrink: 0;"></i>
+            <span>เลือกวันที่ด้านบน ระบบจะกรอกเลขวัน เดือน-ปี และวันในสัปดาห์ด้านล่างให้อัตโนมัติทันที</span>
+          </div>
+        </div>
+
         <div class="dg-form-row">
           <div class="dg-form-group">
-            <label>วันที่ (เลขวัน) *</label>
+            <label>วันที่ (เลขวัน เช่น 06 หรือ 25-29) *</label>
             <input type="text" id="adminEventDay" required placeholder="เช่น 15 หรือ 25-29" />
           </div>
           <div class="dg-form-group">
             <label>เดือน & ปี *</label>
-            <input type="text" id="adminEventMonth" required placeholder="เช่น พ.ย. 67" />
+            <input type="text" id="adminEventMonth" required placeholder="เช่น ต.ค. 69 หรือ พ.ย. 67" />
           </div>
         </div>
+
         <div class="dg-form-row">
           <div class="dg-form-group">
             <label>วันในสัปดาห์</label>
@@ -826,10 +1076,12 @@
             </select>
           </div>
         </div>
+
         <div class="dg-form-group">
           <label>ป้ายหมวดหมู่ภาษาไทย</label>
           <input type="text" id="adminEventCatLabel" placeholder="เช่น ประเพณี & วัฒนธรรม" />
         </div>
+
         <div class="dg-form-row">
           <div class="dg-form-group">
             <label>เวลาจัดกิจกรรม</label>
@@ -840,6 +1092,7 @@
             <input type="text" id="adminEventLocation" placeholder="เช่น ลานกิจกรรมอเนกประสงค์" />
           </div>
         </div>
+
         <div class="dg-form-row">
           <div class="dg-form-group">
             <label>กลุ่มเป้าหมาย / ผู้เข้าร่วม</label>
@@ -850,17 +1103,22 @@
             <input type="text" id="adminEventStatusTag" placeholder="เช่น กำลังมาถึง, สำคัญมาก" />
           </div>
         </div>
+
         <div class="dg-form-group">
           <label>ข้อปฏิบัติ & ภารกิจสารวัตรนักเรียน</label>
           <textarea id="adminEventNote" rows="2" placeholder="สารวัตรนักเรียนประจำจุดดูแลความปลอดภัย..."></textarea>
         </div>
+
         <div class="dg-form-group">
           <label>ลิงก์ Google Calendar (ถ้ามี)</label>
           <input type="url" id="adminEventGcal" placeholder="https://calendar.google.com/..." />
         </div>
+
         <div class="dg-modal-actions">
           <button type="button" class="dg-btn-outline" onclick="closeModal('adminEventModal')">ยกเลิก</button>
-          <button type="submit" class="dg-btn-black">บันทึกกิจกรรม</button>
+          <button type="submit" id="adminEventSubmitBtn" class="dg-btn-black">
+            <span>บันทึกกิจกรรม</span>
+          </button>
         </div>
       </form>
     </div>
@@ -880,13 +1138,19 @@
           <label>ชื่อกิจกรรมเด่น *</label>
           <input type="text" id="adminFeaturedTitle" required placeholder="เช่น การแข่งขันกรีฑาและกีฬาสีภายใน เดชะเกมส์" />
         </div>
+
+        <div class="dg-form-group">
+          <label>เลือกวันที่จัดกิจกรรมเด่น (ช่วยกรอกอัตโนมัติ)</label>
+          <input type="date" id="adminFeaturedDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px;" onchange="handleFeaturedDatePickerChange(this.value)" />
+        </div>
+
         <div class="dg-form-row">
           <div class="dg-form-group">
-            <label>วันที่ (เช่น 12-14) *</label>
+            <label>วันที่ (เช่น 12-14 หรือ 15) *</label>
             <input type="text" id="adminFeaturedDay" required placeholder="12-14" />
           </div>
           <div class="dg-form-group">
-            <label>เดือน (เช่น พ.ย. 67) *</label>
+            <label>เดือน & ปี (เช่น พ.ย. 67 หรือ ต.ค. 69) *</label>
             <input type="text" id="adminFeaturedMonth" required placeholder="พ.ย. 67" />
           </div>
         </div>
@@ -924,7 +1188,9 @@
         </div>
         <div class="dg-modal-actions">
           <button type="button" class="dg-btn-outline" onclick="closeModal('adminFeaturedModal')">ยกเลิก</button>
-          <button type="submit" class="dg-btn-black">บันทึกกิจกรรมเด่น</button>
+          <button type="submit" id="adminFeaturedSubmitBtn" class="dg-btn-black">
+            <span>บันทึกกิจกรรมเด่น</span>
+          </button>
         </div>
       </form>
     </div>
@@ -951,6 +1217,7 @@
         desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
+        reelsUrl: 'https://www.instagram.com/reels/',
         photoUrl: 'https://photos.google.com/'
       },
       {
@@ -962,6 +1229,7 @@
         desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
+        reelsUrl: 'https://www.instagram.com/reels/',
         photoUrl: 'https://photos.google.com/'
       },
       {
@@ -973,6 +1241,7 @@
         desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
+        reelsUrl: '',
         photoUrl: 'https://photos.google.com/'
       },
       {
@@ -984,7 +1253,8 @@
         desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
-        photoUrl: 'https://photos.google.com/'
+        reelsUrl: 'https://www.instagram.com/reels/',
+        photoUrl: ''
       },
       {
         id: 'news-5',
@@ -995,20 +1265,21 @@
         desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
+        reelsUrl: 'https://www.instagram.com/reels/',
         photoUrl: 'https://photos.google.com/'
       }
     ];
 
     const DEFAULT_FEATURED_EVENT = {
-      day: '12-14',
-      month: 'พ.ย. 67',
+      day: '15',
+      month: 'พ.ย. 69',
       tag: 'เร็วๆ นี้ (NEXT UP)',
-      category: 'กิจกรรมสำคัญ • กีฬาสีภายใน',
-      title: 'การแข่งขันกรีฑาและกีฬาสีภายใน "เดชะเกมส์ ประจำปีการศึกษา 2567"',
-      time: '07:30 - 16:30 น. (ตลอด 3 วัน)',
-      location: 'สนามกีฬาและโรงยิมฯ โรงเรียนเดชะปัตตนยานุกูล',
-      audience: 'นักเรียน ม.1 - ม.6 และคณะครูอาจารย์',
-      desc: 'มหกรรมกีฬาแห่งความสามัคคี ขบวนพาเหรด การประกวดกองเชียร์และเชียร์ลีดเดอร์ ภารกิจสารวัตร: ประจำการดูแลความปลอดภัย ตรวจระเบียบทางเข้า-ออก และอำนวยความสะดวกการจราจรตลอดการจัดงาน',
+      category: 'พิธีการ & ประเพณี',
+      title: 'ประเพณีวันลอยกระทง สืบสานวัฒนธรรม และจิตอาสารักษ์สิ่งแวดล้อม',
+      time: '13:00 - 16:30 น.',
+      location: 'ลานกิจกรรมอเนกประสงค์ และรอบคูเมืองโรงเรียน',
+      audience: 'สมาชิกทุกระดับชั้น',
+      desc: 'ประกวดกระทงจากวัสดุธรรมชาติ สารวัตรนักเรียนประจำจุดดูแลความปลอดภัยรอบแหล่งน้ำและจุดคัดแยกขยะ',
       gcalUrl: 'https://calendar.google.com/'
     };
 
@@ -1016,7 +1287,7 @@
       {
         id: 'evt-1',
         day: '15',
-        month: 'พ.ย. 67',
+        month: 'พ.ย. 69',
         weekday: 'ศุกร์',
         category: 'ceremony',
         categoryLabel: 'ประเพณี & วัฒนธรรม',
@@ -1031,11 +1302,11 @@
       {
         id: 'evt-2',
         day: '25-29',
-        month: 'พ.ย. 67',
+        month: 'พ.ย. 69',
         weekday: 'จ.-ศ.',
         category: 'academic',
         categoryLabel: 'วิชาการ & วันสอบ',
-        title: 'การประเมินผลและสอบวัดผลกลางภาคเรียนที่ 2/2567 (Midterm Exams)',
+        title: 'การประเมินผลและสอบวัดผลกลางภาคเรียนที่ 2/2569 (Midterm Exams)',
         time: '08:30 - 15:30 น.',
         location: 'อาคารเรียน 1, 2, 3, 4 ทุกห้องสอบ',
         audience: 'นักเรียน ม.1 - ม.6 ทุกคน',
@@ -1046,7 +1317,7 @@
       {
         id: 'evt-3',
         day: '07',
-        month: 'ธ.ค. 67',
+        month: 'ธ.ค. 69',
         weekday: 'เสาร์',
         category: 'prefect',
         categoryLabel: 'ภารกิจสารวัตร • ค่ายพัฒนาภาวะผู้นำ',
@@ -1061,11 +1332,11 @@
       {
         id: 'evt-4',
         day: '18',
-        month: 'ธ.ค. 67',
+        month: 'ธ.ค. 69',
         weekday: 'พุธ',
         category: 'academic',
         categoryLabel: 'วิชาการ & เปิดบ้านโรงเรียน',
-        title: 'มหกรรมเปิดบ้านวิชาการ "Decha Open House & Exhibition 2024"',
+        title: 'มหกรรมเปิดบ้านวิชาการ "Decha Open House & Exhibition 2026"',
         time: '08:00 - 15:30 น.',
         location: 'ลานโดมอเนกประสงค์ และหอประชุมใหญ่',
         audience: 'นักเรียน ผู้ปกครอง และบุคคลภายนอก',
@@ -1076,11 +1347,11 @@
       {
         id: 'evt-5',
         day: '27',
-        month: 'ธ.ค. 67',
+        month: 'ธ.ค. 69',
         weekday: 'ศุกร์',
         category: 'ceremony',
         categoryLabel: 'พิธีการ & ประเพณี',
-        title: 'กิจกรรมส่งท้ายปีเก่า ต้อนรับปีใหม่ 2568 และทำบุญตักบาตรข้าวสารอาหารแห้ง',
+        title: 'กิจกรรมส่งท้ายปีเก่า ต้อนรับปีใหม่ 2570 และทำบุญตักบาตรข้าวสารอาหารแห้ง',
         time: '07:00 - 12:00 น.',
         location: 'ลานธรรม และสนามหน้าเสาธง',
         audience: 'นักเรียนและบุคลากรทุกท่าน',
@@ -1091,11 +1362,11 @@
       {
         id: 'evt-6',
         day: '17-21',
-        month: 'ก.พ. 68',
+        month: 'ก.พ. 70',
         weekday: 'จ.-ศ.',
         category: 'academic',
         categoryLabel: 'วิชาการ & วันสอบ',
-        title: 'การสอบวัดผลปลายภาคเรียนที่ 2/2567 (Final Examination)',
+        title: 'การสอบวัดผลปลายภาคเรียนที่ 2/2569 (Final Examination)',
         time: '08:30 - 15:30 น.',
         location: 'ทุกอาคารเรียน',
         audience: 'นักเรียน ม.1 - ม.6 ทุกระดับชั้น',
@@ -1164,18 +1435,301 @@
     }
 
     // ==========================================================
-    // DATA ACCESS HELPERS
+    // THAI CALENDAR & DATE UTILITIES
+    // ==========================================================
+    const THAI_MONTHS_SHORT = [
+      'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+      'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+    ];
+
+    const THAI_MONTHS_FULL = [
+      'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+
+    const THAI_DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+
+    /**
+     * Parses any news or event item into a timestamp for accurate descending sorting
+     * (Newest date comes first)
+     */
+    function parseDateToTimestamp(item) {
+      if (!item) return 0;
+      if (item.dateIso) {
+        const ts = new Date(item.dateIso + 'T12:00:00Z').getTime();
+        if (!isNaN(ts)) return ts;
+      }
+
+      const dateStr = item.date || ((item.day || '') + ' ' + (item.month || ''));
+      if (!dateStr || typeof dateStr !== 'string') return 0;
+
+      // Try ISO YYYY-MM-DD format
+      const isoMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (isoMatch) {
+        return Date.UTC(parseInt(isoMatch[1], 10), parseInt(isoMatch[2], 10) - 1, parseInt(isoMatch[3], 10), 12, 0, 0);
+      }
+
+      // Try Thai month matching
+      let month = -1;
+      for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
+        if (dateStr.includes(THAI_MONTHS_SHORT[i]) || dateStr.includes(THAI_MONTHS_FULL[i])) {
+          month = i;
+          break;
+        }
+      }
+
+      const numbers = dateStr.match(/\d+/g);
+      if (!numbers) return 0;
+
+      let day = parseInt(numbers[0], 10);
+      if (numbers.length >= 3 && dateStr.includes('-')) {
+        day = parseInt(numbers[1], 10);
+      }
+
+      let year = new Date().getFullYear();
+      const lastNum = parseInt(numbers[numbers.length - 1], 10);
+      if (lastNum > 2400) {
+        year = lastNum - 543;
+      } else if (lastNum >= 50 && lastNum < 100) {
+        year = (2500 + lastNum) - 543;
+      } else if (lastNum > 2000 && lastNum < 2100) {
+        year = lastNum;
+      }
+
+      if (month === -1) month = 0;
+      return Date.UTC(year, month, day || 1, 12, 0, 0);
+    }
+
+    function formatIsoToThai(isoValue) {
+      if (!isoValue) return '';
+      const parts = isoValue.split('-');
+      if (parts.length < 3) return isoValue;
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      const thaiYear = y + 543;
+      const thaiMonth = THAI_MONTHS_SHORT[m] || '';
+      return `${d} ${thaiMonth} ${thaiYear}`;
+    }
+
+    // --- News Date Helpers ---
+    function handleNewsDatePickerChange(isoValue) {
+      const lbl = document.getElementById('adminNewsDateLabel');
+      if (!isoValue) {
+        if (lbl) lbl.textContent = '-';
+        return;
+      }
+      const formatted = formatIsoToThai(isoValue);
+      const hiddenDate = document.getElementById('adminNewsDate');
+      if (hiddenDate) hiddenDate.value = formatted;
+      const hiddenIso = document.getElementById('adminNewsDateIso');
+      if (hiddenIso) hiddenIso.value = isoValue;
+      if (lbl) lbl.textContent = formatted;
+    }
+
+    function setQuickNewsDate(type) {
+      const d = new Date();
+      if (type === 'yesterday') {
+        d.setDate(d.getDate() - 1);
+      }
+      const iso = d.toISOString().slice(0, 10);
+      const picker = document.getElementById('adminNewsDatePicker');
+      if (picker) picker.value = iso;
+      handleNewsDatePickerChange(iso);
+    }
+
+    function setQuickNewsTag(tag) {
+      const tagInput = document.getElementById('adminNewsTag');
+      if (tagInput) tagInput.value = tag;
+    }
+
+    // --- Event Date Helpers ---
+    function handleEventDatePickerChange(isoValue) {
+      if (!isoValue) return;
+      const parts = isoValue.split('-');
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      const dateObj = new Date(y, m, d);
+
+      const thaiYearShort = String(y + 543).slice(-2);
+      const thaiMonth = THAI_MONTHS_SHORT[m] || '';
+      const dayStr = d < 10 ? '0' + d : String(d);
+      const weekday = THAI_DAYS[dateObj.getDay()] || '';
+
+      document.getElementById('adminEventDay').value = dayStr;
+      document.getElementById('adminEventMonth').value = `${thaiMonth} ${thaiYearShort}`;
+      document.getElementById('adminEventWeekday').value = weekday;
+      document.getElementById('adminEventDateIso').value = isoValue;
+    }
+
+    function setQuickEventDate(type) {
+      const d = new Date();
+      if (type === 'tomorrow') {
+        d.setDate(d.getDate() + 1);
+      }
+      const iso = d.toISOString().slice(0, 10);
+      const picker = document.getElementById('adminEventDatePicker');
+      if (picker) picker.value = iso;
+      handleEventDatePickerChange(iso);
+    }
+
+    function handleFeaturedDatePickerChange(isoValue) {
+      if (!isoValue) return;
+      const parts = isoValue.split('-');
+      const y = parseInt(parts[0], 10);
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      const thaiYearShort = String(y + 543).slice(-2);
+      const thaiMonth = THAI_MONTHS_SHORT[m] || '';
+      const dayStr = d < 10 ? '0' + d : String(d);
+
+      document.getElementById('adminFeaturedDay').value = dayStr;
+      document.getElementById('adminFeaturedMonth').value = `${thaiMonth} ${thaiYearShort}`;
+    }
+
+    // --- Image Mode Selector & Preview ---
+    function switchImgMode(mode) {
+      const btnUpload = document.getElementById('btnImgModeUpload');
+      const btnUrl = document.getElementById('btnImgModeUrl');
+      const panelUpload = document.getElementById('panelImgUpload');
+      const panelUrl = document.getElementById('panelImgUrl');
+
+      if (mode === 'url') {
+        btnUrl.classList.add('active');
+        btnUpload.classList.remove('active');
+        panelUrl.style.display = 'block';
+        panelUpload.style.display = 'none';
+      } else {
+        btnUpload.classList.add('active');
+        btnUrl.classList.remove('active');
+        panelUpload.style.display = 'block';
+        panelUrl.style.display = 'none';
+      }
+    }
+
+    function handleNewsImgUrlChange(url) {
+      const trimmed = url.trim();
+      const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+      const previewImg = document.getElementById('adminNewsImgPreview');
+      const base64Input = document.getElementById('adminNewsImgBase64');
+
+      if (trimmed) {
+        previewImg.src = trimmed;
+        base64Input.value = trimmed;
+        previewWrap.style.display = 'block';
+      } else {
+        base64Input.value = '';
+        previewWrap.style.display = 'none';
+      }
+    }
+
+    function clearSelectedNewsImage() {
+      document.getElementById('adminNewsImgFile').value = '';
+      document.getElementById('adminNewsImgUrl').value = '';
+      document.getElementById('adminNewsImgBase64').value = '';
+      document.getElementById('adminNewsImgPreview').src = '';
+      document.getElementById('adminNewsImgPreviewWrap').style.display = 'none';
+      document.getElementById('adminNewsUploadProgress').style.display = 'none';
+    }
+
+    /**
+     * Client-side HTML5 Canvas Image Compression Engine
+     * Converts raw 5MB-15MB phone photos to ~100KB-180KB web-optimized images
+     * Prevents browser localStorage quota exceeded errors
+     */
+    function compressImageFile(file, onProgress) {
+      return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith('image/')) {
+          return reject(new Error('กรุณาเลือกไฟล์รูปภาพที่ถูกต้อง (JPG, PNG, WebP)'));
+        }
+
+        if (onProgress) onProgress(15, 'กำลังอ่านข้อมูลไฟล์รูปภาพ...');
+
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('เกิดข้อผิดพลาดในการอ่านไฟล์รูปภาพ'));
+
+        reader.onload = (evt) => {
+          if (onProgress) onProgress(45, 'กำลังวิเคราะห์ขนาดและเตรียมบีบอัดภาพ...');
+          const img = new Image();
+          img.onerror = () => reject(new Error('ไม่สามารถประมวลผลรูปภาพนี้ได้'));
+          img.onload = () => {
+            if (onProgress) onProgress(65, 'กำลังปรับขนาดและลดขนาดไฟล์ (Canvas Engine)...');
+
+            let width = img.width;
+            let height = img.height;
+            const maxDim = 1200; // 1200px max dimension provides ultra-sharp crispness for web/mobile
+
+            if (width > maxDim || height > maxDim) {
+              if (width > height) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              } else {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, width, height);
+
+            if (onProgress) onProgress(85, 'กำลังบีบอัดเป็น Web-Optimized JPEG...');
+
+            // Quality 0.82 provides pristine visual fidelity with tiny file size
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
+            const sizeBytes = Math.round((compressedBase64.length * 3) / 4);
+            const sizeKb = Math.round(sizeBytes / 1024);
+
+            if (onProgress) {
+              onProgress(100, `พร้อมใช้งาน 100%! ลดขนาดเหลือ ~${sizeKb} KB`);
+            }
+
+            resolve({
+              base64: compressedBase64,
+              sizeKb: sizeKb,
+              width: width,
+              height: height
+            });
+          };
+          img.src = evt.target.result;
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ==========================================================
+    // DATA ACCESS HELPERS (WITH ERROR PROTECTION & AUTO-SORT)
     // ==========================================================
     function getNews() {
+      let items = DEFAULT_NEWS_ITEMS;
       try {
         const d = localStorage.getItem('dg_sarawat_news_items');
-        if (d) return JSON.parse(d);
-      } catch (err) {}
-      return DEFAULT_NEWS_ITEMS;
+        if (d) {
+          const parsed = JSON.parse(d);
+          if (Array.isArray(parsed) && parsed.length > 0) items = parsed;
+        }
+      } catch (err) {
+        console.warn('Error reading news items:', err);
+      }
+      // Sort chronologically descending: latest activity date comes first!
+      return items.slice().sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
     }
 
     function saveNews(data) {
-      localStorage.setItem('dg_sarawat_news_items', JSON.stringify(data));
+      try {
+        localStorage.setItem('dg_sarawat_news_items', JSON.stringify(data));
+      } catch (err) {
+        if (err.name === 'QuotaExceededError' || err.code === 22) {
+          throw new Error('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม (Storage Quota Exceeded)\nกรุณาใช้รูปภาพขนาดเล็กลง หรือใช้ตัวเลือกวางลิงก์รูปภาพ (Image URL) แทน');
+        }
+        throw err;
+      }
     }
 
     function getEvents() {
@@ -1187,10 +1741,50 @@
     }
 
     function saveEvents(data) {
-      localStorage.setItem('dg_sarawat_calendar_events', JSON.stringify(data));
+      try {
+        localStorage.setItem('dg_sarawat_calendar_events', JSON.stringify(data));
+      } catch (err) {
+        if (err.name === 'QuotaExceededError' || err.code === 22) {
+          throw new Error('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม');
+        }
+        throw err;
+      }
     }
 
     function getFeatured() {
+      // 1. Automatically find the closest upcoming event from the calendar schedule
+      const events = getEvents();
+      if (events && events.length > 0) {
+        const sorted = events.slice().sort((a, b) => parseDateToTimestamp(a) - parseDateToTimestamp(b));
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const nowTs = now.getTime();
+
+        let feat = sorted.find(evt => parseDateToTimestamp(evt) >= nowTs);
+        if (!feat) {
+          feat = sorted.find(evt => (evt.statusTag || '').includes('กำลังมาถึง') || (evt.statusTag || '').includes('เร็วๆ'));
+        }
+        if (!feat) feat = sorted[0];
+
+        if (feat) {
+          return {
+            title: feat.title || '',
+            day: feat.day || '',
+            month: feat.month || '',
+            weekday: feat.weekday || '',
+            tag: feat.statusTag || 'เร็วๆ นี้ (NEXT UP)',
+            category: feat.categoryLabel || feat.category || 'กิจกรรมสำคัญ',
+            time: feat.time || '',
+            location: feat.location || '',
+            audience: feat.audience || '',
+            desc: feat.desc || feat.note || '',
+            gcalUrl: feat.gcalUrl || '',
+            isAuto: true
+          };
+        }
+      }
+
+      // 2. Fallback
       try {
         const d = localStorage.getItem('dg_sarawat_featured_event');
         if (d) return JSON.parse(d);
@@ -1199,7 +1793,14 @@
     }
 
     function saveFeatured(data) {
-      localStorage.setItem('dg_sarawat_featured_event', JSON.stringify(data));
+      try {
+        localStorage.setItem('dg_sarawat_featured_event', JSON.stringify(data));
+      } catch (err) {
+        if (err.name === 'QuotaExceededError' || err.code === 22) {
+          throw new Error('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม');
+        }
+        throw err;
+      }
     }
 
     // ==========================================================
@@ -1221,7 +1822,7 @@
     // ==========================================================
     function renderAdminNews() {
       const grid = document.getElementById('adminNewsGrid');
-      const items = getNews();
+      const items = getNews(); // Already sorted descending by date!
 
       if (!grid) return;
       if (items.length === 0) {
@@ -1229,13 +1830,16 @@
         return;
       }
 
-      grid.innerHTML = items.map(item => `
+      grid.innerHTML = items.map((item, idx) => `
         <div class="admin-news-item-card" data-id="${item.id}">
-          <img src="${item.image}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" />
+          <div style="position: relative;">
+            <img src="${item.image}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" />
+            ${idx === 0 ? '<span style="position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.92); backdrop-filter: blur(6px); color: #fbbf24; font-size: 0.72rem; font-weight: 850; padding: 4px 9px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 4px; border: 1px solid rgba(251,191,36,0.3);">🔥 กิจกรรมล่าสุด (แสดงอันดับ 1 หน้าเว็บ)</span>' : ''}
+          </div>
           <div class="admin-news-item-body">
             <div class="admin-news-meta">
               <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; color: #0f172a; font-weight: 700;">${escapeHtml(item.tag || 'กิจกรรม')}</span>
-              <span>${escapeHtml(item.date || '')}</span>
+              <span style="color: #0f172a; font-weight: 700;">📅 ${escapeHtml(item.date || '')}</span>
             </div>
             <h4 class="admin-news-title">${escapeHtml(item.title)}</h4>
             <p class="admin-news-desc">${escapeHtml(item.desc)}</p>
@@ -1243,7 +1847,8 @@
             <div class="admin-news-links-indicator">
               <span class="link-tag ${item.fbUrl ? 'has-fb' : 'no-link'}">FB</span>
               <span class="link-tag ${item.igUrl ? 'has-ig' : 'no-link'}">IG</span>
-              <span class="link-tag ${item.photoUrl ? 'has-photo' : 'no-link'}">Google Photos</span>
+              <span class="link-tag ${item.reelsUrl ? 'has-reels' : 'no-link'}">Reels</span>
+              <span class="link-tag ${item.photoUrl ? 'has-photo' : 'no-link'}">Photos</span>
             </div>
 
             <div class="admin-card-actions">
@@ -1269,6 +1874,12 @@
       document.getElementById('adminNewsForm').reset();
       document.getElementById('adminNewsImgBase64').value = '';
       document.getElementById('adminNewsImgPreviewWrap').style.display = 'none';
+      document.getElementById('adminNewsUploadProgress').style.display = 'none';
+
+      // Pre-fill today's date automatically
+      setQuickNewsDate('today');
+      switchImgMode('upload');
+
       openModal('adminNewsModal');
     }
 
@@ -1281,73 +1892,146 @@
       document.getElementById('adminNewsId').value = item.id;
       document.getElementById('adminNewsTitle').value = item.title || '';
       document.getElementById('adminNewsDate').value = item.date || '';
+      document.getElementById('adminNewsDateIso').value = item.dateIso || '';
       document.getElementById('adminNewsTag').value = item.tag || '';
       document.getElementById('adminNewsDesc').value = item.desc || '';
       document.getElementById('adminNewsFb').value = item.fbUrl || '';
       document.getElementById('adminNewsIg').value = item.igUrl || '';
+      document.getElementById('adminNewsReels').value = item.reelsUrl || '';
       document.getElementById('adminNewsPhoto').value = item.photoUrl || '';
       document.getElementById('adminNewsImgBase64').value = item.image || '';
+
+      let iso = item.dateIso || '';
+      if (!iso) {
+        const ts = parseDateToTimestamp(item);
+        if (ts > 0) {
+          try {
+            iso = new Date(ts).toISOString().slice(0, 10);
+          } catch (e) {}
+        }
+      }
+      if (iso) {
+        const picker = document.getElementById('adminNewsDatePicker');
+        if (picker) picker.value = iso;
+        document.getElementById('adminNewsDateIso').value = iso;
+      }
+      const displayLabel = item.date || (iso ? formatIsoToThai(iso) : '-');
+      const lbl = document.getElementById('adminNewsDateLabel');
+      if (lbl) lbl.textContent = displayLabel;
+      if (!item.date && iso) {
+        document.getElementById('adminNewsDate').value = formatIsoToThai(iso);
+      }
+
+      // Hide progress
+      document.getElementById('adminNewsUploadProgress').style.display = 'none';
 
       const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
       const previewImg = document.getElementById('adminNewsImgPreview');
       if (item.image) {
         previewImg.src = item.image;
         previewWrap.style.display = 'block';
+        if (item.image.startsWith('http')) {
+          switchImgMode('url');
+          document.getElementById('adminNewsImgUrl').value = item.image;
+        } else {
+          switchImgMode('upload');
+        }
       } else {
         previewWrap.style.display = 'none';
+        switchImgMode('upload');
       }
 
       openModal('adminNewsModal');
     }
 
-    function handleSaveNews(e) {
+    async function handleSaveNews(e) {
       e.preventDefault();
-      const id = document.getElementById('adminNewsId').value;
-      const title = document.getElementById('adminNewsTitle').value.trim();
-      const date = document.getElementById('adminNewsDate').value.trim();
-      const tag = document.getElementById('adminNewsTag').value.trim();
-      const desc = document.getElementById('adminNewsDesc').value.trim();
-      const fbUrl = document.getElementById('adminNewsFb').value.trim();
-      const igUrl = document.getElementById('adminNewsIg').value.trim();
-      const photoUrl = document.getElementById('adminNewsPhoto').value.trim();
-      const imgBase64 = document.getElementById('adminNewsImgBase64').value;
+      const submitBtn = document.getElementById('adminNewsSubmitBtn');
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกข่าวสาร</span>';
 
-      const items = getNews();
+      try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
+        }
 
-      if (id) {
-        const idx = items.findIndex(n => n.id === id);
-        if (idx !== -1) {
-          items[idx] = {
-            ...items[idx],
+        const id = document.getElementById('adminNewsId').value;
+        const title = document.getElementById('adminNewsTitle').value.trim();
+        const pickerVal = document.getElementById('adminNewsDatePicker')?.value || '';
+        let date = document.getElementById('adminNewsDate').value.trim();
+        let dateIso = document.getElementById('adminNewsDateIso').value.trim();
+
+        if (!date && pickerVal) {
+          date = formatIsoToThai(pickerVal);
+          dateIso = pickerVal;
+        } else if (!dateIso && pickerVal) {
+          dateIso = pickerVal;
+        }
+
+        const tag = document.getElementById('adminNewsTag').value.trim();
+        const desc = document.getElementById('adminNewsDesc').value.trim();
+        const fbUrl = document.getElementById('adminNewsFb').value.trim();
+        const igUrl = document.getElementById('adminNewsIg').value.trim();
+        const reelsUrl = document.getElementById('adminNewsReels').value.trim();
+        const photoUrl = document.getElementById('adminNewsPhoto').value.trim();
+        const imgData = document.getElementById('adminNewsImgBase64').value.trim();
+
+        if (!title) throw new Error('กรุณากรอกหัวข้อข่าวสาร/กิจกรรม');
+        if (!date && !pickerVal) throw new Error('กรุณาเลือกวันที่จัดกิจกรรม');
+        if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
+
+        // Check image
+        const finalImage = imgData || 'assets/images/activity-ceremony.jpg';
+
+        const items = getNews();
+
+        if (id) {
+          const idx = items.findIndex(n => n.id === id);
+          if (idx !== -1) {
+            items[idx] = {
+              ...items[idx],
+              title,
+              date,
+              dateIso: dateIso || items[idx].dateIso || '',
+              tag: tag || 'กิจกรรมทั่วไป',
+              desc,
+              fbUrl,
+              igUrl,
+              reelsUrl,
+              photoUrl,
+              image: finalImage
+            };
+          }
+        } else {
+          const newItem = {
+            id: 'news-' + Date.now(),
             title,
             date,
-            tag,
+            dateIso: dateIso || document.getElementById('adminNewsDatePicker')?.value || '',
+            tag: tag || 'กิจกรรมทั่วไป',
             desc,
             fbUrl,
             igUrl,
+            reelsUrl,
             photoUrl,
-            image: imgBase64 || items[idx].image || 'assets/images/activity-ceremony.jpg'
+            image: finalImage
           };
+          items.unshift(newItem);
         }
-      } else {
-        const newItem = {
-          id: 'news-' + Date.now(),
-          title,
-          date,
-          tag: tag || 'กิจกรรมทั่วไป',
-          desc,
-          fbUrl,
-          igUrl,
-          photoUrl,
-          image: imgBase64 || 'assets/images/activity-ceremony.jpg'
-        };
-        items.unshift(newItem);
-      }
 
-      saveNews(items);
-      renderAdminNews();
-      closeModal('adminNewsModal');
-      showToast('บันทึกข่าวสารเรียบร้อยแล้ว');
+        saveNews(items);
+        renderAdminNews();
+        closeModal('adminNewsModal');
+        showToast('✅ บันทึกข่าวสารเรียบร้อยแล้ว (จัดเรียงอันดับใหม่อัตโนมัติ)');
+      } catch (err) {
+        console.error('Save news error:', err);
+        alert('⚠️ เกิดข้อผิดพลาดในการบันทึก:\n\n' + err.message + '\n\nคำแนะนำ: หากเกิดจากขนาดรูปภาพเกิน ให้ลองเลือกรูปภาพอื่น หรือใช้แท็บ "วางลิงก์รูปภาพ (Image URL)" แทน');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
     }
 
     function handleDeleteNews(id) {
@@ -1381,9 +2065,10 @@
               <div style="font-size: 0.8rem; font-weight: 600; opacity: 0.9;">${escapeHtml(feat.month)}</div>
             </div>
             <div style="flex: 1; min-width: 280px;">
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
                 <span style="background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 750; padding: 2px 8px; border-radius: 4px;">${escapeHtml(feat.category)}</span>
                 <span style="background: #e2e8f0; color: #334155; font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${escapeHtml(feat.tag)}</span>
+                <span style="background: #ecfdf5; color: #047857; font-size: 0.72rem; font-weight: 750; padding: 2px 8px; border-radius: 4px; border: 1px solid #a7f3d0; display: inline-flex; align-items: center; gap: 4px;">⚡ กิจกรรมที่จะมาถึงอัตโนมัติ</span>
               </div>
               <h4 style="font-size: 1.15rem; font-weight: 850; margin: 0 0 6px;">${escapeHtml(feat.title)}</h4>
               <p style="font-size: 0.86rem; color: var(--dg-text-secondary); margin: 0 0 8px;">${escapeHtml(feat.desc)}</p>
@@ -1443,6 +2128,7 @@
       document.getElementById('adminEventModalTitle').textContent = 'เพิ่มกิจกรรมใหม่ในตาราง';
       document.getElementById('adminEventId').value = '';
       document.getElementById('adminEventForm').reset();
+      setQuickEventDate('today');
       openModal('adminEventModal');
     }
 
@@ -1465,48 +2151,75 @@
       document.getElementById('adminEventStatusTag').value = evt.statusTag || '';
       document.getElementById('adminEventNote').value = evt.note || '';
       document.getElementById('adminEventGcal').value = evt.gcalUrl || '';
+      document.getElementById('adminEventDateIso').value = evt.dateIso || '';
+
+      if (evt.dateIso) {
+        document.getElementById('adminEventDatePicker').value = evt.dateIso;
+      }
 
       openModal('adminEventModal');
     }
 
     function handleSaveEvent(e) {
       e.preventDefault();
-      const id = document.getElementById('adminEventId').value;
-      const title = document.getElementById('adminEventTitle').value.trim();
-      const day = document.getElementById('adminEventDay').value.trim();
-      const month = document.getElementById('adminEventMonth').value.trim();
-      const weekday = document.getElementById('adminEventWeekday').value.trim();
-      const category = document.getElementById('adminEventCategory').value;
-      const categoryLabel = document.getElementById('adminEventCatLabel').value.trim() || document.getElementById('adminEventCategory').options[document.getElementById('adminEventCategory').selectedIndex].text;
-      const time = document.getElementById('adminEventTime').value.trim();
-      const location = document.getElementById('adminEventLocation').value.trim();
-      const audience = document.getElementById('adminEventAudience').value.trim();
-      const statusTag = document.getElementById('adminEventStatusTag').value.trim() || 'กำลังมาถึง';
-      const note = document.getElementById('adminEventNote').value.trim();
-      const gcalUrl = document.getElementById('adminEventGcal').value.trim() || 'https://calendar.google.com/';
+      const submitBtn = document.getElementById('adminEventSubmitBtn');
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกกิจกรรม</span>';
 
-      const events = getEvents();
-
-      if (id) {
-        const idx = events.findIndex(e => e.id === id);
-        if (idx !== -1) {
-          events[idx] = {
-            ...events[idx],
-            title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl
-          };
+      try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
         }
-      } else {
-        const newEvt = {
-          id: 'evt-' + Date.now(),
-          title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl
-        };
-        events.push(newEvt);
-      }
 
-      saveEvents(events);
-      renderAdminEvents();
-      closeModal('adminEventModal');
-      showToast('บันทึกข้อมูลกิจกรรมเรียบร้อยแล้ว');
+        const id = document.getElementById('adminEventId').value;
+        const title = document.getElementById('adminEventTitle').value.trim();
+        const day = document.getElementById('adminEventDay').value.trim();
+        const month = document.getElementById('adminEventMonth').value.trim();
+        const weekday = document.getElementById('adminEventWeekday').value.trim();
+        const category = document.getElementById('adminEventCategory').value;
+        const categoryLabel = document.getElementById('adminEventCatLabel').value.trim() || document.getElementById('adminEventCategory').options[document.getElementById('adminEventCategory').selectedIndex].text;
+        const time = document.getElementById('adminEventTime').value.trim();
+        const location = document.getElementById('adminEventLocation').value.trim();
+        const audience = document.getElementById('adminEventAudience').value.trim();
+        const statusTag = document.getElementById('adminEventStatusTag').value.trim() || 'กำลังมาถึง';
+        const note = document.getElementById('adminEventNote').value.trim();
+        const gcalUrl = document.getElementById('adminEventGcal').value.trim() || 'https://calendar.google.com/';
+        const dateIso = document.getElementById('adminEventDateIso')?.value || '';
+
+        if (!title) throw new Error('กรุณาระบุชื่อกิจกรรม');
+        if (!day || !month) throw new Error('กรุณาระบุวันที่และเดือน');
+
+        const events = getEvents();
+
+        if (id) {
+          const idx = events.findIndex(e => e.id === id);
+          if (idx !== -1) {
+            events[idx] = {
+              ...events[idx],
+              title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl, dateIso
+            };
+          }
+        } else {
+          const newEvt = {
+            id: 'evt-' + Date.now(),
+            title, day, month, weekday, category, categoryLabel, time, location, audience, statusTag, note, gcalUrl, dateIso
+          };
+          events.push(newEvt);
+        }
+
+        saveEvents(events);
+        renderAdminEvents();
+        closeModal('adminEventModal');
+        showToast('✅ บันทึกข้อมูลกิจกรรมเรียบร้อยแล้ว');
+      } catch (err) {
+        console.error('Save event error:', err);
+        alert('⚠️ เกิดข้อผิดพลาดในการบันทึกกิจกรรม:\n\n' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
     }
 
     function handleDeleteEvent(id) {
@@ -1535,22 +2248,39 @@
 
     function handleSaveFeatured(e) {
       e.preventDefault();
-      const feat = {
-        title: document.getElementById('adminFeaturedTitle').value.trim(),
-        day: document.getElementById('adminFeaturedDay').value.trim(),
-        month: document.getElementById('adminFeaturedMonth').value.trim(),
-        tag: document.getElementById('adminFeaturedBadgeTag').value.trim() || 'เร็วๆ นี้ (NEXT UP)',
-        category: document.getElementById('adminFeaturedCategory').value.trim() || 'กิจกรรมสำคัญ',
-        time: document.getElementById('adminFeaturedTime').value.trim(),
-        location: document.getElementById('adminFeaturedLocation').value.trim(),
-        audience: document.getElementById('adminFeaturedAudience').value.trim(),
-        desc: document.getElementById('adminFeaturedDesc').value.trim(),
-        gcalUrl: document.getElementById('adminFeaturedGcal').value.trim() || 'https://calendar.google.com/'
-      };
-      saveFeatured(feat);
-      renderAdminEvents();
-      closeModal('adminFeaturedModal');
-      showToast('บันทึกกิจกรรมเด่นเรียบร้อยแล้ว');
+      const submitBtn = document.getElementById('adminFeaturedSubmitBtn');
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกกิจกรรมเด่น</span>';
+
+      try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
+        }
+
+        const feat = {
+          title: document.getElementById('adminFeaturedTitle').value.trim(),
+          day: document.getElementById('adminFeaturedDay').value.trim(),
+          month: document.getElementById('adminFeaturedMonth').value.trim(),
+          tag: document.getElementById('adminFeaturedBadgeTag').value.trim() || 'เร็วๆ นี้ (NEXT UP)',
+          category: document.getElementById('adminFeaturedCategory').value.trim() || 'กิจกรรมสำคัญ',
+          time: document.getElementById('adminFeaturedTime').value.trim(),
+          location: document.getElementById('adminFeaturedLocation').value.trim(),
+          audience: document.getElementById('adminFeaturedAudience').value.trim(),
+          desc: document.getElementById('adminFeaturedDesc').value.trim(),
+          gcalUrl: document.getElementById('adminFeaturedGcal').value.trim() || 'https://calendar.google.com/'
+        };
+        saveFeatured(feat);
+        renderAdminEvents();
+        closeModal('adminFeaturedModal');
+        showToast('✅ บันทึกกิจกรรมเด่นเรียบร้อยแล้ว');
+      } catch (err) {
+        alert('⚠️ เกิดข้อผิดพลาดในการบันทึกกิจกรรมเด่น: ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
     }
 
     // ==========================================================
@@ -1560,7 +2290,6 @@
       const uptimeDate = localStorage.getItem('dg_sarawat_uptime_start') || '2026-05-23T07:00:00';
       const dateInput = document.getElementById('settingsDutyStartDate');
       if (dateInput) {
-        // Format for datetime-local (YYYY-MM-DDTHH:mm)
         dateInput.value = uptimeDate.substring(0, 16);
       }
 
@@ -1590,7 +2319,7 @@
     // ==========================================================
     function handleExportJson() {
       const data = {
-        version: '1.0.0',
+        version: '1.1.0',
         exportedAt: new Date().toISOString(),
         adminPin: localStorage.getItem('dg_sarawat_admin_pin') || '2569',
         uptimeStart: localStorage.getItem('dg_sarawat_uptime_start') || '2026-05-23T07:00:00',
@@ -1666,22 +2395,57 @@
     }
 
     // ==========================================================
-    // IMAGE UPLOAD TO BASE64 PREVIEWS
+    // IMAGE UPLOAD LISTENER WITH LIVE PROGRESS BAR (0% - 100%)
     // ==========================================================
-    const newsImgFileInput = document.getElementById('adminNewsImgFile');
-    if (newsImgFileInput) {
-      newsImgFileInput.addEventListener('change', (e) => {
+    function setupImageUploadListener() {
+      const fileInput = document.getElementById('adminNewsImgFile');
+      if (!fileInput) return;
+
+      fileInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            document.getElementById('adminNewsImgBase64').value = evt.target.result;
-            const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
-            const previewImg = document.getElementById('adminNewsImgPreview');
-            previewImg.src = evt.target.result;
-            previewWrap.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
+        if (!file) return;
+
+        const progressWrap = document.getElementById('adminNewsUploadProgress');
+        const fileNameEl = document.getElementById('uploadFileName');
+        const fileSizeEl = document.getElementById('uploadFileSize');
+        const progressFill = document.getElementById('uploadProgressFill');
+        const percentNum = document.getElementById('uploadPercentNum');
+        const statusText = document.getElementById('uploadStatusText');
+        const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+        const previewImg = document.getElementById('adminNewsImgPreview');
+        const base64Input = document.getElementById('adminNewsImgBase64');
+
+        // Show progress UI immediately
+        progressWrap.style.display = 'block';
+        progressFill.classList.remove('complete');
+        progressFill.style.width = '5%';
+        percentNum.textContent = '5%';
+        fileNameEl.textContent = file.name;
+        const originalKb = Math.round(file.size / 1024);
+        fileSizeEl.textContent = originalKb > 1024 ? `${(originalKb / 1024).toFixed(1)} MB` : `${originalKb} KB`;
+        statusText.textContent = 'กำลังโหลดไฟล์...';
+
+        try {
+          const result = await compressImageFile(file, (percent, statusMsg) => {
+            progressFill.style.width = `${percent}%`;
+            percentNum.textContent = `${percent}%`;
+            statusText.textContent = statusMsg;
+            if (percent === 100) {
+              progressFill.classList.add('complete');
+            }
+          });
+
+          // Set preview & hidden input
+          base64Input.value = result.base64;
+          previewImg.src = result.base64;
+          previewWrap.style.display = 'block';
+          showToast(`ภาพพร้อมใช้งาน (${result.sizeKb} KB)`);
+        } catch (err) {
+          console.error('Image compression error:', err);
+          statusText.textContent = 'เกิดข้อผิดพลาด: ' + err.message;
+          progressFill.style.background = '#ef4444';
+          percentNum.textContent = 'Error';
+          alert('⚠️ ไม่สามารถประมวลผลรูปภาพได้: ' + err.message);
         }
       });
     }
@@ -1731,7 +2495,7 @@
         toast.classList.add('show');
         setTimeout(() => {
           toast.classList.remove('show');
-        }, 3000);
+        }, 3200);
       }
     }
 
@@ -1757,6 +2521,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
       checkAuth();
+      setupImageUploadListener();
       initDashboard();
     });
   </script>
