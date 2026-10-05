@@ -149,8 +149,8 @@
 
       <!-- Cinematic Full-Width Photo -->
       <div class="dg-hero-image-wrap" data-reveal="scale">
-        <img src="assets/images/activity-teamwork.jpg" alt="การประชุมและวางแผนงานของคณะกรรมการสารวัตรนักเรียน"
-          id="heroCinematicImg" />
+        <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล"
+          id="heroCinematicImg" style="object-position: center 30%;" />
       </div>
 
       <!-- ============ LIVE OPERATIONAL UPTIME COUNTER (Diego Swiss Minimalist Style) ============ -->
@@ -339,7 +339,7 @@
           Discipline by Example.
         </h2>
         <p class="dg-section-desc">
-          วิสัยทัศน์และแนวทางการขับเคลื่อนระเบียบวินัยเชิงบวก โดยหัวหน้าสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล
+          วิสัยทัศน์และแนวทางการขับเคลื่อนระเบียบวินัยเชิงบวก โดยประธานคณะกรรมการสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล
         </p>
       </div>
 
@@ -347,13 +347,13 @@
         <!-- Left: Chief Portrait Card -->
         <div class="dg-chief-portrait-card" data-reveal="left">
           <div class="dg-chief-photo-wrap">
-            <img src="assets/images/leader-chief.jpg" alt="นายสมชาย ใจดี - หัวหน้าสารวัตรนักเรียน"
-              id="chiefPortraitImg" />
+            <img src="assets/images/president.jpg" alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
+              id="chiefPortraitImg" style="object-position: center 20%;" />
           </div>
           <div class="dg-chief-portrait-meta">
-            <span class="dg-chief-badge">CHIEF PREFECT • 2567-2568</span>
-            <h3 class="dg-chief-name">นายสมชาย ใจดี</h3>
-            <p class="dg-chief-role">หัวหน้าสารวัตรนักเรียน • ชั้นมัธยมศึกษาปีที่ 5/1</p>
+            <span class="dg-chief-badge">PRESIDENT • 2568-2569</span>
+            <h3 class="dg-chief-name">นายอะห์นัฟ สหสันติวรกุล</h3>
+            <p class="dg-chief-role">ประธานคณะกรรมการสารวัตรนักเรียน • ชั้นมัธยมศึกษาปีที่ 5/1</p>
           </div>
         </div>
 
@@ -1232,7 +1232,6 @@
 
       // --- Subtle Parallax Depth on Images ---
       const heroImg = document.getElementById('heroCinematicImg');
-      const chiefImg = document.getElementById('chiefPortraitImg');
       let ticking = false;
 
       function updateParallax() {
@@ -1243,14 +1242,6 @@
           if (rect.bottom > 0 && rect.top < windowHeight) {
             const offset = (rect.top - windowHeight / 2) * 0.06;
             heroImg.style.transform = `scale(1.04) translateY(${offset}px)`;
-          }
-        }
-
-        if (chiefImg) {
-          const rect = chiefImg.getBoundingClientRect();
-          if (rect.bottom > 0 && rect.top < windowHeight) {
-            const offset = (rect.top - windowHeight / 2) * 0.04;
-            chiefImg.style.transform = `scale(1.02) translateY(${offset}px)`;
           }
         }
 
