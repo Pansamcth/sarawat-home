@@ -305,13 +305,14 @@
     // ==========================================================
     // DEFAULT DATA & FALLBACKS
     // ==========================================================
+    const DEFAULT_NEWS_IMAGE = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
     const DEFAULT_NEWS_ITEMS = [
       {
         id: 'news-1',
         title: 'พิธีแต่งตั้งและมอบปลอกแขนสารวัตรนักเรียน ประจำปีการศึกษา 2569',
         date: '23 พ.ค. 2569',
         tag: 'พิธีการสำคัญ',
-        image: 'assets/images/activity-ceremony.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
         detail: 'พิธีจัดขึ้น ณ หอประชุมโรงเรียนเดชะปัตตนยานุกูล โดยมีคณะผู้บริหาร ครูที่ปรึกษางานส่งเสริมวินัยนักเรียน และตัวแทนนักเรียนทุกระดับชั้นร่วมเป็นสักขีพยาน ในพิธีมีการกล่าวคำปฏิญาณตนของคณะสารวัตรนักเรียน เพื่อยืนยันเจตนารมณ์ในการปฏิบัติหน้าที่ด้วยความซื่อสัตย์ สุจริต และเป็นธรรม มุ่งมั่นดูแลความสงบเรียบร้อยและความปลอดภัยของเพื่อนนักเรียนตลอดปีการศึกษา',
         fbUrl: 'https://www.facebook.com/dechapattana',
@@ -324,7 +325,7 @@
         title: 'โครงการรณรงค์วินัยจราจรและเสริมสร้างความปลอดภัยหน้าโรงเรียน',
         date: '12 มิ.ย. 2569',
         tag: 'ความปลอดภัย',
-        image: 'assets/images/activity-inspection.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
         detail: 'คณะสารวัตรนักเรียนปฏิบัติหน้าที่ประจำจุดทางข้ามและบริเวณประตูโรงเรียน เพื่ออำนวยความสะดวกแก่นักเรียนและผู้ปกครอง พร้อมทั้งรณรงค์การสวมหมวกนิรภัย 100% การข้ามถนนตามทางม้าลาย และการปฏิบัติตามกฎจราจรอย่างเคร่งครัดเพื่อลดอุบัติเหตุในชั่วโมงเร่งด่วน',
         fbUrl: 'https://www.facebook.com/dechapattana',
@@ -337,7 +338,7 @@
         title: 'กิจกรรมจิตอาสาพัฒนาสิ่งแวดล้อมและพื้นที่ส่วนรวมโรงเรียน',
         date: '08 ก.ค. 2569',
         tag: 'จิตอาสา',
-        image: 'assets/images/activity-volunteer.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
         detail: 'กิจกรรมจิตอาสาเพื่อเสริมสร้างความรับผิดชอบต่อส่วนรวม ร่วมกันทำความสะอาดจุดพักผ่อน ลานอเนกประสงค์ และคัดแยกขยะอย่างถูกวิธี เพื่อสร้างสภาพแวดล้อมที่น่าอยู่และเอื้อต่อการเรียนรู้ของทุกคนในโรงเรียนเดชะปัตตนยานุกูล',
         fbUrl: 'https://www.facebook.com/dechapattana',
@@ -350,7 +351,7 @@
         title: 'การประชุมเชิงปฏิบัติการอบรมภาวะผู้นำและทักษะไกล่เกลี่ยเชิงบวก',
         date: '19 ส.ค. 2569',
         tag: 'อบรมพัฒนา',
-        image: 'assets/images/activity-training.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
         detail: 'หลักสูตรพิเศษเพื่อเสริมสร้างวุฒิภาวะทางอารมณ์และทักษะการเจรจาไกล่เกลี่ยความขัดแย้งเชิงสันติวิธี เพื่อให้สารวัตรนักเรียนสามารถปฏิบัติหน้าที่ด้วยความยุติธรรม ปราศจากอคติ และสร้างความเข้าใจอันดีระหว่างนักเรียนด้วยกัน',
         fbUrl: 'https://www.facebook.com/dechapattana',
@@ -363,7 +364,7 @@
         title: 'การเตรียมความพร้อมดูแลความสงบเรียบร้อยในสัปดาห์กีฬาสีเดชะฯ 2569',
         date: '25 ก.ย. 2569',
         tag: 'กิจกรรมโรงเรียน',
-        image: 'assets/images/hero-assembly.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
         detail: 'ประสานงานร่วมกับคณะกรรมการนักเรียนและครูฝ่ายปกครอง เพื่อจัดแบ่งกำลังสายตรวจดูแลความปลอดภัย การปฐมพยาบาลเบื้องต้น และอำนวยความสะดวกในการจัดขบวนพาเหรดและการแข่งขันกีฬาอย่างราบรื่นและปลอดภัยที่สุด',
         fbUrl: 'https://www.facebook.com/dechapattana',
@@ -506,7 +507,7 @@
         return `
           <article class="dg-act-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
             <div class="dg-act-card-cover">
-              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-assembly.jpg'" loading="lazy" />
+              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" loading="lazy" />
               <span class="dg-act-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
             </div>
             <div class="dg-act-card-body">
@@ -608,7 +609,7 @@
         </div>
 
         <div class="dg-news-modal-cover">
-          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-assembly.jpg'" />
+          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
         </div>
 
         <div class="dg-news-modal-body">

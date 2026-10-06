@@ -554,6 +554,193 @@
       height: 15px;
     }
 
+    /* Badges & Source Indicators */
+    .img-source-badge {
+      font-size: 0.72rem;
+      font-weight: 750;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .img-source-badge.badge-default {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .img-source-badge.badge-success {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .img-source-badge.badge-warning {
+      background: #fffbeb;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    /* Modern Drag & Drop Zone */
+    .admin-dropzone {
+      border: 2px dashed #cbd5e1;
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 22px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .admin-dropzone:hover {
+      border-color: #3b82f6;
+      background: #f0f7ff;
+      transform: translateY(-1px);
+    }
+
+    .admin-dropzone.dragover {
+      border-color: #2563eb;
+      background: #e0e7ff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      transform: scale(1.01);
+    }
+
+    .admin-dropzone-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      background: #ffffff;
+      color: #2563eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e2e8f0;
+      transition: transform 0.2s ease;
+    }
+
+    .admin-dropzone:hover .admin-dropzone-icon {
+      transform: scale(1.08);
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .admin-dropzone-title {
+      font-size: 0.90rem;
+      font-weight: 750;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .admin-dropzone-desc {
+      font-size: 0.77rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .admin-dropzone-desc strong {
+      color: #0f172a;
+      background: #e2e8f0;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* Preview Card & Controls */
+    .admin-preview-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      background: #ffffff;
+      overflow: hidden;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .admin-preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .preview-mini-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .preview-mini-btn svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .preview-mini-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+
+    .preview-mini-btn.danger {
+      color: #dc2626;
+      border-color: #fecaca;
+      background: #fff5f5;
+    }
+
+    .preview-mini-btn.danger:hover {
+      background: #fee2e2;
+      border-color: #f87171;
+    }
+
+    .admin-preview-img-container {
+      position: relative;
+      width: 100%;
+      height: 190px;
+      background: #090d16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .admin-preview-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+
+    .admin-preview-fallback-notice {
+      background: #fffbeb;
+      border-top: 1px solid #fde68a;
+      color: #b45309;
+      padding: 8px 12px;
+      font-size: 0.77rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.4;
+    }
+
     /* Quick Pills (Date & Tags) */
     .quick-pill-btn {
       background: #f1f5f9;
@@ -631,22 +818,28 @@
 
       <form id="pinAuthForm" onsubmit="event.preventDefault(); handlePinLogin(event); return false;">
         <div style="position: relative; width: 100%;">
-          <input type="password" id="adminPinInput" class="pin-input" maxlength="32" placeholder="••••" autofocus required style="padding-right: 44px;" />
-          <button type="button" onclick="togglePinVisibility()" title="แสดง/ซ่อนรหัสผ่าน" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748b; padding: 4px;">
+          <input type="password" id="adminPinInput" class="pin-input" maxlength="32" placeholder="••••" autofocus
+            required style="padding-right: 44px;" />
+          <button type="button" onclick="togglePinVisibility()" title="แสดง/ซ่อนรหัสผ่าน"
+            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748b; padding: 4px;">
             <i data-lucide="eye" id="pinEyeIcon" style="width: 20px; height: 20px;"></i>
           </button>
         </div>
         <div id="pinErrorMsg"
-          style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
-        <button type="submit" id="adminLoginBtn" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 12px;">
+          style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">
+          รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
+        <button type="submit" id="adminLoginBtn" class="dg-btn-black"
+          style="width: 100%; justify-content: center; padding: 12px;">
           <span>เข้าสู่ระบบ (Sign In)</span>
           <i data-lucide="arrow-right"></i>
         </button>
-        <div style="margin-top: 14px; font-size: 0.82rem; color: #475569; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; line-height: 1.5;">
+        <div
+          style="margin-top: 14px; font-size: 0.82rem; color: #475569; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; line-height: 1.5;">
           💡 <strong>รหัสผ่านเริ่มต้น:</strong> <code>2569</code> (หรือ <code>admin123</code>)
         </div>
         <div style="margin-top: 10px;">
-          <button type="button" onclick="handleResetPinToDefault()" style="background: none; border: none; color: #2563eb; font-size: 0.78rem; text-decoration: underline; cursor: pointer; font-family: inherit;">
+          <button type="button" onclick="handleResetPinToDefault()"
+            style="background: none; border: none; color: #2563eb; font-size: 0.78rem; text-decoration: underline; cursor: pointer; font-family: inherit;">
             ลืมรหัสผ่าน? กดที่นี่เพื่อรีเซ็ตกลับเป็น 2569
           </button>
         </div>
@@ -674,7 +867,8 @@
       </a>
 
       <div class="admin-nav-actions">
-        <span id="adminServerStatusBadge" style="font-size: 0.78rem; font-weight: 750; padding: 6px 12px; border-radius: 999px; background: #f1f5f9; color: #64748b; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #e2e8f0;">
+        <span id="adminServerStatusBadge"
+          style="font-size: 0.78rem; font-weight: 750; padding: 6px 12px; border-radius: 999px; background: #f1f5f9; color: #64748b; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #e2e8f0;">
           <span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
           <span id="adminServerStatusText">ตรวจเซิร์ฟเวอร์...</span>
         </span>
@@ -806,37 +1000,50 @@
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
         <!-- Database & Cloudflare Tunnel API Connection -->
-        <div class="admin-card" style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
-          <div class="admin-card-header" style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <h3 style="margin: 0;"><i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (MySQL + Cloudflare Tunnel)</h3>
-            <span id="apiStatusBadge" style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
-              <span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+        <div class="admin-card"
+          style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+          <div class="admin-card-header"
+            style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <h3 style="margin: 0;"><i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (MySQL +
+              Cloudflare Tunnel)</h3>
+            <span id="apiStatusBadge"
+              style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
+              <span
+                style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
               <span>กำลังตรวจสอบ...</span>
             </span>
           </div>
           <div class="admin-card-body">
             <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px; line-height: 1.6;">
-              ระบบนี้ช่วยให้รูปภาพและกิจกรรมถูกบันทึกลงฮาร์ดดิสก์และ MySQL ถาวร (แก้ปัญหาเบราว์เซอร์พื้นที่เต็ม 100%) และส่งผ่าน Cloudflare Tunnel ให้ทุกคนบนมือถือและคอมพิวเตอร์เครื่องอื่นมองเห็นได้
+              ระบบนี้ช่วยให้รูปภาพและกิจกรรมถูกบันทึกลงฮาร์ดดิสก์และ MySQL ถาวร (แก้ปัญหาเบราว์เซอร์พื้นที่เต็ม 100%)
+              และส่งผ่าน Cloudflare Tunnel ให้ทุกคนบนมือถือและคอมพิวเตอร์เครื่องอื่นมองเห็นได้
             </p>
-            <form onsubmit="handleSaveApiUrl(event)" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            <form onsubmit="handleSaveApiUrl(event)"
+              style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
               <div class="dg-form-group" style="flex: 1; min-width: 280px; margin-bottom: 0;">
-                <label style="font-weight: 700; margin-bottom: 6px; display: block;">API Server URL (เช่น http://localhost:5000 หรือ URL จาก Cloudflare Tunnel)</label>
-                <input type="text" id="settingsApiUrl" placeholder="http://localhost:5000" style="padding: 10px 14px; border: 1.5px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: monospace; font-size: 0.92rem;" />
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">API Server URL (เช่น
+                  http://localhost:5000 หรือ URL จาก Cloudflare Tunnel)</label>
+                <input type="text" id="settingsApiUrl" placeholder="http://localhost:5000"
+                  style="padding: 10px 14px; border: 1.5px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: monospace; font-size: 0.92rem;" />
               </div>
               <button type="submit" class="dg-btn-black" style="padding: 10px 18px;">
                 <i data-lucide="save"></i>
                 <span>บันทึก URL</span>
               </button>
-              <button type="button" class="dg-btn-outline" onclick="checkApiServerStatus(true)" style="padding: 10px 16px;">
+              <button type="button" class="dg-btn-outline" onclick="checkApiServerStatus(true)"
+                style="padding: 10px 16px;">
                 <i data-lucide="refresh-cw"></i>
                 <span>ทดสอบเชื่อมต่อ</span>
               </button>
             </form>
-            <div id="apiInfoNotice" style="margin-top: 16px; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.84rem; color: #334155; line-height: 1.65;">
+            <div id="apiInfoNotice"
+              style="margin-top: 16px; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.84rem; color: #334155; line-height: 1.65;">
               🌐 <strong>วิธีใช้งาน Cloudflare Tunnel:</strong><br>
               1. ดับเบิลคลิกไฟล์ <code>start-server.bat</code> ในโฟลเดอร์ <code>sarawat-backend</code> เพื่อเปิด API<br>
-              2. ดับเบิลคลิกไฟล์ <code>start-cloudflare.bat</code> จะได้รับลิงก์ เช่น <code>https://xxxx.trycloudflare.com</code><br>
-              3. นำลิงก์ HTTPS นั้นมาวางในช่องด้านบนแล้วกด "บันทึก URL" หรือนำไปใส่ใน <code>js/api-config.js</code> เพื่อให้คนอื่นในมือถือเห็นทันที!
+              2. ดับเบิลคลิกไฟล์ <code>start-cloudflare.bat</code> จะได้รับลิงก์ เช่น
+              <code>https://xxxx.trycloudflare.com</code><br>
+              3. นำลิงก์ HTTPS นั้นมาวางในช่องด้านบนแล้วกด "บันทึก URL" หรือนำไปใส่ใน <code>js/api-config.js</code>
+              เพื่อให้คนอื่นในมือถือเห็นทันที!
             </div>
           </div>
         </div>
@@ -1057,14 +1264,21 @@
           </small>
         </div>
 
-        <!-- Image Upload Section with Dual Modes & Live Progress Bar -->
+        <!-- ==========================================
+             REBUILT ACTIVITY IMAGE SYSTEM (UPLOAD / URL / FALLBACK)
+             ========================================== -->
         <div class="dg-form-group">
-          <label>ภาพหน้าปกกิจกรรม *</label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="image"
+                style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> ภาพหน้าปกกิจกรรม
+              *</label>
+            <span id="adminImgSourceBadge" class="img-source-badge badge-default">🎨 ภาพเริ่มต้น</span>
+          </div>
 
           <div class="img-mode-tabs">
             <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')">
               <i data-lucide="upload-cloud"></i>
-              <span>อัปโหลดจากเครื่อง (บีบอัดอัตโนมัติ ⚡)</span>
+              <span>อัปโหลดจากเครื่อง (Drop / Paste ⚡)</span>
             </button>
             <button type="button" class="img-mode-btn" id="btnImgModeUrl" onclick="switchImgMode('url')">
               <i data-lucide="link"></i>
@@ -1072,19 +1286,25 @@
             </button>
           </div>
 
-          <!-- Mode 1: File Upload with Live Progress Bar -->
+          <!-- Mode 1: File Upload (Modern Drag-and-Drop Zone + Hidden File Input) -->
           <div id="panelImgUpload">
-            <input type="file" id="adminNewsImgFile" accept="image/*"
-              style="width: 100%; padding: 10px; border: 1.5px dashed var(--dg-border); border-radius: 8px; background: #fafafa; cursor: pointer;" />
-            <small style="color: #059669; font-size: 0.78rem; display: flex; align-items: center; gap: 4px; margin-top: 6px; font-weight: 600;">
-              ⚡ ระบบจะบีบอัดภาพให้อัตโนมัติ (ลดขนาดเหลือ ~150-300 KB) เพื่อให้ผู้ใช้โหลดเปิดหน้าเว็บได้เร็วที่สุด
-            </small>
+            <input type="file" id="adminNewsImgFile"
+              accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg+xml" style="display: none;" />
+            <div class="admin-dropzone" id="adminNewsDropZone">
+              <div class="admin-dropzone-icon">
+                <i data-lucide="image-plus"></i>
+              </div>
+              <div class="admin-dropzone-title">คลิกเพื่อเลือกไฟล์ หรือลากรูปภาพมาวางที่นี่</div>
+              <div class="admin-dropzone-desc">รองรับ JPG, PNG, WebP (บีบอัดอัตโนมัติ) หรือกด <strong>Ctrl+V</strong>
+                เพื่อวางภาพจาก Clipboard</div>
+            </div>
 
+            <!-- Upload & Compression Progress Box -->
             <div id="adminNewsUploadProgress" class="upload-progress-wrap" style="display: none;">
               <div class="upload-file-meta">
                 <span id="uploadFileName"
-                  style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;">กำลังเตรียมไฟล์...</span>
-                <span id="uploadFileSize">0 KB</span>
+                  style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; font-weight: 700;">เตรียมไฟล์...</span>
+                <span id="uploadFileSize" style="color: #64748b; font-size: 0.78rem;">0 KB</span>
               </div>
               <div class="upload-progress-bar-bg">
                 <div id="uploadProgressFill" class="upload-progress-fill" style="width: 0%;"></div>
@@ -1098,27 +1318,58 @@
 
           <!-- Mode 2: Direct Image URL -->
           <div id="panelImgUrl" style="display: none;">
-            <input type="url" id="adminNewsImgUrl"
-              placeholder="https://... (เช่น ลิงก์จาก Discord, ImgBB, Google Drive หรือเว็บภายนอก)"
-              oninput="handleNewsImgUrlChange(this.value)" />
-            <small
-              style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 4px;">รองรับลิงก์รูปภาพสาธารณะทุกประเภท
-              (JPG, PNG, WebP)</small>
+            <div style="display: flex; gap: 8px;">
+              <input type="url" id="adminNewsImgUrl"
+                placeholder="https://... (เช่น ลิงก์จาก Discord, ImgBB, Google Drive หรือเว็บภายนอก)"
+                oninput="handleNewsImgUrlChange(this.value)" style="flex: 1;" />
+              <button type="button" class="dg-btn-sm-outline" onclick="handleTestImageUrl()"
+                style="white-space: nowrap; padding: 0 14px; font-weight: 700;">
+                <i data-lucide="refresh-cw"></i>
+                <span>ทดสอบ</span>
+              </button>
+            </div>
+            <small style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 5px;">
+              💡 วางลิงก์รูปภาพสาธารณะได้ทุกประเภท ระบบจะทดสอบและแสดงตัวอย่างทันที หากโหลดไม่ได้จะแสดงภาพเริ่มต้นแทน
+            </small>
           </div>
 
+          <!-- Hidden storage for final Base64 / image data -->
           <input type="hidden" id="adminNewsImgBase64" />
 
-          <!-- Live Image Preview -->
-          <div id="adminNewsImgPreviewWrap" style="display: none; margin-top: 10px;">
-            <div
-              style="font-size: 0.78rem; font-weight: 700; color: var(--dg-text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
-              <span>ตัวอย่างรูปภาพที่จะแสดงผล:</span>
-              <button type="button" onclick="clearSelectedNewsImage()"
-                style="background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; font-weight: 600;">ลบรูปภาพออก</button>
+          <!-- Dynamic Live Image Preview Card -->
+          <div id="adminNewsImgPreviewWrap" class="admin-preview-card">
+            <div class="admin-preview-header">
+              <span style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                <span>ตัวอย่างการแสดงผล:</span>
+                <span id="adminPreviewStateLabel"
+                  style="font-weight: 600; color: #64748b; font-size: 0.74rem;">(ภาพกิจกรรมเริ่มต้น)</span>
+              </span>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="preview-mini-btn"
+                  onclick="document.getElementById('adminNewsImgFile').click()" id="btnPreviewChange"
+                  title="เปลี่ยนรูปภาพ">
+                  <i data-lucide="refresh-cw"></i> <span>เปลี่ยนรูป</span>
+                </button>
+                <button type="button" class="preview-mini-btn danger" onclick="clearSelectedNewsImage()"
+                  id="btnPreviewClear" title="ใช้ภาพเริ่มต้น">
+                  <i data-lucide="trash-2"></i> <span>ใช้ภาพเริ่มต้น</span>
+                </button>
+              </div>
             </div>
-            <div style="position: relative; display: inline-block;">
-              <img id="adminNewsImgPreview" src="" alt="Preview"
-                style="max-height: 140px; max-width: 100%; border-radius: 8px; border: 1px solid var(--dg-border); object-fit: cover;" />
+
+            <div class="admin-preview-img-container">
+              <img id="adminNewsImgPreview"
+                src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&"
+                alt="ตัวอย่างภาพกิจกรรม" onerror="handlePreviewImageError(this)"
+                onload="handlePreviewImageLoaded(this)" />
+            </div>
+
+            <!-- Fallback Warning Notification (Hidden by default, shown if image fails to preview) -->
+            <div id="adminPreviewFallbackNotice" class="admin-preview-fallback-notice" style="display: none;">
+              <i data-lucide="alert-triangle" style="width: 16px; height: 16px; flex-shrink: 0; color: #d97706;"></i>
+              <span id="adminPreviewFallbackText">ไม่สามารถโหลดรูปภาพนี้ได้
+                ระบบได้สลับมาแสดงภาพเริ่มต้นให้อัตโนมัติ</span>
             </div>
           </div>
         </div>
@@ -1527,13 +1778,14 @@
     // ==========================================================
     // DEFAULT DATA CONSTANTS
     // ==========================================================
+    const DEFAULT_NEWS_IMAGE = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
     const DEFAULT_NEWS_ITEMS = [
       {
         id: 'news-1',
         title: 'พิธีแต่งตั้งและมอบปลอกแขนสารวัตรนักเรียน ประจำปีการศึกษา 2569',
         date: '23 พ.ค. 2569',
         tag: 'พิธีการสำคัญ',
-        image: 'assets/images/activity-ceremony.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
@@ -1545,7 +1797,7 @@
         title: 'โครงการรณรงค์วินัยจราจรและเสริมสร้างความปลอดภัยหน้าโรงเรียน',
         date: '12 มิ.ย. 2569',
         tag: 'ความปลอดภัย',
-        image: 'assets/images/activity-inspection.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
@@ -1557,7 +1809,7 @@
         title: 'กิจกรรมจิตอาสาพัฒนาสิ่งแวดล้อมและพื้นที่ส่วนรวมโรงเรียน',
         date: '08 ก.ค. 2569',
         tag: 'จิตอาสา',
-        image: 'assets/images/activity-volunteer.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
@@ -1569,7 +1821,7 @@
         title: 'การประชุมเชิงปฏิบัติการอบรมภาวะผู้นำและทักษะไกล่เกลี่ยเชิงบวก',
         date: '19 ส.ค. 2569',
         tag: 'อบรมพัฒนา',
-        image: 'assets/images/activity-training.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
@@ -1581,7 +1833,7 @@
         title: 'การเตรียมความพร้อมดูแลความสงบเรียบร้อยในสัปดาห์กีฬาสีเดชะฯ 2569',
         date: '25 ก.ย. 2569',
         tag: 'กิจกรรมโรงเรียน',
-        image: 'assets/images/hero-assembly.jpg',
+        image: DEFAULT_NEWS_IMAGE,
         desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
@@ -2556,58 +2808,221 @@
       handleFeaturedDatesChange();
     }
 
-    // --- Image Mode Selector & Preview ---
+    // =========================================================================
+    // 🖼️ REBUILT ACTIVITY IMAGE SYSTEM (UPLOAD / URL / RESILIENT FALLBACK)
+    // =========================================================================
+    const DEFAULT_ACTIVITY_FALLBACK_URL = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
+    const LOCAL_ACTIVITY_FALLBACK_URL = window.LOCAL_ACTIVITY_IMAGE_FALLBACK || 'assets/images/default-activity.png';
+
+    // Central state tracking for current news modal image
+    let currentNewsImageState = {
+      mode: 'upload',       // 'upload' | 'url'
+      file: null,           // Compressed File ready for backend upload
+      base64: '',           // Compressed Base64 dataURL
+      url: '',              // External URL entered
+      isCustom: false,      // User chose/entered an image
+      hasError: false       // Preview failed to load
+    };
+
+    /**
+     * Switch between "Upload from device" and "Image URL" tabs
+     */
     function switchImgMode(mode) {
       const btnUpload = document.getElementById('btnImgModeUpload');
       const btnUrl = document.getElementById('btnImgModeUrl');
       const panelUpload = document.getElementById('panelImgUpload');
       const panelUrl = document.getElementById('panelImgUrl');
 
+      currentNewsImageState.mode = mode;
+
       if (mode === 'url') {
-        btnUrl.classList.add('active');
-        btnUpload.classList.remove('active');
-        panelUrl.style.display = 'block';
-        panelUpload.style.display = 'none';
+        if (btnUrl) btnUrl.classList.add('active');
+        if (btnUpload) btnUpload.classList.remove('active');
+        if (panelUrl) panelUrl.style.display = 'block';
+        if (panelUpload) panelUpload.style.display = 'none';
+
+        const urlVal = (document.getElementById('adminNewsImgUrl')?.value || '').trim();
+        if (urlVal) {
+          handleNewsImgUrlChange(urlVal);
+        } else if (!currentNewsImageState.isCustom) {
+          showDefaultPreview();
+        }
       } else {
-        btnUpload.classList.add('active');
-        btnUrl.classList.remove('active');
-        panelUpload.style.display = 'block';
-        panelUrl.style.display = 'none';
+        if (btnUpload) btnUpload.classList.add('active');
+        if (btnUrl) btnUrl.classList.remove('active');
+        if (panelUpload) panelUpload.style.display = 'block';
+        if (panelUrl) panelUrl.style.display = 'none';
+
+        if (currentNewsImageState.base64) {
+          const previewImg = document.getElementById('adminNewsImgPreview');
+          if (previewImg) previewImg.src = currentNewsImageState.base64;
+          updatePreviewUI('upload-success');
+        } else if (!currentNewsImageState.isCustom) {
+          showDefaultPreview();
+        }
       }
-    }
 
-    function handleNewsImgUrlChange(url) {
-      const trimmed = url.trim();
-      const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
-      const previewImg = document.getElementById('adminNewsImgPreview');
-      const base64Input = document.getElementById('adminNewsImgBase64');
-
-      if (trimmed) {
-        previewImg.src = trimmed;
-        base64Input.value = trimmed;
-        previewWrap.style.display = 'block';
-      } else {
-        base64Input.value = '';
-        previewWrap.style.display = 'none';
-      }
-    }
-
-    let currentCompressedNewsFile = null;
-
-    function clearSelectedNewsImage() {
-      currentCompressedNewsFile = null;
-      document.getElementById('adminNewsImgFile').value = '';
-      document.getElementById('adminNewsImgUrl').value = '';
-      document.getElementById('adminNewsImgBase64').value = '';
-      document.getElementById('adminNewsImgPreview').src = '';
-      document.getElementById('adminNewsImgPreviewWrap').style.display = 'none';
-      document.getElementById('adminNewsUploadProgress').style.display = 'none';
+      if (window.lucide) lucide.createIcons();
     }
 
     /**
-     * Client-side HTML5 Canvas Image Compression Engine
-     * Converts raw 5MB-15MB phone photos to ~100KB-180KB web-optimized images
-     * Prevents browser localStorage quota exceeded errors
+     * Set preview back to the default fallback image
+     */
+    function showDefaultPreview() {
+      const previewImg = document.getElementById('adminNewsImgPreview');
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (previewImg) {
+        delete previewImg.dataset.hasFailedFallback;
+        previewImg.src = DEFAULT_ACTIVITY_FALLBACK_URL;
+      }
+      if (notice) notice.style.display = 'none';
+      updatePreviewUI('default');
+    }
+
+    /**
+     * Update labels & badges in preview card
+     */
+    function updatePreviewUI(type) {
+      const badge = document.getElementById('adminImgSourceBadge');
+      const stateLbl = document.getElementById('adminPreviewStateLabel');
+      if (!badge || !stateLbl) return;
+
+      if (type === 'default') {
+        badge.className = 'img-source-badge badge-default';
+        badge.textContent = '🎨 ภาพเริ่มต้น';
+        stateLbl.textContent = '(ภาพกิจกรรมเริ่มต้น)';
+      } else if (type === 'upload-success') {
+        badge.className = 'img-source-badge badge-success';
+        badge.textContent = '✅ รูปภาพพร้อมใช้';
+        stateLbl.textContent = '(อัปโหลดสำเร็จ)';
+      } else if (type === 'url-success') {
+        badge.className = 'img-source-badge badge-success';
+        badge.textContent = '🔗 ลิงก์ออนไลน์';
+        stateLbl.textContent = '(ลิงก์ภายนอก)';
+      } else if (type === 'error-fallback') {
+        badge.className = 'img-source-badge badge-warning';
+        badge.textContent = '⚠️ ใช้ภาพเริ่มต้นแทน';
+        stateLbl.textContent = '(โหลดไม่ได้ - ใช้ภาพเริ่มต้น)';
+      }
+    }
+
+    /**
+     * Handle input in "Image URL" tab
+     */
+    function handleNewsImgUrlChange(url) {
+      const trimmed = (url || '').trim();
+      currentNewsImageState.url = trimmed;
+      currentNewsImageState.hasError = false;
+
+      const previewImg = document.getElementById('adminNewsImgPreview');
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (previewImg) delete previewImg.dataset.hasFailedFallback;
+      if (notice) notice.style.display = 'none';
+
+      if (trimmed) {
+        currentNewsImageState.isCustom = true;
+        currentNewsImageState.file = null; // Clear leftover file so it won't overwrite URL!
+        currentNewsImageState.base64 = '';
+        if (previewImg) previewImg.src = trimmed;
+        updatePreviewUI('url-success');
+      } else {
+        currentNewsImageState.isCustom = false;
+        showDefaultPreview();
+      }
+    }
+
+    /**
+     * Button to test loading the URL in URL mode
+     */
+    function handleTestImageUrl() {
+      const urlInput = document.getElementById('adminNewsImgUrl');
+      const val = (urlInput?.value || '').trim();
+      if (!val) {
+        showToast('กรุณากรอกลิงก์รูปภาพก่อนกดทดสอบ');
+        if (urlInput) urlInput.focus();
+        return;
+      }
+      handleNewsImgUrlChange(val);
+      showToast('กำลังทดสอบโหลดรูปภาพ...');
+    }
+
+    /**
+     * Handle when preview image fails to load
+     */
+    function handlePreviewImageError(img) {
+      if (!img) return;
+
+      // Swap to fallback URL (as requested by user)
+      if (img.src !== DEFAULT_ACTIVITY_FALLBACK_URL && !img.dataset.hasFailedFallback) {
+        img.dataset.hasFailedFallback = 'true';
+        img.src = DEFAULT_ACTIVITY_FALLBACK_URL;
+      } else {
+        // If Discord CDN fails as well (offline/expired), use local PNG fallback
+        img.src = LOCAL_ACTIVITY_FALLBACK_URL;
+        img.onerror = null;
+      }
+
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      const noticeText = document.getElementById('adminPreviewFallbackText');
+      if (notice) notice.style.display = 'flex';
+      if (noticeText) noticeText.textContent = 'ไม่สามารถแสดงตัวอย่างภาพนี้ได้ (ระบบจะแสดงภาพเริ่มต้นแทนอัตโนมัติ)';
+
+      currentNewsImageState.hasError = true;
+      updatePreviewUI('error-fallback');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    /**
+     * Handle when preview image successfully finishes loading
+     */
+    function handlePreviewImageLoaded(img) {
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (currentNewsImageState.hasError) {
+        // Stay in error fallback display
+        return;
+      }
+      if (!currentNewsImageState.isCustom) {
+        if (notice) notice.style.display = 'none';
+        updatePreviewUI('default');
+      } else {
+        if (notice) notice.style.display = 'none';
+        updatePreviewUI(currentNewsImageState.mode === 'url' ? 'url-success' : 'upload-success');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    /**
+     * Clear selected news image and revert to default fallback image
+     */
+    function clearSelectedNewsImage() {
+      currentNewsImageState = {
+        mode: currentNewsImageState.mode,
+        file: null,
+        base64: '',
+        url: '',
+        isCustom: false,
+        hasError: false
+      };
+
+      const fileInput = document.getElementById('adminNewsImgFile');
+      if (fileInput) fileInput.value = '';
+      const urlInput = document.getElementById('adminNewsImgUrl');
+      if (urlInput) urlInput.value = '';
+      const base64Input = document.getElementById('adminNewsImgBase64');
+      if (base64Input) base64Input.value = '';
+
+      const progressWrap = document.getElementById('adminNewsUploadProgress');
+      if (progressWrap) progressWrap.style.display = 'none';
+
+      showDefaultPreview();
+      showToast('คืนค่าเป็นภาพเริ่มต้นเรียบร้อยแล้ว');
+    }
+
+    /**
+     * Resilient HTML5 Canvas Image Compression Engine
+     * - Resizes photos to max 1280px (crisp visual fidelity, under ~150KB)
+     * - Fills background with white before JPEG draw (prevents transparent PNGs turning black!)
+     * - Protects against browser localStorage quota exhaustion
      */
     function compressImageFile(file, onProgress) {
       return new Promise((resolve, reject) => {
@@ -2621,15 +3036,16 @@
         reader.onerror = () => reject(new Error('เกิดข้อผิดพลาดในการอ่านไฟล์รูปภาพ'));
 
         reader.onload = (evt) => {
-          if (onProgress) onProgress(45, 'กำลังวิเคราะห์ขนาดและเตรียมบีบอัดภาพ...');
+          if (onProgress) onProgress(40, 'กำลังวิเคราะห์ขนาดและเตรียมบีบอัดภาพ...');
           const img = new Image();
-          img.onerror = () => reject(new Error('ไม่สามารถประมวลผลรูปภาพนี้ได้'));
+          img.onerror = () => reject(new Error('เบราว์เซอร์ไม่สามารถประมวลผลไฟล์รูปภาพนี้ได้'));
+
           img.onload = () => {
             if (onProgress) onProgress(65, 'กำลังปรับขนาดและลดขนาดไฟล์ (Canvas Engine)...');
 
             let width = img.width;
             let height = img.height;
-            const maxDim = 1400; // 1400px provides ultra-sharp crispness while keeping size under 250KB
+            const maxDim = 1280;
 
             if (width > maxDim || height > maxDim) {
               if (width > height) {
@@ -2645,40 +3061,125 @@
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
+
+            // Fill white background to avoid transparent PNG turning solid black in JPEG!
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(img, 0, 0, width, height);
 
-            if (onProgress) onProgress(85, 'กำลังบีบอัดเป็น Web-Optimized JPEG...');
+            if (onProgress) onProgress(85, 'กำลังสร้างไฟล์ Web-Optimized JPEG...');
 
-            // Quality 0.82 provides pristine visual fidelity with tiny file size
-            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
+            const quality = 0.80;
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
             const sizeBytes = Math.round((compressedBase64.length * 3) / 4);
             const sizeKb = Math.round(sizeBytes / 1024);
+            const originalKb = Math.round(file.size / 1024);
+            const reductionPct = originalKb > 0 ? Math.max(0, Math.round(((originalKb - sizeKb) / originalKb) * 100)) : 0;
 
             canvas.toBlob((blob) => {
+              if (!blob) {
+                return reject(new Error('ไม่สามารถบีบอัดภาพเป็น Blob ได้'));
+              }
               const safeName = (file.name || 'activity').replace(/\.[^/.]+$/, "") + ".jpg";
               const compressedFile = new File([blob], safeName, { type: 'image/jpeg' });
 
               if (onProgress) {
-                onProgress(100, `บีบอัดสำเร็จ 100%! ลดเหลือ ~${sizeKb} KB (ประหยัดพื้นที่)`);
+                onProgress(100, `สำเร็จ 100%! เหลือ ~${sizeKb} KB (ลดขนาด ${reductionPct}%)`);
               }
 
               resolve({
                 base64: compressedBase64,
                 blob: blob,
                 file: compressedFile,
+                originalKb: originalKb,
                 sizeKb: sizeKb,
+                reductionPct: reductionPct,
                 width: width,
                 height: height
               });
-            }, 'image/jpeg', 0.82);
+            }, 'image/jpeg', quality);
           };
+
           img.src = evt.target.result;
         };
 
         reader.readAsDataURL(file);
       });
+    }
+
+    /**
+     * Process an image file from File Input, Drag-and-Drop, or Clipboard Paste
+     */
+    async function processSelectedImage(file) {
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('กรุณาเลือกไฟล์รูปภาพที่ถูกต้อง (JPG, PNG, WebP)');
+        return;
+      }
+
+      const progressWrap = document.getElementById('adminNewsUploadProgress');
+      const fileNameEl = document.getElementById('uploadFileName');
+      const fileSizeEl = document.getElementById('uploadFileSize');
+      const progressFill = document.getElementById('uploadProgressFill');
+      const percentNum = document.getElementById('uploadPercentNum');
+      const statusText = document.getElementById('uploadStatusText');
+      const previewImg = document.getElementById('adminNewsImgPreview');
+      const base64Input = document.getElementById('adminNewsImgBase64');
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+
+      // Instant local preview via Object URL
+      try {
+        const tempUrl = URL.createObjectURL(file);
+        delete previewImg.dataset.hasFailedFallback;
+        previewImg.src = tempUrl;
+        if (notice) notice.style.display = 'none';
+      } catch (e) { }
+
+      // Show progress UI
+      if (progressWrap) progressWrap.style.display = 'block';
+      if (progressFill) {
+        progressFill.classList.remove('complete');
+        progressFill.style.background = '';
+        progressFill.style.width = '8%';
+      }
+      if (percentNum) percentNum.textContent = '8%';
+      if (fileNameEl) fileNameEl.textContent = file.name;
+      const originalKb = Math.round(file.size / 1024);
+      if (fileSizeEl) fileSizeEl.textContent = originalKb > 1024 ? `${(originalKb / 1024).toFixed(1)} MB` : `${originalKb} KB`;
+      if (statusText) statusText.textContent = 'กำลังโหลดไฟล์...';
+
+      try {
+        const result = await compressImageFile(file, (percent, msg) => {
+          if (progressFill) progressFill.style.width = `${percent}%`;
+          if (percentNum) percentNum.textContent = `${percent}%`;
+          if (statusText) statusText.textContent = msg;
+          if (percent === 100 && progressFill) {
+            progressFill.classList.add('complete');
+          }
+        });
+
+        currentNewsImageState.mode = 'upload';
+        currentNewsImageState.file = result.file;
+        currentNewsImageState.base64 = result.base64;
+        currentNewsImageState.url = '';
+        currentNewsImageState.isCustom = true;
+        currentNewsImageState.hasError = false;
+
+        if (base64Input) base64Input.value = result.base64;
+        if (previewImg) previewImg.src = result.base64;
+
+        updatePreviewUI('upload-success');
+        showToast(`⚡ บีบอัดภาพสำเร็จ เหลือ ~${result.sizeKb} KB (ประหยัด ${result.reductionPct}%)`);
+      } catch (err) {
+        console.error('Image compression error:', err);
+        if (statusText) statusText.textContent = 'เกิดข้อผิดพลาด: ' + err.message;
+        if (progressFill) progressFill.style.background = '#ef4444';
+        if (percentNum) percentNum.textContent = 'Error';
+        alert('⚠️ ไม่สามารถประมวลผลรูปภาพได้: ' + err.message);
+      }
     }
 
     // ==========================================================
@@ -2813,7 +3314,7 @@
       grid.innerHTML = items.map((item, idx) => `
         <div class="admin-news-item-card" data-id="${item.id}">
           <div style="position: relative;">
-            <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" />
+            <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE || DEFAULT_ACTIVITY_FALLBACK_URL)}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
             ${idx === 0 ? '<span style="position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.92); backdrop-filter: blur(6px); color: #fbbf24; font-size: 0.72rem; font-weight: 850; padding: 4px 9px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 4px; border: 1px solid rgba(251,191,36,0.3);">🔥 กิจกรรมล่าสุด (แสดงอันดับ 1 หน้าเว็บ)</span>' : ''}
           </div>
           <div class="admin-news-item-body">
@@ -2854,15 +3355,15 @@
       document.getElementById('adminNewsForm').reset();
       const detailEl = document.getElementById('adminNewsDetail');
       if (detailEl) detailEl.value = '';
-      document.getElementById('adminNewsImgBase64').value = '';
-      document.getElementById('adminNewsImgPreviewWrap').style.display = 'none';
-      document.getElementById('adminNewsUploadProgress').style.display = 'none';
+
+      clearSelectedNewsImage();
 
       // Pre-fill today's date automatically (single day)
       setQuickNewsDate('today');
       clearNewsEndDate();
       switchImgMode('upload');
 
+      if (window.lucide) lucide.createIcons();
       openModal('adminNewsModal');
     }
 
@@ -2885,7 +3386,15 @@
       document.getElementById('adminNewsIg').value = item.igUrl || '';
       document.getElementById('adminNewsReels').value = item.reelsUrl || '';
       document.getElementById('adminNewsPhoto').value = item.photoUrl || '';
-      document.getElementById('adminNewsImgBase64').value = item.image || '';
+
+      // Reset image state
+      currentNewsImageState.file = null;
+      currentNewsImageState.hasError = false;
+
+      const fileInput = document.getElementById('adminNewsImgFile');
+      if (fileInput) fileInput.value = '';
+      const progressWrap = document.getElementById('adminNewsUploadProgress');
+      if (progressWrap) progressWrap.style.display = 'none';
 
       let startIso = item.dateIso || '';
       let endIso = item.endDateIso || '';
@@ -2907,25 +3416,40 @@
         if (lbl) lbl.textContent = item.date || '-';
       }
 
-      // Hide progress
-      document.getElementById('adminNewsUploadProgress').style.display = 'none';
-
-      const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
       const previewImg = document.getElementById('adminNewsImgPreview');
-      if (item.image) {
-        previewImg.src = window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image;
-        previewWrap.style.display = 'block';
-        if (item.image.startsWith('http')) {
+      const base64Input = document.getElementById('adminNewsImgBase64');
+      const urlInput = document.getElementById('adminNewsImgUrl');
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (previewImg) delete previewImg.dataset.hasFailedFallback;
+      if (notice) notice.style.display = 'none';
+
+      if (item.image && item.image.trim()) {
+        const trimmedImg = item.image.trim();
+        currentNewsImageState.isCustom = true;
+
+        if (trimmedImg.startsWith('http://') || trimmedImg.startsWith('https://')) {
+          currentNewsImageState.mode = 'url';
+          currentNewsImageState.url = trimmedImg;
+          currentNewsImageState.base64 = '';
+          if (urlInput) urlInput.value = trimmedImg;
+          if (base64Input) base64Input.value = trimmedImg;
           switchImgMode('url');
-          document.getElementById('adminNewsImgUrl').value = item.image;
         } else {
+          currentNewsImageState.mode = 'upload';
+          currentNewsImageState.base64 = trimmedImg;
+          currentNewsImageState.url = '';
+          if (urlInput) urlInput.value = '';
+          if (base64Input) base64Input.value = trimmedImg;
           switchImgMode('upload');
         }
+
+        const resolved = window.resolveImageUrl ? window.resolveImageUrl(trimmedImg) : trimmedImg;
+        if (previewImg) previewImg.src = resolved;
       } else {
-        previewWrap.style.display = 'none';
-        switchImgMode('upload');
+        clearSelectedNewsImage();
       }
 
+      if (window.lucide) lucide.createIcons();
       openModal('adminNewsModal');
     }
 
@@ -2964,27 +3488,38 @@
         const igUrl = document.getElementById('adminNewsIg').value.trim();
         const reelsUrl = document.getElementById('adminNewsReels').value.trim();
         const photoUrl = document.getElementById('adminNewsPhoto').value.trim();
-        const imgData = document.getElementById('adminNewsImgBase64').value.trim();
-        const imgFileInput = document.getElementById('adminNewsImgFile');
 
         if (!title) throw new Error('กรุณากรอกหัวข้อข่าวสาร/กิจกรรม');
         if (!date && !startIso) throw new Error('กรุณาเลือกวันเริ่มต้นจัดกิจกรรม');
         if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
 
-        // Check image: If a compressed or real file is available and API is connected, upload compressed file to server disk!
-        let finalImage = imgData || 'assets/images/activity-ceremony.jpg';
+        // Determine final image
+        let finalImage = '';
 
-        const fileToUpload = currentCompressedNewsFile || (imgFileInput && imgFileInput.files && imgFileInput.files[0]);
-        if (fileToUpload && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
-          try {
-            if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพที่บีบอัดแล้วสู่เซิร์ฟเวอร์...</span>';
-            const uploadRes = await window.SarawatApi.uploadImage(fileToUpload);
-            if (uploadRes && uploadRes.url) {
-              finalImage = uploadRes.url;
+        if (currentNewsImageState.mode === 'url') {
+          const directUrl = (document.getElementById('adminNewsImgUrl')?.value || '').trim();
+          finalImage = directUrl || currentNewsImageState.url || '';
+        } else if (currentNewsImageState.mode === 'upload') {
+          // If we have a file ready and backend API is connected, upload to server disk
+          if (currentNewsImageState.file && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+            try {
+              if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพสู่เซิร์ฟเวอร์...</span>';
+              const uploadRes = await window.SarawatApi.uploadImage(currentNewsImageState.file);
+              if (uploadRes && uploadRes.url) {
+                finalImage = uploadRes.url;
+              }
+            } catch (uploadErr) {
+              console.warn('API image upload error, using local fallback:', uploadErr.message);
             }
-          } catch (uploadErr) {
-            console.warn('API image upload error, using local fallback:', uploadErr.message);
           }
+          if (!finalImage) {
+            finalImage = currentNewsImageState.base64 || (document.getElementById('adminNewsImgBase64')?.value || '').trim();
+          }
+        }
+
+        // If no custom image or error or empty, use fallback image!
+        if (!finalImage || !finalImage.trim() || !currentNewsImageState.isCustom || currentNewsImageState.hasError) {
+          finalImage = window.DEFAULT_ACTIVITY_IMAGE || DEFAULT_ACTIVITY_FALLBACK_URL;
         }
 
         const items = getNews();
@@ -3612,57 +4147,90 @@
     }
 
     // ==========================================================
-    // IMAGE UPLOAD LISTENER WITH LIVE PROGRESS BAR (0% - 100%)
+    // REBUILT IMAGE UPLOAD & DRAG/DROP & CLIPBOARD PASTE SYSTEM
     // ==========================================================
     function setupImageUploadListener() {
       const fileInput = document.getElementById('adminNewsImgFile');
-      if (!fileInput) return;
+      const dropZone = document.getElementById('adminNewsDropZone');
 
-      fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+      // 1. File Input Change Listener
+      if (fileInput) {
+        fileInput.addEventListener('change', async (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            await processSelectedImage(file);
+          }
+          // Reset file input value so selecting the same file again still fires 'change'
+          fileInput.value = '';
+        });
+      }
 
-        const progressWrap = document.getElementById('adminNewsUploadProgress');
-        const fileNameEl = document.getElementById('uploadFileName');
-        const fileSizeEl = document.getElementById('uploadFileSize');
-        const progressFill = document.getElementById('uploadProgressFill');
-        const percentNum = document.getElementById('uploadPercentNum');
-        const statusText = document.getElementById('uploadStatusText');
-        const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
-        const previewImg = document.getElementById('adminNewsImgPreview');
-        const base64Input = document.getElementById('adminNewsImgBase64');
-
-        // Show progress UI immediately
-        progressWrap.style.display = 'block';
-        progressFill.classList.remove('complete');
-        progressFill.style.width = '5%';
-        percentNum.textContent = '5%';
-        fileNameEl.textContent = file.name;
-        const originalKb = Math.round(file.size / 1024);
-        fileSizeEl.textContent = originalKb > 1024 ? `${(originalKb / 1024).toFixed(1)} MB` : `${originalKb} KB`;
-        statusText.textContent = 'กำลังโหลดไฟล์...';
-
-        try {
-          const result = await compressImageFile(file, (percent, statusMsg) => {
-            progressFill.style.width = `${percent}%`;
-            percentNum.textContent = `${percent}%`;
-            statusText.textContent = statusMsg;
-            if (percent === 100) {
-              progressFill.classList.add('complete');
-            }
+      // 2. Modern Drag & Drop Zone Handlers
+      if (dropZone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('dragover');
           });
+        });
 
-          currentCompressedNewsFile = result.file;
-          base64Input.value = result.base64;
-          previewImg.src = result.base64;
-          previewWrap.style.display = 'block';
-          showToast(`ภาพบีบอัดเรียบร้อย (${result.sizeKb} KB)`);
-        } catch (err) {
-          console.error('Image compression error:', err);
-          statusText.textContent = 'เกิดข้อผิดพลาด: ' + err.message;
-          progressFill.style.background = '#ef4444';
-          percentNum.textContent = 'Error';
-          alert('⚠️ ไม่สามารถประมวลผลรูปภาพได้: ' + err.message);
+        ['dragleave', 'dragend'].forEach(eventName => {
+          dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+          });
+        });
+
+        dropZone.addEventListener('drop', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove('dragover');
+
+          const files = e.dataTransfer && e.dataTransfer.files;
+          if (files && files.length > 0) {
+            const file = files[0];
+            if (file.type && file.type.startsWith('image/')) {
+              switchImgMode('upload');
+              await processSelectedImage(file);
+            } else {
+              alert('กรุณาวางเฉพาะไฟล์รูปภาพ (JPG, PNG, WebP)');
+            }
+          }
+        });
+
+        // Click on dropzone to trigger native file dialog
+        dropZone.addEventListener('click', (e) => {
+          if (e.target && e.target.tagName === 'INPUT') return;
+          if (fileInput) fileInput.click();
+        });
+      }
+
+      // 3. Clipboard Paste Listener (Ctrl+V) when Admin Modal is Active
+      document.addEventListener('paste', async (e) => {
+        const modal = document.getElementById('adminNewsModal');
+        if (!modal || !modal.classList.contains('active')) return;
+
+        // If user is focused inside a text input/textarea other than image input, only intercept if clipboard has image
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        const isTextElement = activeTag === 'textarea' || (activeTag === 'input' && document.activeElement.type === 'text');
+
+        const items = e.clipboardData && e.clipboardData.items;
+        if (!items) return;
+
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type && items[i].type.startsWith('image/')) {
+            // Found image in clipboard
+            const file = items[i].getAsFile();
+            if (file) {
+              e.preventDefault();
+              switchImgMode('upload');
+              await processSelectedImage(file);
+              showToast('📋 วางรูปภาพจาก Clipboard เรียบร้อยแล้ว');
+              break;
+            }
+          }
         }
       });
     }

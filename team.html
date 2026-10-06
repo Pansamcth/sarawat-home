@@ -37,6 +37,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- API Config & Dynamic Image System -->
+    <script src="js/api-config.js"></script>
+
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/team-page.css" />
@@ -46,7 +49,7 @@
     <!-- =============== HERO HEADER - Bold Typography =============== -->
     <header class="tp-hero" id="tp-hero">
       <div class="tp-hero-bg">
-        <img src="assets/images/hero-assembly.jpg" alt="นักเรียนเข้าแถวหน้าเสาธง" />
+        <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
         <div class="tp-hero-overlay"></div>
       </div>
       <div class="container tp-hero-content">
@@ -106,16 +109,16 @@
             </div>
           </div>
 
-          <!-- Image Grid (3 images like SKATEHIVE) -->
+          <!-- Image Grid (3 images) -->
           <div class="tp-image-grid tp-grid-3col">
             <div class="tp-grid-item tp-grid-large">
-              <img src="assets/images/hero-assembly.jpg" alt="เข้าแถวหน้าเสาธง" />
+              <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
             </div>
             <div class="tp-grid-item">
-              <img src="assets/images/activity-inspection.jpg" alt="ตรวจระเบียบ" />
+              <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="กิจกรรมสารวัตรนักเรียน" />
             </div>
             <div class="tp-grid-item">
-              <img src="assets/images/activity-volunteer.jpg" alt="จิตอาสา" />
+              <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="จิตอาสาและบริการ" />
             </div>
           </div>
         </div>
@@ -151,10 +154,10 @@
           <!-- Image Grid -->
           <div class="tp-image-grid tp-grid-2col">
             <div class="tp-grid-item tp-grid-tall">
-              <img src="assets/images/activity-training.jpg" alt="อบรมสารวัตร" />
+              <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="อบรมสารวัตร" />
             </div>
             <div class="tp-grid-item">
-              <img src="assets/images/activity-teamwork.jpg" alt="ประชุมทีม" />
+              <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
             </div>
           </div>
         </div>
@@ -168,41 +171,41 @@
           <span class="tp-section-label">03/แกลเลอรี</span>
           <h2 class="tp-section-heading">ภาพกิจกรรม</h2>
         </div>
-        <div class="tp-gallery-grid">
+        <div class="tp-gallery-grid" id="tpGalleryGrid">
           <div class="tp-gallery-item tp-gallery-wide">
-            <img src="assets/images/hero-assembly.jpg" alt="เข้าแถว" />
+            <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
             <div class="tp-gallery-overlay">
-              <span>เข้าแถวหน้าเสาธง</span>
+              <span>คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</span>
             </div>
           </div>
           <div class="tp-gallery-item">
-            <img src="assets/images/activity-inspection.jpg" alt="ตรวจระเบียบ" />
+            <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="กิจกรรมสารวัตรนักเรียน" />
             <div class="tp-gallery-overlay">
-              <span>ตรวจระเบียบหน้าประตู</span>
+              <span>กิจกรรมสารวัตรนักเรียน</span>
             </div>
           </div>
           <div class="tp-gallery-item">
-            <img src="assets/images/activity-volunteer.jpg" alt="จิตอาสา" />
+            <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="กิจกรรมจิตอาสา" />
             <div class="tp-gallery-overlay">
               <span>กิจกรรมจิตอาสา</span>
             </div>
           </div>
           <div class="tp-gallery-item">
-            <img src="assets/images/activity-training.jpg" alt="อบรม" />
+            <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="อบรมพัฒนาสารวัตร" />
             <div class="tp-gallery-overlay">
-              <span>อบรมสารวัตร</span>
+              <span>อบรมพัฒนาสารวัตร</span>
             </div>
           </div>
           <div class="tp-gallery-item tp-gallery-wide">
-            <img src="assets/images/activity-ceremony.jpg" alt="พิธีมอบเกียรติบัตร" />
+            <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="กิจกรรมโรงเรียน" />
             <div class="tp-gallery-overlay">
-              <span>พิธีประดับเข็มและมอบเกียรติบัตร</span>
+              <span>กิจกรรมโรงเรียน</span>
             </div>
           </div>
           <div class="tp-gallery-item">
-            <img src="assets/images/activity-teamwork.jpg" alt="ประชุมทีม" />
+            <img src="https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/default-activity.png';}" alt="การปฏิบัติหน้าที่" />
             <div class="tp-gallery-overlay">
-              <span>ประชุมวางแผนทีม</span>
+              <span>การปฏิบัติหน้าที่</span>
             </div>
           </div>
         </div>
@@ -456,6 +459,43 @@
           }
         });
       });
+
+      // Dynamic gallery loader from backend API if available
+      (async function loadDynamicGallery() {
+        if (!window.SarawatApi || !window.SarawatApi.getNews) return;
+        try {
+          const news = await window.SarawatApi.getNews();
+          if (news && news.length > 0) {
+            const galleryGrid = document.getElementById('tpGalleryGrid');
+            if (!galleryGrid) return;
+            const validWithImages = news.filter(n => n.image && n.image.trim().length > 0);
+            if (validWithImages.length > 0) {
+              const galleryItems = galleryGrid.querySelectorAll('.tp-gallery-item');
+              validWithImages.slice(0, 5).forEach((item, idx) => {
+                const targetEl = galleryItems[idx + 1];
+                if (targetEl) {
+                  const img = targetEl.querySelector('img');
+                  const caption = targetEl.querySelector('.tp-gallery-overlay span');
+                  const resolvedUrl = window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image;
+                  if (img) {
+                    img.src = resolvedUrl;
+                    img.alt = item.title;
+                    img.onerror = function() {
+                      if (window.handleActivityImageError) window.handleActivityImageError(this);
+                      else this.src = 'assets/images/default-activity.png';
+                    };
+                  }
+                  if (caption) {
+                    caption.textContent = item.title;
+                  }
+                }
+              });
+            }
+          }
+        } catch (e) {
+          console.warn('[Team] Dynamic gallery load error:', e);
+        }
+      })();
     </script>
 
     <!-- Image Protection & Anti-Copy System -->
