@@ -954,3 +954,58 @@
     font-size: 1.5rem;
   }
 }
+
+/* ==========================================================
+   IMAGE PROTECTION & ANTI-COPY (ป้องกันการบันทึกภาพและโลโก้)
+   ========================================================== */
+img,
+picture,
+.tp-member-avatar img,
+.tp-hero-bg img,
+.tp-grid-item img {
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+.dg-protect-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background: rgba(10, 10, 12, 0.94);
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 9999px;
+  font-size: 0.86rem;
+  font-weight: 650;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 99999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.dg-protect-toast.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dg-protect-toast svg {
+  width: 17px;
+  height: 17px;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+

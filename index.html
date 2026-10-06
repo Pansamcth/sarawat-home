@@ -110,48 +110,58 @@
     </div>
   </nav>
 
-  <!-- ============ HERO SECTION (Diego Style Header + Sub-grid + Cinematic Image) ============ -->
+  <!-- ============ HERO SECTION ============ -->
   <header class="dg-hero-section" id="hero">
-    <div class="dg-container">
-      <!-- Hero Swiss Headline -->
-      <h1 class="dg-hero-heading" data-reveal="fade">
-        <span class="dg-heading-th">สร้างสรรค์วินัย ด้วยพลังจิตอาสา</span><br>
-        <span class="dg-heading-en">We lead with purpose to protect & inspire.</span>
-      </h1>
+    <!-- Viewport Screen 1: Exactly matches mobile mockup -->
+    <div class="dg-hero-mobile-viewport">
+      <!-- 3 Text Blocks Centered Vertically -->
+      <div class="dg-container dg-hero-text-container">
+        <!-- 1: Headline -->
+        <h1 class="dg-hero-heading" data-reveal="fade">
+          <span class="dg-heading-th">สร้างสรรค์วินัย ด้วยพลังจิตอาสา</span>
+          <span class="dg-heading-en">We lead with purpose to protect &<br class="dg-mobile-br" /> inspire.</span>
+        </h1>
 
-      <!-- 2-Column Subtext Layout -->
-      <div class="dg-hero-sub-grid" data-reveal="fade" data-delay="100">
-        <div class="dg-hero-sub-left">
-          สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล องค์กรตัวแทนนักเรียนผู้มุ่งมั่นสร้างสรรค์สังคมแห่งความมีวินัย ปลอดภัย
-          และเป็นแบบอย่างที่ดี
-        </div>
-        <div class="dg-hero-sub-right">
-          <p>
-            ร่วมขับเคลื่อนรั้วเดชะปัตตนยานุกูลสู่มาตรฐานใหม่ ผ่านการดูแลความปลอดภัยอย่างใกล้ชิด การสร้างความเข้าใจ
-            และการปฏิบัติหน้าที่ด้วยความเป็นธรรม
-          </p>
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <!-- Sub-grid: Blocks 2 & 3 -->
+        <div class="dg-hero-sub-grid" data-reveal="fade" data-delay="100">
+          <!-- Block 2 (Paragraph 1) -->
+          <div class="dg-hero-sub-left dg-hero-block-2">
+            สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล องค์กร<br class="dg-hero-p1-br" />ตัวแทนนักเรียนผู้มุ่งมั่นสร้างสรรค์สังคมแห่งความมี<br class="dg-hero-p1-br" />วินัย ปลอดภัย และเป็นแบบอย่างที่ดี
+          </div>
+
+          <!-- Block 3 (Paragraph 2 + Arrow Link) -->
+          <div class="dg-hero-sub-right dg-hero-block-3">
+            <p>
+              ร่วมขับเคลื่อนรั้วเดชะปัตตนยานุกูลสู่มาตรฐานใหม่ ผ่านการดูแลความปลอดภัย<br class="dg-hero-p2-br" />อย่างใกล้ชิด การสร้างความเข้าใจ และการปฏิบัติหน้าที่ด้วยความเป็นธรรม
+            </p>
             <a href="#operations" class="dg-arrow-link">
               <span>สำรวจระบบบริการออนไลน์</span>
               <i data-lucide="arrow-right"></i>
             </a>
-            <!-- Hero Animated Scroll Cue -->
-            <a href="#vision" class="dg-hero-scroll-cue" id="heroScrollCue">
-              <div class="dg-mouse-pill">
-                <div class="dg-mouse-wheel"></div>
-              </div>
-              <span class="dg-scroll-cue-text">SCROLL TO EXPLORE <i data-lucide="chevron-down"
-                  style="width: 13px; height: 13px;"></i></span>
-            </a>
           </div>
         </div>
-      </div>
+      </div><!-- /.dg-hero-text-container -->
 
-      <!-- Cinematic Full-Width Photo -->
-      <div class="dg-hero-image-wrap" data-reveal="scale">
-        <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" id="heroCinematicImg"
-          style="object-position: center 30%;" />
+      <!-- Bottom Photo: Straddles bottom edge of screen 1 with scroll cue above on the right -->
+      <div class="dg-container dg-hero-image-container">
+        <!-- Scroll Indicator: Positioned directly above photo on the right -->
+        <div class="dg-hero-scroll-wrapper dg-mobile-only" data-reveal="fade" data-delay="150">
+          <a href="#dutyUptimeCard" class="dg-hero-scroll-cue" id="heroScrollCue" aria-label="เลื่อนเพื่อสำรวจเนื้อหา">
+            <div class="dg-mouse-pill">
+              <div class="dg-mouse-wheel"></div>
+            </div>
+            <span class="dg-scroll-cue-text">SCROLL TO EXPLORE <i data-lucide="chevron-down"></i></span>
+          </a>
+        </div>
+
+        <div class="dg-hero-image-wrap" data-reveal="scale" id="heroImageWrap">
+          <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" id="heroCinematicImg" />
+        </div>
       </div>
+    </div><!-- /.dg-hero-mobile-viewport -->
+
+    <!-- ============ LIVE OPERATIONAL UPTIME COUNTER & VISION ============ -->
+    <div class="dg-container">
 
       <!-- ============ LIVE OPERATIONAL UPTIME COUNTER (Diego Swiss Minimalist Style) ============ -->
       <div class="dg-uptime-card" id="dutyUptimeCard" data-reveal="fade">
@@ -159,7 +169,7 @@
           <div class="dg-uptime-title-wrap">
             <span class="dg-section-tag">PREFECT DUTY IN SERVICE • ระยะเวลาปฏิบัติหน้าที่</span>
           </div>
-          <div class="dg-uptime-meta">
+          <div class="dg-uptime-meta dg-desktop-only">
             <span id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
           </div>
         </div>
@@ -195,6 +205,11 @@
             <div class="dg-uptime-name">วินาที</div>
             <div class="dg-uptime-subname">SECONDS</div>
           </div>
+        </div>
+
+        <!-- Mobile: Positioned on the line below the clock -->
+        <div class="dg-uptime-meta-bottom dg-mobile-only">
+          <span id="dutyStartLabelMobile">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
         </div>
       </div>
 
@@ -235,6 +250,10 @@
           </p>
         </div>
         <div class="dg-news-header-actions">
+          <a href="activities.html" class="dg-arrow-link" id="viewAllActivitiesLink">
+            <span>ดูรายการทั้งหมด</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
           <div class="dg-news-carousel-nav">
             <button class="dg-carousel-btn" id="newsPrevBtn" type="button" aria-label="ข่าวก่อนหน้า"
               title="ข่าวก่อนหน้า">
@@ -646,6 +665,8 @@
           <div class="dg-footer-col">
             <h5>ส่วนสำคัญ</h5>
             <a href="#hero">หน้าหลัก (Homepage)</a>
+            <a href="#news">ข่าวสารกิจกรรมล่าสุด</a>
+            <a href="activities.html">คลังกิจกรรมทั้งหมด (Archive)</a>
             <a href="#vision">วิสัยทัศน์ & พันธกิจ</a>
             <a href="#operations">รวมระบบออนไลน์</a>
             <a href="#team">วิสัยทัศน์ประธาน</a>
@@ -676,11 +697,11 @@
         <div style="display: flex; align-items: center; gap: 8px;">
           <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
             style="width: 20px; height: 20px; object-fit: contain;" />
-          <span>© 2568 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล. All rights reserved.</span>
+          <span>©2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล. All rights reserved.</span>
         </div>
         <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-          <span>Designed in Diego Swiss Agency Style • Powered By <a href="https://github.com/Pansamcth"
-              target="_blank">Rujira Wattanakitpaisal</a></span>
+          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank">Rujira
+              Wattanakitpaisal</a></span>
           <span style="opacity: 0.3;">|</span>
           <a href="admin.html"
             style="display: inline-flex; align-items: center; gap: 5px; color: var(--dg-text-muted); font-size: 0.78rem; text-decoration: none; transition: color 0.2s;"
@@ -784,6 +805,19 @@
     </div>
   </div>
 
+  <!-- 3. News & Activity Detail Modal (ป๊อปอัปแสดงรายละเอียดข่าวสารและกิจกรรม) -->
+  <div class="dg-modal-backdrop" id="newsDetailModal" style="display: none;">
+    <div class="dg-modal-box dg-news-modal-box">
+      <button class="dg-modal-close-btn" onclick="closeModal('newsDetailModal')" aria-label="ปิดหน้าต่าง">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="dg-news-modal-inner" id="newsModalContent">
+        <!-- Injected dynamically by openNewsDetailModal(id) -->
+      </div>
+    </div>
+  </div>
+
 
 
   <!-- ============ CIRCULAR SCROLL PROGRESS BACK-TO-TOP ============ -->
@@ -841,6 +875,7 @@
         tag: 'พิธีการสำคัญ',
         image: 'assets/images/activity-ceremony.jpg',
         desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
+        detail: 'พิธีจัดขึ้น ณ หอประชุมโรงเรียนเดชะปัตตนยานุกูล โดยมีคณะผู้บริหาร ครูที่ปรึกษางานส่งเสริมวินัยนักเรียน และตัวแทนนักเรียนทุกระดับชั้นร่วมเป็นสักขีพยาน ในพิธีมีการกล่าวคำปฏิญาณตนของคณะสารวัตรนักเรียน เพื่อยืนยันเจตนารมณ์ในการปฏิบัติหน้าที่ด้วยความซื่อสัตย์ สุจริต และเป็นธรรม มุ่งมั่นดูแลความสงบเรียบร้อยและความปลอดภัยของเพื่อนนักเรียนตลอดปีการศึกษา',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
         reelsUrl: 'https://www.instagram.com/reels/',
@@ -853,6 +888,7 @@
         tag: 'ความปลอดภัย',
         image: 'assets/images/activity-inspection.jpg',
         desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
+        detail: 'คณะสารวัตรนักเรียนปฏิบัติหน้าที่ประจำจุดทางข้ามและบริเวณประตูโรงเรียน เพื่ออำนวยความสะดวกแก่นักเรียนและผู้ปกครอง พร้อมทั้งรณรงค์การสวมหมวกนิรภัย 100% การข้ามถนนตามทางม้าลาย และการปฏิบัติตามกฎจราจรอย่างเคร่งครัดเพื่อลดอุบัติเหตุในชั่วโมงเร่งด่วน',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
         reelsUrl: 'https://www.instagram.com/reels/',
@@ -865,6 +901,7 @@
         tag: 'จิตอาสา',
         image: 'assets/images/activity-volunteer.jpg',
         desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
+        detail: 'กิจกรรมจิตอาสาเพื่อเสริมสร้างความรับผิดชอบต่อส่วนรวม ร่วมกันทำความสะอาดจุดพักผ่อน ลานอเนกประสงค์ และคัดแยกขยะอย่างถูกวิธี เพื่อสร้างสภาพแวดล้อมที่น่าอยู่และเอื้อต่อการเรียนรู้ของทุกคนในโรงเรียนเดชะปัตตนยานุกูล',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
         reelsUrl: '',
@@ -877,6 +914,7 @@
         tag: 'อบรมพัฒนา',
         image: 'assets/images/activity-training.jpg',
         desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
+        detail: 'หลักสูตรพิเศษเพื่อเสริมสร้างวุฒิภาวะทางอารมณ์และทักษะการเจรจาไกล่เกลี่ยความขัดแย้งเชิงสันติวิธี เพื่อให้สารวัตรนักเรียนสามารถปฏิบัติหน้าที่ด้วยความยุติธรรม ปราศจากอคติ และสร้างความเข้าใจอันดีระหว่างนักเรียนด้วยกัน',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
         reelsUrl: 'https://www.instagram.com/reels/',
@@ -889,6 +927,7 @@
         tag: 'กิจกรรมโรงเรียน',
         image: 'assets/images/hero-assembly.jpg',
         desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
+        detail: 'ประสานงานร่วมกับคณะกรรมการนักเรียนและครูฝ่ายปกครอง เพื่อจัดแบ่งกำลังสายตรวจดูแลความปลอดภัย การปฐมพยาบาลเบื้องต้น และอำนวยความสะดวกในการจัดขบวนพาเหรดและการแข่งขันกีฬาอย่างราบรื่นและปลอดภัยที่สุด',
         fbUrl: 'https://www.facebook.com/dechapattana',
         igUrl: 'https://www.instagram.com/',
         reelsUrl: 'https://www.instagram.com/reels/',
@@ -1198,8 +1237,8 @@
         if (events.length > 3) {
           moreWrap.style.display = 'block';
           if (moreText) {
-            moreText.textContent = isEventsExpanded 
-              ? 'แสดงน้อยลง (ย่อกลับ)' 
+            moreText.textContent = isEventsExpanded
+              ? 'แสดงน้อยลง (ย่อกลับ)'
               : `ดูตารางกิจกรรมเพิ่มเติม (${events.length - 3} รายการ)`;
           }
           if (moreBtn) {
@@ -1240,8 +1279,8 @@
       const remainingCount = Math.max(0, otherEvents.length - 3);
 
       if (moreText) {
-        moreText.textContent = isEventsExpanded 
-          ? 'แสดงน้อยลง (ย่อกลับ)' 
+        moreText.textContent = isEventsExpanded
+          ? 'แสดงน้อยลง (ย่อกลับ)'
           : `ดูตารางกิจกรรมเพิ่มเติม (${remainingCount} รายการ)`;
       }
 
@@ -1260,8 +1299,11 @@
       const track = document.getElementById('newsCardsTrack');
       if (!track) return;
 
-      const items = getNewsData();
-      track.innerHTML = items.map((item, index) => {
+      const allItems = getNewsData();
+      // Show ONLY the latest 5 news/activities in the main page carousel
+      const items = allItems.slice(0, 5);
+
+      const cardsHtml = items.map((item, index) => {
         const hasFb = Boolean(item.fbUrl && item.fbUrl.trim());
         const hasIg = Boolean(item.igUrl && item.igUrl.trim());
         const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
@@ -1269,7 +1311,7 @@
         const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
 
         const fbBtn = hasFb ? `
-          <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-fb" title="Facebook" aria-label="Facebook">
+          <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-fb" title="Facebook" aria-label="Facebook" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
             </svg>
@@ -1277,7 +1319,7 @@
         ` : '';
 
         const igBtn = hasIg ? `
-          <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-ig" title="Instagram" aria-label="Instagram">
+          <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-ig" title="Instagram" aria-label="Instagram" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
@@ -1287,7 +1329,7 @@
         ` : '';
 
         const reelsBtn = hasReels ? `
-          <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-reels" title="Instagram Reels" aria-label="Instagram Reels">
+          <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-reels" title="Instagram Reels" aria-label="Instagram Reels" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
               <path d="M2.5 8h19"/>
@@ -1300,7 +1342,7 @@
         ` : '';
 
         const photoBtn = hasPhoto ? `
-          <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-photo" title="Google Photos" aria-label="Google Photos">
+          <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-photo" title="Google Photos" aria-label="Google Photos" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" width="16" height="16">
               <path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/>
               <path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/>
@@ -1311,7 +1353,7 @@
         ` : '';
 
         return `
-          <article class="dg-news-card" data-id="${item.id}">
+          <article class="dg-news-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
             <div class="dg-news-cover-wrap">
               <img src="${item.image}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" />
               <span class="dg-news-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
@@ -1331,21 +1373,189 @@
 
               <div class="dg-news-card-meta-bar">
                 <span class="dg-news-counter-tag">${index === 0 ? '🔥 กิจกรรมล่าสุด (LATEST)' : `ACTIVITY #${index + 1}`}</span>
-                ${item.date ? `
-                  <span class="dg-news-bottom-date">
-                    <i data-lucide="calendar"></i>
-                    <span>${escapeHtml(item.date)}</span>
-                  </span>
-                ` : ''}
+                <span class="dg-news-read-more-btn">
+                  <span>ดูรายละเอียด</span>
+                  <i data-lucide="arrow-up-right"></i>
+                </span>
               </div>
             </div>
           </article>
         `;
       }).join('');
 
+      // Append the "ดูเพิ่มเติม" card at the end of the 5 cards
+      const moreCardHtml = `
+        <a href="activities.html" class="dg-news-card dg-news-more-card" title="คลิกเพื่อดูข่าวสารและกิจกรรมทั้งหมด">
+          <div class="dg-news-more-card-body">
+            <div>
+              <div class="dg-news-more-icon-badge">
+                <i data-lucide="arrow-right"></i>
+              </div>
+              <div class="dg-news-more-content">
+                <span class="dg-news-more-tag">ARCHIVE • คลังกิจกรรม</span>
+                <h3 class="dg-news-more-title">
+                  <span>ดูเพิ่มเติม</span>
+                  <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+                </h3>
+                <p class="dg-news-more-desc">
+                  รวบรวมภาพข่าวสาร และประมวลภาพกิจกรรมการปฏิบัติหน้าที่ของสารวัตรนักเรียนทั้งหมด (${allItems.length} รายการ)
+                </p>
+              </div>
+            </div>
+            <div class="dg-news-more-footer">
+              <span class="dg-news-more-action-text">เปิดหน้ารวมกิจกรรม</span>
+              <div class="dg-news-more-arrow-btn">
+                <i data-lucide="arrow-up-right"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+
+      track.innerHTML = cardsHtml + moreCardHtml;
+
       if (window.lucide) {
         lucide.createIcons();
       }
+    }
+
+    function openNewsDetailModal(id) {
+      const items = getNewsData();
+      const item = items.find(it => String(it.id) === String(id));
+      if (!item) return;
+
+      const container = document.getElementById('newsModalContent');
+      if (!container) return;
+
+      const hasFb = Boolean(item.fbUrl && item.fbUrl.trim());
+      const hasIg = Boolean(item.igUrl && item.igUrl.trim());
+      const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
+      const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
+      const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
+
+      container.innerHTML = `
+        <div class="dg-news-modal-header">
+          <div class="dg-news-modal-meta-top">
+            <span class="dg-news-modal-badge">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+            ${item.date ? `
+              <span class="dg-news-modal-date">
+                <i data-lucide="calendar"></i>
+                <span>${escapeHtml(item.date)}</span>
+              </span>
+            ` : ''}
+          </div>
+          <h2 class="dg-news-modal-title">${escapeHtml(item.title)}</h2>
+        </div>
+
+        <div class="dg-news-modal-cover">
+          <img src="${item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-main.jpg'" />
+        </div>
+
+        <div class="dg-news-modal-body">
+          <div class="dg-news-modal-desc">
+            <p>${escapeHtml(item.desc || '')}</p>
+            ${item.detail ? `
+              <div class="dg-news-modal-subdesc">
+                ${escapeHtml(item.detail)}
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="dg-news-modal-specs">
+            <div class="dg-news-spec-item">
+              <span class="dg-spec-label"><i data-lucide="tag"></i> หมวดหมู่</span>
+              <span class="dg-spec-val">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+            </div>
+            <div class="dg-news-spec-item">
+              <span class="dg-spec-label"><i data-lucide="calendar"></i> วันที่จัดกิจกรรม</span>
+              <span class="dg-spec-val">${escapeHtml(item.date || '-')}</span>
+            </div>
+            <div class="dg-news-spec-item">
+              <span class="dg-spec-label"><i data-lucide="shield-check"></i> ผู้รับผิดชอบ</span>
+              <span class="dg-spec-val">คณะสารวัตรนักเรียน</span>
+            </div>
+          </div>
+
+          ${hasAnyLinks ? `
+            <div class="dg-news-modal-links-section">
+              <h4 class="dg-news-modal-links-title">
+                <i data-lucide="external-link"></i> ช่องทางรับชมรูปภาพและสื่อเพิ่มเติม
+              </h4>
+              <div class="dg-news-modal-links-grid">
+                ${hasFb ? `
+                  <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-fb">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                      <span>ดูโพสต์บน Facebook</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+
+                ${hasIg ? `
+                  <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-ig">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                      </svg>
+                      <span>เปิดดูบน Instagram</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+
+                ${hasReels ? `
+                  <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-reels">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
+                        <path d="M2.5 8h19"/>
+                        <path d="m8 2.5-2.5 5.5"/>
+                        <path d="m14 2.5-2.5 5.5"/>
+                        <path d="m20 2.5-2.5 5.5"/>
+                        <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
+                      </svg>
+                      <span>รับชมคลิป Reels</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+
+                ${hasPhoto ? `
+                  <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-photo">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/>
+                        <path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/>
+                        <path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/>
+                        <path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/>
+                      </svg>
+                      <span>อัลบั้ม Google Photos</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="dg-news-modal-footer">
+          <button type="button" class="dg-btn-black" onclick="closeModal('newsDetailModal')" style="cursor: pointer;">
+            <span>ปิดหน้าต่าง</span>
+          </button>
+        </div>
+      `;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      openModal('newsDetailModal');
     }
 
     function escapeHtml(text) {
@@ -1435,8 +1645,10 @@
         const dutyStartDate = storedStart ? new Date(storedStart) : new Date('2026-05-23T07:00:00');
         const storedLabel = localStorage.getItem('dg_sarawat_uptime_label');
         const labelEl = document.getElementById('dutyStartLabel');
-        if (labelEl && storedLabel) {
-          labelEl.textContent = storedLabel;
+        const labelElMobile = document.getElementById('dutyStartLabelMobile');
+        if (storedLabel) {
+          if (labelEl) labelEl.textContent = storedLabel;
+          if (labelElMobile) labelElMobile.textContent = storedLabel;
         }
 
         const now = new Date();
@@ -1612,7 +1824,7 @@
         revealItems.forEach(item => item.classList.add('is-revealed'));
       }
 
-      // --- Subtle Parallax Depth on Images ---
+      // --- Subtle Parallax Depth on Hero Image ---
       const heroImg = document.getElementById('heroCinematicImg');
       let ticking = false;
 
@@ -1622,8 +1834,8 @@
         if (heroImg) {
           const rect = heroImg.getBoundingClientRect();
           if (rect.bottom > 0 && rect.top < windowHeight) {
-            const offset = (rect.top - windowHeight / 2) * 0.06;
-            heroImg.style.transform = `scale(1.04) translateY(${offset}px)`;
+            const offset = (rect.top - windowHeight / 2) * 0.04;
+            heroImg.style.transform = `scale(1.02) translateY(${offset}px)`;
           }
         }
 
@@ -1760,6 +1972,9 @@
       }
     });
   </script>
+
+  <!-- Image Protection & Anti-Copy System -->
+  <script src="js/image-protection.js"></script>
 </body>
 
 </html>
