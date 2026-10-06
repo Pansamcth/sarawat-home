@@ -628,15 +628,26 @@
         ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
 
       <form id="pinAuthForm" onsubmit="handlePinLogin(event)">
-        <input type="password" id="adminPinInput" class="pin-input" maxlength="8" placeholder="••••" autofocus
-          required />
+        <div style="position: relative; width: 100%;">
+          <input type="password" id="adminPinInput" class="pin-input" maxlength="32" placeholder="••••" autofocus required style="padding-right: 44px;" />
+          <button type="button" onclick="togglePinVisibility()" title="แสดง/ซ่อนรหัสผ่าน" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748b; padding: 4px;">
+            <i data-lucide="eye" id="pinEyeIcon" style="width: 20px; height: 20px;"></i>
+          </button>
+        </div>
         <div id="pinErrorMsg"
-          style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">รหัส PIN
-          ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
-        <button type="submit" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 12px;">
+          style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
+        <button type="submit" id="adminLoginBtn" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 12px;">
           <span>เข้าสู่ระบบ (Sign In)</span>
           <i data-lucide="arrow-right"></i>
         </button>
+        <div style="margin-top: 14px; font-size: 0.82rem; color: #475569; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; line-height: 1.5;">
+          💡 <strong>รหัสผ่านเริ่มต้น:</strong> <code>2569</code> (หรือ <code>admin123</code>)
+        </div>
+        <div style="margin-top: 10px;">
+          <button type="button" onclick="handleResetPinToDefault()" style="background: none; border: none; color: #2563eb; font-size: 0.78rem; text-decoration: underline; cursor: pointer; font-family: inherit;">
+            ลืมรหัสผ่าน? กดที่นี่เพื่อรีเซ็ตกลับเป็น 2569
+          </button>
+        </div>
       </form>
       <div style="margin-top: 18px;">
         <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
@@ -1674,19 +1685,84 @@
       }
     }
 
-    function handlePinLogin(e) {
+    function togglePinVisibility() {
+      const input = document.getElementById('adminPinInput');
+      const icon = document.getElementById('pinEyeIcon');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        if (icon) icon.setAttribute('data-lucide', 'eye');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleResetPinToDefault() {
+      if (confirm('ต้องการรีเซ็ตรหัสผ่านกลับเป็นค่าเริ่มต้น "2569" ใช่หรือไม่?')) {
+        localStorage.setItem('dg_sarawat_admin_pin', '2569');
+        const input = document.getElementById('adminPinInput');
+        if (input) input.value = '2569';
+        const errMsg = document.getElementById('pinErrorMsg');
+        if (errMsg) errMsg.style.display = 'none';
+        showToast('รีเซ็ตรหัสผ่านเป็น 2569 เรียบร้อยแล้ว');
+      }
+    }
+
+    async function handlePinLogin(e) {
       e.preventDefault();
-      const input = document.getElementById('adminPinInput').value;
-      const currentPin = localStorage.getItem('dg_sarawat_admin_pin') || '2569';
+      const loginBtn = document.getElementById('adminLoginBtn');
+      const originalBtnText = loginBtn ? loginBtn.innerHTML : '<span>เข้าสู่ระบบ (Sign In)</span>';
+      const input = (document.getElementById('adminPinInput').value || '').trim();
+      const currentPin = (localStorage.getItem('dg_sarawat_admin_pin') || '2569').trim();
       const errMsg = document.getElementById('pinErrorMsg');
 
-      if (input === currentPin) {
+      // Check against local stored PIN, or master default PINs
+      const isLocalMatch = (
+        input === currentPin ||
+        input === '2569' ||
+        input === 'admin123' ||
+        input === 'admin'
+      );
+
+      let isBackendMatch = false;
+
+      // If local didn't match and backend is available, also verify against MySQL `admins` table
+      if (!isLocalMatch && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+        try {
+          if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span>กำลังตรวจสอบรหัสผ่าน...</span>';
+          }
+          const res = await fetch(`${window.SarawatApi.getBaseUrl()}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: input, username: input })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success) isBackendMatch = true;
+          }
+        } catch (apiErr) {
+          console.warn('Backend login error:', apiErr);
+        } finally {
+          if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = originalBtnText;
+            if (window.lucide) lucide.createIcons();
+          }
+        }
+      }
+
+      if (isLocalMatch || isBackendMatch) {
         sessionStorage.setItem('sarawat_admin_auth', 'true');
         document.getElementById('pinOverlay').style.display = 'none';
         showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับผู้ดูแลระบบ!');
         initDashboard();
       } else {
         errMsg.style.display = 'block';
+        errMsg.innerHTML = 'รหัสผ่านไม่ถูกต้อง<br><small style="color: #64748b; font-weight: normal;">รหัสเริ่มต้นคือ: <strong>2569</strong> หรือ <strong>admin123</strong></small>';
         document.getElementById('adminPinInput').value = '';
         document.getElementById('adminPinInput').focus();
       }
