@@ -2183,21 +2183,108 @@ svg:not([data-lucide]),
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--dg-text-muted);
-  margin: 0 0 20px;
+  color: var(--dg-black);
+  margin: 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #0a0a0c;
 }
 
 .dg-footer-col a {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--dg-text-secondary);
   text-decoration: none;
-  margin-bottom: 12px;
-  transition: color 0.2s ease;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
 }
 
 .dg-footer-col a:hover {
   color: var(--dg-black);
+}
+
+/* Nav list in Column 1 */
+.dg-footer-nav-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dg-footer-nav-list a {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #4b5563;
+  text-decoration: none;
+  padding: 4px 0;
+  margin-bottom: 2px;
+  line-height: 1.35;
+  transition: color 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dg-footer-nav-list a:hover {
+  color: #000000;
+  transform: translateX(3px);
+}
+
+/* Service Links in Column 2 - Frameless Arrow Links (Matching Homepage) */
+.dg-footer-service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dg-footer-arrow-link,
+.dg-footer-arrow-link:link,
+.dg-footer-arrow-link:visited {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--dg-font-sans);
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #0a0a0c !important;
+  text-decoration: none !important;
+  width: fit-content;
+  max-width: 100%;
+  border-bottom: 1.5px solid #0a0a0c;
+  padding-bottom: 3px;
+  background: transparent !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1.35;
+}
+
+.dg-footer-arrow-link:hover,
+.dg-footer-arrow-link:active {
+  gap: 10px;
+  color: var(--dg-text-secondary) !important;
+  border-color: var(--dg-text-secondary);
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.dg-footer-arrow-link svg,
+.dg-footer-arrow-link i {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  stroke-width: 2.2;
+  transition: transform 0.2s ease;
+}
+
+.dg-footer-arrow-link:hover svg,
+.dg-footer-arrow-link:hover i {
+  transform: translate(2px, -2px);
 }
 
 /* Contact Channel Buttons in Footer */
@@ -2313,12 +2400,51 @@ svg:not([data-lucide]),
   padding-top: 36px;
   font-size: 0.85rem;
   color: var(--dg-text-muted);
+  gap: 16px;
 }
 
 .dg-footer-bottom a {
   color: var(--dg-text-primary);
   text-decoration: none;
   font-weight: 600;
+}
+
+.dg-footer-bottom-copy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dg-footer-bottom-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.dg-footer-meta-sep {
+  opacity: 0.35;
+}
+
+.dg-footer-admin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--dg-text-secondary) !important;
+  font-size: 0.78rem !important;
+  font-weight: 550 !important;
+  text-decoration: none !important;
+  padding: 4px 10px;
+  background: #f4f4f6;
+  border: 1px solid var(--dg-border);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.dg-footer-admin-link:hover {
+  background: #0a0a0c;
+  color: #ffffff !important;
+  border-color: #0a0a0c;
 }
 
 /* ==========================================================
@@ -4574,13 +4700,13 @@ svg:not([data-lucide]),
     padding-right: 0;
   }
 
-  /* --- Footer & Contact --- */
+  /* --- Footer & Contact Mobile Responsive --- */
   .dg-footer {
-    padding: 50px 0 30px;
+    padding: 44px 0 120px; /* Leaves 120px breathing room so bottom mourning ribbon (80px) & back-to-top never overlap footer text */
   }
   .dg-pre-footer-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 30px;
     padding-bottom: 34px;
   }
   .dg-pre-footer-title {
@@ -4588,26 +4714,116 @@ svg:not([data-lucide]),
     line-height: 1.1;
     margin-bottom: 14px;
   }
+  
+  /* 2-Column Grid on Mobile - structured and neat like Desktop */
   .dg-footer-columns {
-    grid-template-columns: 1fr;
-    gap: 22px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 26px 16px;
+    align-items: start;
+  }
+  .dg-footer-col {
+    min-width: 0;
   }
   .dg-footer-col h5 {
     font-size: 0.74rem;
-    margin-bottom: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--dg-black);
+    margin: 0 0 12px;
+    display: inline-flex;
+    align-items: center;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #0a0a0c;
   }
-  .dg-footer-col a {
-    font-size: 0.86rem;
-    margin-bottom: 8px;
+  .dg-footer-col:nth-child(1) {
+    grid-column: 1;
   }
+  .dg-footer-col:nth-child(2) {
+    grid-column: 2;
+  }
+  .dg-footer-col:nth-child(3) {
+    grid-column: 1 / -1;
+    padding-top: 18px;
+    border-top: 1px solid var(--dg-border);
+    margin-top: 6px;
+  }
+
+  .dg-footer-nav-list a {
+    font-size: 0.8rem;
+    padding: 4px 0;
+    line-height: 1.35;
+  }
+
+  .dg-footer-service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dg-footer-arrow-link {
+    font-size: 0.8rem !important;
+    gap: 5px;
+    padding-bottom: 2px;
+  }
+
+  .dg-footer-arrow-link:hover {
+    gap: 8px;
+  }
+
+  .dg-footer-arrow-link svg,
+  .dg-footer-arrow-link i {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dg-contact-btn-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .dg-contact-btn {
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 0.84rem !important;
+  }
+
+  /* Footer Bottom on Mobile - Centered, beautifully spaced, clean hierarchy */
   .dg-footer-bottom {
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     text-align: center;
     padding-top: 24px;
-    font-size: 0.8rem;
+    border-top: 1px solid var(--dg-border);
+    font-size: 0.76rem;
     align-items: center;
     justify-content: center;
+  }
+  .dg-footer-bottom-copy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+    line-height: 1.45;
+  }
+  .dg-footer-bottom-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    text-align: center;
+    line-height: 1.45;
+  }
+  .dg-footer-meta-sep {
+    opacity: 0.35;
+  }
+  .dg-footer-admin-link {
+    font-size: 0.75rem !important;
+    padding: 3px 9px;
+    border-radius: 6px;
   }
 
   /* --- Modals --- */

@@ -157,6 +157,7 @@
         opacity: 0;
         transform: translateY(6px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -303,11 +304,31 @@
       gap: 4px;
     }
 
-    .link-tag.has-fb { background: #eff6ff; color: #1d4ed8; }
-    .link-tag.has-ig { background: #fdf2f8; color: #be185d; }
-    .link-tag.has-reels { background: #fff1f2; color: #e11d48; }
-    .link-tag.has-photo { background: #fefce8; color: #a16207; }
-    .link-tag.no-link { background: #f1f5f9; color: #94a3b8; text-decoration: line-through; }
+    .link-tag.has-fb {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .link-tag.has-ig {
+      background: #fdf2f8;
+      color: #be185d;
+    }
+
+    .link-tag.has-reels {
+      background: #fff1f2;
+      color: #e11d48;
+    }
+
+    .link-tag.has-photo {
+      background: #fefce8;
+      color: #a16207;
+    }
+
+    .link-tag.no-link {
+      background: #f1f5f9;
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
 
     .admin-card-actions {
       display: flex;
@@ -574,9 +595,11 @@
       .admin-main {
         padding: 20px 16px 60px;
       }
+
       .admin-grid-news {
         grid-template-columns: 1fr;
       }
+
       .admin-nav-actions span {
         display: none;
       }
@@ -588,17 +611,25 @@
   <!-- ============ PIN AUTH OVERLAY ============ -->
   <div class="pin-overlay" id="pinOverlay">
     <div class="pin-box">
-      <div class="pin-icon" style="background: transparent; border: none; box-shadow: none; width: auto; height: auto; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 14px;">
-        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));" />
+      <div class="pin-icon"
+        style="background: transparent; border: none; box-shadow: none; width: auto; height: auto; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 14px;">
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+          style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));" />
         <span style="display: inline-block; width: 1px; height: 36px; background: #e2e8f0;"></span>
-        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo" style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));" />
+        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
+          style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));" />
       </div>
-      <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 850; margin: 0 0 6px;">ระบบควบคุมสารวัตรนักเรียน</h2>
-      <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0 0 16px;">กรุณากรอกรหัส PIN ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
-      
+      <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 850; margin: 0 0 6px;">
+        ระบบควบคุมสารวัตรนักเรียน</h2>
+      <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0 0 16px;">กรุณากรอกรหัส PIN
+        ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
+
       <form id="pinAuthForm" onsubmit="handlePinLogin(event)">
-        <input type="password" id="adminPinInput" class="pin-input" maxlength="8" placeholder="••••" autofocus required />
-        <div id="pinErrorMsg" style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
+        <input type="password" id="adminPinInput" class="pin-input" maxlength="8" placeholder="••••" autofocus
+          required />
+        <div id="pinErrorMsg"
+          style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">รหัส PIN
+          ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
         <button type="submit" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 12px;">
           <span>เข้าสู่ระบบ (Sign In)</span>
           <i data-lucide="arrow-right"></i>
@@ -609,9 +640,6 @@
           <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
         </a>
       </div>
-      <div style="margin-top: 14px; font-size: 0.75rem; color: var(--dg-text-muted);">
-        (รหัสเริ่มต้น: <strong>2569</strong> สามารถเปลี่ยนได้ในการตั้งค่า)
-      </div>
     </div>
   </div>
 
@@ -619,9 +647,11 @@
   <header class="admin-navbar">
     <div class="admin-nav-inner">
       <a href="admin.html" class="admin-brand">
-        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="width: 32px; height: 32px; object-fit: contain;" />
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+          style="width: 32px; height: 32px; object-fit: contain;" />
         <span style="display: inline-block; width: 1px; height: 20px; background: #e2e8f0; margin: 0 2px;"></span>
-        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo" style="width: 32px; height: 32px; object-fit: contain;" />
+        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
+          style="width: 32px; height: 32px; object-fit: contain;" />
         <span class="admin-brand-text">
           SARAWAT <span class="admin-badge">ADMIN PORTAL</span>
         </span>
@@ -632,7 +662,8 @@
           <i data-lucide="external-link"></i>
           <span>ดูหน้าเว็บจริง</span>
         </a>
-        <button type="button" onclick="handleLogout()" class="dg-btn-outline" style="padding: 8px 14px; font-size: 0.84rem; color: #ef4444; border-color: #fee2e2;">
+        <button type="button" onclick="handleLogout()" class="dg-btn-outline"
+          style="padding: 8px 14px; font-size: 0.84rem; color: #ef4444; border-color: #fee2e2;">
           <i data-lucide="log-out"></i>
           <span>ออกจากระบบ</span>
         </button>
@@ -766,11 +797,14 @@
             <form onsubmit="handleSaveUptimeDate(event)">
               <div class="dg-form-group" style="margin-bottom: 14px;">
                 <label>วันและเวลาเริ่มต้นปฏิบัติหน้าที่</label>
-                <input type="datetime-local" id="settingsDutyStartDate" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;" />
+                <input type="datetime-local" id="settingsDutyStartDate" required
+                  style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;" />
               </div>
               <div class="dg-form-group" style="margin-bottom: 18px;">
                 <label>ข้อความระบุวันที่ (แสดงบนหน้าเว็บ)</label>
-                <input type="text" id="settingsDutyDateLabel" placeholder="เช่น เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;" />
+                <input type="text" id="settingsDutyDateLabel" placeholder="เช่น เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569"
+                  required
+                  style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;" />
               </div>
               <button type="submit" class="dg-btn-black">บันทึกวันปฏิบัติหน้าที่</button>
             </form>
@@ -789,11 +823,13 @@
             <form onsubmit="handleChangePin(event)">
               <div class="dg-form-group" style="margin-bottom: 14px;">
                 <label>รหัส PIN ปัจจุบัน</label>
-                <input type="password" id="settingsCurrentPin" required placeholder="••••" style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
+                <input type="password" id="settingsCurrentPin" required placeholder="••••"
+                  style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
               </div>
               <div class="dg-form-group" style="margin-bottom: 18px;">
                 <label>รหัส PIN ใหม่ (4-8 หลัก)</label>
-                <input type="password" id="settingsNewPin" required maxlength="8" placeholder="เช่น 2569" style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
+                <input type="password" id="settingsNewPin" required maxlength="8" placeholder="เช่น 2569"
+                  style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
               </div>
               <button type="submit" class="dg-btn-black">เปลี่ยนรหัสผ่าน PIN</button>
             </form>
@@ -809,7 +845,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <h2>สำรองและนำเข้าข้อมูล (Data Backup & Synchronization)</h2>
-          <p>เนื่องจากเว็บดีพลอยบน Vercel แบบ Static Web ข้อมูลจะถูกบันทึกในเบราว์เซอร์ คุณสามารถสำรองข้อมูลเป็นไฟล์ JSON เพื่อนำไปเปิดในเครื่องอื่น หรือเก็บไว้เป็นชุดข้อมูลสำรองได้ตลอดเวลา</p>
+          <p>เนื่องจากเว็บดีพลอยบน Vercel แบบ Static Web ข้อมูลจะถูกบันทึกในเบราว์เซอร์ คุณสามารถสำรองข้อมูลเป็นไฟล์
+            JSON เพื่อนำไปเปิดในเครื่องอื่น หรือเก็บไว้เป็นชุดข้อมูลสำรองได้ตลอดเวลา</p>
         </div>
       </div>
 
@@ -856,7 +893,8 @@
             <p style="font-size: 0.88rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 20px;">
               หากต้องการล้างข้อมูลที่แก้ไขทั้งหมด และโหลดข้อมูลมาตรฐานตั้งต้นของสารวัตรนักเรียนปี 2569 กลับมา
             </p>
-            <button type="button" class="dg-btn-outline" style="color: #dc2626; border-color: #fca5a5;" onclick="handleResetDefaults()">
+            <button type="button" class="dg-btn-outline" style="color: #dc2626; border-color: #fca5a5;"
+              onclick="handleResetDefaults()">
               <i data-lucide="refresh-cw"></i>
               <span>รีเซ็ตข้อมูลทั้งหมดกลับสู่ค่าเริ่มต้น</span>
             </button>
@@ -884,46 +922,48 @@
 
         <div class="dg-form-group">
           <label>หัวข้อข่าวสาร/กิจกรรม *</label>
-          <input type="text" id="adminNewsTitle" required placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" />
+          <input type="text" id="adminNewsTitle" required
+            placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" />
         </div>
 
         <!-- Date Selection: Start Date & Optional End Date with Live Summary -->
         <div class="dg-form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> วันที่จัดกิจกรรม *</label>
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar"
+                style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> วันที่จัดกิจกรรม
+              *</label>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
               <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('today')">📅 วันนี้</button>
               <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('yesterday')">⏪ เมื่อวาน</button>
-              <button type="button" class="quick-pill-btn" onclick="clearNewsEndDate()" style="color: #64748b;">✖️ วันเดียว (ล้างวันสิ้นสุด)</button>
+              <button type="button" class="quick-pill-btn" onclick="clearNewsEndDate()" style="color: #64748b;">✖️
+                วันเดียว (ล้างวันสิ้นสุด)</button>
             </div>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div>
-              <span style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม *</span>
-              <input 
-                type="date" 
-                id="adminNewsStartDatePicker" 
-                required 
-                onclick="try{this.showPicker()}catch(e){}"
-                onchange="handleNewsDatesChange()" 
-                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" 
-              />
+              <span
+                style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม
+                *</span>
+              <input type="date" id="adminNewsStartDatePicker" required onclick="try{this.showPicker()}catch(e){}"
+                onchange="handleNewsDatesChange()"
+                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" />
             </div>
             <div>
-              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
-              <input 
-                type="date" 
-                id="adminNewsEndDatePicker" 
-                onclick="try{this.showPicker()}catch(e){}"
-                onchange="handleNewsDatesChange()" 
-                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" 
-              />
+              <span
+                style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม
+                <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ =
+                  มีแค่วันเดียว)</span></span>
+              <input type="date" id="adminNewsEndDatePicker" onclick="try{this.showPicker()}catch(e){}"
+                onchange="handleNewsDatesChange()"
+                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" />
             </div>
           </div>
           <input type="hidden" id="adminNewsDate" />
           <div id="adminNewsDateBanner" class="date-helper-banner" style="margin-top: 8px;">
             <i data-lucide="calendar" style="width: 14px; height: 14px; flex-shrink: 0; color: #16a34a;"></i>
-            <span>วันที่แสดงผล: <strong id="adminNewsDateLabel" style="font-weight: 800; color: #0f172a;">-</strong></span>
+            <span>วันที่แสดงผล: <strong id="adminNewsDateLabel"
+                style="font-weight: 800; color: #0f172a;">-</strong></span>
           </div>
         </div>
 
@@ -936,7 +976,8 @@
             <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('พิธีการสำคัญ')">พิธีการสำคัญ</button>
             <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('จิตอาสา')">จิตอาสา</button>
             <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('ความปลอดภัย')">ความปลอดภัย</button>
-            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('กิจกรรมโรงเรียน')">กิจกรรมโรงเรียน</button>
+            <button type="button" class="quick-pill-btn"
+              onclick="setQuickNewsTag('กิจกรรมโรงเรียน')">กิจกรรมโรงเรียน</button>
             <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('อบรมพัฒนา')">อบรมพัฒนา</button>
           </div>
           <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา" />
@@ -944,18 +985,20 @@
 
         <div class="dg-form-group">
           <label>รายละเอียดกิจกรรม (เนื้อหาหลัก) *</label>
-          <textarea id="adminNewsDesc" rows="3" required placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
+          <textarea id="adminNewsDesc" rows="3" required
+            placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
         </div>
 
         <div class="dg-form-group">
           <label>รายละเอียดเพิ่มเติมสำหรับป๊อบอัป (Optional / แสดงในหน้าต่างขยาย)</label>
-          <textarea id="adminNewsDetail" rows="3" placeholder="ระบุเนื้อหาเชิงลึก ลำดับขั้นตอน ผลการดำเนินงาน หรือข้อความขยายความเพิ่มเติมสำหรับหน้าต่างป๊อบอัป..."></textarea>
+          <textarea id="adminNewsDetail" rows="3"
+            placeholder="ระบุเนื้อหาเชิงลึก ลำดับขั้นตอน ผลการดำเนินงาน หรือข้อความขยายความเพิ่มเติมสำหรับหน้าต่างป๊อบอัป..."></textarea>
         </div>
 
         <!-- Image Upload Section with Dual Modes & Live Progress Bar -->
         <div class="dg-form-group">
           <label>ภาพหน้าปกกิจกรรม *</label>
-          
+
           <div class="img-mode-tabs">
             <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')">
               <i data-lucide="upload-cloud"></i>
@@ -969,11 +1012,13 @@
 
           <!-- Mode 1: File Upload with Live Progress Bar -->
           <div id="panelImgUpload">
-            <input type="file" id="adminNewsImgFile" accept="image/*" style="width: 100%; padding: 10px; border: 1.5px dashed var(--dg-border); border-radius: 8px; background: #fafafa; cursor: pointer;" />
-            
+            <input type="file" id="adminNewsImgFile" accept="image/*"
+              style="width: 100%; padding: 10px; border: 1.5px dashed var(--dg-border); border-radius: 8px; background: #fafafa; cursor: pointer;" />
+
             <div id="adminNewsUploadProgress" class="upload-progress-wrap" style="display: none;">
               <div class="upload-file-meta">
-                <span id="uploadFileName" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;">กำลังเตรียมไฟล์...</span>
+                <span id="uploadFileName"
+                  style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px;">กำลังเตรียมไฟล์...</span>
                 <span id="uploadFileSize">0 KB</span>
               </div>
               <div class="upload-progress-bar-bg">
@@ -988,20 +1033,27 @@
 
           <!-- Mode 2: Direct Image URL -->
           <div id="panelImgUrl" style="display: none;">
-            <input type="url" id="adminNewsImgUrl" placeholder="https://... (เช่น ลิงก์จาก Discord, ImgBB, Google Drive หรือเว็บภายนอก)" oninput="handleNewsImgUrlChange(this.value)" />
-            <small style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 4px;">รองรับลิงก์รูปภาพสาธารณะทุกประเภท (JPG, PNG, WebP)</small>
+            <input type="url" id="adminNewsImgUrl"
+              placeholder="https://... (เช่น ลิงก์จาก Discord, ImgBB, Google Drive หรือเว็บภายนอก)"
+              oninput="handleNewsImgUrlChange(this.value)" />
+            <small
+              style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 4px;">รองรับลิงก์รูปภาพสาธารณะทุกประเภท
+              (JPG, PNG, WebP)</small>
           </div>
 
           <input type="hidden" id="adminNewsImgBase64" />
 
           <!-- Live Image Preview -->
           <div id="adminNewsImgPreviewWrap" style="display: none; margin-top: 10px;">
-            <div style="font-size: 0.78rem; font-weight: 700; color: var(--dg-text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="font-size: 0.78rem; font-weight: 700; color: var(--dg-text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
               <span>ตัวอย่างรูปภาพที่จะแสดงผล:</span>
-              <button type="button" onclick="clearSelectedNewsImage()" style="background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; font-weight: 600;">ลบรูปภาพออก</button>
+              <button type="button" onclick="clearSelectedNewsImage()"
+                style="background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; font-weight: 600;">ลบรูปภาพออก</button>
             </div>
             <div style="position: relative; display: inline-block;">
-              <img id="adminNewsImgPreview" src="" alt="Preview" style="max-height: 140px; max-width: 100%; border-radius: 8px; border: 1px solid var(--dg-border); object-fit: cover;" />
+              <img id="adminNewsImgPreview" src="" alt="Preview"
+                style="max-height: 140px; max-width: 100%; border-radius: 8px; border: 1px solid var(--dg-border); object-fit: cover;" />
             </div>
           </div>
         </div>
@@ -1055,68 +1107,102 @@
         </div>
 
         <!-- Date Range & Time Auto-Calculator for Events -->
-        <div class="dg-form-group" style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 1. กำหนดวันที่จัดกิจกรรม</label>
+        <div class="dg-form-group"
+          style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar"
+                style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 1.
+              กำหนดวันที่จัดกิจกรรม</label>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
               <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('today')">📅 วันนี้</button>
               <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('tomorrow')">⏩ พรุ่งนี้</button>
-              <button type="button" class="quick-pill-btn" onclick="clearEventEndDate()" style="color: #64748b;">✖️ วันเดียว (ล้างวันสิ้นสุด)</button>
+              <button type="button" class="quick-pill-btn" onclick="clearEventEndDate()" style="color: #64748b;">✖️
+                วันเดียว (ล้างวันสิ้นสุด)</button>
             </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div>
-              <span style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม *</span>
-              <input type="date" id="adminEventStartDatePicker" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventDatesChange()" />
+              <span
+                style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม
+                *</span>
+              <input type="date" id="adminEventStartDatePicker" required
+                style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                onchange="handleEventDatesChange()" />
             </div>
             <div>
-              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
-              <input type="date" id="adminEventEndDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventDatesChange()" />
+              <span
+                style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม
+                <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ =
+                  มีแค่วันเดียว)</span></span>
+              <input type="date" id="adminEventEndDatePicker"
+                style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                onchange="handleEventDatesChange()" />
             </div>
           </div>
 
-          <div id="adminEventDateSummaryBanner" class="date-helper-banner" style="margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
+          <div id="adminEventDateSummaryBanner" class="date-helper-banner"
+            style="margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
             <i data-lucide="calendar-check" style="width: 15px; height: 15px; flex-shrink: 0; color: #16a34a;"></i>
             <span id="adminEventDateSummaryText">ระบบจะกรอกเลขวัน เดือน ปี และลงเวลาอัตโนมัติ</span>
           </div>
 
           <!-- Time Selection Section -->
           <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 2. กำหนดเวลาจัดกิจกรรม</label>
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock"
+                  style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> 2.
+                กำหนดเวลาจัดกิจกรรม</label>
               <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                <button type="button" class="quick-pill-btn btn-event-time-quick active" data-time-preset="เต็มวัน" onclick="setQuickEventTimePreset('เต็มวัน')">⏰ เต็มวัน</button>
-                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="เช้า" onclick="setQuickEventTimePreset('เช้า')">🌅 เช้า (08:30-12:00)</button>
-                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="บ่าย" onclick="setQuickEventTimePreset('บ่าย')">🌇 บ่าย (13:00-16:30)</button>
-                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="เต็มวัน-เวลา" onclick="setQuickEventTimePreset('เต็มวัน-เวลา')">⏱️ ทั้งวัน (ระบุเวลา)</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick active" data-time-preset="เต็มวัน"
+                  onclick="setQuickEventTimePreset('เต็มวัน')">⏰ เต็มวัน</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="เช้า"
+                  onclick="setQuickEventTimePreset('เช้า')">🌅 เช้า (08:30-12:00)</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="บ่าย"
+                  onclick="setQuickEventTimePreset('บ่าย')">🌇 บ่าย (13:00-16:30)</button>
+                <button type="button" class="quick-pill-btn btn-event-time-quick" data-time-preset="เต็มวัน-เวลา"
+                  onclick="setQuickEventTimePreset('เต็มวัน-เวลา')">⏱️ ทั้งวัน (ระบุเวลา)</button>
               </div>
             </div>
 
             <!-- Time Display / Status (When 'เต็มวัน' is active) -->
-            <div id="adminEventAllDayBanner" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-              <div style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 700; font-size: 0.92rem;">
+            <div id="adminEventAllDayBanner"
+              style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <div
+                style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 700; font-size: 0.92rem;">
                 <i data-lucide="sun" style="width: 18px; height: 18px; color: #16a34a;"></i>
                 <span>กิจกรรมเต็มวัน (All Day)</span>
-                <span style="font-weight: 400; font-size: 0.78rem; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">ไม่ระบุชั่วโมงเวลา</span>
+                <span
+                  style="font-weight: 400; font-size: 0.78rem; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">ไม่ระบุชั่วโมงเวลา</span>
               </div>
-              <button type="button" onclick="switchToCustomEventTime()" style="background: #ffffff; border: 1px solid #bbf7d0; color: #15803d; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              <button type="button" onclick="switchToCustomEventTime()"
+                style="background: #ffffff; border: 1px solid #bbf7d0; color: #15803d; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                 <span>ระบุเวลาเริ่ม-สิ้นสุด</span>
                 <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
               </button>
             </div>
 
             <!-- Time Pickers (When custom hours is active) -->
-            <div id="adminEventCustomTimeWrap" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+            <div id="adminEventCustomTimeWrap"
+              style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
               <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
                 <div>
-                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาเริ่ม:</span>
-                  <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeCustomChange()" />
+                  <span
+                    style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาเริ่ม:</span>
+                  <input type="time" id="adminEventStartTime" value="08:30"
+                    style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                    onchange="handleEventTimeCustomChange()" />
                 </div>
-                <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px; font-weight: 700;">ถึง</span>
+                <span
+                  style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px; font-weight: 700;">ถึง</span>
                 <div>
-                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาสิ้นสุด:</span>
-                  <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleEventTimeCustomChange()" />
+                  <span
+                    style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาสิ้นสุด:</span>
+                  <input type="time" id="adminEventEndTime" value="16:30"
+                    style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                    onchange="handleEventTimeCustomChange()" />
                 </div>
               </div>
             </div>
@@ -1124,10 +1210,14 @@
             <!-- Single Unified Time Text Input & Live Badge -->
             <div style="margin-top: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <label style="font-size: 0.78rem; font-weight: 700; color: #334155; margin: 0;">เวลาที่จะบันทึกและแสดงบนเว็บไซต์:</label>
-                <strong id="adminEventTimePreview" style="color: #15803d; font-size: 0.84rem; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">เต็มวัน</strong>
+                <label
+                  style="font-size: 0.78rem; font-weight: 700; color: #334155; margin: 0;">เวลาที่จะบันทึกและแสดงบนเว็บไซต์:</label>
+                <strong id="adminEventTimePreview"
+                  style="color: #15803d; font-size: 0.84rem; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">เต็มวัน</strong>
               </div>
-              <input type="text" id="adminEventTime" value="เต็มวัน" placeholder="เช่น เต็มวัน หรือ 08:30 - 15:30 น." oninput="updateEventTimePreview(this.value)" style="width: 100%; padding: 9px 12px; font-weight: 700; color: #0f172a; border: 1.5px solid #16a34a; border-radius: 6px; background: #ffffff;" />
+              <input type="text" id="adminEventTime" value="เต็มวัน" placeholder="เช่น เต็มวัน หรือ 08:30 - 15:30 น."
+                oninput="updateEventTimePreview(this.value)"
+                style="width: 100%; padding: 9px 12px; font-weight: 700; color: #0f172a; border: 1.5px solid #16a34a; border-radius: 6px; background: #ffffff;" />
             </div>
           </div>
         </div>
@@ -1150,7 +1240,8 @@
           </div>
           <div class="dg-form-group">
             <label>หมวดหมู่กิจกรรม *</label>
-            <select id="adminEventCategory" required style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;">
+            <select id="adminEventCategory" required
+              style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: inherit;">
               <option value="general">กิจกรรมทั่วไป (general)</option>
               <option value="affairs">กิจการนักเรียน (affairs)</option>
               <option value="academic">วิชาการ (academic)</option>
@@ -1205,69 +1296,104 @@
 
         <div class="dg-form-group">
           <label>ชื่อกิจกรรมเด่น *</label>
-          <input type="text" id="adminFeaturedTitle" required placeholder="เช่น การแข่งขันกรีฑาและกีฬาสีภายใน เดชะเกมส์" />
+          <input type="text" id="adminFeaturedTitle" required
+            placeholder="เช่น การแข่งขันกรีฑาและกีฬาสีภายใน เดชะเกมส์" />
         </div>
 
-        <div class="dg-form-group" style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> กำหนดวันที่จัดกิจกรรมเด่น</label>
+        <div class="dg-form-group"
+          style="background: #f8fafc; border: 1px solid var(--dg-border); padding: 14px; border-radius: 8px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar"
+                style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i>
+              กำหนดวันที่จัดกิจกรรมเด่น</label>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button type="button" class="quick-pill-btn" onclick="clearFeaturedEndDate()" style="color: #64748b;">✖️ วันเดียว (ล้างวันสิ้นสุด)</button>
+              <button type="button" class="quick-pill-btn" onclick="clearFeaturedEndDate()" style="color: #64748b;">✖️
+                วันเดียว (ล้างวันสิ้นสุด)</button>
             </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div>
-              <span style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม *</span>
-              <input type="date" id="adminFeaturedStartDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedDatesChange()" />
+              <span
+                style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม
+                *</span>
+              <input type="date" id="adminFeaturedStartDatePicker"
+                style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                onchange="handleFeaturedDatesChange()" />
             </div>
             <div>
-              <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
-              <input type="date" id="adminFeaturedEndDatePicker" style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedDatesChange()" />
+              <span
+                style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม
+                <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ =
+                  มีแค่วันเดียว)</span></span>
+              <input type="date" id="adminFeaturedEndDatePicker"
+                style="width: 100%; padding: 10px 12px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                onchange="handleFeaturedDatesChange()" />
             </div>
           </div>
 
-          <div id="adminFeaturedDateSummaryBanner" class="date-helper-banner" style="margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
+          <div id="adminFeaturedDateSummaryBanner" class="date-helper-banner"
+            style="margin-top: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;">
             <i data-lucide="calendar-check" style="width: 15px; height: 15px; flex-shrink: 0; color: #16a34a;"></i>
             <span id="adminFeaturedDateSummaryText">ระบบจะกรอกเลขวัน เดือน ปี ให้อัตโนมัติ</span>
           </div>
 
           <!-- Time Selection Section for Featured -->
           <div style="margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 12px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock" style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> กำหนดเวลาจัดกิจกรรม</label>
+            <div
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <label style="margin: 0; font-weight: 750;"><i data-lucide="clock"
+                  style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i>
+                กำหนดเวลาจัดกิจกรรม</label>
               <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                <button type="button" class="quick-pill-btn btn-feat-time-quick active" data-time-preset="เต็มวัน" onclick="setQuickFeaturedTimePreset('เต็มวัน')">⏰ เต็มวัน</button>
-                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="เช้า" onclick="setQuickFeaturedTimePreset('เช้า')">🌅 เช้า (08:30-12:00)</button>
-                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="บ่าย" onclick="setQuickFeaturedTimePreset('บ่าย')">🌇 บ่าย (13:00-16:30)</button>
-                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="เต็มวัน-เวลา" onclick="setQuickFeaturedTimePreset('เต็มวัน-เวลา')">⏱️ ทั้งวัน (ระบุเวลา)</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick active" data-time-preset="เต็มวัน"
+                  onclick="setQuickFeaturedTimePreset('เต็มวัน')">⏰ เต็มวัน</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="เช้า"
+                  onclick="setQuickFeaturedTimePreset('เช้า')">🌅 เช้า (08:30-12:00)</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="บ่าย"
+                  onclick="setQuickFeaturedTimePreset('บ่าย')">🌇 บ่าย (13:00-16:30)</button>
+                <button type="button" class="quick-pill-btn btn-feat-time-quick" data-time-preset="เต็มวัน-เวลา"
+                  onclick="setQuickFeaturedTimePreset('เต็มวัน-เวลา')">⏱️ ทั้งวัน (ระบุเวลา)</button>
               </div>
             </div>
 
             <!-- Time Display / Status (When 'เต็มวัน' is active) -->
-            <div id="adminFeaturedAllDayBanner" style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-              <div style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 700; font-size: 0.92rem;">
+            <div id="adminFeaturedAllDayBanner"
+              style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <div
+                style="display: flex; align-items: center; gap: 8px; color: #166534; font-weight: 700; font-size: 0.92rem;">
                 <i data-lucide="sun" style="width: 18px; height: 18px; color: #16a34a;"></i>
                 <span>กิจกรรมเต็มวัน (All Day)</span>
-                <span style="font-weight: 400; font-size: 0.78rem; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">ไม่ระบุชั่วโมงเวลา</span>
+                <span
+                  style="font-weight: 400; font-size: 0.78rem; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 12px;">ไม่ระบุชั่วโมงเวลา</span>
               </div>
-              <button type="button" onclick="switchToCustomFeaturedTime()" style="background: #ffffff; border: 1px solid #bbf7d0; color: #15803d; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+              <button type="button" onclick="switchToCustomFeaturedTime()"
+                style="background: #ffffff; border: 1px solid #bbf7d0; color: #15803d; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                 <span>ระบุเวลาเริ่ม-สิ้นสุด</span>
                 <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
               </button>
             </div>
 
             <!-- Time Pickers (When custom hours is active) -->
-            <div id="adminFeaturedCustomTimeWrap" style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+            <div id="adminFeaturedCustomTimeWrap"
+              style="display: none; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
               <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;">
                 <div>
-                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาเริ่ม:</span>
-                  <input type="time" id="adminFeaturedStartTime" value="08:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeCustomChange()" />
+                  <span
+                    style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาเริ่ม:</span>
+                  <input type="time" id="adminFeaturedStartTime" value="08:30"
+                    style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                    onchange="handleFeaturedTimeCustomChange()" />
                 </div>
-                <span style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px; font-weight: 700;">ถึง</span>
+                <span
+                  style="font-size: 0.85rem; color: var(--dg-text-muted); padding-top: 18px; font-weight: 700;">ถึง</span>
                 <div>
-                  <span style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาสิ้นสุด:</span>
-                  <input type="time" id="adminFeaturedEndTime" value="16:30" style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;" onchange="handleFeaturedTimeCustomChange()" />
+                  <span
+                    style="font-size: 0.75rem; color: var(--dg-text-muted); display: block; margin-bottom: 3px; font-weight: 600;">เวลาสิ้นสุด:</span>
+                  <input type="time" id="adminFeaturedEndTime" value="16:30"
+                    style="width: 100%; padding: 8px 10px; border: 1px solid var(--dg-border); border-radius: 6px; background: #ffffff;"
+                    onchange="handleFeaturedTimeCustomChange()" />
                 </div>
               </div>
             </div>
@@ -1275,10 +1401,14 @@
             <!-- Single Unified Time Text Input & Live Badge -->
             <div style="margin-top: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <label style="font-size: 0.78rem; font-weight: 700; color: #334155; margin: 0;">เวลาที่จะบันทึกและแสดงบนเว็บไซต์:</label>
-                <strong id="adminFeaturedTimePreview" style="color: #15803d; font-size: 0.84rem; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">เต็มวัน</strong>
+                <label
+                  style="font-size: 0.78rem; font-weight: 700; color: #334155; margin: 0;">เวลาที่จะบันทึกและแสดงบนเว็บไซต์:</label>
+                <strong id="adminFeaturedTimePreview"
+                  style="color: #15803d; font-size: 0.84rem; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">เต็มวัน</strong>
               </div>
-              <input type="text" id="adminFeaturedTime" value="เต็มวัน" placeholder="เช่น เต็มวัน หรือ 07:30 - 16:30 น." oninput="updateFeaturedTimePreview(this.value)" style="width: 100%; padding: 9px 12px; font-weight: 700; color: #0f172a; border: 1.5px solid #16a34a; border-radius: 6px; background: #ffffff;" />
+              <input type="text" id="adminFeaturedTime" value="เต็มวัน" placeholder="เช่น เต็มวัน หรือ 07:30 - 16:30 น."
+                oninput="updateFeaturedTimePreview(this.value)"
+                style="width: 100%; padding: 9px 12px; font-weight: 700; color: #0f172a; border: 1.5px solid #16a34a; border-radius: 6px; background: #ffffff;" />
             </div>
           </div>
         </div>
@@ -1722,7 +1852,7 @@
      */
     function inferIsoFromEvent(dayStr, monthStr) {
       if (!dayStr || !monthStr) return { startIso: '', endIso: '' };
-      
+
       let mIdx = -1;
       for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
         if (monthStr.includes(THAI_MONTHS_SHORT[i])) {
@@ -2435,7 +2565,7 @@
       try {
         const d = localStorage.getItem('dg_sarawat_calendar_events');
         if (d) return JSON.parse(d);
-      } catch (err) {}
+      } catch (err) { }
       return DEFAULT_CALENDAR_EVENTS;
     }
 
@@ -2489,7 +2619,7 @@
       try {
         const d = localStorage.getItem('dg_sarawat_featured_event');
         if (d) return JSON.parse(d);
-      } catch (err) {}
+      } catch (err) { }
       return DEFAULT_FEATURED_EVENT;
     }
 
@@ -3183,7 +3313,7 @@
       }
 
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         try {
           const data = JSON.parse(e.target.result);
           if (data.newsItems && Array.isArray(data.newsItems)) {
