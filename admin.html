@@ -17,6 +17,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- API & Cloudflare Tunnel Config -->
+  <script src="js/api-config.js"></script>
+
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
 
@@ -658,6 +661,10 @@
       </a>
 
       <div class="admin-nav-actions">
+        <span id="adminServerStatusBadge" style="font-size: 0.78rem; font-weight: 750; padding: 6px 12px; border-radius: 999px; background: #f1f5f9; color: #64748b; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #e2e8f0;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+          <span id="adminServerStatusText">ตรวจเซิร์ฟเวอร์...</span>
+        </span>
         <a href="index.html" target="_blank" class="dg-btn-outline" style="padding: 8px 14px; font-size: 0.84rem;">
           <i data-lucide="external-link"></i>
           <span>ดูหน้าเว็บจริง</span>
@@ -785,6 +792,42 @@
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+        <!-- Database & Cloudflare Tunnel API Connection -->
+        <div class="admin-card" style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+          <div class="admin-card-header" style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <h3 style="margin: 0;"><i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (MySQL + Cloudflare Tunnel)</h3>
+            <span id="apiStatusBadge" style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+              <span>กำลังตรวจสอบ...</span>
+            </span>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px; line-height: 1.6;">
+              ระบบนี้ช่วยให้รูปภาพและกิจกรรมถูกบันทึกลงฮาร์ดดิสก์และ MySQL ถาวร (แก้ปัญหาเบราว์เซอร์พื้นที่เต็ม 100%) และส่งผ่าน Cloudflare Tunnel ให้ทุกคนบนมือถือและคอมพิวเตอร์เครื่องอื่นมองเห็นได้
+            </p>
+            <form onsubmit="handleSaveApiUrl(event)" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+              <div class="dg-form-group" style="flex: 1; min-width: 280px; margin-bottom: 0;">
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">API Server URL (เช่น http://localhost:5000 หรือ URL จาก Cloudflare Tunnel)</label>
+                <input type="text" id="settingsApiUrl" placeholder="http://localhost:5000" style="padding: 10px 14px; border: 1.5px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: monospace; font-size: 0.92rem;" />
+              </div>
+              <button type="submit" class="dg-btn-black" style="padding: 10px 18px;">
+                <i data-lucide="save"></i>
+                <span>บันทึก URL</span>
+              </button>
+              <button type="button" class="dg-btn-outline" onclick="checkApiServerStatus(true)" style="padding: 10px 16px;">
+                <i data-lucide="refresh-cw"></i>
+                <span>ทดสอบเชื่อมต่อ</span>
+              </button>
+            </form>
+            <div id="apiInfoNotice" style="margin-top: 16px; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.84rem; color: #334155; line-height: 1.65;">
+              🌐 <strong>วิธีใช้งาน Cloudflare Tunnel:</strong><br>
+              1. ดับเบิลคลิกไฟล์ <code>start-server.bat</code> ในโฟลเดอร์ <code>sarawat-backend</code> เพื่อเปิด API<br>
+              2. ดับเบิลคลิกไฟล์ <code>start-cloudflare.bat</code> จะได้รับลิงก์ เช่น <code>https://xxxx.trycloudflare.com</code><br>
+              3. นำลิงก์ HTTPS นั้นมาวางในช่องด้านบนแล้วกด "บันทึก URL" หรือนำไปใส่ใน <code>js/api-config.js</code> เพื่อให้คนอื่นในมือถือเห็นทันที!
+            </div>
+          </div>
+        </div>
+
         <!-- Duty Start Date Settings -->
         <div class="admin-card">
           <div class="admin-card-header">
@@ -2664,7 +2707,7 @@
       grid.innerHTML = items.map((item, idx) => `
         <div class="admin-news-item-card" data-id="${item.id}">
           <div style="position: relative;">
-            <img src="${item.image}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" />
+            <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" class="admin-news-thumb" />
             ${idx === 0 ? '<span style="position: absolute; top: 10px; left: 10px; background: rgba(15,23,42,0.92); backdrop-filter: blur(6px); color: #fbbf24; font-size: 0.72rem; font-weight: 850; padding: 4px 9px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 4px; border: 1px solid rgba(251,191,36,0.3);">🔥 กิจกรรมล่าสุด (แสดงอันดับ 1 หน้าเว็บ)</span>' : ''}
           </div>
           <div class="admin-news-item-body">
@@ -2764,7 +2807,7 @@
       const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
       const previewImg = document.getElementById('adminNewsImgPreview');
       if (item.image) {
-        previewImg.src = item.image;
+        previewImg.src = window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image;
         previewWrap.style.display = 'block';
         if (item.image.startsWith('http')) {
           switchImgMode('url');
@@ -2816,58 +2859,72 @@
         const reelsUrl = document.getElementById('adminNewsReels').value.trim();
         const photoUrl = document.getElementById('adminNewsPhoto').value.trim();
         const imgData = document.getElementById('adminNewsImgBase64').value.trim();
+        const imgFileInput = document.getElementById('adminNewsImgFile');
 
         if (!title) throw new Error('กรุณากรอกหัวข้อข่าวสาร/กิจกรรม');
         if (!date && !startIso) throw new Error('กรุณาเลือกวันเริ่มต้นจัดกิจกรรม');
         if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
 
-        // Check image
-        const finalImage = imgData || 'assets/images/activity-ceremony.jpg';
+        // Check image: If a real file is chosen and API is connected, upload directly to server disk!
+        let finalImage = imgData || 'assets/images/activity-ceremony.jpg';
+
+        if (imgFileInput && imgFileInput.files && imgFileInput.files[0] && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพสู่เซิร์ฟเวอร์...</span>';
+            const uploadRes = await window.SarawatApi.uploadImage(imgFileInput.files[0]);
+            if (uploadRes && uploadRes.url) {
+              finalImage = uploadRes.url;
+            }
+          } catch (uploadErr) {
+            console.warn('API image upload error, using local fallback:', uploadErr.message);
+          }
+        }
 
         const items = getNews();
+        const targetId = id || ('news-' + Date.now());
+        const newsItemObj = {
+          id: targetId,
+          title,
+          date,
+          dateIso: dateIso || '',
+          endDateIso: endDateIso || '',
+          tag: tag || 'กิจกรรมทั่วไป',
+          desc,
+          detail: detail || '',
+          fbUrl,
+          igUrl,
+          reelsUrl,
+          photoUrl,
+          image: finalImage
+        };
 
         if (id) {
           const idx = items.findIndex(n => n.id === id);
           if (idx !== -1) {
-            items[idx] = {
-              ...items[idx],
-              title,
-              date,
-              dateIso: dateIso || items[idx].dateIso || '',
-              endDateIso: endDateIso || items[idx].endDateIso || '',
-              tag: tag || 'กิจกรรมทั่วไป',
-              desc,
-              detail: detail || items[idx].detail || '',
-              fbUrl,
-              igUrl,
-              reelsUrl,
-              photoUrl,
-              image: finalImage
-            };
+            items[idx] = newsItemObj;
           }
         } else {
-          const newItem = {
-            id: 'news-' + Date.now(),
-            title,
-            date,
-            dateIso,
-            endDateIso,
-            tag: tag || 'กิจกรรมทั่วไป',
-            desc,
-            detail: detail || '',
-            fbUrl,
-            igUrl,
-            reelsUrl,
-            photoUrl,
-            image: finalImage
-          };
-          items.unshift(newItem);
+          items.unshift(newsItemObj);
+        }
+
+        // Save to Backend MySQL if connected
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล MySQL...</span>';
+            await window.SarawatApi.saveNews({
+              ...newsItemObj,
+              dateStart: dateIso,
+              dateEnd: endDateIso
+            });
+          } catch (apiErr) {
+            console.warn('Backend API save news warning:', apiErr.message);
+          }
         }
 
         saveNews(items);
         renderAdminNews();
         closeModal('adminNewsModal');
-        showToast('✅ บันทึกข่าวสารเรียบร้อยแล้ว (จัดเรียงอันดับใหม่อัตโนมัติ)');
+        showToast('✅ บันทึกข่าวสารเรียบร้อยแล้ว (ซิงค์สู่เซิร์ฟเวอร์)');
       } catch (err) {
         console.error('Save news error:', err);
         alert('⚠️ เกิดข้อผิดพลาดในการบันทึก:\n\n' + err.message + '\n\nคำแนะนำ: หากเกิดจากขนาดรูปภาพเกิน ให้ลองเลือกรูปภาพอื่น หรือใช้แท็บ "วางลิงก์รูปภาพ (Image URL)" แทน');
@@ -2879,8 +2936,15 @@
       }
     }
 
-    function handleDeleteNews(id) {
+    async function handleDeleteNews(id) {
       if (!confirm('คุณต้องการลบข่าวสารนี้ใช่หรือไม่?')) return;
+      if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+        try {
+          await window.SarawatApi.deleteNews(id);
+        } catch (apiErr) {
+          console.warn('Backend API delete news warning:', apiErr.message);
+        }
+      }
       let items = getNews();
       items = items.filter(n => n.id !== id);
       saveNews(items);
@@ -3107,6 +3171,16 @@
           events.push(newEvt);
         }
 
+        // Save to Backend API if connected
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล...</span>';
+            await window.SarawatApi.saveEvent(id ? events[idx] : newEvt);
+          } catch (apiErr) {
+            console.warn('Backend API save event warning:', apiErr.message);
+          }
+        }
+
         saveEvents(events);
         renderAdminEvents();
         closeModal('adminEventModal');
@@ -3122,8 +3196,15 @@
       }
     }
 
-    function handleDeleteEvent(id) {
+    async function handleDeleteEvent(id) {
       if (!confirm('คุณต้องการลบกิจกรรมนี้ออกจากตารางใช่หรือไม่?')) return;
+      if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+        try {
+          await window.SarawatApi.deleteEvent(id);
+        } catch (apiErr) {
+          console.warn('Backend API delete event warning:', apiErr.message);
+        }
+      }
       let events = getEvents();
       events = events.filter(e => e.id !== id);
       saveEvents(events);
@@ -3191,7 +3272,7 @@
       openModal('adminFeaturedModal');
     }
 
-    function handleSaveFeatured(e) {
+    async function handleSaveFeatured(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('adminFeaturedSubmitBtn');
       const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกกิจกรรมเด่น</span>';
@@ -3231,6 +3312,16 @@
           dateIso: dateIso,
           endDateIso: endDateIso
         };
+
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกกิจกรรมเด่น...</span>';
+            await window.SarawatApi.saveFeatured(feat);
+          } catch (apiErr) {
+            console.warn('Backend API save featured warning:', apiErr.message);
+          }
+        }
+
         saveFeatured(feat);
         renderAdminEvents();
         closeModal('adminFeaturedModal');
@@ -3259,6 +3350,63 @@
       if (labelInput) {
         labelInput.value = localStorage.getItem('dg_sarawat_uptime_label') || 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569';
       }
+
+      const apiInput = document.getElementById('settingsApiUrl');
+      if (apiInput && window.SarawatApi) {
+        apiInput.value = window.SarawatApi.getBaseUrl();
+      }
+    }
+
+    async function checkApiServerStatus(showAlert = false) {
+      const badge = document.getElementById('apiStatusBadge');
+      const navBadge = document.getElementById('adminServerStatusBadge');
+      const navText = document.getElementById('adminServerStatusText');
+
+      if (navText) navText.textContent = 'ตรวจเซิร์ฟเวอร์...';
+      if (badge) badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span> ตรวจสอบ...';
+
+      if (!window.SarawatApi) return;
+      const res = await window.SarawatApi.checkHealth();
+
+      if (res.online) {
+        if (badge) {
+          badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span> ออนไลน์ (MySQL OK)';
+          badge.style.color = '#15803d';
+          badge.style.background = '#dcfce7';
+        }
+        if (navBadge) {
+          navBadge.style.background = '#dcfce7';
+          navBadge.style.color = '#15803d';
+          navBadge.style.borderColor = '#bbf7d0';
+        }
+        if (navText) navText.textContent = 'ออนไลน์ (MySQL)';
+        if (showAlert) showToast('🟢 เชื่อมต่อเซิร์ฟเวอร์สำเร็จ! (' + res.baseUrl + ')');
+      } else {
+        if (badge) {
+          badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> ออฟไลน์ (ใช้แคช)';
+          badge.style.color = '#b91c1c';
+          badge.style.background = '#fee2e2';
+        }
+        if (navBadge) {
+          navBadge.style.background = '#fef3c7';
+          navBadge.style.color = '#b45309';
+          navBadge.style.borderColor = '#fde68a';
+        }
+        if (navText) navText.textContent = 'ออฟไลน์ (ใช้แคช)';
+        if (showAlert) alert('⚠️ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้:\n\n' + (res.reason || 'กรุณาตรวจสอบว่ารัน start-server.bat แล้วหรือยัง'));
+      }
+    }
+
+    function handleSaveApiUrl(e) {
+      e.preventDefault();
+      const input = document.getElementById('settingsApiUrl');
+      if (!input) return;
+      const val = input.value.trim();
+      if (window.SarawatApi) {
+        window.SarawatApi.setBaseUrl(val);
+      }
+      showToast('บันทึกที่อยู่เซิร์ฟเวอร์เรียบร้อยแล้ว');
+      checkApiServerStatus(true);
     }
 
     function handleSaveUptimeDate(e) {
@@ -3472,12 +3620,41 @@
     }
 
     // ==========================================================
-    // INITIALIZATION
+    // INITIALIZATION & BACKEND SYNC
     // ==========================================================
+    async function syncFromBackend() {
+      if (window.SarawatApi) {
+        checkApiServerStatus(false);
+        const base = window.SarawatApi.getBaseUrl();
+        if (base) {
+          try {
+            const sNews = await window.SarawatApi.getNews();
+            if (sNews && Array.isArray(sNews) && sNews.length > 0) {
+              saveNews(sNews);
+              renderAdminNews();
+            }
+            const sEvents = await window.SarawatApi.getEvents();
+            if (sEvents && Array.isArray(sEvents) && sEvents.length > 0) {
+              saveEvents(sEvents);
+              renderAdminEvents();
+            }
+            const sFeat = await window.SarawatApi.getFeatured();
+            if (sFeat && sFeat.title) {
+              saveFeatured(sFeat);
+              renderAdminEvents();
+            }
+          } catch (e) {
+            console.warn('Sync from backend failed:', e);
+          }
+        }
+      }
+    }
+
     function initDashboard() {
       renderAdminNews();
       renderAdminEvents();
       initSettings();
+      syncFromBackend();
     }
 
     document.addEventListener('DOMContentLoaded', () => {

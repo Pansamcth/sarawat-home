@@ -32,6 +32,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- API & Cloudflare Tunnel Config -->
+  <script src="js/api-config.js"></script>
+
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
 
@@ -503,7 +506,7 @@
         return `
           <article class="dg-act-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
             <div class="dg-act-card-cover">
-              <img src="${item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-assembly.jpg'" loading="lazy" />
+              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-assembly.jpg'" loading="lazy" />
               <span class="dg-act-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
             </div>
             <div class="dg-act-card-body">
@@ -591,7 +594,7 @@
         </div>
 
         <div class="dg-news-modal-cover">
-          <img src="${item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-assembly.jpg'" />
+          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-assembly.jpg'" />
         </div>
 
         <div class="dg-news-modal-body">
@@ -739,6 +742,16 @@
     // Initialize on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       renderActivities();
+
+      // Background Sync from MySQL Backend API if server is connected
+      if (window.SarawatApi) {
+        window.SarawatApi.getNews().then(items => {
+          if (items && Array.isArray(items) && items.length > 0) {
+            try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch(e){}
+            renderActivities();
+          }
+        }).catch(() => {});
+      }
 
       // Mobile menu toggle
       const toggle = document.getElementById('dgNavToggle');

@@ -39,6 +39,9 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- API & Cloudflare Tunnel Config -->
+  <script src="js/api-config.js"></script>
+
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
 
@@ -1421,7 +1424,7 @@
         return `
           <article class="dg-news-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
             <div class="dg-news-cover-wrap">
-              <img src="${item.image}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" />
+              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" />
               <span class="dg-news-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
             </div>
             <div class="dg-news-content">
@@ -1514,7 +1517,7 @@
         </div>
 
         <div class="dg-news-modal-cover">
-          <img src="${item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-main.jpg'" />
+          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/images/hero-main.jpg'" />
         </div>
 
         <div class="dg-news-modal-body">
@@ -2024,6 +2027,32 @@
       renderCalendarEvents();
       if (typeof filterEvents === 'function') filterEvents();
       renderNewsCards();
+
+      // Background Sync from MySQL Backend API if server is connected
+      if (window.SarawatApi) {
+        window.SarawatApi.getNews().then(items => {
+          if (items && Array.isArray(items) && items.length > 0) {
+            try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch(e){}
+            renderNewsCards();
+          }
+        }).catch(() => {});
+
+        window.SarawatApi.getEvents().then(evts => {
+          if (evts && Array.isArray(evts) && evts.length > 0) {
+            try { localStorage.setItem('dg_sarawat_calendar_events', JSON.stringify(evts)); } catch(e){}
+            renderFeaturedEvent();
+            renderCalendarEvents();
+            if (typeof filterEvents === 'function') filterEvents();
+          }
+        }).catch(() => {});
+
+        window.SarawatApi.getFeatured().then(feat => {
+          if (feat && feat.title) {
+            try { localStorage.setItem('dg_sarawat_featured_event', JSON.stringify(feat)); } catch(e){}
+            renderFeaturedEvent();
+          }
+        }).catch(() => {});
+      }
 
       const newsTrackWrap = document.getElementById('newsTrackWrap');
       const newsPrevBtn = document.getElementById('newsPrevBtn');
