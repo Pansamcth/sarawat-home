@@ -970,30 +970,34 @@ picture,
   user-select: none !important;
 }
 
+/* Floating Anti-Save Toast Notification (Red Block Warning) */
 .dg-protect-toast {
   position: fixed;
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%) translateY(30px);
-  background: rgba(10, 10, 12, 0.94);
+  background: #dc2626;
+  background: linear-gradient(135deg, #e11d48 0%, #dc2626 100%);
   color: #ffffff;
-  padding: 12px 22px;
-  border-radius: 9999px;
-  font-size: 0.86rem;
-  font-weight: 650;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.45), 0 4px 12px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   z-index: 99999;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
   pointer-events: none;
   white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
 }
 
 .dg-protect-toast.active {
@@ -1002,10 +1006,19 @@ picture,
   transform: translateX(-50%) translateY(0);
 }
 
-.dg-protect-toast svg {
-  width: 17px;
-  height: 17px;
-  color: #f59e0b;
+.dg-protect-toast .dg-toast-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+}
+
+.dg-protect-toast .dg-toast-text {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
 }
 

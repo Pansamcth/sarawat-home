@@ -8,8 +8,9 @@
   'use strict';
 
   let toastTimeout = null;
+  const DEFAULT_WARNING_MSG = 'เว็บไซต์นี้ไม่อนุญาตให้คุณบันทึกภาพ';
 
-  // 1. Create floating toast notification if not present
+  // 1. Create floating toast notification if not present (Red Warning Block)
   function getOrCreateToast() {
     let toast = document.getElementById('dgProtectToast');
     if (!toast) {
@@ -19,12 +20,8 @@
       toast.setAttribute('role', 'alert');
       toast.setAttribute('aria-live', 'assertive');
       toast.innerHTML = `
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        <span>ไม่อนุญาตให้บันทึกหรือคัดลอกรูปภาพจากเว็บไซต์</span>
+        <span class="dg-toast-icon" aria-hidden="true">🚧</span>
+        <span class="dg-toast-text">${DEFAULT_WARNING_MSG}</span>
       `;
       document.body.appendChild(toast);
     }
@@ -33,16 +30,16 @@
 
   function showProtectToast(msg) {
     const toast = getOrCreateToast();
-    if (msg) {
-      const span = toast.querySelector('span');
-      if (span) span.textContent = msg;
+    const textSpan = toast.querySelector('.dg-toast-text');
+    if (textSpan) {
+      textSpan.textContent = msg || DEFAULT_WARNING_MSG;
     }
     toast.classList.add('active');
 
     if (toastTimeout) clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
       toast.classList.remove('active');
-    }, 2200);
+    }, 2400);
   }
 
   // 2. Helper to check if an element is or contains a protected image
@@ -75,7 +72,7 @@
     if (isProtectedImage(e.target)) {
       e.preventDefault();
       e.stopPropagation();
-      showProtectToast('ไม่อนุญาตให้คลิกขวาเพื่อบันทึกรูปภาพหรือตราสัญลักษณ์');
+      showProtectToast(DEFAULT_WARNING_MSG);
       return false;
     }
   }, true);
@@ -85,6 +82,7 @@
     if (isProtectedImage(e.target)) {
       e.preventDefault();
       e.stopPropagation();
+      showProtectToast(DEFAULT_WARNING_MSG);
       return false;
     }
   }, true);
@@ -102,8 +100,8 @@
   document.addEventListener('touchstart', function (e) {
     if (isProtectedImage(e.target)) {
       touchTimer = setTimeout(function () {
-        showProtectToast('ไม่อนุญาตให้กดค้างเพื่อบันทึกรูปภาพ');
-      }, 500);
+        showProtectToast(DEFAULT_WARNING_MSG);
+      }, 450);
     }
   }, { passive: true });
 
@@ -120,7 +118,7 @@
     const isSave = (e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S');
     if (isSave) {
       e.preventDefault();
-      showProtectToast('ระบบปิดการบันทึกหน้าเว็บและรูปภาพ');
+      showProtectToast(DEFAULT_WARNING_MSG);
     }
   });
 
