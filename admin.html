@@ -627,7 +627,7 @@
       <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0 0 16px;">กรุณากรอกรหัส PIN
         ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
 
-      <form id="pinAuthForm" onsubmit="handlePinLogin(event)">
+      <form id="pinAuthForm" onsubmit="event.preventDefault(); handlePinLogin(event); return false;">
         <div style="position: relative; width: 100%;">
           <input type="password" id="adminPinInput" class="pin-input" maxlength="32" placeholder="••••" autofocus required style="padding-right: 44px;" />
           <button type="button" onclick="togglePinVisibility()" title="แสดง/ซ่อนรหัสผ่าน" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748b; padding: 4px;">
@@ -1756,10 +1756,19 @@
       }
 
       if (isLocalMatch || isBackendMatch) {
-        sessionStorage.setItem('sarawat_admin_auth', 'true');
-        document.getElementById('pinOverlay').style.display = 'none';
+        try {
+          sessionStorage.setItem('sarawat_admin_auth', 'true');
+        } catch (storageErr) {
+          console.warn('SessionStorage error:', storageErr);
+        }
+        const overlay = document.getElementById('pinOverlay');
+        if (overlay) overlay.style.display = 'none';
         showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับผู้ดูแลระบบ!');
-        initDashboard();
+        try {
+          initDashboard();
+        } catch (initErr) {
+          console.warn('Dashboard init warning:', initErr);
+        }
       } else {
         errMsg.style.display = 'block';
         errMsg.innerHTML = 'รหัสผ่านไม่ถูกต้อง<br><small style="color: #64748b; font-weight: normal;">รหัสเริ่มต้นคือ: <strong>2569</strong> หรือ <strong>admin123</strong></small>';
@@ -3187,7 +3196,7 @@
       openModal('adminEventModal');
     }
 
-    function handleSaveEvent(e) {
+    async function handleSaveEvent(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('adminEventSubmitBtn');
       const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกกิจกรรม</span>';
