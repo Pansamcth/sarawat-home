@@ -375,58 +375,124 @@
       background: #fafafa;
     }
 
-    /* PIN Lock Screen */
+    /* PIN & Auth Lock Screen */
     .pin-overlay {
       position: fixed;
       inset: 0;
-      background: #ffffff;
+      background: radial-gradient(circle at 50% 20%, #f8fafc 0%, #e2e8f0 100%);
       z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      backdrop-filter: blur(8px);
     }
 
-    .pin-box {
-      max-width: 400px;
+    .auth-card {
+      max-width: 440px;
       width: 100%;
-      text-align: center;
-      padding: 40px 32px;
       background: #ffffff;
-      border: 1px solid var(--dg-border);
-      border-radius: var(--dg-radius-lg);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 16px;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.02);
+      padding: 36px 32px;
+      animation: authCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .pin-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #f1f5f9;
+    @keyframes authCardIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-input-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .auth-input-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .auth-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 12px 42px 12px 14px;
+      font-size: 0.95rem;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+      color: #0f172a;
+      box-sizing: border-box;
+    }
+
+    .auth-input:focus {
+      border-color: #0f172a;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+
+    .auth-input-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 20px;
-      color: #0f172a;
     }
 
-    .pin-input {
-      font-family: var(--dg-font-sans);
-      font-size: 1.8rem;
-      font-weight: 850;
-      letter-spacing: 0.3em;
-      text-align: center;
-      width: 100%;
-      padding: 12px;
-      margin: 18px 0;
-      border: 2px solid var(--dg-border);
+    .auth-alert-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      padding: 10px 14px;
       border-radius: 8px;
-      outline: none;
-      transition: border-color 0.2s;
+      font-size: 0.84rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .pin-input:focus {
-      border-color: #0f172a;
+    .admin-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .admin-role-badge.super {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .admin-role-badge.regular {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
     }
 
     /* Toast notification */
@@ -800,56 +866,131 @@
 </head>
 
 <body>
-  <!-- ============ PIN AUTH OVERLAY ============ -->
+  <!-- ============ AUTH OVERLAY (LOGIN & FIRST-TIME SETUP) ============ -->
   <div class="pin-overlay" id="pinOverlay">
-    <div class="pin-box">
-      <div class="pin-icon"
-        style="background: transparent; border: none; box-shadow: none; width: auto; height: auto; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 14px;">
-        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
-          style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));" />
-        <span style="display: inline-block; width: 1px; height: 36px; background: #e2e8f0;"></span>
-        <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
-          style="width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));" />
-      </div>
-      <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 850; margin: 0 0 6px;">
-        ระบบควบคุมสารวัตรนักเรียน</h2>
-      <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0 0 16px;">กรุณากรอกรหัส PIN
-        ประจำคณะทำงานเพื่อเข้าใช้งาน</p>
 
-      <form id="pinAuthForm" onsubmit="event.preventDefault(); handlePinLogin(event); return false;">
-        <div style="position: relative; width: 100%;">
-          <input type="password" id="adminPinInput" class="pin-input" maxlength="32" placeholder="••••" autofocus
-            required style="padding-right: 44px;" />
-          <button type="button" onclick="togglePinVisibility()" title="แสดง/ซ่อนรหัสผ่าน"
-            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #64748b; padding: 4px;">
-            <i data-lucide="eye" id="pinEyeIcon" style="width: 20px; height: 20px;"></i>
-          </button>
+    <!-- 1. REGULAR LOGIN CARD (Username & Password) -->
+    <div class="auth-card" id="authLoginCard">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 16px;">
+          <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+            style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));" />
+          <span style="display: inline-block; width: 1px; height: 32px; background: #e2e8f0;"></span>
+          <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
+            style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));" />
         </div>
-        <div id="pinErrorMsg"
-          style="color: #ef4444; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; display: none;">
-          รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
-        <button type="submit" id="adminLoginBtn" class="dg-btn-black"
-          style="width: 100%; justify-content: center; padding: 12px;">
+        <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 850; margin: 0 0 6px; color: #0f172a;">
+          เข้าสู่ระบบผู้ดูแลสารวัตรนักเรียน
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0;">
+          กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าใช้งาน
+        </p>
+      </div>
+
+      <form id="adminLoginForm" onsubmit="event.preventDefault(); handleUserLogin(event); return false;">
+        <div class="auth-input-group">
+          <label class="auth-input-label" for="loginUsernameInput">ชื่อผู้ใช้ (Username)</label>
+          <div class="auth-input-wrapper">
+            <input type="text" id="loginUsernameInput" class="auth-input" placeholder="กรอกชื่อผู้ใช้" required autocomplete="username" autofocus />
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label class="auth-input-label" for="loginPasswordInput">รหัสผ่าน (Password)</label>
+          <div class="auth-input-wrapper">
+            <input type="password" id="loginPasswordInput" class="auth-input" placeholder="กรอกรหัสผ่าน" required autocomplete="current-password" />
+            <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('loginPasswordInput', 'loginEyeIcon')" title="แสดง/ซ่อนรหัสผ่าน">
+              <i data-lucide="eye" id="loginEyeIcon" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="loginErrorMsg" class="auth-alert-error" style="display: none;">
+          <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+          <span id="loginErrorText">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</span>
+        </div>
+
+        <button type="submit" id="adminLoginBtn" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 13px; font-weight: 750; border-radius: 8px;">
           <span>เข้าสู่ระบบ (Sign In)</span>
           <i data-lucide="arrow-right"></i>
         </button>
-        <div
-          style="margin-top: 14px; font-size: 0.82rem; color: #475569; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; line-height: 1.5;">
-          💡 <strong>รหัสผ่านเริ่มต้น:</strong> <code>2569</code> (หรือ <code>admin123</code>)
-        </div>
-        <div style="margin-top: 10px;">
-          <button type="button" onclick="handleResetPinToDefault()"
-            style="background: none; border: none; color: #2563eb; font-size: 0.78rem; text-decoration: underline; cursor: pointer; font-family: inherit;">
-            ลืมรหัสผ่าน? กดที่นี่เพื่อรีเซ็ตกลับเป็น 2569
-          </button>
-        </div>
       </form>
-      <div style="margin-top: 18px;">
+
+      <div style="margin-top: 22px; text-align: center;">
         <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
           <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
         </a>
       </div>
     </div>
+
+    <!-- 2. FIRST-TIME SUPER ADMIN SETUP CARD (Displayed when 0 admins exist) -->
+    <div class="auth-card" id="authSetupCard" style="display: none;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px;">
+          <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+            style="width: 52px; height: 52px; object-fit: contain;" />
+          <span style="display: inline-block; width: 1px; height: 32px; background: #e2e8f0;"></span>
+          <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
+            style="width: 52px; height: 52px; object-fit: contain;" />
+        </div>
+        <div style="display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 999px; font-size: 0.76rem; font-weight: 800; margin-bottom: 10px; border: 1px solid #fde68a;">
+          <i data-lucide="crown" style="width: 14px; height: 14px;"></i>
+          <span>ตั้งค่าระบบครั้งแรก (First-Time Setup)</span>
+        </div>
+        <h2 style="font-family: var(--dg-font-sans); font-size: 1.4rem; font-weight: 850; margin: 0 0 6px; color: #0f172a;">
+          สร้างบัญชี Super Admin
+        </h2>
+        <p style="font-size: 0.86rem; color: var(--dg-text-secondary); margin: 0; line-height: 1.5;">
+          ยังไม่มีผู้ดูแลในระบบ กรุณากำหนดชื่อผู้ใช้และรหัสผ่านสำหรับ<br><strong>ผู้ดูแลระบบสูงสุด (Super Admin)</strong> เพื่อเริ่มต้นใช้งาน
+        </p>
+      </div>
+
+      <form id="adminSetupForm" onsubmit="event.preventDefault(); handleFirstTimeSetup(event); return false;">
+        <div class="auth-input-group">
+          <label class="auth-input-label" for="setupUsernameInput">กำหนดชื่อผู้ใช้ (Username)</label>
+          <div class="auth-input-wrapper">
+            <input type="text" id="setupUsernameInput" class="auth-input" placeholder="เช่น superadmin หรือ admin" required autocomplete="username" />
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label class="auth-input-label" for="setupPasswordInput">กำหนดรหัสผ่าน (Password)</label>
+          <div class="auth-input-wrapper">
+            <input type="password" id="setupPasswordInput" class="auth-input" placeholder="อย่างน้อย 4 ตัวอักษร" required minlength="4" />
+            <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('setupPasswordInput', 'setupEyeIcon1')" title="แสดง/ซ่อนรหัสผ่าน">
+              <i data-lucide="eye" id="setupEyeIcon1" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label class="auth-input-label" for="setupConfirmPasswordInput">ยืนยันรหัสผ่านอีกครั้ง</label>
+          <div class="auth-input-wrapper">
+            <input type="password" id="setupConfirmPasswordInput" class="auth-input" placeholder="พิมพ์รหัสผ่านซ้ำอีกครั้ง" required minlength="4" />
+            <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('setupConfirmPasswordInput', 'setupEyeIcon2')" title="แสดง/ซ่อนรหัสผ่าน">
+              <i data-lucide="eye" id="setupEyeIcon2" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="setupErrorMsg" class="auth-alert-error" style="display: none;">
+          <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+          <span id="setupErrorText">กรุณากรอกข้อมูลให้ครบถ้วน</span>
+        </div>
+
+        <button type="submit" id="adminSetupBtn" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 13px; font-weight: 750; border-radius: 8px; background: linear-gradient(135deg, #0f172a, #1e293b);">
+          <i data-lucide="crown"></i>
+          <span>สร้างบัญชี Super Admin และเข้าสู่ระบบ</span>
+        </button>
+      </form>
+
+      <div style="margin-top: 20px; text-align: center;">
+        <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
+          <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
+        </a>
+      </div>
+    </div>
+
   </div>
 
   <!-- ============ ADMIN TOPBAR ============ -->
@@ -867,6 +1008,13 @@
       </a>
 
       <div class="admin-nav-actions">
+        <!-- Role Badge -->
+        <span id="adminUserRoleBadge" class="admin-role-badge super">
+          <i data-lucide="crown" id="adminUserRoleIcon" style="width: 14px; height: 14px;"></i>
+          <span id="adminUserRoleText">Super Admin</span>
+        </span>
+
+        <!-- Server Status Badge -->
         <span id="adminServerStatusBadge"
           style="font-size: 0.78rem; font-weight: 750; padding: 6px 12px; border-radius: 999px; background: #f1f5f9; color: #64748b; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #e2e8f0;">
           <span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
@@ -904,6 +1052,11 @@
       <button type="button" class="admin-tab-btn" data-tab="tab-backup">
         <i data-lucide="hard-drive"></i>
         <span>สำรอง & นำเข้าข้อมูล (JSON)</span>
+      </button>
+      <button type="button" class="admin-tab-btn" id="tabBtnAdminUsers" data-tab="tab-admins" style="display: none;">
+        <i data-lucide="users"></i>
+        <span>จัดการผู้ดูแลระบบ (Admin Users)</span>
+        <span class="admin-role-badge super" style="font-size: 0.65rem; padding: 1px 6px; margin-left: 4px;">👑 Super Admin</span>
       </button>
     </div>
 
@@ -999,13 +1152,15 @@
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
-        <!-- Database & Cloudflare Tunnel API Connection -->
-        <div class="admin-card"
+        <!-- Database & Cloudflare Tunnel API Connection (SUPER ADMIN ONLY) -->
+        <div class="admin-card" id="adminSqlConfigCard"
           style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
           <div class="admin-card-header"
             style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <h3 style="margin: 0;"><i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (SQLite +
-              Cloudflare Tunnel)</h3>
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (SQLite + Cloudflare Tunnel)
+              <span class="admin-role-badge super" style="font-size: 0.72rem; padding: 2px 8px;">👑 เฉพาะ Super Admin</span>
+            </h3>
             <span id="apiStatusBadge"
               style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 9999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
               <span
@@ -1048,7 +1203,26 @@
           </div>
         </div>
 
-        <!-- Duty Start Date Settings -->
+        <!-- Locked SQL Notice for Regular Admin -->
+        <div class="admin-card" id="adminSqlLockedNoticeCard"
+          style="grid-column: 1 / -1; display: none; border-color: #e2e8f0; background: #f8fafc;">
+          <div class="admin-card-body" style="display: flex; align-items: center; gap: 16px; padding: 22px;">
+            <div style="width: 46px; height: 46px; border-radius: 12px; background: #ffffff; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #64748b;">
+              <i data-lucide="lock" style="width: 22px; height: 22px;"></i>
+            </div>
+            <div>
+              <div style="font-weight: 800; font-size: 0.98rem; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                <span>การตั้งค่าเชื่อมต่อ SQL และ Cloudflare Tunnel</span>
+                <span class="admin-role-badge regular" style="font-size: 0.72rem; padding: 2px 8px;">🛡️ สำหรับ Super Admin เท่านั้น</span>
+              </div>
+              <div style="font-size: 0.86rem; color: #64748b; line-height: 1.55;">
+                บัญชีของคุณมีสิทธิ์ระดับ <strong>Admin ธรรมดา</strong> สามารถแก้ไขข่าวสาร กิจกรรม ตารางงาน และเวลาปฏิบัติหน้าที่ได้ตามปกติ สำหรับการสลับลิงก์เชื่อมต่อฐานข้อมูล SQL หรือ API Server สงวนสิทธิ์เฉพาะผู้ดูแลระบบสูงสุด (Super Admin)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Duty Start Date Settings (Available to all admins) -->
         <div class="admin-card">
           <div class="admin-card-header">
             <h3><i data-lucide="clock"></i> กำหนดวันเริ่มต้นปฏิบัติหน้าที่ (Uptime Start)</h3>
@@ -1074,28 +1248,57 @@
           </div>
         </div>
 
-        <!-- Admin PIN Change -->
+        <!-- Change Password Card (Available to all admins) -->
         <div class="admin-card">
           <div class="admin-card-header">
-            <h3><i data-lucide="key"></i> เปลี่ยนรหัส PIN ผู้ดูแลระบบ (Admin PIN)</h3>
+            <h3><i data-lucide="key-round"></i> เปลี่ยนรหัสผ่านบัญชีของคุณ</h3>
           </div>
           <div class="admin-card-body">
             <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px;">
-              ใช้สำหรับเข้าใช้งานหน้า Admin Portal (admin.html) เพื่อความปลอดภัยของข้อมูล
+              เปลี่ยนรหัสผ่านสำหรับบัญชีที่กำลังเข้าสู่ระบบอยู่ในขณะนี้
             </p>
-            <form onsubmit="handleChangePin(event)">
+            <form onsubmit="handleChangeMyPassword(event)">
               <div class="dg-form-group" style="margin-bottom: 14px;">
-                <label>รหัส PIN ปัจจุบัน</label>
-                <input type="password" id="settingsCurrentPin" required placeholder="••••"
+                <label>รหัสผ่านปัจจุบัน</label>
+                <input type="password" id="myCurrentPassword" required placeholder="••••••••"
+                  style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 14px;">
+                <label>รหัสผ่านใหม่ (อย่างน้อย 4 ตัวอักษร)</label>
+                <input type="password" id="myNewPassword" required minlength="4" placeholder="กำหนดรหัสผ่านใหม่"
                   style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
               </div>
               <div class="dg-form-group" style="margin-bottom: 18px;">
-                <label>รหัส PIN ใหม่ (4-8 หลัก)</label>
-                <input type="password" id="settingsNewPin" required maxlength="8" placeholder="เช่น 2569"
+                <label>ยืนยันรหัสผ่านใหม่อีกครั้ง</label>
+                <input type="password" id="myConfirmNewPassword" required minlength="4" placeholder="ยืนยันรหัสผ่านใหม่อีกครั้ง"
                   style="padding: 10px 14px; border: 1px solid var(--dg-border); border-radius: 6px; width: 100%;" />
               </div>
-              <button type="submit" class="dg-btn-black">เปลี่ยนรหัสผ่าน PIN</button>
+              <button type="submit" class="dg-btn-black">บันทึกรหัสผ่านใหม่</button>
             </form>
+          </div>
+        </div>
+
+        <!-- Super Admin Quick Link to Admin Management Tab -->
+        <div class="admin-card" id="adminQuickManageCard" style="grid-column: 1 / -1; display: none; border-color: #cbd5e1; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+          <div class="admin-card-body" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 22px 24px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 48px; height: 48px; border-radius: 12px; background: #fef3c7; color: #92400e; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+              </div>
+              <div>
+                <div style="font-weight: 850; font-size: 1.02rem; color: #0f172a; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;">
+                  <span>จัดการบัญชีผู้ดูแลระบบ (Admin Users Management)</span>
+                  <span class="admin-role-badge super" style="font-size: 0.72rem; padding: 2px 8px;">👑 Super Admin</span>
+                </div>
+                <div style="font-size: 0.86rem; color: #64748b;">
+                  คุณสามารถสร้างแอดมินใหม่ กำหนดสิทธิ์เป็น Admin ธรรมดา หรือ Super Admin และจัดการผู้ดูแลทั้งหมดได้ที่หน้าจัดการผู้ดูแลระบบ
+                </div>
+              </div>
+            </div>
+            <button type="button" class="dg-btn-black" onclick="switchToAdminTab()" style="padding: 10px 18px;">
+              <span>ไปยังหน้าจัดการผู้ดูแลระบบ</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -1162,6 +1365,174 @@
               <span>รีเซ็ตข้อมูลทั้งหมดกลับสู่ค่าเริ่มต้น</span>
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 5: ADMIN MANAGEMENT (SUPER ADMIN ONLY)
+         ========================================== -->
+    <div class="admin-pane" id="tab-admins">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+            <h2 style="margin: 0;">จัดการผู้ดูแลระบบ (Admin Accounts Management)</h2>
+            <span class="admin-role-badge super" style="font-size: 0.76rem; padding: 3px 10px;">👑 เฉพาะ Super Admin</span>
+          </div>
+          <p>สร้าง กำหนดสิทธิ์ และควบคุมบัญชีผู้ดูแลระบบทั้งหมดในโรงเรียนเดชะปัตตนยานุกูล</p>
+        </div>
+        <button type="button" class="dg-btn-black" onclick="document.getElementById('newAdminUsername').focus()">
+          <i data-lucide="user-plus"></i>
+          <span>สร้างผู้ดูแลใหม่</span>
+        </button>
+      </div>
+
+      <!-- Quick Stats Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 28px;">
+        <div class="admin-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 16px;">
+          <div style="width: 50px; height: 50px; border-radius: 12px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #0f172a; flex-shrink: 0;">
+            <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-transform: uppercase;">ผู้ดูแลทั้งหมด</div>
+            <div style="font-size: 1.6rem; font-weight: 850; color: #0f172a;" id="statTotalAdmins">0</div>
+          </div>
+        </div>
+
+        <div class="admin-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 16px; border-color: #fde68a;">
+          <div style="width: 50px; height: 50px; border-radius: 12px; background: #fef3c7; display: flex; align-items: center; justify-content: center; color: #92400e; flex-shrink: 0;">
+            <i data-lucide="crown" style="width: 24px; height: 24px;"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.8rem; color: #92400e; font-weight: 700; text-transform: uppercase;">Super Admin</div>
+            <div style="font-size: 1.6rem; font-weight: 850; color: #92400e;" id="statSuperAdmins">0</div>
+          </div>
+        </div>
+
+        <div class="admin-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 16px; border-color: #bae6fd;">
+          <div style="width: 50px; height: 50px; border-radius: 12px; background: #e0f2fe; display: flex; align-items: center; justify-content: center; color: #0369a1; flex-shrink: 0;">
+            <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+          </div>
+          <div>
+            <div style="font-size: 0.8rem; color: #0369a1; font-weight: 700; text-transform: uppercase;">Admin ธรรมดา</div>
+            <div style="font-size: 1.6rem; font-weight: 850; color: #0369a1;" id="statRegularAdmins">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Columns: Left = Create Admin Form, Right = Role Explanations -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 28px;">
+        <!-- Card 1: Create Admin Form -->
+        <div class="admin-card" style="margin-bottom: 0;">
+          <div class="admin-card-header" style="background: #fafafa;">
+            <h3><i data-lucide="user-plus"></i> เพิ่มบัญชีผู้ดูแลระบบใหม่</h3>
+          </div>
+          <div class="admin-card-body">
+            <form onsubmit="handleCreateNewAdmin(event)">
+              <div class="dg-form-group" style="margin-bottom: 14px;">
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">ชื่อผู้ใช้ (Username)</label>
+                <div class="auth-input-wrapper">
+                  <input type="text" id="newAdminUsername" class="auth-input" required placeholder="เช่น staff_sarawat" autocomplete="off" />
+                </div>
+              </div>
+
+              <div class="dg-form-group" style="margin-bottom: 14px;">
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">รหัสผ่าน (Password)</label>
+                <div class="auth-input-wrapper">
+                  <input type="password" id="newAdminPassword" class="auth-input" required minlength="4" placeholder="กำหนดรหัสผ่าน (อย่างน้อย 4 ตัวอักษร)" />
+                  <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('newAdminPassword', 'newAdminEyeIcon1')" title="แสดง/ซ่อนรหัสผ่าน">
+                    <i data-lucide="eye" id="newAdminEyeIcon1" style="width: 18px; height: 18px;"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="dg-form-group" style="margin-bottom: 16px;">
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">ยืนยันรหัสผ่าน (Confirm Password)</label>
+                <div class="auth-input-wrapper">
+                  <input type="password" id="newAdminConfirmPassword" class="auth-input" required minlength="4" placeholder="พิมพ์รหัสผ่านซ้ำอีกครั้ง" />
+                  <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('newAdminConfirmPassword', 'newAdminEyeIcon2')" title="แสดง/ซ่อนรหัสผ่าน">
+                    <i data-lucide="eye" id="newAdminEyeIcon2" style="width: 18px; height: 18px;"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="dg-form-group" style="margin-bottom: 20px;">
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">ระดับสิทธิ์ (Role Assignment)</label>
+                <select id="newAdminRole" style="padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 100%; background: #ffffff; font-family: inherit; font-size: 0.92rem; outline: none;">
+                  <option value="Admin">🛡️ Admin ธรรมดา (แก้ไขข้อมูลข่าวสาร, ปฏิทิน, กิจกรรมทั่วไป)</option>
+                  <option value="Super Admin">👑 Super Admin (สิทธิ์สูงสุด + เปลี่ยน SQL + จัดการระบบ)</option>
+                </select>
+              </div>
+
+              <button type="submit" id="btnSubmitNewAdmin" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 12px; font-weight: 750;">
+                <i data-lucide="user-check"></i>
+                <span>สร้างบัญชีผู้ดูแลระบบ (Create Admin)</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Card 2: Permissions Guide -->
+        <div class="admin-card" style="margin-bottom: 0;">
+          <div class="admin-card-header" style="background: #fafafa;">
+            <h3><i data-lucide="shield-alert"></i> สรุปสิทธิ์ของแต่ละยศผู้ดูแล</h3>
+          </div>
+          <div class="admin-card-body" style="font-size: 0.88rem; line-height: 1.65; color: #334155;">
+            <div style="padding: 14px; background: #fefce8; border: 1px solid #fef08a; border-radius: 10px; margin-bottom: 14px;">
+              <div style="font-weight: 800; color: #854d0e; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
+                <span>👑 Super Admin (ผู้ดูแลระบบสูงสุด)</span>
+              </div>
+              <ul style="margin: 0; padding-left: 20px; color: #713f12; font-size: 0.84rem;">
+                <li><strong>เปลี่ยนลิงก์เชื่อมต่อฐานข้อมูล SQL</strong> / Cloudflare Tunnel ได้อย่างอิสระ</li>
+                <li><strong>เข้าถึงหน้านี้</strong> เพื่อสร้าง/รีเซ็ตรหัส/ลบบัญชีผู้ดูแลระบบทั้งหมดได้</li>
+                <li>แก้ไขและจัดการข่าวสาร กิจกรรม ตารางงาน และการสำรองข้อมูลได้ครบทุกฟังก์ชัน</li>
+              </ul>
+            </div>
+
+            <div style="padding: 14px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px;">
+              <div style="font-weight: 800; color: #0369a1; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+                <span>🛡️ Admin ธรรมดา (ผู้ดูแลทั่วไป)</span>
+              </div>
+              <ul style="margin: 0; padding-left: 20px; color: #0c4a6e; font-size: 0.84rem;">
+                <li>จัดการข่าวสาร ประชาสัมพันธ์ และอัปโหลดภาพกิจกรรม</li>
+                <li>จัดการตารางกิจกรรมโรงเรียน และกิจกรรมเด่น (Next-Up)</li>
+                <li>แก้ไขวันเริ่มต้นนับเวลาปฏิบัติหน้าที่ (Uptime) และเปลี่ยนรหัสผ่านของตนเอง</li>
+                <li><strong style="color: #b91c1c;">ไม่มีสิทธิ์</strong> เปลี่ยนแปลงลิงก์ SQL หรือเซิร์ฟเวอร์ระบบ (หน้าต่างถูกล็อก)</li>
+                <li><strong style="color: #b91c1c;">ไม่มีสิทธิ์</strong> เข้าถึงหน้านี้ หรือจัดการบัญชีแอดมินคนอื่น</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Admins List Table -->
+      <div class="admin-card">
+        <div class="admin-card-header" style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="list-ordered"></i> รายชื่อผู้ดูแลระบบทั้งหมดในระบบ
+          </h3>
+          <button type="button" class="dg-btn-sm-outline" onclick="renderAdminsList()">
+            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+            <span>รีเฟรชข้อมูล</span>
+          </button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr style="border-bottom: 2px solid #e2e8f0; text-align: left; font-size: 0.84rem; color: #64748b;">
+                <th style="padding: 14px; width: 60px;">#</th>
+                <th style="padding: 14px;">ชื่อผู้ใช้ (Username)</th>
+                <th style="padding: 14px; width: 180px;">ระดับสิทธิ์ (Role)</th>
+                <th style="padding: 14px;">ขอบเขตการทำงาน</th>
+                <th style="padding: 14px; text-align: right; width: 240px;">การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="adminsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1936,21 +2307,100 @@
     ];
 
     // ==========================================================
-    // PIN AUTHENTICATION
+    // 🔐 AUTHENTICATION & ROLE-BASED ACCESS CONTROL (RBAC)
     // ==========================================================
-    function checkAuth() {
-      const isAuth = sessionStorage.getItem('sarawat_admin_auth');
-      const overlay = document.getElementById('pinOverlay');
-      if (isAuth === 'true') {
-        overlay.style.display = 'none';
-      } else {
-        overlay.style.display = 'flex';
+    let currentAdminUser = {
+      username: '',
+      role: 'Admin' // 'Super Admin' | 'Admin'
+    };
+
+    function getLocalAdmins() {
+      try {
+        const raw = localStorage.getItem('dg_sarawat_admins');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {
+        console.warn('Error reading local admins:', e);
+      }
+      return [];
+    }
+
+    function saveLocalAdmins(adminsList) {
+      try {
+        localStorage.setItem('dg_sarawat_admins', JSON.stringify(adminsList));
+      } catch (e) {
+        console.warn('Error saving local admins:', e);
       }
     }
 
-    function togglePinVisibility() {
-      const input = document.getElementById('adminPinInput');
-      const icon = document.getElementById('pinEyeIcon');
+    async function checkAuth() {
+      const isAuth = sessionStorage.getItem('sarawat_admin_auth');
+      const savedUserStr = sessionStorage.getItem('sarawat_admin_user');
+      const overlay = document.getElementById('pinOverlay');
+
+      if (isAuth === 'true' && savedUserStr) {
+        try {
+          const userObj = JSON.parse(savedUserStr);
+          currentAdminUser = {
+            username: userObj.username || 'Admin',
+            role: userObj.role || 'Admin'
+          };
+        } catch (e) {
+          currentAdminUser = { username: 'Admin', role: 'Admin' };
+        }
+        if (overlay) overlay.style.display = 'none';
+        applyRolePermissions(currentAdminUser.role, currentAdminUser.username);
+        return;
+      }
+
+      // Not authenticated: Show login or First-Time Setup
+      if (overlay) overlay.style.display = 'flex';
+      await checkSetupStatusAndToggleForm();
+    }
+
+    async function checkSetupStatusAndToggleForm() {
+      let needsSetup = false;
+
+      // 1. Check backend if available
+      if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+        try {
+          const status = await window.SarawatApi.getSetupStatus();
+          if (status && !status.offline) {
+            needsSetup = !!status.needsSetup;
+          }
+        } catch (err) {
+          console.warn('Check setup status error:', err);
+        }
+      }
+
+      // 2. If backend is offline or not configured, check local storage
+      if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) {
+        const localAdmins = getLocalAdmins();
+        needsSetup = localAdmins.length === 0;
+      }
+
+      const loginCard = document.getElementById('authLoginCard');
+      const setupCard = document.getElementById('authSetupCard');
+
+      if (needsSetup) {
+        if (loginCard) loginCard.style.display = 'none';
+        if (setupCard) setupCard.style.display = 'block';
+        const setupUserInp = document.getElementById('setupUsernameInput');
+        if (setupUserInp) setupUserInp.focus();
+      } else {
+        if (loginCard) loginCard.style.display = 'block';
+        if (setupCard) setupCard.style.display = 'none';
+        const loginUserInp = document.getElementById('loginUsernameInput');
+        if (loginUserInp) loginUserInp.focus();
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
       if (!input) return;
       if (input.type === 'password') {
         input.type = 'text';
@@ -1962,109 +2412,462 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    function handleResetPinToDefault() {
-      if (confirm('ต้องการรีเซ็ตรหัสผ่านกลับเป็นค่าเริ่มต้น "2569" ใช่หรือไม่?')) {
-        localStorage.setItem('dg_sarawat_admin_pin', '2569');
-        const input = document.getElementById('adminPinInput');
-        if (input) input.value = '2569';
-        const errMsg = document.getElementById('pinErrorMsg');
-        if (errMsg) errMsg.style.display = 'none';
-        showToast('รีเซ็ตรหัสผ่านเป็น 2569 เรียบร้อยแล้ว');
+    // First-Time Super Admin Creation
+    async function handleFirstTimeSetup(e) {
+      e.preventDefault();
+      const setupBtn = document.getElementById('adminSetupBtn');
+      const errEl = document.getElementById('setupErrorMsg');
+      const errText = document.getElementById('setupErrorText');
+
+      const u = (document.getElementById('setupUsernameInput').value || '').trim();
+      const p = (document.getElementById('setupPasswordInput').value || '').trim();
+      const cp = (document.getElementById('setupConfirmPasswordInput').value || '').trim();
+
+      if (!u || !p) {
+        showSetupError('กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบถ้วน');
+        return;
+      }
+      if (p.length < 4) {
+        showSetupError('รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+        return;
+      }
+      if (p !== cp) {
+        showSetupError('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน');
+        return;
+      }
+
+      if (errEl) errEl.style.display = 'none';
+      if (setupBtn) {
+        setupBtn.disabled = true;
+        setupBtn.innerHTML = '<span>กำลังสร้างบัญชี Super Admin...</span>';
+      }
+
+      try {
+        // 1. Try to register with backend
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            await window.SarawatApi.setupSuperAdmin(u, p);
+          } catch (apiErr) {
+            console.warn('Backend setup API error:', apiErr);
+          }
+        }
+
+        // 2. Always persist to localStorage
+        const admins = getLocalAdmins();
+        admins.push({ id: Date.now(), username: u, password: p, role: 'Super Admin' });
+        saveLocalAdmins(admins);
+
+        // 3. Mark session authenticated
+        currentAdminUser = { username: u, role: 'Super Admin' };
+        sessionStorage.setItem('sarawat_admin_auth', 'true');
+        sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
+
+        const overlay = document.getElementById('pinOverlay');
+        if (overlay) overlay.style.display = 'none';
+
+        applyRolePermissions('Super Admin', u);
+        showToast(`สร้างบัญชีสำเร็จ! ยินดีต้อนรับ Super Admin (${u})`);
+        initDashboard();
+      } catch (err) {
+        showSetupError(err.message || 'เกิดข้อผิดพลาดในการสร้างบัญชี');
+      } finally {
+        if (setupBtn) {
+          setupBtn.disabled = false;
+          setupBtn.innerHTML = '<i data-lucide="crown"></i><span>สร้างบัญชี Super Admin และเข้าสู่ระบบ</span>';
+          if (window.lucide) lucide.createIcons();
+        }
       }
     }
 
-    async function handlePinLogin(e) {
+    function showSetupError(msg) {
+      const errEl = document.getElementById('setupErrorMsg');
+      const errText = document.getElementById('setupErrorText');
+      if (errText) errText.textContent = msg;
+      if (errEl) errEl.style.display = 'flex';
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Regular Login (Strict Username + Password, No default PIN leaks)
+    async function handleUserLogin(e) {
       e.preventDefault();
       const loginBtn = document.getElementById('adminLoginBtn');
-      const originalBtnText = loginBtn ? loginBtn.innerHTML : '<span>เข้าสู่ระบบ (Sign In)</span>';
-      const input = (document.getElementById('adminPinInput').value || '').trim();
-      const currentPin = (localStorage.getItem('dg_sarawat_admin_pin') || '2569').trim();
-      const errMsg = document.getElementById('pinErrorMsg');
+      const errEl = document.getElementById('loginErrorMsg');
+      const errText = document.getElementById('loginErrorText');
+      const u = (document.getElementById('loginUsernameInput').value || '').trim();
+      const p = (document.getElementById('loginPasswordInput').value || '').trim();
 
-      // Check against local stored PIN, or master default PINs
-      const isLocalMatch = (
-        input === currentPin ||
-        input === '2569' ||
-        input === 'admin123' ||
-        input === 'admin'
-      );
+      if (!u || !p) {
+        showLoginError('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+        return;
+      }
 
-      let isBackendMatch = false;
+      if (errEl) errEl.style.display = 'none';
+      if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<span>กำลังตรวจสอบข้อมูล...</span>';
+      }
 
-      // If local didn't match and backend is available, also verify against MySQL `admins` table
-      if (!isLocalMatch && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+      let authenticatedUser = null;
+      let lastErrorMessage = '';
+
+      // 1. Try Backend authentication
+      if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
         try {
-          if (loginBtn) {
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<span>กำลังตรวจสอบรหัสผ่าน...</span>';
-          }
-          const res = await fetch(`${window.SarawatApi.getBaseUrl()}/api/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: input, username: input })
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.success) isBackendMatch = true;
+          const res = await window.SarawatApi.login(u, p);
+          if (res && res.success) {
+            authenticatedUser = {
+              username: res.user || u,
+              role: res.role || 'Admin'
+            };
           }
         } catch (apiErr) {
-          console.warn('Backend login error:', apiErr);
-        } finally {
-          if (loginBtn) {
-            loginBtn.disabled = false;
-            loginBtn.innerHTML = originalBtnText;
-            if (window.lucide) lucide.createIcons();
-          }
+          console.warn('Backend login attempt:', apiErr.message);
+          lastErrorMessage = apiErr.message;
         }
       }
 
-      if (isLocalMatch || isBackendMatch) {
-        try {
-          sessionStorage.setItem('sarawat_admin_auth', 'true');
-        } catch (storageErr) {
-          console.warn('SessionStorage error:', storageErr);
+      // 2. Local Storage fallback authentication
+      if (!authenticatedUser) {
+        const localAdmins = getLocalAdmins();
+        const found = localAdmins.find(a => a.username.toLowerCase() === u.toLowerCase() && a.password === p);
+        if (found) {
+          authenticatedUser = {
+            username: found.username,
+            role: found.role || 'Admin'
+          };
         }
+      }
+
+      if (authenticatedUser) {
+        currentAdminUser = authenticatedUser;
+        sessionStorage.setItem('sarawat_admin_auth', 'true');
+        sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
+
         const overlay = document.getElementById('pinOverlay');
         if (overlay) overlay.style.display = 'none';
-        showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับผู้ดูแลระบบ!');
+
+        applyRolePermissions(currentAdminUser.role, currentAdminUser.username);
+        showToast(`เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ ${currentAdminUser.role}: ${currentAdminUser.username}`);
+
         try {
           initDashboard();
         } catch (initErr) {
           console.warn('Dashboard init warning:', initErr);
         }
       } else {
-        errMsg.style.display = 'block';
-        errMsg.innerHTML = 'รหัสผ่านไม่ถูกต้อง<br><small style="color: #64748b; font-weight: normal;">รหัสเริ่มต้นคือ: <strong>2569</strong> หรือ <strong>admin123</strong></small>';
-        document.getElementById('adminPinInput').value = '';
-        document.getElementById('adminPinInput').focus();
+        showLoginError(lastErrorMessage || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+        const pInput = document.getElementById('loginPasswordInput');
+        if (pInput) {
+          pInput.value = '';
+          pInput.focus();
+        }
+      }
+
+      if (loginBtn) {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span><i data-lucide="arrow-right"></i>';
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function showLoginError(msg) {
+      const errEl = document.getElementById('loginErrorMsg');
+      const errText = document.getElementById('loginErrorText');
+      if (errText) errText.textContent = msg;
+      if (errEl) errEl.style.display = 'flex';
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function switchToAdminTab() {
+      const tabBtn = document.getElementById('tabBtnAdminUsers');
+      if (tabBtn) tabBtn.click();
+    }
+
+    // Role-Based UI Permissions
+    function applyRolePermissions(role, username) {
+      const isSuper = (role === 'Super Admin');
+
+      // Topbar Badge
+      const roleBadge = document.getElementById('adminUserRoleBadge');
+      const roleText = document.getElementById('adminUserRoleText');
+      const roleIcon = document.getElementById('adminUserRoleIcon');
+
+      if (roleBadge && roleText) {
+        if (isSuper) {
+          roleBadge.className = 'admin-role-badge super';
+          roleText.textContent = `Super Admin (${username})`;
+          if (roleIcon) roleIcon.setAttribute('data-lucide', 'crown');
+        } else {
+          roleBadge.className = 'admin-role-badge regular';
+          roleText.textContent = `Admin (${username})`;
+          if (roleIcon) roleIcon.setAttribute('data-lucide', 'shield');
+        }
+      }
+
+      // Dedicated Tab Button for Super Admin
+      const tabBtnAdmins = document.getElementById('tabBtnAdminUsers');
+      if (tabBtnAdmins) {
+        tabBtnAdmins.style.display = isSuper ? 'inline-flex' : 'none';
+      }
+
+      // If regular admin is on tab-admins, switch to tab-news
+      if (!isSuper) {
+        const adminsPane = document.getElementById('tab-admins');
+        if (adminsPane && adminsPane.classList.contains('active')) {
+          const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
+          if (newsTabBtn) newsTabBtn.click();
+        }
+      }
+
+      // SQL / Cloudflare Connection Settings Card: Super Admin ONLY
+      const sqlCard = document.getElementById('adminSqlConfigCard');
+      const sqlNotice = document.getElementById('adminSqlLockedNoticeCard');
+      if (sqlCard) sqlCard.style.display = isSuper ? 'block' : 'none';
+      if (sqlNotice) sqlNotice.style.display = isSuper ? 'none' : 'block';
+
+      // Quick Link Card in Tab 3: Super Admin ONLY
+      const quickManageCard = document.getElementById('adminQuickManageCard');
+      if (quickManageCard) quickManageCard.style.display = isSuper ? 'block' : 'none';
+
+      // Load Admins Data if Super Admin
+      if (isSuper) {
+        renderAdminsList();
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Admin Accounts Management (Super Admin)
+    async function renderAdminsList() {
+      const tbody = document.getElementById('adminsTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 24px; color: #94a3b8;">กำลังโหลดรายชื่อผู้ดูแลระบบ...</td></tr>';
+
+      let list = [];
+      if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+        try {
+          const apiList = await window.SarawatApi.getAdmins();
+          if (apiList && Array.isArray(apiList)) {
+            list = apiList;
+          }
+        } catch (e) {
+          console.warn('Load admins from API failed:', e);
+        }
+      }
+
+      if (list.length === 0) {
+        list = getLocalAdmins();
+      }
+
+      // Update Quick Stats
+      const statTotal = document.getElementById('statTotalAdmins');
+      const statSuper = document.getElementById('statSuperAdmins');
+      const statRegular = document.getElementById('statRegularAdmins');
+
+      const superCount = list.filter(a => a.role === 'Super Admin').length;
+      const regularCount = list.filter(a => a.role !== 'Super Admin').length;
+
+      if (statTotal) statTotal.textContent = list.length;
+      if (statSuper) statSuper.textContent = superCount;
+      if (statRegular) statRegular.textContent = regularCount;
+
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 24px; color: #94a3b8;">ไม่พบบัญชีผู้ดูแลระบบ</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map((item, idx) => {
+        const isSuper = (item.role === 'Super Admin');
+        const isSelf = (item.username && currentAdminUser.username && item.username.toLowerCase() === currentAdminUser.username.toLowerCase());
+        const badgeHtml = isSuper
+          ? '<span class="admin-role-badge super"><i data-lucide="crown" style="width: 12px; height: 12px;"></i> Super Admin</span>'
+          : '<span class="admin-role-badge regular"><i data-lucide="shield" style="width: 12px; height: 12px;"></i> Admin ธรรมดา</span>';
+
+        const scopeHtml = isSuper
+          ? '<span style="font-size: 0.82rem; color: #92400e; font-weight: 600;">🌐 สิทธิ์สูงสุด + ลิงก์ SQL + จัดการระบบ</span>'
+          : '<span style="font-size: 0.82rem; color: #0369a1; font-weight: 600;">📝 จัดการข่าวสาร, ปฏิทิน, กิจกรรมทั่วไป</span>';
+
+        return `
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 14px; font-weight: 600; color: #94a3b8;">${idx + 1}</td>
+            <td style="padding: 14px; font-weight: 700; color: #0f172a;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: ${isSuper ? '#fef3c7' : '#e0f2fe'}; color: ${isSuper ? '#92400e' : '#0369a1'}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
+                  ${escapeHtml(item.username.charAt(0).toUpperCase())}
+                </div>
+                <span>${escapeHtml(item.username)}</span>
+                ${isSelf ? '<span style="font-size: 0.72rem; color: #2563eb; background: #eff6ff; padding: 2px 8px; border-radius: 4px; font-weight: 700;">(บัญชีคุณ)</span>' : ''}
+              </div>
+            </td>
+            <td style="padding: 14px;">${badgeHtml}</td>
+            <td style="padding: 14px;">${scopeHtml}</td>
+            <td style="padding: 14px; text-align: right;">
+              ${isSelf ? '<span style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">กำลังเข้าสู่ระบบ</span>' : `
+                <div style="display: inline-flex; gap: 6px;">
+                  <button type="button" class="dg-btn-sm-outline" onclick="handleResetOtherAdminPassword(${item.id || `'${item.username}'`}, '${escapeHtml(item.username)}')" style="padding: 5px 10px; font-size: 0.78rem;">
+                    <i data-lucide="key-round" style="width: 13px; height: 13px;"></i>
+                    <span>รีเซ็ตรหัส</span>
+                  </button>
+                  <button type="button" class="dg-btn-sm-outline" onclick="handleDeleteAdminAccount(${item.id || `'${item.username}'`}, '${escapeHtml(item.username)}', '${item.role}')" style="color: #ef4444; border-color: #fee2e2; padding: 5px 10px; font-size: 0.78rem;">
+                    <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                    <span>ลบ</span>
+                  </button>
+                </div>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function handleCreateNewAdmin(e) {
+      e.preventDefault();
+      const u = (document.getElementById('newAdminUsername').value || '').trim();
+      const p = (document.getElementById('newAdminPassword').value || '').trim();
+      const cp = (document.getElementById('newAdminConfirmPassword').value || '').trim();
+      const r = document.getElementById('newAdminRole').value || 'Admin';
+
+      if (!u || !p) {
+        alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+        return;
+      }
+      if (p.length < 4) {
+        alert('รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+        return;
+      }
+      if (p !== cp) {
+        alert('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน');
+        return;
+      }
+
+      try {
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            await window.SarawatApi.createAdmin(u, p, r);
+          } catch (apiErr) {
+            console.warn('API create admin error:', apiErr);
+          }
+        }
+
+        const localAdmins = getLocalAdmins();
+        if (localAdmins.some(a => a.username.toLowerCase() === u.toLowerCase())) {
+          alert('ชื่อผู้ใช้นี้มีในระบบแล้ว กรุณาเลือกชื่ออื่น');
+          return;
+        }
+        localAdmins.push({ id: Date.now(), username: u, password: p, role: r });
+        saveLocalAdmins(localAdmins);
+
+        e.target.reset();
+        showToast(`สร้างบัญชีผู้ดูแล "${u}" (${r}) เรียบร้อยแล้ว!`);
+        renderAdminsList();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด: ' + err.message);
+      }
+    }
+
+    async function handleResetOtherAdminPassword(id, username) {
+      const newPwd = prompt(`กำหนดรหัสผ่านใหม่สำหรับผู้ดูแล "${username}" (อย่างน้อย 4 ตัวอักษร):`);
+      if (newPwd === null) return;
+      const clean = newPwd.trim();
+      if (clean.length < 4) {
+        alert('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+        return;
+      }
+
+      try {
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          await window.SarawatApi.resetAdminPassword(id, clean);
+        }
+
+        const localAdmins = getLocalAdmins();
+        const target = localAdmins.find(a => (a.id == id || a.username.toLowerCase() === username.toLowerCase()));
+        if (target) {
+          target.password = clean;
+          saveLocalAdmins(localAdmins);
+        }
+
+        showToast(`รีเซ็ตรหัสผ่านสำหรับ "${username}" เรียบร้อยแล้ว!`);
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด: ' + err.message);
+      }
+    }
+
+    async function handleDeleteAdminAccount(id, username, role) {
+      if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบบัญชีผู้ดูแล "${username}" (${role})?`)) return;
+
+      try {
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            await window.SarawatApi.deleteAdmin(id);
+          } catch (apiErr) {
+            console.warn('API delete admin error:', apiErr);
+          }
+        }
+
+        let localAdmins = getLocalAdmins();
+        localAdmins = localAdmins.filter(a => a.username.toLowerCase() !== username.toLowerCase() && a.id != id);
+        saveLocalAdmins(localAdmins);
+
+        showToast(`ลบบัญชี "${username}" เรียบร้อยแล้ว`);
+        renderAdminsList();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการลบ: ' + err.message);
+      }
+    }
+
+    // Change Password for Current Admin User
+    async function handleChangeMyPassword(e) {
+      e.preventDefault();
+      const curP = (document.getElementById('myCurrentPassword').value || '').trim();
+      const newP = (document.getElementById('myNewPassword').value || '').trim();
+      const confP = (document.getElementById('myConfirmNewPassword').value || '').trim();
+
+      if (!curP || !newP) {
+        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+      if (newP.length < 4) {
+        alert('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+        return;
+      }
+      if (newP !== confP) {
+        alert('รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน');
+        return;
+      }
+
+      try {
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          await window.SarawatApi.changePassword(currentAdminUser.username, curP, newP);
+        }
+
+        // Update in localStorage
+        const localAdmins = getLocalAdmins();
+        const found = localAdmins.find(a => a.username.toLowerCase() === currentAdminUser.username.toLowerCase());
+        if (found) {
+          if (found.password !== curP && (!window.SarawatApi || !window.SarawatApi.getBaseUrl())) {
+            alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
+            return;
+          }
+          found.password = newP;
+          saveLocalAdmins(localAdmins);
+        }
+
+        showToast('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว!');
+        e.target.reset();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาด: ' + err.message);
       }
     }
 
     function handleLogout() {
       if (confirm('คุณต้องการออกจากระบบ Admin ใช่หรือไม่?')) {
         sessionStorage.removeItem('sarawat_admin_auth');
+        sessionStorage.removeItem('sarawat_admin_user');
         window.location.reload();
       }
-    }
-
-    function handleChangePin(e) {
-      e.preventDefault();
-      const currentPin = localStorage.getItem('dg_sarawat_admin_pin') || '2569';
-      const curInput = document.getElementById('settingsCurrentPin').value;
-      const newInput = document.getElementById('settingsNewPin').value;
-
-      if (curInput !== currentPin) {
-        alert('รหัส PIN ปัจจุบันไม่ถูกต้อง!');
-        return;
-      }
-      if (newInput.length < 4) {
-        alert('รหัส PIN ใหม่ต้องมีอย่างน้อย 4 หลัก!');
-        return;
-      }
-
-      localStorage.setItem('dg_sarawat_admin_pin', newInput);
-      showToast('เปลี่ยนรหัส PIN เรียบร้อยแล้ว!');
-      e.target.reset();
     }
 
     // ==========================================================
@@ -4042,6 +4845,10 @@
 
     function handleSaveApiUrl(e) {
       e.preventDefault();
+      if (currentAdminUser.role !== 'Super Admin') {
+        alert('🔒 สิทธิ์เฉพาะ Super Admin: คุณไม่มีสิทธิ์เปลี่ยน URL เซิร์ฟเวอร์หรือฐานข้อมูล SQL');
+        return;
+      }
       const input = document.getElementById('settingsApiUrl');
       if (!input) return;
       const val = input.value.trim();
@@ -4072,9 +4879,10 @@
     // ==========================================================
     function handleExportJson() {
       const data = {
-        version: '1.1.0',
+        version: '1.2.0',
         exportedAt: new Date().toISOString(),
-        adminPin: localStorage.getItem('dg_sarawat_admin_pin') || '2569',
+        currentUser: currentAdminUser.username,
+        currentRole: currentAdminUser.role,
         uptimeStart: localStorage.getItem('dg_sarawat_uptime_start') || '2026-05-23T07:00:00',
         uptimeLabel: localStorage.getItem('dg_sarawat_uptime_label') || 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569',
         newsItems: getNews(),
@@ -4122,8 +4930,8 @@
           if (data.uptimeLabel) {
             localStorage.setItem('dg_sarawat_uptime_label', data.uptimeLabel);
           }
-          if (data.adminPin) {
-            localStorage.setItem('dg_sarawat_admin_pin', data.adminPin);
+          if (data.admins && Array.isArray(data.admins)) {
+            saveLocalAdmins(data.admins);
           }
 
           initDashboard();
