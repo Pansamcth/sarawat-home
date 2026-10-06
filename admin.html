@@ -17,8 +17,138 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- API & Cloudflare Tunnel Config -->
-  <script src="js/api-config.js"></script>
+  <!-- API & Cloudflare Tunnel Config (with Cache-Buster) -->
+  <script src="js/api-config.js?v=2.2.0"></script>
+  <script>
+    // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
+    window.SarawatApi = window.SarawatApi || {};
+    if (typeof window.SarawatApi.getBaseUrl !== 'function') {
+      window.SarawatApi.getBaseUrl = function () {
+        const saved = localStorage.getItem('dg_sarawat_api_url');
+        if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+          return 'http://localhost:5000';
+        }
+        return '';
+      };
+    }
+    if (typeof window.SarawatApi.login !== 'function') {
+      window.SarawatApi.login = async function (u, p) {
+        const base = this.getBaseUrl();
+        if (!base) {
+          const err = new Error('⚠️ ยังไม่ได้ระบุที่อยู่เซิร์ฟเวอร์ หรือ Cloudflare Tunnel ปิดอยู่');
+          err.isNetworkError = true;
+          throw err;
+        }
+        try {
+          const res = await fetch(`${base}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: u, password: p })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.success) {
+            const err = new Error(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            err.isAuthError = true;
+            throw err;
+          }
+          return data;
+        } catch (fetchErr) {
+          if (fetchErr.isAuthError) throw fetchErr;
+          const netErr = new Error(`⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ (${base}) ได้ กรุณาตรวจสอบว่าเปิด start-server.bat และ Cloudflare Tunnel แล้วหรือไม่`);
+          netErr.isNetworkError = true;
+          throw netErr;
+        }
+      };
+    }
+    if (typeof window.SarawatApi.getSetupStatus !== 'function') {
+      window.SarawatApi.getSetupStatus = async function () {
+        const base = this.getBaseUrl();
+        if (!base) return { needsSetup: false, offline: true };
+        try {
+          const res = await fetch(`${base}/api/admins/setup-status`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        } catch (e) {
+          return { needsSetup: false, offline: true };
+        }
+      };
+    }
+    if (typeof window.SarawatApi.setupSuperAdmin !== 'function') {
+      window.SarawatApi.setupSuperAdmin = async function (u, p) {
+        const base = this.getBaseUrl();
+        const res = await fetch(`${base}/api/admins/setup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || 'สร้าง Super Admin ไม่สำเร็จ');
+        return data;
+      };
+    }
+    if (typeof window.SarawatApi.getAdmins !== 'function') {
+      window.SarawatApi.getAdmins = async function () {
+        const base = this.getBaseUrl();
+        if (!base) return null;
+        try {
+          const res = await fetch(`${base}/api/admins`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        } catch (e) {
+          return null;
+        }
+      };
+    }
+    if (typeof window.SarawatApi.createAdmin !== 'function') {
+      window.SarawatApi.createAdmin = async function (u, p, r) {
+        const base = this.getBaseUrl();
+        const res = await fetch(`${base}/api/admins`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p, role: r })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || 'เพิ่มผู้ดูแลไม่สำเร็จ');
+        return data;
+      };
+    }
+    if (typeof window.SarawatApi.resetAdminPassword !== 'function') {
+      window.SarawatApi.resetAdminPassword = async function (id, newP) {
+        const base = this.getBaseUrl();
+        const res = await fetch(`${base}/api/admins/${id}/reset-password`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newPassword: newP })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || 'รีเซ็ตรหัสผ่านไม่สำเร็จ');
+        return data;
+      };
+    }
+    if (typeof window.SarawatApi.deleteAdmin !== 'function') {
+      window.SarawatApi.deleteAdmin = async function (id) {
+        const base = this.getBaseUrl();
+        const res = await fetch(`${base}/api/admins/${id}`, { method: 'DELETE' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || 'ลบผู้ดูแลไม่สำเร็จ');
+        return data;
+      };
+    }
+    if (typeof window.SarawatApi.changePassword !== 'function') {
+      window.SarawatApi.changePassword = async function (u, curP, newP) {
+        const base = this.getBaseUrl();
+        const res = await fetch(`${base}/api/admins/change-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, currentPassword: curP, newPassword: newP })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || 'เปลี่ยนรหัสผ่านไม่สำเร็จ');
+        return data;
+      };
+    }
+  </script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
@@ -916,7 +1046,26 @@
         </button>
       </form>
 
-      <div style="margin-top: 22px; text-align: center;">
+      <!-- Server / Cloudflare Connection Settings Toggle (Useful on Vercel / External Devices) -->
+      <div style="margin-top: 18px; padding-top: 14px; border-top: 1px dashed #e2e8f0; text-align: center;">
+        <button type="button" onclick="toggleLoginServerConfig()" style="background: none; border: none; font-size: 0.78rem; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-weight: 600;">
+          <i data-lucide="settings" style="width: 13px; height: 13px;"></i>
+          <span>ตั้งค่า Server / Cloudflare URL (สำหรับ Vercel)</span>
+        </button>
+        
+        <div id="loginServerConfigBox" style="display: none; margin-top: 10px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #334155; margin-bottom: 5px;">
+            Server API URL (เช่น จาก Cloudflare Tunnel หรือ http://localhost:5000)
+          </label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" id="loginServerUrlInput" placeholder="https://xxxx.trycloudflare.com" style="flex: 1; padding: 8px 10px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" />
+            <button type="button" class="dg-btn-black" onclick="saveLoginServerUrl()" style="padding: 8px 12px; font-size: 0.78rem;">บันทึก</button>
+          </div>
+          <div id="loginServerStatusText" style="font-size: 0.74rem; color: #64748b; margin-top: 6px;"></div>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; text-align: center;">
         <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
           <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
         </a>
@@ -2511,7 +2660,7 @@
       let lastErrorMessage = '';
 
       // 1. Try Backend authentication
-      if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+      if (window.SarawatApi && typeof window.SarawatApi.login === 'function' && window.SarawatApi.getBaseUrl()) {
         try {
           const res = await window.SarawatApi.login(u, p);
           if (res && res.success) {
@@ -2576,6 +2725,46 @@
       if (errText) errText.textContent = msg;
       if (errEl) errEl.style.display = 'flex';
       if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleLoginServerConfig() {
+      const box = document.getElementById('loginServerConfigBox');
+      const inp = document.getElementById('loginServerUrlInput');
+      if (!box) return;
+      const isHidden = (box.style.display === 'none' || !box.style.display);
+      box.style.display = isHidden ? 'block' : 'none';
+      if (isHidden && inp && window.SarawatApi) {
+        inp.value = window.SarawatApi.getBaseUrl() || '';
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function saveLoginServerUrl() {
+      const inp = document.getElementById('loginServerUrlInput');
+      const txt = document.getElementById('loginServerStatusText');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (window.SarawatApi) {
+        window.SarawatApi.setBaseUrl(val);
+        if (txt) {
+          txt.style.color = '#3b82f6';
+          txt.textContent = '⏳ กำลังทดสอบเชื่อมต่อ...';
+        }
+        const res = await window.SarawatApi.checkHealth();
+        if (res.online) {
+          if (txt) {
+            txt.style.color = '#16a34a';
+            txt.textContent = '✅ เชื่อมต่อเซิร์ฟเวอร์สำเร็จ! (' + res.baseUrl + ')';
+          }
+          showToast('🟢 เชื่อมต่อเซิร์ฟเวอร์สำเร็จแล้ว');
+          await checkSetupStatusAndToggleForm();
+        } else {
+          if (txt) {
+            txt.style.color = '#dc2626';
+            txt.textContent = '❌ เชื่อมต่อไม่ได้: ' + (res.reason || 'กรุณาตรวจสอบ URL หรือเปิดเซิร์ฟเวอร์');
+          }
+        }
+      }
     }
 
     function switchToAdminTab() {
