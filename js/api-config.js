@@ -19,8 +19,8 @@
       return saved.trim().replace(/\/+$/, '');
     }
 
-    // 2. หากรันบนเครื่องตนเอง (Localhost) ให้ชี้ไปที่พอร์ต 5000 ของ Node.js อัตโนมัติ
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    // 2. หากรันบนเครื่องตนเอง (Localhost หรือเปิดไฟล์ HTML โดยตรง) ให้ชี้ไปที่พอร์ต 5000 ของ Node.js อัตโนมัติ
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
       return 'http://localhost:5000';
     }
 

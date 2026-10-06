@@ -288,6 +288,8 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       flex: 1;
+      white-space: pre-line;
+      word-break: break-word;
     }
 
     .admin-news-links-indicator {
@@ -1039,14 +1041,20 @@
 
         <div class="dg-form-group">
           <label>รายละเอียดกิจกรรม (เนื้อหาหลัก) *</label>
-          <textarea id="adminNewsDesc" rows="3" required
+          <textarea id="adminNewsDesc" rows="4" required
             placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
+          <small style="color: var(--dg-text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
+            💡 สามารถกด Enter เพื่อเว้นบรรทัดหรือแบ่งย่อหน้าได้ตามต้องการ ระบบจะแสดงผลเว้นบรรทัดตามที่พิมพ์จริง
+          </small>
         </div>
 
         <div class="dg-form-group">
           <label>รายละเอียดเพิ่มเติมสำหรับป๊อบอัป (Optional / แสดงในหน้าต่างขยาย)</label>
-          <textarea id="adminNewsDetail" rows="3"
+          <textarea id="adminNewsDetail" rows="4"
             placeholder="ระบุเนื้อหาเชิงลึก ลำดับขั้นตอน ผลการดำเนินงาน หรือข้อความขยายความเพิ่มเติมสำหรับหน้าต่างป๊อบอัป..."></textarea>
+          <small style="color: var(--dg-text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
+            💡 รองรับการเว้นบรรทัดและแบ่งย่อหน้าอย่างสวยงามในหน้าต่างป๊อบอัป
+          </small>
         </div>
 
         <!-- Image Upload Section with Dual Modes & Live Progress Bar -->
@@ -1056,7 +1064,7 @@
           <div class="img-mode-tabs">
             <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')">
               <i data-lucide="upload-cloud"></i>
-              <span>อัปโหลดจากเครื่อง (มีบาร์ %)</span>
+              <span>อัปโหลดจากเครื่อง (บีบอัดอัตโนมัติ ⚡)</span>
             </button>
             <button type="button" class="img-mode-btn" id="btnImgModeUrl" onclick="switchImgMode('url')">
               <i data-lucide="link"></i>
@@ -1068,6 +1076,9 @@
           <div id="panelImgUpload">
             <input type="file" id="adminNewsImgFile" accept="image/*"
               style="width: 100%; padding: 10px; border: 1.5px dashed var(--dg-border); border-radius: 8px; background: #fafafa; cursor: pointer;" />
+            <small style="color: #059669; font-size: 0.78rem; display: flex; align-items: center; gap: 4px; margin-top: 6px; font-weight: 600;">
+              ⚡ ระบบจะบีบอัดภาพให้อัตโนมัติ (ลดขนาดเหลือ ~150-300 KB) เพื่อให้ผู้ใช้โหลดเปิดหน้าเว็บได้เร็วที่สุด
+            </small>
 
             <div id="adminNewsUploadProgress" class="upload-progress-wrap" style="display: none;">
               <div class="upload-file-meta">
@@ -2581,7 +2592,10 @@
       }
     }
 
+    let currentCompressedNewsFile = null;
+
     function clearSelectedNewsImage() {
+      currentCompressedNewsFile = null;
       document.getElementById('adminNewsImgFile').value = '';
       document.getElementById('adminNewsImgUrl').value = '';
       document.getElementById('adminNewsImgBase64').value = '';
@@ -2615,7 +2629,7 @@
 
             let width = img.width;
             let height = img.height;
-            const maxDim = 1200; // 1200px max dimension provides ultra-sharp crispness for web/mobile
+            const maxDim = 1400; // 1400px provides ultra-sharp crispness while keeping size under 250KB
 
             if (width > maxDim || height > maxDim) {
               if (width > height) {
@@ -2642,16 +2656,23 @@
             const sizeBytes = Math.round((compressedBase64.length * 3) / 4);
             const sizeKb = Math.round(sizeBytes / 1024);
 
-            if (onProgress) {
-              onProgress(100, `พร้อมใช้งาน 100%! ลดขนาดเหลือ ~${sizeKb} KB`);
-            }
+            canvas.toBlob((blob) => {
+              const safeName = (file.name || 'activity').replace(/\.[^/.]+$/, "") + ".jpg";
+              const compressedFile = new File([blob], safeName, { type: 'image/jpeg' });
 
-            resolve({
-              base64: compressedBase64,
-              sizeKb: sizeKb,
-              width: width,
-              height: height
-            });
+              if (onProgress) {
+                onProgress(100, `บีบอัดสำเร็จ 100%! ลดเหลือ ~${sizeKb} KB (ประหยัดพื้นที่)`);
+              }
+
+              resolve({
+                base64: compressedBase64,
+                blob: blob,
+                file: compressedFile,
+                sizeKb: sizeKb,
+                width: width,
+                height: height
+              });
+            }, 'image/jpeg', 0.82);
           };
           img.src = evt.target.result;
         };
@@ -2950,13 +2971,14 @@
         if (!date && !startIso) throw new Error('กรุณาเลือกวันเริ่มต้นจัดกิจกรรม');
         if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
 
-        // Check image: If a real file is chosen and API is connected, upload directly to server disk!
+        // Check image: If a compressed or real file is available and API is connected, upload compressed file to server disk!
         let finalImage = imgData || 'assets/images/activity-ceremony.jpg';
 
-        if (imgFileInput && imgFileInput.files && imgFileInput.files[0] && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+        const fileToUpload = currentCompressedNewsFile || (imgFileInput && imgFileInput.files && imgFileInput.files[0]);
+        if (fileToUpload && window.SarawatApi && window.SarawatApi.getBaseUrl()) {
           try {
-            if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพสู่เซิร์ฟเวอร์...</span>';
-            const uploadRes = await window.SarawatApi.uploadImage(imgFileInput.files[0]);
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพที่บีบอัดแล้วสู่เซิร์ฟเวอร์...</span>';
+            const uploadRes = await window.SarawatApi.uploadImage(fileToUpload);
             if (uploadRes && uploadRes.url) {
               finalImage = uploadRes.url;
             }
@@ -3630,11 +3652,11 @@
             }
           });
 
-          // Set preview & hidden input
+          currentCompressedNewsFile = result.file;
           base64Input.value = result.base64;
           previewImg.src = result.base64;
           previewWrap.style.display = 'block';
-          showToast(`ภาพพร้อมใช้งาน (${result.sizeKb} KB)`);
+          showToast(`ภาพบีบอัดเรียบร้อย (${result.sizeKb} KB)`);
         } catch (err) {
           console.error('Image compression error:', err);
           statusText.textContent = 'เกิดข้อผิดพลาด: ' + err.message;

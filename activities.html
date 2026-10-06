@@ -531,6 +531,18 @@
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
                     </a>
                   ` : ''}
+                  ${hasReels ? `
+                    <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-act-social-btn dg-act-social-reels" title="Instagram Reels" onclick="event.stopPropagation()">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
+                        <path d="M2.5 8h19"/>
+                        <path d="m8 2.5-2.5 5.5"/>
+                        <path d="m14 2.5-2.5 5.5"/>
+                        <path d="m20 2.5-2.5 5.5"/>
+                        <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
+                      </svg>
+                    </a>
+                  ` : ''}
                   ${hasPhoto ? `
                     <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-act-social-btn" title="Google Photos" onclick="event.stopPropagation()">
                       <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/><path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/><path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/><path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/></svg>
@@ -578,6 +590,8 @@
       const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
       const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
       const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
+
+      
 
       container.innerHTML = `
         <div class="dg-news-modal-header">
@@ -660,15 +674,15 @@
                 ${hasReels ? `
                   <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-reels">
                     <span style="display: flex; align-items: center; gap: 8px;">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <rect x="2.5" y="2.5" width="19" height="19" rx="5"/>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
                         <path d="M2.5 8h19"/>
                         <path d="m8 2.5-2.5 5.5"/>
                         <path d="m14 2.5-2.5 5.5"/>
                         <path d="m20 2.5-2.5 5.5"/>
                         <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
                       </svg>
-                      <span>Instagram Reels</span>
+                      <span>รับชมคลิป Reels</span>
                     </span>
                     <i data-lucide="arrow-up-right"></i>
                   </a>

@@ -2698,10 +2698,14 @@ svg:not([data-lucide]),
   line-height: 1.7;
   color: var(--dg-text-primary);
   margin-bottom: 20px;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 .dg-news-modal-desc p {
   margin: 0 0 10px;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 .dg-news-modal-subdesc {
@@ -2713,6 +2717,8 @@ svg:not([data-lucide]),
   padding: 12px 16px;
   border-radius: 0 8px 8px 0;
   margin-top: 12px;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 .dg-news-modal-specs {
@@ -2832,6 +2838,8 @@ svg:not([data-lucide]),
 .dg-news-modal-btn svg {
   flex-shrink: 0;
 }
+
+
 
 .dg-news-modal-footer {
   margin-top: 26px;
@@ -3304,6 +3312,14 @@ svg:not([data-lucide]),
   transform: translateY(-2px);
   background: #ffffff;
 }
+
+.dg-act-social-btn.dg-act-social-reels:hover {
+  background: #fff1f2;
+  border-color: #fda4af;
+  color: #e11d48;
+}
+
+
 
 .dg-act-more-link {
   display: inline-flex;
