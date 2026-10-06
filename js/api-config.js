@@ -1,7 +1,7 @@
 /**
  * Sarawat Portfolio - Central API & Server Configuration
  * ========================================================
- * จัดการการเชื่อมต่อระหว่างหน้าเว็บกับระบบหลังบ้าน (Node.js + MySQL + Cloudflare Tunnel)
+ * จัดการการเชื่อมต่อระหว่างหน้าเว็บกับระบบหลังบ้าน (Node.js + SQLite + Cloudflare Tunnel)
  */
 
 (function () {

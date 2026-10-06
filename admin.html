@@ -1004,10 +1004,10 @@
           style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
           <div class="admin-card-header"
             style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <h3 style="margin: 0;"><i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (MySQL +
+            <h3 style="margin: 0;"><i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (SQLite +
               Cloudflare Tunnel)</h3>
             <span id="apiStatusBadge"
-              style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
+              style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 9999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
               <span
                 style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
               <span>กำลังตรวจสอบ...</span>
@@ -1015,8 +1015,8 @@
           </div>
           <div class="admin-card-body">
             <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px; line-height: 1.6;">
-              ระบบนี้ช่วยให้รูปภาพและกิจกรรมถูกบันทึกลงฮาร์ดดิสก์และ MySQL ถาวร (แก้ปัญหาเบราว์เซอร์พื้นที่เต็ม 100%)
-              และส่งผ่าน Cloudflare Tunnel ให้ทุกคนบนมือถือและคอมพิวเตอร์เครื่องอื่นมองเห็นได้
+              ระบบนี้ช่วยให้รูปภาพและกิจกรรมถูกบันทึกลงฮาร์ดดิสก์และ SQLite (sarawat.db) ถาวร รวดเร็วและไม่จำเป็นต้องเปิด MySQL
+              พร้อมส่งผ่าน Cloudflare Tunnel ให้ทุกคนบนมือถือและคอมพิวเตอร์เครื่องอื่นมองเห็นได้
             </p>
             <form onsubmit="handleSaveApiUrl(event)"
               style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
@@ -3549,10 +3549,10 @@
           items.unshift(newsItemObj);
         }
 
-        // Save to Backend MySQL if connected
+        // Save to Backend SQLite if connected
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
           try {
-            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล MySQL...</span>';
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล SQLite...</span>';
             await window.SarawatApi.saveNews({
               ...newsItemObj,
               dateStart: dateIso,
@@ -4011,8 +4011,9 @@
       const res = await window.SarawatApi.checkHealth();
 
       if (res.online) {
+        const dbName = (res.data?.database && res.data.database.includes('SQLite')) ? 'SQLite' : 'ออนไลน์';
         if (badge) {
-          badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span> ออนไลน์ (MySQL OK)';
+          badge.innerHTML = `<span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span> ออนไลน์ (${dbName} OK)`;
           badge.style.color = '#15803d';
           badge.style.background = '#dcfce7';
         }
@@ -4021,7 +4022,7 @@
           navBadge.style.color = '#15803d';
           navBadge.style.borderColor = '#bbf7d0';
         }
-        if (navText) navText.textContent = 'ออนไลน์ (MySQL)';
+        if (navText) navText.textContent = `ออนไลน์ (${dbName})`;
         if (showAlert) showToast('🟢 เชื่อมต่อเซิร์ฟเวอร์สำเร็จ! (' + res.baseUrl + ')');
       } else {
         if (badge) {
