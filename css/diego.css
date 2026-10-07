@@ -5480,3 +5480,5 @@ img {
     margin-top: 4px !important;
   }
 }
+
+.dg-ops-card.theme-rules .dg-ops-icon-box { background: #dbeafe; color: #2563eb; }

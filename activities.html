@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="css/diego.css" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/icons/sarawat_glow.png" />
+  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
 </head>
 
 <body class="dg-activities-page">
@@ -54,14 +54,15 @@
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span
           style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
-        <img src="assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน"
+        <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span class="dg-brand-text">SARAWAT</span>
       </a>
 
       <div class="dg-nav-links" id="dgNavLinks">
-        <a href="index.html">← กลับหน้าหลัก</a>
-        <a href="activities.html" class="active" style="color: var(--dg-black); font-weight: 800;">กิจกรรมทั้งหมด</a>
+        <a href="index.html">หน้าแรก</a>
+        <a href="activities.html" class="active">ข่าวสารกิจกรรม</a>
+        <a href="rules.html">กฎระเบียบ</a>
         <a href="index.html#calendar">ตารางกิจกรรม</a>
         <a href="team.html">คณะทำงาน</a>
       </div>
@@ -126,19 +127,21 @@
           <button type="button" class="dg-act-pill-btn" data-category="พิธีการสำคัญ" onclick="filterByCategory('พิธีการสำคัญ')">
             <span>พิธีการสำคัญ</span>
           </button>
-          <button type="button" class="dg-act-pill-btn" data-category="ความปลอดภัย" onclick="filterByCategory('ความปลอดภัย')">
-            <span>ความปลอดภัย</span>
-          </button>
           <button type="button" class="dg-act-pill-btn" data-category="จิตอาสา" onclick="filterByCategory('จิตอาสา')">
             <span>จิตอาสา</span>
+          </button>
+          <button type="button" class="dg-act-pill-btn" data-category="กิจกรรม" onclick="filterByCategory('กิจกรรม')">
+            <span>กิจกรรม</span>
           </button>
           <button type="button" class="dg-act-pill-btn" data-category="อบรมพัฒนา" onclick="filterByCategory('อบรมพัฒนา')">
             <span>อบรมพัฒนา</span>
           </button>
-          <button type="button" class="dg-act-pill-btn" data-category="กิจกรรมโรงเรียน" onclick="filterByCategory('กิจกรรมโรงเรียน')">
-            <span>กิจกรรมโรงเรียน</span>
+          <button type="button" class="dg-act-pill-btn" data-category="ตรวจสารเสพติด" onclick="filterByCategory('ตรวจสารเสพติด')">
+            <span>ตรวจสารเสพติด</span>
           </button>
         </div>
+
+        
       </div>
     </div>
   </header>
@@ -185,7 +188,7 @@
             <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
               style="height: 52px; width: auto; object-fit: contain;" />
             <span style="display: inline-block; width: 1px; height: 36px; background: var(--dg-border);"></span>
-            <img src="assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน"
+            <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
               style="height: 50px; width: auto; object-fit: contain;" />
           </div>
           <h2 class="dg-pre-footer-title">
@@ -216,6 +219,7 @@
               <a href="index.html#team">วิสัยทัศน์ประธาน</a>
               <a href="index.html#calendar">ตารางกิจกรรมโรงเรียน</a>
               <a href="team.html">หน้าคณะทำงาน</a>
+              <a href="rules.html">กฎระเบียบของโรงเรียน</a>
             </div>
           </div>
 
@@ -280,8 +284,6 @@
       <!-- Bottom Bar -->
       <div class="dg-footer-bottom">
         <div class="dg-footer-bottom-copy">
-          <img src="assets/icons/sarawat_glow.png" alt="Sarawat Logo"
-            style="width: 20px; height: 20px; object-fit: contain;" />
           <span>©2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล. All rights reserved.</span>
         </div>
         <div class="dg-footer-bottom-meta">
