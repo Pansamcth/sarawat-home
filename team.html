@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ระบบกำลังพัฒนา | ทีมสารวัตรนักเรียน</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/icons/sarawat_glow.png" type="image/png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--dg-bg-white);
+        color: var(--dg-text-black);
+        font-family: 'Kanit', sans-serif;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      
+      .maintenance-container {
+        text-align: center;
+        padding: 2rem;
+        max-width: 600px;
+        animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      
+      .maintenance-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        background-color: #f1f5f9;
+        border-radius: 50%;
+        margin-bottom: 2rem;
+        color: var(--dg-text-black);
+      }
+      
+      .maintenance-icon svg {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .maintenance-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+      }
+      
+      .maintenance-desc {
+        font-size: 1.1rem;
+        color: var(--dg-text-muted);
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+      }
+      
+      .dg-btn-black {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: var(--dg-text-black);
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 9999px;
+        transition: all 0.3s ease;
+      }
+      
+      .dg-btn-black:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -10px rgba(0,0,0,0.3);
+      }
+      
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="maintenance-container">
+      <div class="maintenance-icon">
+        <i data-lucide="hammer"></i>
+      </div>
+      <h1 class="maintenance-title">ระบบกำลังพัฒนา</h1>
+      <p class="maintenance-desc">
+        หน้าคณะทำงาน (Team) กำลังอยู่ในช่วงปรับปรุงและพัฒนา<br>
+        เพื่อประสบการณ์การใช้งานที่ดียิ่งขึ้น กรุณากลับมาเยี่ยมชมใหม่ในภายหลัง
+      </p>
+      <a href="index.html" class="dg-btn-black">
+        <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+        กลับสู่หน้าหลัก
+      </a>
+    </div>
+
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
