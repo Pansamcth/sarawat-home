@@ -25,7 +25,7 @@
     if (typeof window.SarawatApi.getBaseUrl !== 'function') {
       window.SarawatApi.getBaseUrl = function () {
         const saved = localStorage.getItem('dg_sarawat_api_url');
-        if (saved && saved.trim()) return saved.trim().replace(//+$/, '');
+        if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
           return 'http://localhost:5000';
         }
@@ -3048,7 +3048,7 @@
       if (!dateStr || typeof dateStr !== 'string') return 0;
 
       // Try ISO YYYY-MM-DD format
-      const isoMatch = dateStr.match(/(d{4})-(d{1,2})-(d{1,2})/);
+      const isoMatch = dateStr.match(/(\\d{4})-(\\d{1,2})-(\\d{1,2})/);
       if (isoMatch) {
         return Date.UTC(parseInt(isoMatch[1], 10), parseInt(isoMatch[2], 10) - 1, parseInt(isoMatch[3], 10), 12, 0, 0);
       }
@@ -3062,7 +3062,7 @@
         }
       }
 
-      const numbers = dateStr.match(/d+/g);
+      const numbers = dateStr.match(/\d+/g);
       if (!numbers) return 0;
 
       let day = parseInt(numbers[0], 10);
@@ -3205,7 +3205,7 @@
       if (mIdx === -1) mIdx = 0;
 
       let year = new Date().getFullYear();
-      const yearMatch = monthStr.match(/d+/);
+      const yearMatch = monthStr.match(/\d+/);
       if (yearMatch) {
         const yVal = parseInt(yearMatch[0], 10);
         if (yVal > 2400) year = yVal - 543;
@@ -3225,7 +3225,7 @@
         };
       }
 
-      const singleDayMatch = String(dayStr).match(/d{1,2}/);
+      const singleDayMatch = String(dayStr).match(/\d{1,2}/);
       if (singleDayMatch) {
         const sD = singleDayMatch[0].padStart(2, '0');
         return {
@@ -3257,7 +3257,7 @@
           if (left.includes(THAI_MONTHS_SHORT[i])) { lM = i; break; }
         }
 
-        const yearNums = right.match(/d{4}|d{2}/g);
+        const yearNums = right.match(/\d{4}|\d{2}/g);
         let year = new Date().getFullYear();
         if (yearNums) {
           const yVal = parseInt(yearNums[yearNums.length - 1], 10);
@@ -3266,8 +3266,8 @@
           else if (yVal > 2000 && yVal < 2100) year = yVal;
         }
 
-        const lNums = left.match(/d+/);
-        const rNums = right.match(/d+/);
+        const lNums = left.match(/\d+/);
+        const rNums = right.match(/\d+/);
         if (lNums && rNums && lM !== -1 && rM !== -1) {
           const sD = lNums[0].padStart(2, '0');
           const eD = rNums[0].padStart(2, '0');
@@ -3284,7 +3284,7 @@
       for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
         if (dateStr.includes(THAI_MONTHS_SHORT[i])) { mIdx = i; break; }
       }
-      const nums = dateStr.match(/d+/g);
+      const nums = dateStr.match(/\d+/g);
       if (nums && nums.length >= 2 && mIdx !== -1) {
         const sD = nums[0].padStart(2, '0');
         let year = new Date().getFullYear();
@@ -4559,7 +4559,7 @@
       const badge = document.getElementById('eventsCountBadge');
       const previewBox = document.getElementById('featuredEventPreviewBox');
 
-      const events = getEvents();
+      const events = getEvents().slice().sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
       const feat = getFeatured();
 
       if (badge) badge.textContent = `${events.length} รายการ`;
