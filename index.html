@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 
 <head>
@@ -478,14 +478,14 @@
   <section class="dg-calendar-section" id="calendar">
     <div class="dg-container">
       <div class="dg-section-header">
-        <span class="dg-section-tag">ACADEMIC & ACTIVITIES SCHEDULE • ปฏิทินและตารางกิจกรรมโรงเรียน</span>
+        <span class="dg-section-tag">ACTIVITIES SCHEDULE • ปฏิทินโรงเรียน</span>
         <h2 class="dg-section-title">
           School Calendar & Agenda.<br>
           Never miss an event.
         </h2>
         <p class="dg-section-desc">
-          ตรวจสอบกำหนดการ กิจกรรมสำคัญ วันสอบ และวาระงานของโรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2569
-          เพื่อการวางแผนและเตรียมความพร้อมร่วมกันของนักเรียน ครู และบุคลากร
+          ปฏิทินนี้จัดทำขึ้นโดยอ้างอิงข้อมูลข่าวสารและปฏิทินวิชาการภายในโรงเรียน ทั้งนี้ กำหนดการและรายละเอียดต่าง ๆ
+          อาจมีการเปลี่ยนแปลง แก้ไข หรือปรับปรุงได้ตลอดเวลาตามความเหมาะสมและสถานการณ์
         </p>
       </div>
 
@@ -556,21 +556,6 @@
         <p>ลองค้นหาด้วยคำอื่น เช่น "สอบ", "กีฬาสี", "ปีใหม่" หรือคลิกเลือกหมวดหมู่ "ทั้งหมด"</p>
       </div>
 
-      <!-- Notice Footer Bar -->
-      <div class="dg-calendar-footer-note" data-reveal="fade">
-        <div class="note-left">
-          <i data-lucide="info"></i>
-          <span><strong>หมายเหตุ:</strong> กำหนดการอาจมีการเปลี่ยนแปลงตามประกาศของกลุ่มบริหารวิชาการและกิจการนักเรียน
-            สามารถตรวจสอบประกาศล่าสุดได้ที่หน้าเพจโรงเรียน</span>
-        </div>
-        <div>
-          <a href="https://web.facebook.com/sarawatdechaa" target="_blank" class="dg-arrow-link"
-            style="font-size: 0.85rem;">
-            <span>ติดตามประกาศด่วนบน Facebook</span>
-            <i data-lucide="arrow-right"></i>
-          </a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1415,22 +1400,6 @@
                 ${escapeHtml(item.detail)}
               </div>
             ` : ''}
-          </div>
-
-          <div class="dg-news-modal-specs">
-            <div class="dg-news-spec-item">
-              <span class="dg-spec-label"><i data-lucide="tag"></i> หมวดหมู่</span>
-              <span class="dg-spec-val">${escapeHtml(item.tag || 'กิจกรรม')}</span>
-            </div>
-            <div class="dg-news-spec-item">
-              <span class="dg-spec-label"><i data-lucide="calendar"></i> วันที่จัดกิจกรรม</span>
-              <span class="dg-spec-val">${escapeHtml(item.date || '-')}</span>
-            </div>
-            <div class="dg-news-spec-item">
-              <span class="dg-spec-label"><i data-lucide="shield-check"></i> ผู้รับผิดชอบ</span>
-              <span class="dg-spec-val">${escapeHtml(item.author || 'สารวัตรนักเรียน')}</span>
-            </div>
-            
           </div>
 
           ${hasAnyLinks ? `

@@ -478,7 +478,7 @@ svg:not([data-lucide]),
   display: flex;
   justify-content: center;
   gap: 32px;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
 }
 
 .dg-uptime-unit {
@@ -2860,13 +2860,13 @@ svg:not([data-lucide]),
   font-size: 0.96rem;
   line-height: 1.7;
   color: var(--dg-text-primary);
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   white-space: pre-line;
   word-break: break-word;
 }
 
 .dg-news-modal-desc p {
-  margin: 0 0 10px;
+  margin: 0;
   white-space: pre-line;
   word-break: break-word;
 }
@@ -2924,8 +2924,8 @@ svg:not([data-lucide]),
 }
 
 .dg-news-modal-links-section {
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid var(--dg-border);
 }
 

@@ -28,7 +28,7 @@
     return toast;
   }
 
-  function 
+  function showWarningToast(msg) {
     const toast = getOrCreateToast();
     const textSpan = toast.querySelector('.dg-toast-text');
     if (textSpan) {
@@ -155,5 +155,5 @@
   });
 
   // Expose to window
-  window.dgProtectToast = 
+  window.dgProtectToast = showWarningToast;
 })();

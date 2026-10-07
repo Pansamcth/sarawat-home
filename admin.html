@@ -1792,11 +1792,6 @@
         </div>
 
         <div class="dg-form-group">
-          <label>ผู้รับผิดชอบ</label>
-          <input type="text" id="adminNewsAuthor" placeholder="เช่น สารวัตรนักเรียน, ฝ่ายปกครอง" value="สารวัตรนักเรียน" />
-        </div>
-
-        <div class="dg-form-group">
           <label>รายละเอียดกิจกรรม (เนื้อหาหลัก) *</label>
           <textarea id="adminNewsDesc" rows="4" required
             placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
@@ -4326,14 +4321,13 @@
       document.getElementById('adminNewsModalTitle').textContent = 'แก้ไขข่าวสารและกิจกรรม';
       document.getElementById('adminNewsId').value = item.id;
       document.getElementById('adminNewsTitle').value = item.title || '';
-      if (document.getElementById('adminNewsAuthor')) document.getElementById('adminNewsAuthor').value = item.author || 'สารวัตรนักเรียน';
+
       document.getElementById('adminNewsDate').value = item.date || '';
       
       document.getElementById('adminNewsDateIso').value = item.dateIso || '';
       document.getElementById('adminNewsEndDateIso').value = item.endDateIso || '';
       document.getElementById('adminNewsTag').value = item.tag || '';
-      if(document.getElementById('adminNewsAuthor')) document.getElementById('adminNewsAuthor').value = item.author || 'สารวัตรนักเรียน';
-      if(document.getElementById('adminNewsAuthor')) document.getElementById('adminNewsAuthor').value = item.author || 'สารวัตรนักเรียน';
+
       document.getElementById('adminNewsDesc').value = item.desc || '';
       const detailEl = document.getElementById('adminNewsDetail');
       if (detailEl) detailEl.value = item.detail || '';
@@ -4439,7 +4433,7 @@
         const tag = document.getElementById('adminNewsTag').value.trim();
         const desc = document.getElementById('adminNewsDesc').value.trim();
         const detail = document.getElementById('adminNewsDetail')?.value.trim() || '';
-        const author = document.getElementById('adminNewsAuthor')?.value.trim() || 'สารวัตรนักเรียน';
+        const author = 'คณะสารวัตรนักเรียน';
         const fbUrl = document.getElementById('adminNewsFb').value.trim();
         const igUrl = document.getElementById('adminNewsIg').value.trim();
         const reelsUrl = document.getElementById('adminNewsReels').value.trim();
