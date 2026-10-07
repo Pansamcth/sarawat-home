@@ -4696,7 +4696,7 @@
       }
 
       // Parse start and end time from evt.time if available
-      const timeMatch = (evt.time || '').match(/(d{1,2}:d{2})s*[-–]s*(d{1,2}:d{2})/);
+      const timeMatch = String(evt.time || '').match(/(\d{1,2}:\d{2}).*?(\d{1,2}:\d{2})/);
       const startEl = document.getElementById('adminEventStartTime');
       const endEl = document.getElementById('adminEventEndTime');
       if (timeMatch && startEl && endEl) {
@@ -4857,7 +4857,7 @@
       }
 
       // Parse start and end time from feat.time if available
-      const timeMatch = (feat.time || '').match(/(d{1,2}:d{2})s*[-–]s*(d{1,2}:d{2})/);
+      const timeMatch = String(feat.time || '').match(/(\d{1,2}:\d{2}).*?(\d{1,2}:\d{2})/);
       const startEl = document.getElementById('adminFeaturedStartTime');
       const endEl = document.getElementById('adminFeaturedEndTime');
       if (timeMatch && startEl && endEl) {
