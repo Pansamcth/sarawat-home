@@ -10,21 +10,26 @@
   // หากคุณเปิด Cloudflare Tunnel แล้วได้ลิงก์ เช่น https://xxxx.trycloudflare.com
   // สามารถนำมาวางในเครื่องหมายคำพูดด้านล่างนี้ เพื่อให้ผู้ใช้ภายนอก/มือถือทุกคนเชื่อมต่อได้ทันที
   // =========================================================================
-  const HARDCODED_TUNNEL_URL = 'https://towards-stuffed-bob-disposition.trycloudflare.com'; // <-- วางลิงก์ Cloudflare ที่นี่ได้ (ถ้ามี)
+  const HARDCODED_TUNNEL_URL = 'https://justify-clearing-changelog-reserved.trycloudflare.com'; // <-- ลิงก์ Cloudflare ที่กำลังออนไลน์อยู่ขณะนี้
 
   function getActiveApiBase() {
+    const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
+
     // 1. อ่านจากค่าที่ผู้ดูแลระบบตั้งไว้ในหน้า Admin Settings (LocalStorage)
     const saved = localStorage.getItem('dg_sarawat_api_url');
     if (saved && saved.trim().length > 0) {
-      return saved.trim().replace(/\/+$/, '');
+      const cleanSaved = saved.trim().replace(/\/+$/, '');
+      // หากอยู่ในเครื่องตนเอง แต่ URL ที่บันทึกไว้เป็น Tunnel ภายนอกที่อาจปิดไปแล้ว 
+      // ให้ลองใช้ แต่ถ้าล้มเหลวระบบจะมี fallback ไป localhost:5000 อัตโนมัติ
+      return cleanSaved;
     }
 
     // 2. หากรันบนเครื่องตนเอง (Localhost หรือเปิดไฟล์ HTML โดยตรง) ให้ชี้ไปที่พอร์ต 5000 ของ Node.js อัตโนมัติ
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+    if (isLocal) {
       return 'http://localhost:5000';
     }
 
-    // 3. หากมีกำหนด Hardcoded Cloudflare URL ไว้
+    // 3. หากมีกำหนด Hardcoded Cloudflare URL ไว้ (สำหรับผู้ใช้งานจากมือถือ / Vercel)
     if (HARDCODED_TUNNEL_URL && HARDCODED_TUNNEL_URL.trim().length > 0) {
       return HARDCODED_TUNNEL_URL.trim().replace(/\/+$/, '');
     }
@@ -256,6 +261,167 @@
       });
       if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการบันทึกกิจกรรมเด่น (HTTP ${res.status})`);
       return await res.json();
+    },
+
+    // ==========================================
+    // 🔐 ADMIN AUTH & MANAGEMENT APIS
+    // ==========================================
+    getSetupStatus: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { needsSetup: false, offline: true };
+      try {
+        const res = await fetch(`${base}/api/admins/setup-status`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
+        if (isLocal && base !== 'http://localhost:5000') {
+          try {
+            const retryRes = await fetch('http://localhost:5000/api/admins/setup-status');
+            if (retryRes.ok) {
+              this.setBaseUrl('http://localhost:5000');
+              return await retryRes.json();
+            }
+          } catch (retryErr) {
+            // ignore
+          }
+        }
+        console.warn('[SarawatApi] getSetupStatus failed:', err.message);
+        return { needsSetup: false, offline: true };
+      }
+    },
+
+    setupSuperAdmin: async function (username, password) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      const res = await fetch(`${base}/api/admins/setup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'สร้างบัญชี Super Admin ไม่สำเร็จ');
+      }
+      return data;
+    },
+
+    login: async function (username, password) {
+      let base = this.getBaseUrl();
+      if (!base) {
+        const err = new Error('⚠️ ไม่พบที่อยู่เซิร์ฟเวอร์หลังบ้าน กรุณาดับเบิลคลิก start-server.bat');
+        err.isNetworkError = true;
+        throw err;
+      }
+
+      const doLoginFetch = async (targetBase) => {
+        const res = await fetch(`${targetBase}/api/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) {
+          const err = new Error(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+          err.isAuthError = true;
+          throw err;
+        }
+        return data;
+      };
+
+      try {
+        return await doLoginFetch(base);
+      } catch (err) {
+        if (err.isAuthError) throw err;
+
+        // หากกำลังเปิดบนเครื่องตนเอง และ URL ปัจจุบันไม่ใช่ localhost:5000 ให้ลอง fallback ไปยัง localhost:5000
+        const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
+        if (isLocal && base !== 'http://localhost:5000') {
+          try {
+            console.warn('[SarawatApi] Primary URL connection failed, falling back to http://localhost:5000...');
+            const retryData = await doLoginFetch('http://localhost:5000');
+            this.setBaseUrl('http://localhost:5000');
+            return retryData;
+          } catch (retryErr) {
+            if (retryErr.isAuthError) throw retryErr;
+          }
+        }
+
+        const netErr = new Error('⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์หลังบ้านได้ (กรุณาดับเบิลคลิก start-server.bat ก่อนเข้าสู่ระบบ)');
+        netErr.isNetworkError = true;
+        throw netErr;
+      }
+    },
+
+    getAdmins: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return null;
+      try {
+        const res = await fetch(`${base}/api/admins`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.warn('[SarawatApi] getAdmins failed:', err.message);
+        return null;
+      }
+    },
+
+    createAdmin: async function (username, password, role) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      const res = await fetch(`${base}/api/admins`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, role })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'เพิ่มผู้ดูแลระบบไม่สำเร็จ');
+      }
+      return data;
+    },
+
+    deleteAdmin: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      const res = await fetch(`${base}/api/admins/${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'ลบผู้ดูแลระบบไม่สำเร็จ');
+      }
+      return data;
+    },
+
+    resetAdminPassword: async function (id, newPassword) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      const res = await fetch(`${base}/api/admins/${encodeURIComponent(id)}/reset-password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newPassword })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'รีเซ็ตรหัสผ่านไม่สำเร็จ');
+      }
+      return data;
+    },
+
+    changePassword: async function (username, currentPassword, newPassword) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      const res = await fetch(`${base}/api/admins/change-password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, currentPassword, newPassword })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'เปลี่ยนรหัสผ่านไม่สำเร็จ');
+      }
+      return data;
     }
   };
 })();
