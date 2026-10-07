@@ -53,34 +53,7 @@
   <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
   <div class="dg-scroll-progress" id="scrollProgress"></div>
 
-  <!-- ============ FLOATING SIDE CHAPTER NAVIGATOR ============ -->
-  <aside class="dg-side-nav" id="dgSideNav" aria-label="Section Quick Navigation">
-    <a href="#hero" class="dg-side-dot active" data-section="hero">
-      <span class="dg-side-tooltip">01 • หน้าแรก</span>
-    </a>
-    <a href="#vision" class="dg-side-dot" data-section="vision">
-      <span class="dg-side-tooltip">02 • วิสัยทัศน์ & พันธกิจ</span>
-    </a>
-    <a href="#news" class="dg-side-dot" data-section="news">
-      <span class="dg-side-tooltip">03 • ข่าวสารและกิจกรรม</span>
-    </a>
-    <a href="#operations" class="dg-side-dot" data-section="operations">
-      <span class="dg-side-tooltip">04 • รวมระบบออนไลน์</span>
-    </a>
-    <a href="#team" class="dg-side-dot" data-section="team">
-      <span class="dg-side-tooltip">05 • วิสัยทัศน์ประธาน</span>
-    </a>
-    <a href="#calendar" class="dg-side-dot" data-section="calendar">
-      <span class="dg-side-tooltip">06 • ตารางกิจกรรมโรงเรียน</span>
-    </a>
-    <a href="#faq" class="dg-side-dot" data-section="faq">
-      <span class="dg-side-tooltip">07 • คำถามที่พบบ่อย</span>
-    </a>
-    <a href="#contact" class="dg-side-dot" data-section="contact">
-      <span class="dg-side-tooltip">08 • ติดต่อเรา</span>
-    </a>
-  </aside>
-
+  
   <!-- ============ NAVIGATION BAR (Diego Minimalist Header) ============ -->
   <nav class="dg-nav" id="dgNav">
     <div class="dg-nav-container">
@@ -160,82 +133,128 @@
           </a>
         </div>
 
-        <div class="dg-hero-image-wrap" data-reveal="scale" id="heroImageWrap">
+        <div class="dg-hero-image-wrap" id="heroImageWrap">
           <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล"
             id="heroCinematicImg" />
         </div>
       </div>
     </div><!-- /.dg-hero-mobile-viewport -->
 
+    <!-- ============ WHO WE ARE & DUTIES ============ -->
+    <section class="dg-what-we-do" id="whatWeDo" style="padding-top: 60px; padding-bottom: 20px;">
+      <div class="dg-container">
+        <div class="dg-what-grid" style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center;">
+          <!-- Left: Text -->
+          <div class="dg-what-content" >
+            <div class="dg-section-header" style="margin-bottom: 0;">
+              <span class="dg-section-tag">WHO WE ARE • สารวัตรนักเรียนคือใคร?</span>
+              <h2 class="dg-section-title">
+                What is the<br>
+                Truant Patrol?
+              </h2>
+              <p class="dg-section-desc">
+                นักเรียนโรงเรียนเดชะปัตตนยานุกูลระดับชั้นมัธยมศึกษาปีที่ 4 ถึง 5 ที่มีความประพฤติเรียบร้อย มีระเบียบวินัย มีจิตสาธารณะ พร้อมเสียสละเพื่อส่วนรวม และมีคุณสมบัติตามกฎเกณฑ์ที่กลุ่มงานกิจการนักเรียนกำหนด โดยสารวัตรนักเรียนยังเป็นที่รู้จักและเรียกกันอย่างง่าย ๆ ว่า <strong>“พี่เสื้อดำ”</strong> ซึ่งมาจากเสื้อประจำตำแหน่งที่เป็นสีดำ อันเป็นเอกลักษณ์ที่ช่วยให้นักเรียนและบุคลากรสามารถสังเกตและจดจำได้อย่างชัดเจน
+              </p>
+            </div>
+          </div>
+
+          <!-- Right: Visual Image -->
+          <div class="dg-what-visual" data-reveal="scale" data-delay="150">
+            <div class="dg-what-image-wrapper">
+              <img src="assets/images/what-we-do-1.jpg" alt="การปฏิบัติหน้าที่สารวัตรนักเรียน" onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 2: Duties (Right-Aligned Zigzag) -->
+        <div class="dg-what-grid" style="margin-top: 80px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 60px; align-items: center;">
+          <!-- Left: Visual Image 2 -->
+          <div class="dg-what-visual" data-reveal="scale" data-delay="150">
+            <div class="dg-what-image-wrapper">
+              <img src="assets/images/what-we-do-2.jpg" alt="หน้าที่สารวัตรนักเรียน" onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
+            </div>
+          </div>
+
+          <!-- Right: Text -->
+          <div class="dg-what-content"  style="text-align: right;">
+            <div class="dg-section-header" style="margin-bottom: 0;">
+              <span class="dg-section-tag" style="justify-content: flex-end; display: flex;">OUR DUTIES • มีหน้าที่ทำอะไรบ้าง?</span>
+              <h2 class="dg-section-title">
+                What exactly<br>
+                do we do?
+              </h2>
+              <p class="dg-section-desc" style="margin-left: auto; margin-right: 0;">
+                เรามีบทบาทสำคัญในการดูแลความสงบเรียบร้อยและความปลอดภัยบริเวณโรงเรียนในทุกวันทำการและช่วงงานกิจกรรม ตลอดจนตรวจสอบความเป็นระเบียบภายในอาคารเรียน และร่วมปฏิบัติหน้าที่จิตอาสาต่างๆ ตามที่ได้รับมอบหมายจากกลุ่มงานกิจการนักเรียน
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ LIVE OPERATIONAL UPTIME COUNTER & VISION ============ -->
     <div class="dg-container">
 
-      <!-- ============ LIVE OPERATIONAL UPTIME COUNTER (Diego Swiss Minimalist Style) ============ -->
-      <div class="dg-uptime-card" id="dutyUptimeCard" data-reveal="fade">
-        <div class="dg-uptime-header">
-          <div class="dg-uptime-title-wrap">
-            <span class="dg-section-tag">PREFECT DUTY IN SERVICE • ระยะเวลาปฏิบัติหน้าที่</span>
+      <!-- ============ LIVE OPERATIONAL UPTIME & VISION (Vertical Grid Layout) ============ -->
+      <div class="dg-uptime-vision-layout" >
+        
+        <!-- Left: Vertical Uptime Counter -->
+        <div class="dg-uptime-card-vertical" id="dutyUptimeCard">
+          <div class="dg-uptime-layout-inner">
+            <div class="dg-uptime-grid-vertical">
+              <!-- Months -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeMonths">00</div>
+                <div class="dg-uptime-name">เดือน</div>
+              </div>
+              <!-- Days -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeDays">00</div>
+                <div class="dg-uptime-name">วัน</div>
+              </div>
+              <!-- Hours -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeHours">00</div>
+                <div class="dg-uptime-name">ชั่วโมง</div>
+              </div>
+              <!-- Minutes -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeMinutes">00</div>
+                <div class="dg-uptime-name">นาที</div>
+              </div>
+              <!-- Seconds -->
+              <div class="dg-uptime-unit is-seconds">
+                <div class="dg-uptime-val" id="uptimeSeconds">00</div>
+                <div class="dg-uptime-name">วินาที</div>
+              </div>
+            </div>
+            <!-- Start Label Text placed to the right of the blocks -->
+            <div class="dg-uptime-start-label-vertical" id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</div>
           </div>
-          <div class="dg-uptime-meta dg-desktop-only">
-            <span id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
-          </div>
-        </div>
-
-        <div class="dg-uptime-grid">
-          <!-- Months -->
-          <div class="dg-uptime-unit">
-            <div class="dg-uptime-val" id="uptimeMonths">00</div>
-            <div class="dg-uptime-name">เดือน</div>
-            <div class="dg-uptime-subname">MONTHS</div>
-          </div>
-          <!-- Days -->
-          <div class="dg-uptime-unit">
-            <div class="dg-uptime-val" id="uptimeDays">00</div>
-            <div class="dg-uptime-name">วัน</div>
-            <div class="dg-uptime-subname">DAYS</div>
-          </div>
-          <!-- Hours -->
-          <div class="dg-uptime-unit">
-            <div class="dg-uptime-val" id="uptimeHours">00</div>
-            <div class="dg-uptime-name">ชั่วโมง</div>
-            <div class="dg-uptime-subname">HOURS</div>
-          </div>
-          <!-- Minutes -->
-          <div class="dg-uptime-unit">
-            <div class="dg-uptime-val" id="uptimeMinutes">00</div>
-            <div class="dg-uptime-name">นาที</div>
-            <div class="dg-uptime-subname">MINUTES</div>
-          </div>
-          <!-- Seconds -->
-          <div class="dg-uptime-unit is-seconds">
-            <div class="dg-uptime-val" id="uptimeSeconds">00</div>
-            <div class="dg-uptime-name">วินาที</div>
-            <div class="dg-uptime-subname">SECONDS</div>
+          <!-- Mobile Fallback Text -->
+          <div class="dg-uptime-meta-bottom dg-mobile-only">
+            <span id="dutyStartLabelMobile">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
           </div>
         </div>
 
-        <!-- Mobile: Positioned on the line below the clock -->
-        <div class="dg-uptime-meta-bottom dg-mobile-only">
-          <span id="dutyStartLabelMobile">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
+        <!-- Right: Stacked Mission & Vision -->
+        <div class="dg-mission-vision-stacked" id="vision">
+          <div class="dg-mv-item">
+            <span class="dg-mv-label">OUR MISSION • พันธกิจหลัก</span>
+            <p class="dg-mv-desc">
+              สร้างแรงบันดาลใจและเสริมสร้างวินัยผ่านการเป็นแบบอย่างที่ดี ปลูกฝังจิตสาธารณะและความรับผิดชอบต่อส่วนรวม
+              ดูแลความสงบเรียบร้อยและความปลอดภัยตลอดเวลาในรั้วโรงเรียนเดชะปัตตนยานุกูล เพื่อให้ทุกคนเรียนรู้อย่างมีความสุข
+            </p>
+          </div>
+          <div class="dg-mv-item">
+            <span class="dg-mv-label">OUR VISION • วิสัยทัศน์</span>
+            <p class="dg-mv-desc">
+              มุ่งสู่การเป็นองค์กรตัวแทนนักเรียนต้นแบบที่มีระบบการทำงานโปร่งใส ยุติธรรม ทันสมัยด้วยเทคโนโลยีดิจิทัล
+              และเป็นที่พึ่งพาที่ไว้วางใจได้ของเพื่อนนักเรียนและคณะครูอาจารย์อย่างแท้จริง
+            </p>
+          </div>
         </div>
-      </div>
 
-      <!-- Mission & Vision 2-Column Layout -->
-      <div class="dg-mission-vision-grid" id="vision" data-reveal="fade">
-        <div>
-          <span class="dg-mv-label">OUR MISSION • พันธกิจหลัก</span>
-          <p class="dg-mv-desc">
-            สร้างแรงบันดาลใจและเสริมสร้างวินัยผ่านการเป็นแบบอย่างที่ดี ปลูกฝังจิตสาธารณะและความรับผิดชอบต่อส่วนรวม
-            ดูแลความสงบเรียบร้อยและความปลอดภัยตลอดเวลาในรั้วโรงเรียนเดชะปัตตนยานุกูล เพื่อให้ทุกคนเรียนรู้อย่างมีความสุข
-          </p>
-        </div>
-        <div>
-          <span class="dg-mv-label">OUR VISION • วิสัยทัศน์</span>
-          <p class="dg-mv-desc">
-            มุ่งสู่การเป็นองค์กรตัวแทนนักเรียนต้นแบบที่มีระบบการทำงานโปร่งใส ยุติธรรม ทันสมัยด้วยเทคโนโลยีดิจิทัล
-            และเป็นที่พึ่งพาที่ไว้วางใจได้ของเพื่อนนักเรียนและคณะครูอาจารย์อย่างแท้จริง
-          </p>
-        </div>
       </div>
 
     </div>
@@ -244,7 +263,7 @@
   <!-- ============ NEWS & ACTIVITIES SECTION (ข่าวสารและกิจกรรม) ============ -->
   <section class="dg-news-section" id="news">
     <div class="dg-container">
-      <div class="dg-news-header" data-reveal="fade">
+      <div class="dg-news-header" >
         <div class="dg-news-header-left">
           <span class="dg-section-tag">NEWS & ACTIVITIES • ข่าวสารและกิจกรรม</span>
           <h2 class="dg-section-title">
@@ -274,9 +293,15 @@
       </div>
 
       <!-- Carousel / Grid Track -->
-      <div class="dg-news-track-wrap" id="newsTrackWrap">
-        <div class="dg-news-track" id="newsCardsTrack">
-          <!-- Rendered dynamically by JavaScript -->
+      <div class="dg-news-carousel-wrapper">
+        <div class="dg-news-scroll-fade dg-fade-left" id="newsFadeLeft"></div>
+        <div class="dg-news-track-wrap" id="newsTrackWrap">
+          <div class="dg-news-track" id="newsCardsTrack">
+            <!-- Rendered dynamically by JavaScript -->
+          </div>
+        </div>
+        <div class="dg-news-scroll-fade dg-fade-right" id="newsFadeRight">
+          <i data-lucide="chevron-right" class="dg-fade-arrow"></i>
         </div>
       </div>
     </div>
@@ -285,7 +310,7 @@
   <!-- ============ INTEGRATED OPERATIONS SECTION (3 Essential Digital Services) ============ -->
   <section class="dg-ops-section" id="operations">
     <div class="dg-container">
-      <div class="dg-section-header" data-reveal="fade">
+      <div class="dg-section-header" >
         <span class="dg-section-tag">ONLINE SERVICES • รวมระบบปฏิบัติการ</span>
         <h2 class="dg-section-title">
           Digital Operations. Integrated<br>
@@ -356,10 +381,10 @@
     </div>
   </section>
 
-  <!-- ============ CHIEF PREFECT VISION SECTION (วิสัยทัศน์ประธานสารวัตร) ============ -->
+  <!-- ============ CHIEF OF TRUANT PATROL VISION SECTION (วิสัยทัศน์ประธานสารวัตร) ============ -->
   <section class="dg-chief-section" id="team">
     <div class="dg-container">
-      <div class="dg-section-header" data-reveal="fade">
+      <div class="dg-section-header" >
         <span class="dg-section-tag">LEADERSHIP • วิสัยทัศน์ประธาน</span>
         <h2 class="dg-section-title">
           Lead with Empathy.<br>
@@ -448,7 +473,7 @@
   <!-- ============ ACADEMIC & ACTIVITIES CALENDAR SECTION (ตารางกิจกรรมโรงเรียน) ============ -->
   <section class="dg-calendar-section" id="calendar">
     <div class="dg-container">
-      <div class="dg-section-header" data-reveal="fade">
+      <div class="dg-section-header" >
         <span class="dg-section-tag">ACADEMIC & ACTIVITIES SCHEDULE • ปฏิทินและตารางกิจกรรมโรงเรียน</span>
         <h2 class="dg-section-title">
           School Calendar & Agenda.<br>
@@ -550,7 +575,7 @@
     <div class="dg-container">
       <div class="dg-faq-grid">
         <!-- Left: Big Title + Contact Card -->
-        <div class="dg-faq-left" data-reveal="fade">
+        <div class="dg-faq-left" >
           <h2 class="dg-faq-title">
             Questions?<br>
             Answers.

@@ -28,7 +28,7 @@
     return toast;
   }
 
-  function showProtectToast(msg) {
+  function 
     const toast = getOrCreateToast();
     const textSpan = toast.querySelector('.dg-toast-text');
     if (textSpan) {
@@ -72,7 +72,7 @@
     if (isProtectedImage(e.target)) {
       e.preventDefault();
       e.stopPropagation();
-      showProtectToast(DEFAULT_WARNING_MSG);
+      
       return false;
     }
   }, true);
@@ -82,7 +82,7 @@
     if (isProtectedImage(e.target)) {
       e.preventDefault();
       e.stopPropagation();
-      showProtectToast(DEFAULT_WARNING_MSG);
+      
       return false;
     }
   }, true);
@@ -100,7 +100,7 @@
   document.addEventListener('touchstart', function (e) {
     if (isProtectedImage(e.target)) {
       touchTimer = setTimeout(function () {
-        showProtectToast(DEFAULT_WARNING_MSG);
+        
       }, 450);
     }
   }, { passive: true });
@@ -118,7 +118,7 @@
     const isSave = (e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S');
     if (isSave) {
       e.preventDefault();
-      showProtectToast(DEFAULT_WARNING_MSG);
+      
     }
   });
 
@@ -155,5 +155,5 @@
   });
 
   // Expose to window
-  window.dgProtectToast = showProtectToast;
+  window.dgProtectToast = 
 })();

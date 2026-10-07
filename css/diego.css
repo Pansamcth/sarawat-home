@@ -475,58 +475,52 @@ svg:not([data-lucide]),
 
 /* 5-Column Digit Grid - Frameless and Clean */
 .dg-uptime-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 12px;
 }
 
 .dg-uptime-unit {
   background: transparent;
   border: none;
-  border-radius: 0;
-  padding: 12px 6px;
+  padding: 0;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
-  transition: transform 0.2s ease;
-}
-
-.dg-uptime-unit:hover {
-  transform: translateY(-2px);
 }
 
 .dg-uptime-val {
   font-family: var(--dg-font-sans);
-  font-size: clamp(2.6rem, 4.6vw, 4.2rem);
-  font-weight: 850;
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 700;
   line-height: 1;
   color: var(--dg-text-primary);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  margin-bottom: 8px;
-}
-
-.dg-uptime-unit.is-seconds .dg-uptime-val {
-  color: var(--dg-text-primary);
+  margin-bottom: 4px;
+  display: inline-block;
 }
 
 .dg-uptime-name {
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: var(--dg-text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--dg-text-secondary);
 }
 
 .dg-uptime-subname {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--dg-text-muted);
-  margin-top: 3px;
+  display: none;
+}
+
+@keyframes tickAnim {
+  0% { transform: translateY(-4px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.tick-anim {
+  animation: tickAnim 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Mission & Vision Row (Underneath Image) */
@@ -599,10 +593,12 @@ svg:not([data-lucide]),
    NEWS & ACTIVITIES SECTION (ข่าวสารและกิจกรรม)
    ========================================================== */
 .dg-news-section {
-  padding: 44px 0 80px;
+  padding: 40px 0 70px;
   border-bottom: 1px solid var(--dg-border);
   background: #ffffff;
+  background-image: radial-gradient(circle at 100% 0%, rgba(240, 240, 240, 0.6) 0%, transparent 35%);
   position: relative;
+  overflow: hidden;
 }
 
 .dg-news-header {
@@ -675,6 +671,54 @@ svg:not([data-lucide]),
 }
 
 /* Track & Cards */
+.dg-news-carousel-wrapper {
+  position: relative;
+}
+
+.dg-news-scroll-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.dg-news-scroll-fade.dg-fade-left {
+  left: 0;
+  background: linear-gradient(to right, rgba(250, 250, 250, 0.9) 0%, rgba(250, 250, 250, 0) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-mask-image: linear-gradient(to right, black, transparent);
+  mask-image: linear-gradient(to right, black, transparent);
+}
+
+.dg-news-scroll-fade.dg-fade-right {
+  right: 0;
+  background: linear-gradient(to left, rgba(250, 250, 250, 0.9) 0%, rgba(250, 250, 250, 0) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-mask-image: linear-gradient(to left, black, transparent);
+  mask-image: linear-gradient(to left, black, transparent);
+}
+
+.dg-fade-arrow {
+  color: var(--dg-text-primary);
+  width: 32px;
+  height: 32px;
+  opacity: 0.7;
+  animation: dg-pulse-right 1.5s infinite ease-in-out;
+}
+
+@keyframes dg-pulse-right {
+  0% { transform: translateX(0); opacity: 0.3; }
+  50% { transform: translateX(8px); opacity: 0.9; }
+  100% { transform: translateX(0); opacity: 0.3; }
+}
+
 .dg-news-track-wrap {
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -691,12 +735,14 @@ svg:not([data-lucide]),
 .dg-news-track {
   display: flex;
   gap: 26px;
+  padding: 0 calc(50% - 160px);
 }
 
 .dg-news-card {
   flex: 0 0 calc((100% - 52px) / 3);
   min-width: 320px;
-  scroll-snap-align: start;
+  max-width: 400px;
+  scroll-snap-align: center;
   background: #ffffff;
   border: 1px solid var(--dg-border);
   border-radius: var(--dg-radius-md);
@@ -1145,7 +1191,7 @@ svg:not([data-lucide]),
    STATISTICS & AWARDS SECTION (Exact 2-Column Ledger)
    ========================================================== */
 .dg-stats-section {
-  padding: 80px 0;
+  padding: 70px 0;
   border-bottom: 1px solid var(--dg-border);
 }
 
@@ -1196,12 +1242,161 @@ svg:not([data-lucide]),
 }
 
 /* ==========================================================
+   WHAT IS A PREFECT? (Infographic Section)
+   ========================================================== */
+.dg-what-we-do-section {
+  padding: 60px 0;
+  background: var(--dg-white);
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.dg-what-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 60px;
+  align-items: stretch;
+}
+
+.dg-what-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dg-what-title {
+  font-family: var(--dg-font-sans);
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 850;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  color: var(--dg-black);
+}
+
+.dg-what-title .dg-text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--dg-black);
+}
+
+.dg-what-title .dg-text-gradient {
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dg-what-desc {
+  font-size: 1.1rem;
+  color: var(--dg-text-secondary);
+  margin-bottom: 48px;
+  line-height: 1.6;
+  max-width: 90%;
+}
+
+.dg-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.dg-info-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--dg-bg-subtle);
+  padding: 20px 24px;
+  border-radius: var(--dg-radius-md);
+  border: 1px solid var(--dg-border);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.dg-info-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+}
+
+.dg-info-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--dg-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dg-info-icon i {
+  width: 26px;
+  height: 26px;
+}
+
+.dg-info-text h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--dg-black);
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.dg-info-text p {
+  font-size: 0.9rem;
+  color: var(--dg-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dg-what-visual {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+.dg-what-image-wrapper {
+  position: relative;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  height: 100%;
+}
+
+.dg-what-image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+
+@media (max-width: 991px) {
+  .dg-what-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  .dg-what-title { font-size: 2.8rem; }
+  .dg-what-desc { max-width: 100%; }
+  
+  .dg-what-visual { height: auto; }
+  .dg-what-image-wrapper { height: auto; }
+  .dg-what-image-wrapper img { position: relative; aspect-ratio: 4/3; }
+}
+
+/* ==========================================================
    INTEGRATED OPERATIONS SECTION (3 Essential System Nodes)
    ========================================================== */
 .dg-ops-section {
-  padding: 100px 0;
-  background: var(--dg-bg-subtle);
+  padding: 80px 0;
+  background-color: var(--dg-bg-subtle);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
   border-bottom: 1px solid var(--dg-border);
+  position: relative;
 }
 
 .dg-section-header {
@@ -1260,9 +1455,10 @@ svg:not([data-lucide]),
 }
 
 .dg-ops-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px) scale(1.01);
   border-color: var(--dg-black);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  z-index: 2;
 }
 
 .dg-ops-icon-box {
@@ -1336,8 +1532,12 @@ svg:not([data-lucide]),
    CHIEF PREFECT VISION SECTION (วิสัยทัศน์ประธานสารวัตร)
    ========================================================== */
 .dg-chief-section {
-  padding: 100px 0;
+  padding: 80px 0;
+  background: #ffffff;
+  background-image: radial-gradient(circle at 0% 100%, rgba(240, 240, 240, 0.8) 0%, transparent 40%);
   border-bottom: 1px solid var(--dg-border);
+  position: relative;
+  overflow: hidden;
 }
 
 .dg-chief-grid {
@@ -1500,9 +1700,14 @@ svg:not([data-lucide]),
    ACADEMIC & ACTIVITIES CALENDAR SECTION (ตารางกิจกรรมโรงเรียน)
    ========================================================== */
 .dg-calendar-section {
-  padding: 100px 0;
-  background: var(--dg-bg-subtle);
+  padding: 80px 0;
+  background-color: var(--dg-bg-subtle);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
   border-bottom: 1px solid var(--dg-border);
+  position: relative;
 }
 
 /* Featured Event Banner */
@@ -1720,8 +1925,8 @@ svg:not([data-lucide]),
 
 .dg-event-card:hover {
   border-color: var(--dg-black);
-  transform: translateX(4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+  transform: translateX(8px) scale(1.01);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
 }
 
 .dg-event-card.hidden {
@@ -2036,8 +2241,12 @@ svg:not([data-lucide]),
    FAQ SECTION (Diego "Questions? Answers." Accordion)
    ========================================================== */
 .dg-faq-section {
-  padding: 110px 0;
+  padding: 85px 0;
+  background: #ffffff;
+  background-image: radial-gradient(circle at 100% 50%, rgba(240, 240, 240, 0.6) 0%, transparent 50%);
   border-bottom: 1px solid var(--dg-border);
+  position: relative;
+  overflow: hidden;
 }
 
 .dg-faq-grid {
@@ -3379,14 +3588,22 @@ svg:not([data-lucide]),
   position: fixed;
   top: 0;
   left: 0;
-  height: 3px;
+  height: 4px;
   width: 0%;
-  background: linear-gradient(90deg, #111111 0%, #2563eb 50%, #059669 100%);
+  background: linear-gradient(90deg, #000000 0%, #3b82f6 33%, #10b981 66%, #000000 100%);
+  background-size: 200% 100%;
+  animation: dgGradientMove 4s ease infinite;
   z-index: 10000;
-  transition: width 0.08s ease-out;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
+  transition: width 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   pointer-events: none;
 }
+
+@keyframes dgGradientMove {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
 
 /* 2. Hero Animated Scroll Cue */
 .dg-hero-scroll-cue {
@@ -3628,41 +3845,51 @@ svg:not([data-lucide]),
   transform: translateY(-2px);
 }
 
-/* 5. Scroll Reveal System */
+/* 5. Scroll Reveal System (Enhanced with Motion & Blur) */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  transform: translateY(45px) scale(0.97);
+  filter: blur(8px);
+  transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              filter 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform, filter;
 }
 
 [data-reveal].is-revealed {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 [data-reveal="scale"] {
-  transform: scale(0.96) translateY(20px);
+  transform: scale(0.92) translateY(25px);
+  filter: blur(10px);
 }
 
 [data-reveal="scale"].is-revealed {
   transform: scale(1) translateY(0);
+  filter: blur(0);
 }
 
 [data-reveal="left"] {
-  transform: translateX(-28px);
+  transform: translateX(-45px) scale(0.98);
+  filter: blur(8px);
 }
 
 [data-reveal="left"].is-revealed {
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
+  filter: blur(0);
 }
 
 [data-reveal="right"] {
-  transform: translateX(28px);
+  transform: translateX(45px) scale(0.98);
+  filter: blur(8px);
 }
 
 [data-reveal="right"].is-revealed {
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
+  filter: blur(0);
 }
 
 /* 6. Active Scrollspy link in header */
@@ -4134,50 +4361,21 @@ svg:not([data-lucide]),
     border-bottom: 1px solid var(--dg-border);
   }
   .dg-uptime-grid {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    margin-bottom: 0;
-    background: transparent;
-    border: none;
-    border-radius: 0;
+    gap: 16px;
     padding: 8px 0;
-    box-sizing: border-box;
   }
   .dg-uptime-unit {
-    background: transparent;
-    border: none;
-    padding: 6px 1px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .dg-uptime-unit:not(:last-child) {
-    border-right: none;
+    padding: 0;
   }
   .dg-uptime-val {
-    font-family: var(--dg-font-sans);
-    font-size: clamp(1.65rem, 6.4vw, 2.3rem);
-    font-weight: 850;
-    line-height: 1;
-    color: var(--dg-text-primary);
-    margin-bottom: 6px;
-    letter-spacing: -0.04em;
-    font-variant-numeric: tabular-nums;
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    margin-bottom: 4px;
   }
   .dg-uptime-name {
-    font-size: 0.78rem;
-    font-weight: 800;
-    color: var(--dg-text-primary);
+    font-size: 0.75rem;
   }
   .dg-uptime-subname {
-    font-size: 0.54rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--dg-text-muted);
-    margin-top: 2px;
+    display: none;
   }
   .dg-uptime-meta-bottom {
     display: flex !important;
@@ -5091,4 +5289,117 @@ svg:not([data-lucide]),
     flex: 0 0 90%;
     min-width: 245px;
   }
+}
+/* ============ NEW VERTICAL UPTIME & STACKED MISSION/VISION ============ */
+.dg-uptime-vision-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 80px;
+  align-items: center;
+  padding: 60px 0;
+  border-bottom: 1px solid var(--dg-border);
+}
+
+.dg-uptime-card-vertical {
+  position: relative;
+}
+
+.dg-uptime-layout-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.dg-uptime-grid-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dg-uptime-grid-vertical .dg-uptime-unit {
+  width: 70px;
+  height: 70px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  padding: 0;
+}
+
+.dg-uptime-grid-vertical .dg-uptime-val {
+  font-family: var(--dg-font-sans);
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--dg-text-primary);
+  margin-bottom: 2px;
+}
+
+.dg-uptime-grid-vertical .dg-uptime-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--dg-text-secondary);
+}
+
+.dg-uptime-start-label-vertical {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--dg-text-secondary);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.dg-mission-vision-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.dg-mv-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 991px) {
+  .dg-uptime-vision-layout {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    padding: 40px 0;
+  }
+  .dg-uptime-layout-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dg-uptime-grid-vertical {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .dg-uptime-grid-vertical .dg-uptime-unit {
+    width: 60px;
+    height: 60px;
+  }
+  .dg-uptime-grid-vertical .dg-uptime-val {
+    font-size: 1.5rem;
+  }
+  .dg-uptime-start-label-vertical {
+    writing-mode: horizontal-tb;
+    transform: none;
+    margin-top: 10px;
+  }
+}
+
+
+/* Global Image Protection */
+img {
+  pointer-events: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
 }
