@@ -17,7 +17,7 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- API & Cloudflare Tunnel Config (with Cache-Buster) -->
+  <!-- High-Security Database Gateway Config (with Cache-Buster) -->
   <script src="js/api-config.js?v=2.2.0"></script>
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
@@ -36,7 +36,7 @@
       window.SarawatApi.login = async function (u, p) {
         const base = this.getBaseUrl();
         if (!base) {
-          const err = new Error('⚠️ ยังไม่ได้ระบุที่อยู่เซิร์ฟเวอร์ หรือ Cloudflare Tunnel ปิดอยู่');
+          const err = new Error('⚠️ ยังไม่ได้กำหนดค่าระบบฐานข้อมูล');
           err.isNetworkError = true;
           throw err;
         }
@@ -55,7 +55,7 @@
           return data;
         } catch (fetchErr) {
           if (fetchErr.isAuthError) throw fetchErr;
-          const netErr = new Error(`⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ (${base}) ได้ กรุณาตรวจสอบว่าเปิด start-server.bat และ Cloudflare Tunnel แล้วหรือไม่`);
+          const netErr = new Error(`⚠️ ไม่สามารถเชื่อมต่อกับระบบฐานข้อมูลได้`);
           netErr.isNetworkError = true;
           throw netErr;
         }
@@ -1046,22 +1046,58 @@
         </button>
       </form>
 
-      <!-- Server / Cloudflare Connection Settings Toggle (Useful on Vercel / External Devices) -->
+      <!-- Database Setting (Master Security Key Protected) -->
       <div style="margin-top: 18px; padding-top: 14px; border-top: 1px dashed #e2e8f0; text-align: center;">
-        <button type="button" onclick="toggleLoginServerConfig()" style="background: none; border: none; font-size: 0.78rem; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; font-weight: 600;">
-          <i data-lucide="settings" style="width: 13px; height: 13px;"></i>
-          <span>ตั้งค่า Server / Cloudflare URL (สำหรับ Vercel)</span>
+        <button type="button" id="btnToggleDatabaseConfig" onclick="toggleDatabaseConfig()" style="background: none; border: none; font-size: 0.78rem; color: #64748b; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; transition: color 0.15s ease;">
+          <i data-lucide="database" style="width: 14px; height: 14px; color: #475569;"></i>
+          <span>ระบบฐานข้อมูล</span>
         </button>
         
-        <div id="loginServerConfigBox" style="display: none; margin-top: 10px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-          <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #334155; margin-bottom: 5px;">
-            Server API URL (เช่น จาก Cloudflare Tunnel หรือ http://localhost:5000)
-          </label>
-          <div style="display: flex; gap: 6px;">
-            <input type="text" id="loginServerUrlInput" placeholder="https://xxxx.trycloudflare.com" style="flex: 1; padding: 8px 10px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" />
-            <button type="button" class="dg-btn-black" onclick="saveLoginServerUrl()" style="padding: 8px 12px; font-size: 0.78rem;">บันทึก</button>
+        <div id="loginDatabaseConfigBox" style="display: none; margin-top: 12px; text-align: left; background: #f8fafc; padding: 14px 16px; border-radius: 10px; border: 1.5px solid #e2e8f0; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);">
+          
+          <!-- Phase 1: Security Key Verification -->
+          <div id="dbSecurityGateSection">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: #0f172a; color: #ffffff; font-size: 0.72rem; font-weight: 800;">🔒</span>
+              <span style="font-size: 0.82rem; font-weight: 800; color: #0f172a;">ระบบฐานข้อมูล</span>
+            </div>
+            <p style="font-size: 0.74rem; color: #64748b; margin: 0 0 10px; line-height: 1.45;">
+              กรุณากรอกรหัสผ่านเพื่อเข้าถึงระบบฐานข้อมูล
+            </p>
+            <div style="display: flex; gap: 6px;">
+              <input type="password" id="dbSecurityKeyInput" placeholder="กรอกรหัสผ่าน" autocomplete="off" style="flex: 1; padding: 8px 12px; font-size: 0.82rem; border: 1.5px solid #cbd5e1; border-radius: 6px; outline: none; background: #ffffff;" onkeydown="if(event.key==='Enter'){event.preventDefault();verifyDatabaseSecurityKey();}" />
+              <button type="button" class="dg-btn-black" onclick="verifyDatabaseSecurityKey()" style="padding: 8px 14px; font-size: 0.78rem; font-weight: 750; white-space: nowrap;">
+                <span>ยืนยันสิทธิ์</span>
+              </button>
+            </div>
+            <div id="dbSecurityKeyError" style="display: none; font-size: 0.74rem; color: #dc2626; font-weight: 600; margin-top: 6px; align-items: center; gap: 4px;">
+              <i data-lucide="alert-circle" style="width: 12px; height: 12px; flex-shrink: 0;"></i>
+              <span id="dbSecurityKeyErrorText">รหัสความปลอดภัยไม่ถูกต้อง การเข้าถึงถูกปฏิเสธ</span>
+            </div>
           </div>
-          <div id="loginServerStatusText" style="font-size: 0.74rem; color: #64748b; margin-top: 6px;"></div>
+
+          <!-- Phase 2: Database Setting -->
+          <div id="dbEndpointConfigSection" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #dcfce7; color: #15803d; font-size: 0.65rem; font-weight: 800;">✓</span>
+                <span style="font-size: 0.78rem; font-weight: 800; color: #166534;">ยืนยันสิทธิ์แล้ว</span>
+              </div>
+              <button type="button" onclick="lockDatabaseConfig()" style="background: none; border: none; font-size: 0.72rem; color: #94a3b8; cursor: pointer; text-decoration: underline;" title="ล็อกระบบอีกครั้ง">ล็อกสิทธิ์</button>
+            </div>
+
+            <label style="display: block; font-size: 0.76rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+              ระบบฐานข้อมูล
+            </label>
+            <div style="display: flex; gap: 6px;">
+              <input type="text" id="loginServerUrlInput" placeholder="https://..." style="flex: 1; padding: 8px 10px; font-size: 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 6px; font-family: monospace; background: #ffffff;" onkeydown="if(event.key==='Enter'){event.preventDefault();saveLoginServerUrl();}" />
+              <button type="button" class="dg-btn-black" onclick="saveLoginServerUrl()" style="padding: 8px 14px; font-size: 0.78rem; font-weight: 750; white-space: nowrap;">
+                <span>บันทึก</span>
+              </button>
+            </div>
+            <div id="loginServerStatusText" style="font-size: 0.74rem; color: #64748b; margin-top: 6px; font-weight: 600;"></div>
+          </div>
+
         </div>
       </div>
 
@@ -1167,7 +1203,7 @@
         <span id="adminServerStatusBadge"
           style="font-size: 0.78rem; font-weight: 750; padding: 6px 12px; border-radius: 999px; background: #f1f5f9; color: #64748b; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #e2e8f0;">
           <span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
-          <span id="adminServerStatusText">ตรวจเซิร์ฟเวอร์...</span>
+          <span id="adminServerStatusText">ตรวจสอบฐานข้อมูล...</span>
         </span>
         <a href="index.html" target="_blank" class="dg-btn-outline" style="padding: 8px 14px; font-size: 0.84rem;">
           <i data-lucide="external-link"></i>
@@ -1301,58 +1337,47 @@
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
-        <!-- Database & Cloudflare Tunnel API Connection (SUPER ADMIN ONLY) -->
+        <!-- Database Management (SUPER ADMIN ONLY) -->
         <div class="admin-card" id="adminSqlConfigCard"
           style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
           <div class="admin-card-header"
             style="background: #f8fafc; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="database"></i> เชื่อมต่อฐานข้อมูล & เซิร์ฟเวอร์หลังบ้าน (SQLite + Cloudflare Tunnel)
+              <i data-lucide="database"></i> ระบบฐานข้อมูล
               <span class="admin-role-badge super" style="font-size: 0.72rem; padding: 2px 8px;">👑 เฉพาะ Super Admin</span>
             </h3>
             <span id="apiStatusBadge"
               style="font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 9999px; background: #e2e8f0; color: #475569; display: inline-flex; align-items: center; gap: 6px;">
               <span
                 style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
-              <span>กำลังตรวจสอบ...</span>
+              <span>กำลังตรวจสอบสถานะ...</span>
             </span>
           </div>
           <div class="admin-card-body">
             <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 16px; line-height: 1.6;">
-              ระบบนี้ช่วยให้รูปภาพและกิจกรรมถูกบันทึกลงฮาร์ดดิสก์และ SQLite (sarawat.db) ถาวร รวดเร็วและไม่จำเป็นต้องเปิด MySQL
-              พร้อมส่งผ่าน Cloudflare Tunnel ให้ทุกคนบนมือถือและคอมพิวเตอร์เครื่องอื่นมองเห็นได้
+              ระบบจัดเก็บข้อมูลสำหรับข่าวสาร กิจกรรม ตารางงาน และรูปภาพ
             </p>
             <form onsubmit="handleSaveApiUrl(event)"
               style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
               <div class="dg-form-group" style="flex: 1; min-width: 280px; margin-bottom: 0;">
-                <label style="font-weight: 700; margin-bottom: 6px; display: block;">API Server URL (เช่น
-                  http://localhost:5000 หรือ URL จาก Cloudflare Tunnel)</label>
-                <input type="text" id="settingsApiUrl" placeholder="http://localhost:5000"
+                <label style="font-weight: 700; margin-bottom: 6px; display: block;">ระบบฐานข้อมูล</label>
+                <input type="text" id="settingsApiUrl" placeholder="https://..."
                   style="padding: 10px 14px; border: 1.5px solid var(--dg-border); border-radius: 6px; width: 100%; font-family: monospace; font-size: 0.92rem;" />
               </div>
               <button type="submit" class="dg-btn-black" style="padding: 10px 18px;">
                 <i data-lucide="save"></i>
-                <span>บันทึก URL</span>
+                <span>บันทึก</span>
               </button>
               <button type="button" class="dg-btn-outline" onclick="checkApiServerStatus(true)"
                 style="padding: 10px 16px;">
                 <i data-lucide="refresh-cw"></i>
-                <span>ทดสอบเชื่อมต่อ</span>
+                <span>ทดสอบการเชื่อมต่อ</span>
               </button>
             </form>
-            <div id="apiInfoNotice"
-              style="margin-top: 16px; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.84rem; color: #334155; line-height: 1.65;">
-              🌐 <strong>วิธีใช้งาน Cloudflare Tunnel:</strong><br>
-              1. ดับเบิลคลิกไฟล์ <code>start-server.bat</code> ในโฟลเดอร์ <code>sarawat-backend</code> เพื่อเปิด API<br>
-              2. ดับเบิลคลิกไฟล์ <code>start-cloudflare.bat</code> จะได้รับลิงก์ เช่น
-              <code>https://xxxx.trycloudflare.com</code><br>
-              3. นำลิงก์ HTTPS นั้นมาวางในช่องด้านบนแล้วกด "บันทึก URL" หรือนำไปใส่ใน <code>js/api-config.js</code>
-              เพื่อให้คนอื่นในมือถือเห็นทันที!
-            </div>
           </div>
         </div>
 
-        <!-- Locked SQL Notice for Regular Admin -->
+        <!-- Locked Database Notice for Regular Admin -->
         <div class="admin-card" id="adminSqlLockedNoticeCard"
           style="grid-column: 1 / -1; display: none; border-color: #e2e8f0; background: #f8fafc;">
           <div class="admin-card-body" style="display: flex; align-items: center; gap: 16px; padding: 22px;">
@@ -1361,11 +1386,11 @@
             </div>
             <div>
               <div style="font-weight: 800; font-size: 0.98rem; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
-                <span>การตั้งค่าเชื่อมต่อ SQL และ Cloudflare Tunnel</span>
+                <span>ระบบฐานข้อมูล</span>
                 <span class="admin-role-badge regular" style="font-size: 0.72rem; padding: 2px 8px;">🛡️ สำหรับ Super Admin เท่านั้น</span>
               </div>
               <div style="font-size: 0.86rem; color: #64748b; line-height: 1.55;">
-                บัญชีของคุณมีสิทธิ์ระดับ <strong>Admin ธรรมดา</strong> สามารถแก้ไขข่าวสาร กิจกรรม ตารางงาน และเวลาปฏิบัติหน้าที่ได้ตามปกติ สำหรับการสลับลิงก์เชื่อมต่อฐานข้อมูล SQL หรือ API Server สงวนสิทธิ์เฉพาะผู้ดูแลระบบสูงสุด (Super Admin)
+                บัญชีของคุณมีสิทธิ์ระดับ <strong>Admin ธรรมดา</strong> สามารถแก้ไขข่าวสาร กิจกรรม ตารางงาน และเวลาปฏิบัติหน้าที่ได้ตามปกติ สำหรับการปรับเปลี่ยนระบบฐานข้อมูล สงวนสิทธิ์เฉพาะผู้ดูแลระบบสูงสุด (Super Admin)
               </div>
             </div>
           </div>
@@ -1609,7 +1634,7 @@
                 <label style="font-weight: 700; margin-bottom: 6px; display: block;">ระดับสิทธิ์ (Role Assignment)</label>
                 <select id="newAdminRole" style="padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; width: 100%; background: #ffffff; font-family: inherit; font-size: 0.92rem; outline: none;">
                   <option value="Admin">🛡️ Admin ธรรมดา (แก้ไขข้อมูลข่าวสาร, ปฏิทิน, กิจกรรมทั่วไป)</option>
-                  <option value="Super Admin">👑 Super Admin (สิทธิ์สูงสุด + เปลี่ยน SQL + จัดการระบบ)</option>
+                  <option value="Super Admin">👑 Super Admin (สิทธิ์สูงสุด + ระบบฐานข้อมูล + จัดการระบบ)</option>
                 </select>
               </div>
 
@@ -1633,7 +1658,7 @@
                 <span>👑 Super Admin (ผู้ดูแลระบบสูงสุด)</span>
               </div>
               <ul style="margin: 0; padding-left: 20px; color: #713f12; font-size: 0.84rem;">
-                <li><strong>เปลี่ยนลิงก์เชื่อมต่อฐานข้อมูล SQL</strong> / Cloudflare Tunnel ได้อย่างอิสระ</li>
+                <li><strong>กำหนดค่าและปรับเปลี่ยนระบบฐานข้อมูล</strong> ได้อย่างอิสระ</li>
                 <li><strong>เข้าถึงหน้านี้</strong> เพื่อสร้าง/รีเซ็ตรหัส/ลบบัญชีผู้ดูแลระบบทั้งหมดได้</li>
                 <li>แก้ไขและจัดการข่าวสาร กิจกรรม ตารางงาน และการสำรองข้อมูลได้ครบทุกฟังก์ชัน</li>
               </ul>
@@ -1648,7 +1673,7 @@
                 <li>จัดการข่าวสาร ประชาสัมพันธ์ และอัปโหลดภาพกิจกรรม</li>
                 <li>จัดการตารางกิจกรรมโรงเรียน และกิจกรรมเด่น (Next-Up)</li>
                 <li>แก้ไขวันเริ่มต้นนับเวลาปฏิบัติหน้าที่ (Uptime) และเปลี่ยนรหัสผ่านของตนเอง</li>
-                <li><strong style="color: #b91c1c;">ไม่มีสิทธิ์</strong> เปลี่ยนแปลงลิงก์ SQL หรือเซิร์ฟเวอร์ระบบ (หน้าต่างถูกล็อก)</li>
+                <li><strong style="color: #b91c1c;">ไม่มีสิทธิ์</strong> ปรับเปลี่ยนระบบฐานข้อมูล (หน้าต่างถูกล็อก)</li>
                 <li><strong style="color: #b91c1c;">ไม่มีสิทธิ์</strong> เข้าถึงหน้านี้ หรือจัดการบัญชีแอดมินคนอื่น</li>
               </ul>
             </div>
@@ -2727,16 +2752,95 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    function toggleLoginServerConfig() {
-      const box = document.getElementById('loginServerConfigBox');
-      const inp = document.getElementById('loginServerUrlInput');
+    // Master Security Key for Database Endpoint Access (No DB required, client-side verified)
+    const MASTER_DATABASE_SECURITY_KEY = '7952134826137913';
+    let isDatabaseConfigUnlocked = false;
+
+    function toggleDatabaseConfig() {
+      const box = document.getElementById('loginDatabaseConfigBox');
       if (!box) return;
       const isHidden = (box.style.display === 'none' || !box.style.display);
       box.style.display = isHidden ? 'block' : 'none';
-      if (isHidden && inp && window.SarawatApi) {
-        inp.value = window.SarawatApi.getBaseUrl() || '';
+
+      if (isHidden) {
+        if (isDatabaseConfigUnlocked) {
+          showDatabaseEndpointSection();
+        } else {
+          showDatabaseSecurityGateSection();
+        }
       }
       if (window.lucide) lucide.createIcons();
+    }
+
+    // Alias for backwards compatibility
+    function toggleLoginServerConfig() {
+      toggleDatabaseConfig();
+    }
+
+    function showDatabaseSecurityGateSection() {
+      const gate = document.getElementById('dbSecurityGateSection');
+      const endpoint = document.getElementById('dbEndpointConfigSection');
+      const keyInp = document.getElementById('dbSecurityKeyInput');
+      const err = document.getElementById('dbSecurityKeyError');
+
+      if (gate) gate.style.display = 'block';
+      if (endpoint) endpoint.style.display = 'none';
+      if (err) err.style.display = 'none';
+      if (keyInp) {
+        keyInp.value = '';
+        setTimeout(() => keyInp.focus(), 60);
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function showDatabaseEndpointSection() {
+      const gate = document.getElementById('dbSecurityGateSection');
+      const endpoint = document.getElementById('dbEndpointConfigSection');
+      const urlInp = document.getElementById('loginServerUrlInput');
+      const stat = document.getElementById('loginServerStatusText');
+
+      if (gate) gate.style.display = 'none';
+      if (endpoint) endpoint.style.display = 'block';
+      if (urlInp && window.SarawatApi) {
+        urlInp.value = window.SarawatApi.getBaseUrl() || '';
+        setTimeout(() => urlInp.focus(), 60);
+      }
+      if (stat) stat.textContent = '';
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function verifyDatabaseSecurityKey() {
+      const keyInp = document.getElementById('dbSecurityKeyInput');
+      const err = document.getElementById('dbSecurityKeyError');
+      const errText = document.getElementById('dbSecurityKeyErrorText');
+      if (!keyInp) return;
+
+      const inputVal = keyInp.value.trim();
+      if (!inputVal) {
+        if (errText) errText.textContent = 'กรุณากรอกรหัสความปลอดภัย';
+        if (err) err.style.display = 'flex';
+        keyInp.focus();
+        return;
+      }
+
+      if (inputVal === MASTER_DATABASE_SECURITY_KEY) {
+        if (err) err.style.display = 'none';
+        isDatabaseConfigUnlocked = true;
+        showDatabaseEndpointSection();
+        showToast('🔓 ยืนยันสิทธิ์สำเร็จ เข้าถึงระบบฐานข้อมูล');
+      } else {
+        if (errText) errText.textContent = 'รหัสความปลอดภัยไม่ถูกต้อง การเข้าถึงถูกปฏิเสธ';
+        if (err) err.style.display = 'flex';
+        keyInp.value = '';
+        keyInp.focus();
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function lockDatabaseConfig() {
+      isDatabaseConfigUnlocked = false;
+      showDatabaseSecurityGateSection();
+      showToast('🔒 ล็อกระบบฐานข้อมูลเรียบร้อย');
     }
 
     async function saveLoginServerUrl() {
@@ -2748,20 +2852,20 @@
         window.SarawatApi.setBaseUrl(val);
         if (txt) {
           txt.style.color = '#3b82f6';
-          txt.textContent = '⏳ กำลังทดสอบเชื่อมต่อ...';
+          txt.textContent = '⏳ กำลังตรวจสอบระบบฐานข้อมูล...';
         }
         const res = await window.SarawatApi.checkHealth();
         if (res.online) {
           if (txt) {
             txt.style.color = '#16a34a';
-            txt.textContent = '✅ เชื่อมต่อเซิร์ฟเวอร์สำเร็จ! (' + res.baseUrl + ')';
+            txt.textContent = '🟢 เชื่อมต่อระบบฐานข้อมูลสำเร็จ';
           }
-          showToast('🟢 เชื่อมต่อเซิร์ฟเวอร์สำเร็จแล้ว');
+          showToast('🟢 เชื่อมต่อระบบฐานข้อมูลสำเร็จ');
           await checkSetupStatusAndToggleForm();
         } else {
           if (txt) {
             txt.style.color = '#dc2626';
-            txt.textContent = '❌ เชื่อมต่อไม่ได้: ' + (res.reason || 'กรุณาตรวจสอบ URL หรือเปิดเซิร์ฟเวอร์');
+            txt.textContent = '⚠️ ไม่สามารถเชื่อมต่อระบบฐานข้อมูลได้';
           }
         }
       }
@@ -2808,7 +2912,7 @@
         }
       }
 
-      // SQL / Cloudflare Connection Settings Card: Super Admin ONLY
+      // Database Connection Settings Card: Super Admin ONLY
       const sqlCard = document.getElementById('adminSqlConfigCard');
       const sqlNotice = document.getElementById('adminSqlLockedNoticeCard');
       if (sqlCard) sqlCard.style.display = isSuper ? 'block' : 'none';
@@ -2874,7 +2978,7 @@
           : '<span class="admin-role-badge regular"><i data-lucide="shield" style="width: 12px; height: 12px;"></i> Admin ธรรมดา</span>';
 
         const scopeHtml = isSuper
-          ? '<span style="font-size: 0.82rem; color: #92400e; font-weight: 600;">🌐 สิทธิ์สูงสุด + ลิงก์ SQL + จัดการระบบ</span>'
+          ? '<span style="font-size: 0.82rem; color: #92400e; font-weight: 600;">🌐 สิทธิ์สูงสุด + จัดการระบบฐานข้อมูล</span>'
           : '<span style="font-size: 0.82rem; color: #0369a1; font-weight: 600;">📝 จัดการข่าวสาร, ปฏิทิน, กิจกรรมทั่วไป</span>';
 
         return `
@@ -4544,7 +4648,7 @@
         // Save to Backend SQLite if connected
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
           try {
-            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล SQLite...</span>';
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
             await window.SarawatApi.saveNews({
               ...newsItemObj,
               dateStart: dateIso,
@@ -4996,16 +5100,15 @@
       const navBadge = document.getElementById('adminServerStatusBadge');
       const navText = document.getElementById('adminServerStatusText');
 
-      if (navText) navText.textContent = 'ตรวจเซิร์ฟเวอร์...';
-      if (badge) badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span> ตรวจสอบ...';
+      if (navText) navText.textContent = 'ตรวจสอบฐานข้อมูล...';
+      if (badge) badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span> ตรวจสอบการเชื่อมต่อ...';
 
       if (!window.SarawatApi) return;
       const res = await window.SarawatApi.checkHealth();
 
       if (res.online) {
-        const dbName = (res.data?.database && res.data.database.includes('SQLite')) ? 'SQLite' : 'ออนไลน์';
         if (badge) {
-          badge.innerHTML = `<span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span> ออนไลน์ (${dbName} OK)`;
+          badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span> เชื่อมต่อระบบฐานข้อมูลแล้ว';
           badge.style.color = '#15803d';
           badge.style.background = '#dcfce7';
         }
@@ -5014,11 +5117,11 @@
           navBadge.style.color = '#15803d';
           navBadge.style.borderColor = '#bbf7d0';
         }
-        if (navText) navText.textContent = `ออนไลน์ (${dbName})`;
-        if (showAlert) showToast('🟢 เชื่อมต่อเซิร์ฟเวอร์สำเร็จ! (' + res.baseUrl + ')');
+        if (navText) navText.textContent = 'ระบบฐานข้อมูลออนไลน์';
+        if (showAlert) showToast('🟢 เชื่อมต่อระบบฐานข้อมูลสำเร็จ');
       } else {
         if (badge) {
-          badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> ออฟไลน์ (ใช้แคช)';
+          badge.innerHTML = '<span style="width: 7px; height: 7px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> ระบบฐานข้อมูลออฟไลน์';
           badge.style.color = '#b91c1c';
           badge.style.background = '#fee2e2';
         }
@@ -5027,15 +5130,15 @@
           navBadge.style.color = '#b45309';
           navBadge.style.borderColor = '#fde68a';
         }
-        if (navText) navText.textContent = 'ออฟไลน์ (ใช้แคช)';
-        if (showAlert) alert('⚠️ ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้:\n\n' + (res.reason || 'กรุณาตรวจสอบว่ารัน start-server.bat แล้วหรือยัง'));
+        if (navText) navText.textContent = 'ระบบฐานข้อมูลออฟไลน์';
+        if (showAlert) alert('⚠️ ไม่สามารถเชื่อมต่อระบบฐานข้อมูลได้:\n\n' + (res.reason || 'กรุณาตรวจสอบการเชื่อมต่อ'));
       }
     }
 
     function handleSaveApiUrl(e) {
       e.preventDefault();
       if (currentAdminUser.role !== 'Super Admin') {
-        alert('🔒 สิทธิ์เฉพาะ Super Admin: คุณไม่มีสิทธิ์เปลี่ยน URL เซิร์ฟเวอร์หรือฐานข้อมูล SQL');
+        alert('🔒 สิทธิ์เฉพาะ Super Admin: คุณไม่มีสิทธิ์เปลี่ยนระบบฐานข้อมูล');
         return;
       }
       const input = document.getElementById('settingsApiUrl');
@@ -5044,7 +5147,7 @@
       if (window.SarawatApi) {
         window.SarawatApi.setBaseUrl(val);
       }
-      showToast('บันทึกที่อยู่เซิร์ฟเวอร์เรียบร้อยแล้ว');
+      showToast('บันทึกระบบฐานข้อมูลเรียบร้อยแล้ว');
       checkApiServerStatus(true);
     }
 

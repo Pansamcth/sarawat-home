@@ -119,10 +119,10 @@
       return window.SARAWAT_API_BASE;
     },
 
-    // ตรวจสอบสถานะการทำงานของเซิร์ฟเวอร์
+    // ตรวจสอบสถานะการทำงานของระบบฐานข้อมูล
     checkHealth: async function () {
       const base = this.getBaseUrl();
-      if (!base) return { online: false, reason: 'ไม่ได้ระบุ Server URL' };
+      if (!base) return { online: false, reason: 'ไม่ได้ระบุระบบฐานข้อมูล' };
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000);
@@ -137,7 +137,7 @@
         }
         return { online: false, status: res.status, reason: `HTTP ${res.status}` };
       } catch (err) {
-        return { online: false, reason: err.message || 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้' };
+        return { online: false, reason: err.message || 'ไม่สามารถเชื่อมต่อระบบฐานข้อมูลได้' };
       }
     },
 
@@ -158,7 +158,7 @@
     // บันทึก/อัปเดตข่าวสาร
     saveNews: async function (item) {
       const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/news`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -171,7 +171,7 @@
     // ลบข่าวสาร
     deleteNews: async function (id) {
       const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/news/${encodeURIComponent(id)}`, {
         method: 'DELETE'
       });
@@ -215,7 +215,7 @@
     // บันทึกกิจกรรมปฏิทิน
     saveEvent: async function (item) {
       const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/events`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -228,7 +228,7 @@
     // ลบกิจกรรมปฏิทิน
     deleteEvent: async function (id) {
       const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/events/${encodeURIComponent(id)}`, {
         method: 'DELETE'
       });
@@ -253,7 +253,7 @@
     // บันทึกกิจกรรมเด่น
     saveFeatured: async function (item) {
       const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/featured`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -309,7 +309,7 @@
     login: async function (username, password) {
       let base = this.getBaseUrl();
       if (!base) {
-        const err = new Error('⚠️ ไม่พบที่อยู่เซิร์ฟเวอร์หลังบ้าน กรุณาดับเบิลคลิก start-server.bat');
+        const err = new Error('⚠️ ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
         err.isNetworkError = true;
         throw err;
       }
@@ -347,7 +347,7 @@
           }
         }
 
-        const netErr = new Error('⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์หลังบ้านได้ (กรุณาดับเบิลคลิก start-server.bat ก่อนเข้าสู่ระบบ)');
+        const netErr = new Error('⚠️ ไม่สามารถเชื่อมต่อระบบฐานข้อมูลได้');
         netErr.isNetworkError = true;
         throw netErr;
       }
