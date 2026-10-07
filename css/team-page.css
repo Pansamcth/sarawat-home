@@ -768,7 +768,7 @@
 /* ---------- Responsive ---------- */
 
 /* Tablet */
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
   .tp-editorial-layout {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -807,7 +807,7 @@
 }
 
 /* Mobile Landscape */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .tp-hero-title {
     font-size: clamp(3rem, 14vw, 6rem);
   }

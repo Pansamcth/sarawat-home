@@ -1299,7 +1299,7 @@ ol {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .step-cards-row {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2587,7 +2587,7 @@ ol {
 /* ---------- Responsive Design ---------- */
 
 /* Tablet */
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
   .featured-grid {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-4);
@@ -2628,7 +2628,7 @@ ol {
 }
 
 /* Mobile Landscape */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .featured-grid {
     grid-template-columns: 1fr;
   }

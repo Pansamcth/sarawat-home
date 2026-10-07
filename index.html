@@ -95,7 +95,7 @@
         <!-- 1: Headline -->
         <h1 class="dg-hero-heading" data-reveal="fade">
           <span class="dg-heading-th">สร้างสรรค์วินัย ด้วยพลังจิตอาสา</span>
-          <span class="dg-heading-en">We lead with purpose to protect &<br class="dg-mobile-br" /> inspire.</span>
+          <span class="dg-heading-en">We lead with purpose to<br /> protect & inspire.</span>
         </h1>
 
         <!-- Sub-grid: Blocks 2 & 3 -->
@@ -110,8 +110,9 @@
           <!-- Block 3 (Paragraph 2 + Arrow Link) -->
           <div class="dg-hero-sub-right dg-hero-block-3">
             <p>
-              ร่วมขับเคลื่อนรั้วเดชะปัตตนยานุกูลสู่มาตรฐานใหม่ ผ่านการดูแลความปลอดภัย<br
-                class="dg-hero-p2-br" />อย่างใกล้ชิด การสร้างความเข้าใจ และการปฏิบัติหน้าที่ด้วยความเป็นธรรม
+              ร่วมขับเคลื่อนรั้วเดชะปัตตนยานุกูลสู่มาตรฐานใหม่<br class="dg-mobile-br" />
+              ผ่านการดูแลความปลอดภัยอย่างใกล้ชิด<br class="dg-mobile-br" />
+              การสร้างความเข้าใจ และการปฏิบัติหน้าที่ด้วยความเป็นธรรม
             </p>
             <a href="#operations" class="dg-arrow-link">
               <span>สำรวจระบบบริการออนไลน์</span>
@@ -143,8 +144,7 @@
     <!-- ============ WHO WE ARE & DUTIES ============ -->
     <section class="dg-what-we-do" id="whatWeDo" style="padding-top: 60px; padding-bottom: 20px;">
       <div class="dg-container">
-        <div class="dg-what-grid"
-          style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: center;">
+        <div class="dg-what-grid dg-what-align-center">
           <!-- Left: Text -->
           <div class="dg-what-content">
             <div class="dg-section-header" style="margin-bottom: 0;">
@@ -165,7 +165,7 @@
           </div>
 
           <!-- Right: Visual Image -->
-          <div class="dg-what-visual" data-reveal="scale" data-delay="150">
+          <div class="dg-what-visual">
             <div class="dg-what-image-wrapper">
               <img src="assets/images/what-we-do-1.jpg" alt="การปฏิบัติหน้าที่สารวัตรนักเรียน"
                 onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
@@ -174,10 +174,9 @@
         </div>
 
         <!-- Question 2: Duties (Right-Aligned Zigzag) -->
-        <div class="dg-what-grid"
-          style="margin-top: 80px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 60px; align-items: center;">
+        <div class="dg-what-grid dg-what-grid-reverse dg-what-align-center" style="margin-top: 80px;">
           <!-- Left: Visual Image 2 -->
-          <div class="dg-what-visual" data-reveal="scale" data-delay="150">
+          <div class="dg-what-visual">
             <div class="dg-what-image-wrapper">
               <img src="assets/images/what-we-do-2.jpg" alt="หน้าที่สารวัตรนักเรียน"
                 onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
@@ -244,10 +243,7 @@
             <div class="dg-uptime-start-label-vertical" id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569
             </div>
           </div>
-          <!-- Mobile Fallback Text -->
-          <div class="dg-uptime-meta-bottom dg-mobile-only">
-            <span id="dutyStartLabelMobile">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569</span>
-          </div>
+
         </div>
 
         <!-- Right: Stacked Mission & Vision -->
@@ -1929,30 +1925,7 @@
         revealItems.forEach(item => item.classList.add('is-revealed'));
       }
 
-      // --- Subtle Parallax Depth on Hero Image ---
-      const heroImg = document.getElementById('heroCinematicImg');
-      let ticking = false;
 
-      function updateParallax() {
-        const windowHeight = window.innerHeight;
-
-        if (heroImg) {
-          const rect = heroImg.getBoundingClientRect();
-          if (rect.bottom > 0 && rect.top < windowHeight) {
-            const offset = (rect.top - windowHeight / 2) * 0.04;
-            heroImg.style.transform = `scale(1.02) translateY(${offset}px)`;
-          }
-        }
-
-        ticking = false;
-      }
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          requestAnimationFrame(updateParallax);
-          ticking = true;
-        }
-      }, { passive: true });
 
       // --- 3D Interactive Card Tilt on Mousemove ---
       const tiltCards = document.querySelectorAll('.dg-ops-card, .dg-chief-portrait-card');
