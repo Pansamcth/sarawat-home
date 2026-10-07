@@ -25,7 +25,7 @@
     if (typeof window.SarawatApi.getBaseUrl !== 'function') {
       window.SarawatApi.getBaseUrl = function () {
         const saved = localStorage.getItem('dg_sarawat_api_url');
-        if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
+        if (saved && saved.trim()) return saved.trim().replace(//+$/, '');
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
           return 'http://localhost:5000';
         }
@@ -3048,7 +3048,7 @@
       if (!dateStr || typeof dateStr !== 'string') return 0;
 
       // Try ISO YYYY-MM-DD format
-      const isoMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      const isoMatch = dateStr.match(/(d{4})-(d{1,2})-(d{1,2})/);
       if (isoMatch) {
         return Date.UTC(parseInt(isoMatch[1], 10), parseInt(isoMatch[2], 10) - 1, parseInt(isoMatch[3], 10), 12, 0, 0);
       }
@@ -3062,7 +3062,7 @@
         }
       }
 
-      const numbers = dateStr.match(/\d+/g);
+      const numbers = dateStr.match(/d+/g);
       if (!numbers) return 0;
 
       let day = parseInt(numbers[0], 10);
@@ -3205,7 +3205,7 @@
       if (mIdx === -1) mIdx = 0;
 
       let year = new Date().getFullYear();
-      const yearMatch = monthStr.match(/\d+/);
+      const yearMatch = monthStr.match(/d+/);
       if (yearMatch) {
         const yVal = parseInt(yearMatch[0], 10);
         if (yVal > 2400) year = yVal - 543;
@@ -3215,7 +3215,7 @@
 
       const mm = String(mIdx + 1).padStart(2, '0');
 
-      const rangeMatch = String(dayStr).match(/(\d{1,2})\s*[-–]\s*(\d{1,2})/);
+      const rangeMatch = String(dayStr).match(/(d{1,2})s*[-–]s*(d{1,2})/);
       if (rangeMatch) {
         const sD = rangeMatch[1].padStart(2, '0');
         const eD = rangeMatch[2].padStart(2, '0');
@@ -3225,7 +3225,7 @@
         };
       }
 
-      const singleDayMatch = String(dayStr).match(/\d{1,2}/);
+      const singleDayMatch = String(dayStr).match(/d{1,2}/);
       if (singleDayMatch) {
         const sD = singleDayMatch[0].padStart(2, '0');
         return {
@@ -3257,7 +3257,7 @@
           if (left.includes(THAI_MONTHS_SHORT[i])) { lM = i; break; }
         }
 
-        const yearNums = right.match(/\d{4}|\d{2}/g);
+        const yearNums = right.match(/d{4}|d{2}/g);
         let year = new Date().getFullYear();
         if (yearNums) {
           const yVal = parseInt(yearNums[yearNums.length - 1], 10);
@@ -3266,8 +3266,8 @@
           else if (yVal > 2000 && yVal < 2100) year = yVal;
         }
 
-        const lNums = left.match(/\d+/);
-        const rNums = right.match(/\d+/);
+        const lNums = left.match(/d+/);
+        const rNums = right.match(/d+/);
         if (lNums && rNums && lM !== -1 && rM !== -1) {
           const sD = lNums[0].padStart(2, '0');
           const eD = rNums[0].padStart(2, '0');
@@ -3284,7 +3284,7 @@
       for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
         if (dateStr.includes(THAI_MONTHS_SHORT[i])) { mIdx = i; break; }
       }
-      const nums = dateStr.match(/\d+/g);
+      const nums = dateStr.match(/d+/g);
       if (nums && nums.length >= 2 && mIdx !== -1) {
         const sD = nums[0].padStart(2, '0');
         let year = new Date().getFullYear();
@@ -4034,7 +4034,7 @@
               if (!blob) {
                 return reject(new Error('ไม่สามารถบีบอัดภาพเป็น Blob ได้'));
               }
-              const safeName = (file.name || 'activity').replace(/\.[^/.]+$/, "") + ".jpg";
+              const safeName = (file.name || 'activity').replace(/.[^/.]+$/, "") + ".jpg";
               const compressedFile = new File([blob], safeName, { type: 'image/jpeg' });
 
               if (onProgress) {
@@ -4156,7 +4156,7 @@
         localStorage.setItem('dg_sarawat_news_items', JSON.stringify(data));
       } catch (err) {
         if (err.name === 'QuotaExceededError' || err.code === 22) {
-          throw new Error('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม (Storage Quota Exceeded)\nกรุณาใช้รูปภาพขนาดเล็กลง หรือใช้ตัวเลือกวางลิงก์รูปภาพ (Image URL) แทน');
+          throw new Error('พื้นที่จัดเก็บของเบราว์เซอร์เต็ม (Storage Quota Exceeded)nกรุณาใช้รูปภาพขนาดเล็กลง หรือใช้ตัวเลือกวางลิงก์รูปภาพ (Image URL) แทน');
         }
         throw err;
       }
@@ -4326,8 +4326,9 @@
       document.getElementById('adminNewsModalTitle').textContent = 'แก้ไขข่าวสารและกิจกรรม';
       document.getElementById('adminNewsId').value = item.id;
       document.getElementById('adminNewsTitle').value = item.title || '';
-      document.getElementById('adminNewsDate').value = item.date || '';
       if (document.getElementById('adminNewsAuthor')) document.getElementById('adminNewsAuthor').value = item.author || 'สารวัตรนักเรียน';
+      document.getElementById('adminNewsDate').value = item.date || '';
+      
       document.getElementById('adminNewsDateIso').value = item.dateIso || '';
       document.getElementById('adminNewsEndDateIso').value = item.endDateIso || '';
       document.getElementById('adminNewsTag').value = item.tag || '';
@@ -4438,6 +4439,7 @@
         const tag = document.getElementById('adminNewsTag').value.trim();
         const desc = document.getElementById('adminNewsDesc').value.trim();
         const detail = document.getElementById('adminNewsDetail')?.value.trim() || '';
+        const author = document.getElementById('adminNewsAuthor')?.value.trim() || 'สารวัตรนักเรียน';
         const fbUrl = document.getElementById('adminNewsFb').value.trim();
         const igUrl = document.getElementById('adminNewsIg').value.trim();
         const reelsUrl = document.getElementById('adminNewsReels').value.trim();
@@ -4487,6 +4489,7 @@
           tag: tag || 'กิจกรรมทั่วไป',
           desc,
           detail: detail || '',
+          author,
           fbUrl,
           igUrl,
           reelsUrl,
@@ -4523,7 +4526,7 @@
         showToast('✅ บันทึกข่าวสารเรียบร้อยแล้ว (ซิงค์สู่เซิร์ฟเวอร์)');
       } catch (err) {
         console.error('Save news error:', err);
-        alert('⚠️ เกิดข้อผิดพลาดในการบันทึก:\n\n' + err.message + '\n\nคำแนะนำ: หากเกิดจากขนาดรูปภาพเกิน ให้ลองเลือกรูปภาพอื่น หรือใช้แท็บ "วางลิงก์รูปภาพ (Image URL)" แทน');
+        alert('⚠️ เกิดข้อผิดพลาดในการบันทึก:nn' + err.message + 'nnคำแนะนำ: หากเกิดจากขนาดรูปภาพเกิน ให้ลองเลือกรูปภาพอื่น หรือใช้แท็บ "วางลิงก์รูปภาพ (Image URL)" แทน');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -4693,7 +4696,7 @@
       }
 
       // Parse start and end time from evt.time if available
-      const timeMatch = (evt.time || '').match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/);
+      const timeMatch = (evt.time || '').match(/(d{1,2}:d{2})s*[-–]s*(d{1,2}:d{2})/);
       const startEl = document.getElementById('adminEventStartTime');
       const endEl = document.getElementById('adminEventEndTime');
       if (timeMatch && startEl && endEl) {
@@ -4783,7 +4786,7 @@
         showToast('✅ บันทึกข้อมูลกิจกรรมเรียบร้อยแล้ว');
       } catch (err) {
         console.error('Save event error:', err);
-        alert('⚠️ เกิดข้อผิดพลาดในการบันทึกกิจกรรม:\n\n' + err.message);
+        alert('⚠️ เกิดข้อผิดพลาดในการบันทึกกิจกรรม:nn' + err.message);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -4854,7 +4857,7 @@
       }
 
       // Parse start and end time from feat.time if available
-      const timeMatch = (feat.time || '').match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/);
+      const timeMatch = (feat.time || '').match(/(d{1,2}:d{2})s*[-–]s*(d{1,2}:d{2})/);
       const startEl = document.getElementById('adminFeaturedStartTime');
       const endEl = document.getElementById('adminFeaturedEndTime');
       if (timeMatch && startEl && endEl) {
@@ -4989,7 +4992,7 @@
           navBadge.style.borderColor = '#fde68a';
         }
         if (navText) navText.textContent = 'ระบบฐานข้อมูลออฟไลน์';
-        if (showAlert) alert('⚠️ ไม่สามารถเชื่อมต่อระบบฐานข้อมูลได้:\n\n' + (res.reason || 'กรุณาตรวจสอบการเชื่อมต่อ'));
+        if (showAlert) alert('⚠️ ไม่สามารถเชื่อมต่อระบบฐานข้อมูลได้:nn' + (res.reason || 'กรุณาตรวจสอบการเชื่อมต่อ'));
       }
     }
 
