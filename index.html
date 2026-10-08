@@ -6,16 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>สารวัตรนักเรียน | โรงเรียนเดชะปัตตนยานุกูล</title>
   <meta name="description"
-    content="เว็บไซต์คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล - เสริมสร้างระเบียบวินัย ความปลอดภัย และจิตอาสาเพื่อสังคมโรงเรียนที่น่าอยู่" />
-  <meta name="keywords" content="สารวัตรนักเรียน, เดชะปัตตนยานุกูล, กิจการนักเรียน, ระเบียบวินัย, โรงเรียนเดชะ" />
+    content="เว็บไซต์อย่างเป็นทางการของคณะกรรมการสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ติดตามข่าวสาร กิจกรรม และระบบการทำงานต่างๆ" />
+  <meta name="keywords" content="สารวัตรนักเรียน, โรงเรียนเดชะปัตตนยานุกูล, กรรมการนักเรียน, ระบบลงหน้าที่, แจ้งเหตุ" />
   <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
 
   <!-- Open Graph / Discord Preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://pansamcth.github.io/" />
-  <meta property="og:title" content="🛡️ Sarawat Portfolio - เว็บไซต์สารวัตรนักเรียน" />
+  <meta property="og:url" content="https://sarawatdc.site/" />
+  <meta property="og:title" content="🛡️ สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
   <meta property="og:description"
-    content="เว็บไซต์ Sarawat Portfolio จัดทำขึ้นเพื่อแสดงผลงาน บทบาทหน้าที่ และกิจกรรมของคณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+    content="เว็บไซต์อย่างเป็นทางการของคณะกรรมการสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
   <meta property="og:image" content="assets/icons/sarawat-logo.png" />
   <meta property="og:site_name" content="Sarawat - Dechapattanayanukul School" />
 
@@ -69,9 +69,9 @@
 
       <div class="dg-nav-links" id="dgNavLinks">
         <a href="#hero">หน้าแรก</a>
-        <a href="#news">ข่าวสารกิจกรรม</a>
+        <a href="activities.html">ข่าวสารกิจกรรม</a>
         <a href="rules.html">กฎระเบียบ</a>
-        <a href="#calendar">ตารางกิจกรรม</a>
+        <a href="calendar.html">ตารางกิจกรรม</a>
         <a href="team.html">คณะทำงาน</a>
       </div>
 
@@ -382,7 +382,7 @@
             <i data-lucide="arrow-up-right"></i>
           </div>
         </a>
-      
+
         <!-- Card 4: School Rules -->
         <a href="rules.html" class="dg-ops-card theme-rules" data-reveal="scale" data-delay="360">
           <div>
@@ -399,7 +399,7 @@
             <i data-lucide="arrow-right"></i>
           </div>
         </a>
-</div>
+      </div>
     </div>
   </section>
 
@@ -482,10 +482,6 @@
               <span>ไปยังหน้าคณะทำงาน (Meet the Team)</span>
               <i data-lucide="arrow-right"></i>
             </a>
-            <a href="#contact" class="dg-arrow-link">
-              <span>ส่งข้อความถึงประธาน</span>
-              <i data-lucide="arrow-right"></i>
-            </a>
           </div>
         </div>
       </div>
@@ -536,6 +532,7 @@
           <button type="button" class="dg-filter-btn" data-category="general">กิจกรรมทั่วไป</button>
           <button type="button" class="dg-filter-btn" data-category="affairs">งานกิจการนักเรียน</button>
           <button type="button" class="dg-filter-btn" data-category="academic">งานวิชาการ</button>
+          <button type="button" class="dg-filter-btn" data-category="prefect">ภารกิจสารวัตรนักเรียน</button>
         </div>
         <div class="dg-calendar-search-wrap">
           <div class="dg-calendar-search">
@@ -558,10 +555,9 @@
 
       <!-- Load More / Expand Events Button -->
       <div class="dg-calendar-more-wrap" id="calendarMoreWrap" style="display: none;">
-        <button type="button" class="dg-btn-more-events" id="btnToggleMoreEvents" onclick="toggleMoreEvents()">
-          <span id="loadMoreText">ดูตารางกิจกรรมเพิ่มเติม</span>
-          <i data-lucide="chevron-down" id="loadMoreIcon"></i>
-        </button>
+        <a href="calendar.html" class="dg-btn-more-events"
+          style="text-decoration: none; display: inline-flex; justify-content: center; align-items: center; gap: 8px;">ดูกิจกรรมทั้งหมด
+          <i data-lucide="arrow-right"></i></a>
       </div>
 
       <!-- Empty Search State -->
@@ -1046,15 +1042,12 @@
 
     const DEFAULT_CALENDAR_EVENTS = [];
 
-    function getCalendarData() {
+    async function getCalendarData() {
       try {
-        const stored = localStorage.getItem('dg_sarawat_calendar_events');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-      } catch (e) { }
-      return DEFAULT_CALENDAR_EVENTS;
+        if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) return [];
+        const items = await window.SarawatApi.getEvents();
+        return Array.isArray(items) ? items : [];
+      } catch (e) { return []; }
     }
 
     function getFeaturedEvent() {
@@ -1122,82 +1115,75 @@
 
     let isEventsExpanded = false;
 
-    function renderCalendarEvents() {
-      const container = document.getElementById('eventsListContainer');
+    async function renderCalendarEvents() {
       const moreWrap = document.getElementById('calendarMoreWrap');
-      const moreBtn = document.getElementById('btnToggleMoreEvents');
-      const moreText = document.getElementById('loadMoreText');
-      if (!container) return;
+      const grid = document.getElementById('calendarEventsGrid');
+      const emptyState = document.getElementById('calendarEmptyState');
+      if (!grid) return;
 
-      // Sort events chronologically ascending (earliest upcoming first)
-      const allSorted = getCalendarData().slice().sort((a, b) => parseDateToTimestamp(a) - parseDateToTimestamp(b));
-      const feat = getFeaturedEvent();
+      const events = await getCalendarData();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-      // Exclude the featured upcoming event so there is ZERO duplication!
-      const events = allSorted.filter(evt => {
-        if (feat && feat.id) return evt.id !== feat.id;
-        if (feat && feat.title) return evt.title !== feat.title;
-        return true;
+      // Filter upcoming events only
+      let upcoming = events.filter(evt => {
+        const endDt = new Date((evt.dateEnd || evt.dateStart || '') + 'T23:59:59Z');
+        if (isNaN(endDt.getTime())) return true; // keep if invalid
+        return endDt >= today;
       });
 
-      if (events.length === 0) {
-        container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted);">ยังไม่มีกิจกรรมในเร็วๆ นี้</div>';
+      // Sort by closest date
+      upcoming.sort((a, b) => {
+        let tsA = new Date(a.dateStart || a.dateIso).getTime() || 0;
+        let tsB = new Date(b.dateStart || b.dateIso).getTime() || 0;
+        return tsA - tsB;
+      });
+
+      // Take only top 5
+      const top5 = upcoming.slice(0, 5);
+
+      if (top5.length === 0) {
+        grid.style.display = 'none';
+        if (emptyState) emptyState.style.display = 'block';
         if (moreWrap) moreWrap.style.display = 'none';
         return;
       }
 
-      // Render cards, tagging elements from index 3 onward as extra
-      container.innerHTML = events.map((evt, index) => {
-        const catClass = (evt.category === 'general') ? 'cat-general' : ((evt.category === 'affairs') ? 'cat-affairs' : ((evt.category === 'academic') ? 'cat-academic' : ((evt.category === 'prefect') ? 'cat-prefect' : ((evt.category === 'ceremony') ? 'cat-affairs' : 'cat-general'))));
-        const fullNote = evt.note || evt.desc || '';
-        const keywords = `${evt.title || ''} ${evt.categoryLabel || ''} ${evt.location || ''} ${fullNote} ${evt.day || ''} ${evt.month || ''}`.toLowerCase();
-        const isExtra = index >= 3;
-        const extraClass = isExtra ? 'dg-event-extra' : '';
-        const hideStyle = (isExtra && !isEventsExpanded) ? 'style="display: none;"' : '';
+      grid.style.display = 'grid';
+      if (emptyState) emptyState.style.display = 'none';
+      if (moreWrap) moreWrap.style.display = 'block'; // Show "View All" button
+
+      grid.innerHTML = top5.map((evt, idx) => {
+        let delay = idx * 100;
+        let day = escapeHtml(evt.day || '');
+        let month = escapeHtml(evt.month || '');
+        let title = escapeHtml(evt.title);
+        let catLabel = escapeHtml(evt.categoryLabel || evt.category || 'ทั่วไป');
+        let note = escapeHtml(evt.desc || evt.note || '');
+        let time = escapeHtml(evt.timeMode === 'custom' ? evt.time : evt.time || 'เต็มวัน');
 
         return `
-          <div class="dg-event-card ${extraClass}" data-category="${escapeHtml(evt.category || 'general')}" data-keywords="${escapeHtml(keywords)}" ${hideStyle}>
-            <div class="dg-event-date-box">
-              <span class="day-num">${escapeHtml(evt.day || '')}</span>
-              <span class="month-str">${escapeHtml(evt.month || '')}</span>
-              <span class="weekday-str">${escapeHtml(evt.weekday || '')}</span>
+          <a href="calendar.html" class="dg-cal-item" data-reveal="fade-up" data-delay="${delay}" style="text-decoration:none; display:flex;">
+            <div class="dg-cal-date">
+              <span class="dg-cal-day">${day}</span>
+              <span class="dg-cal-month">${month}</span>
             </div>
-            <div class="dg-event-details">
-              <div class="dg-event-header-row">
-                <span class="dg-event-category-badge ${catClass}">${escapeHtml(evt.categoryLabel || 'กิจกรรม')}</span>
-                <h4 class="dg-event-title">${escapeHtml(evt.title || '')}</h4>
+            <div class="dg-cal-content" style="flex:1;">
+              <div class="dg-cal-meta">
+                <span class="dg-cal-cat ${escapeHtml(evt.category || 'general')}">${catLabel}</span>
               </div>
-              <div class="dg-event-info-bar">
-                <span><i data-lucide="clock"></i> ${escapeHtml(evt.time || '-')}</span>
-                <span><i data-lucide="map-pin"></i> ${escapeHtml(evt.location || '-')}</span>
-                <span><i data-lucide="users"></i> ${escapeHtml(evt.audience || '-')}</span>
+              <h4 class="dg-cal-title" style="color:var(--dg-text-primary);">${title}</h4>
+              <p class="dg-cal-desc" style="color:var(--dg-text-secondary);">${note}</p>
+              <div class="dg-cal-time" style="color:var(--dg-text-muted);">
+                <i data-lucide="clock"></i> ${time}
               </div>
-              ${fullNote ? `
-                <p class="dg-event-prefect-note">
-                  <strong>ข้อปฏิบัติ & สารวัตร:</strong> ${escapeHtml(fullNote)}
-                </p>
-              ` : ''}
             </div>
-          </div>
+            <div class="dg-cal-arrow" style="align-self:center; margin-left:16px;">
+              <i data-lucide="arrow-right" style="color:var(--dg-text-muted);"></i>
+            </div>
+          </a>
         `;
       }).join('');
-
-      // Setup Load More button
-      if (moreWrap) {
-        if (events.length > 3) {
-          moreWrap.style.display = 'block';
-          if (moreText) {
-            moreText.textContent = isEventsExpanded
-              ? 'แสดงน้อยลง (ย่อกลับ)'
-              : `ดูตารางกิจกรรมเพิ่มเติม (${events.length - 3} รายการ)`;
-          }
-          if (moreBtn) {
-            moreBtn.classList.toggle('expanded', isEventsExpanded);
-          }
-        } else {
-          moreWrap.style.display = 'none';
-        }
-      }
 
       if (window.lucide) lucide.createIcons();
     }
@@ -1705,7 +1691,7 @@
         } else {
           // Default All view: respect isEventsExpanded (3 or all)
           const extraCards = document.querySelectorAll('.dg-event-card.dg-event-extra');
-          if (moreWrap && extraCards.length > 0) {
+          if (moreWrap && upcoming.length > 5) {
             moreWrap.style.display = 'block';
           }
 
@@ -1721,7 +1707,7 @@
         }
 
         if (emptyState) {
-          emptyState.classList.toggle('show', visibleCount === 0);
+          emptyState.classList.toggle('show', visibleCount === 0 && eventCards.length > 0);
         }
       }
 
@@ -1888,7 +1874,7 @@
 
         window.SarawatApi.getEvents().then(evts => {
           if (evts && Array.isArray(evts)) {
-            try { localStorage.setItem('dg_sarawat_calendar_events', JSON.stringify(evts)); } catch (e) { }
+
             renderFeaturedEvent();
             renderCalendarEvents();
             if (typeof filterEvents === 'function') filterEvents();

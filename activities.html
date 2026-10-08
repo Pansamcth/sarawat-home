@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>คลังข่าวสารและกิจกรรมทั้งหมด | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</title>
+  <title>คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</title>
   <meta name="description"
-    content="รวมภาพข่าวสาร การปฏิบัติหน้าที่ และกิจกรรมของคณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ทั้งหมดในระบบ" />
-  <meta name="keywords" content="สารวัตรนักเรียน, กิจกรรม, ข่าวสาร, โรงเรียนเดชะปัตตนยานุกูล, กิจการนักเรียน" />
+    content="รวบรวมประมวลภาพกิจกรรม การปฏิบัติหน้าที่ และข่าวสารประชาสัมพันธ์ของคณะสารวัตรนักเรียน" />
+  <meta name="keywords" content="กิจกรรม, ข่าวสาร, สารวัตรนักเรียน, โรงเรียนเดชะปัตตนยานุกูล, ภาพกิจกรรม" />
   <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
 
   <!-- Open Graph / Discord Preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://pansamcth.github.io/activities.html" />
+  <meta property="og:url" content="https://sarawatdc.site/activities.html" />
   <meta property="og:title" content="📸 คลังข่าวสารและกิจกรรมทั้งหมด | สารวัตรนักเรียน" />
   <meta property="og:description"
-    content="รวบรวมประมวลภาพกิจกรรม การปฏิบัติหน้าที่ และข่าวสารประชาสัมพันธ์ของคณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+    content="รวบรวมประมวลภาพกิจกรรม การปฏิบัติหน้าที่ และข่าวสารประชาสัมพันธ์ของคณะสารวัตรนักเรียน" />
   <meta property="og:image" content="assets/icons/sarawat-logo.png" />
   <meta property="og:site_name" content="Sarawat - Dechapattanayanukul School" />
 
@@ -63,7 +63,7 @@
         <a href="index.html">หน้าแรก</a>
         <a href="activities.html" class="active">ข่าวสารกิจกรรม</a>
         <a href="rules.html">กฎระเบียบ</a>
-        <a href="index.html#calendar">ตารางกิจกรรม</a>
+        <a href="calendar.html">ตารางกิจกรรม</a>
         <a href="team.html">คณะทำงาน</a>
       </div>
 
@@ -100,7 +100,8 @@
             รวมภาพการปฏิบัติหน้าที่และกิจกรรมทั้งหมด
           </h1>
           <p class="dg-act-subtitle">
-            ศูนย์รวมประมวลภาพกิจกรรม ข่าวสารประชาสัมพันธ์ และบันทึกการปฏิบัติหน้าที่ของคณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ครบทุกภารกิจ สามารถคลิกเพื่อดูรายละเอียดเพิ่มเติมและลิงก์ภาพความละเอียดสูง
+            ศูนย์รวมประมวลภาพกิจกรรม ข่าวสารประชาสัมพันธ์ และบันทึกการปฏิบัติหน้าที่ของคณะสารวัตรนักเรียน
+            โรงเรียนเดชะปัตตนยานุกูล ครบทุกภารกิจ สามารถคลิกเพื่อดูรายละเอียดเพิ่มเติมและลิงก์ภาพความละเอียดสูง
           </p>
         </div>
         <div class="dg-act-stats-badge">
@@ -124,7 +125,8 @@
           <button type="button" class="dg-act-pill-btn active" data-category="all" onclick="filterByCategory('all')">
             <span>ทั้งหมด</span>
           </button>
-          <button type="button" class="dg-act-pill-btn" data-category="พิธีการสำคัญ" onclick="filterByCategory('พิธีการสำคัญ')">
+          <button type="button" class="dg-act-pill-btn" data-category="พิธีการสำคัญ"
+            onclick="filterByCategory('พิธีการสำคัญ')">
             <span>พิธีการสำคัญ</span>
           </button>
           <button type="button" class="dg-act-pill-btn" data-category="จิตอาสา" onclick="filterByCategory('จิตอาสา')">
@@ -133,15 +135,17 @@
           <button type="button" class="dg-act-pill-btn" data-category="กิจกรรม" onclick="filterByCategory('กิจกรรม')">
             <span>กิจกรรม</span>
           </button>
-          <button type="button" class="dg-act-pill-btn" data-category="อบรมพัฒนา" onclick="filterByCategory('อบรมพัฒนา')">
+          <button type="button" class="dg-act-pill-btn" data-category="อบรมพัฒนา"
+            onclick="filterByCategory('อบรมพัฒนา')">
             <span>อบรมพัฒนา</span>
           </button>
-          <button type="button" class="dg-act-pill-btn" data-category="ตรวจสารเสพติด" onclick="filterByCategory('ตรวจสารเสพติด')">
+          <button type="button" class="dg-act-pill-btn" data-category="ตรวจสารเสพติด"
+            onclick="filterByCategory('ตรวจสารเสพติด')">
             <span>ตรวจสารเสพติด</span>
           </button>
         </div>
 
-        
+
       </div>
     </div>
   </header>
@@ -182,7 +186,7 @@
   <footer class="dg-footer" id="contact">
     <div class="dg-container">
       <!-- Pre-Footer CTA (Exact Diego Layout) -->
-      <div class="dg-pre-footer-grid">
+      <div class="dg-pre-footer-grid" data-reveal="fade">
         <div>
           <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
             <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
@@ -197,12 +201,7 @@
           </h2>
           <a href="https://web.facebook.com/sarawatdechaa" target="_blank" class="dg-arrow-link">
             <span>ส่งข้อความหาเราผ่าน Facebook</span>
-            <i data-lucide="arrow-right">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </i>
+            <i data-lucide="arrow-right"></i>
           </a>
         </div>
 
@@ -211,13 +210,13 @@
           <div class="dg-footer-col">
             <h5>ส่วนสำคัญ</h5>
             <div class="dg-footer-nav-list">
-              <a href="index.html#hero">หน้าหลัก (Homepage)</a>
-              <a href="index.html#news">ข่าวสารกิจกรรมล่าสุด</a>
-              <a href="activities.html">คลังกิจกรรมทั้งหมด (Archive)</a>
-              <a href="index.html#vision">วิสัยทัศน์ & พันธกิจ</a>
-              <a href="index.html#operations">รวมระบบออนไลน์</a>
-              <a href="index.html#team">วิสัยทัศน์ประธาน</a>
-              <a href="index.html#calendar">ตารางกิจกรรมโรงเรียน</a>
+              <a href="#hero">หน้าหลัก</a>
+              <a href="#news">ข่าวสารกิจกรรมล่าสุด</a>
+              <a href="activities.html">คลังกิจกรรมทั้งหมด</a>
+              <a href="#vision">วิสัยทัศน์ & พันธกิจ</a>
+              <a href="#operations">รวมระบบออนไลน์</a>
+              <a href="#team">วิสัยทัศน์ประธาน</a>
+              <a href="#calendar">ตารางกิจกรรมโรงเรียน</a>
               <a href="team.html">หน้าคณะทำงาน</a>
               <a href="rules.html">กฎระเบียบของโรงเรียน</a>
             </div>
@@ -226,15 +225,18 @@
           <div class="dg-footer-col">
             <h5>บริการออนไลน์</h5>
             <div class="dg-footer-service-list">
-              <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer" class="dg-footer-arrow-link" title="แจ้งเหตุฉุกเฉิน (Emergency)">
+              <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="แจ้งเหตุฉุกเฉิน (Emergency)">
                 <span>แจ้งเหตุฉุกเฉิน (Emergency)</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer" class="dg-footer-arrow-link" title="ร้องเรียนการทำงาน (Complaint)">
+              <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="ร้องเรียนการทำงาน (Complaint)">
                 <span>ร้องเรียนการทำงาน (Complaint)</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer" class="dg-footer-arrow-link" title="ตารางเวร / ระบบลงหน้าที่ (SI-ROSTER)">
+              <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
                 <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
@@ -271,7 +273,8 @@
               <a href="https://decha.ac.th" target="_blank" rel="noopener noreferrer"
                 class="dg-contact-btn dg-btn-school" title="เว็บไซต์โรงเรียนเดชะปัตตนยานุกูล">
                 <span class="dg-contact-btn-icon">
-                  <img src="assets/icons/school-logo.png" alt="โลโก้โรงเรียนเดชะปัตตนยานุกูล" class="dg-contact-school-img" />
+                  <img src="assets/icons/school-logo.png" alt="โลโก้โรงเรียนเดชะปัตตนยานุกูล"
+                    class="dg-contact-school-img" />
                 </span>
                 <span class="dg-contact-btn-label">เว็บไซต์โรงเรียนเดชะฯ</span>
                 <i data-lucide="arrow-up-right" class="dg-contact-btn-arrow"></i>
@@ -287,7 +290,8 @@
           <span>©2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล. All rights reserved.</span>
         </div>
         <div class="dg-footer-bottom-meta">
-          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank">Rujira Wattanakitpaisal</a></span>
+          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank">Rujira
+              Wattanakitpaisal</a></span>
           <span class="dg-footer-meta-sep">•</span>
           <a href="admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
@@ -295,7 +299,7 @@
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
-            <span>ระบบจัดการสารวัตร (Admin)</span>
+            <span>ระบบจัดการหน้าเว็บ (Admin)</span>
           </a>
         </div>
       </div>
@@ -594,7 +598,7 @@
       const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
       const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
 
-      
+
 
       container.innerHTML = `
         <div class="dg-news-modal-header">
@@ -749,10 +753,10 @@
       if (window.SarawatApi) {
         window.SarawatApi.getNews().then(items => {
           if (items && Array.isArray(items) && items.length > 0) {
-            try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch(e){}
+            try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch (e) { }
             renderActivities();
           }
-        }).catch(() => {});
+        }).catch(() => { });
       }
 
       // Mobile menu toggle
@@ -780,41 +784,42 @@
         });
       }
 
-        // --- Scroll Reveal System (IntersectionObserver) ---
-        const revealItems = document.querySelectorAll('[data-reveal]');
-        if ('IntersectionObserver' in window) {
-          const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                const delay = entry.target.getAttribute('data-delay') || 0;
-                setTimeout(() => {
-                  entry.target.classList.add('is-revealed');
-                }, parseInt(delay, 10));
-                observer.unobserve(entry.target);
-              }
-            });
-          }, {
-            threshold: 0.12,
-            rootMargin: '0px 0px -40px 0px'
+      // --- Scroll Reveal System (IntersectionObserver) ---
+      const revealItems = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const delay = entry.target.getAttribute('data-delay') || 0;
+              setTimeout(() => {
+                entry.target.classList.add('is-revealed');
+              }, parseInt(delay, 10));
+              observer.unobserve(entry.target);
+            }
           });
+        }, {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px'
+        });
 
-          revealItems.forEach(item => revealObserver.observe(item));
-        } else {
-          revealItems.forEach(item => item.classList.add('is-revealed'));
-        }
+        revealItems.forEach(item => revealObserver.observe(item));
+      } else {
+        revealItems.forEach(item => item.classList.add('is-revealed'));
+      }
 
-        if (window.lucide) lucide.createIcons();
-      });
-
-      // Immediate Lucide init
       if (window.lucide) lucide.createIcons();
-    </script>
+    });
+
+    // Immediate Lucide init
+    if (window.lucide) lucide.createIcons();
+  </script>
 
   <!-- Black Mourning Ribbon (ริบบิ้นไว้ทุกข์มุมล่างซ้าย) -->
-  <img src="https://github.com/KongNontawatDev/Black-Mourning-Ribbon/blob/2150640c0e623c7fbcca07024287b597f7999a84/ribbon_bottom_left.png?raw=true" 
-       alt="Black mourning ribbon for websites, bottom left corner, ริบบิ้นไว้ทุกข์สีดำ มุมล่างซ้าย สำหรับแสดงความอาลัยบนเว็บไซต์" 
-       style="position:fixed; bottom:0; left:0; width:80px; opacity:0.9; z-index:9999; pointer-events:none;"
-       onerror="this.src='assets/icons/ribbon_bottom_left.png';" />
+  <img
+    src="https://github.com/KongNontawatDev/Black-Mourning-Ribbon/blob/2150640c0e623c7fbcca07024287b597f7999a84/ribbon_bottom_left.png?raw=true"
+    alt="Black mourning ribbon for websites, bottom left corner, ริบบิ้นไว้ทุกข์สีดำ มุมล่างซ้าย สำหรับแสดงความอาลัยบนเว็บไซต์"
+    style="position:fixed; bottom:0; left:0; width:80px; opacity:0.9; z-index:9999; pointer-events:none;"
+    onerror="this.src='assets/icons/ribbon_bottom_left.png';" />
 
   <!-- Image Protection & Anti-Copy System -->
   <script src="js/image-protection.js"></script>
