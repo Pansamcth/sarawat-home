@@ -198,56 +198,19 @@
       return await res.json(); // { success: true, url: '/uploads/activity_xxx.jpg', ... }
     },
 
-    // ดึงตารางกิจกรรมปฏิทิน
+    // ดึงตารางกิจกรรมปฏิทิน (ระบบกำลังปรับปรุงพัฒนา)
     getEvents: async function () {
-      const base = this.getBaseUrl();
-      if (!base) return null;
-      try {
-        const res = await fetch(`${base}/api/events`, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const items = await res.json();
-        if (Array.isArray(items)) {
-          items.forEach(i => {
-            i.note = i.desc || i.note || '';
-            i.dateIso = i.dateStart || i.dateIso || '';
-            i.endDateIso = i.dateEnd || i.endDateIso || '';
-          });
-        }
-        return items;
-      } catch (err) {
-        console.warn('[SarawatApi] Fetch events failed, using local fallback:', err.message);
-        return null;
-      }
+      return [];
     },
 
-    // บันทึกกิจกรรมปฏิทิน
+    // บันทึกกิจกรรมปฏิทิน (ระบบกำลังปรับปรุงพัฒนา)
     saveEvent: async function (item) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
-      const payload = {
-        ...item,
-        desc: item.note || item.desc || '',
-        dateStart: item.dateIso || item.dateStart || '',
-        dateEnd: item.endDateIso || item.dateEnd || ''
-      };
-      const res = await fetch(`${base}/api/events`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการบันทึกกิจกรรม (HTTP ${res.status})`);
-      return await res.json();
+      throw new Error('ระบบปฏิทินกำลังอยู่ในช่วงปรับปรุงและพัฒนา');
     },
 
-    // ลบกิจกรรมปฏิทิน
+    // ลบกิจกรรมปฏิทิน (ระบบกำลังปรับปรุงพัฒนา)
     deleteEvent: async function (id) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
-      const res = await fetch(`${base}/api/events/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
-      });
-      if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการลบกิจกรรม (HTTP ${res.status})`);
-      return await res.json();
+      throw new Error('ระบบปฏิทินกำลังอยู่ในช่วงปรับปรุงและพัฒนา');
     },
 
     // ดึงกิจกรรมเด่น

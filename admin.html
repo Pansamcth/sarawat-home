@@ -1301,79 +1301,17 @@
          TAB 2: SCHOOL CALENDAR & AGENDA
          ========================================== -->
     <div class="admin-pane" id="tab-calendar">
-      <div class="admin-section-header" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 40px; border-radius: 16px; margin-bottom: 24px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);">
-        <div class="admin-section-title" style="margin: 0;">
-          <h2 style="color: white; font-size: 1.8rem; font-weight: 850; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
-            <i data-lucide="calendar-days" style="width: 28px; height: 28px; color: #38bdf8;"></i>
-            จัดการปฏิทินกิจกรรมโรงเรียน
-          </h2>
-          <p style="color: #94a3b8; font-size: 0.95rem; margin: 0; max-width: 600px; line-height: 1.6;">
-            ระบบจัดตารางกิจกรรมอัจฉริยะ (Smart Agenda) อัปเดตข้อมูลแบบเรียลไทม์ 
-            กิจกรรมที่กำลังจะมาถึงจะถูกดึงไปแสดงผลบนหน้าแรกอัตโนมัติ (Top 5 Upcoming)
+      <!-- Calendar Under Construction -->
+      <div style="display: flex; align-items: center; justify-content: center; margin: 40px 0;">
+        <div style="background: var(--dg-bg-subtle, #f9fafb); border: 1px solid var(--dg-border, #e5e7eb); border-radius: 16px; padding: 60px 40px; text-align: center; max-width: 600px; width: 100%;">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <i data-lucide="wrench" style="width: 32px; height: 32px;"></i>
+          </div>
+          <h2 style="font-family: var(--dg-font-sans); font-size: 1.5rem; font-weight: 800; color: var(--dg-black); margin-bottom: 12px;">ระบบกำลังพัฒนา</h2>
+          <p style="font-size: 0.95rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 0;">
+            ระบบจัดการปฏิทินกิจกรรมโรงเรียนกำลังอยู่ในระหว่างการพัฒนา<br>
+            โปรดติดตามการอัปเดตในภายหลัง
           </p>
-        </div>
-        <div>
-          <button type="button" class="dg-btn-black" onclick="openAddEventModal()" style="background: #38bdf8; color: #0f172a; padding: 12px 24px; font-size: 0.95rem; border-radius: 99px; border: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); transition: all 0.3s ease;">
-            <i data-lucide="plus-circle" style="stroke-width: 2.5px;"></i>
-            <span>เพิ่มกิจกรรมใหม่</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Statistics & Insights -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-          <div style="width: 54px; height: 54px; border-radius: 14px; background: #f0f9ff; color: #0ea5e9; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="list-todo" style="width: 26px; height: 26px;"></i>
-          </div>
-          <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">กิจกรรมทั้งหมด</div>
-            <div style="font-size: 1.6rem; font-weight: 850; color: #0f172a;" id="statTotalEvents">0</div>
-          </div>
-        </div>
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-          <div style="width: 54px; height: 54px; border-radius: 14px; background: #ecfdf5; color: #10b981; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="calendar-clock" style="width: 26px; height: 26px;"></i>
-          </div>
-          <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">กำลังจะมาถึง (Upcoming)</div>
-            <div style="font-size: 1.6rem; font-weight: 850; color: #0f172a;" id="statUpcomingEvents">0</div>
-          </div>
-        </div>
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-          <div style="width: 54px; height: 54px; border-radius: 14px; background: #fef2f2; color: #ef4444; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="history" style="width: 26px; height: 26px;"></i>
-          </div>
-          <div>
-            <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">สิ้นสุดแล้ว (Past)</div>
-            <div style="font-size: 1.6rem; font-weight: 850; color: #0f172a;" id="statPastEvents">0</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Events List Table -->
-      <div class="admin-card" style="border: none; box-shadow: 0 8px 30px rgba(0,0,0,0.04); border-radius: 16px; overflow: hidden;">
-        <div class="admin-card-header" style="background: #ffffff; padding: 20px 24px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-          <h3 style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.15rem; color: #0f172a;">
-            <i data-lucide="layout-list" style="color: #6366f1;"></i> รายการกิจกรรมในระบบ
-          </h3>
-          <span style="font-size: 0.8rem; font-weight: 700; background: #f1f5f9; color: #475569; padding: 4px 12px; border-radius: 99px;" id="eventsCountBadge">0 รายการ</span>
-        </div>
-        <div class="admin-table-wrap" style="padding: 0;">
-          <table class="admin-table" style="margin: 0;">
-            <thead style="background: #f8fafc;">
-              <tr>
-                <th style="width: 140px; padding: 16px 24px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">วันจัดกิจกรรม</th>
-                <th style="width: 150px; padding: 16px 24px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">หมวดหมู่</th>
-                <th style="padding: 16px 24px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">ชื่องาน / กิจกรรม</th>
-                <th style="padding: 16px 24px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">เวลา & สถานที่</th>
-                <th style="width: 140px; text-align: right; padding: 16px 24px; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">จัดการ</th>
-              </tr>
-            </thead>
-            <tbody id="adminEventsTableBody">
-              <!-- Rendered dynamically -->
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
@@ -3686,7 +3624,7 @@
     /**
      * Clear selected news image and revert to default fallback image
      */
-    function clearSelectedNewsImage() {
+    function clearSelectedNewsImage(silent = false) {
       currentNewsImageState = {
         mode: currentNewsImageState.mode,
         file: null,
@@ -3707,7 +3645,7 @@
       if (progressWrap) progressWrap.style.display = 'none';
 
       showDefaultPreview();
-      showToast('คืนค่าเป็นภาพเริ่มต้นเรียบร้อยแล้ว');
+      if (!silent) showToast('คืนค่าเป็นภาพเริ่มต้นเรียบร้อยแล้ว');
     }
 
     /**
@@ -3909,34 +3847,56 @@
       if (!grid) return;
       grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); grid-column: 1 / -1;"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</div>';
       
-      const news = await fetchNewsApi();
-      if (news.length === 0) {
-        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;"><i data-lucide="newspaper" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีข่าวสาร / กิจกรรมในระบบ</div>';
-      } else {
-        grid.innerHTML = news.map(item => `
-          <div class="admin-news-card">
-            <div class="admin-news-img" style="background-image: url('${item.image || item.img || window.DEFAULT_ACTIVITY_IMAGE}')">
-              <div class="admin-news-date">${escapeHtml(item.date)}</div>
-              <div class="admin-news-tag">${escapeHtml(item.tag)}</div>
-            </div>
-            <div class="admin-news-body">
-              <div class="admin-news-desc">${escapeHtml(item.title)}</div>
-              ${item.detail ? `<div style="font-size: 0.8rem; color: #64748b; margin-top: 8px; max-height: 40px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(item.detail)}</div>` : ''}
-              <div class="admin-news-actions">
-                <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3"></i> แก้ไข</button>
-                <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2"></i> ลบ</button>
+      try {
+        let news = await fetchNewsApi();
+        if (!news || !Array.isArray(news)) news = [];
+        news = news.filter(Boolean);
+
+        // Sort chronologically descending: latest activity date comes first
+        news.sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
+
+        if (news.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;"><i data-lucide="newspaper" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีข่าวสาร / กิจกรรมในระบบ</div>';
+        } else {
+          grid.innerHTML = news.map(item => {
+            const imgSrc = window.resolveImageUrl ? window.resolveImageUrl(item.image || item.img) : (item.image || item.img || window.DEFAULT_ACTIVITY_IMAGE);
+            return `
+            <div class="admin-news-item-card">
+              <img src="${imgSrc || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&'}" class="admin-news-thumb" alt="News Image" onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';">
+              <div class="admin-news-item-body">
+                <div class="admin-news-meta">
+                  <span>${escapeHtml(item.date || '')}</span>
+                  <span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>
+                </div>
+                <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
+                <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
+                <div class="admin-news-links-indicator">
+                  ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> FB</span>` : ''}
+                  ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> IG</span>` : ''}
+                  ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Reels</span>` : ''}
+                  ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> รูปภาพ</span>` : ''}
+                </div>
+                <div class="admin-card-actions">
+                  <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" style="width:14px;height:14px;"></i> แก้ไข</button>
+                  <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> ลบ</button>
+                </div>
               </div>
             </div>
-          </div>
-        `).join('');
+            `;
+          }).join('');
+        }
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        console.error("renderAdminNews error:", err);
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + err.message + '</div>';
       }
-      if (window.lucide) lucide.createIcons();
     }
 
     async function handleSaveNews(e) {
       e.preventDefault();
       try {
         const id = document.getElementById('adminNewsId').value;
+        const title = document.getElementById('adminNewsTitle') ? document.getElementById('adminNewsTitle').value.trim() : '';
         const date = document.getElementById('adminNewsDate').value.trim();
         const tag = document.getElementById('adminNewsTag').value.trim();
         const desc = document.getElementById('adminNewsDesc').value.trim();
@@ -3946,11 +3906,12 @@
         const ig = document.getElementById('adminNewsIg').value.trim();
         const reels = document.getElementById('adminNewsReels').value.trim();
         const photo = document.getElementById('adminNewsPhoto').value.trim();
-        const dateIso = document.getElementById('adminNewsDatePicker')?.value || '';
+        const dateIso = document.getElementById('adminNewsStartDatePicker')?.value || '';
+        const endDateIso = document.getElementById('adminNewsEndDatePicker')?.value || '';
 
-        if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
+        if (!title && !desc) throw new Error('กรุณาระบุหัวข้อหรือรายละเอียดกิจกรรม');
         
-        const payload = { date, tag, desc, detail, img, linkFb: fb, linkIg: ig, linkReels: reels, linkPhoto: photo, dateIso };
+        const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso };
         if (id) payload.id = id;
 
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
@@ -3984,25 +3945,30 @@
       }
     }
     
-            function openAddNewsModal() {
+    function openAddNewsModal() {
+      const titleEl = document.getElementById('adminNewsModalTitle');
+      if (titleEl) titleEl.textContent = 'เพิ่มข่าวสารและกิจกรรมใหม่';
       document.getElementById('adminNewsForm').reset();
       document.getElementById('adminNewsId').value = '';
       
       const today = new Date().toISOString().split('T')[0];
-      const dp = document.getElementById('adminNewsDatePicker');
-      if (dp) {
-        dp.value = today;
-        handleNewsDatesChange();
-      }
+      const dpStart = document.getElementById('adminNewsStartDatePicker');
+      const dpEnd = document.getElementById('adminNewsEndDatePicker');
+      if (dpStart) dpStart.value = today;
+      if (dpEnd) dpEnd.value = '';
+      if (typeof handleNewsDatesChange === 'function') handleNewsDatesChange();
       
-      clearSelectedNewsImage();
-      document.getElementById('adminNewsSubmitBtn').innerHTML = '<i data-lucide="plus"></i> <span>????????????</span>';
+      clearSelectedNewsImage(true);
+      const submitBtn = document.getElementById('adminNewsSubmitBtn');
+      if (submitBtn) submitBtn.innerHTML = '<i data-lucide="plus"></i> <span>เพิ่มข่าวสาร</span>';
       
       openModal('adminNewsModal');
       if (window.lucide) lucide.createIcons();
     }
 
     async function openEditNewsModal(id) {
+      const titleEl = document.getElementById('adminNewsModalTitle');
+      if (titleEl) titleEl.textContent = 'แก้ไขข่าวสารและกิจกรรม';
       document.getElementById('adminNewsForm').reset();
       document.getElementById('adminNewsId').value = id;
       
@@ -4010,34 +3976,69 @@
       const item = news.find(n => n.id === id);
       if (!item) return;
 
-      document.getElementById('adminNewsTag').value = item.tag || '';
-      document.getElementById('adminNewsDesc').value = item.desc || '';
-      document.getElementById('adminNewsDetail').value = item.detail || '';
-      document.getElementById('adminNewsFb').value = item.linkFb || '';
-      document.getElementById('adminNewsIg').value = item.linkIg || '';
-      document.getElementById('adminNewsReels').value = item.linkReels || '';
-      document.getElementById('adminNewsPhoto').value = item.linkPhoto || '';
+      const titleInput = document.getElementById('adminNewsTitle');
+      if (titleInput) titleInput.value = item.title || '';
+      
+      const tagInput = document.getElementById('adminNewsTag');
+      if (tagInput) tagInput.value = item.tag || '';
+      
+      const descInput = document.getElementById('adminNewsDesc');
+      if (descInput) descInput.value = item.desc || '';
+      
+      const detailInput = document.getElementById('adminNewsDetail');
+      if (detailInput) detailInput.value = item.detail || '';
+      
+      const fbInput = document.getElementById('adminNewsFb');
+      if (fbInput) fbInput.value = item.fbUrl || item.linkFb || '';
+      
+      const igInput = document.getElementById('adminNewsIg');
+      if (igInput) igInput.value = item.igUrl || item.linkIg || '';
+      
+      const reelsInput = document.getElementById('adminNewsReels');
+      if (reelsInput) reelsInput.value = item.reelsUrl || item.linkReels || '';
+      
+      const photoInput = document.getElementById('adminNewsPhoto');
+      if (photoInput) photoInput.value = item.photoUrl || item.linkPhoto || '';
       
       let dateIso = item.dateIso || '';
-      if (!dateIso && item.date) {
+      if (!dateIso && item.date && typeof inferIsoFromNewsDate === 'function') {
          const info = inferIsoFromNewsDate(item.date);
          if (info) dateIso = info;
       }
-      if (dateIso) {
-         const dp = document.getElementById('adminNewsDatePicker');
-         if (dp) { dp.value = dateIso; handleNewsDatesChange(); }
-      }
       
-      clearSelectedNewsImage();
-      if (item.img) {
-         document.getElementById('adminNewsImgBase64').value = item.img;
-         document.getElementById('newsImgPreview').src = item.img;
-         document.getElementById('newsImgPreview').style.display = 'block';
+      const dpStart = document.getElementById('adminNewsStartDatePicker');
+      const dpEnd = document.getElementById('adminNewsEndDatePicker');
+      if (dpStart) dpStart.value = dateIso || '';
+      if (dpEnd) dpEnd.value = item.endDateIso || '';
+      if (typeof handleNewsDatesChange === 'function') handleNewsDatesChange();
+      
+      clearSelectedNewsImage(true);
+      if (item.image || item.img) {
+         const imgSrc = item.image || item.img;
+         const base64Input = document.getElementById('adminNewsImgBase64');
+         if (base64Input) base64Input.value = imgSrc;
+         
+         if (typeof currentNewsImageState !== 'undefined') {
+            currentNewsImageState.isCustom = true;
+            currentNewsImageState.url = imgSrc;
+         }
+         
+         const preview = document.getElementById('newsImgPreview');
+         if (preview) {
+             preview.src = window.resolveImageUrl ? window.resolveImageUrl(imgSrc) : imgSrc;
+             preview.style.display = 'block';
+         }
+         
          const pText = document.getElementById('newsImgPreviewText');
          if (pText) pText.style.display = 'none';
+         
+         if (typeof updatePreviewUI === 'function') {
+            updatePreviewUI('url-success');
+         }
       }
       
-      document.getElementById('adminNewsSubmitBtn').innerHTML = '<i data-lucide="save"></i> <span>????????????????????</span>';
+      const submitBtn = document.getElementById('adminNewsSubmitBtn');
+      if (submitBtn) submitBtn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกการแก้ไข</span>';
       
       openModal('adminNewsModal');
       if (window.lucide) lucide.createIcons();
@@ -4055,87 +4056,73 @@ async function fetchEventsApi() {
     }
 
     async function renderAdminEvents() {
-      const tbody = document.getElementById('adminEventsTableBody');
-      const statTotal = document.getElementById('statTotalEvents');
-      const statUpcoming = document.getElementById('statUpcomingEvents');
-      
-      if (!tbody) return;
-      
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--dg-text-muted);"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</td></tr>';
-      
-      let events = await fetchEventsApi();
-      
-      if (statTotal) statTotal.textContent = events.length;
-      
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      const nowTs = now.getTime();
-      
-      let upcomingCount = 0;
-      
-      // Sort
-      events.sort((a, b) => parseDateToTimestamp(a) - parseDateToTimestamp(b));
-      
-      if (events.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 60px; color: #94a3b8; background: #f8fafc;"><i data-lucide="calendar-x-2" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีกิจกรรมในระบบ</td></tr>';
-      } else {
-        tbody.innerHTML = events.map(evt => {
-          const evtTs = parseDateToTimestamp(evt);
-          let isUpcoming = false;
-          if (evt.endDateIso) {
-             const endTs = new Date(evt.endDateIso + 'T23:59:59Z').getTime();
-             if (nowTs <= endTs) { isUpcoming = true; upcomingCount++; }
+        const tbody = document.getElementById('adminEventsTableBody');
+        const statTotal = document.getElementById('statTotalEvents');
+        const statUpcoming = document.getElementById('statUpcomingEvents');
+        
+        if (!tbody) return;
+        
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--dg-text-muted);"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</td></tr>';
+        
+        try {
+          let events = await fetchEventsApi();
+          if (!events || !Array.isArray(events)) events = [];
+          events = events.filter(Boolean);
+          
+          if (statTotal) statTotal.textContent = events.length;
+          
+          const now = new Date();
+          now.setHours(0, 0, 0, 0);
+          const nowTs = now.getTime();
+          
+          let upcomingCount = 0;
+          
+          events.sort((a, b) => parseDateToTimestamp(a) - parseDateToTimestamp(b));
+          
+          if (events.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 60px; color: #94a3b8; background: #f8fafc;"><i data-lucide="calendar-x-2" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีกิจกรรมในปฏิทินโรงเรียน</td></tr>';
           } else {
-             if (evtTs >= nowTs) { isUpcoming = true; upcomingCount++; }
+            tbody.innerHTML = events.map(evt => {
+              const evtTs = parseDateToTimestamp(evt);
+              let isUpcoming = false;
+              if (evt.endDateIso) {
+                 const endTs = new Date(evt.endDateIso + 'T23:59:59Z').getTime();
+                 if (nowTs <= endTs) { isUpcoming = true; upcomingCount++; }
+              } else {
+                 if (nowTs <= evtTs) { isUpcoming = true; upcomingCount++; }
+              }
+              const rowClass = isUpcoming ? '' : 'style="opacity: 0.6; background: #f8fafc;"';
+              const statusBadge = isUpcoming ? '<span style="background:#ecfdf5; color:#10b981; padding:2px 8px; border-radius:12px; font-size:0.75rem;">เร็วๆ นี้</span>' : '<span style="background:#f1f5f9; color:#64748b; padding:2px 8px; border-radius:12px; font-size:0.75rem;">ผ่านมาแล้ว</span>';
+              
+              return `
+                <tr ${rowClass}>
+                  <td>
+                    <div style="font-weight: 500; color: var(--dg-black);">${escapeHtml(evt.dateStart || evt.dateIso || evt.date || '')}</div>
+                    ${evt.endDateIso ? `<div style="font-size: 0.8rem; color: #64748b;">ถึง ${escapeHtml(evt.endDateIso)}</div>` : ''}
+                  </td>
+                  <td>
+                    <div style="font-weight: 500; color: var(--dg-black);">${escapeHtml(evt.title || '')}</div>
+                    <div style="font-size: 0.8rem; color: #64748b;">${escapeHtml(evt.categoryLabel || evt.category || '')}</div>
+                  </td>
+                  <td>${escapeHtml(evt.time || '-')}</td>
+                  <td>${escapeHtml(evt.location || '-')}</td>
+                  <td>${statusBadge}</td>
+                  <td>
+                    <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" style="margin-right: 4px;"><i data-lucide="edit-3" style="width:14px; height:14px;"></i></button>
+                    <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;" onclick="handleDeleteEvent('${evt.id}')"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
+                  </td>
+                </tr>
+              `;
+            }).join('');
           }
-          
-          const statusBadge = isUpcoming 
-            ? `<span style="background: #ecfdf5; color: #059669; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; border: 1px solid #a7f3d0; display: inline-flex; align-items: center; gap: 4px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span> เร็วๆ นี้</span>`
-            : `<span style="background: #f1f5f9; color: #64748b; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; border: 1px solid #e2e8f0;">ผ่านไปแล้ว</span>`;
-            
-          let displayDate = `${escapeHtml(evt.day)} ${escapeHtml(evt.month)}`;
-          if (evt.dateIso && evt.endDateIso && evt.dateIso !== evt.endDateIso) {
-             const endD = new Date(evt.endDateIso);
-             const endDayStr = endD.getDate().toString().padStart(2, '0');
-             const endMonthStr = endD.toLocaleString('th-TH', { month: 'short' });
-             displayDate = `${escapeHtml(evt.day)} ${escapeHtml(evt.month)} - ${endDayStr} ${endMonthStr}`;
-          }
-          
-          return `
-          <tr style="border-bottom: 1px solid #f1f5f9; transition: all 0.2s ease;">
-            <td style="padding: 16px 20px;">
-              <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">${displayDate}</div>
-              <div style="font-size: 0.8rem; color: #64748b;">${escapeHtml(evt.weekday || '')}</div>
-            </td>
-            <td style="padding: 16px 20px;">
-              <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">${escapeHtml(evt.title)}</div>
-              ${evt.categoryLabel ? `<span style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">${escapeHtml(evt.categoryLabel)}</span>` : ''}
-            </td>
-            <td style="padding: 16px 20px;">
-              <div style="display: flex; align-items: center; gap: 6px; color: #475569; font-size: 0.9rem; margin-bottom: 4px;"><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${escapeHtml(evt.time || 'เต็มวัน')}</div>
-              <div style="display: flex; align-items: center; gap: 6px; color: #64748b; font-size: 0.85rem;"><i data-lucide="map-pin" style="width: 14px; height: 14px;"></i> ${escapeHtml(evt.location || '-')}</div>
-            </td>
-            <td style="padding: 16px 20px; font-size: 0.9rem; color: #475569;">
-              ${escapeHtml(evt.target || evt.audience || '-')}
-            </td>
-            <td style="padding: 16px 20px;">
-              ${statusBadge}
-            </td>
-            <td style="padding: 16px 20px;">
-              <div style="display: flex; gap: 8px;">
-                <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" style="padding: 6px 12px;"><i data-lucide="edit-3" style="width: 16px; height: 16px;"></i></button>
-                <button type="button" class="dg-btn-sm-outline" onclick="handleDeleteEvent('${evt.id}')" style="padding: 6px 12px; color: #ef4444; border-color: #fca5a5; background: #fef2f2;"><i data-lucide="trash-2" style="width: 16px; height: 16px;"></i></button>
-              </div>
-            </td>
-          </tr>
-          `;
-        }).join('');
+          if (statUpcoming) statUpcoming.textContent = upcomingCount;
+          if (window.lucide) lucide.createIcons();
+        } catch (err) {
+          console.error("renderAdminEvents error:", err);
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + err.message + '</td></tr>';
+        }
       }
-      
-      if (statUpcoming) statUpcoming.textContent = upcomingCount;
-      if (window.lucide) lucide.createIcons();
-    }
-    
+
     async function handleSaveEvent(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('adminEventSubmitBtn');
@@ -4770,21 +4757,9 @@ async function fetchEventsApi() {
         const base = window.SarawatApi.getBaseUrl();
         if (base) {
           try {
-            const sNews = await window.SarawatApi.getNews();
-            if (sNews && Array.isArray(sNews) && sNews.length > 0) {
-              
-              renderAdminNews();
-            }
-            const sEvents = await window.SarawatApi.getEvents();
-            if (sEvents && Array.isArray(sEvents) && sEvents.length > 0) {
-              
-              renderAdminEvents();
-            }
-            const sFeat = await window.SarawatApi.getFeatured();
-            if (sFeat && sFeat.title) {
-              
-              renderAdminEvents();
-            }
+            
+            
+            
           } catch (e) {
             console.warn('Sync from backend failed:', e);
           }

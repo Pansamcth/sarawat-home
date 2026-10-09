@@ -680,6 +680,7 @@ svg:not([data-lucide]),
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding: 6px 2px 24px;
+  touch-action: pan-x pan-y;
 }
 
 .dg-news-track-wrap::-webkit-scrollbar {
@@ -704,6 +705,7 @@ svg:not([data-lucide]),
   display: flex;
   flex-direction: column;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  touch-action: pan-x pan-y;
 }
 
 .dg-news-card:hover {
@@ -3343,6 +3345,7 @@ svg:not([data-lucide]),
   display: flex;
   flex-direction: column;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  touch-action: pan-x pan-y;
   cursor: pointer;
   user-select: none;
 }
@@ -5482,3 +5485,5 @@ img {
 }
 
 .dg-ops-card.theme-rules .dg-ops-icon-box { background: #dbeafe; color: #2563eb; }
+
+
