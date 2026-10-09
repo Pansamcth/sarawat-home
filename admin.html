@@ -1301,17 +1301,78 @@
          TAB 2: SCHOOL CALENDAR & AGENDA
          ========================================== -->
     <div class="admin-pane" id="tab-calendar">
-      <!-- Calendar Under Construction -->
-      <div style="display: flex; align-items: center; justify-content: center; margin: 40px 0;">
-        <div style="background: var(--dg-bg-subtle, #f9fafb); border: 1px solid var(--dg-border, #e5e7eb); border-radius: 16px; padding: 60px 40px; text-align: center; max-width: 600px; width: 100%;">
-          <div style="width: 64px; height: 64px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-            <i data-lucide="wrench" style="width: 32px; height: 32px;"></i>
+      <div class="admin-section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+        <div class="admin-section-title">
+          <h2>ตารางกิจกรรมโรงเรียน (School Calendar & Agenda)</h2>
+          <p>จัดการกำหนดการ กิจกรรม วันสำคัญ และวาระงานของโรงเรียนและสารวัตรนักเรียน</p>
+        </div>
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-black" onclick="openAddEventModal()" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 99px; font-weight: 700;">
+            <i data-lucide="calendar-plus"></i>
+            <span>+ เพิ่มกิจกรรม</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats Row -->
+      <div class="admin-stats-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div class="admin-stat-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.85rem; color: #64748b; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="layers" style="width: 16px; height: 16px; color: #0284c7;"></i>
+            <span>กิจกรรมทั้งหมดในระบบ</span>
           </div>
-          <h2 style="font-family: var(--dg-font-sans); font-size: 1.5rem; font-weight: 800; color: var(--dg-black); margin-bottom: 12px;">ระบบกำลังพัฒนา</h2>
-          <p style="font-size: 0.95rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 0;">
-            ระบบจัดการปฏิทินกิจกรรมโรงเรียนกำลังอยู่ในระหว่างการพัฒนา<br>
-            โปรดติดตามการอัปเดตในภายหลัง
-          </p>
+          <div id="statTotalEvents" style="font-size: 1.8rem; font-weight: 850; color: #0f172a;">0</div>
+        </div>
+        <div class="admin-stat-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.85rem; color: #16a34a; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="clock" style="width: 16px; height: 16px; color: #16a34a;"></i>
+            <span>กิจกรรมเร็ว ๆ นี้ (Upcoming)</span>
+          </div>
+          <div id="statUpcomingEvents" style="font-size: 1.8rem; font-weight: 850; color: #16a34a;">0</div>
+        </div>
+        <div class="admin-stat-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.85rem; color: #64748b; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="check-circle" style="width: 16px; height: 16px; color: #64748b;"></i>
+            <span>กิจกรรมที่ผ่านมาแล้ว</span>
+          </div>
+          <div id="statPastEvents" style="font-size: 1.8rem; font-weight: 850; color: #64748b;">0</div>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="admin-toolbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;" id="adminEventsFilterPills">
+          <button type="button" class="dg-filter-btn active" data-admin-cat="all" onclick="filterAdminEventsCategory('all')">ทั้งหมด</button>
+          <button type="button" class="dg-filter-btn" data-admin-cat="general" onclick="filterAdminEventsCategory('general')">กิจกรรมทั่วไป</button>
+          <button type="button" class="dg-filter-btn" data-admin-cat="affairs" onclick="filterAdminEventsCategory('affairs')">กิจการนักเรียน</button>
+          <button type="button" class="dg-filter-btn" data-admin-cat="academic" onclick="filterAdminEventsCategory('academic')">วิชาการ</button>
+          <button type="button" class="dg-filter-btn" data-admin-cat="prefect" onclick="filterAdminEventsCategory('prefect')">ภารกิจสารวัตร</button>
+        </div>
+        <div style="position: relative; min-width: 260px;">
+          <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #94a3b8;"></i>
+          <input type="text" id="adminEventsSearchInput" placeholder="ค้นหาชื่อกิจกรรม, สถานที่, ผู้เข้าร่วม..." oninput="handleAdminEventsSearch(this.value)" style="padding: 8px 14px 8px 36px; border: 1px solid var(--dg-border); border-radius: 99px; width: 100%; font-size: 0.88rem; outline: none; background: #ffffff;" />
+        </div>
+      </div>
+
+      <!-- Events Table Card -->
+      <div class="admin-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.03);">
+        <div style="overflow-x: auto;">
+          <table class="admin-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1.5px solid var(--dg-border);">
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem; width: 140px;">วันที่</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem;">ชื่องาน & หมวดหมู่</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem; width: 150px;">เวลา</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem;">สถานที่</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem; width: 130px;">กลุ่มเป้าหมาย</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem; width: 100px;">สถานะ</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.85rem; text-align: right; width: 110px;">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="adminEventsTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -2024,19 +2085,19 @@
             <label style="font-weight: 800; color: #0f172a; margin-bottom: 12px; display: block;">เวลาปฏิบัติงาน (Time Mode)</label>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
               <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" value="เต็มวัน" checked onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
+                <input type="radio" name="adminEventTimeType" id="adminEventTime_full" value="เต็มวัน" checked onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
                 <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">เต็มวัน</span>
               </label>
               <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" value="ช่วงเช้า" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
+                <input type="radio" name="adminEventTimeType" id="adminEventTime_morning" value="ช่วงเช้า" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
                 <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">ช่วงเช้า <br><small style="color: #64748b; font-weight: 400;">08:30 - 12:00</small></span>
               </label>
               <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" value="ช่วงบ่าย" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
+                <input type="radio" name="adminEventTimeType" id="adminEventTime_afternoon" value="ช่วงบ่าย" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
                 <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">ช่วงบ่าย <br><small style="color: #64748b; font-weight: 400;">13:00 - 16:30</small></span>
               </label>
               <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" value="กำหนดเวลาเอง" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
+                <input type="radio" name="adminEventTimeType" id="adminEventTime_custom" value="กำหนดเวลาเอง" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
                 <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">กำหนดเอง</span>
               </label>
             </div>
@@ -2867,13 +2928,11 @@
       const dateStr = item.date || ((item.day || '') + ' ' + (item.month || ''));
       if (!dateStr || typeof dateStr !== 'string') return 0;
 
-      // Try ISO YYYY-MM-DD format
-      const isoMatch = dateStr.match(/(\\d{4})-(\\d{1,2})-(\\d{1,2})/);
+      const isoMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
       if (isoMatch) {
         return Date.UTC(parseInt(isoMatch[1], 10), parseInt(isoMatch[2], 10) - 1, parseInt(isoMatch[3], 10), 12, 0, 0);
       }
 
-      // Try Thai month matching
       let month = -1;
       for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
         if (dateStr.includes(THAI_MONTHS_SHORT[i]) || dateStr.includes(THAI_MONTHS_FULL[i])) {
@@ -2918,11 +2977,6 @@
 
     const THAI_DAYS_SHORT = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
 
-    /**
-     * Calculates Thai day, month, weekday, and formatted strings for an event
-     * given startIso (YYYY-MM-DD) and optional endIso (YYYY-MM-DD).
-     * If endIso is omitted, empty, or equals startIso => single day activity!
-     */
     function calculateEventDateInfo(startIso, endIso) {
       if (!startIso) return null;
       const [sY, sM, sD] = startIso.split('-').map(Number);
@@ -2934,7 +2988,6 @@
       const sWeekdayFull = THAI_DAYS[startDate.getDay()] || '';
       const sWeekdayShort = THAI_DAYS_SHORT[startDate.getDay()] || '';
 
-      // Check if endIso is provided, valid, and distinct from startIso
       let hasEndDate = Boolean(endIso && endIso.trim() && endIso !== startIso);
       let eY, eM, eD, endDate, eThaiYear, eThaiYearShort, eMonthShort, eWeekdayShort, diffDays = 1;
 
@@ -2945,7 +2998,6 @@
         eD = parts[2];
         endDate = new Date(eY, eM - 1, eD);
 
-        // If end date is chronologically before start date, treat as single day
         if (endDate.getTime() < startDate.getTime()) {
           hasEndDate = false;
         } else {
@@ -2959,7 +3011,6 @@
         }
       }
 
-      // Case 1: Single day activity
       if (!hasEndDate) {
         return {
           isRange: false,
@@ -2973,24 +3024,20 @@
         };
       }
 
-      // Case 2: Multi-day activity range
       let dayStr = '';
       let monthStr = '';
       let weekdayStr = `${sWeekdayShort}-${eWeekdayShort}`;
       let newsDate = '';
 
       if (sY === eY && sM === eM) {
-        // Same month & year: e.g. 17-21 ก.พ. 70
         dayStr = `${sD}-${eD}`;
         monthStr = `${sMonthShort} ${sThaiYearShort}`;
         newsDate = `${sD} - ${eD} ${sMonthShort} ${sThaiYear}`;
       } else if (sY === eY) {
-        // Different month, same year: e.g. 28 ก.พ. - 3 มี.ค. 70
         dayStr = `${sD} ${sMonthShort} - ${eD} ${eMonthShort}`;
         monthStr = `${sThaiYearShort}`;
         newsDate = `${sD} ${sMonthShort} - ${eD} ${eMonthShort} ${sThaiYear}`;
       } else {
-        // Different year
         dayStr = `${sD} ${sMonthShort} ${sThaiYearShort} - ${eD} ${eMonthShort} ${sThaiYearShort}`;
         monthStr = `${sThaiYearShort}-${eThaiYearShort}`;
         newsDate = `${sD} ${sMonthShort} ${sThaiYear} - ${eD} ${eMonthShort} ${sThaiYear}`;
@@ -3009,9 +3056,6 @@
       };
     }
 
-    /**
-     * Infers ISO start and end dates from event day and month string
-     */
     function inferIsoFromEvent(dayStr, monthStr) {
       if (!dayStr || !monthStr) return { startIso: '', endIso: '' };
 
@@ -3035,7 +3079,7 @@
 
       const mm = String(mIdx + 1).padStart(2, '0');
 
-      const rangeMatch = String(dayStr).match(/(d{1,2})s*[-–]s*(d{1,2})/);
+      const rangeMatch = String(dayStr).match(/(\d{1,2})\s*[-–]\s*(\d{1,2})/);
       if (rangeMatch) {
         const sD = rangeMatch[1].padStart(2, '0');
         const eD = rangeMatch[2].padStart(2, '0');
@@ -3057,9 +3101,6 @@
       return { startIso: '', endIso: '' };
     }
 
-    /**
-     * Infers ISO start and end dates from news date string
-     */
     function inferIsoFromNewsDate(dateStr) {
       if (!dateStr || typeof dateStr !== 'string') return { startIso: '', endIso: '' };
 
@@ -3122,7 +3163,6 @@
       return { startIso: '', endIso: '' };
     }
 
-    // --- News Date Helpers ---
     function handleNewsDatesChange() {
       const startIso = document.getElementById('adminNewsStartDatePicker')?.value || '';
       let endIso = document.getElementById('adminNewsEndDatePicker')?.value || '';
@@ -3139,7 +3179,6 @@
         return;
       }
 
-      // If end date is prior to start date, reset end date
       if (endIso && endIso < startIso) {
         endIso = '';
         const endPicker = document.getElementById('adminNewsEndDatePicker');
@@ -3182,7 +3221,6 @@
       if (tagInput) tagInput.value = tag;
     }
 
-    // --- Event Date & Time Helpers ---
     function highlightInput(el) {
       if (!el) return;
       el.style.transition = 'all 0.25s ease';
@@ -3194,46 +3232,42 @@
       }, 700);
     }
 
-    
-  function handleTimeRadioChange(val) {
-    const customWrap = document.getElementById('adminEventCustomTimeWrap');
-    const timeInput = document.getElementById('adminEventTime');
-    
-    if (val === 'กำหนดเวลาเอง') {
-      customWrap.style.display = 'block';
-      handleEventTimeCustomChange();
-    } else {
-      customWrap.style.display = 'none';
-      if (val === 'ช่วงเช้า') timeInput.value = '08:30 - 12:00 น.';
-      else if (val === 'ช่วงบ่าย') timeInput.value = '13:00 - 16:30 น.';
-      else timeInput.value = 'เต็มวัน';
+    function handleTimeRadioChange(val) {
+      const customWrap = document.getElementById('adminEventCustomTimeWrap');
+      const timeInput = document.getElementById('adminEventTime');
+      
+      if (val === 'กำหนดเวลาเอง') {
+        if (customWrap) customWrap.style.display = 'block';
+        handleEventTimeCustomChange();
+      } else {
+        if (customWrap) customWrap.style.display = 'none';
+        if (timeInput) {
+          if (val === 'ช่วงเช้า') timeInput.value = '08:30 - 12:00 น.';
+          else if (val === 'ช่วงบ่าย') timeInput.value = '13:00 - 16:30 น.';
+          else timeInput.value = 'เต็มวัน';
+        }
+      }
     }
-  }
 
-  function handleEventTimeCustomChange() {
-    const start = document.getElementById('adminEventStartTime').value;
-    const end = document.getElementById('adminEventEndTime').value;
-    const timeInput = document.getElementById('adminEventTime');
-    if (start && end) {
-      timeInput.value = start + ' - ' + end + ' น.';
+    function handleEventTimeCustomChange() {
+      const start = document.getElementById('adminEventStartTime')?.value;
+      const end = document.getElementById('adminEventEndTime')?.value;
+      const timeInput = document.getElementById('adminEventTime');
+      if (timeInput && start && end) {
+        timeInput.value = start + ' - ' + end + ' น.';
+      }
     }
-  }
+
     function setQuickEventTime(start, end) {
       if (start === '08:30' && end === '16:30') {
-        
-  const radio = document.querySelector('input[name="adminEventTimeType"][value="เต็มวัน"]');
-  if (radio) { radio.checked = true; handleTimeRadioChange('เต็มวัน'); }
-
+        const radio = document.querySelector('input[name="adminEventTimeType"][value="เต็มวัน"]');
+        if (radio) { radio.checked = true; handleTimeRadioChange('เต็มวัน'); }
       } else if (start === '08:30' && end === '12:00') {
-        
-  const radio = document.querySelector('input[name="adminEventTimeType"][value="ช่วงเช้า"]');
-  if (radio) { radio.checked = true; handleTimeRadioChange('ช่วงเช้า'); }
-
+        const radio = document.querySelector('input[name="adminEventTimeType"][value="ช่วงเช้า"]');
+        if (radio) { radio.checked = true; handleTimeRadioChange('ช่วงเช้า'); }
       } else if (start === '13:00' && end === '16:30') {
-        
-  const radio = document.querySelector('input[name="adminEventTimeType"][value="ช่วงบ่าย"]');
-  if (radio) { radio.checked = true; handleTimeRadioChange('ช่วงบ่าย'); }
-
+        const radio = document.querySelector('input[name="adminEventTimeType"][value="ช่วงบ่าย"]');
+        if (radio) { radio.checked = true; handleTimeRadioChange('ช่วงบ่าย'); }
       } else {
         const startEl = document.getElementById('adminEventStartTime');
         const endEl = document.getElementById('adminEventEndTime');
@@ -3241,6 +3275,64 @@
         if (endEl) endEl.value = end;
         handleEventTimeCustomChange();
       }
+    }
+
+    function handleEventDatesChange() {
+      const startIso = document.getElementById('adminEventStartDatePicker')?.value || '';
+      let endIso = document.getElementById('adminEventEndDatePicker')?.value || '';
+      const summaryText = document.getElementById('adminEventDateSummaryText');
+
+      if (!startIso) return;
+
+      if (endIso && endIso < startIso) {
+        endIso = '';
+        const endPicker = document.getElementById('adminEventEndDatePicker');
+        if (endPicker) endPicker.value = '';
+      }
+
+      const info = calculateEventDateInfo(startIso, endIso);
+      if (!info) return;
+
+      const dayEl = document.getElementById('adminEventDay');
+      const monthEl = document.getElementById('adminEventMonth');
+      const weekdayEl = document.getElementById('adminEventWeekday');
+      const dateIsoEl = document.getElementById('adminEventDateIso');
+      const endDateIsoEl = document.getElementById('adminEventEndDateIso');
+
+      if (dayEl) dayEl.value = info.day;
+      if (monthEl) monthEl.value = info.month;
+      if (weekdayEl) weekdayEl.value = info.weekday;
+      if (dateIsoEl) dateIsoEl.value = info.dateIso;
+      if (endDateIsoEl) endDateIsoEl.value = info.endDateIso;
+
+      if (summaryText) {
+        summaryText.textContent = info.summary;
+      }
+
+      const timeInput = document.getElementById('adminEventTime');
+      if (timeInput && !timeInput.value.trim()) {
+        const radio = document.querySelector('input[name="adminEventTimeType"][value="เต็มวัน"]');
+        if (radio) { radio.checked = true; handleTimeRadioChange('เต็มวัน'); }
+      }
+    }
+
+    function clearEventEndDate() {
+      const endPicker = document.getElementById('adminEventEndDatePicker');
+      if (endPicker) endPicker.value = '';
+      handleEventDatesChange();
+    }
+
+    function setQuickEventDate(type) {
+      const d = new Date();
+      if (type === 'tomorrow') {
+        d.setDate(d.getDate() + 1);
+      }
+      const iso = d.toISOString().slice(0, 10);
+      const startPicker = document.getElementById('adminEventStartDatePicker');
+      const endPicker = document.getElementById('adminEventEndDatePicker');
+      if (startPicker) startPicker.value = iso;
+      if (endPicker) endPicker.value = '';
+      handleEventDatesChange();
     }
 
     function setQuickFeaturedTimePreset(type) {
@@ -3344,62 +3436,6 @@
       }
     }
 
-    function handleEventDatesChange() {
-      const startIso = document.getElementById('adminEventStartDatePicker')?.value || '';
-      let endIso = document.getElementById('adminEventEndDatePicker')?.value || '';
-      const summaryText = document.getElementById('adminEventDateSummaryText');
-
-      if (!startIso) return;
-
-      // If end date is prior to start date, reset end date
-      if (endIso && endIso < startIso) {
-        endIso = '';
-        const endPicker = document.getElementById('adminEventEndDatePicker');
-        if (endPicker) endPicker.value = '';
-      }
-
-      const info = calculateEventDateInfo(startIso, endIso);
-      if (!info) return;
-
-      document.getElementById('adminEventDay').value = info.day;
-      document.getElementById('adminEventMonth').value = info.month;
-      document.getElementById('adminEventWeekday').value = info.weekday;
-      document.getElementById('adminEventDateIso').value = info.dateIso;
-      document.getElementById('adminEventEndDateIso').value = info.endDateIso;
-
-      if (summaryText) {
-        summaryText.textContent = info.summary;
-      }
-
-      // Auto-fill time automatically if empty
-      const timeInput = document.getElementById('adminEventTime');
-      if (timeInput && !timeInput.value.trim()) {
-        
-  const radio = document.querySelector('input[name="adminEventTimeType"][value="เต็มวัน"]');
-  if (radio) { radio.checked = true; handleTimeRadioChange('เต็มวัน'); }
-
-      }
-    }
-
-    function clearEventEndDate() {
-      const endPicker = document.getElementById('adminEventEndDatePicker');
-      if (endPicker) endPicker.value = '';
-      handleEventDatesChange();
-    }
-
-    function setQuickEventDate(type) {
-      const d = new Date();
-      if (type === 'tomorrow') {
-        d.setDate(d.getDate() + 1);
-      }
-      const iso = d.toISOString().slice(0, 10);
-      const startPicker = document.getElementById('adminEventStartDatePicker');
-      const endPicker = document.getElementById('adminEventEndDatePicker');
-      if (startPicker) startPicker.value = iso;
-      if (endPicker) endPicker.value = '';
-      handleEventDatesChange();
-    }
-
     function handleFeaturedDatesChange() {
       const startIso = document.getElementById('adminFeaturedStartDatePicker')?.value || '';
       let endIso = document.getElementById('adminFeaturedEndDatePicker')?.value || '';
@@ -3416,16 +3452,20 @@
       const info = calculateEventDateInfo(startIso, endIso);
       if (!info) return;
 
-      document.getElementById('adminFeaturedDay').value = info.day;
-      document.getElementById('adminFeaturedMonth').value = info.month;
-      document.getElementById('adminFeaturedDateIso').value = info.dateIso;
-      document.getElementById('adminFeaturedEndDateIso').value = info.endDateIso;
+      const dayEl = document.getElementById('adminFeaturedDay');
+      const monthEl = document.getElementById('adminFeaturedMonth');
+      const dateIsoEl = document.getElementById('adminFeaturedDateIso');
+      const endDateIsoEl = document.getElementById('adminFeaturedEndDateIso');
+
+      if (dayEl) dayEl.value = info.day;
+      if (monthEl) monthEl.value = info.month;
+      if (dateIsoEl) dateIsoEl.value = info.dateIso;
+      if (endDateIsoEl) endDateIsoEl.value = info.endDateIso;
 
       if (summaryText) {
         summaryText.textContent = info.summary;
       }
 
-      // Auto-fill time automatically if empty
       const timeInput = document.getElementById('adminFeaturedTime');
       if (timeInput && !timeInput.value.trim()) {
         setQuickFeaturedTimePreset('เต็มวัน');
@@ -3438,25 +3478,18 @@
       handleFeaturedDatesChange();
     }
 
-    // =========================================================================
-    // 🖼️ REBUILT ACTIVITY IMAGE SYSTEM (UPLOAD / URL / RESILIENT FALLBACK)
-    // =========================================================================
     const DEFAULT_ACTIVITY_FALLBACK_URL = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
     const LOCAL_ACTIVITY_FALLBACK_URL = window.LOCAL_ACTIVITY_IMAGE_FALLBACK || 'assets/images/default-activity.png';
 
-    // Central state tracking for current news modal image
     let currentNewsImageState = {
-      mode: 'upload',       // 'upload' | 'url'
-      file: null,           // Compressed File ready for backend upload
-      base64: '',           // Compressed Base64 dataURL
-      url: '',              // External URL entered
-      isCustom: false,      // User chose/entered an image
-      hasError: false       // Preview failed to load
+      mode: 'upload',
+      file: null,
+      base64: '',
+      url: '',
+      isCustom: false,
+      hasError: false
     };
 
-    /**
-     * Switch between "Upload from device" and "Image URL" tabs
-     */
     function switchImgMode(mode) {
       const btnUpload = document.getElementById('btnImgModeUpload');
       const btnUrl = document.getElementById('btnImgModeUrl');
@@ -3495,9 +3528,6 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    /**
-     * Set preview back to the default fallback image
-     */
     function showDefaultPreview() {
       const previewImg = document.getElementById('adminNewsImgPreview');
       const notice = document.getElementById('adminPreviewFallbackNotice');
@@ -3509,9 +3539,6 @@
       updatePreviewUI('default');
     }
 
-    /**
-     * Update labels & badges in preview card
-     */
     function updatePreviewUI(type) {
       const badge = document.getElementById('adminImgSourceBadge');
       const stateLbl = document.getElementById('adminPreviewStateLabel');
@@ -3536,9 +3563,6 @@
       }
     }
 
-    /**
-     * Handle input in "Image URL" tab
-     */
     function handleNewsImgUrlChange(url) {
       const trimmed = (url || '').trim();
       currentNewsImageState.url = trimmed;
@@ -3551,7 +3575,7 @@
 
       if (trimmed) {
         currentNewsImageState.isCustom = true;
-        currentNewsImageState.file = null; // Clear leftover file so it won't overwrite URL!
+        currentNewsImageState.file = null;
         currentNewsImageState.base64 = '';
         if (previewImg) previewImg.src = trimmed;
         updatePreviewUI('url-success');
@@ -3561,9 +3585,6 @@
       }
     }
 
-    /**
-     * Button to test loading the URL in URL mode
-     */
     function handleTestImageUrl() {
       const urlInput = document.getElementById('adminNewsImgUrl');
       const val = (urlInput?.value || '').trim();
@@ -3576,18 +3597,12 @@
       showToast('กำลังทดสอบโหลดรูปภาพ...');
     }
 
-    /**
-     * Handle when preview image fails to load
-     */
     function handlePreviewImageError(img) {
       if (!img) return;
-
-      // Swap to fallback URL (as requested by user)
       if (img.src !== DEFAULT_ACTIVITY_FALLBACK_URL && !img.dataset.hasFailedFallback) {
         img.dataset.hasFailedFallback = 'true';
         img.src = DEFAULT_ACTIVITY_FALLBACK_URL;
       } else {
-        // If Discord CDN fails as well (offline/expired), use local PNG fallback
         img.src = LOCAL_ACTIVITY_FALLBACK_URL;
         img.onerror = null;
       }
@@ -3602,15 +3617,9 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    /**
-     * Handle when preview image successfully finishes loading
-     */
     function handlePreviewImageLoaded(img) {
       const notice = document.getElementById('adminPreviewFallbackNotice');
-      if (currentNewsImageState.hasError) {
-        // Stay in error fallback display
-        return;
-      }
+      if (currentNewsImageState.hasError) return;
       if (!currentNewsImageState.isCustom) {
         if (notice) notice.style.display = 'none';
         updatePreviewUI('default');
@@ -3621,9 +3630,6 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    /**
-     * Clear selected news image and revert to default fallback image
-     */
     function clearSelectedNewsImage(silent = false) {
       currentNewsImageState = {
         mode: currentNewsImageState.mode,
@@ -3648,12 +3654,6 @@
       if (!silent) showToast('คืนค่าเป็นภาพเริ่มต้นเรียบร้อยแล้ว');
     }
 
-    /**
-     * Resilient HTML5 Canvas Image Compression Engine
-     * - Resizes photos to max 1280px (crisp visual fidelity, under ~150KB)
-     * - Fills background with white before JPEG draw (prevents transparent PNGs turning black!)
-     * - Protects against browser localStorage quota exhaustion
-     */
     function compressImageFile(file, onProgress) {
       return new Promise((resolve, reject) => {
         if (!file || !file.type.startsWith('image/')) {
@@ -3691,226 +3691,91 @@
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
-
-            // Fill white background to avoid transparent PNG turning solid black in JPEG!
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, width, height);
-
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(img, 0, 0, width, height);
 
-            if (onProgress) onProgress(85, 'กำลังสร้างไฟล์ Web-Optimized JPEG...');
-
-            const quality = 0.80;
-            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            if (onProgress) onProgress(85, 'กำลังบีบอัดเป็น Web-Optimized JPEG...');
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
             const sizeBytes = Math.round((compressedBase64.length * 3) / 4);
             const sizeKb = Math.round(sizeBytes / 1024);
-            const originalKb = Math.round(file.size / 1024);
-            const reductionPct = originalKb > 0 ? Math.max(0, Math.round(((originalKb - sizeKb) / originalKb) * 100)) : 0;
 
             canvas.toBlob((blob) => {
-              if (!blob) {
-                return reject(new Error('ไม่สามารถบีบอัดภาพเป็น Blob ได้'));
-              }
-              const safeName = (file.name || 'activity').replace(/.[^/.]+$/, "") + ".jpg";
+              const safeName = (file.name || 'activity').replace(/\.[^/.]+$/, "") + ".jpg";
               const compressedFile = new File([blob], safeName, { type: 'image/jpeg' });
 
               if (onProgress) {
-                onProgress(100, `สำเร็จ 100%! เหลือ ~${sizeKb} KB (ลดขนาด ${reductionPct}%)`);
+                onProgress(100, `บีบอัดสำเร็จ 100%! ลดเหลือ ~${sizeKb} KB`);
               }
 
               resolve({
                 base64: compressedBase64,
                 blob: blob,
                 file: compressedFile,
-                originalKb: originalKb,
                 sizeKb: sizeKb,
-                reductionPct: reductionPct,
                 width: width,
                 height: height
               });
-            }, 'image/jpeg', quality);
+            }, 'image/jpeg', 0.82);
           };
-
           img.src = evt.target.result;
         };
-
         reader.readAsDataURL(file);
       });
     }
 
-    /**
-     * Process an image file from File Input, Drag-and-Drop, or Clipboard Paste
-     */
-    async function processSelectedImage(file) {
-      if (!file) return;
-      if (!file.type.startsWith('image/')) {
-        alert('กรุณาเลือกไฟล์รูปภาพที่ถูกต้อง (JPG, PNG, WebP)');
-        return;
-      }
-
-      const progressWrap = document.getElementById('adminNewsUploadProgress');
-      const fileNameEl = document.getElementById('uploadFileName');
-      const fileSizeEl = document.getElementById('uploadFileSize');
-      const progressFill = document.getElementById('uploadProgressFill');
-      const percentNum = document.getElementById('uploadPercentNum');
-      const statusText = document.getElementById('uploadStatusText');
-      const previewImg = document.getElementById('adminNewsImgPreview');
-      const base64Input = document.getElementById('adminNewsImgBase64');
-      const notice = document.getElementById('adminPreviewFallbackNotice');
-
-      // Instant local preview via Object URL
-      try {
-        const tempUrl = URL.createObjectURL(file);
-        delete previewImg.dataset.hasFailedFallback;
-        previewImg.src = tempUrl;
-        if (notice) notice.style.display = 'none';
-      } catch (e) { }
-
-      // Show progress UI
-      if (progressWrap) progressWrap.style.display = 'block';
-      if (progressFill) {
-        progressFill.classList.remove('complete');
-        progressFill.style.background = '';
-        progressFill.style.width = '8%';
-      }
-      if (percentNum) percentNum.textContent = '8%';
-      if (fileNameEl) fileNameEl.textContent = file.name;
-      const originalKb = Math.round(file.size / 1024);
-      if (fileSizeEl) fileSizeEl.textContent = originalKb > 1024 ? `${(originalKb / 1024).toFixed(1)} MB` : `${originalKb} KB`;
-      if (statusText) statusText.textContent = 'กำลังโหลดไฟล์...';
-
-      try {
-        const result = await compressImageFile(file, (percent, msg) => {
-          if (progressFill) progressFill.style.width = `${percent}%`;
-          if (percentNum) percentNum.textContent = `${percent}%`;
-          if (statusText) statusText.textContent = msg;
-          if (percent === 100 && progressFill) {
-            progressFill.classList.add('complete');
-          }
-        });
-
-        currentNewsImageState.mode = 'upload';
-        currentNewsImageState.file = result.file;
-        currentNewsImageState.base64 = result.base64;
-        currentNewsImageState.url = '';
-        currentNewsImageState.isCustom = true;
-        currentNewsImageState.hasError = false;
-
-        if (base64Input) base64Input.value = result.base64;
-        if (previewImg) previewImg.src = result.base64;
-
-        updatePreviewUI('upload-success');
-        showToast(`⚡ บีบอัดภาพสำเร็จ เหลือ ~${result.sizeKb} KB (ประหยัด ${result.reductionPct}%)`);
-      } catch (err) {
-        console.error('Image compression error:', err);
-        if (statusText) statusText.textContent = 'เกิดข้อผิดพลาด: ' + err.message;
-        if (progressFill) progressFill.style.background = '#ef4444';
-        if (percentNum) percentNum.textContent = 'Error';
-        alert('⚠️ ไม่สามารถประมวลผลรูปภาพได้: ' + err.message);
-      }
-    }
-
-    // ==========================================================
-    // DATA ACCESS HELPERS (WITH ERROR PROTECTION & AUTO-SORT)
-    // ==========================================================
-    function getNews() {
-      let items = DEFAULT_NEWS_ITEMS;
-      try {
-        const d = localStorage.getItem('dg_sarawat_news_items');
-        if (d) {
-          const parsed = JSON.parse(d);
-          if (Array.isArray(parsed)) items = parsed;
-        }
-      } catch (err) {
-        console.warn('Error reading news items:', err);
-      }
-      // Sort chronologically descending: latest activity date comes first!
-      return items.slice().sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
-    }
-
-
-    async function fetchNewsApi() {
-      try {
-        if (!window.SarawatApi) return [];
-        const news = await window.SarawatApi.getNews();
-        return Array.isArray(news) ? news : [];
-      } catch (e) {
-        console.error('API Error:', e);
-        return [];
-      }
-    }
-
-        async function renderAdminNews() {
-      const grid = document.getElementById('adminNewsGrid');
-      if (!grid) return;
-      grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); grid-column: 1 / -1;"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</div>';
-      
-      try {
-        let news = await fetchNewsApi();
-        if (!news || !Array.isArray(news)) news = [];
-        news = news.filter(Boolean);
-
-        // Sort chronologically descending: latest activity date comes first
-        news.sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
-
-        if (news.length === 0) {
-          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;"><i data-lucide="newspaper" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีข่าวสาร / กิจกรรมในระบบ</div>';
-        } else {
-          grid.innerHTML = news.map(item => {
-            const imgSrc = window.resolveImageUrl ? window.resolveImageUrl(item.image || item.img) : (item.image || item.img || window.DEFAULT_ACTIVITY_IMAGE);
-            return `
-            <div class="admin-news-item-card">
-              <img src="${imgSrc || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&'}" class="admin-news-thumb" alt="News Image" onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';">
-              <div class="admin-news-item-body">
-                <div class="admin-news-meta">
-                  <span>${escapeHtml(item.date || '')}</span>
-                  <span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>
-                </div>
-                <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
-                <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
-                <div class="admin-news-links-indicator">
-                  ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> FB</span>` : ''}
-                  ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> IG</span>` : ''}
-                  ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Reels</span>` : ''}
-                  ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> รูปภาพ</span>` : ''}
-                </div>
-                <div class="admin-card-actions">
-                  <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" style="width:14px;height:14px;"></i> แก้ไข</button>
-                  <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> ลบ</button>
-                </div>
-              </div>
-            </div>
-            `;
-          }).join('');
-        }
-        if (window.lucide) lucide.createIcons();
-      } catch (err) {
-        console.error("renderAdminNews error:", err);
-        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + err.message + '</div>';
-      }
-    }
-
     async function handleSaveNews(e) {
       e.preventDefault();
+      const submitBtn = document.getElementById('adminNewsSubmitBtn');
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกข่าวสาร</span>';
+
       try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
+        }
+
         const id = document.getElementById('adminNewsId').value;
-        const title = document.getElementById('adminNewsTitle') ? document.getElementById('adminNewsTitle').value.trim() : '';
-        const date = document.getElementById('adminNewsDate').value.trim();
+        const title = document.getElementById('adminNewsTitle').value.trim();
+        const startIso = document.getElementById('adminNewsStartDatePicker')?.value || '';
+        const endIso = document.getElementById('adminNewsEndDatePicker')?.value || '';
+        let date = document.getElementById('adminNewsDate')?.value?.trim() || '';
+        let dateIso = document.getElementById('adminNewsDateIso')?.value?.trim() || startIso;
+        let endDateIso = document.getElementById('adminNewsEndDateIso')?.value?.trim() || endIso;
+
+        if ((!date || !dateIso) && startIso) {
+          const info = typeof calculateEventDateInfo === 'function' ? calculateEventDateInfo(startIso, endIso) : null;
+          if (info) {
+            date = info.newsDate || date;
+            dateIso = info.dateIso || dateIso;
+            endDateIso = info.endDateIso || endDateIso;
+          }
+        }
+
         const tag = document.getElementById('adminNewsTag').value.trim();
         const desc = document.getElementById('adminNewsDesc').value.trim();
-        const detail = document.getElementById('adminNewsDetail').value.trim();
-        const img = document.getElementById('adminNewsImgBase64').value.trim();
-        const fb = document.getElementById('adminNewsFb').value.trim();
-        const ig = document.getElementById('adminNewsIg').value.trim();
-        const reels = document.getElementById('adminNewsReels').value.trim();
-        const photo = document.getElementById('adminNewsPhoto').value.trim();
-        const dateIso = document.getElementById('adminNewsStartDatePicker')?.value || '';
-        const endDateIso = document.getElementById('adminNewsEndDatePicker')?.value || '';
+        const detail = document.getElementById('adminNewsDetail')?.value.trim() || '';
+        const fb = document.getElementById('adminNewsFb')?.value.trim() || '';
+        const ig = document.getElementById('adminNewsIg')?.value.trim() || '';
+        const reels = document.getElementById('adminNewsReels')?.value.trim() || '';
+        const photo = document.getElementById('adminNewsPhoto')?.value.trim() || '';
+        let img = document.getElementById('adminNewsImgBase64')?.value.trim() || '';
 
-        if (!title && !desc) throw new Error('กรุณาระบุหัวข้อหรือรายละเอียดกิจกรรม');
-        
+        if (!title) throw new Error('กรุณากรอกหัวข้อข่าวสาร/กิจกรรม');
+        if (!date && !startIso) throw new Error('กรุณาเลือกวันเริ่มต้นจัดกิจกรรม');
+        if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
+
+        const fileInput = document.getElementById('adminNewsImgFile');
+        if (fileInput && fileInput.files && fileInput.files[0] && currentNewsImageState?.mode === 'upload') {
+          if (submitBtn) submitBtn.innerHTML = '<span>กำลังบีบอัดรูปภาพ...</span>';
+          try {
+            const comp = await compressImageFile(fileInput.files[0]);
+            img = comp.base64;
+          } catch (cErr) {
+            console.warn('Compression error:', cErr);
+          }
+        }
+
         const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso };
         if (id) payload.id = id;
 
@@ -3927,6 +3792,11 @@
       } catch (err) {
         console.error(err);
         alert('⚠️ ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
       }
     }
 
@@ -4044,84 +3914,244 @@
       if (window.lucide) lucide.createIcons();
     }
 
-async function fetchEventsApi() {
+    async function fetchNewsApi() {
+      try {
+        if (window.SarawatApi && typeof window.SarawatApi.getNews === 'function') {
+          const items = await window.SarawatApi.getNews();
+          if (Array.isArray(items)) return items;
+        }
+        const stored = localStorage.getItem('dg_sarawat_news_items');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) return parsed;
+        }
+        return DEFAULT_NEWS_ITEMS || [];
+      } catch (e) {
+        console.error('API Error fetching news:', e);
+        return [];
+      }
+    }
+
+    async function renderAdminNews() {
+      const grid = document.getElementById('adminNewsGrid');
+      if (!grid) return;
+      grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); grid-column: 1 / -1;"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</div>';
+
+      try {
+        let news = await fetchNewsApi();
+        if (!news || !Array.isArray(news)) news = [];
+        news = news.filter(Boolean);
+
+        // Sort chronologically descending: latest activity date comes first
+        news.sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
+
+        if (news.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;"><i data-lucide="newspaper" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีข่าวสาร / กิจกรรมในระบบ</div>';
+        } else {
+          grid.innerHTML = news.map(item => {
+            const imgSrc = window.resolveImageUrl ? window.resolveImageUrl(item.image || item.img) : (item.image || item.img || window.DEFAULT_ACTIVITY_IMAGE);
+            return `
+            <div class="admin-news-item-card">
+              <img src="${imgSrc || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&'}" class="admin-news-thumb" alt="News Image" onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';">
+              <div class="admin-news-item-body">
+                <div class="admin-news-meta">
+                  <span>${escapeHtml(item.date || '')}</span>
+                  <span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>
+                </div>
+                <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
+                <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
+                <div class="admin-news-links-indicator">
+                  ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> FB</span>` : ''}
+                  ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> IG</span>` : ''}
+                  ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Reels</span>` : ''}
+                  ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> รูปภาพ</span>` : ''}
+                </div>
+                <div class="admin-card-actions">
+                  <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" style="width:14px;height:14px;"></i> แก้ไข</button>
+                  <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> ลบ</button>
+                </div>
+              </div>
+            </div>
+            `;
+          }).join('');
+        }
+
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        console.error('renderAdminNews error:', err);
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #ef4444;">ไม่สามารถโหลดข้อมูลข่าวสารได้</div>';
+      }
+    }
+
+    // ==========================================================
+    // 📅 SCHOOL CALENDAR & AGENDA ENGINE (CRUD / FILTER / REAL API)
+    // ==========================================================
+    let adminEventsCache = [];
+    let adminEventsCategoryFilter = 'all';
+    let adminEventsSearchTerm = '';
+
+    async function fetchEventsApi() {
       try {
         if (!window.SarawatApi) return [];
         const events = await window.SarawatApi.getEvents();
         return Array.isArray(events) ? events : [];
       } catch (e) {
-        console.error('API Error:', e);
+        console.error('API Error fetching events:', e);
         return [];
       }
     }
 
+    function filterAdminEventsCategory(cat) {
+      adminEventsCategoryFilter = cat || 'all';
+      const pills = document.querySelectorAll('#adminEventsFilterPills .dg-filter-btn');
+      pills.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-admin-cat') === adminEventsCategoryFilter);
+      });
+      renderAdminEventsTableOnly();
+    }
+
+    function handleAdminEventsSearch(val) {
+      adminEventsSearchTerm = (val || '').trim().toLowerCase();
+      renderAdminEventsTableOnly();
+    }
+
     async function renderAdminEvents() {
-        const tbody = document.getElementById('adminEventsTableBody');
+      const tbody = document.getElementById('adminEventsTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--dg-text-muted);"><div class="loading-spinner"></div> กำลังโหลดข้อมูลจากฐานข้อมูล...</td></tr>';
+
+      try {
+        let events = await fetchEventsApi();
+        if (!events || !Array.isArray(events)) events = [];
+        adminEventsCache = events.filter(Boolean);
+
+        // Sort chronologically ascending (closest upcoming first)
+        adminEventsCache.sort((a, b) => {
+          const tsA = (a.dateStart ? new Date(a.dateStart + 'T00:00:00Z').getTime() : parseDateToTimestamp(a));
+          const tsB = (b.dateStart ? new Date(b.dateStart + 'T00:00:00Z').getTime() : parseDateToTimestamp(b));
+          return tsA - tsB;
+        });
+
+        // Update statistics counters
+        const todayIso = new Date().toLocaleDateString('en-CA');
         const statTotal = document.getElementById('statTotalEvents');
         const statUpcoming = document.getElementById('statUpcomingEvents');
-        
-        if (!tbody) return;
-        
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: var(--dg-text-muted);"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</td></tr>';
-        
-        try {
-          let events = await fetchEventsApi();
-          if (!events || !Array.isArray(events)) events = [];
-          events = events.filter(Boolean);
-          
-          if (statTotal) statTotal.textContent = events.length;
-          
-          const now = new Date();
-          now.setHours(0, 0, 0, 0);
-          const nowTs = now.getTime();
-          
-          let upcomingCount = 0;
-          
-          events.sort((a, b) => parseDateToTimestamp(a) - parseDateToTimestamp(b));
-          
-          if (events.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 60px; color: #94a3b8; background: #f8fafc;"><i data-lucide="calendar-x-2" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีกิจกรรมในปฏิทินโรงเรียน</td></tr>';
+        const statPast = document.getElementById('statPastEvents');
+
+        let upcomingCount = 0;
+        let pastCount = 0;
+
+        adminEventsCache.forEach(evt => {
+          const effectiveEnd = (evt.dateEnd || evt.dateStart || '').trim();
+          if (effectiveEnd) {
+            if (effectiveEnd >= todayIso) upcomingCount++;
+            else pastCount++;
           } else {
-            tbody.innerHTML = events.map(evt => {
-              const evtTs = parseDateToTimestamp(evt);
-              let isUpcoming = false;
-              if (evt.endDateIso) {
-                 const endTs = new Date(evt.endDateIso + 'T23:59:59Z').getTime();
-                 if (nowTs <= endTs) { isUpcoming = true; upcomingCount++; }
-              } else {
-                 if (nowTs <= evtTs) { isUpcoming = true; upcomingCount++; }
-              }
-              const rowClass = isUpcoming ? '' : 'style="opacity: 0.6; background: #f8fafc;"';
-              const statusBadge = isUpcoming ? '<span style="background:#ecfdf5; color:#10b981; padding:2px 8px; border-radius:12px; font-size:0.75rem;">เร็วๆ นี้</span>' : '<span style="background:#f1f5f9; color:#64748b; padding:2px 8px; border-radius:12px; font-size:0.75rem;">ผ่านมาแล้ว</span>';
-              
-              return `
-                <tr ${rowClass}>
-                  <td>
-                    <div style="font-weight: 500; color: var(--dg-black);">${escapeHtml(evt.dateStart || evt.dateIso || evt.date || '')}</div>
-                    ${evt.endDateIso ? `<div style="font-size: 0.8rem; color: #64748b;">ถึง ${escapeHtml(evt.endDateIso)}</div>` : ''}
-                  </td>
-                  <td>
-                    <div style="font-weight: 500; color: var(--dg-black);">${escapeHtml(evt.title || '')}</div>
-                    <div style="font-size: 0.8rem; color: #64748b;">${escapeHtml(evt.categoryLabel || evt.category || '')}</div>
-                  </td>
-                  <td>${escapeHtml(evt.time || '-')}</td>
-                  <td>${escapeHtml(evt.location || '-')}</td>
-                  <td>${statusBadge}</td>
-                  <td>
-                    <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" style="margin-right: 4px;"><i data-lucide="edit-3" style="width:14px; height:14px;"></i></button>
-                    <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2;" onclick="handleDeleteEvent('${evt.id}')"><i data-lucide="trash-2" style="width:14px; height:14px;"></i></button>
-                  </td>
-                </tr>
-              `;
-            }).join('');
+            upcomingCount++;
           }
-          if (statUpcoming) statUpcoming.textContent = upcomingCount;
-          if (window.lucide) lucide.createIcons();
-        } catch (err) {
-          console.error("renderAdminEvents error:", err);
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + err.message + '</td></tr>';
-        }
+        });
+
+        if (statTotal) statTotal.textContent = adminEventsCache.length;
+        if (statUpcoming) statUpcoming.textContent = upcomingCount;
+        if (statPast) statPast.textContent = pastCount;
+
+        renderAdminEventsTableOnly();
+      } catch (err) {
+        console.error('renderAdminEvents error:', err);
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + err.message + '</td></tr>';
       }
+    }
+
+    function renderAdminEventsTableOnly() {
+      const tbody = document.getElementById('adminEventsTableBody');
+      if (!tbody) return;
+
+      const todayIso = new Date().toLocaleDateString('en-CA');
+
+      // Filter events by category and search term
+      let filtered = adminEventsCache.slice();
+
+      if (adminEventsCategoryFilter && adminEventsCategoryFilter !== 'all') {
+        filtered = filtered.filter(e => e.category === adminEventsCategoryFilter || e.categoryLabel === adminEventsCategoryFilter);
+      }
+
+      if (adminEventsSearchTerm) {
+        filtered = filtered.filter(e =>
+          (e.title && e.title.toLowerCase().includes(adminEventsSearchTerm)) ||
+          (e.desc && e.desc.toLowerCase().includes(adminEventsSearchTerm)) ||
+          (e.location && e.location.toLowerCase().includes(adminEventsSearchTerm)) ||
+          (e.audience && e.audience.toLowerCase().includes(adminEventsSearchTerm)) ||
+          (e.categoryLabel && e.categoryLabel.toLowerCase().includes(adminEventsSearchTerm))
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 60px; color: #94a3b8; background: #f8fafc;"><i data-lucide="calendar-x-2" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ไม่พบรายการกิจกรรมในระบบ</td></tr>';
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(evt => {
+        const effectiveEnd = (evt.dateEnd || evt.dateStart || '').trim();
+        const isUpcoming = !effectiveEnd || effectiveEnd >= todayIso;
+        const rowStyle = isUpcoming ? '' : 'style="opacity: 0.7; background: #fafafa;"';
+        const statusBadge = isUpcoming
+          ? '<span style="background:#ecfdf5; color:#10b981; border: 1px solid #a7f3d0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">เร็วๆ นี้</span>'
+          : '<span style="background:#f1f5f9; color:#64748b; border: 1px solid #e2e8f0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">ผ่านมาแล้ว</span>';
+
+        const catClass = `cat-${evt.category || 'general'}`;
+        const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป');
+
+        const displayDate = evt.day && evt.month ? `${evt.day} ${evt.month}` : (evt.dateStart || '-');
+
+        return `
+          <tr ${rowStyle}>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border);">
+              <div style="font-weight: 750; color: #0f172a; font-size: 0.95rem;">${escapeHtml(displayDate)}</div>
+              ${evt.dateStart ? `<div style="font-size: 0.75rem; color: #94a3b8;">${escapeHtml(evt.dateStart)}${evt.dateEnd ? ' ถึง ' + escapeHtml(evt.dateEnd) : ''}</div>` : ''}
+            </td>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border);">
+              <div style="font-weight: 750; color: #0f172a; font-size: 0.98rem; margin-bottom: 4px;">${escapeHtml(evt.title || '')}</div>
+              <span class="dg-event-category-badge ${catClass}" style="font-size: 0.72rem; padding: 2px 8px;">${escapeHtml(catLabel)}</span>
+            </td>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #334155; font-size: 0.88rem;">
+              <span style="display: inline-flex; align-items: center; gap: 4px;">
+                <i data-lucide="clock" style="width: 14px; height: 14px; color: #94a3b8;"></i>
+                <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
+              </span>
+            </td>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #475569; font-size: 0.88rem;">
+              ${evt.location ? `
+                <span style="display: inline-flex; align-items: center; gap: 4px;">
+                  <i data-lucide="map-pin" style="width: 14px; height: 14px; color: #94a3b8;"></i>
+                  <span>${escapeHtml(evt.location)}</span>
+                </span>
+              ` : '<span style="color:#cbd5e1;">-</span>'}
+            </td>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #475569; font-size: 0.88rem;">
+              ${evt.audience ? `
+                <span style="display: inline-flex; align-items: center; gap: 4px;">
+                  <i data-lucide="users" style="width: 14px; height: 14px; color: #94a3b8;"></i>
+                  <span>${escapeHtml(evt.audience)}</span>
+                </span>
+              ` : '<span style="color:#cbd5e1;">ทุกระดับชั้น</span>'}
+            </td>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border);">${statusBadge}</td>
+            <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); text-align: right; white-space: nowrap;">
+              <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" title="แก้ไขกิจกรรม" style="margin-right: 6px; padding: 6px 10px; border-radius: 6px;">
+                <i data-lucide="edit-3" style="width:14px; height:14px;"></i>
+              </button>
+              <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2; padding: 6px 10px; border-radius: 6px;" onclick="handleDeleteEvent('${evt.id}')" title="ลบกิจกรรม">
+                <i data-lucide="trash-2" style="width:14px; height:14px;"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
 
     async function handleSaveEvent(e) {
       e.preventDefault();
@@ -4139,6 +4169,9 @@ async function fetchEventsApi() {
         let dateIso = document.getElementById('adminEventDateIso')?.value || startIso;
         let endDateIso = document.getElementById('adminEventEndDateIso')?.value || endIso;
 
+        if (!title) throw new Error('กรุณาระบุชื่อกิจกรรม');
+        if (!startIso) throw new Error('กรุณาเลือกวันเริ่มต้นกิจกรรม');
+
         if ((!day || !month || !dateIso) && startIso) {
           const info = calculateEventDateInfo(startIso, endIso);
           if (info) {
@@ -4150,32 +4183,47 @@ async function fetchEventsApi() {
           }
         }
 
-        const category = document.getElementById('adminEventCategory').value;
+        const category = document.getElementById('adminEventCategory').value || 'general';
         const categoryLabel = document.getElementById('adminEventCatLabel').value.trim() || document.getElementById('adminEventCategory').options[document.getElementById('adminEventCategory').selectedIndex].text;
-        
+
         let timeMode = document.querySelector('input[name="adminEventTimeType"]:checked')?.value || 'เต็มวัน';
         let time = timeMode;
         if (timeMode === 'กำหนดเวลาเอง') {
           const st = document.getElementById('adminEventStartTime').value;
           const en = document.getElementById('adminEventEndTime').value;
           if (!st || !en) throw new Error('กรุณาระบุเวลาเริ่มต้นและสิ้นสุด');
-          if (st >= en) throw new Error('เวลาเริ่มต้นต้องไม่มากกว่าหรือเท่ากับเวลาสิ้นสุด');
           time = `${st} - ${en} น.`;
-          timeMode = 'custom';
-        } else if (timeMode === 'ช่วงเช้า') timeMode = 'morning';
-        else if (timeMode === 'ช่วงบ่าย') timeMode = 'afternoon';
-        else timeMode = 'full_day';
+        } else if (timeMode === 'ช่วงเช้า') {
+          time = '08:30 - 12:00 น.';
+        } else if (timeMode === 'ช่วงบ่าย') {
+          time = '13:00 - 16:30 น.';
+        } else {
+          time = 'เต็มวัน';
+        }
 
         const location = document.getElementById('adminEventLocation').value.trim();
         const audience = document.getElementById('adminEventAudience').value.trim();
         const desc = document.getElementById('adminEventNote').value.trim();
 
-        if (!title) throw new Error('กรุณาระบุชื่อกิจกรรม');
-        if (!dateIso) throw new Error('กรุณาระบุวันเริ่มต้นกิจกรรม (รูปแบบวันที่ไม่ถูกต้อง)');
-        if (endDateIso && dateIso > endDateIso) throw new Error('วันสิ้นสุดต้องไม่เกิดก่อนวันเริ่มต้น');
+        if (endDateIso && dateIso > endDateIso) {
+          throw new Error('วันสิ้นสุดต้องไม่เกิดก่อนวันเริ่มต้น');
+        }
 
         const payload = {
-          title, day, month, weekday, category, categoryLabel, time, timeMode, location, target: audience, desc, dateStart: dateIso, dateEnd: endDateIso
+          title,
+          day,
+          month,
+          weekday,
+          category,
+          categoryLabel,
+          time,
+          timeMode,
+          location,
+          audience,
+          target: audience,
+          desc,
+          dateStart: dateIso,
+          dateEnd: endDateIso
         };
         if (id) payload.id = id;
 
@@ -4184,11 +4232,10 @@ async function fetchEventsApi() {
           submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล...</span>';
         }
 
-        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
-          const res = await window.SarawatApi.saveEvent(payload);
-          if (!res || !res.success) throw new Error('เซิร์ฟเวอร์ปฏิเสธการบันทึกข้อมูล');
+        if (window.SarawatApi) {
+          await window.SarawatApi.saveEvent(payload);
         } else {
-          throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล (Source of Truth)');
+          throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
         }
 
         await renderAdminEvents();
@@ -4206,35 +4253,51 @@ async function fetchEventsApi() {
     }
 
     async function handleDeleteEvent(id) {
-      if (!confirm('????????????????????????????????????????????')) return;
+      if (!confirm('คุณต้องการลบกิจกรรมนี้ออกจากปฏิทินโรงเรียนใช่หรือไม่?')) return;
       try {
-        if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) throw new Error('??????????????????????????????');
-        
-        const res = await window.SarawatApi.deleteEvent(id);
-        if (!res || !res.success) throw new Error('????????????????????????????');
+        if (window.SarawatApi) {
+          await window.SarawatApi.deleteEvent(id);
+        } else {
+          throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+        }
 
         await renderAdminEvents();
-        showToast('??????????????????????');
+        showToast('🗑️ ลบกิจกรรมเรียบร้อยแล้ว');
       } catch (err) {
-        console.error(err);
+        console.error('Delete event error:', err);
+        alert('⚠️ ' + err.message);
       }
     }
 
     function openAddEventModal() {
       document.getElementById('adminEventForm').reset();
       document.getElementById('adminEventId').value = '';
-      
-      const today = new Date().toISOString().split('T')[0];
+
+      const today = new Date().toLocaleDateString('en-CA');
       const dp = document.getElementById('adminEventStartDatePicker');
-      if (dp) {
-        dp.value = today;
-        handleEventDatesChange();
+      if (dp) dp.value = today;
+      const edp = document.getElementById('adminEventEndDatePicker');
+      if (edp) edp.value = '';
+
+      handleEventDatesChange();
+
+      const r = document.querySelector('input[name="adminEventTimeType"][value="เต็มวัน"]');
+      if (r) r.checked = true;
+      handleTimeRadioChange('เต็มวัน');
+
+      const submitBtn = document.getElementById('adminEventSubmitBtn');
+      if (submitBtn) submitBtn.innerHTML = '<i data-lucide="plus"></i> <span>เพิ่มกิจกรรม</span>';
+
+      const titleModal = document.getElementById('adminEventModalTitle');
+      if (titleModal) {
+        titleModal.innerHTML = `
+          <div style="background: #38bdf8; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
+            <i data-lucide="calendar-plus" style="width: 18px; height: 18px;"></i>
+          </div>
+          เพิ่มกิจกรรมในตาราง
+        `;
       }
-      document.getElementById('adminEventSubmitBtn').innerHTML = '<i data-lucide="plus"></i> <span>เพิ่มกิจกรรม</span>';
-      
-      const r1 = document.getElementById('time_mode_full');
-      if (r1) { r1.checked = true; handleEventTimeCustomChange(); }
-      
+
       openModal('adminEventModal');
       if (window.lucide) lucide.createIcons();
     }
@@ -4242,63 +4305,83 @@ async function fetchEventsApi() {
     async function openEditEventModal(id) {
       document.getElementById('adminEventForm').reset();
       document.getElementById('adminEventId').value = id;
-      document.getElementById('adminEventSubmitBtn').innerHTML = '<i data-lucide="save"></i> <span>บันทึกการเปลี่ยนแปลง</span>';
-      
+      const submitBtn = document.getElementById('adminEventSubmitBtn');
+      if (submitBtn) submitBtn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกการเปลี่ยนแปลง</span>';
+
       const events = await fetchEventsApi();
-      const evt = events.find(e => e.id === id);
+      const evt = events.find(e => String(e.id) === String(id));
       if (!evt) return;
 
       document.getElementById('adminEventTitle').value = evt.title || '';
-      document.getElementById('adminEventCategory').value = evt.categoryLabel || evt.category || '';
+
+      const catSelect = document.getElementById('adminEventCategory');
+      if (catSelect) {
+        catSelect.value = evt.category || 'general';
+      }
+      document.getElementById('adminEventCatLabel').value = evt.categoryLabel || '';
       document.getElementById('adminEventLocation').value = evt.location || '';
-      document.getElementById('adminEventAudience').value = evt.target || evt.audience || '';
+      document.getElementById('adminEventAudience').value = evt.audience || evt.target || '';
       document.getElementById('adminEventNote').value = evt.desc || evt.note || '';
-      
-      // Try to parse Date Iso
+
       let startDateIso = evt.dateStart || evt.dateIso || '';
       let endDateIso = evt.dateEnd || evt.endDateIso || '';
-      
+
       if (!startDateIso && evt.day && evt.month) {
         const info = inferIsoFromEvent(evt.day, evt.month);
-        if (info) startDateIso = info;
-      }
-      if (startDateIso) {
-        const dp = document.getElementById('adminEventStartDatePicker');
-        if (dp) { dp.value = startDateIso; handleEventDatesChange(); }
-      }
-      if (endDateIso) {
-        const edp = document.getElementById('adminEventEndDatePicker');
-        if (edp) edp.value = endDateIso;
+        if (info) startDateIso = info.startIso;
+        if (!endDateIso && info) endDateIso = info.endIso;
       }
 
-      // Restore time
-      let tMode = evt.timeMode || '';
-      if (!tMode) {
-        if (evt.time === 'เต็มวัน') tMode = 'full_day';
-        else if (evt.time === 'ช่วงเช้า') tMode = 'morning';
-        else if (evt.time === 'ช่วงบ่าย') tMode = 'afternoon';
-        else tMode = 'custom';
-      }
-      
-      if (tMode === 'full_day') document.getElementById('time_mode_full').checked = true;
-      else if (tMode === 'morning') document.getElementById('time_mode_morning').checked = true;
-      else if (tMode === 'afternoon') document.getElementById('time_mode_afternoon').checked = true;
-      else {
-        document.getElementById('time_mode_custom').checked = true;
-        if (evt.time) {
-           const match = evt.time.match(/([0-9]{1,2}:[0-9]{2})[\s\-]*([0-9]{1,2}:[0-9]{2})/);
-           if (match) {
-             document.getElementById('adminEventStartTime').value = match[1];
-             document.getElementById('adminEventEndTime').value = match[2];
-           }
+      const dp = document.getElementById('adminEventStartDatePicker');
+      if (dp) dp.value = startDateIso || '';
+      const edp = document.getElementById('adminEventEndDatePicker');
+      if (edp) edp.value = endDateIso || '';
+      handleEventDatesChange();
+
+      const timeVal = evt.time || 'เต็มวัน';
+      const customWrap = document.getElementById('adminEventCustomTimeWrap');
+      const timeInput = document.getElementById('adminEventTime');
+      if (timeInput) timeInput.value = timeVal;
+
+      if (timeVal === 'เต็มวัน') {
+        const r = document.querySelector('input[name="adminEventTimeType"][value="เต็มวัน"]');
+        if (r) r.checked = true;
+        if (customWrap) customWrap.style.display = 'none';
+      } else if (timeVal === 'ช่วงเช้า' || timeVal.includes('08:30 - 12:00')) {
+        const r = document.querySelector('input[name="adminEventTimeType"][value="ช่วงเช้า"]');
+        if (r) r.checked = true;
+        if (customWrap) customWrap.style.display = 'none';
+      } else if (timeVal === 'ช่วงบ่าย' || timeVal.includes('13:00 - 16:30')) {
+        const r = document.querySelector('input[name="adminEventTimeType"][value="ช่วงบ่าย"]');
+        if (r) r.checked = true;
+        if (customWrap) customWrap.style.display = 'none';
+      } else {
+        const r = document.querySelector('input[name="adminEventTimeType"][value="กำหนดเวลาเอง"]');
+        if (r) r.checked = true;
+        if (customWrap) customWrap.style.display = 'block';
+        const match = timeVal.match(/([0-9]{1,2}:[0-9]{2})[\s\-]*([0-9]{1,2}:[0-9]{2})/);
+        if (match) {
+          const stEl = document.getElementById('adminEventStartTime');
+          const enEl = document.getElementById('adminEventEndTime');
+          if (stEl) stEl.value = match[1];
+          if (enEl) enEl.value = match[2];
         }
       }
-      handleEventTimeCustomChange();
-      
+
       document.getElementById('adminEventDay').value = evt.day || '';
       document.getElementById('adminEventMonth').value = evt.month || '';
       document.getElementById('adminEventWeekday').value = evt.weekday || '';
-      
+
+      const titleModal = document.getElementById('adminEventModalTitle');
+      if (titleModal) {
+        titleModal.innerHTML = `
+          <div style="background: #38bdf8; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
+            <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+          </div>
+          แก้ไขข้อมูลกิจกรรม
+        `;
+      }
+
       openModal('adminEventModal');
       if (window.lucide) lucide.createIcons();
     }

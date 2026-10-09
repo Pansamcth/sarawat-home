@@ -503,22 +503,19 @@
         </p>
       </div>
 
-      <!-- Calendar Under Construction -->
-      <div style="display: flex; align-items: center; justify-content: center; margin-top: 40px;" data-reveal="fade-up">
-        <div
-          style="background: var(--dg-bg-subtle, #f9fafb); border: 1px solid var(--dg-border, #e5e7eb); border-radius: 16px; padding: 60px 40px; text-align: center; max-width: 600px; width: 100%;">
-          <div
-            style="width: 64px; height: 64px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-            <i data-lucide="wrench" style="width: 32px; height: 32px;"></i>
-          </div>
-          <h2
-            style="font-family: var(--dg-font-sans); font-size: 1.5rem; font-weight: 800; color: var(--dg-black); margin-bottom: 12px;">
-            ระบบกำลังพัฒนา</h2>
-          <p style="font-size: 0.95rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 0;">
-            ระบบปฏิทินของโรงเรียนอยู่ระหว่างการพัฒนา<br>
-            โปรดติดตามการอัปเดตในภายหลัง
-          </p>
+      <!-- Upcoming Events Container (Top ~5 items) -->
+      <div class="dg-events-list" id="upcomingEventsList" style="margin-top: 36px;">
+        <div style="text-align: center; padding: 40px; color: var(--dg-text-muted);">
+          <div class="loading-spinner"></div> กำลังโหลดกิจกรรมที่กำลังจะมาถึง...
         </div>
+      </div>
+
+      <!-- "ดูกิจกรรมทั้งหมด" Button (linking to calendar.html) -->
+      <div class="dg-calendar-more-wrap" style="margin-top: 36px; text-align: center;">
+        <a href="calendar.html" class="dg-btn-more-events" style="text-decoration: none;">
+          <span>ดูกิจกรรมทั้งหมด</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
       </div>
 
     </div>
@@ -1259,6 +1256,86 @@
         .replace(/'/g, '&#039;');
     }
 
+    // ==========================================================
+    // UPCOMING SCHOOL EVENTS (TOP ~5 CHRONOLOGICAL)
+    // ==========================================================
+    async function renderUpcomingEvents() {
+      const container = document.getElementById('upcomingEventsList');
+      if (!container) return;
+
+      try {
+        let events = [];
+        if (window.SarawatApi) {
+          events = await window.SarawatApi.getEvents({ upcoming: true, limit: 5 });
+        }
+        if (!events || !Array.isArray(events) || events.length === 0) {
+          container.innerHTML = `
+            <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: var(--dg-radius-md); padding: 50px 24px; text-align: center;">
+              <div style="width: 52px; height: 52px; border-radius: 50%; background: #f1f5f9; color: #64748b; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i data-lucide="calendar-check" style="width: 26px; height: 26px;"></i>
+              </div>
+              <h3 style="font-family: var(--dg-font-sans); font-size: 1.15rem; font-weight: 750; color: var(--dg-black); margin-bottom: 8px;">ยังไม่มีกิจกรรมใหม่ที่กำลังจะมาถึงในขณะนี้</h3>
+              <p style="font-size: 0.9rem; color: var(--dg-text-secondary); margin-bottom: 0;">สามารถตรวจสอบกำหนดการหรือกิจกรรมย้อนหลังได้ที่หน้าปฏิทินโรงเรียน</p>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = events.map(evt => {
+          const catClass = `cat-${evt.category || 'general'}`;
+          const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป');
+          const dayDisplay = evt.day || '-';
+          const monthDisplay = evt.month || '';
+          const weekdayDisplay = evt.weekday || '';
+
+          return `
+            <div class="dg-event-card">
+              <div class="dg-event-date-box">
+                <span class="day-num">${escapeHtml(dayDisplay)}</span>
+                <span class="month-str">${escapeHtml(monthDisplay)}</span>
+                ${weekdayDisplay ? `<span class="weekday-str">${escapeHtml(weekdayDisplay)}</span>` : ''}
+              </div>
+              <div class="dg-event-details">
+                <div class="dg-event-header-row">
+                  <span class="dg-event-category-badge ${catClass}">${escapeHtml(catLabel)}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
+                    <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+                    <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
+                  </span>
+                  ${evt.location ? `
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
+                      <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i>
+                      <span>${escapeHtml(evt.location)}</span>
+                    </span>
+                  ` : ''}
+                  ${evt.audience ? `
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
+                      <i data-lucide="users" style="width: 13px; height: 13px;"></i>
+                      <span>${escapeHtml(evt.audience)}</span>
+                    </span>
+                  ` : ''}
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--dg-black); margin: 4px 0 2px; letter-spacing: -0.01em;">
+                  ${escapeHtml(evt.title || '')}
+                </h3>
+                ${evt.desc ? `
+                  <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${escapeHtml(evt.desc)}
+                  </p>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        console.error('renderUpcomingEvents error:', err);
+        container.innerHTML = '<div style="text-align: center; padding: 30px; color: #ef4444;">ไม่สามารถโหลดกิจกรรมได้ในขณะนี้</div>';
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // Initialize Lucide icons
       lucide.createIcons();
@@ -1548,10 +1625,8 @@
         }
       });
       // --- Dynamic Calendar & News Initialization ---
-
-
-
       renderNewsCards();
+      renderUpcomingEvents();
 
       // Background Sync from MySQL Backend API if server is connected
       if (window.SarawatApi) {
@@ -1562,9 +1637,8 @@
           }
         }).catch(() => { });
 
-
-
-
+        // Refresh upcoming events
+        renderUpcomingEvents();
       }
 
       const newsTrackWrap = document.getElementById('newsTrackWrap');

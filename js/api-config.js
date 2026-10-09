@@ -198,19 +198,194 @@
       return await res.json(); // { success: true, url: '/uploads/activity_xxx.jpg', ... }
     },
 
-    // ดึงตารางกิจกรรมปฏิทิน (ระบบกำลังปรับปรุงพัฒนา)
-    getEvents: async function () {
-      return [];
+    // ดึงตารางกิจกรรมปฏิทินโรงเรียน
+    getEvents: async function (options = {}) {
+      const base = this.getBaseUrl();
+      let rawEvents = null;
+
+      if (base) {
+        try {
+          const res = await fetch(`${base}/api/events`);
+          if (res.ok) {
+            rawEvents = await res.json();
+            if (Array.isArray(rawEvents)) {
+              try {
+                localStorage.setItem('dg_sarawat_events_items', JSON.stringify(rawEvents));
+              } catch (e) {}
+            }
+          }
+        } catch (err) {
+          console.warn('[SarawatApi] Fetch events failed, trying local fallback:', err.message);
+        }
+      }
+
+      if (!Array.isArray(rawEvents)) {
+        try {
+          const stored = localStorage.getItem('dg_sarawat_events_items');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) rawEvents = parsed;
+          }
+        } catch (e) {}
+      }
+
+      if (!Array.isArray(rawEvents)) {
+        rawEvents = [];
+      }
+
+      // Helper function to convert ISO date or Thai date to timestamp
+      const getEventTimestamp = (evt) => {
+        if (!evt) return 0;
+        if (evt.dateStart) {
+          const ts = new Date(evt.dateStart + 'T00:00:00Z').getTime();
+          if (!isNaN(ts)) return ts;
+        }
+        if (evt.dateIso) {
+          const ts = new Date(evt.dateIso + 'T00:00:00Z').getTime();
+          if (!isNaN(ts)) return ts;
+        }
+        const dateStr = (evt.day || '') + ' ' + (evt.month || '');
+        const numMatch = dateStr.match(/\d+/g);
+        if (numMatch) {
+          const d = parseInt(numMatch[0], 10) || 1;
+          return Date.UTC(2026, 9, d, 0, 0, 0);
+        }
+        return 0;
+      };
+
+      // Current local date YYYY-MM-DD
+      const now = new Date();
+      const todayIso = now.toLocaleDateString('en-CA'); // YYYY-MM-DD
+
+      let processed = rawEvents.slice();
+
+      // Filter by category if requested
+      if (options.category && options.category !== 'all') {
+        processed = processed.filter(e => (e.category === options.category || e.categoryLabel === options.category));
+      }
+
+      // Filter by search query
+      if (options.q && options.q.trim()) {
+        const q = options.q.trim().toLowerCase();
+        processed = processed.filter(e =>
+          (e.title && e.title.toLowerCase().includes(q)) ||
+          (e.desc && e.desc.toLowerCase().includes(q)) ||
+          (e.location && e.location.toLowerCase().includes(q)) ||
+          (e.audience && e.audience.toLowerCase().includes(q)) ||
+          (e.categoryLabel && e.categoryLabel.toLowerCase().includes(q))
+        );
+      }
+
+      // Filter upcoming if requested
+      if (options.upcoming) {
+        processed = processed.filter(e => {
+          const end = (e.dateEnd || '').trim();
+          const start = (e.dateStart || e.dateIso || '').trim();
+          const effectiveEnd = end || start;
+          if (effectiveEnd) {
+            return effectiveEnd >= todayIso;
+          }
+          // If no ISO date, check timestamp against today
+          const ts = getEventTimestamp(e);
+          const todayTs = new Date(todayIso + 'T00:00:00Z').getTime();
+          return ts >= todayTs;
+        });
+
+        // Sort upcoming: Closest date to today comes first (Ascending)
+        processed.sort((a, b) => getEventTimestamp(a) - getEventTimestamp(b));
+      } else {
+        // Default calendar view: Chronological order (Earliest to latest)
+        processed.sort((a, b) => getEventTimestamp(a) - getEventTimestamp(b));
+      }
+
+      // Limit results if requested
+      if (options.limit && Number(options.limit) > 0) {
+        processed = processed.slice(0, Number(options.limit));
+      }
+
+      return processed;
     },
 
-    // บันทึกกิจกรรมปฏิทิน (ระบบกำลังปรับปรุงพัฒนา)
+    // บันทึก/อัปเดตกิจกรรมปฏิทิน
     saveEvent: async function (item) {
-      throw new Error('ระบบปฏิทินกำลังอยู่ในช่วงปรับปรุงและพัฒนา');
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูลหลัก');
+
+      // Normalize fields
+      const payload = {
+        id: item.id || ('evt-' + Date.now()),
+        title: item.title || '',
+        day: item.day || '',
+        month: item.month || '',
+        weekday: item.weekday || '',
+        category: item.category || 'general',
+        categoryLabel: item.categoryLabel || '',
+        time: item.time || 'เต็มวัน',
+        location: item.location || '',
+        audience: item.audience || item.target || '',
+        desc: item.desc || item.note || '',
+        dateStart: item.dateStart || item.date_start || '',
+        dateEnd: item.dateEnd || item.date_end || ''
+      };
+
+      const res = await fetch(`${base}/api/events`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการบันทึกกิจกรรม (HTTP ${res.status})`);
+      const data = await res.json();
+
+      // Update local cache
+      try {
+        let events = [];
+        const stored = localStorage.getItem('dg_sarawat_events_items');
+        if (stored) events = JSON.parse(stored) || [];
+        const idx = events.findIndex(e => String(e.id) === String(payload.id));
+        if (idx >= 0) {
+          events[idx] = payload;
+        } else {
+          events.push(payload);
+        }
+        localStorage.setItem('dg_sarawat_events_items', JSON.stringify(events));
+      } catch (e) {}
+
+      return data;
     },
 
-    // ลบกิจกรรมปฏิทิน (ระบบกำลังปรับปรุงพัฒนา)
+    // ลบกิจกรรมปฏิทิน
     deleteEvent: async function (id) {
-      throw new Error('ระบบปฏิทินกำลังอยู่ในช่วงปรับปรุงและพัฒนา');
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูลหลัก');
+
+      const res = await fetch(`${base}/api/events/${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการลบกิจกรรม (HTTP ${res.status})`);
+      const data = await res.json();
+
+      // Remove from local cache
+      try {
+        let events = [];
+        const stored = localStorage.getItem('dg_sarawat_events_items');
+        if (stored) events = JSON.parse(stored) || [];
+        events = events.filter(e => String(e.id) !== String(id));
+        localStorage.setItem('dg_sarawat_events_items', JSON.stringify(events));
+      } catch (e) {}
+
+      return data;
+    },
+
+    // ดึงหมวดหมู่กิจกรรม
+    getCategories: function () {
+      return [
+        { key: 'general', label: 'กิจกรรมทั่วไป', desc: 'กิจกรรมทั่วไปของโรงเรียน', color: 'cat-general' },
+        { key: 'affairs', label: 'งานกิจการนักเรียน', desc: 'กิจกรรมที่เกี่ยวข้องกับฝ่าย/กลุ่มงานกิจการนักเรียน', color: 'cat-affairs' },
+        { key: 'academic', label: 'งานวิชาการ', desc: 'กิจกรรมด้านการเรียน การสอบ การแข่งขัน หรือภารกิจทางวิชาการ', color: 'cat-academic' },
+        { key: 'prefect', label: 'ภารกิจสารวัตร', desc: 'กิจกรรมหรือภารกิจที่เกี่ยวข้องกับสารวัตรนักเรียน', color: 'cat-prefect' }
+      ];
     },
 
     // ดึงกิจกรรมเด่น

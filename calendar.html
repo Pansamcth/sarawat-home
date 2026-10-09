@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ปฏิทินกิจกรรมโรงเรียน | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</title>
   <meta name="description"
-    content="กฎระเบียบและข้อบังคับต่างๆ ของโรงเรียนเดชะปัตตนยานุกูล เพื่อความเป็นระเบียบเรียบร้อย" />
-  <meta name="keywords" content="กฎระเบียบ, ข้อบังคับ, โรงเรียนเดชะปัตตนยานุกูล, วินัยนักเรียน, สารวัตรนักเรียน" />
+    content="รวมกำหนดการและปฏิทินกิจกรรมสำคัญของโรงเรียนเดชะปัตตนยานุกูล ทั้งงานวิชาการ กิจการนักเรียน และภารกิจสารวัตร" />
+  <meta name="keywords" content="ปฏิทินโรงเรียน, ตารางกิจกรรม, กำหนดการ, โรงเรียนเดชะปัตตนยานุกูล, สารวัตรนักเรียน, กิจกรรมนักเรียน" />
   <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
 
   <!-- Open Graph / Discord Preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sarawatdc.site/rules.html" />
+  <meta property="og:url" content="https://sarawatdc.site/calendar.html" />
   <meta property="og:title" content="ปฏิทินกิจกรรมโรงเรียน | สารวัตรนักเรียน" />
-  <meta property="og:description" content="กฎระเบียบและข้อบังคับต่างๆ ของโรงเรียนเดชะปัตตนยานุกูล" />
+  <meta property="og:description" content="รวมกำหนดการและปฏิทินกิจกรรมสำคัญของโรงเรียนเดชะปัตตนยานุกูล" />
   <meta property="og:image" content="assets/icons/sarawat-logo.png" />
   <meta property="og:site_name" content="Sarawat - Dechapattanayanukul School" />
 
@@ -98,52 +98,80 @@
             School Calendar & Agenda.<br>ปฏิทินกิจกรรมโรงเรียน
           </h1>
           <p class="dg-act-subtitle">
-            รวมกำหนดการและกิจกรรมสำคัญของโรงเรียน เพื่อให้นักเรียน ผู้ปกครอง
-            และบุคลากรสามารถตรวจสอบข้อมูลกิจกรรมได้อย่างสะดวกและเป็นทางการ
+            ศูนย์รวมกำหนดการ กิจกรรมวิชาการ กิจการนักเรียน และภารกิจสำคัญของโรงเรียนเดชะปัตตนยานุกูล
+            เพื่อให้นักเรียน ครู บุคลากร และผู้ปกครอง ตรวจสอบข้อมูลกิจกรรมได้อย่างสะดวกและเป็นทางการ
           </p>
         </div>
-
+        <div class="dg-act-stats-badge">
+          <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+          <span>กิจกรรมในระบบทั้งหมด:</span>
+          <strong id="calendarTotalBadge">0 รายการ</strong>
+        </div>
       </div>
 
+      <!-- Controls: Search & Category Filter Pills -->
+      <div class="dg-act-controls-bar">
+        <!-- Search Box -->
+        <div class="dg-act-search-box">
+          <i data-lucide="search" class="dg-act-search-icon"></i>
+          <input type="text" id="calendarSearchInput" placeholder="ค้นหาชื่อกิจกรรม, สถานที่, กลุ่มเป้าหมาย, หรือรายละเอียด..."
+            oninput="handleCalendarSearch(this.value)" />
+        </div>
 
-    </div>
+        <!-- Category Pills -->
+        <div class="dg-act-filter-pills" id="calendarCategoryPills">
+          <button type="button" class="dg-act-pill-btn active" data-category="all" onclick="filterCalendarCategory('all')">
+            <span>ทั้งหมด</span>
+          </button>
+          <button type="button" class="dg-act-pill-btn" data-category="general" onclick="filterCalendarCategory('general')">
+            <span>กิจกรรมทั่วไป</span>
+          </button>
+          <button type="button" class="dg-act-pill-btn" data-category="affairs" onclick="filterCalendarCategory('affairs')">
+            <span>งานกิจการนักเรียน</span>
+          </button>
+          <button type="button" class="dg-act-pill-btn" data-category="academic" onclick="filterCalendarCategory('academic')">
+            <span>งานวิชาการ</span>
+          </button>
+          <button type="button" class="dg-act-pill-btn" data-category="prefect" onclick="filterCalendarCategory('prefect')">
+            <span>ภารกิจสารวัตร</span>
+          </button>
+        </div>
+      </div>
+
     </div>
   </header>
 
-  <!-- ============ MAIN ACTIVITIES GRID SECTION (3 Cols PC, 2 Cols Mobile) ============ -->
-
-  <main class="dg-calendar-section" id="calendar" style="padding: 40px 0; min-height: 50vh;">
+  <!-- ============ MAIN CALENDAR SECTION ============ -->
+  <main class="dg-calendar-section" id="calendar" style="padding: 40px 0 70px; min-height: 60vh;">
     <div class="dg-container">
-      <!-- Calendar Under Construction -->
-      <div style="display: flex; align-items: center; justify-content: center; margin-top: 40px;" data-reveal="fade-up">
-        <div style="background: var(--dg-bg-subtle, #f9fafb); border: 1px solid var(--dg-border, #e5e7eb); border-radius: 16px; padding: 60px 40px; text-align: center; max-width: 600px; width: 100%;">
-          <div style="width: 64px; height: 64px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-            <i data-lucide="wrench" style="width: 32px; height: 32px;"></i>
-          </div>
-          <h2 style="font-family: var(--dg-font-sans); font-size: 1.5rem; font-weight: 800; color: var(--dg-black); margin-bottom: 12px;">ระบบกำลังพัฒนา</h2>
-          <p style="font-size: 0.95rem; color: var(--dg-text-secondary); line-height: 1.6; margin-bottom: 24px;">
-            ระบบปฏิทินของโรงเรียนอยู่ระหว่างการพัฒนา<br>
-            โปรดติดตามการอัปเดตในภายหลัง
-          </p>
-          <a href="index.html" class="dg-btn-black" style="display: inline-flex; padding: 12px 24px; font-size: 0.95rem; justify-content: center; background: #0f172a; color: white; border-radius: 99px; text-decoration: none; align-items: center; font-weight: 500;">
-            <i data-lucide="arrow-left" style="margin-right: 8px; width: 18px; height: 18px;"></i>
-            <span>กลับสู่หน้าหลัก</span>
-          </a>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--dg-text-secondary);" id="calendarResultCountLabel">
+          กำลังโหลดกิจกรรม...
+        </span>
+        <button type="button" class="dg-btn-outline" id="calendarResetBtn" style="padding: 6px 16px; font-size: 0.82rem; border-radius: var(--dg-radius-pill); display: none; cursor: pointer;" onclick="resetCalendarFilters()">
+          <i data-lucide="rotate-ccw" style="width: 13px; height: 13px;"></i>
+          <span>ล้างตัวกรอง</span>
+        </button>
+      </div>
+
+      <!-- Events List Container -->
+      <div class="dg-events-list" id="calendarEventsList">
+        <div style="text-align: center; padding: 60px; color: var(--dg-text-muted);">
+          <div class="loading-spinner"></div> กำลังโหลดข้อมูลกิจกรรมโรงเรียน...
         </div>
       </div>
     </div>
   </main>
 
-
-  <!-- ============ NEWS & ACTIVITIES DETAIL POP-UP MODAL ============ -->
-  <div class="dg-modal-backdrop" id="newsDetailModal" onclick="if(event.target === this) closeModal('newsDetailModal')">
-    <div class="dg-modal-box dg-news-modal-box">
-      <button class="dg-modal-close-btn" type="button" onclick="closeModal('newsDetailModal')" aria-label="ปิดหน้าต่าง">
-        <i data-lucide="x"></i>
+  <!-- ============ EVENT DETAIL POP-UP MODAL ============ -->
+  <div class="dg-modal-backdrop" id="eventDetailModal" onclick="if(event.target === this) closeModal('eventDetailModal')">
+    <div class="dg-modal-box" style="max-width: 620px; border-radius: 20px; padding: 0; overflow: hidden; background: #ffffff; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
+      <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง" style="position: absolute; top: 18px; right: 20px; z-index: 10; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
       </button>
 
-      <div id="newsModalContent">
-        <!-- Injected dynamically via openNewsDetailModal(id) -->
+      <div id="eventDetailModalContent">
+        <!-- Injected dynamically via openEventDetailModal(id) -->
       </div>
     </div>
   </div>
@@ -279,105 +307,51 @@
   <!-- ============ JAVASCRIPT LOGIC ============ -->
   <script>
     // ==========================================================
-    // DEFAULT DATA & FALLBACKS
+    // THAI CALENDAR & DATE UTILITIES
     // ==========================================================
-    const DEFAULT_NEWS_IMAGE = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
-    const DEFAULT_NEWS_ITEMS = [
-      {
-        id: 'news-1',
-        title: 'พิธีแต่งตั้งและมอบปลอกแขนสารวัตรนักเรียน ประจำปีการศึกษา 2569',
-        date: '23 พ.ค. 2569',
-        tag: 'พิธีการสำคัญ',
-        image: DEFAULT_NEWS_IMAGE,
-        desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน เพื่อเริ่มต้นการปฏิบัติหน้าที่อย่างเป็นทางการ',
-        detail: 'พิธีจัดขึ้น ณ หอประชุมโรงเรียนเดชะปัตตนยานุกูล โดยมีคณะผู้บริหาร ครูที่ปรึกษางานส่งเสริมวินัยนักเรียน และตัวแทนนักเรียนทุกระดับชั้นร่วมเป็นสักขีพยาน ในพิธีมีการกล่าวคำปฏิญาณตนของคณะสารวัตรนักเรียน เพื่อยืนยันเจตนารมณ์ในการปฏิบัติหน้าที่ด้วยความซื่อสัตย์ สุจริต และเป็นธรรม มุ่งมั่นดูแลความสงบเรียบร้อยและความปลอดภัยของเพื่อนนักเรียนตลอดปีการศึกษา',
-        fbUrl: 'https://www.facebook.com/dechapattana',
-        igUrl: 'https://www.instagram.com/',
-        reelsUrl: 'https://www.instagram.com/reels/',
-        photoUrl: 'https://photos.google.com/'
-      },
-      {
-        id: 'news-2',
-        title: 'โครงการรณรงค์วินัยจราจรและเสริมสร้างความปลอดภัยหน้าโรงเรียน',
-        date: '12 มิ.ย. 2569',
-        tag: 'ความปลอดภัย',
-        image: DEFAULT_NEWS_IMAGE,
-        desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
-        detail: 'คณะสารวัตรนักเรียนปฏิบัติหน้าที่ประจำจุดทางข้ามและบริเวณประตูโรงเรียน เพื่ออำนวยความสะดวกแก่นักเรียนและผู้ปกครอง พร้อมทั้งรณรงค์การสวมหมวกนิรภัย 100% การข้ามถนนตามทางม้าลาย และการปฏิบัติตามกฎจราจรอย่างเคร่งครัดเพื่อลดอุบัติเหตุในชั่วโมงเร่งด่วน',
-        fbUrl: 'https://www.facebook.com/dechapattana',
-        igUrl: 'https://www.instagram.com/',
-        reelsUrl: 'https://www.instagram.com/reels/',
-        photoUrl: 'https://photos.google.com/'
-      },
-      {
-        id: 'news-3',
-        title: 'กิจกรรมจิตอาสาพัฒนาสิ่งแวดล้อมและพื้นที่ส่วนรวมโรงเรียน',
-        date: '08 ก.ค. 2569',
-        tag: 'จิตอาสา',
-        image: DEFAULT_NEWS_IMAGE,
-        desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
-        detail: 'กิจกรรมจิตอาสาเพื่อเสริมสร้างความรับผิดชอบต่อส่วนรวม ร่วมกันทำความสะอาดจุดพักผ่อน ลานอเนกประสงค์ และคัดแยกขยะอย่างถูกวิธี เพื่อสร้างสภาพแวดล้อมที่น่าอยู่และเอื้อต่อการเรียนรู้ของทุกคนในโรงเรียนเดชะปัตตนยานุกูล',
-        fbUrl: 'https://www.facebook.com/dechapattana',
-        igUrl: 'https://www.instagram.com/',
-        reelsUrl: '',
-        photoUrl: 'https://photos.google.com/'
-      },
-      {
-        id: 'news-4',
-        title: 'การประชุมเชิงปฏิบัติการอบรมภาวะผู้นำและทักษะไกล่เกลี่ยเชิงบวก',
-        date: '19 ส.ค. 2569',
-        tag: 'อบรมพัฒนา',
-        image: DEFAULT_NEWS_IMAGE,
-        desc: 'เพิ่มพูนทักษะการสื่อสารด้วยความเข้าอกเข้าใจ การแก้ไขข้อขัดแย้งอย่างสร้างสรรค์ และการเป็นกระบอกเสียงที่เข้มแข็งเพื่อสิทธิและความสุขของเพื่อนนักเรียน',
-        detail: 'หลักสูตรพิเศษเพื่อเสริมสร้างวุฒิภาวะทางอารมณ์และทักษะการเจรจาไกล่เกลี่ยความขัดแย้งเชิงสันติวิธี เพื่อให้สารวัตรนักเรียนสามารถปฏิบัติหน้าที่ด้วยความยุติธรรม ปราศจากอคติ และสร้างความเข้าใจอันดีระหว่างนักเรียนด้วยกัน',
-        fbUrl: 'https://www.facebook.com/dechapattana',
-        igUrl: 'https://www.instagram.com/',
-        reelsUrl: 'https://www.instagram.com/reels/',
-        photoUrl: ''
-      },
-      {
-        id: 'news-5',
-        title: 'การเตรียมความพร้อมดูแลความสงบเรียบร้อยในสัปดาห์กีฬาสีเดชะฯ 2569',
-        date: '25 ก.ย. 2569',
-        tag: 'กิจกรรมโรงเรียน',
-        image: DEFAULT_NEWS_IMAGE,
-        desc: 'ประชุมวางแผนสายตรวจประจำจุด ลานอัฒจันทร์ และรอบบริเวณสนามกีฬา เพื่อสนับสนุนความปลอดภัยและการเชียร์อย่างสร้างสรรค์ตลอดงานมหกรรมกีฬา',
-        detail: 'ประสานงานร่วมกับคณะกรรมการนักเรียนและครูฝ่ายปกครอง เพื่อจัดแบ่งกำลังสายตรวจดูแลความปลอดภัย การปฐมพยาบาลเบื้องต้น และอำนวยความสะดวกในการจัดขบวนพาเหรดและการแข่งขันกีฬาอย่างราบรื่นและปลอดภัยที่สุด',
-        fbUrl: 'https://www.facebook.com/dechapattana',
-        igUrl: 'https://www.instagram.com/',
-        reelsUrl: 'https://www.instagram.com/reels/',
-        photoUrl: 'https://photos.google.com/'
-      }
-    ];
-
     const THAI_MONTHS_SHORT = [
       'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
       'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
     ];
 
+    const THAI_MONTHS_FULL = [
+      'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+
+    const THAI_DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+    const THAI_DAYS_SHORT = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+
     function parseDateToTimestamp(item) {
       if (!item) return 0;
-      if (item.dateIso) {
-        const ts = new Date(item.dateIso + 'T12:00:00Z').getTime();
+      const iso = item.dateStart || item.dateIso || '';
+      if (iso) {
+        const ts = new Date(iso + 'T12:00:00Z').getTime();
         if (!isNaN(ts)) return ts;
       }
-      const dateStr = item.date || '';
-      if (!dateStr) return 0;
+      const dateStr = item.date || ((item.day || '') + ' ' + (item.month || ''));
+      if (!dateStr || typeof dateStr !== 'string') return 0;
+
+      const isoMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (isoMatch) {
+        return Date.UTC(parseInt(isoMatch[1], 10), parseInt(isoMatch[2], 10) - 1, parseInt(isoMatch[3], 10), 12, 0, 0);
+      }
 
       let month = -1;
       for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
-        if (dateStr.includes(THAI_MONTHS_SHORT[i])) {
+        if (dateStr.includes(THAI_MONTHS_SHORT[i]) || dateStr.includes(THAI_MONTHS_FULL[i])) {
           month = i;
           break;
         }
       }
 
-      const nums = dateStr.match(/\d+/g) || [];
-      const day = nums[0] ? parseInt(nums[0], 10) : 1;
-      const lastNum = nums.length > 1 ? parseInt(nums[nums.length - 1], 10) : 0;
-      let year = new Date().getFullYear();
+      const numbers = dateStr.match(/\d+/g);
+      if (!numbers) return 0;
 
-      if (lastNum > 2400 && lastNum < 2650) {
+      let day = parseInt(numbers[0], 10);
+      let year = new Date().getFullYear();
+      const lastNum = parseInt(numbers[numbers.length - 1], 10);
+      if (lastNum > 2400) {
         year = lastNum - 543;
       } else if (lastNum >= 50 && lastNum < 100) {
         year = (2500 + lastNum) - 543;
@@ -389,18 +363,101 @@
       return Date.UTC(year, month, day || 1, 12, 0, 0);
     }
 
-    function getNewsData() {
-      let items = DEFAULT_NEWS_ITEMS;
-      try {
-        const stored = localStorage.getItem('dg_sarawat_news_items');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) items = parsed;
+    function calculateEventDateInfo(startIso, endIso) {
+      if (!startIso) return null;
+      const [sY, sM, sD] = startIso.split('-').map(Number);
+      const startDate = new Date(sY, sM - 1, sD);
+      const sThaiYear = sY + 543;
+      const sThaiYearShort = String(sThaiYear).slice(-2);
+      const sMonthShort = THAI_MONTHS_SHORT[sM - 1] || '';
+      const sMonthFull = THAI_MONTHS_FULL[sM - 1] || '';
+      const sDayStr = String(sD);
+      const sWeekdayFull = THAI_DAYS[startDate.getDay()] || '';
+      const sWeekdayShort = THAI_DAYS_SHORT[startDate.getDay()] || '';
+
+      let hasEndDate = Boolean(endIso && endIso.trim() && endIso !== startIso);
+      let eY, eM, eD, endDate, eThaiYear, eThaiYearShort, eMonthShort, eMonthFull, eWeekdayShort, diffDays = 1;
+
+      if (hasEndDate) {
+        const parts = endIso.split('-').map(Number);
+        eY = parts[0];
+        eM = parts[1];
+        eD = parts[2];
+        endDate = new Date(eY, eM - 1, eD);
+
+        if (endDate.getTime() < startDate.getTime()) {
+          hasEndDate = false;
+        } else {
+          eThaiYear = eY + 543;
+          eThaiYearShort = String(eThaiYear).slice(-2);
+          eMonthShort = THAI_MONTHS_SHORT[eM - 1] || '';
+          eMonthFull = THAI_MONTHS_FULL[eM - 1] || '';
+          eWeekdayShort = THAI_DAYS_SHORT[endDate.getDay()] || '';
+          const diffTime = endDate.getTime() - startDate.getTime();
+          diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+          if (diffDays <= 1) hasEndDate = false;
         }
-      } catch (err) {
-        console.warn('Error reading news from localStorage:', err);
       }
-      return items.slice().sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
+
+      if (!hasEndDate) {
+        return {
+          isRange: false,
+          day: sDayStr,
+          month: sMonthShort + ' ' + sThaiYearShort,
+          weekday: sWeekdayFull,
+          fullDateText: sD + ' ' + sMonthFull + ' ' + sThaiYear + ' (วัน' + sWeekdayFull + ')',
+          dateIso: startIso,
+          endDateIso: ''
+        };
+      }
+
+      let dayStr = '';
+      let monthStr = '';
+      let weekdayStr = sWeekdayShort + '-' + eWeekdayShort;
+      let fullDateText = '';
+
+      if (sY === eY && sM === eM) {
+        dayStr = sD + '-' + eD;
+        monthStr = sMonthShort + ' ' + sThaiYearShort;
+        fullDateText = sD + ' - ' + eD + ' ' + sMonthFull + ' ' + sThaiYear + ' (' + diffDays + ' วัน)';
+      } else if (sY === eY) {
+        dayStr = sD + ' ' + sMonthShort + ' - ' + eD + ' ' + eMonthShort;
+        monthStr = sThaiYearShort;
+        fullDateText = sD + ' ' + sMonthFull + ' ถึง ' + eD + ' ' + eMonthFull + ' ' + sThaiYear + ' (' + diffDays + ' วัน)';
+      } else {
+        dayStr = sD + ' ' + sMonthShort + ' - ' + eD + ' ' + eMonthShort;
+        monthStr = sThaiYearShort + '-' + eThaiYearShort;
+        fullDateText = sD + ' ' + sMonthFull + ' ' + sThaiYear + ' ถึง ' + eD + ' ' + eMonthFull + ' ' + eThaiYear + ' (' + diffDays + ' วัน)';
+      }
+
+      return {
+        isRange: true,
+        day: dayStr,
+        month: monthStr,
+        weekday: weekdayStr,
+        fullDateText: fullDateText,
+        durationDays: diffDays,
+        dateIso: startIso,
+        endDateIso: endIso
+      };
+    }
+
+    function getEventStatus(item) {
+      const today = new Date().toLocaleDateString('en-CA');
+      const start = item.dateStart || item.dateIso || '';
+      const end = item.dateEnd || item.endDateIso || start;
+
+      if (!start) {
+        return { label: 'กำหนดการ', style: 'background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;' };
+      }
+
+      if (end && today > end) {
+        return { label: 'สิ้นสุดแล้ว', style: 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;' };
+      } else if (today >= start && (!end || today <= end)) {
+        return { label: 'กำลังดำเนินการ', style: 'background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 800;' };
+      } else {
+        return { label: 'เร็วๆ นี้', style: 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 750;' };
+      }
     }
 
     function escapeHtml(str) {
@@ -414,279 +471,296 @@
     }
 
     // ==========================================================
-    // FILTER & SEARCH STATE
+    // CALENDAR APP STATE
     // ==========================================================
+    let calendarEventsCache = [];
     let selectedCategory = 'all';
     let searchQuery = '';
 
-    function filterByCategory(cat) {
-      selectedCategory = cat;
-      document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-category') === cat);
-      });
-      renderActivities();
+    // ==========================================================
+    // DATA FETCHING & RENDERING
+    // ==========================================================
+    async function loadCalendarEvents() {
+      const container = document.getElementById('calendarEventsList');
+      if (container) {
+        container.innerHTML = '<div style="text-align: center; padding: 60px; color: var(--dg-text-muted);"><div class="loading-spinner"></div> กำลังโหลดข้อมูลกิจกรรมโรงเรียน...</div>';
+      }
+
+      try {
+        let events = [];
+        if (window.SarawatApi) {
+          events = await window.SarawatApi.getEvents();
+        }
+
+        // Normalize events date fields
+        calendarEventsCache = (events || []).map(evt => {
+          if (!evt.day || !evt.month) {
+            const info = calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
+            if (info) {
+              evt.day = info.day;
+              evt.month = info.month;
+              evt.weekday = info.weekday;
+              evt.fullDateText = info.fullDateText;
+            }
+          }
+          return evt;
+        });
+
+        // Sort chronologically ascending (closest upcoming first)
+        calendarEventsCache.sort((a, b) => {
+          const tA = parseDateToTimestamp(a);
+          const tB = parseDateToTimestamp(b);
+          return tA - tB;
+        });
+
+        renderCalendarEvents();
+      } catch (err) {
+        console.error('loadCalendarEvents error:', err);
+        if (container) {
+          container.innerHTML = '<div style="text-align: center; padding: 50px 20px; color: #ef4444; background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--dg-radius-md);"><i data-lucide="alert-circle" style="width: 36px; height: 36px; margin-bottom: 12px; display: inline-block;"></i><h3 style="font-size: 1.1rem; font-weight: 750; margin-bottom: 6px;">ไม่สามารถโหลดข้อมูลกิจกรรมได้ในขณะนี้</h3><p style="font-size: 0.9rem; color: #9f1239; margin-bottom: 16px;">โปรดตรวจสอบการเชื่อมต่อกับเซิร์ฟเวอร์หรือลองใหม่อีกครั้ง</p><button type="button" class="dg-btn-black" onclick="loadCalendarEvents()" style="padding: 8px 20px; font-size: 0.88rem;"><span>ลองใหม่อีกครั้ง</span></button></div>';
+          if (window.lucide) lucide.createIcons();
+        }
+      }
     }
 
-    function handleSearchInput(val) {
-      searchQuery = val.trim().toLowerCase();
-      renderActivities();
-    }
+    function renderCalendarEvents() {
+      const container = document.getElementById('calendarEventsList');
+      const totalBadge = document.getElementById('calendarTotalBadge');
+      const countLabel = document.getElementById('calendarResultCountLabel');
+      const resetBtn = document.getElementById('calendarResetBtn');
+      if (!container) return;
 
-    // ==========================================================
-    // RENDER ACTIVITIES GRID (3 Cols PC, 2 Cols Mobile)
-    // ==========================================================
-    function renderActivities() {
-      const grid = document.getElementById('activitiesGrid');
-      const totalBadge = document.getElementById('actTotalBadge');
-      const countLabel = document.getElementById('actResultCountLabel');
-      if (!grid) return;
+      if (totalBadge) {
+        totalBadge.textContent = calendarEventsCache.length + ' รายการ';
+      }
 
-      const allItems = getNewsData();
-      if (totalBadge) totalBadge.textContent = `${allItems.length} รายการ`;
+      // Filter events
+      const filtered = calendarEventsCache.filter(evt => {
+        const matchesCategory = selectedCategory === 'all' || evt.category === selectedCategory;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch = !q ||
+          (evt.title && evt.title.toLowerCase().includes(q)) ||
+          (evt.desc && evt.desc.toLowerCase().includes(q)) ||
+          (evt.location && evt.location.toLowerCase().includes(q)) ||
+          (evt.audience && evt.audience.toLowerCase().includes(q)) ||
+          (evt.categoryLabel && evt.categoryLabel.toLowerCase().includes(q)) ||
+          (evt.time && evt.time.toLowerCase().includes(q));
 
-      // Filter items
-      const filtered = allItems.filter(item => {
-        const matchesCategory = selectedCategory === 'all' || (item.tag && item.tag.includes(selectedCategory));
-        const matchesSearch = !searchQuery ||
-          (item.title && item.title.toLowerCase().includes(searchQuery)) ||
-          (item.desc && item.desc.toLowerCase().includes(searchQuery)) ||
-          (item.tag && item.tag.toLowerCase().includes(searchQuery)) ||
-          (item.date && item.date.toLowerCase().includes(searchQuery));
         return matchesCategory && matchesSearch;
       });
 
+      // Update Result Count Label
       if (countLabel) {
-        countLabel.textContent = `แสดง ${filtered.length} จากทั้งหมด ${allItems.length} รายการ ${selectedCategory !== 'all' ? `(หมวด: ${selectedCategory})` : ''}`;
+        if (selectedCategory === 'all' && !searchQuery) {
+          countLabel.textContent = 'แสดงกิจกรรมทั้งหมด ' + filtered.length + ' รายการ';
+        } else {
+          countLabel.textContent = 'พบ ' + filtered.length + ' จากทั้งหมด ' + calendarEventsCache.length + ' รายการ';
+        }
       }
 
+      // Toggle Reset Button
+      if (resetBtn) {
+        resetBtn.style.display = (selectedCategory !== 'all' || searchQuery) ? 'inline-flex' : 'none';
+      }
+
+      // Empty State
       if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="dg-act-empty-box">
-            <i data-lucide="search-x"></i>
-            <h3>ไม่พบกิจกรรมที่ตรงกับการค้นหา</h3>
-            <p>ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นเพื่อดูรายการกิจกรรมทั้งหมด</p>
-            <button type="button" class="dg-btn-outline" style="margin-top: 16px; padding: 8px 18px;" onclick="resetFilters()">
-              ล้างการค้นหาทั้งหมด
-            </button>
-          </div>
-        `;
+        container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 60px 24px; text-align: center;"><div style="width: 56px; height: 56px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;"><i data-lucide="calendar-x-2" style="width: 28px; height: 28px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.2rem; font-weight: 800; color: var(--dg-black); margin-bottom: 8px;">ไม่พบกิจกรรมที่ตรงกับการค้นหา</h3><p style="font-size: 0.92rem; color: var(--dg-text-secondary); margin-bottom: 20px; max-width: 460px; margin-left: auto; margin-right: auto;">ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นเพื่อตรวจสอบกิจกรรมในระบบ</p><button type="button" class="dg-btn-black" onclick="resetCalendarFilters()" style="padding: 10px 22px; font-size: 0.88rem; cursor: pointer;"><span>แสดงกิจกรรมทั้งหมด</span></button></div>';
         if (window.lucide) lucide.createIcons();
         return;
       }
 
-      grid.innerHTML = filtered.map((item, index) => {
-        const hasFb = Boolean(item.fbUrl && item.fbUrl.trim());
-        const hasIg = Boolean(item.igUrl && item.igUrl.trim());
-        const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
-        const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
+      // Render Cards
+      container.innerHTML = filtered.map(evt => {
+        const catClass = 'cat-' + (evt.category || 'general');
+        const catLabel = evt.categoryLabel || (
+          evt.category === 'affairs' ? 'งานกิจการนักเรียน' :
+          evt.category === 'academic' ? 'งานวิชาการ' :
+          evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป'
+        );
 
-        return `
-          <article class="dg-act-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
-            <div class="dg-act-card-cover">
-              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" loading="lazy" />
-              <span class="dg-act-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
-            </div>
-            <div class="dg-act-card-body">
-              ${item.date ? `
-                <div class="dg-act-card-date">
-                  <i data-lucide="calendar"></i>
-                  <span>${escapeHtml(item.date)}</span>
-                </div>
-              ` : ''}
-              <h3 class="dg-act-card-title">${escapeHtml(item.title)}</h3>
-              <p class="dg-act-card-desc">${escapeHtml(item.desc)}</p>
+        const dayDisplay = evt.day || '-';
+        const monthDisplay = evt.month || '';
+        const weekdayDisplay = evt.weekday || '';
+        const status = getEventStatus(evt);
 
-              <div class="dg-act-card-footer">
-                <div class="dg-act-social-mini">
-                  ${hasFb ? `
-                    <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-act-social-btn" title="Facebook" onclick="event.stopPropagation()">
-                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    </a>
-                  ` : ''}
-                  ${hasIg ? `
-                    <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-act-social-btn" title="Instagram" onclick="event.stopPropagation()">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-                    </a>
-                  ` : ''}
-                  ${hasReels ? `
-                    <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-act-social-btn dg-act-social-reels" title="Instagram Reels" onclick="event.stopPropagation()">
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
-                        <path d="M2.5 8h19"/>
-                        <path d="m8 2.5-2.5 5.5"/>
-                        <path d="m14 2.5-2.5 5.5"/>
-                        <path d="m20 2.5-2.5 5.5"/>
-                        <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
-                      </svg>
-                    </a>
-                  ` : ''}
-                  ${hasPhoto ? `
-                    <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-act-social-btn" title="Google Photos" onclick="event.stopPropagation()">
-                      <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/><path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/><path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/><path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/></svg>
-                    </a>
-                  ` : ''}
-                </div>
-
-                <div class="dg-act-more-link">
-                  <span>ดูรายละเอียด</span>
-                  <i data-lucide="arrow-up-right"></i>
-                </div>
-              </div>
-            </div>
-          </article>
-        `;
+        return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
+          '<div class="dg-event-date-box">' +
+            '<span class="day-num">' + escapeHtml(dayDisplay) + '</span>' +
+            '<span class="month-str">' + escapeHtml(monthDisplay) + '</span>' +
+            (weekdayDisplay ? '<span class="weekday-str">' + escapeHtml(weekdayDisplay) + '</span>' : '') +
+          '</div>' +
+          '<div class="dg-event-details">' +
+            '<div class="dg-event-header-row">' +
+              '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>' +
+              '<span style="font-size: 0.74rem; padding: 2px 8px; border-radius: var(--dg-radius-pill); ' + status.style + '">' +
+                escapeHtml(status.label) +
+              '</span>' +
+              '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">' +
+                '<i data-lucide="clock" style="width: 13px; height: 13px;"></i>' +
+                '<span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span>' +
+              '</span>' +
+              (evt.location ? '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);"><i data-lucide="map-pin" style="width: 13px; height: 13px;"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '') +
+              (evt.audience ? '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);"><i data-lucide="users" style="width: 13px; height: 13px;"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '') +
+            '</div>' +
+            '<h3 class="dg-event-title" style="margin-top: 4px;">' +
+              escapeHtml(evt.title || '') +
+            '</h3>' +
+            (evt.desc ? '<p class="dg-event-prefect-note" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">' + escapeHtml(evt.desc) + '</p>' : '') +
+          '</div>' +
+          '<div class="dg-event-action-col">' +
+            '<button type="button" class="dg-btn-sm-outline" onclick="event.stopPropagation(); openEventDetailModal(\'' + evt.id + '\')" title="ดูรายละเอียดกิจกรรม">' +
+              '<span>รายละเอียด</span>' +
+              '<i data-lucide="arrow-up-right"></i>' +
+            '</button>' +
+          '</div>' +
+        '</div>';
       }).join('');
 
       if (window.lucide) lucide.createIcons();
     }
 
-    function resetFilters() {
+    // ==========================================================
+    // FILTER CONTROLS
+    // ==========================================================
+    function filterCalendarCategory(cat) {
+      selectedCategory = cat;
+      document.querySelectorAll('#calendarCategoryPills .dg-act-pill-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-category') === cat);
+      });
+      renderCalendarEvents();
+    }
+
+    function handleCalendarSearch(query) {
+      searchQuery = (query || '').trim();
+      renderCalendarEvents();
+    }
+
+    function resetCalendarFilters() {
       selectedCategory = 'all';
       searchQuery = '';
-      const input = document.getElementById('actSearchInput');
+      const input = document.getElementById('calendarSearchInput');
       if (input) input.value = '';
-      document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
+
+      document.querySelectorAll('#calendarCategoryPills .dg-act-pill-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-category') === 'all');
       });
-      renderActivities();
+
+      renderCalendarEvents();
     }
 
     // ==========================================================
-    // DETAIL POP-UP MODAL LOGIC
+    // EVENT DETAIL POP-UP MODAL
     // ==========================================================
-    function openNewsDetailModal(id) {
-      const items = getNewsData();
-      const item = items.find(it => String(it.id) === String(id));
-      if (!item) return;
+    function openEventDetailModal(id) {
+      const evt = calendarEventsCache.find(e => String(e.id) === String(id));
+      if (!evt) return;
 
-      const container = document.getElementById('newsModalContent');
+      const container = document.getElementById('eventDetailModalContent');
       if (!container) return;
 
-      const hasFb = Boolean(item.fbUrl && item.fbUrl.trim());
-      const hasIg = Boolean(item.igUrl && item.igUrl.trim());
-      const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
-      const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
-      const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
+      const catClass = 'cat-' + (evt.category || 'general');
+      const catLabel = evt.categoryLabel || (
+        evt.category === 'affairs' ? 'งานกิจการนักเรียน' :
+        evt.category === 'academic' ? 'งานวิชาการ' :
+        evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป'
+      );
+      const status = getEventStatus(evt);
 
-
-
-      container.innerHTML = `
-        <div class="dg-news-modal-header">
-          <div class="dg-news-modal-meta-top">
-            <span class="dg-news-modal-badge">${escapeHtml(item.tag || 'กิจกรรม')}</span>
-            ${item.date ? `
-              <span class="dg-news-modal-date">
-                <i data-lucide="calendar"></i>
-                <span>${escapeHtml(item.date)}</span>
-              </span>
-            ` : ''}
-          </div>
-          <h2 class="dg-news-modal-title">${escapeHtml(item.title)}</h2>
-        </div>
-
-        <div class="dg-news-modal-cover">
-          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
-        </div>
-
-        <div class="dg-news-modal-body">
-          <div class="dg-news-modal-desc">
-            <p>${escapeHtml(item.desc || '')}</p>
-            ${item.detail ? `
-              <div class="dg-news-modal-subdesc">
-                ${escapeHtml(item.detail)}
-              </div>
-            ` : ''}
-          </div>
-
-
-          <!-- Direct Media Links -->
-          ${hasAnyLinks ? `
-            <div class="dg-news-modal-links-section">
-              <h4 class="dg-news-modal-links-title">
-                <i data-lucide="share-2"></i>
-                <span>ช่องทางรับชมภาพและวิดีโอเพิ่มเติม</span>
-              </h4>
-              <div class="dg-news-modal-links-grid">
-                ${hasFb ? `
-                  <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-fb">
-                    <span style="display: flex; align-items: center; gap: 8px;">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                      </svg>
-                      <span>โพสต์ Facebook</span>
-                    </span>
-                    <i data-lucide="arrow-up-right"></i>
-                  </a>
-                ` : ''}
-
-                ${hasIg ? `
-                  <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-ig">
-                    <span style="display: flex; align-items: center; gap: 8px;">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="5"/>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                      </svg>
-                      <span>Instagram Post</span>
-                    </span>
-                    <i data-lucide="arrow-up-right"></i>
-                  </a>
-                ` : ''}
-
-                ${hasReels ? `
-                  <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-reels">
-                    <span style="display: flex; align-items: center; gap: 8px;">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
-                        <path d="M2.5 8h19"/>
-                        <path d="m8 2.5-2.5 5.5"/>
-                        <path d="m14 2.5-2.5 5.5"/>
-                        <path d="m20 2.5-2.5 5.5"/>
-                        <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
-                      </svg>
-                      <span>รับชมคลิป Reels</span>
-                    </span>
-                    <i data-lucide="arrow-up-right"></i>
-                  </a>
-                ` : ''}
-
-                ${hasPhoto ? `
-                  <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-photo">
-                    <span style="display: flex; align-items: center; gap: 8px;">
-                      <svg viewBox="0 0 24 24" width="18" height="18">
-                        <path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/>
-                        <path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/>
-                        <path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/>
-                        <path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/>
-                      </svg>
-                      <span>อัลบั้ม Google Photos</span>
-                    </span>
-                    <i data-lucide="arrow-up-right"></i>
-                  </a>
-                ` : ''}
-              </div>
-            </div>
-          ` : ''}
-
-          <div class="dg-news-modal-footer">
-            <button type="button" class="dg-btn-black" onclick="closeModal('newsDetailModal')" style="padding: 10px 24px;">
-              <span>ปิดหน้าต่าง</span>
-            </button>
-          </div>
-        </div>
-      `;
-
-      if (window.lucide) {
-        lucide.createIcons();
+      // Compute friendly date text
+      let dateText = evt.fullDateText;
+      if (!dateText) {
+        const info = calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
+        dateText = info ? info.fullDateText : (evt.day || '') + ' ' + (evt.month || '');
       }
 
-      openModal('newsDetailModal');
+      container.innerHTML = '' +
+        '<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 30px 24px; color: #ffffff;">' +
+          '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">' +
+            '<span class="dg-event-category-badge ' + catClass + '" style="background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.25);">' +
+              escapeHtml(catLabel) +
+            '</span>' +
+            '<span style="font-size: 0.74rem; padding: 2px 10px; border-radius: var(--dg-radius-pill); font-weight: 750; ' + status.style + '">' +
+              escapeHtml(status.label) +
+            '</span>' +
+          '</div>' +
+          '<h2 style="font-family: var(--dg-font-sans); font-size: 1.35rem; font-weight: 850; line-height: 1.4; color: #ffffff; margin: 0;">' +
+            escapeHtml(evt.title || '') +
+          '</h2>' +
+        '</div>' +
+
+        '<div style="padding: 24px 30px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">' +
+          '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">' +
+            '<div style="display: flex; gap: 10px;">' +
+              '<div style="width: 34px; height: 34px; border-radius: 8px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="calendar" style="width: 18px; height: 18px;"></i>' +
+              '</div>' +
+              '<div>' +
+                '<span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">กำหนดการ / วันที่</span>' +
+                '<span style="font-size: 0.92rem; font-weight: 750; color: #0f172a; line-height: 1.3;">' + escapeHtml(dateText) + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display: flex; gap: 10px;">' +
+              '<div style="width: 34px; height: 34px; border-radius: 8px; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="clock" style="width: 18px; height: 18px;"></i>' +
+              '</div>' +
+              '<div>' +
+                '<span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">เวลาปฏิบัติงาน</span>' +
+                '<span style="font-size: 0.92rem; font-weight: 750; color: #0f172a; line-height: 1.3;">' + escapeHtml(evt.time || 'เต็มวัน') + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display: flex; gap: 10px;">' +
+              '<div style="width: 34px; height: 34px; border-radius: 8px; background: #fce7f3; color: #db2777; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>' +
+              '</div>' +
+              '<div>' +
+                '<span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">สถานที่จัดกิจกรรม</span>' +
+                '<span style="font-size: 0.92rem; font-weight: 750; color: #0f172a; line-height: 1.3;">' + escapeHtml(evt.location || 'ภายในสถานศึกษา') + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="display: flex; gap: 10px;">' +
+              '<div style="width: 34px; height: 34px; border-radius: 8px; background: #dcfce7; color: #16a34a; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="users" style="width: 18px; height: 18px;"></i>' +
+              '</div>' +
+              '<div>' +
+                '<span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">กลุ่มเป้าหมาย / ผู้เข้าร่วม</span>' +
+                '<span style="font-size: 0.92rem; font-weight: 750; color: #0f172a; line-height: 1.3;">' + escapeHtml(evt.audience || 'นักเรียนและบุคลากร') + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div style="padding: 26px 30px; background: #ffffff;">' +
+          '<h4 style="font-size: 0.86rem; font-weight: 800; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">' +
+            '<i data-lucide="file-text" style="width: 16px; height: 16px; color: #64748b;"></i>' +
+            '<span>รายละเอียดกิจกรรมและข้อปฏิบัติ</span>' +
+          '</h4>' +
+          '<div style="font-size: 0.93rem; color: #334155; line-height: 1.7; white-space: pre-line;">' +
+            escapeHtml(evt.desc || 'ไม่มีรายละเอียดเพิ่มเติมสำหรับกิจกรรมนี้') +
+          '</div>' +
+        '</div>' +
+
+        '<div style="padding: 16px 30px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; align-items: center;">' +
+          '<button type="button" class="dg-btn-black" onclick="closeModal(\'eventDetailModal\')" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">' +
+            '<span>ปิดหน้าต่าง</span>' +
+          '</button>' +
+        '</div>';
+
+      if (window.lucide) lucide.createIcons();
+      openModal('eventDetailModal');
     }
 
+    // ==========================================================
+    // MODAL HELPERS & BASE LISTENERS
+    // ==========================================================
     function openModal(modalId) {
       const modal = document.getElementById(modalId);
       if (!modal) return;
       modal.classList.add('active');
+      modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
 
@@ -694,6 +768,7 @@
       const modal = document.getElementById(modalId);
       if (!modal) return;
       modal.classList.remove('active');
+      modal.style.display = 'none';
       document.body.style.overflow = '';
     }
 
@@ -717,17 +792,7 @@
 
     // Initialize on DOM load
     document.addEventListener('DOMContentLoaded', () => {
-      renderActivities();
-
-      // Background Sync from MySQL Backend API if server is connected
-      if (window.SarawatApi) {
-        window.SarawatApi.getNews().then(items => {
-          if (items && Array.isArray(items) && items.length > 0) {
-            try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch (e) { }
-            renderActivities();
-          }
-        }).catch(() => { });
-      }
+      loadCalendarEvents();
 
       // Mobile menu toggle
       const toggle = document.getElementById('dgNavToggle');
