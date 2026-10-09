@@ -261,6 +261,44 @@ svg:not([data-lucide]),
   transform: translateX(3px);
 }
 
+.dg-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: var(--dg-text-primary);
+  padding: 8px 18px;
+  border-radius: var(--dg-radius-pill);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--dg-border);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.dg-btn-outline:hover {
+  background: var(--dg-black);
+  color: var(--dg-white);
+  border-color: var(--dg-black);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.dg-btn-outline svg,
+.dg-btn-outline i {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s ease;
+}
+
+.dg-btn-outline:hover svg,
+.dg-btn-outline:hover i {
+  transform: rotate(-90deg);
+}
+
+
 .dg-nav-toggle {
   display: none;
   background: none;
@@ -1873,7 +1911,7 @@ svg:not([data-lucide]),
   border-radius: var(--dg-radius-md);
   padding: 20px 24px;
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 96px 1fr auto;
   gap: 22px;
   align-items: center;
   transition: var(--dg-transition);
@@ -2101,9 +2139,11 @@ svg:not([data-lucide]),
 /* Right Action */
 .dg-event-action-col {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-end;
   gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .dg-event-status-tag {
@@ -2118,6 +2158,8 @@ svg:not([data-lucide]),
 
 .dg-btn-sm-outline {
   padding: 7px 15px;
+  white-space: nowrap;
+  flex-shrink: 0;
   border: 1px solid var(--dg-border);
   border-radius: var(--dg-radius-pill);
   font-family: var(--dg-font-sans);
@@ -4522,7 +4564,7 @@ svg:not([data-lucide]),
     padding: 50px 0;
   }
   .dg-calendar-featured {
-    grid-template-columns: 78px 1fr;
+    grid-template-columns: 78px 1fr auto;
     gap: 14px;
     padding: 16px 14px;
     border-radius: 12px;
@@ -5223,7 +5265,7 @@ svg:not([data-lucide]),
     gap: 2px;
   }
   .dg-calendar-featured {
-    grid-template-columns: 70px 1fr;
+    grid-template-columns: 70px 1fr auto;
     gap: 10px;
     padding: 14px 12px;
   }

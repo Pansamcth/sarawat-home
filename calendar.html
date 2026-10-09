@@ -39,6 +39,552 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+  <!-- Dedicated Google Calendar Month View Styles -->
+  <style>
+    /* ==========================================================
+       GOOGLE CALENDAR MONTH VIEW STYLING (DG-CAL)
+       ========================================================== */
+    .dg-cal-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .dg-cal-view-switch {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--dg-radius-pill);
+      border: 1px solid #e2e8f0;
+      gap: 4px;
+    }
+
+    .dg-cal-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: var(--dg-radius-pill);
+      font-family: var(--dg-font-sans);
+      font-size: 0.88rem;
+      font-weight: 750;
+      border: none;
+      background: transparent;
+      color: var(--dg-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dg-cal-view-btn.active {
+      background: var(--dg-black);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .dg-cal-view-btn:not(.active):hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--dg-black);
+    }
+
+    .dg-cal-month-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 6px 14px;
+      border-radius: var(--dg-radius-pill);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .dg-cal-nav-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .dg-cal-nav-btn:hover {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+      transform: scale(1.05);
+    }
+
+    .dg-cal-today-btn {
+      padding: 6px 14px;
+      border-radius: var(--dg-radius-pill);
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: var(--dg-font-sans);
+      font-size: 0.84rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .dg-cal-today-btn:hover {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+
+    .dg-cal-title-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 180px;
+      padding: 0 8px;
+    }
+
+    .dg-cal-month-title {
+      font-family: var(--dg-font-sans);
+      font-size: 1.25rem;
+      font-weight: 850;
+      color: var(--dg-black);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .dg-cal-month-subtitle {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Calendar Grid Card */
+    .dg-cal-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+    }
+
+    .dg-cal-scroll-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .dg-cal-inner-board {
+      min-width: 780px;
+    }
+
+    /* Day Names Header (7 Columns) */
+    .dg-cal-header-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      background: #f8fafc;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .dg-cal-day-head {
+      padding: 12px 6px;
+      text-align: center;
+      font-family: var(--dg-font-sans);
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #475569;
+      letter-spacing: 0.02em;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    .dg-cal-day-head:last-child {
+      border-right: none;
+    }
+
+    .dg-cal-day-head.is-sun {
+      color: #e11d48;
+    }
+
+    .dg-cal-day-head.is-sat {
+      color: #2563eb;
+    }
+
+    /* Week Row */
+    .dg-cal-week-row {
+      position: relative;
+      min-height: 120px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .dg-cal-week-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Day Cells Background Layer */
+    .dg-cal-cells-grid-bg {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+
+    .dg-cal-day-bg {
+      border-right: 1px solid #f1f5f9;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      transition: background 0.15s ease;
+    }
+
+    .dg-cal-day-bg:last-child {
+      border-right: none;
+    }
+
+    .dg-cal-day-bg.is-other-month {
+      background: #fbfcfe;
+    }
+
+    .dg-cal-day-bg.is-today {
+      background: #f0f7ff;
+    }
+
+    .dg-cal-date-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-family: var(--dg-font-sans);
+      font-size: 0.82rem;
+      font-weight: 750;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .dg-cal-day-bg.is-other-month .dg-cal-date-num {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .dg-cal-day-bg.is-today .dg-cal-date-num {
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Events Layer (CSS Grid with slot rows) */
+    .dg-cal-events-layer {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: 28px;
+      gap: 4px 6px;
+      padding: 38px 6px 10px;
+    }
+
+    /* Multi-Day Spanning Event Bar (Google Calendar Style) */
+    .dg-cal-event-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-family: var(--dg-font-sans);
+      font-size: 0.77rem;
+      font-weight: 750;
+      line-height: 1.25;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: none;
+      transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .dg-cal-event-bar:hover {
+      transform: translateY(-1.5px);
+      filter: brightness(1.08);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+      z-index: 10;
+    }
+
+    /* Solid Spanning Bars for Multi-Day Events */
+    .dg-cal-event-bar.cat-academic {
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dg-cal-event-bar.cat-affairs {
+      background: linear-gradient(135deg, #be123c 0%, #e11d48 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dg-cal-event-bar.cat-prefect {
+      background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dg-cal-event-bar.cat-general {
+      background: linear-gradient(135deg, #334155 0%, #475569 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Single-Day Event styling in Calendar Grid */
+    .dg-cal-event-bar.is-single-day {
+      border-radius: 6px;
+      padding: 3px 8px;
+    }
+
+    .dg-cal-event-bar.is-single-day.cat-academic {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+      border-left: 3.5px solid #2563eb;
+    }
+
+    .dg-cal-event-bar.is-single-day.cat-affairs {
+      background: #fff1f2;
+      color: #9f1239;
+      border: 1px solid #fecdd3;
+      border-left: 3.5px solid #e11d48;
+    }
+
+    .dg-cal-event-bar.is-single-day.cat-prefect {
+      background: #f5f3ff;
+      color: #5b21b6;
+      border: 1px solid #ede9fe;
+      border-left: 3.5px solid #7c3aed;
+    }
+
+    .dg-cal-event-bar.is-single-day.cat-general {
+      background: #f8fafc;
+      color: #1e293b;
+      border: 1px solid #e2e8f0;
+      border-left: 3.5px solid #475569;
+    }
+
+    /* Week-spanning continuation indicators */
+    .dg-cal-event-bar.continues-prev {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -5px;
+      padding-left: 6px;
+    }
+
+    .dg-cal-event-bar.continues-next {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-right: -5px;
+      padding-right: 6px;
+    }
+
+    .dg-cal-bar-arrow {
+      font-size: 0.72rem;
+      opacity: 0.85;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .dg-cal-bar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dg-cal-event-bar.is-single-day.cat-academic .dg-cal-bar-dot { background: #2563eb; }
+    .dg-cal-event-bar.is-single-day.cat-affairs .dg-cal-bar-dot { background: #e11d48; }
+    .dg-cal-event-bar.is-single-day.cat-prefect .dg-cal-bar-dot { background: #7c3aed; }
+    .dg-cal-event-bar.is-single-day.cat-general .dg-cal-bar-dot { background: #475569; }
+
+    .dg-cal-bar-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .dg-cal-bar-badge {
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.22);
+      color: inherit;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Calendar Legend Footer */
+    .dg-cal-legend-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    .dg-cal-legend-items {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dg-cal-legend-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .dg-cal-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .dg-cal-top-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .dg-cal-view-switch {
+        width: 100%;
+        justify-content: center;
+      }
+      .dg-cal-month-nav {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .dg-cal-legend-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* ============ LIST VIEW EVENT CARD 3-COLUMN FIX ============ */
+    .dg-event-card {
+      display: grid !important;
+      grid-template-columns: 96px 1fr auto !important;
+      gap: 22px !important;
+      align-items: center !important;
+    }
+
+    .dg-event-details {
+      min-width: 0 !important;
+    }
+
+    .dg-event-action-col {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      flex-shrink: 0 !important;
+      margin-left: auto !important;
+    }
+
+    .dg-btn-sm-outline {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 8px 16px !important;
+    }
+
+    @media (max-width: 768px) {
+      .dg-event-card {
+        grid-template-columns: 78px 1fr auto !important;
+        gap: 12px !important;
+        padding: 16px 14px !important;
+      }
+      .dg-btn-sm-outline {
+        padding: 6px 12px !important;
+        font-size: 0.78rem !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dg-event-card {
+        grid-template-columns: 68px 1fr auto !important;
+        gap: 10px !important;
+        padding: 12px 10px !important;
+      }
+      .dg-btn-sm-outline {
+        padding: 5px 10px !important;
+        font-size: 0.75rem !important;
+      }
+    }
+
+    /* ============ CLEAN RESET FILTER BUTTON (DIEGO STYLE) ============ */
+    .dg-cal-reset-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #ffffff;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--dg-radius-pill);
+      font-family: var(--dg-font-sans);
+      font-size: 0.82rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .dg-cal-reset-btn:hover {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .dg-cal-reset-btn i,
+    .dg-cal-reset-btn svg {
+      width: 13px;
+      height: 13px;
+      transition: transform 0.25s ease;
+    }
+
+    .dg-cal-reset-btn:hover i,
+    .dg-cal-reset-btn:hover svg {
+      transform: rotate(-90deg);
+    }
+
+    .dg-cal-reset-btn:active {
+      transform: scale(0.96);
+    }
+  </style>
 </head>
 
 <body class="dg-activities-page">
@@ -142,24 +688,115 @@
   </header>
 
   <!-- ============ MAIN CALENDAR SECTION ============ -->
-  <main class="dg-calendar-section" id="calendar" style="padding: 40px 0 70px; min-height: 60vh;">
+  <main class="dg-calendar-section" id="calendar" style="padding: 30px 0 70px; min-height: 60vh;">
     <div class="dg-container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
-        <span style="font-size: 0.88rem; font-weight: 700; color: var(--dg-text-secondary);" id="calendarResultCountLabel">
-          กำลังโหลดกิจกรรม...
-        </span>
-        <button type="button" class="dg-btn-outline" id="calendarResetBtn" style="padding: 6px 16px; font-size: 0.82rem; border-radius: var(--dg-radius-pill); display: none; cursor: pointer;" onclick="resetCalendarFilters()">
-          <i data-lucide="rotate-ccw" style="width: 13px; height: 13px;"></i>
-          <span>ล้างตัวกรอง</span>
-        </button>
-      </div>
+      
+      <!-- Top Bar: View Switcher + Month Navigation + Status -->
+      <div class="dg-cal-top-bar">
+        <!-- View Mode Switcher -->
+        <div class="dg-cal-view-switch">
+          <button type="button" class="dg-cal-view-btn active" id="btnViewMonth" onclick="switchCalendarView('month')">
+            <i data-lucide="calendar" style="width: 15px; height: 15px;"></i>
+            <span>ปฏิทินรายเดือน</span>
+          </button>
+          <button type="button" class="dg-cal-view-btn" id="btnViewList" onclick="switchCalendarView('list')">
+            <i data-lucide="list" style="width: 15px; height: 15px;"></i>
+            <span>รายการกำหนดการ</span>
+          </button>
+        </div>
 
-      <!-- Events List Container -->
-      <div class="dg-events-list" id="calendarEventsList">
-        <div style="text-align: center; padding: 60px; color: var(--dg-text-muted);">
-          <div class="loading-spinner"></div> กำลังโหลดข้อมูลกิจกรรมโรงเรียน...
+        <!-- Month Navigation Toolbar (Shown when Month View is active) -->
+        <div class="dg-cal-month-nav" id="calMonthNavToolbar">
+          <button type="button" class="dg-cal-nav-btn" onclick="onCalendarPrevMonth()" title="เดือนก่อนหน้า">
+            <i data-lucide="chevron-left" style="width: 18px; height: 18px;"></i>
+          </button>
+          <button type="button" class="dg-cal-today-btn" onclick="onCalendarGoToday()" title="กลับไปเดือนปัจจุบัน">
+            <span>วันนี้</span>
+          </button>
+          <button type="button" class="dg-cal-nav-btn" onclick="onCalendarNextMonth()" title="เดือนถัดไป">
+            <i data-lucide="chevron-right" style="width: 18px; height: 18px;"></i>
+          </button>
+          <div class="dg-cal-title-box">
+            <span class="dg-cal-month-title" id="calCurrentMonthTitle">ตุลาคม 2569</span>
+            <span class="dg-cal-month-subtitle" id="calCurrentMonthSubtitle">ปีการศึกษา 2569</span>
+          </div>
+        </div>
+
+        <!-- Filter Count & Reset Button -->
+        <div style="display: inline-flex; align-items: center; gap: 12px; margin-left: auto;">
+          <span style="font-size: 0.86rem; font-weight: 700; color: var(--dg-text-secondary);" id="calendarResultCountLabel">
+            กำลังโหลดกิจกรรม...
+          </span>
+          <button type="button" class="dg-cal-reset-btn" id="calendarResetBtn" style="display: none;" onclick="resetCalendarFilters()" title="ล้างการค้นหาและคืนค่าตัวกรองทั้งหมด">
+            <i data-lucide="rotate-ccw"></i>
+            <span>ล้างตัวกรอง</span>
+          </button>
         </div>
       </div>
+
+      <!-- ============ 1. GOOGLE CALENDAR MONTH VIEW WRAPPER ============ -->
+      <div id="calendarMonthViewWrap">
+        <div class="dg-cal-card">
+          <div class="dg-cal-scroll-container">
+            <div class="dg-cal-inner-board">
+              <!-- 7-Column Day Names Header -->
+              <div class="dg-cal-header-row">
+                <div class="dg-cal-day-head is-sun">อาทิตย์</div>
+                <div class="dg-cal-day-head">จันทร์</div>
+                <div class="dg-cal-day-head">อังคาร</div>
+                <div class="dg-cal-day-head">พุธ</div>
+                <div class="dg-cal-day-head">พฤหัสบดี</div>
+                <div class="dg-cal-day-head">ศุกร์</div>
+                <div class="dg-cal-day-head is-sat">เสาร์</div>
+              </div>
+
+              <!-- Month Weeks Container (Injected dynamically) -->
+              <div id="calendarMonthWeeksContainer">
+                <div style="text-align: center; padding: 70px 20px; color: var(--dg-text-muted);">
+                  <div class="loading-spinner"></div> กำลังจัดเตรียมตารางปฏิทิน...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar Legend & Hint Footer -->
+          <div class="dg-cal-legend-footer">
+            <div class="dg-cal-legend-items">
+              <span style="font-weight: 800; color: #0f172a; margin-right: 4px;">หมวดหมู่:</span>
+              <span class="dg-cal-legend-pill">
+                <span class="dg-cal-legend-dot" style="background: #2563eb;"></span>
+                <span>งานวิชาการ</span>
+              </span>
+              <span class="dg-cal-legend-pill">
+                <span class="dg-cal-legend-dot" style="background: #e11d48;"></span>
+                <span>งานกิจการนักเรียน</span>
+              </span>
+              <span class="dg-cal-legend-pill">
+                <span class="dg-cal-legend-dot" style="background: #7c3aed;"></span>
+                <span>ภารกิจสารวัตร</span>
+              </span>
+              <span class="dg-cal-legend-pill">
+                <span class="dg-cal-legend-dot" style="background: #475569;"></span>
+                <span>กิจกรรมทั่วไป</span>
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 600;">
+              <i data-lucide="info" style="width: 14px; height: 14px; color: #64748b;"></i>
+              <span>คลิกที่แถบกิจกรรมเพื่อดูรายละเอียดฉบับเต็ม</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 2. LIST VIEW WRAPPER ============ -->
+      <div id="calendarListViewWrap" style="display: none;">
+        <div class="dg-events-list" id="calendarEventsList">
+          <div style="text-align: center; padding: 60px; color: var(--dg-text-muted);">
+            <div class="loading-spinner"></div> กำลังโหลดข้อมูลกิจกรรมโรงเรียน...
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -476,6 +1113,9 @@
     let calendarEventsCache = [];
     let selectedCategory = 'all';
     let searchQuery = '';
+    let currentViewMode = 'month';
+    let currentCalYear = 2026;
+    let currentCalMonth = 9; // 0-indexed (9 = Oct)
 
     // ==========================================================
     // DATA FETCHING & RENDERING
@@ -518,24 +1158,108 @@
         console.error('loadCalendarEvents error:', err);
         if (container) {
           container.innerHTML = '<div style="text-align: center; padding: 50px 20px; color: #ef4444; background: #fff1f2; border: 1px solid #fecdd3; border-radius: var(--dg-radius-md);"><i data-lucide="alert-circle" style="width: 36px; height: 36px; margin-bottom: 12px; display: inline-block;"></i><h3 style="font-size: 1.1rem; font-weight: 750; margin-bottom: 6px;">ไม่สามารถโหลดข้อมูลกิจกรรมได้ในขณะนี้</h3><p style="font-size: 0.9rem; color: #9f1239; margin-bottom: 16px;">โปรดตรวจสอบการเชื่อมต่อกับเซิร์ฟเวอร์หรือลองใหม่อีกครั้ง</p><button type="button" class="dg-btn-black" onclick="loadCalendarEvents()" style="padding: 8px 20px; font-size: 0.88rem;"><span>ลองใหม่อีกครั้ง</span></button></div>';
-          if (window.lucide) lucide.createIcons();
+          if (window.lucide) window.lucide.createIcons();
         }
       }
     }
 
-    function renderCalendarEvents() {
-      const container = document.getElementById('calendarEventsList');
-      const totalBadge = document.getElementById('calendarTotalBadge');
-      const countLabel = document.getElementById('calendarResultCountLabel');
-      const resetBtn = document.getElementById('calendarResetBtn');
-      if (!container) return;
+    function getDayDifference(startStr, endStr) {
+      if (!startStr || !endStr) return 0;
+      const [y1, m1, d1] = startStr.split('-').map(Number);
+      const [y2, m2, d2] = endStr.split('-').map(Number);
+      const dt1 = Date.UTC(y1, m1 - 1, d1);
+      const dt2 = Date.UTC(y2, m2 - 1, d2);
+      return Math.round((dt2 - dt1) / (1000 * 60 * 60 * 24));
+    }
 
-      if (totalBadge) {
-        totalBadge.textContent = calendarEventsCache.length + ' รายการ';
+    function getMonthWeeks(year, month) {
+      const firstDay = new Date(Date.UTC(year, month, 1));
+      const firstDayOfWeek = firstDay.getUTCDay();
+      const gridStart = new Date(Date.UTC(year, month, 1 - firstDayOfWeek));
+      const lastDay = new Date(Date.UTC(year, month + 1, 0));
+      const lastDayOfWeek = lastDay.getUTCDay();
+      const daysToAdd = 6 - lastDayOfWeek;
+      const gridEnd = new Date(Date.UTC(year, month + 1, daysToAdd));
+
+      const weeks = [];
+      let curr = new Date(gridStart.getTime());
+
+      while (curr.getTime() <= gridEnd.getTime()) {
+        const days = [];
+        for (let i = 0; i < 7; i++) {
+          const y = curr.getUTCFullYear();
+          const m = curr.getUTCMonth();
+          const d = curr.getUTCDate();
+          const ymd = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+          days.push({
+            year: y,
+            month: m,
+            dayNum: d,
+            ymd: ymd,
+            isCurrentMonth: (m === month),
+            dayOfWeek: i
+          });
+          curr.setUTCDate(curr.getUTCDate() + 1);
+        }
+        weeks.push(days);
       }
+      return weeks;
+    }
 
-      // Filter events
-      const filtered = calendarEventsCache.filter(evt => {
+    function switchCalendarView(mode) {
+      currentViewMode = mode;
+      const btnMonth = document.getElementById('btnViewMonth');
+      const btnList = document.getElementById('btnViewList');
+      const monthWrap = document.getElementById('calendarMonthViewWrap');
+      const listWrap = document.getElementById('calendarListViewWrap');
+      const monthNav = document.getElementById('calMonthNavToolbar');
+
+      if (btnMonth) btnMonth.classList.toggle('active', mode === 'month');
+      if (btnList) btnList.classList.toggle('active', mode === 'list');
+
+      if (mode === 'month') {
+        if (monthWrap) monthWrap.style.display = 'block';
+        if (listWrap) listWrap.style.display = 'none';
+        if (monthNav) monthNav.style.display = 'inline-flex';
+        renderMonthCalendar();
+      } else {
+        if (monthWrap) monthWrap.style.display = 'none';
+        if (listWrap) listWrap.style.display = 'block';
+        if (monthNav) monthNav.style.display = 'none';
+      }
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function onCalendarPrevMonth() {
+      currentCalMonth--;
+      if (currentCalMonth < 0) {
+        currentCalMonth = 11;
+        currentCalYear--;
+      }
+      renderMonthCalendar();
+      updateResultCountLabel();
+    }
+
+    function onCalendarNextMonth() {
+      currentCalMonth++;
+      if (currentCalMonth > 11) {
+        currentCalMonth = 0;
+        currentCalYear++;
+      }
+      renderMonthCalendar();
+      updateResultCountLabel();
+    }
+
+    function onCalendarGoToday() {
+      const now = new Date();
+      currentCalYear = now.getFullYear();
+      currentCalMonth = now.getMonth();
+      renderMonthCalendar();
+      updateResultCountLabel();
+    }
+
+    function getFilteredEvents() {
+      return calendarEventsCache.filter(evt => {
         const matchesCategory = selectedCategory === 'all' || evt.category === selectedCategory;
         const q = searchQuery.toLowerCase();
         const matchesSearch = !q ||
@@ -548,29 +1272,202 @@
 
         return matchesCategory && matchesSearch;
       });
+    }
 
-      // Update Result Count Label
+    function updateResultCountLabel() {
+      const filtered = getFilteredEvents();
+      const countLabel = document.getElementById('calendarResultCountLabel');
+      const resetBtn = document.getElementById('calendarResetBtn');
+      const totalBadge = document.getElementById('calendarTotalBadge');
+
+      if (totalBadge) {
+        totalBadge.textContent = calendarEventsCache.length + ' รายการ';
+      }
+
       if (countLabel) {
-        if (selectedCategory === 'all' && !searchQuery) {
-          countLabel.textContent = 'แสดงกิจกรรมทั้งหมด ' + filtered.length + ' รายการ';
+        if (currentViewMode === 'month') {
+          const thaiMonthName = THAI_MONTHS_FULL[currentCalMonth] || '';
+          const thaiYear = currentCalYear + 543;
+          const monthPrefix = currentCalYear + '-' + String(currentCalMonth + 1).padStart(2, '0');
+          const monthEvents = filtered.filter(evt => {
+            const s = String(evt.dateStart || evt.dateIso || '').trim();
+            let e = String(evt.dateEnd || evt.endDateIso || '').trim();
+            if (!e) e = s;
+            const mStart = monthPrefix + '-01';
+            const mEnd = monthPrefix + '-31';
+            return e >= mStart && s <= mEnd;
+          });
+          countLabel.textContent = 'กิจกรรมในปฏิทิน ' + thaiMonthName + ' ' + thaiYear + ' (พบ ' + monthEvents.length + ' รายการ)';
         } else {
-          countLabel.textContent = 'พบ ' + filtered.length + ' จากทั้งหมด ' + calendarEventsCache.length + ' รายการ';
+          if (selectedCategory === 'all' && !searchQuery) {
+            countLabel.textContent = 'แสดงกิจกรรมทั้งหมด ' + filtered.length + ' รายการ';
+          } else {
+            countLabel.textContent = 'พบ ' + filtered.length + ' จากทั้งหมด ' + calendarEventsCache.length + ' รายการ';
+          }
         }
       }
 
-      // Toggle Reset Button
       if (resetBtn) {
         resetBtn.style.display = (selectedCategory !== 'all' || searchQuery) ? 'inline-flex' : 'none';
       }
+    }
 
-      // Empty State
+    function renderMonthCalendar() {
+      const weeksContainer = document.getElementById('calendarMonthWeeksContainer');
+      const titleEl = document.getElementById('calCurrentMonthTitle');
+      const subTitleEl = document.getElementById('calCurrentMonthSubtitle');
+      if (!weeksContainer) return;
+
+      const thaiMonthName = THAI_MONTHS_FULL[currentCalMonth] || '';
+      const thaiYear = currentCalYear + 543;
+      if (titleEl) titleEl.textContent = thaiMonthName + ' ' + thaiYear;
+      if (subTitleEl) {
+        const acadYear = (currentCalMonth >= 4 ? currentCalYear + 543 : currentCalYear + 542);
+        subTitleEl.textContent = 'ปีการศึกษา ' + acadYear;
+      }
+
+      const todayIso = new Date().toLocaleDateString('en-CA');
+      const weeks = getMonthWeeks(currentCalYear, currentCalMonth);
+      const filteredEvents = getFilteredEvents();
+
+      let html = '';
+
+      weeks.forEach((week) => {
+        const weekStartYmd = week[0].ymd;
+        const weekEndYmd = week[6].ymd;
+
+        // 1. Build Background 7-Day Cells
+        let bgCellsHtml = '';
+        week.forEach(day => {
+          const isToday = (day.ymd === todayIso);
+          const otherMonthClass = !day.isCurrentMonth ? ' is-other-month' : '';
+          const todayClass = isToday ? ' is-today' : '';
+          bgCellsHtml += '<div class="dg-cal-day-bg' + otherMonthClass + todayClass + '" data-ymd="' + day.ymd + '">' +
+            '<span class="dg-cal-date-num" title="' + day.ymd + '">' + day.dayNum + '</span>' +
+          '</div>';
+        });
+
+        // 2. Find intersecting events for this week
+        const weekEvents = [];
+        filteredEvents.forEach(evt => {
+          const s = String(evt.dateStart || evt.dateIso || '').trim();
+          let e = String(evt.dateEnd || evt.endDateIso || '').trim();
+          if (!e) e = s;
+          if (!s) return;
+
+          if (e >= weekStartYmd && s <= weekEndYmd) {
+            const startCol = Math.max(1, getDayDifference(weekStartYmd, s) + 1);
+            const endCol = Math.min(7, getDayDifference(weekStartYmd, e) + 1);
+            const span = endCol - startCol + 1;
+            const continuesPrev = (s < weekStartYmd);
+            const continuesNext = (e > weekEndYmd);
+            const isMultiDay = (Boolean(e) && e !== s);
+
+            weekEvents.push({
+              evt,
+              id: evt.id,
+              title: evt.title || '',
+              category: evt.category || 'general',
+              time: evt.time || '',
+              dayText: evt.day || '',
+              startCol,
+              endCol,
+              span,
+              continuesPrev,
+              continuesNext,
+              isMultiDay
+            });
+          }
+        });
+
+        // Sort events: Multi-day first (longer span first), then earlier startCol
+        weekEvents.sort((a, b) => {
+          if (a.isMultiDay !== b.isMultiDay) return a.isMultiDay ? -1 : 1;
+          if (b.span !== a.span) return b.span - a.span;
+          return a.startCol - b.startCol;
+        });
+
+        // Greedy slot row packing
+        const slotOccupied = [];
+        weekEvents.forEach(item => {
+          let row = 0;
+          while (true) {
+            if (!slotOccupied[row]) slotOccupied[row] = new Array(7).fill(false);
+            let fits = true;
+            for (let c = item.startCol - 1; c < item.endCol; c++) {
+              if (slotOccupied[row][c]) {
+                fits = false;
+                break;
+              }
+            }
+            if (fits) {
+              for (let c = item.startCol - 1; c < item.endCol; c++) {
+                slotOccupied[row][c] = true;
+              }
+              item.gridRow = row + 1;
+              break;
+            }
+            row++;
+          }
+        });
+
+        // 3. Build Events Layer Bars
+        let eventsLayerHtml = '';
+        weekEvents.forEach(item => {
+          const catClass = 'cat-' + item.category;
+          const multiClass = item.isMultiDay ? ' is-multi-day' : ' is-single-day';
+          const prevClass = item.continuesPrev ? ' continues-prev' : '';
+          const nextClass = item.continuesNext ? ' continues-next' : '';
+          const fullTitle = item.title;
+          const safeTitle = escapeHtml(fullTitle);
+          const style = 'grid-column: ' + item.startCol + ' / span ' + item.span + '; grid-row: ' + item.gridRow + ';';
+
+          let contentInner = '';
+          if (item.isMultiDay) {
+            // Multi-Day Continuous Bar (Google Calendar Style)
+            const arrowPrev = item.continuesPrev ? '<span class="dg-cal-bar-arrow">‹</span>' : '';
+            const arrowNext = item.continuesNext ? '<span class="dg-cal-bar-arrow">›</span>' : '';
+            const badgeText = item.dayText ? '<span class="dg-cal-bar-badge">' + escapeHtml(item.dayText) + '</span>' : '';
+            contentInner = arrowPrev + badgeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>' + arrowNext;
+          } else {
+            // Single-Day Event Pill
+            const timeText = item.time && item.time !== 'เต็มวัน' ? '<span style="font-size: 0.7rem; font-weight: 700; opacity: 0.85; flex-shrink: 0;">' + escapeHtml(item.time) + '</span>' : '';
+            contentInner = '<span class="dg-cal-bar-dot"></span>' + timeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>';
+          }
+
+          eventsLayerHtml += '<div class="dg-cal-event-bar ' + catClass + multiClass + prevClass + nextClass + '" style="' + style + '" onclick="openEventDetailModal(\'' + item.id + '\')" title="' + safeTitle + ' (คลิกเพื่อดูรายละเอียด)">' +
+            contentInner +
+          '</div>';
+        });
+
+        html += '<div class="dg-cal-week-row">' +
+          '<div class="dg-cal-cells-grid-bg">' + bgCellsHtml + '</div>' +
+          '<div class="dg-cal-events-layer">' + eventsLayerHtml + '</div>' +
+        '</div>';
+      });
+
+      weeksContainer.innerHTML = html;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function renderCalendarEvents() {
+      const container = document.getElementById('calendarEventsList');
+      const filtered = getFilteredEvents();
+
+      updateResultCountLabel();
+
+      // 1. Render Google Calendar Month View
+      renderMonthCalendar();
+
+      // 2. Render List View
+      if (!container) return;
+
       if (filtered.length === 0) {
         container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 60px 24px; text-align: center;"><div style="width: 56px; height: 56px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;"><i data-lucide="calendar-x-2" style="width: 28px; height: 28px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.2rem; font-weight: 800; color: var(--dg-black); margin-bottom: 8px;">ไม่พบกิจกรรมที่ตรงกับการค้นหา</h3><p style="font-size: 0.92rem; color: var(--dg-text-secondary); margin-bottom: 20px; max-width: 460px; margin-left: auto; margin-right: auto;">ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นเพื่อตรวจสอบกิจกรรมในระบบ</p><button type="button" class="dg-btn-black" onclick="resetCalendarFilters()" style="padding: 10px 22px; font-size: 0.88rem; cursor: pointer;"><span>แสดงกิจกรรมทั้งหมด</span></button></div>';
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide) window.lucide.createIcons();
         return;
       }
 
-      // Render Cards
       container.innerHTML = filtered.map(evt => {
         const catClass = 'cat-' + (evt.category || 'general');
         const catLabel = evt.categoryLabel || (
@@ -617,12 +1514,9 @@
         '</div>';
       }).join('');
 
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     }
 
-    // ==========================================================
-    // FILTER CONTROLS
-    // ==========================================================
     function filterCalendarCategory(cat) {
       selectedCategory = cat;
       document.querySelectorAll('#calendarCategoryPills .dg-act-pill-btn').forEach(btn => {
@@ -749,7 +1643,7 @@
           '</button>' +
         '</div>';
 
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
       openModal('eventDetailModal');
     }
 
@@ -842,11 +1736,11 @@
         revealItems.forEach(item => item.classList.add('is-revealed'));
       }
 
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     });
 
     // Immediate Lucide init
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   </script>
 
   <!-- Black Mourning Ribbon (ริบบิ้นไว้ทุกข์มุมล่างซ้าย) -->
