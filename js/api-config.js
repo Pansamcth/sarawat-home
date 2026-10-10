@@ -574,6 +574,170 @@
         throw new Error(data.error || 'เปลี่ยนรหัสผ่านไม่สำเร็จ');
       }
       return data;
+    },
+
+    // ==========================================
+    // 📬 FEEDBACK & COMPLAINTS APIS
+    // ==========================================
+    getFeedbacks: async function (options = {}) {
+      const base = this.getBaseUrl();
+      let list = null;
+
+      if (base) {
+        try {
+          const params = new URLSearchParams();
+          if (options.type && options.type !== 'all') params.append('type', options.type);
+          if (options.status && options.status !== 'all') params.append('status', options.status);
+          if (options.q && options.q.trim()) params.append('q', options.q.trim());
+
+          const url = `${base}/api/feedbacks` + (params.toString() ? `?${params.toString()}` : '');
+          const res = await fetch(url);
+          if (res.ok) {
+            list = await res.json();
+            if (Array.isArray(list)) {
+              try {
+                localStorage.setItem('dg_sarawat_feedbacks_cache', JSON.stringify(list));
+              } catch (e) {}
+            }
+          }
+        } catch (err) {
+          console.warn('[SarawatApi] getFeedbacks failed, fallback to local cache:', err.message);
+        }
+      }
+
+      if (!Array.isArray(list)) {
+        try {
+          const stored = localStorage.getItem('dg_sarawat_feedbacks_cache');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) list = parsed;
+          }
+        } catch (e) {}
+      }
+
+      if (!Array.isArray(list)) list = [];
+
+      // Filter locally if offline
+      if (options.type && options.type !== 'all') {
+        list = list.filter(item => item.type === options.type);
+      }
+      if (options.status && options.status !== 'all') {
+        list = list.filter(item => item.status === options.status);
+      }
+      if (options.q && options.q.trim()) {
+        const q = options.q.trim().toLowerCase();
+        list = list.filter(item =>
+          (item.title && item.title.toLowerCase().includes(q)) ||
+          (item.detail && item.detail.toLowerCase().includes(q)) ||
+          (item.location && item.location.toLowerCase().includes(q)) ||
+          (item.senderName && item.senderName.toLowerCase().includes(q))
+        );
+      }
+
+      return list;
+    },
+
+    submitFeedback: async function (item) {
+      const base = this.getBaseUrl();
+      const payload = {
+        id: item.id || ('fb-' + Date.now() + '-' + Math.floor(Math.random() * 1000)),
+        type: item.type || 'feedback',
+        category: item.category || 'ทั่วไป',
+        title: item.title || '',
+        location: item.location || '',
+        targetPerson: item.targetPerson || item.target_person || '',
+        detail: item.detail || '',
+        senderName: item.senderName || item.sender_name || 'ไม่ระบุตัวตน (Anonymous)',
+        contact: item.contact || '',
+        status: item.status || 'pending',
+        adminNotes: item.adminNotes || item.admin_notes || '',
+        createdAt: new Date().toISOString().replace('T', ' ').substring(0, 19)
+      };
+
+      let apiSuccess = false;
+      let apiData = null;
+
+      if (base) {
+        try {
+          const res = await fetch(`${base}/api/feedbacks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            apiData = await res.json();
+            apiSuccess = true;
+          }
+        } catch (err) {
+          console.warn('[SarawatApi] submitFeedback fetch failed, saving to local cache only:', err.message);
+        }
+      }
+
+      // Always save / append to local storage cache so it persists locally as well
+      try {
+        let cached = [];
+        const stored = localStorage.getItem('dg_sarawat_feedbacks_cache');
+        if (stored) cached = JSON.parse(stored) || [];
+        cached.unshift(payload);
+        localStorage.setItem('dg_sarawat_feedbacks_cache', JSON.stringify(cached));
+      } catch (e) {}
+
+      return apiData || { success: true, id: payload.id, offline: !apiSuccess };
+    },
+
+    updateFeedback: async function (id, updateData) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+
+      const res = await fetch(`${base}/api/feedbacks/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `อัปเดตไม่สำเร็จ (HTTP ${res.status})`);
+      }
+
+      // Update local cache
+      try {
+        let cached = [];
+        const stored = localStorage.getItem('dg_sarawat_feedbacks_cache');
+        if (stored) cached = JSON.parse(stored) || [];
+        const idx = cached.findIndex(item => String(item.id) === String(id));
+        if (idx >= 0) {
+          cached[idx] = { ...cached[idx], ...updateData };
+          localStorage.setItem('dg_sarawat_feedbacks_cache', JSON.stringify(cached));
+        }
+      } catch (e) {}
+
+      return await res.json();
+    },
+
+    deleteFeedback: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+
+      const res = await fetch(`${base}/api/feedbacks/${encodeURIComponent(id)}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `ลบไม่สำเร็จ (HTTP ${res.status})`);
+      }
+
+      // Update local cache
+      try {
+        let cached = [];
+        const stored = localStorage.getItem('dg_sarawat_feedbacks_cache');
+        if (stored) cached = JSON.parse(stored) || [];
+        cached = cached.filter(item => String(item.id) !== String(id));
+        localStorage.setItem('dg_sarawat_feedbacks_cache', JSON.stringify(cached));
+      } catch (e) {}
+
+      return await res.json();
     }
   };
 })();

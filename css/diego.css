@@ -1522,6 +1522,35 @@ svg:not([data-lucide]),
   border-color: #059669;
 }
 
+/* Feedback & Wishlist Theme Card */
+.dg-ops-card.theme-feedback {
+  border-color: #bfdbfe;
+  background: linear-gradient(to bottom, #ffffff, #f0f7ff);
+}
+
+.dg-ops-card.theme-feedback .dg-ops-icon-box {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.dg-ops-card.theme-feedback:hover {
+  border-color: #2563eb;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.1);
+}
+
+/* Complaints & Reports Theme Card */
+.dg-ops-card.theme-complaint {
+  border-color: #fed7aa;
+  background: linear-gradient(to bottom, #ffffff, #fffbeb);
+}
+
+.dg-ops-card.theme-complaint:hover {
+  border-color: #ea580c;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(234, 88, 12, 0.1);
+}
+
 /* ==========================================================
    CHIEF PREFECT VISION SECTION (วิสัยทัศน์ประธานสารวัตร)
    ========================================================== */

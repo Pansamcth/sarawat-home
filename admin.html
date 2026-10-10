@@ -1231,6 +1231,11 @@
         <i data-lucide="calendar"></i>
         <span>ตารางกิจกรรมโรงเรียน</span>
       </button>
+      <button type="button" class="admin-tab-btn" data-tab="tab-feedbacks" id="tabBtnFeedbacks">
+        <i data-lucide="inbox"></i>
+        <span>กล่องข้อความ & Feedback</span>
+        <span id="feedbackCounterBadge" class="admin-badge" style="background: #2563eb; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
+      </button>
       <button type="button" class="admin-tab-btn" data-tab="tab-settings">
         <i data-lucide="sliders"></i>
         <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
@@ -1376,6 +1381,102 @@
         </div>
       </div>
     </div>
+
+    <!-- ==========================================
+         TAB: FEEDBACK & WORK COMPLAINTS / REPORTS
+         ========================================== -->
+    <div class="admin-pane" id="tab-feedbacks">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <h2>กล่องข้อความ Feedback & เรื่องร้องเรียน (Inbox)</h2>
+          <p>ตรวจสอบสิ่งที่นักเรียนต้องการให้สารวัตรทำ ข้อเสนอแนะกิจกรรม และรายงานการปฏิบัติหน้าที่</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button type="button" class="dg-btn-outline" onclick="renderAdminFeedbacks()" style="padding: 9px 16px; font-size: 0.84rem;">
+            <i data-lucide="refresh-cw"></i>
+            <span>รีเฟรชข้อมูล</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Metric Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 24px;">
+        <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">รายการทั้งหมด</div>
+          <div style="font-size: 1.8rem; font-weight: 850; color: #0f172a;" id="fbStatTotal">0</div>
+          <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 4px;">ข้อความจากนักเรียนทั้งหมด</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #fef3c7; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #b45309; text-transform: uppercase; margin-bottom: 6px;">รอดำเนินการ</div>
+          <div style="font-size: 1.8rem; font-weight: 850; color: #d97706;" id="fbStatPending">0</div>
+          <div style="font-size: 0.74rem; color: #b45309; margin-top: 4px;">รอสารวัตร/ครูตรวจสอบ</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase; margin-bottom: 6px;">สิ่งที่อยากให้ทำ & Feedback</div>
+          <div style="font-size: 1.8rem; font-weight: 850; color: #2563eb;" id="fbStatWish">0</div>
+          <div style="font-size: 0.74rem; color: #1d4ed8; margin-top: 4px;">ข้อเสนอแนะและไอเดีย</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #fecaca; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #b91c1c; text-transform: uppercase; margin-bottom: 6px;">รายงาน / ร้องเรียน</div>
+          <div style="font-size: 1.8rem; font-weight: 850; color: #dc2626;" id="fbStatComplaints">0</div>
+          <div style="font-size: 0.74rem; color: #b91c1c; margin-top: 4px;">รายงานการปฏิบัติหน้าที่</div>
+        </div>
+      </div>
+
+      <!-- Filter and Search Toolbar -->
+      <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+          <!-- Filter Type -->
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <label style="font-size: 0.82rem; font-weight: 700; color: #475569;">ประเภท:</label>
+            <select id="fbFilterType" onchange="filterAdminFeedbacks()" style="padding: 7px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background: #ffffff; outline: none;">
+              <option value="all">ทั้งหมด (All Types)</option>
+              <option value="feedback">✨ สิ่งที่อยากให้ทำ / Feedback</option>
+              <option value="complaint">🛡️ รายงานการทำงาน / ร้องเรียน</option>
+            </select>
+          </div>
+          <!-- Filter Status -->
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <label style="font-size: 0.82rem; font-weight: 700; color: #475569;">สถานะ:</label>
+            <select id="fbFilterStatus" onchange="filterAdminFeedbacks()" style="padding: 7px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background: #ffffff; outline: none;">
+              <option value="all">ทั้งหมด (All Status)</option>
+              <option value="pending">⏳ รอดำเนินการ (Pending)</option>
+              <option value="reviewing">🔍 กำลังตรวจสอบ (Reviewing)</option>
+              <option value="resolved">✅ ดำเนินการแล้ว (Resolved)</option>
+              <option value="rejected">✖ ยุติเรื่อง (Closed)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Search Input -->
+        <div style="position: relative; min-width: 260px; flex: 1; max-width: 380px;">
+          <input type="text" id="fbSearchInput" oninput="filterAdminFeedbacks()" placeholder="ค้นหาตามหัวข้อ, ข้อความ, ผู้ส่ง, จุดเกิดเหตุ..." style="width: 100%; padding: 8px 12px 8px 34px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; outline: none;" />
+          <i data-lucide="search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #94a3b8;"></i>
+        </div>
+      </div>
+
+      <!-- Table Container -->
+      <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.02);">
+        <div style="overflow-x: auto;">
+          <table class="admin-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1.5px solid var(--dg-border);">
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.84rem; width: 130px;">ประเภท</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.84rem; width: 120px;">สถานะ</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.84rem;">หัวข้อ & รายละเอียด</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.84rem; width: 160px;">สถานที่ / จุดเกิดเหตุ</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.84rem; width: 160px;">ผู้ส่ง & วันที่</th>
+                <th style="padding: 14px 18px; font-weight: 700; color: #475569; font-size: 0.84rem; text-align: right; width: 130px;">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="feedbacksTableBody">
+              <!-- Rendered by renderAdminFeedbacks() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- ==========================================
          TAB 3: SYSTEM SETTINGS & DUTY COUNTER
          ========================================== -->
@@ -2187,6 +2288,109 @@
       </form>
     </div>
   </div>
+
+  <!-- ==========================================
+       MODAL: ADMIN FEEDBACK & COMPLAINT DETAIL & MANAGEMENT
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminFeedbackModal" style="display: none; align-items: center; justify-content: center;">
+    <div class="dg-modal-box" style="max-width: 680px; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 1px solid #e2e8f0; padding: 20px 28px;">
+        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 850; color: #0f172a; display: flex; align-items: center; gap: 10px;">
+          <div style="background: #2563eb; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
+            <i data-lucide="inbox" style="width: 18px; height: 18px;"></i>
+          </div>
+          <span>รายละเอียด Feedback & จัดการเรื่อง</span>
+        </h3>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminFeedbackModal')" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s;">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form id="adminFeedbackForm" onsubmit="handleSaveAdminFeedback(event)" style="padding: 24px 28px; overflow-y: auto; background: #ffffff;">
+        <input type="hidden" id="modalFbId" />
+
+        <!-- Top Badges -->
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div id="modalFbTypeBadge"></div>
+            <span style="background: #f1f5f9; color: #475569; padding: 3px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 700;" id="modalFbCategory"></span>
+          </div>
+          <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 600;" id="modalFbDate"></div>
+        </div>
+
+        <!-- Title -->
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 0.8rem; font-weight: 750; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">หัวข้อเรื่อง</div>
+          <div id="modalFbTitle" style="font-size: 1.15rem; font-weight: 850; color: #0f172a; line-height: 1.4;"></div>
+        </div>
+
+        <!-- Meta info grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;">
+          <div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b;">สถานที่ / จุดเกิดเหตุ</div>
+            <div id="modalFbLocation" style="font-size: 0.88rem; font-weight: 700; color: #1e293b; margin-top: 2px;"></div>
+          </div>
+          <div id="modalFbTargetRow" style="display: none;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #dc2626;">สารวัตร / ผู้เกี่ยวข้อง</div>
+            <div id="modalFbTarget" style="font-size: 0.88rem; font-weight: 700; color: #b91c1c; margin-top: 2px;"></div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b;">ผู้ส่งข้อมูล</div>
+            <div id="modalFbSender" style="font-size: 0.88rem; font-weight: 700; color: #1e293b; margin-top: 2px;"></div>
+          </div>
+          <div>
+            <div style="font-size: 0.75rem; font-weight: 700; color: #64748b;">ช่องทางติดต่อกลับ</div>
+            <div id="modalFbContact" style="font-size: 0.88rem; font-weight: 700; color: #2563eb; margin-top: 2px;"></div>
+          </div>
+        </div>
+
+        <!-- Detail Message Box -->
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 0.8rem; font-weight: 750; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">รายละเอียดข้อความฉบับเต็ม</div>
+          <div id="modalFbDetail" style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 16px; font-size: 0.92rem; line-height: 1.6; color: #1e293b; white-space: pre-wrap; max-height: 180px; overflow-y: auto;"></div>
+        </div>
+
+        <!-- Management Box -->
+        <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;">
+          <h4 style="margin: 0 0 14px; font-size: 0.92rem; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="check-square" style="width: 16px; height: 16px;"></i> การดำเนินการของผู้ดูแลระบบ
+          </h4>
+          <div class="dg-form-group" style="margin-bottom: 14px;">
+            <label style="font-weight: 700; color: #166534; font-size: 0.84rem; display: block; margin-bottom: 6px;">เปลี่ยนสถานะการดำเนินการ</label>
+            <select id="modalFbStatusSelect" style="width: 100%; padding: 10px 14px; border: 1.5px solid #86efac; border-radius: 8px; font-size: 0.9rem; font-weight: 700; background: #ffffff; color: #1e293b; outline: none;">
+              <option value="pending">⏳ รอดำเนินการ (Pending)</option>
+              <option value="reviewing">🔍 กำลังตรวจสอบ / นำเข้าที่ประชุม (Reviewing)</option>
+              <option value="resolved">✅ ดำเนินการแก้ไขแล้ว / บรรลุผล (Resolved)</option>
+              <option value="rejected">✖ ยุติเรื่อง / ไม่อยู่ในขอบเขต (Closed)</option>
+            </select>
+          </div>
+          <div class="dg-form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; color: #166534; font-size: 0.84rem; display: block; margin-bottom: 6px;">บันทึกการติดตาม / ข้อความตอบกลับของสารวัตร (Admin Notes)</label>
+            <textarea id="modalFbAdminNotes" rows="2" placeholder="เช่น ส่งสารวัตรผลัดเย็นดูแลจุดตรวจแล้ว, ครูที่ปรึกษาเรียกตักเตือนแล้ว..." style="width: 100%; padding: 10px 14px; border: 1.5px solid #86efac; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #ffffff; outline: none; resize: vertical;"></textarea>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+          <button type="button" onclick="deleteAdminFeedback(document.getElementById('modalFbId').value)" style="padding: 10px 16px; border-radius: 8px; border: 1px solid #fee2e2; background: #fef2f2; color: #dc2626; font-weight: 750; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+            <span>ลบรายการนี้</span>
+          </button>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="button" onclick="closeModal('adminFeedbackModal')" style="padding: 10px 18px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+              ปิด
+            </button>
+            <button type="submit" style="padding: 10px 24px; border-radius: 8px; border: none; background: #0f172a; color: #ffffff; font-weight: 800; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+              <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+              <span>บันทึกสถานะ</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Toast Element -->
   <div class="admin-toast" id="adminToast">
     <i data-lucide="check-circle" style="color: #22c55e;"></i>
@@ -4832,6 +5036,235 @@
     }
 
     // ==========================================================
+    // 📬 FEEDBACKS & COMPLAINTS MANAGEMENT
+    // ==========================================================
+    let adminFeedbacksCache = [];
+
+    async function renderAdminFeedbacks() {
+      const tbody = document.getElementById('feedbacksTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 32px; color: #94a3b8;">กำลังโหลดข้อมูลข้อความและเรื่องร้องเรียน...</td></tr>';
+
+      try {
+        if (window.SarawatApi) {
+          adminFeedbacksCache = await window.SarawatApi.getFeedbacks();
+        } else {
+          adminFeedbacksCache = [];
+        }
+      } catch (err) {
+        console.error('Error fetching feedbacks:', err);
+        adminFeedbacksCache = [];
+      }
+
+      updateFeedbackStats();
+      filterAdminFeedbacks();
+    }
+
+    function updateFeedbackStats() {
+      const total = adminFeedbacksCache.length;
+      const pending = adminFeedbacksCache.filter(f => f.status === 'pending').length;
+      const wishlist = adminFeedbacksCache.filter(f => f.type === 'feedback').length;
+      const complaints = adminFeedbacksCache.filter(f => f.type === 'complaint').length;
+
+      const elTotal = document.getElementById('fbStatTotal');
+      const elPending = document.getElementById('fbStatPending');
+      const elWish = document.getElementById('fbStatWish');
+      const elComplaints = document.getElementById('fbStatComplaints');
+      const elBadge = document.getElementById('feedbackCounterBadge');
+
+      if (elTotal) elTotal.textContent = total;
+      if (elPending) elPending.textContent = pending;
+      if (elWish) elWish.textContent = wishlist;
+      if (elComplaints) elComplaints.textContent = complaints;
+      if (elBadge) {
+        elBadge.textContent = pending > 0 ? pending : total;
+        elBadge.style.display = total > 0 ? 'inline-flex' : 'none';
+        elBadge.style.background = pending > 0 ? '#d97706' : '#2563eb';
+      }
+    }
+
+    function filterAdminFeedbacks() {
+      const tbody = document.getElementById('feedbacksTableBody');
+      if (!tbody) return;
+
+      const typeFilter = document.getElementById('fbFilterType')?.value || 'all';
+      const statusFilter = document.getElementById('fbFilterStatus')?.value || 'all';
+      const q = (document.getElementById('fbSearchInput')?.value || '').trim().toLowerCase();
+
+      let filtered = adminFeedbacksCache.slice();
+
+      if (typeFilter !== 'all') {
+        filtered = filtered.filter(f => f.type === typeFilter);
+      }
+      if (statusFilter !== 'all') {
+        filtered = filtered.filter(f => f.status === statusFilter);
+      }
+      if (q) {
+        filtered = filtered.filter(f =>
+          (f.title && f.title.toLowerCase().includes(q)) ||
+          (f.detail && f.detail.toLowerCase().includes(q)) ||
+          (f.location && f.location.toLowerCase().includes(q)) ||
+          (f.category && f.category.toLowerCase().includes(q)) ||
+          (f.senderName && f.senderName.toLowerCase().includes(q)) ||
+          (f.targetPerson && f.targetPerson.toLowerCase().includes(q))
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 48px 24px; color: #94a3b8;">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <i data-lucide="inbox" style="width: 40px; height: 40px; opacity: 0.4;"></i>
+                <div style="font-weight: 700; font-size: 0.95rem; color: #64748b;">ไม่พบข้อมูลตามเงื่อนไขที่เลือก</div>
+                <div style="font-size: 0.82rem;">ยังไม่มีข้อเสนอแนะหรือเรื่องร้องเรียนในหมวดหมู่นี้</div>
+              </div>
+            </td>
+          </tr>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      const getStatusBadge = (status) => {
+        switch (status) {
+          case 'pending':
+            return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">⏳ รอดำเนินการ</span>';
+          case 'reviewing':
+            return '<span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">🔍 กำลังตรวจ</span>';
+          case 'resolved':
+            return '<span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">✅ ดำเนินการแล้ว</span>';
+          case 'rejected':
+            return '<span style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">✖ ยุติเรื่อง</span>';
+          default:
+            return '<span style="background: #f1f5f9; color: #64748b; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750;">' + (status || 'ไม่ระบุ') + '</span>';
+        }
+      };
+
+      const getTypeBadge = (type) => {
+        if (type === 'feedback') {
+          return '<span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 3px 8px; border-radius: 6px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">✨ Feedback</span>';
+        } else {
+          return '<span style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 3px 8px; border-radius: 6px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">🛡️ ร้องเรียน</span>';
+        }
+      };
+
+      tbody.innerHTML = filtered.map(item => {
+        const dateStr = item.createdAt ? item.createdAt.substring(0, 16) : '-';
+        const detailSnippet = (item.detail || '').length > 60 ? (item.detail.substring(0, 60) + '...') : (item.detail || '');
+
+        return `
+          <tr style="border-bottom: 1px solid var(--dg-border); transition: background 0.15s ease;">
+            <td style="padding: 14px 18px; vertical-align: top;">
+              ${getTypeBadge(item.type)}
+              <div style="font-size: 0.74rem; color: #64748b; margin-top: 4px;">${escapeHtml(item.category || '')}</div>
+            </td>
+            <td style="padding: 14px 18px; vertical-align: top;">
+              ${getStatusBadge(item.status)}
+            </td>
+            <td style="padding: 14px 18px; vertical-align: top;">
+              <div style="font-weight: 750; color: #0f172a; font-size: 0.92rem; margin-bottom: 3px;">${escapeHtml(item.title || '')}</div>
+              <div style="color: #64748b; font-size: 0.82rem; line-height: 1.45;">${escapeHtml(detailSnippet)}</div>
+              ${item.adminNotes ? `<div style="margin-top: 6px; font-size: 0.76rem; color: #0369a1; background: #f0f9ff; padding: 3px 8px; border-radius: 4px; display: inline-block;">📝 ตอบกลับ: ${escapeHtml(item.adminNotes)}</div>` : ''}
+            </td>
+            <td style="padding: 14px 18px; vertical-align: top; font-size: 0.84rem; color: #334155;">
+              <div>${escapeHtml(item.location || '-')}</div>
+              ${item.targetPerson ? `<div style="font-size: 0.76rem; color: #dc2626; margin-top: 2px;">ผู้เกี่ยวข้อง: ${escapeHtml(item.targetPerson)}</div>` : ''}
+            </td>
+            <td style="padding: 14px 18px; vertical-align: top; font-size: 0.82rem; color: #64748b;">
+              <div style="font-weight: 700; color: #334155;">${escapeHtml(item.senderName || 'นิรนาม')}</div>
+              <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 2px;">${dateStr}</div>
+              ${item.contact ? `<div style="font-size: 0.74rem; color: #2563eb; margin-top: 2px;">${escapeHtml(item.contact)}</div>` : ''}
+            </td>
+            <td style="padding: 14px 18px; vertical-align: top; text-align: right;">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <button type="button" class="dg-btn-outline" onclick="openAdminFeedbackDetail('${item.id}')" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 750;" title="ดูและจัดการ">
+                  <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                  <span>ดู</span>
+                </button>
+                <button type="button" class="dg-btn-outline" onclick="deleteAdminFeedback('${item.id}')" style="padding: 6px 10px; font-size: 0.78rem; color: #dc2626; border-color: #fee2e2;" title="ลบรายการนี้">
+                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openAdminFeedbackDetail(id) {
+      const item = adminFeedbacksCache.find(f => String(f.id) === String(id));
+      if (!item) return;
+
+      document.getElementById('modalFbId').value = item.id;
+      document.getElementById('modalFbTypeBadge').innerHTML = item.type === 'feedback'
+        ? '<span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">✨ สิ่งที่อยากให้ทำ / Feedback</span>'
+        : '<span style="background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">🛡️ รายงานการทำงาน / ร้องเรียน</span>';
+      
+      document.getElementById('modalFbCategory').textContent = item.category || 'ทั่วไป';
+      document.getElementById('modalFbTitle').textContent = item.title || '-';
+      document.getElementById('modalFbLocation').textContent = item.location || '-';
+      document.getElementById('modalFbSender').textContent = item.senderName || 'ไม่ระบุตัวตน (Anonymous)';
+      document.getElementById('modalFbContact').textContent = item.contact || '-';
+      document.getElementById('modalFbDate').textContent = item.createdAt || '-';
+      document.getElementById('modalFbDetail').textContent = item.detail || '-';
+
+      const targetRow = document.getElementById('modalFbTargetRow');
+      if (item.targetPerson) {
+        if (targetRow) targetRow.style.display = 'block';
+        document.getElementById('modalFbTarget').textContent = item.targetPerson;
+      } else {
+        if (targetRow) targetRow.style.display = 'none';
+      }
+
+      document.getElementById('modalFbStatusSelect').value = item.status || 'pending';
+      document.getElementById('modalFbAdminNotes').value = item.adminNotes || '';
+
+      openModal('adminFeedbackModal');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function handleSaveAdminFeedback(e) {
+      if (e) e.preventDefault();
+      const id = document.getElementById('modalFbId').value;
+      if (!id) return;
+
+      const status = document.getElementById('modalFbStatusSelect').value;
+      const adminNotes = document.getElementById('modalFbAdminNotes').value;
+
+      try {
+        if (window.SarawatApi) {
+          await window.SarawatApi.updateFeedback(id, { status, adminNotes });
+        }
+        showToast('อัปเดตสถานะและบันทึกข้อมูลเรียบร้อยแล้ว');
+        closeModal('adminFeedbackModal');
+        await renderAdminFeedbacks();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการบันทึก: ' + err.message);
+      }
+    }
+
+    async function deleteAdminFeedback(id) {
+      if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? การกระทำนี้ไม่สามารถย้อนกลับได้')) return;
+
+      try {
+        if (window.SarawatApi) {
+          await window.SarawatApi.deleteFeedback(id);
+        }
+        showToast('ลบรายการเรียบร้อยแล้ว');
+        if (document.getElementById('adminFeedbackModal')?.classList.contains('active')) {
+          closeModal('adminFeedbackModal');
+        }
+        await renderAdminFeedbacks();
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการลบ: ' + err.message);
+      }
+    }
+
+    // ==========================================================
     // INITIALIZATION & BACKEND SYNC
     // ==========================================================
     async function syncFromBackend() {
@@ -4853,6 +5286,7 @@
     function initDashboard() {
       renderAdminNews();
       renderAdminEvents();
+      renderAdminFeedbacks();
       initSettings();
       syncFromBackend();
     }
@@ -4867,7 +5301,11 @@
           if (paneId) {
             const pane = document.getElementById(paneId);
             if (pane) pane.style.display = 'block';
+            if (paneId === 'tab-feedbacks') {
+              renderAdminFeedbacks();
+            }
           }
+          if (window.lucide) lucide.createIcons();
         });
       });
     }

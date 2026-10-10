@@ -70,7 +70,6 @@
       <div class="dg-nav-links" id="dgNavLinks">
         <a href="#hero">หน้าแรก</a>
         <a href="activities.html">ข่าวสารกิจกรรม</a>
-        <a href="rules.html">กฎระเบียบ</a>
         <a href="calendar.html">ตารางกิจกรรม</a>
         <a href="team.html">คณะทำงาน</a>
       </div>
@@ -327,43 +326,46 @@
         </p>
       </div>
 
-      <div class="dg-ops-grid">
-        <!-- Card 1: Emergency -->
-        <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
-          class="dg-ops-card theme-emergency" data-reveal="scale" data-delay="0">
+      <div class="dg-ops-grid"
+        style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1080px; margin: 0 auto; gap: 24px;">
+
+        <!-- Card 1: Feedback & Wishlist (สิ่งที่อยากให้สารวัตรทำ) -->
+        <div onclick="openModal('feedbackModal')" role="button" tabindex="0" class="dg-ops-card theme-feedback"
+          data-reveal="scale" data-delay="80" style="cursor: pointer;">
           <div>
             <div class="dg-ops-icon-box">
-              <i data-lucide="megaphone"></i>
+              <i data-lucide="message-square-heart"></i>
             </div>
-            <h3>แจ้งเหตุฉุกเฉิน</h3>
+            <h3>สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
             <p>
-              แจ้งพฤติกรรมไม่เหมาะสม ทะเลาะวิวาท อุบัติเหตุ หรือเหตุการณ์ฉุกเฉิน พร้อมระบบพิกัดภายในโรงเรียน
+              เสนอแนะสิ่งที่อยากให้สารวัตรช่วยดูแล แนะนำจุดตรวจ ความปลอดภัย กิจกรรมสร้างสรรค์
+              หรือสิ่งที่นักเรียนอยากเห็น
             </p>
           </div>
           <div class="dg-ops-card-action">
-            <span>เปิดระบบแจ้งเหตุด่วน</span>
-            <i data-lucide="arrow-up-right"></i>
+            <span>ส่งข้อเสนอแนะ / สิ่งที่อยากให้ทำ</span>
+            <i data-lucide="arrow-right"></i>
           </div>
-        </a>
+        </div>
 
-        <!-- Card 2: Anonymous Complaints -->
-        <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
-          class="dg-ops-card theme-complaint" data-reveal="scale" data-delay="120">
+        <!-- Card 2: Report & Anonymous Complaints (รายงานการทำงาน / ร้องเรียน - ป๊อปอัปตรงนี้โดยไม่ต้องเพิ่มหน้าใหม่) -->
+        <div onclick="openModal('complaintModal')" role="button" tabindex="0" class="dg-ops-card theme-complaint"
+          data-reveal="scale" data-delay="160" style="cursor: pointer;">
           <div>
             <div class="dg-ops-icon-box">
               <i data-lucide="scale"></i>
             </div>
-            <h3>ร้องเรียนการทำงาน</h3>
+            <h3>รายงานการทำงาน / ร้องเรียน</h3>
             <p>
-              สะท้อนข้อคิดเห็นหรือร้องเรียนการปฏิบัติหน้าที่ ข้อมูลจะถูกปิดบังตัวตน 100%
-              ส่งตรงถึงครูที่ปรึกษาสาวัตรนักเรียน
+              สะท้อนปัญหา แจ้งเรื่องร้องเรียน หรือรายงานพฤติกรรมการปฏิบัติหน้าที่ ข้อมูลจะถูกปิดบังตัวตน 100%
+              ส่งตรงถึงครูที่ปรึกษา
             </p>
           </div>
           <div class="dg-ops-card-action">
-            <span>ส่งข้อร้องเรียนลับ</span>
-            <i data-lucide="arrow-up-right"></i>
+            <span>ส่งเรื่องรายงาน / ร้องเรียน (นิรนาม)</span>
+            <i data-lucide="arrow-right"></i>
           </div>
-        </a>
+        </div>
 
         <!-- Card 3: SI-ROSTER (The Green Featured Link Card) -->
         <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer"
@@ -374,7 +376,7 @@
             </div>
             <h3>ระบบลงหน้าที่ (SI-ROSTER)</h3>
             <p>
-              ตรวจสอบตารางเวร จุดตรวจ และบันทึกเวลาปฏิบัติหน้าที่ ประจำภาคเรียนที่ 2/2567 ผ่านระบบออนไลน์
+              ตรวจสอบตารางเวร จุดตรวจ และบันทึกเวลาปฏิบัติหน้าที่ ประจำภาคเรียนที่ 2/2569 ผ่านระบบออนไลน์
             </p>
           </div>
           <div class="dg-ops-card-action">
@@ -383,22 +385,6 @@
           </div>
         </a>
 
-        <!-- Card 4: School Rules -->
-        <a href="rules.html" class="dg-ops-card theme-rules" data-reveal="scale" data-delay="360">
-          <div>
-            <div class="dg-ops-icon-box">
-              <i data-lucide="book-open"></i>
-            </div>
-            <h3>กฎระเบียบของโรงเรียน</h3>
-            <p>
-              ข้อมูลกฎ ระเบียบ และแนวปฏิบัติของโรงเรียน
-            </p>
-          </div>
-          <div class="dg-ops-card-action">
-            <span>เข้าสู่ระบบกฎระเบียบ</span>
-            <i data-lucide="arrow-right"></i>
-          </div>
-        </a>
       </div>
     </div>
   </section>
@@ -603,8 +589,7 @@
             </button>
             <div class="dg-accordion-body">
               <p>
-                สามารถแจ้งผ่านระบบ «แจ้งเหตุฉุกเฉินออนไลน์» บนหน้าเว็บไซต์นี้ได้ทันที
-                ซึ่งระบบจะส่งต่อข้อมูลด่วนไปยังคณะสารวัตรนักเรียนและครูที่ปรึกษาโดยตรง
+                สามารถส่งข้อความแจ้งเตือนมายัง Facebook Page คณะสารวัตรนักเรียน
                 หรือสามารถแจ้งต่อนักเรียนสารวัตรที่ประจำจุดตรวจในบริเวณใกล้เคียงเพื่อเข้าตรวจสอบและระงับเหตุได้อย่างทันท่วงที
               </p>
             </div>
@@ -672,18 +657,12 @@
               <a href="#team">วิสัยทัศน์ประธาน</a>
               <a href="#calendar">ตารางกิจกรรมโรงเรียน</a>
               <a href="team.html">หน้าคณะทำงาน</a>
-              <a href="rules.html">กฎระเบียบของโรงเรียน</a>
             </div>
           </div>
 
           <div class="dg-footer-col">
             <h5>บริการออนไลน์</h5>
             <div class="dg-footer-service-list">
-              <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
-                class="dg-footer-arrow-link" title="แจ้งเหตุฉุกเฉิน (Emergency)">
-                <span>แจ้งเหตุฉุกเฉิน (Emergency)</span>
-                <i data-lucide="arrow-up-right"></i>
-              </a>
               <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
                 class="dg-footer-arrow-link" title="ร้องเรียนการทำงาน (Complaint)">
                 <span>ร้องเรียนการทำงาน (Complaint)</span>
@@ -693,10 +672,6 @@
                 class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
                 <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
                 <i data-lucide="arrow-up-right"></i>
-              </a>
-              <a href="rules.html" class="dg-footer-arrow-link" title="กฎระเบียบ (Rules)">
-                <span>กฎระเบียบ (Rules)</span>
-                <i data-lucide="arrow-right"></i>
               </a>
             </div>
           </div>
@@ -765,86 +740,111 @@
   </footer>
 
   <!-- ============ MODALS FOR ONLINE OPERATIONS ============ -->
-  <!-- 1. Emergency Modal -->
-  <div class="dg-modal-backdrop" id="emergencyModal" style="display: none;">
+  <!-- 1. Feedback & Request Modal (ป๊อปอัปสิ่งที่อยากให้สารวัตรทำ) -->
+  <div class="dg-modal-backdrop" id="feedbackModal">
     <div class="dg-modal-box">
-      <button class="dg-modal-close-btn" onclick="closeModal('emergencyModal')" aria-label="Close modal">
+      <button class="dg-modal-close-btn" onclick="closeModal('feedbackModal')" aria-label="Close modal">
         <i data-lucide="x"></i>
       </button>
       <div class="dg-modal-header">
-        <div class="dg-modal-header-icon" style="background: #fee2e2; color: #dc2626;">
-          <i data-lucide="megaphone"></i>
+        <div class="dg-modal-header-icon" style="background: #dbeafe; color: #2563eb;">
+          <i data-lucide="message-square-heart"></i>
         </div>
         <div class="dg-modal-header-text">
-          <h3>แจ้งเหตุฉุกเฉิน / พฤติกรรมไม่เหมาะสม</h3>
-          <p>ระบบแจ้งเตือนเร่งด่วนสู่ศูนย์ปฏิบัติการสารวัตรนักเรียน</p>
+          <h3>สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+          <p>ส่งความคิดเห็น เสนอแนะกิจกรรม หรือสิ่งที่อยากให้สารวัตรช่วยดูแล</p>
         </div>
       </div>
-      <form onsubmit="handleModalSubmit(event, 'ส่งข้อมูลแจ้งเหตุฉุกเฉินเรียบร้อยแล้ว ทีมสารวัตรจะเข้าตรวจสอบทันที!')">
+      <form id="feedbackForm" onsubmit="submitFeedbackForm(event)">
         <div class="dg-form-group">
-          <label>ประเภทเหตุการณ์</label>
-          <select required>
-            <option value="">-- เลือกประเภทเหตุ --</option>
-            <option value="ทะเลาะวิวาท">การทะเลาะวิวาท / ขัดแย้ง</option>
-            <option value="พฤติกรรมไม่เหมาะสม">พฤติกรรมไม่เหมาะสม / หนีเรียน</option>
-            <option value="อุบัติเหตุ">อุบัติเหตุ / อาการเจ็บป่วยกะทันหัน</option>
-            <option value="สิ่งผิดกฎระเบียบ">พกพาสิ่งผิดกฎระเบียบ / สารเสพติด</option>
-            <option value="อื่นๆ">เหตุฉุกเฉินอื่นๆ</option>
+          <label>หมวดหมู่เรื่อง</label>
+          <select id="fbCategory" required
+            style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #ffffff;">
+            <option value="สิ่งที่อยากให้สารวัตรช่วยทำ">🎯 สิ่งที่อยากให้สารวัตรช่วยทำ / จัดกิจกรรม</option>
+            <option value="ความปลอดภัย/จุดตรวจ">🛡️ เสนอแนะจุดตรวจ / ความปลอดภัย</option>
+            <option value="ข้อเสนอแนะปรับปรุงการทำงาน">⚡ ข้อเสนอแนะปรับปรุงการทำงาน</option>
+            <option value="คำชื่นชมและให้กำลังใจ">💖 คำชื่นชมและให้กำลังใจ</option>
+            <option value="อื่นๆ">📌 อื่นๆ</option>
           </select>
         </div>
         <div class="dg-form-group">
-          <label>สถานที่เกิดเหตุภายในโรงเรียน</label>
-          <input type="text" placeholder="เช่น บริเวณหลังอาคาร 3, ข้างโรงอาหาร, สนามกีฬา" required />
+          <label>หัวข้อเรื่อง</label>
+          <input type="text" id="fbTitle"
+            placeholder="เช่น อยากให้มีสารวัตรช่วยดูแลช่วงข้ามถนน, เสนอจัดกิจกรรมสัปดาห์สอบ" required />
         </div>
         <div class="dg-form-group">
-          <label>รายละเอียดเหตุการณ์</label>
-          <textarea placeholder="อธิบายสิ่งที่พบเห็น ลักษณะบุคคล หรือเวลาที่เกิดเหตุ..." required></textarea>
+          <label>จุดหรือบริเวณที่เกี่ยวข้อง (ถ้ามี)</label>
+          <input type="text" id="fbLocation" placeholder="เช่น บริเวณโรงอาหาร, ประตู 2, อาคาร 3" />
         </div>
-        <button type="submit" class="dg-modal-submit-btn" style="background: #dc2626;">
+        <div class="dg-form-group">
+          <label>รายละเอียดข้อเสนอแนะ</label>
+          <textarea id="fbDetail" rows="4" placeholder="บอกสิ่งที่คุณอยากให้ทำ หรือข้อเสนอแนะอย่างละเอียด..."
+            required></textarea>
+        </div>
+        <div class="dg-form-group">
+          <label>ชื่อผู้ส่ง หรือระดับชั้น (ระบุหรือไม่ระบุก็ได้)</label>
+          <input type="text" id="fbSender" placeholder="เช่น ตัวแทน ม.4/1 หรือเว้นว่างเพื่อส่งแบบไม่ระบุชื่อ" />
+        </div>
+        <div class="dg-form-group">
+          <label>ช่องทางติดต่อกลับ (LINE ID / เบอร์โทร ถ้าต้องการให้สารวัตรติดต่อกลับ)</label>
+          <input type="text" id="fbContact" placeholder="ไม่บังคับ กรอกเฉพาะกรณีต้องการให้ติดต่อกลับ" />
+        </div>
+        <button type="submit" id="fbSubmitBtn" class="dg-modal-submit-btn" style="background: #2563eb; color: #ffffff;">
           <i data-lucide="send"></i>
-          <span>ส่งแจ้งเหตุด่วนทันที</span>
+          <span>ส่งข้อเสนอแนะถึงสารวัตร</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- 2. Complaint Modal -->
-  <div class="dg-modal-backdrop" id="complaintModal" style="display: none;">
+  <!-- 2. Complaint & Work Report Modal (ป๊อปอัปรายงานการทำงานและข้อร้องเรียนนิรนาม) -->
+  <div class="dg-modal-backdrop" id="complaintModal">
     <div class="dg-modal-box">
       <button class="dg-modal-close-btn" onclick="closeModal('complaintModal')" aria-label="Close modal">
         <i data-lucide="x"></i>
       </button>
       <div class="dg-modal-header">
-        <div class="dg-modal-header-icon" style="background: #fef3c7; color: #d97706;">
+        <div class="dg-modal-header-icon" style="background: #fee2e2; color: #dc2626;">
           <i data-lucide="scale"></i>
         </div>
         <div class="dg-modal-header-text">
-          <h3>ร้องเรียนการทำงานและข้อเสนอแนะ</h3>
+          <h3>รายงานการทำงาน / ร้องเรียนการปฏิบัติหน้าที่</h3>
           <p>ข้อมูลทั้งหมดจะถูกปกปิดตัวตน 100% และส่งตรงถึงครูที่ปรึกษา</p>
         </div>
       </div>
-      <div
-        style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 14px; margin-bottom: 20px; font-size: 0.85rem; color: #b45309; line-height: 1.5;">
-        🛡️ ระบบรักษาความปลอดภัย: ข้อความของคุณจะไม่ระบุชื่อ หรือ IP Address
-        เพื่อให้คุณสามารถสะท้อนความจริงได้อย่างปลอดภัยและเป็นธรรม
-      </div>
-      <form
-        onsubmit="handleModalSubmit(event, 'ส่งข้อร้องเรียนถึงครูที่ปรึกษาเรียบร้อยแล้ว ขอบคุณที่ร่วมพัฒนาการทำงานของสารวัตร!')">
+      <form id="complaintForm" onsubmit="submitComplaintForm(event)">
+        <div class="dg-form-group">
+          <label>หมวดหมู่การรายงาน</label>
+          <select id="cpCategory" required
+            style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #ffffff;">
+            <option value="การใช้วาจาและมารยาท">🗣️ การใช้วาจาและมารยาทการปฏิบัติหน้าที่</option>
+            <option value="การตรวจระเบียบที่ไม่เป็นธรรม">⚖️ การตรวจระเบียบที่ไม่เป็นธรรม / สองมาตรฐาน</option>
+            <option value="การละเลยหน้าที่หรือจุดเวร">📍 การละเลยการปฏิบัติหน้าที่ / จุดตรวจ</option>
+            <option value="รายงานจุดอันตรายหรือพฤติกรรมเสี่ยง">⚠️ รายงานจุดเสี่ยงความปลอดภัยในโรงเรียน</option>
+            <option value="อื่นๆ">📌 อื่นๆ</option>
+          </select>
+        </div>
         <div class="dg-form-group">
           <label>หัวข้อเรื่อง</label>
-          <input type="text" placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบที่ไม่เป็นธรรม" required />
+          <input type="text" id="cpTitle" placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบไม่เป็นธรรม"
+            required />
         </div>
         <div class="dg-form-group">
-          <label>วันที่และจุดปฏิบัติงาน</label>
-          <input type="text" placeholder="เช่น วันจันทร์ที่ผ่านมา ประตูหน้าโรงเรียน" required />
+          <label>วันที่และจุดปฏิบัติงาน / สถานที่เกิดเหตุ</label>
+          <input type="text" id="cpLocation" placeholder="เช่น วันจันทร์ที่ผ่านมา บริเวณหน้าประตู 1" required />
         </div>
         <div class="dg-form-group">
-          <label>รายละเอียดข้อร้องเรียนหรือข้อเสนอแนะ</label>
-          <textarea placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใส..." required></textarea>
+          <label>เจ้าหน้าที่หรือสารวัตรที่เกี่ยวข้อง (ถ้าทราบ / ไม่ทราบให้เว้นว่างได้)</label>
+          <input type="text" id="cpTarget" placeholder="ระบุชื่อหรือลักษณะสารวัตรที่เกี่ยวข้อง (ไม่บังคับ)" />
         </div>
-        <button type="submit" class="dg-modal-submit-btn">
+        <div class="dg-form-group">
+          <label>รายละเอียดเหตุการณ์</label>
+          <textarea id="cpDetail" rows="4"
+            placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใสและเป็นธรรม..." required></textarea>
+        </div>
+        <button type="submit" id="cpSubmitBtn" class="dg-modal-submit-btn" style="background: #dc2626; color: #ffffff;">
           <i data-lucide="shield-check"></i>
-          <span>ส่งเรื่องร้องเรียน (นิรนาม)</span>
+          <span>ส่งรายงาน / เรื่องร้องเรียน (นิรนาม)</span>
         </button>
       </form>
     </div>
@@ -899,6 +899,80 @@
       if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+      }
+    }
+
+    async function submitFeedbackForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('fbSubmitBtn');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">⏳ กำลังบันทึกข้อมูลลงระบบ...</span>';
+      }
+
+      const payload = {
+        type: 'feedback',
+        category: document.getElementById('fbCategory')?.value || 'ทั่วไป',
+        title: (document.getElementById('fbTitle')?.value || '').trim(),
+        location: (document.getElementById('fbLocation')?.value || '').trim(),
+        detail: (document.getElementById('fbDetail')?.value || '').trim(),
+        senderName: (document.getElementById('fbSender')?.value || '').trim() || 'ไม่ระบุตัวตน (Anonymous)',
+        contact: (document.getElementById('fbContact')?.value || '').trim()
+      };
+
+      try {
+        if (window.SarawatApi) {
+          await window.SarawatApi.submitFeedback(payload);
+        }
+        alert('✨ ส่งข้อเสนอแนะถึงคณะสารวัตรนักเรียนเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลเรียบร้อยแล้ว ขอบคุณสำหรับเสียงสะท้อนเพื่อพัฒนาโรงเรียน');
+        document.getElementById('feedbackForm')?.reset();
+        closeModal('feedbackModal');
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    async function submitComplaintForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('cpSubmitBtn');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">⏳ กำลังบันทึกข้อมูลนิรนาม...</span>';
+      }
+
+      const payload = {
+        type: 'complaint',
+        category: document.getElementById('cpCategory')?.value || 'ทั่วไป',
+        title: (document.getElementById('cpTitle')?.value || '').trim(),
+        location: (document.getElementById('cpLocation')?.value || '').trim(),
+        targetPerson: (document.getElementById('cpTarget')?.value || '').trim(),
+        detail: (document.getElementById('cpDetail')?.value || '').trim(),
+        senderName: 'ไม่ระบุตัวตน (Anonymous)'
+      };
+
+      try {
+        if (window.SarawatApi) {
+          await window.SarawatApi.submitFeedback(payload);
+        }
+        alert('🛡️ ส่งข้อมูลถึงครูที่ปรึกษาสารวัตรนักเรียนเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลโดยปกปิดตัวตนของคุณ 100% ขอบคุณที่ร่วมสร้างความโปร่งใส');
+        document.getElementById('complaintForm')?.reset();
+        closeModal('complaintModal');
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+          if (window.lucide) lucide.createIcons();
+        }
       }
     }
 
