@@ -1551,6 +1551,23 @@ svg:not([data-lucide]),
   box-shadow: 0 16px 36px rgba(234, 88, 12, 0.1);
 }
 
+/* Recruitment Theme Card */
+.dg-ops-card.theme-recruit {
+  border-color: #c7d2fe;
+  background: linear-gradient(to bottom, #ffffff, #f5f3ff);
+}
+
+.dg-ops-card.theme-recruit .dg-ops-icon-box {
+  background: #ede9fe;
+  color: #6366f1;
+}
+
+.dg-ops-card.theme-recruit:hover {
+  border-color: #4f46e5;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(99, 102, 241, 0.12);
+}
+
 /* ==========================================================
    CHIEF PREFECT VISION SECTION (วิสัยทัศน์ประธานสารวัตร)
    ========================================================== */

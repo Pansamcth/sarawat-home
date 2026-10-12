@@ -738,6 +738,231 @@
       } catch (e) {}
 
       return await res.json();
+    },
+
+    // ==========================================
+    // 🛡️ RECRUITMENT APIS (ระบบรับสมัครสารวัตรนักเรียน ปีการศึกษา 2570)
+    // ==========================================
+    getRecruitmentStatus: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { isOpen: false, error: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' };
+      try {
+        const res = await fetch(`${base}/api/recruitment/status`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.error('getRecruitmentStatus error:', err);
+        return { isOpen: false, error: err.message };
+      }
+    },
+
+    getRecruitmentClubs: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { clubs: [], affiliations: [] };
+      try {
+        const res = await fetch(`${base}/api/recruitment/clubs`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.error('getRecruitmentClubs error:', err);
+        return { clubs: [], affiliations: [], error: err.message };
+      }
+    },
+
+    submitRecruitmentApplication: async function (formData) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Backend Offline)');
+      const res = await fetch(`${base}/api/recruitment/apply`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'เกิดข้อผิดพลาดในการส่งใบสมัคร');
+      return data;
+    },
+
+    checkApplicantStatus: async function (studentId) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const res = await fetch(`${base}/api/recruitment/check-status/${encodeURIComponent(studentId)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ไม่พบข้อมูลใบสมัคร');
+      return data;
+    },
+
+    unlockApplicantCorrection: async function (studentId, phone) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const res = await fetch(`${base}/api/recruitment/unlock-correction`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: studentId, phone: phone })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ยืนยันตัวตนไม่สำเร็จ');
+      return data;
+    },
+
+    submitApplicantCorrection: async function (studentId, formData) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const res = await fetch(`${base}/api/recruitment/correction/${encodeURIComponent(studentId)}`, {
+        method: 'PUT',
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'บันทึกข้อมูลแก้ไขไม่สำเร็จ');
+      return data;
+    },
+
+    // --- Admin Recruitment Methods ---
+    adminGetRecruitmentStats: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { total: 0, byStatus: {}, byGrade: {} };
+      try {
+        const res = await fetch(`${base}/api/recruitment/stats`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.error('adminGetRecruitmentStats error:', err);
+        return { total: 0, byStatus: {}, byGrade: {} };
+      }
+    },
+
+    adminGetApplicants: async function (params = {}) {
+      const base = this.getBaseUrl();
+      if (!base) return { success: false, applicants: [], total: 0 };
+      const q = new URLSearchParams();
+      if (params.search) q.set('search', params.search);
+      if (params.status) q.set('status', params.status);
+      if (params.grade) q.set('grade', params.grade);
+      if (params.club) q.set('club', params.club);
+      if (params.page) q.set('page', params.page);
+      if (params.limit) q.set('limit', params.limit);
+
+      const res = await fetch(`${base}/api/recruitment/applicants?${q.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    },
+
+    adminGetApplicantDetail: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/applicant/${id}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      return data;
+    },
+
+    adminUpdateApplicantStatus: async function (id, data) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/applicant/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const resData = await res.json();
+      if (!res.ok) throw new Error(resData.error || 'Failed');
+      return resData;
+    },
+
+    adminGetRecruitmentSettings: async function () {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/settings`);
+      return await res.json();
+    },
+
+    adminUpdateRecruitmentSettings: async function (settings) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/settings`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
+      return data;
+    },
+
+    adminGetRecruitmentClubs: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { clubs: [] };
+      const res = await fetch(`${base}/api/recruitment/admin-clubs`);
+      return await res.json();
+    },
+
+    adminCreateRecruitmentClub: async function (data) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/admin-clubs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    },
+
+    adminUpdateRecruitmentClub: async function (id, data) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/admin-clubs/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    },
+
+    adminDeleteRecruitmentClub: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('Offline');
+      const res = await fetch(`${base}/api/recruitment/admin-clubs/${id}`, {
+        method: 'DELETE'
+      });
+      return await res.json();
+    },
+
+    adminDeleteApplicant: async function (id, admin = 'Admin') {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
+      const res = await fetch(`${base}/api/recruitment/applicant/${id}?admin=${encodeURIComponent(admin)}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ลบใบสมัครไม่สำเร็จ');
+      return data;
+    },
+
+    adminClearAllApplicants: async function (admin = 'Admin') {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
+      const res = await fetch(`${base}/api/recruitment/applicants/clear`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ล้างข้อมูลผู้สมัครไม่สำเร็จ');
+      return data;
+    },
+
+    getRecruitmentExportUrl: function (format = 'xlsx', status = 'all', grade = 'all') {
+      const base = this.getBaseUrl();
+      const q = new URLSearchParams({ format, status, grade });
+      return `${base}/api/recruitment/export?${q.toString()}`;
+    },
+
+    adminGetRecruitmentLogs: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { logs: [] };
+      const res = await fetch(`${base}/api/recruitment/logs`);
+      return await res.json();
     }
   };
+
+  // Dual exports: support both window.SarawatApi and window.SarawatAPI
+  window.SarawatAPI = window.SarawatApi;
 })();

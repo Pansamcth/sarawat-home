@@ -17,12 +17,52 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- Leaflet CSS & JS for OpenStreetMap -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <!-- High-Security Database Gateway Config (with Cache-Buster) -->
-  <script src="js/api-config.js?v=2.2.0"></script>
+  <script src="js/api-config.js?v=2.7.2"></script>
   
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
     window.SarawatApi = window.SarawatApi || {};
+    window.SarawatAPI = window.SarawatApi;
+
+    window.openRecruitSettingsModal = function() {
+      const m = document.getElementById('adminRecruitSettingsModal');
+      if (m) {
+        m.classList.add('active');
+        m.style.display = 'flex';
+        m.style.opacity = '1';
+        m.style.visibility = 'visible';
+        m.style.pointerEvents = 'auto';
+        m.style.zIndex = '9500';
+        document.body.style.overflow = 'hidden';
+      }
+    };
+    window.closeRecruitSettingsModal = function() {
+      const m = document.getElementById('adminRecruitSettingsModal');
+      if (m) {
+        m.classList.remove('active');
+        m.style.display = 'none';
+        m.style.opacity = '';
+        m.style.visibility = '';
+        m.style.pointerEvents = '';
+        document.body.style.overflow = '';
+      }
+    };
+    window.closeApplicantReviewModal = function() {
+      const m = document.getElementById('adminApplicantReviewModal');
+      if (m) {
+        m.classList.remove('active');
+        m.style.display = 'none';
+        m.style.opacity = '';
+        m.style.visibility = '';
+        m.style.pointerEvents = '';
+        document.body.style.overflow = '';
+      }
+    };
     if (typeof window.SarawatApi.getBaseUrl !== 'function') {
       window.SarawatApi.getBaseUrl = function () {
         const saved = localStorage.getItem('dg_sarawat_api_url');
@@ -177,7 +217,7 @@
     }
 
     .admin-nav-inner {
-      max-width: 1280px;
+      max-width: 1560px;
       margin: 0 auto;
       padding: 16px 24px;
       display: flex;
@@ -186,94 +226,215 @@
       gap: 16px;
     }
 
-    .admin-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--dg-text-primary);
-    }
-
-    .admin-brand img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
-
-    .admin-brand-text {
-      font-family: var(--dg-font-sans);
-      font-weight: 850;
-      font-size: 1.1rem;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .admin-badge {
-      background: #0f172a;
-      color: #ffffff;
-      font-size: 0.68rem;
-      font-weight: 750;
-      padding: 2px 8px;
-      border-radius: 4px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .admin-nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
     .admin-main {
-      max-width: 1280px;
+      max-width: 1560px;
       width: 100%;
       margin: 0 auto;
-      padding: 36px 24px 80px;
+      padding: 28px 24px 80px;
       flex: 1;
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 28px;
+      align-items: start;
     }
 
-    /* Tabs Bar */
-    .admin-tabs {
+    /* Sticky Sidebar Navigation (Side Menu) */
+    .admin-sidebar {
+      position: sticky;
+      top: 86px;
+      max-height: calc(100vh - 105px);
+      overflow-y: auto;
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 16px;
+      padding: 18px 14px;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
       display: flex;
-      gap: 10px;
-      border-bottom: 1px solid var(--dg-border);
-      margin-bottom: 32px;
-      overflow-x: auto;
-      padding-bottom: 2px;
+      flex-direction: column;
+      gap: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+      z-index: 50;
     }
 
-    .admin-tab-btn {
-      background: none;
-      border: none;
-      padding: 12px 20px;
-      font-family: var(--dg-font-sans);
-      font-size: 0.95rem;
-      font-weight: 750;
-      color: var(--dg-text-muted);
-      cursor: pointer;
+    .admin-sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .admin-sidebar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .admin-sidebar-header {
+      padding: 2px 8px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-sidebar-tag {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s ease;
+      font-size: 0.72rem;
+      font-weight: 850;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .admin-sidebar-tag i,
+    .admin-sidebar-tag svg {
+      width: 15px;
+      height: 15px;
+      color: #2563eb;
+    }
+
+    .admin-sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .admin-nav-group-title {
+      font-size: 0.68rem;
+      font-weight: 850;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 10px 10px 4px;
+    }
+
+    .admin-tab-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 10px 12px;
+      font-family: var(--dg-font-sans);
+      font-size: 0.88rem;
+      font-weight: 750;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-radius: 10px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: left;
+    }
+
+    .admin-tab-btn-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .admin-tab-btn-content span {
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .admin-tab-btn svg,
+    .admin-tab-btn i {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      color: #64748b;
+      transition: color 0.2s ease;
     }
 
     .admin-tab-btn:hover {
-      color: var(--dg-text-primary);
+      background: #f1f5f9;
+      color: #0f172a;
+      transform: translateX(3px);
+    }
+
+    .admin-tab-btn:hover svg,
+    .admin-tab-btn:hover i {
+      color: #0f172a;
     }
 
     .admin-tab-btn.active {
-      color: var(--dg-black);
-      border-bottom-color: var(--dg-black);
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
     }
 
-    .admin-tab-btn svg {
-      width: 18px;
-      height: 18px;
+    .admin-tab-btn.active svg,
+    .admin-tab-btn.active i {
+      color: #ffffff;
+    }
+
+    .admin-tab-btn.active .admin-badge {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    #tabBtnAdminUsers[style*="inline-flex"],
+    #tabBtnAdminUsers[style*="flex"] {
+      display: flex !important;
+      width: 100% !important;
+    }
+
+    .admin-sidebar-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .admin-sidebar-status-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .admin-content-area {
+      min-width: 0;
+      width: 100%;
+    }
+
+    @media (max-width: 1024px) {
+      .admin-main {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .admin-sidebar {
+        position: sticky;
+        top: 72px;
+        z-index: 80;
+        max-height: none;
+        padding: 10px 12px;
+        border-radius: 12px;
+      }
+
+      .admin-sidebar-header,
+      .admin-sidebar-footer,
+      .admin-nav-group-title {
+        display: none;
+      }
+
+      .admin-sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 6px;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+      }
+      .admin-sidebar-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .admin-tab-btn {
+        width: auto;
+        flex-shrink: 0;
+        padding: 8px 14px;
+      }
     }
 
     /* Tab Content Panes */
@@ -297,6 +458,8 @@
         transform: translateY(0);
       }
     }
+
+
 
     .admin-section-header {
       display: flex;
@@ -416,6 +579,7 @@
       margin: 0 0 14px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
       flex: 1;
@@ -993,6 +1157,422 @@
         display: none;
       }
     }
+
+    /* ==========================================================
+       RECRUITMENT ADMIN SYSTEM STYLES (Diego Swiss Minimalist)
+       ========================================================== */
+    .recruit-nav-tabs {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 9999px;
+      gap: 4px;
+      margin-bottom: 24px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .recruit-tab-btn {
+      background: transparent;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: inherit;
+    }
+
+    .recruit-tab-btn:hover {
+      color: #0f172a;
+    }
+
+    .recruit-tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      font-weight: 800;
+    }
+
+    /* Grid Form Layout */
+    .recruit-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .col-12 { grid-column: span 12; }
+    .col-8  { grid-column: span 8; }
+    .col-6  { grid-column: span 6; }
+    .col-5  { grid-column: span 5; }
+    .col-4  { grid-column: span 4; }
+    .col-3  { grid-column: span 3; }
+
+    @media (max-width: 768px) {
+      .col-8, .col-6, .col-5, .col-4, .col-3 {
+        grid-column: span 12;
+      }
+    }
+
+    /* Form Inputs & Labels */
+    .recruit-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .recruit-label {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+    }
+
+    .recruit-label .req {
+      color: #ef4444;
+      margin-left: 2px;
+    }
+
+    .recruit-input,
+    .recruit-select {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      font-size: 0.92rem;
+      font-family: inherit;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    textarea.recruit-input {
+      height: auto;
+      min-height: 110px;
+      padding: 12px 14px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .recruit-input:focus,
+    .recruit-select:focus {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+      background: #ffffff;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .status-badge.pending {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .status-badge.reviewing {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .status-badge.approved {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .status-badge.rejected {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .status-badge.correction_needed {
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
+    /* ========================================================
+       APPLICANT REVIEW MODAL - PREMIUM SWISS AGENCY DESIGN
+       ======================================================== */
+    .app-review-modal-box {
+      max-width: 880px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 30px 80px -15px rgba(15, 23, 42, 0.28);
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+      animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.97) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .app-review-modal-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    .app-review-modal-box::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+
+    .app-review-header {
+      padding: 22px 28px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    .app-review-hero {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 24px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    @media (max-width: 700px) {
+      .app-review-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .app-review-photo-wrapper {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.15);
+      border: 3px solid #ffffff;
+      background: #e2e8f0;
+      aspect-ratio: 3/4;
+      max-height: 240px;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 190px;
+    }
+
+    .app-review-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .app-review-photo-zoom {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 5px 9px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .app-review-photo-zoom:hover {
+      background: rgba(15, 23, 42, 0.95);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Bento Mini Cards */
+    .app-review-bento {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .app-review-bento {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .app-bento-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+    }
+
+    .app-bento-card:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+
+    .app-bento-card.highlight {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border-color: #bbf7d0;
+    }
+
+    .app-bento-card.highlight-blue {
+      background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+      border-color: #bfdbfe;
+    }
+
+    .app-bento-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .app-bento-card.highlight .app-bento-icon {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .app-bento-card.highlight-blue .app-bento-icon {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .app-bento-label {
+      font-size: 0.74rem;
+      font-weight: 750;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .app-bento-value {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    /* Decision Panel Deck */
+    .app-decision-panel {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 6px 24px -4px rgba(15, 23, 42, 0.04);
+    }
+
+    .app-decision-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Modern Timeline */
+    .app-timeline-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .app-timeline-list {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .app-timeline-list::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: #cbd5e1;
+    }
+
+    .app-timeline-item {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .app-timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .app-timeline-dot {
+      position: absolute;
+      left: -28px;
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3.5px solid #0f172a;
+      box-sizing: border-box;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.06);
+    }
   </style>
 </head>
 
@@ -1221,40 +1801,94 @@
 
   <!-- ============ MAIN DASHBOARD ============ -->
   <main class="admin-main">
-    <!-- Tabs Header -->
-    <div class="admin-tabs">
-      <button type="button" class="admin-tab-btn active" data-tab="tab-news">
-        <i data-lucide="newspaper"></i>
-        <span>ข่าวสารและกิจกรรม</span>
-      </button>
-      <button type="button" class="admin-tab-btn" data-tab="tab-calendar">
-        <i data-lucide="calendar"></i>
-        <span>ตารางกิจกรรมโรงเรียน</span>
-      </button>
-      <button type="button" class="admin-tab-btn" data-tab="tab-feedbacks" id="tabBtnFeedbacks">
-        <i data-lucide="inbox"></i>
-        <span>กล่องข้อความ & Feedback</span>
-        <span id="feedbackCounterBadge" class="admin-badge" style="background: #2563eb; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
-      </button>
-      <button type="button" class="admin-tab-btn" data-tab="tab-settings">
-        <i data-lucide="sliders"></i>
-        <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
-      </button>
-      <button type="button" class="admin-tab-btn" data-tab="tab-backup">
-        <i data-lucide="hard-drive"></i>
-        <span>สำรอง & นำเข้าข้อมูล (JSON)</span>
-      </button>
+    <!-- Sticky Sidebar Navigation (Side Menu) -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-sidebar-tag">
+          <i data-lucide="layout-grid"></i>
+          <span>ระบบจัดการหลัก</span>
+        </div>
+        <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Admin Menu</span>
+      </div>
 
-          <button type="button" class="admin-tab-btn" data-tab="tab-team"> 
-            <i data-lucide="users"></i> <span>จัดการคณะทำงาน</span> 
-          </button>
+      <nav class="admin-sidebar-nav">
+        <!-- หมวดหมู่ที่ 1: หน้าหลักและกิจกรรม -->
+        <div class="admin-nav-group-title">หน้าหลัก & กิจกรรม</div>
+        <button type="button" class="admin-tab-btn active" data-tab="tab-news">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="newspaper"></i>
+            <span>ข่าวสารและกิจกรรม</span>
+          </div>
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-calendar">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="calendar"></i>
+            <span>ตารางกิจกรรมโรงเรียน</span>
+          </div>
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-team">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="users"></i>
+            <span>จัดการคณะทำงาน</span>
+          </div>
+        </button>
 
-      <button type="button" class="admin-tab-btn" id="tabBtnAdminUsers" data-tab="tab-admins" style="display: none;">
-        <i data-lucide="users"></i>
-        <span>จัดการผู้ดูแลระบบ (Admin Users)</span>
-        <span class="admin-role-badge super" style="font-size: 0.65rem; padding: 1px 6px; margin-left: 4px;">👑 Super Admin</span>
-      </button>
-    </div>
+        <!-- หมวดหมู่ที่ 2: งานรับสมัคร & รับเรื่อง -->
+        <div class="admin-nav-group-title" style="margin-top: 8px;">งานรับสมัคร & รับเรื่อง</div>
+        <button type="button" class="admin-tab-btn" data-tab="tab-recruitment">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="user-plus"></i>
+            <span>รับสมัครสารวัตร</span>
+          </div>
+          <span class="admin-badge" id="recruitmentCounterBadge" style="background: #2563eb; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-feedbacks" id="tabBtnFeedbacks">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="inbox"></i>
+            <span>กล่องข้อความ & Feedback</span>
+          </div>
+          <span id="feedbackCounterBadge" class="admin-badge" style="background: #2563eb; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
+        </button>
+
+        <!-- หมวดหมู่ที่ 3: ระบบ & การตั้งค่า -->
+        <div class="admin-nav-group-title" style="margin-top: 8px;">ระบบ & การตั้งค่า</div>
+        <button type="button" class="admin-tab-btn" data-tab="tab-settings">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="sliders"></i>
+            <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
+          </div>
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-backup">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="hard-drive"></i>
+            <span>สำรอง & นำเข้า (JSON)</span>
+          </div>
+        </button>
+        <button type="button" class="admin-tab-btn" id="tabBtnAdminUsers" data-tab="tab-admins" style="display: none;">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="shield-check"></i>
+            <span>จัดการผู้ดูแลระบบ</span>
+          </div>
+          <span class="admin-role-badge super" style="font-size: 0.62rem; padding: 1px 6px;">👑 Super</span>
+        </button>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-sidebar-status-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-size: 0.72rem; font-weight: 750; color: #64748b;">โหมดทำงาน</span>
+            <span style="display: inline-flex; width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+          </div>
+          <div style="font-size: 0.78rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="shield" style="width: 13px; height: 13px; color: #2563eb;"></i>
+            <span>แผงควบคุมระบบหลัก</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area with all Panes -->
+    <div class="admin-content-area">
 
     <!-- ==========================================
          TAB 1: NEWS & ACTIVITIES
@@ -1862,6 +2496,536 @@
         </div>
       </div>
     </div>
+
+    <!-- ==========================================
+         TAB: RECRUITMENT MANAGEMENT (ประจำปีการศึกษา 2570)
+         ========================================== -->
+    <div class="admin-pane" id="tab-recruitment" style="display: none;">
+      <!-- Recruitment Pane Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--dg-border);">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <span class="dg-section-tag" style="margin: 0;">RECRUITMENT 2570 • รับสมัครสารวัตร</span>
+            <span class="schedule-badge-status open" id="adminRecruitStatusPill" style="padding: 2px 10px; font-size: 0.75rem;">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>
+              <span id="txtAdminRecruitStatus">เปิดรับสมัคร</span>
+            </span>
+          </div>
+          <h2 style="font-size: 1.55rem; font-weight: 850; color: #0f172a; margin: 0;">
+            ระบบจัดการรับสมัครสารวัตรนักเรียน 2570
+          </h2>
+          <p style="font-size: 0.88rem; color: #64748b; margin: 4px 0 0;">
+            ตรวจสอบรายชื่อผู้สมัคร พิจารณาผลการคัดเลือก กำหนดเกณฑ์ และจัดการโควตาสังกัด
+          </p>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="btn-step-prev" id="btnToggleRecruitmentOpen" style="padding: 8px 16px; font-size: 0.85rem;">
+            <i data-lucide="power" style="width: 15px; height: 15px;"></i>
+            <span id="txtBtnToggleRecruit">สลับสถานะเปิด/ปิด</span>
+          </button>
+
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="photo-btn-select" id="btnExportRecruitXlsx" style="padding: 8px 16px; font-size: 0.85rem; background: #ecfdf5; border-color: #a7f3d0; color: #065f46;">
+              <i data-lucide="sheet" style="width: 15px; height: 15px;"></i>
+              <span>ส่งออก Excel (.xlsx)</span>
+            </button>
+            <button type="button" class="photo-btn-select" id="btnExportRecruitCsv" style="padding: 8px 16px; font-size: 0.85rem;">
+              <i data-lucide="file-text" style="width: 15px; height: 15px;"></i>
+              <span>CSV</span>
+            </button>
+          </div>
+
+          <button type="button" class="btn-step-prev" id="btnWipeAllApplicants" style="padding: 8px 16px; font-size: 0.85rem; color: #ef4444; border-color: #fca5a5; background: #fff1f2; display: inline-flex; align-items: center; gap: 6px;" title="ลบฐานข้อมูลผู้สมัครทั้งหมด">
+            <i data-lucide="trash-2" style="width: 15px; height: 15px; color: #ef4444;"></i>
+            <span>ล้างข้อมูลทั้งหมด</span>
+          </button>
+
+          <button type="button" class="dg-btn-black" id="btnOpenRecruitSettings" onclick="openRecruitSettingsModal()" style="padding: 9px 20px; font-size: 0.88rem; cursor: pointer;">
+            <i data-lucide="sliders" style="width: 16px; height: 16px;"></i>
+            <span>ตั้งค่าระบบ & โควตา</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards Row -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 24px;">
+        <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 14px; padding: 18px 16px; text-align: left;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">ผู้สมัครทั้งหมด</div>
+          <div style="font-size: 1.7rem; font-weight: 900; color: #0f172a;" id="statTotalApplicants">0</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #fde68a; border-radius: 14px; padding: 18px 16px; text-align: left;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #b45309; margin-bottom: 4px;">รอการตรวจสอบ</div>
+          <div style="font-size: 1.7rem; font-weight: 900; color: #d97706;" id="statPendingApplicants">0</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #bfdbfe; border-radius: 14px; padding: 18px 16px; text-align: left;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #1d4ed8; margin-bottom: 4px;">กำลังตรวจสอบ</div>
+          <div style="font-size: 1.7rem; font-weight: 900; color: #2563eb;" id="statReviewingApplicants">0</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #a7f3d0; border-radius: 14px; padding: 18px 16px; text-align: left;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #047857; margin-bottom: 4px;">ผ่านการคัดเลือก</div>
+          <div style="font-size: 1.7rem; font-weight: 900; color: #10b981;" id="statApprovedApplicants">0</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #fed7aa; border-radius: 14px; padding: 18px 16px; text-align: left;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #c2410c; margin-bottom: 4px;">รอแก้ไขข้อมูล</div>
+          <div style="font-size: 1.7rem; font-weight: 900; color: #ea580c;" id="statCorrectionApplicants">0</div>
+        </div>
+        <div style="background: #ffffff; border: 1px solid #fecaca; border-radius: 14px; padding: 18px 16px; text-align: left;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #b91c1c; margin-bottom: 4px;">ไม่ผ่านการคัดเลือก</div>
+          <div style="font-size: 1.7rem; font-weight: 900; color: #ef4444;" id="statRejectedApplicants">0</div>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 16px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px;">
+          <div style="position: relative; width: 100%; max-width: 320px;">
+            <input type="text" id="adminApplicantSearch" class="recruit-input" placeholder="ค้นหา: รหัสนักเรียน, เลขอ้างอิง, ชื่อ..." style="height: 40px; padding-left: 36px;" />
+            <i data-lucide="search" style="position: absolute; left: 12px; top: 12px; width: 16px; height: 16px; color: #94a3b8;"></i>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <select id="adminFilterStatus" class="recruit-select" style="height: 40px; width: 160px; font-size: 0.85rem;">
+            <option value="all">ทุกสถานะ</option>
+            <option value="pending">รอการตรวจสอบ</option>
+            <option value="reviewing">กำลังตรวจสอบ</option>
+            <option value="approved">ผ่านการคัดเลือก</option>
+            <option value="correction_needed">รอแก้ไขข้อมูล</option>
+            <option value="rejected">ไม่ผ่านการคัดเลือก</option>
+          </select>
+
+          <select id="adminFilterGrade" class="recruit-select" style="height: 40px; width: 130px; font-size: 0.85rem;">
+            <option value="all">ทุกระดับชั้น</option>
+            <option value="ม.4">ม.4</option>
+            <option value="ม.5">ม.5</option>
+          </select>
+
+          <button type="button" class="btn-step-prev" id="btnResetApplicantFilters" style="padding: 8px 16px; font-size: 0.82rem; height: 40px;">
+            <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+            <span>รีเซ็ต</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Applicant Data Table -->
+      <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1px solid var(--dg-border); color: #475569; font-weight: 750;">
+                <th style="padding: 14px 16px;">เลขอ้างอิง</th>
+                <th style="padding: 14px 16px;">รูปถ่าย</th>
+                <th style="padding: 14px 16px;">รหัส นร.</th>
+                <th style="padding: 14px 16px;">ชื่อ - สกุล</th>
+                <th style="padding: 14px 16px;">ระดับชั้น</th>
+                <th style="padding: 14px 16px;">GPAX</th>
+                <th style="padding: 14px 16px;">ชุมนุม</th>
+                <th style="padding: 14px 16px;">สถานะ</th>
+                <th style="padding: 14px 16px; text-align: right;">การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="adminApplicantsTableBody">
+              <tr>
+                <td colspan="9" style="padding: 40px; text-align: center; color: #94a3b8;">
+                  กำลังโหลดข้อมูลใบสมัคร...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div style="padding: 14px 20px; border-top: 1px solid var(--dg-border); display: flex; align-items: center; justify-content: space-between; font-size: 0.84rem; color: #64748b;">
+          <div id="adminApplicantPaginationMeta">แสดง 0 รายการ</div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-step-prev" id="btnPrevPageApplicant" style="padding: 6px 14px; font-size: 0.8rem; height: 34px;" disabled>
+              หน้าก่อนหน้า
+            </button>
+            <button type="button" class="btn-step-prev" id="btnNextPageApplicant" style="padding: 6px 14px; font-size: 0.8rem; height: 34px;" disabled>
+              หน้าถัดไป
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL: APPLICANT REVIEW & STATUS DECISION
+         ========================================== -->
+    <div class="dg-modal-backdrop" id="adminApplicantReviewModal" style="display: none; z-index: 9500;" onclick="if(event.target === this) closeApplicantReviewModal()">
+      <div class="app-review-modal-box">
+        <!-- Sticky Modern Header -->
+        <div class="app-review-header">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.22); flex-shrink: 0;">
+              <i data-lucide="file-badge-2" style="width: 22px; height: 22px;"></i>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h3 style="font-size: 1.25rem; font-weight: 850; color: #0f172a; margin: 0; letter-spacing: -0.02em;">
+                  รายละเอียดและพิจารณาใบสมัคร
+                </h3>
+                <span id="mdlAppHeaderStatusBadge" class="status-badge pending" style="font-size: 0.74rem; padding: 2px 10px;">
+                  -
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; font-size: 0.82rem; color: #64748b; flex-wrap: wrap;">
+                <span>เลขอ้างอิง: <strong id="mdlAppCode" style="color: #0f172a; font-family: monospace; font-size: 0.88rem; background: #f1f5f9; padding: 2px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">-</strong></span>
+                <span>•</span>
+                <span>ส่งเมื่อ: <span id="mdlAppSubmittedAt" style="color: #334155; font-weight: 700;">-</span></span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="dg-modal-close" id="btnCloseApplicantReview" onclick="closeApplicantReviewModal()" style="width: 38px; height: 38px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer; color: #475569; transition: all 0.15s ease;">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+
+        <div style="padding: 24px 28px;">
+          <!-- Hero Profile Card -->
+          <div class="app-review-hero">
+            <!-- Left: Photo Frame -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+              <div class="app-review-photo-wrapper">
+                <img id="mdlAppPhoto" src="" alt="รูปถ่ายผู้สมัคร" />
+                <a id="mdlAppPhotoLink" href="#" target="_blank" class="app-review-photo-zoom" title="เปิดดูรูปขนาดเต็ม">
+                  <i data-lucide="external-link" style="width: 12px; height: 12px;"></i>
+                  <span>ดูรูปเต็ม</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Right: Identity & Bento Grid -->
+            <div>
+              <div style="font-size: 1.55rem; font-weight: 850; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.25;" id="mdlAppName">-</div>
+
+              <!-- Meta Pill Group -->
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #0f172a; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 750;">
+                  <i data-lucide="id-card" style="width: 13px; height: 13px;"></i>
+                  <span>รหัส นร. <strong id="mdlAppStudentId" style="color: #38bdf8;">-</strong></span>
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #e2e8f0; color: #1e293b; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 750;">
+                  <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
+                  <span>ชั้น <strong id="mdlAppGradeRoom">-</strong></span>
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 800;">
+                  <i data-lucide="award" style="width: 13px; height: 13px;"></i>
+                  <span>GPAX <strong id="mdlAppGpax">-</strong></span>
+                </span>
+              </div>
+
+              <!-- Bento Info Grid -->
+              <div class="app-review-bento">
+                <!-- Club Selection (Highlight) -->
+                <div class="app-bento-card highlight-blue" style="grid-column: span 2;">
+                  <div class="app-bento-icon">
+                    <i data-lucide="flag" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <div style="flex: 1;">
+                    <div class="app-bento-label">ชุมนุมที่เลือก (ปีการศึกษา 2570)</div>
+                    <div class="app-bento-value" id="mdlAppClub" style="color: #1e3a8a; font-size: 1.02rem;">-</div>
+                  </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="app-bento-card">
+                  <div class="app-bento-icon">
+                    <i data-lucide="phone-call" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <div>
+                    <div class="app-bento-label">เบอร์โทรศัพท์ติดต่อ</div>
+                    <div class="app-bento-value">
+                      <a id="mdlAppPhoneLink" href="#" style="color: #0f172a; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                        <span id="mdlAppPhone">-</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Submission Time -->
+                <div class="app-bento-card">
+                  <div class="app-bento-icon">
+                    <i data-lucide="clock" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <div>
+                    <div class="app-bento-label">วันที่ส่งใบสมัคร</div>
+                    <div class="app-bento-value" id="mdlAppCreated" style="font-size: 0.88rem; color: #334155;">-</div>
+                  </div>
+                </div>
+
+                <!-- Address -->
+                <div class="app-bento-card" style="grid-column: span 2;">
+                  <div class="app-bento-icon">
+                    <i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <div style="flex: 1;">
+                    <div class="app-bento-label">ที่อยู่ปัจจุบัน (Text Only)</div>
+                    <div class="app-bento-value" id="mdlAppAddress" style="font-size: 0.9rem; font-weight: 600; color: #334155; line-height: 1.5;">-</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Decision Deck -->
+          <div class="app-decision-panel">
+            <div class="app-decision-header">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+                  <i data-lucide="gavel" style="width: 16px; height: 16px;"></i>
+                </div>
+                <div>
+                  <h4 style="font-size: 1.02rem; font-weight: 850; color: #0f172a; margin: 0;">
+                    บันทึกผลการพิจารณาใบสมัคร
+                  </h4>
+                  <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                    กำหนดสถานะใบสมัคร และระบุหมายเหตุเพื่อบันทึกลงระบบประวัติ
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 16px;">
+              <div class="recruit-form-group">
+                <label class="recruit-label">
+                  <span>สถานะใบสมัคร <span class="req">*</span></span>
+                </label>
+                <select id="mdlSelectStatus" class="recruit-select" style="font-weight: 700; height: 46px;">
+                  <option value="pending">⏳ รอการตรวจสอบ (Pending)</option>
+                  <option value="reviewing">🔍 กำลังตรวจสอบ (Reviewing)</option>
+                  <option value="approved">✅ ผ่านการคัดเลือก (Approved)</option>
+                  <option value="rejected">❌ ไม่ผ่านการคัดเลือก (Rejected)</option>
+                  <option value="correction_needed">⚠️ รอแก้ไขข้อมูล (Correction Needed)</option>
+                </select>
+              </div>
+
+              <div class="recruit-form-group">
+                <label class="recruit-label">
+                  <span>หมายเหตุภายใน (คณะกรรมการ)</span>
+                </label>
+                <input type="text" id="mdlAdminNotes" class="recruit-input" style="height: 46px;" placeholder="เช่น สัมภาษณ์ผ่าน, เอกสารครบถ้วน" />
+              </div>
+            </div>
+
+            <!-- Correction note box (shown when correction_needed selected) -->
+            <div id="mdlCorrectionNoteGroup" style="display: none; margin-bottom: 16px;">
+              <div style="background: #fffbeb; border: 1.5px solid #fed7aa; border-radius: 14px; padding: 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; color: #c2410c; margin-bottom: 8px; font-size: 0.88rem;">
+                  <i data-lucide="alert-triangle" style="width: 16px; height: 16px;"></i>
+                  <span>ข้อความแจ้งให้นักเรียนแก้ไขข้อมูล (จะแสดงผลในหน้าตรวจสอบสถานะของนักเรียน) *</span>
+                </div>
+                <textarea id="mdlCorrectionNote" class="recruit-input" style="height: 80px; padding: 10px 14px; background: #ffffff; border-color: #fdba74;" placeholder="ระบุสิ่งที่ต้องการให้ผู้สมัครแก้ไขอย่างชัดเจน เช่น รูปถ่ายไม่ชัดเจน หรือที่อยู่ไม่ครบถ้วน"></textarea>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+              <button type="button" class="btn-step-prev" id="btnDeleteCurrentApplicant" style="padding: 10px 18px; font-size: 0.88rem; height: 44px; border-radius: 10px; color: #ef4444; border-color: #fca5a5; background: #fff1f2; display: inline-flex; align-items: center; gap: 6px;">
+                <i data-lucide="trash-2" style="width: 16px; height: 16px; color: #ef4444;"></i>
+                <span>ลบใบสมัครนี้</span>
+              </button>
+
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button type="button" class="btn-step-prev" onclick="closeApplicantReviewModal()" style="padding: 10px 20px; font-size: 0.88rem; height: 44px; border-radius: 10px;">
+                  <span>ปิดหน้าต่าง</span>
+                </button>
+                <button type="button" class="dg-btn-black" id="btnSaveApplicantDecision" style="padding: 10px 26px; font-size: 0.92rem; height: 44px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);">
+                  <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                  <span>บันทึกผลการพิจารณา</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status History Log (Audit Trail) -->
+          <div class="app-timeline-box">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+              <i data-lucide="history" style="width: 16px; height: 16px; color: #64748b;"></i>
+              <h4 style="font-size: 0.95rem; font-weight: 850; color: #334155; margin: 0;">
+                ประวัติการเปลี่ยนแปลงสถานะ (Audit Trail)
+              </h4>
+            </div>
+            <div id="mdlStatusHistoryTimeline">
+              กำลังโหลดประวัติ...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL: RECRUITMENT SETTINGS & CLUBS
+         ========================================== -->
+    <div class="dg-modal-backdrop" id="adminRecruitSettingsModal" style="display: none; z-index: 9500;" onclick="if(event.target === this) closeRecruitSettingsModal()">
+      <div class="dg-modal-box" style="max-width: 860px; max-height: 90vh; overflow-y: auto;">
+        <div class="dg-modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 34px; height: 34px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #0f172a;">
+              <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
+            </div>
+            <h3 style="font-size: 1.2rem; font-weight: 850; color: #0f172a; margin: 0;">
+              ตั้งค่าระบบรับสมัครและจัดการโควตา (ปี 2570)
+            </h3>
+          </div>
+          <button type="button" class="dg-modal-close" id="btnCloseRecruitSettings" onclick="closeRecruitSettingsModal()">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div style="padding: 24px;">
+          <!-- Tabs inside settings modal -->
+          <div class="recruit-nav-tabs" style="margin-bottom: 20px;">
+            <button type="button" class="recruit-tab-btn active" id="tabBtnSetGeneral" onclick="switchRecruitSettingsTab('gen')">
+              <span>ทั่วไป & กำหนดการ</span>
+            </button>
+            <button type="button" class="recruit-tab-btn" id="tabBtnSetClubs" onclick="switchRecruitSettingsTab('clubs')">
+              <span>จัดการชุมนุม & โควตา</span>
+            </button>
+            <button type="button" class="recruit-tab-btn" id="tabBtnSetLogs" onclick="switchRecruitSettingsTab('logs')">
+              <span>Audit Log</span>
+            </button>
+          </div>
+
+          <!-- PANE 1: GENERAL SETTINGS -->
+          <div id="setPaneGeneral">
+            <div class="recruit-grid">
+              <div class="col-4">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">ปีการศึกษา</label>
+                  <input type="text" id="cfgAcademicYear" class="recruit-input" value="2570" />
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">เกณฑ์ GPAX ขั้นต่ำ</label>
+                  <input type="number" step="0.01" min="0" max="4.00" id="cfgMinGpax" class="recruit-input" value="2.50" />
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">ระดับชั้นที่เปิดรับ</label>
+                  <input type="text" id="cfgAllowedGrades" class="recruit-input" value="ม.4,ม.5" />
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">วัน-เวลาเปิดรับสมัคร (อัตโนมัติ)</label>
+                  <input type="datetime-local" id="cfgStartDatetime" class="recruit-input" />
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">วัน-เวลาปิดรับสมัคร (อัตโนมัติ)</label>
+                  <input type="datetime-local" id="cfgEndDatetime" class="recruit-input" />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">ข้อความประกาศหน้าเว็บ</label>
+                  <input type="text" id="cfgAnnouncementText" class="recruit-input" placeholder="ข้อความแจ้งเตือนสำคัญ" />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">ข้อความประกาศนโยบายความเป็นส่วนตัว (PDPA)</label>
+                  <textarea id="cfgPdpaContent" class="recruit-input" style="height: 120px; padding: 10px 12px;"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div style="text-align: right; margin-top: 20px;">
+              <button type="button" class="dg-btn-black" id="btnSaveGeneralSettings" style="padding: 10px 24px;">
+                <span>บันทึกการตั้งค่า</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- PANE 2: CLUBS & AFFILIATIONS MANAGER -->
+          <div id="setPaneClubs" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0;">
+                รายชื่อชุมนุมและโควตาที่เปิดรับ
+              </h4>
+              <button type="button" class="dg-btn-black" id="btnAddNewClubRow" style="padding: 6px 14px; font-size: 0.8rem;">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                <span>เพิ่มรายการ</span>
+              </button>
+            </div>
+
+            <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #475569;">
+                    <th style="padding: 10px 14px;">ประเภท</th>
+                    <th style="padding: 10px 14px;">ชื่อรายการ</th>
+                    <th style="padding: 10px 14px;">โควตา (คน)</th>
+                    <th style="padding: 10px 14px;">ยอดสมัคร</th>
+                    <th style="padding: 10px 14px; text-align: right;">การกระทำ</th>
+                  </tr>
+                </thead>
+                <tbody id="tblAdminClubsBody">
+                  <tr><td colspan="5" style="padding: 20px; text-align: center; color: #94a3b8;">กำลังโหลด...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Add/Edit Club Form Box (hidden by default) -->
+            <div id="boxAddClubForm" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px;">
+              <h5 style="font-size: 0.92rem; font-weight: 800; color: #0f172a; margin: 0 0 12px;" id="txtAddClubFormTitle">
+                เพิ่มรายการใหม่
+              </h5>
+              <div class="recruit-grid">
+                <input type="hidden" id="inpNewClubType" value="club" />
+                <div class="col-8">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label">ชื่อชุมนุม</label>
+                    <input type="text" id="inpNewClubName" class="recruit-input" style="height: 38px;" placeholder="เช่น ชุมนุมสารวัตรนักเรียนฝ่ายจราจรและความปลอดภัย" />
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label">โควตา (0=ไม่จำกัด)</label>
+                    <input type="number" id="inpNewClubQuota" class="recruit-input" style="height: 38px;" value="15" min="0" />
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px;">
+                <button type="button" class="btn-step-prev" id="btnCancelAddClub" style="padding: 6px 14px; font-size: 0.8rem; height: 34px;">ยกเลิก</button>
+                <button type="button" class="dg-btn-black" id="btnSaveNewClub" style="padding: 6px 18px; font-size: 0.8rem; height: 34px;">บันทึก</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 3: AUDIT LOGS -->
+          <div id="setPaneLogs" style="display: none;">
+            <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; max-height: 400px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #475569;">
+                    <th style="padding: 8px 12px;">วันเวลา</th>
+                    <th style="padding: 8px 12px;">ผู้ดำเนินการ</th>
+                    <th style="padding: 8px 12px;">การกระทำ</th>
+                    <th style="padding: 8px 12px;">เป้าหมาย</th>
+                    <th style="padding: 8px 12px;">รายละเอียด</th>
+                  </tr>
+                </thead>
+                <tbody id="tblAdminLogsBody">
+                  <tr><td colspan="5" style="padding: 20px; text-align: center; color: #94a3b8;">กำลังโหลด Log...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /.admin-content-area -->
   </main>
 
   <!-- ==========================================
@@ -5289,6 +6453,9 @@
       renderAdminFeedbacks();
       initSettings();
       syncFromBackend();
+      if (typeof loadRecruitmentAdmin === 'function') {
+        loadRecruitmentAdmin();
+      }
     }
 
     function setupTabs() {
@@ -5304,7 +6471,11 @@
             if (paneId === 'tab-feedbacks') {
               renderAdminFeedbacks();
             }
+            if (paneId === 'tab-recruitment' && typeof loadRecruitmentAdmin === 'function') {
+              loadRecruitmentAdmin();
+            }
           }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           if (window.lucide) lucide.createIcons();
         });
       });
@@ -5319,6 +6490,7 @@
     });
   </script>
   <script src="js/admin-team.js"></script>
+  <script src="js/admin-recruitment.js?v=2.7.4"></script>
 </body>
 
 </html>
