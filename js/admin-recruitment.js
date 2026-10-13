@@ -545,8 +545,45 @@
       const corrGroup = document.getElementById('mdlCorrectionNoteGroup');
       corrGroup.style.display = a.status === 'correction_needed' ? 'block' : 'none';
 
+      const boxEditLink = document.getElementById('boxCorrectionEditLink');
+      const inpDirectLink = document.getElementById('inpCorrectionDirectLink');
+      const btnOpenPage = document.getElementById('btnOpenCorrectionPage');
+      const btnCopyLink = document.getElementById('btnCopyCorrectionLink');
+
+      const updateCorrectionLinkUI = () => {
+        if (boxEditLink && inpDirectLink && btnOpenPage) {
+          if (a.student_id && (selStatus.value === 'correction_needed' || a.status === 'correction_needed')) {
+            const origin = window.location.origin;
+            const pathname = window.location.pathname.replace(/admin\.html.*$/, 'recruit.html');
+            const fullLink = `${origin}${pathname}?edit=${a.student_id}`;
+            inpDirectLink.value = fullLink;
+            btnOpenPage.href = fullLink;
+            boxEditLink.style.display = 'block';
+
+            if (btnCopyLink && !btnCopyLink.dataset.bound) {
+              btnCopyLink.dataset.bound = 'true';
+              btnCopyLink.onclick = () => {
+                navigator.clipboard.writeText(fullLink).then(() => {
+                  btnCopyLink.textContent = 'คัดลอกแล้ว!';
+                  setTimeout(() => btnCopyLink.textContent = 'คัดลอก', 2000);
+                }).catch(() => {
+                  inpDirectLink.select();
+                  document.execCommand('copy');
+                  btnCopyLink.textContent = 'คัดลอกแล้ว!';
+                  setTimeout(() => btnCopyLink.textContent = 'คัดลอก', 2000);
+                });
+              };
+            }
+          } else if (boxEditLink) {
+            boxEditLink.style.display = 'none';
+          }
+        }
+      };
+      updateCorrectionLinkUI();
+
       selStatus.onchange = () => {
         corrGroup.style.display = selStatus.value === 'correction_needed' ? 'block' : 'none';
+        updateCorrectionLinkUI();
         if (elHeaderBadge) {
           elHeaderBadge.className = `status-badge ${selStatus.value}`;
           const optText = selStatus.options[selStatus.selectedIndex]?.text.split('(')[0].replace(/^[^\s]+\s+/, '').trim();

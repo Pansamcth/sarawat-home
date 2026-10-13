@@ -790,7 +790,7 @@
       return data;
     },
 
-    unlockApplicantCorrection: async function (studentId, phone) {
+    unlockApplicantCorrection: async function (studentId, phone = '') {
       const base = this.getBaseUrl();
       if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
       const res = await fetch(`${base}/api/recruitment/unlock-correction`, {
@@ -799,7 +799,16 @@
         body: JSON.stringify({ student_id: studentId, phone: phone })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'ยืนยันตัวตนไม่สำเร็จ');
+      if (!res.ok) throw new Error(data.error || 'ไม่สามารถเข้าสู่โหมดแก้ไขข้อมูลได้');
+      return data;
+    },
+
+    getApplicantForCorrection: async function (studentId) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const res = await fetch(`${base}/api/recruitment/applicant-correction/${encodeURIComponent(studentId)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ไม่สามารถดึงข้อมูลสำหรับแก้ไขได้');
       return data;
     },
 

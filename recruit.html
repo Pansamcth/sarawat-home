@@ -839,10 +839,125 @@
       color: #ef4444;
     }
 
-    .recruit-closed-icon-wrap.waiting {
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      color: #d97706;
+    /* Editing Mode Banner (ปลดล็อคให้แก้ไขข้อมูลแม้ระบบปิดรับสมัคร) */
+    .editing-mode-banner {
+      background: #fff7ed;
+      border: 1.5px solid #fdba74;
+      border-radius: 18px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(234, 88, 12, 0.08);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .editing-mode-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .editing-mode-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .editing-mode-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #ffedd5;
+      color: #ea580c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid #fed7aa;
+    }
+
+    .editing-mode-text {
+      flex: 1;
+    }
+
+    .editing-mode-title {
+      font-size: 1.05rem;
+      font-weight: 850;
+      color: #9a3412;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .editing-mode-id-badge {
+      background: #ea580c;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.03em;
+    }
+
+    .editing-mode-desc {
+      font-size: 0.88rem;
+      color: #c2410c;
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+
+    .editing-mode-note-card {
+      background: #ffffff;
+      border: 1.5px dashed #fb923c;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 6px;
+    }
+
+    .editing-mode-note-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #ea580c;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .editing-mode-note-val {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .btn-cancel-edit {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 9999px;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 750;
+      color: #64748b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-cancel-edit:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+      background: #fef2f2;
     }
 
 
@@ -989,6 +1104,37 @@
 
         <!-- FORM WRAPPER (Subject to blur if closed) -->
         <div id="recruitFormWrapper">
+
+        <!-- EDITING MODE BANNER (ปลดล็อคให้แก้ไขข้อมูลแม้ระบบปิดรับสมัคร) -->
+        <div id="editingModeBanner" class="editing-mode-banner" style="display: none;">
+          <div class="editing-mode-inner">
+            <div class="editing-mode-left">
+              <div class="editing-mode-icon">
+                <i data-lucide="edit-3" style="width: 22px; height: 22px;"></i>
+              </div>
+              <div class="editing-mode-text">
+                <div class="editing-mode-title">
+                  <span>โหมดแก้ไขข้อมูลใบสมัคร</span>
+                  <span class="editing-mode-id-badge" id="txtEditingStudentIdBadge">รหัส -</span>
+                </div>
+                <p class="editing-mode-desc">
+                  ระบบปลดล็อคแบบฟอร์มให้ท่านแก้ไขข้อมูลตามคำขอของคณะกรรมการ แม้ระบบจะปิดรับสมัครใหม่แล้ว
+                </p>
+                <div class="editing-mode-note-card" id="boxEditingCorrectionNote" style="display: none;">
+                  <div class="editing-mode-note-label">
+                    <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i>
+                    <span>สิ่งที่คณะกรรมการแจ้งให้แก้ไข:</span>
+                  </div>
+                  <div class="editing-mode-note-val" id="txtEditingCorrectionNote">-</div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-cancel-edit" id="btnCancelEditMode" title="ยกเลิกโหมดแก้ไขและกลับสู่หน้าปกติ">
+              <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              <span>ยกเลิกการแก้ไข</span>
+            </button>
+          </div>
+        </div>
 
         <!-- Step Indicator -->
         <div class="recruit-steps-bar">
@@ -1563,29 +1709,23 @@
             <div class="correction-box" id="stCorrectionBox" style="display: none;">
               <div
                 style="display: flex; align-items: center; gap: 8px; font-weight: 800; color: #c2410c; margin-bottom: 6px;">
-                <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
-                <span>แจ้งเตือน: คณะกรรมการขอให้แก้ไขข้อมูล</span>
+                <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
+                <span style="font-size: 1.02rem;">คณะกรรมการขอให้ท่านแก้ไขข้อมูลใบสมัคร</span>
               </div>
-              <div style="font-size: 0.9rem; color: #7c2d12; margin-bottom: 14px;" id="stCorrectionNote">
+              <div style="font-size: 0.92rem; color: #7c2d12; margin-bottom: 14px; background: rgba(254, 215, 170, 0.4); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #ea580c; line-height: 1.5;" id="stCorrectionNote">
                 -
               </div>
 
-              <!-- Verification with Phone to Unlock Form -->
-              <div style="background: #ffffff; border: 1px solid #fed7aa; border-radius: 10px; padding: 14px;">
-                <div style="font-size: 0.84rem; font-weight: 700; color: #9a3412; margin-bottom: 8px;">
-                  🔒 กรอกเบอร์โทรศัพท์ที่ใช้สมัคร เพื่อปลดล็อกและเข้าแก้ไขข้อมูล:
-                </div>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                  <input type="tel" id="inpUnlockPhone" maxlength="10" class="recruit-input"
-                    placeholder="เบอร์โทรศัพท์ 10 หลัก" style="height: 42px; flex: 1; min-width: 0;" />
-                  <button type="button" class="dg-btn-black" id="btnUnlockCorrection"
-                    style="padding: 0 20px; height: 42px; font-size: 0.88rem; font-weight: 750; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-                    <i data-lucide="edit-3" style="width: 15px; height: 15px;"></i>
-                    <span style="white-space: nowrap;">เข้าสู่หน้าแก้ไข</span>
-                  </button>
-                </div>
-                <div class="recruit-field-error" id="errUnlockPhone" style="margin-top: 4px;">เบอร์โทรศัพท์ไม่ถูกต้อง
-                </div>
+              <!-- Direct Unlock Button (ไม่ต้องกรอกเบอร์โทรศัพท์ ปลดล็อคเบลอทันที) -->
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button type="button" class="dg-btn-black" id="btnUnlockCorrection"
+                  style="width: 100%; height: 46px; font-size: 0.95rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #ea580c; border-color: #ea580c; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.25);">
+                  <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+                  <span>ปลดล็อคและเข้าสู่หน้าแก้ไขข้อมูลใบสมัคร</span>
+                </button>
+                <p style="font-size: 0.8rem; color: #9a3412; margin: 0; text-align: center;">
+                  * ระบบจะปลดล็อคหน้าแบบฟอร์มที่เบลออยู่ และดึงข้อมูลเดิมของท่านขึ้นมาแก้ไขได้ทันที แม้จะปิดรับสมัครแล้ว
+                </p>
               </div>
             </div>
 
@@ -1780,6 +1920,7 @@
       let selectedPhotoFile = null;
       let isEditingMode = false;
       let editingStudentId = null;
+      let verifiedUnlockPhone = '';
 
       // DOM Elements
       const tabBtnApply = document.getElementById('tabBtnApply');
@@ -1818,6 +1959,190 @@
       const txtPdpaModalBody = document.getElementById('txtPdpaModalBody');
 
       // ==========================================
+      // FORM LOCK & BLUR STATE MANAGER
+      // ==========================================
+      function updateFormLockState() {
+        const recruitFormWrapper = document.getElementById('recruitFormWrapper');
+        const recruitClosedOverlay = document.getElementById('recruitClosedOverlay');
+        const editingModeBanner = document.getElementById('editingModeBanner');
+        const txtBtnSubmit = document.getElementById('txtBtnSubmit');
+
+        if (isEditingMode) {
+          // โหมดแก้ไขข้อมูล: ปลดล็อคเบลอ ปลดล็อคฟอร์ม และซ่อนการ์ดแจ้งเตือนปิดรับสมัครเสมอ
+          if (recruitFormWrapper) {
+            recruitFormWrapper.classList.remove('form-blurred');
+            recruitFormWrapper.style.filter = 'none';
+            recruitFormWrapper.style.webkitFilter = 'none';
+            recruitFormWrapper.style.opacity = '1';
+            recruitFormWrapper.style.pointerEvents = 'auto';
+            recruitFormWrapper.style.userSelect = 'auto';
+          }
+          if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'none';
+          if (editingModeBanner) editingModeBanner.style.display = 'block';
+          if (btnGoToStep2) {
+            btnGoToStep2.disabled = false;
+            btnGoToStep2.style.opacity = '1';
+            btnGoToStep2.style.cursor = 'pointer';
+          }
+          if (txtBtnSubmit) txtBtnSubmit.textContent = 'บันทึกการแก้ไขและส่งตรวจใหม่';
+        } else {
+          // โหมดปกติ (ยื่นใบสมัครใหม่)
+          if (editingModeBanner) editingModeBanner.style.display = 'none';
+          if (txtBtnSubmit) txtBtnSubmit.textContent = 'ยืนยันและส่งใบสมัคร';
+
+          if (!systemSettings.isOpen) {
+            // ระบบปิดรับสมัคร: เบลอแบบฟอร์ม และแสดงการ์ดแจ้งเตือน
+            if (recruitFormWrapper) {
+              recruitFormWrapper.classList.add('form-blurred');
+              recruitFormWrapper.style.filter = '';
+              recruitFormWrapper.style.webkitFilter = '';
+              recruitFormWrapper.style.opacity = '';
+              recruitFormWrapper.style.pointerEvents = '';
+              recruitFormWrapper.style.userSelect = '';
+            }
+            if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'block';
+            if (btnGoToStep2) {
+              btnGoToStep2.disabled = true;
+              btnGoToStep2.style.opacity = '0.5';
+              btnGoToStep2.style.cursor = 'not-allowed';
+            }
+          } else {
+            // ระบบเปิดรับสมัคร: ปลดเบลอ และซ่อนการ์ดแจ้งเตือน
+            if (recruitFormWrapper) {
+              recruitFormWrapper.classList.remove('form-blurred');
+              recruitFormWrapper.style.filter = 'none';
+              recruitFormWrapper.style.webkitFilter = 'none';
+              recruitFormWrapper.style.opacity = '1';
+              recruitFormWrapper.style.pointerEvents = 'auto';
+              recruitFormWrapper.style.userSelect = 'auto';
+            }
+            if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'none';
+            if (btnGoToStep2) {
+              btnGoToStep2.disabled = false;
+              btnGoToStep2.style.opacity = '1';
+              btnGoToStep2.style.cursor = 'pointer';
+            }
+          }
+        }
+      }
+
+      // Exit Edit Mode
+      function exitEditMode() {
+        if (!isEditingMode) return;
+        if (!confirm('ต้องการยกเลิกโหมดแก้ไขข้อมูลและกลับสู่หน้าตรวจสอบสถานะหรือไม่?')) return;
+
+        isEditingMode = false;
+        editingStudentId = null;
+        verifiedUnlockPhone = '';
+        selectedPhotoFile = null;
+        sessionStorage.removeItem('recruit_editing_student_id');
+
+        document.getElementById('recruitForm').reset();
+        document.getElementById('inpStudentId').disabled = false;
+        photoPreviewImg.src = '';
+        photoPreviewImg.style.display = 'none';
+        photoPlaceholder.style.display = 'flex';
+        btnRemovePhoto.style.display = 'none';
+
+        stepPane1.style.display = 'block';
+        stepPane2.style.display = 'none';
+        stepPane3.style.display = 'none';
+        stepNode1.className = 'recruit-step-node active';
+        stepNode2.className = 'recruit-step-node';
+        stepNode3.className = 'recruit-step-node';
+
+        updateFormLockState();
+        switchTab('status');
+      }
+
+      // Centralized Function to activate Edit Mode (ปลดล็อคเบลอสำหรับผู้ที่ต้องแก้ไขข้อมูล)
+      async function startCorrectionForStudent(studentId) {
+        const sid = String(studentId || '').trim();
+        if (!/^\d{5}$/.test(sid)) {
+          alert('กรุณากรอกรหัสประจำตัวนักเรียนเป็นตัวเลข 5 หลัก');
+          return false;
+        }
+
+        try {
+          const res = await window.SarawatAPI.getApplicantForCorrection(sid);
+          if (!res.success || !res.applicant) {
+            throw new Error(res.error || 'ไม่พบข้อมูลใบสมัคร');
+          }
+
+          const app = res.applicant;
+          isEditingMode = true;
+          editingStudentId = app.studentId;
+          sessionStorage.setItem('recruit_editing_student_id', app.studentId);
+
+          // Populate form fields
+          document.getElementById('inpStudentId').value = app.studentId;
+          document.getElementById('inpStudentId').disabled = true; // Lock student ID
+          if (document.getElementById('selPrefix')) document.getElementById('selPrefix').value = app.prefix || 'นาย';
+          if (document.getElementById('inpFirstName')) document.getElementById('inpFirstName').value = app.firstName || '';
+          if (document.getElementById('inpLastName')) document.getElementById('inpLastName').value = app.lastName || '';
+          if (document.getElementById('selGrade')) document.getElementById('selGrade').value = app.gradeLevel || 'ม.4';
+          if (document.getElementById('inpClassroom')) document.getElementById('inpClassroom').value = app.classroom || '';
+          if (document.getElementById('inpPhone')) document.getElementById('inpPhone').value = app.phone || '';
+          if (document.getElementById('inpGpax')) document.getElementById('inpGpax').value = app.gpax || '';
+          if (document.getElementById('selClub')) document.getElementById('selClub').value = app.club || '';
+          const elSelAff = document.getElementById('selAffiliation');
+          if (elSelAff) elSelAff.value = app.affiliation || '';
+
+          if (document.getElementById('inpHouseNo')) document.getElementById('inpHouseNo').value = app.houseNo || '';
+          if (document.getElementById('inpVillageNo')) document.getElementById('inpVillageNo').value = app.villageNo || '';
+          if (document.getElementById('inpBuilding')) document.getElementById('inpBuilding').value = app.building || '';
+          if (document.getElementById('inpSoi')) document.getElementById('inpSoi').value = app.soi || '';
+          if (document.getElementById('inpRoad')) document.getElementById('inpRoad').value = app.road || '';
+          if (document.getElementById('inpSubdistrict')) document.getElementById('inpSubdistrict').value = app.subdistrict || '';
+          if (document.getElementById('inpDistrict')) document.getElementById('inpDistrict').value = app.district || '';
+          if (document.getElementById('inpProvince')) document.getElementById('inpProvince').value = app.province || '';
+          if (document.getElementById('inpPostalCode')) document.getElementById('inpPostalCode').value = app.postalCode || '';
+
+          if (app.photoUrl) {
+            const fullUrl = app.photoUrl.startsWith('http') ? app.photoUrl : (window.SarawatAPI.getBaseUrl() + app.photoUrl);
+            photoPreviewImg.src = fullUrl;
+            photoPreviewImg.style.display = 'block';
+            photoPlaceholder.style.display = 'none';
+            btnRemovePhoto.style.display = 'inline-flex';
+          }
+
+          // Update editing banner content
+          const badgeId = document.getElementById('txtEditingStudentIdBadge');
+          if (badgeId) badgeId.textContent = `รหัส ${app.studentId}`;
+          const boxNote = document.getElementById('boxEditingCorrectionNote');
+          const txtNote = document.getElementById('txtEditingCorrectionNote');
+          if (app.correctionNote && app.correctionNote.trim()) {
+            if (txtNote) txtNote.textContent = app.correctionNote;
+            if (boxNote) boxNote.style.display = 'block';
+          } else {
+            if (boxNote) boxNote.style.display = 'none';
+          }
+
+          // Switch back to Apply tab in editing mode
+          switchTab('apply');
+          stepPane2.style.display = 'none';
+          stepPane3.style.display = 'none';
+          stepPane1.style.display = 'block';
+          stepNode1.className = 'recruit-step-node active';
+          stepNode2.className = 'recruit-step-node';
+          stepNode3.className = 'recruit-step-node';
+
+          // UNBLUR AND REMOVE ALL LOCKS
+          updateFormLockState();
+          if (window.lucide) lucide.createIcons();
+
+          window.scrollTo({ top: 350, behavior: 'smooth' });
+          return true;
+        } catch (err) {
+          alert('ไม่สามารถเข้าสู่โหมดแก้ไขข้อมูลได้: ' + (err.message || 'เกิดข้อผิดพลาด'));
+          return false;
+        }
+      }
+
+      const btnCancelEditMode = document.getElementById('btnCancelEditMode');
+      if (btnCancelEditMode) btnCancelEditMode.addEventListener('click', exitEditMode);
+
+      // ==========================================
       // TAB SWITCHING (Apply vs Status)
       // ==========================================
       function switchTab(mode) {
@@ -1826,6 +2151,7 @@
           tabBtnStatus.classList.remove('active');
           viewApplication.style.display = 'block';
           viewStatus.style.display = 'none';
+          updateFormLockState();
         } else {
           tabBtnApply.classList.remove('active');
           tabBtnStatus.classList.add('active');
@@ -1893,17 +2219,6 @@
             const recruitClosedOverlay = document.getElementById('recruitClosedOverlay');
 
             if (!statusRes.isOpen) {
-              // 1. BLUR FORM (เบลอแบบฟอร์ม ป้องกันการคลิกหรือกรอกข้อมูล)
-              if (recruitFormWrapper) recruitFormWrapper.classList.add('form-blurred');
-              if (btnGoToStep2) {
-                btnGoToStep2.disabled = true;
-                btnGoToStep2.style.opacity = '0.5';
-                btnGoToStep2.style.cursor = 'not-allowed';
-              }
-
-              // 2. SHOW NOTICE OVERLAY (แสดงการแจ้งเตือนพร้อมกำหนดเวลารับสมัคร)
-              if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'block';
-
               const badge = document.getElementById('closedNoticeBadge');
               const iconWrap = document.getElementById('closedNoticeIconWrap');
               const title = document.getElementById('closedNoticeTitle');
@@ -1948,16 +2263,10 @@
               }
 
               if (window.lucide) lucide.createIcons();
-            } else {
-              // OPEN: แสดงแบบฟอร์มคมชัดตามปกติ ซ่อนกล่องแจ้งเตือน
-              if (recruitFormWrapper) recruitFormWrapper.classList.remove('form-blurred');
-              if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'none';
-              if (btnGoToStep2) {
-                btnGoToStep2.disabled = false;
-                btnGoToStep2.style.opacity = '1';
-                btnGoToStep2.style.cursor = 'pointer';
-              }
             }
+
+            // Sync lock/blur state based on isEditingMode & isOpen
+            updateFormLockState();
 
             // Hook Quick Status Button in Closed Overlay
             const btnClosedGoStatus = document.getElementById('btnClosedGoStatus');
@@ -2295,10 +2604,33 @@
         try {
           let res;
           if (isEditingMode && editingStudentId) {
-            res = await window.SarawatAPI.submitApplicantCorrection(editingStudentId, formData);
+            const currentEditingId = editingStudentId;
+            res = await window.SarawatAPI.submitApplicantCorrection(currentEditingId, formData);
             alert('แก้ไขข้อมูลและส่งตรวจใหม่เรียบร้อยแล้ว!');
+
+            isEditingMode = false;
+            editingStudentId = null;
+            verifiedUnlockPhone = '';
+            selectedPhotoFile = null;
+            sessionStorage.removeItem('recruit_editing_student_id');
+
+            document.getElementById('recruitForm').reset();
+            document.getElementById('inpStudentId').disabled = false;
+            photoPreviewImg.src = '';
+            photoPreviewImg.style.display = 'none';
+            photoPlaceholder.style.display = 'flex';
+            btnRemovePhoto.style.display = 'none';
+
+            stepPane1.style.display = 'block';
+            stepPane2.style.display = 'none';
+            stepPane3.style.display = 'none';
+            stepNode1.className = 'recruit-step-node active';
+            stepNode2.className = 'recruit-step-node';
+            stepNode3.className = 'recruit-step-node';
+
+            updateFormLockState();
             switchTab('status');
-            document.getElementById('inpSearchStudentId').value = editingStudentId;
+            document.getElementById('inpSearchStudentId').value = currentEditingId;
             document.getElementById('btnSearchStatus').click();
             return;
           } else {
@@ -2397,78 +2729,44 @@
         }
       });
 
-      // Unlock for correction
+      // Unlock for correction button on Status tab (ไม่ต้องกรอกเบอร์โทรศัพท์)
       const btnUnlockCorrection = document.getElementById('btnUnlockCorrection');
-      const inpUnlockPhone = document.getElementById('inpUnlockPhone');
-      const errUnlockPhone = document.getElementById('errUnlockPhone');
+      if (btnUnlockCorrection) {
+        btnUnlockCorrection.addEventListener('click', async () => {
+          const studentId = btnUnlockCorrection.dataset.studentId;
+          if (!studentId) return;
 
-      btnUnlockCorrection.addEventListener('click', async () => {
-        const studentId = btnUnlockCorrection.dataset.studentId;
-        const phone = inpUnlockPhone.value.trim().replace(/[-\s]/g, '');
+          btnUnlockCorrection.disabled = true;
+          const origHtml = btnUnlockCorrection.innerHTML;
+          btnUnlockCorrection.innerHTML = '<span>กำลังปลดล็อคแบบฟอร์ม...</span>';
 
-        if (!phone) {
-          errUnlockPhone.style.display = 'block';
-          errUnlockPhone.textContent = 'กรุณากรอกเบอร์โทรศัพท์';
-          return;
-        }
-        errUnlockPhone.style.display = 'none';
-
-        try {
-          const res = await window.SarawatAPI.unlockApplicantCorrection(studentId, phone);
-          if (res.success && res.applicant) {
-            const app = res.applicant;
-            isEditingMode = true;
-            editingStudentId = app.studentId;
-
-            // Load data into form
-            document.getElementById('inpStudentId').value = app.studentId;
-            document.getElementById('inpStudentId').disabled = true; // Lock student ID
-            document.getElementById('selPrefix').value = app.prefix;
-            document.getElementById('inpFirstName').value = app.firstName;
-            document.getElementById('inpLastName').value = app.lastName;
-            document.getElementById('selGrade').value = app.gradeLevel;
-            document.getElementById('inpClassroom').value = app.classroom;
-            document.getElementById('inpPhone').value = app.phone;
-            document.getElementById('inpGpax').value = app.gpax;
-            document.getElementById('selClub').value = app.club;
-            const elSelAff = document.getElementById('selAffiliation');
-            if (elSelAff) elSelAff.value = app.affiliation || '';
-
-            document.getElementById('inpHouseNo').value = app.houseNo || '';
-            document.getElementById('inpVillageNo').value = app.villageNo || '';
-            document.getElementById('inpBuilding').value = app.building || '';
-            document.getElementById('inpSoi').value = app.soi || '';
-            document.getElementById('inpRoad').value = app.road || '';
-            document.getElementById('inpSubdistrict').value = app.subdistrict || '';
-            document.getElementById('inpDistrict').value = app.district || '';
-            document.getElementById('inpProvince').value = app.province || '';
-            document.getElementById('inpPostalCode').value = app.postalCode || '';
-
-            if (app.photoUrl) {
-              const fullUrl = app.photoUrl.startsWith('http') ? app.photoUrl : (window.SarawatAPI.getBaseUrl() + app.photoUrl);
-              photoPreviewImg.src = fullUrl;
-              photoPreviewImg.style.display = 'block';
-              photoPlaceholder.style.display = 'none';
-              btnRemovePhoto.style.display = 'inline-flex';
-            }
-
-            // Switch back to Apply tab in editing mode
-            switchTab('apply');
-            stepPane2.style.display = 'none';
-            stepPane3.style.display = 'none';
-            stepPane1.style.display = 'block';
-            stepNode1.className = 'recruit-step-node active';
-            stepNode2.className = 'recruit-step-node';
-            stepNode3.className = 'recruit-step-node';
-
-            alert('เข้าสู่โหมดแก้ไขข้อมูลเรียบร้อยแล้ว กรุณาแก้ไขข้อมูลตามที่คณะกรรมการระบุ แล้วกดยืนยันเพื่อส่งตรวจใหม่');
-            window.scrollTo({ top: 350, behavior: 'smooth' });
+          try {
+            await startCorrectionForStudent(studentId);
+          } finally {
+            btnUnlockCorrection.disabled = false;
+            btnUnlockCorrection.innerHTML = origHtml;
+            if (window.lucide) lucide.createIcons();
           }
-        } catch (err) {
-          errUnlockPhone.style.display = 'block';
-          errUnlockPhone.textContent = err.message || 'ยืนยันตัวตนไม่สำเร็จ';
+        });
+      }
+
+      // Automatically check URL and SessionStorage for Edit Mode
+      // e.g. recruit.html?edit=36463 or #edit-36463
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editFromQuery = urlParams.get('edit');
+        const hashMatch = window.location.hash.match(/#edit-(\d{5})/);
+        const editFromHash = hashMatch ? hashMatch[1] : null;
+        const editFromSession = sessionStorage.getItem('recruit_editing_student_id');
+
+        const targetEditStudentId = editFromQuery || editFromHash || editFromSession;
+        if (targetEditStudentId && /^\d{5}$/.test(targetEditStudentId)) {
+          console.log('Activating correction mode for student:', targetEditStudentId);
+          await startCorrectionForStudent(targetEditStudentId);
         }
-      });
+      } catch (e) {
+        console.warn('Auto correction check error:', e);
+      }
 
     });
   </script>
