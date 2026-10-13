@@ -1,0 +1,13 @@
+# robots.txt for https://sarawatdc.site/
+# Reference: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+User-agent: *
+Allow: /
+
+# Exclude private administration portal from crawling
+Disallow: /admin
+Disallow: /admin.html
+
+# Sitemap location
+Sitemap: https://sarawatdc.site/sitemap.xml
+
