@@ -1,5 +1,43 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/si-roster",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/si-roster/",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/si-roster/admin",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/si-roster/admin.html",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/roster",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/si-roster/:path*",
+      "destination": "/SI-ROSTER/:path*"
+    },
+    {
+      "source": "/SI-ROSTER/admin",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://justify-clearing-changelog-reserved.trycloudflare.com/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://justify-clearing-changelog-reserved.trycloudflare.com/uploads/:path*"
+    }
+  ]
 }

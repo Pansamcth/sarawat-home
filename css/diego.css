@@ -2708,6 +2708,140 @@ svg:not([data-lucide]),
 }
 
 /* ==========================================================
+   FLOATING ELEVATED ISLAND FOOTER & INSIDE WATERMARK
+   ========================================================== */
+.dg-footer-wrap {
+  background: var(--dg-bg-subtle, #f7f8fa);
+  padding: 60px 24px 44px 24px;
+  position: relative;
+}
+
+.dg-footer-floating-card {
+  position: relative;
+  overflow: hidden;
+  max-width: 1220px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 28px;
+  box-shadow: 0 22px 48px -12px rgba(15, 23, 42, 0.08), 0 4px 16px rgba(15, 23, 42, 0.03);
+  padding: 56px 56px 36px 56px;
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dg-footer-floating-card:hover {
+  box-shadow: 0 28px 58px -12px rgba(15, 23, 42, 0.12), 0 6px 20px rgba(15, 23, 42, 0.04);
+  border-color: rgba(203, 213, 225, 0.9);
+}
+
+/* Giant Inside-Card Watermark (Fade bottom-to-top) */
+.dg-footer-card-watermark {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  line-height: 0.78;
+  white-space: nowrap;
+}
+
+.dg-footer-card-watermark span {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(3.2rem, 10.4vw, 9.2rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  display: inline-block;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.085) 0%, rgba(15, 23, 42, 0.035) 45%, rgba(15, 23, 42, 0) 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dg-footer-floating-card .dg-pre-footer-grid,
+.dg-footer-floating-card .dg-footer-bottom {
+  position: relative;
+  z-index: 1;
+}
+
+.dg-footer-floating-card .dg-pre-footer-grid {
+  padding-bottom: 48px;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 60px;
+}
+
+.dg-footer-floating-card .dg-footer-columns {
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+/* Minimalist Social Icon Buttons Under Question CTA */
+.dg-footer-social-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.dg-social-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  color: #0f172a;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.dg-social-icon-btn:hover {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+.dg-footer-floating-card .dg-footer-bottom {
+  padding-top: 26px;
+}
+
+@media (max-width: 992px) {
+  .dg-footer-floating-card .dg-pre-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .dg-footer-wrap {
+    padding: 36px 14px 24px 14px;
+  }
+  .dg-footer-floating-card {
+    padding: 36px 20px 24px 20px;
+    border-radius: 20px;
+  }
+  .dg-footer-floating-card .dg-footer-columns {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .dg-footer-floating-card .dg-pre-footer-grid {
+    padding-bottom: 32px;
+  }
+  .dg-footer-card-watermark span {
+    font-size: clamp(2.2rem, 11vw, 3.8rem);
+  }
+}
+
+/* ==========================================================
    MODAL SYSTEM (Clean Diego Minimalist Dark-Accented Box)
    ========================================================== */
 .dg-modal-backdrop {
