@@ -391,14 +391,21 @@ async function saveTeamSettings() {
       team_members_db: JSON.stringify(allMembers.filter(m => m.name.trim() !== ''))
     };
     
-    const base = window.SarawatApi ? window.SarawatApi.getBaseUrl() : '';
-    const res = await fetch(base + '/api/settings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    if (window.SarawatApi && typeof window.SarawatApi.saveSettings === 'function') {
+      await window.SarawatApi.saveSettings(payload);
+    } else {
+      const base = window.SarawatApi ? window.SarawatApi.getBaseUrl() : '';
+      const headers = window.SarawatApi && typeof window.SarawatApi.getAuthHeaders === 'function'
+        ? window.SarawatApi.getAuthHeaders({ 'Content-Type': 'application/json' })
+        : { 'Content-Type': 'application/json' };
+      const res = await fetch(base + '/api/settings', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+    }
 
-    if (!res.ok) throw new Error('HTTP ' + res.status);
     if(window.showToast) window.showToast('บันทึกข้อมูลคณะทำงานสำเร็จ!');
     else alert('บันทึกข้อมูลสำเร็จ!');
   } catch (err) {

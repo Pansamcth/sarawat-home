@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สารวัตรนักเรียน | โรงเรียนเดชะปัตตนยานุกูล</title>
+  <meta name="description"
+    content="เว็บไซต์อย่างเป็นทางการของคณะกรรมการสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ติดตามข่าวสาร กิจกรรม และระบบการทำงานต่างๆ" />
+  <meta name="keywords" content="สารวัตรนักเรียน, โรงเรียนเดชะปัตตนยานุกูล, กรรมการนักเรียน, ระบบลงหน้าที่, แจ้งเหตุ" />
+  <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://sarawatdc.site/" />
+
+  <!-- Open Graph / Discord Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sarawatdc.site/" />
+  <meta property="og:title" content="🛡️ สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta property="og:description"
+    content="เว็บไซต์อย่างเป็นทางการของคณะกรรมการสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta property="og:image" content="assets/icons/sarawat-logo.png" />
+  <meta property="og:site_name" content="Sarawat - Dechapattanayanukul School" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="🛡️ Sarawat Portfolio - เว็บไซต์สารวัตรนักเรียน" />
+  <meta name="twitter:description"
+    content="เว็บไซต์ Sarawat Portfolio จัดทำขึ้นเพื่อแสดงผลงาน บทบาทหน้าที่ และกิจกรรมของคณะสารวัตรนักเรียน" />
+  <meta name="twitter:image" content="assets/icons/sarawat-logo.png" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Google Fonts: Plus Jakarta Sans + Outfit + Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- API & Cloudflare Tunnel Config -->
+  <script src="js/api-config.js?v=2.2.0"></script>
+
+  <!-- Diego Minimalist Swiss Agency Design System -->
+  <link rel="stylesheet" href="css/diego.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+</head>
+
+<body>
+  <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
+  <div class="dg-scroll-progress" id="scrollProgress"></div>
+
+
+  <!-- ============ NAVIGATION BAR (Diego Minimalist Header) ============ -->
+  <nav class="dg-nav" id="dgNav">
+    <div class="dg-nav-container">
+      <a href="#hero" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+          style="width: 36px; height: 36px; object-fit: contain;" />
+        <span
+          style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
+        <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+          style="width: 36px; height: 36px; object-fit: contain;" />
+        <span class="dg-brand-text">SARAWAT</span>
+      </a>
+
+      <div class="dg-nav-links" id="dgNavLinks">
+        <a href="#hero">หน้าแรก</a>
+        <a href="activities.html">ข่าวสารกิจกรรม</a>
+        <a href="calendar.html">ตารางกิจกรรม</a>
+        <a href="team.html">คณะทำงาน</a>
+      </div>
+
+      <div class="dg-nav-actions">
+        <a href="#contact" class="dg-btn-black">
+          <span>ติดต่อเรา</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+        <button class="dg-nav-toggle" id="dgNavToggle" aria-label="Toggle menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HERO SECTION ============ -->
+  <header class="dg-hero-section" id="hero">
+    <!-- Viewport Screen 1: Exactly matches mobile mockup -->
+    <div class="dg-hero-mobile-viewport">
+      <!-- 3 Text Blocks Centered Vertically -->
+      <div class="dg-container dg-hero-text-container">
+        <!-- 1: Headline -->
+        <h1 class="dg-hero-heading" data-reveal="fade">
+          <span class="dg-heading-th">สร้างสรรค์วินัย ด้วยพลังจิตอาสา</span>
+          <span class="dg-heading-en">We lead with purpose to<br /> protect & inspire.</span>
+        </h1>
+
+        <!-- Sub-grid: Blocks 2 & 3 -->
+        <div class="dg-hero-sub-grid" data-reveal="fade" data-delay="100">
+          <!-- Block 2 (Paragraph 1) -->
+          <div class="dg-hero-sub-left dg-hero-block-2">
+            สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล กลุ่มงานกิจการนักเรียน <br
+              class="dg-hero-p1-br" />ตัวแทนนักเรียนผู้มุ่งมั่นสร้างสรรค์สังคมแห่งความมี<br
+              class="dg-hero-p1-br" />วินัย ปลอดภัย และเป็นแบบอย่างที่ดี
+          </div>
+
+          <!-- Block 3 (Paragraph 2 + Arrow Link) -->
+          <div class="dg-hero-sub-right dg-hero-block-3">
+            <p>
+              ร่วมขับเคลื่อนรั้วเดชะปัตตนยานุกูลสู่มาตรฐานใหม่<br class="dg-mobile-br" />
+              ผ่านการดูแลความปลอดภัยอย่างใกล้ชิด<br class="dg-mobile-br" />
+              การสร้างความเข้าใจ และการปฏิบัติหน้าที่ด้วยความเป็นธรรม
+            </p>
+            <a href="#operations" class="dg-arrow-link">
+              <span>สำรวจระบบบริการออนไลน์</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div><!-- /.dg-hero-text-container -->
+
+      <!-- Bottom Photo: Straddles bottom edge of screen 1 with scroll cue above on the right -->
+      <div class="dg-container dg-hero-image-container">
+        <!-- Scroll Indicator: Positioned directly above photo on the right -->
+        <div class="dg-hero-scroll-wrapper dg-mobile-only" data-reveal="fade" data-delay="150">
+          <a href="#dutyUptimeCard" class="dg-hero-scroll-cue" id="heroScrollCue" aria-label="เลื่อนเพื่อสำรวจเนื้อหา">
+            <div class="dg-mouse-pill">
+              <div class="dg-mouse-wheel"></div>
+            </div>
+            <span class="dg-scroll-cue-text">SCROLL TO EXPLORE <i data-lucide="chevron-down"></i></span>
+          </a>
+        </div>
+
+        <div class="dg-hero-image-wrap" id="heroImageWrap">
+          <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล"
+            id="heroCinematicImg" />
+        </div>
+      </div>
+    </div><!-- /.dg-hero-mobile-viewport -->
+
+    <!-- ============ WHO WE ARE & DUTIES ============ -->
+    <section class="dg-what-we-do" id="whatWeDo" style="padding-top: 60px; padding-bottom: 20px;">
+      <div class="dg-container">
+        <div class="dg-what-grid dg-what-align-center">
+          <!-- Left: Text -->
+          <div class="dg-what-content">
+            <div class="dg-section-header" style="margin-bottom: 0;">
+              <span class="dg-section-tag">WHO WE ARE • สารวัตรนักเรียนคือใคร?</span>
+              <h2 class="dg-section-title">
+                What is the<br>
+                Truant Patrol?
+              </h2>
+              <p class="dg-section-desc">
+                นักเรียนโรงเรียนเดชะปัตตนยานุกูลระดับชั้นมัธยมศึกษาปีที่ 4 ถึง 5 ที่มีความประพฤติเรียบร้อย
+                มีระเบียบวินัย มีจิตสาธารณะ พร้อมเสียสละเพื่อส่วนรวม
+                และมีคุณสมบัติตามกฎเกณฑ์ที่กลุ่มงานกิจการนักเรียนกำหนด
+                โดยสารวัตรนักเรียนยังเป็นที่รู้จักและเรียกกันอย่างง่าย ๆ ว่า <strong>“พี่เสื้อดำ”</strong>
+                ซึ่งมาจากเสื้อประจำตำแหน่งที่เป็นสีดำ
+                อันเป็นเอกลักษณ์ที่ช่วยให้นักเรียนและบุคลากรสามารถสังเกตและจดจำได้อย่างชัดเจน
+              </p>
+            </div>
+          </div>
+
+          <!-- Right: Visual Image -->
+          <div class="dg-what-visual">
+            <div class="dg-what-image-wrapper">
+              <img src="assets/images/what-we-do-1.jpg" alt="การปฏิบัติหน้าที่สารวัตรนักเรียน"
+                onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 2: Duties (Right-Aligned Zigzag) -->
+        <div class="dg-what-grid dg-what-grid-reverse dg-what-align-center" style="margin-top: 80px;">
+          <!-- Left: Visual Image 2 -->
+          <div class="dg-what-visual">
+            <div class="dg-what-image-wrapper">
+              <img src="assets/images/what-we-do-2.jpg" alt="หน้าที่สารวัตรนักเรียน"
+                onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
+            </div>
+          </div>
+
+          <!-- Right: Text -->
+          <div class="dg-what-content" style="text-align: right;">
+            <div class="dg-section-header" style="margin-bottom: 0;">
+              <span class="dg-section-tag" style="justify-content: flex-end; display: flex;">OUR DUTIES •
+                มีหน้าที่ทำอะไรบ้าง?</span>
+              <h2 class="dg-section-title">
+                What exactly<br>
+                do we do?
+              </h2>
+              <p class="dg-section-desc" style="margin-left: auto; margin-right: 0;">
+                สารวัตรนักเรียนมีบทบาทสำคัญในการดูแลความสงบเรียบร้อยและความปลอดภัยบริเวณโรงเรียนและรอบโรงเรียนในทุกวันทำการและช่วงงานกิจกรรม
+                ตลอดจนตรวจสอบความเป็นระเบียบภายในอาคารเรียน และร่วมปฏิบัติหน้าที่จิตอาสาต่างๆ
+                ตามที่ได้รับมอบหมายจากกลุ่มงานกิจการนักเรียน
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIVE OPERATIONAL UPTIME COUNTER & VISION ============ -->
+    <div class="dg-container">
+
+      <!-- ============ LIVE OPERATIONAL UPTIME & VISION (Vertical Grid Layout) ============ -->
+      <div class="dg-uptime-vision-layout">
+
+        <!-- Left: Vertical Uptime Counter -->
+        <div class="dg-uptime-card-vertical" id="dutyUptimeCard">
+          <div class="dg-uptime-layout-inner">
+            <div class="dg-uptime-grid-vertical">
+              <!-- Months -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeMonths">00</div>
+                <div class="dg-uptime-name">เดือน</div>
+              </div>
+              <!-- Days -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeDays">00</div>
+                <div class="dg-uptime-name">วัน</div>
+              </div>
+              <!-- Hours -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeHours">00</div>
+                <div class="dg-uptime-name">ชั่วโมง</div>
+              </div>
+              <!-- Minutes -->
+              <div class="dg-uptime-unit">
+                <div class="dg-uptime-val" id="uptimeMinutes">00</div>
+                <div class="dg-uptime-name">นาที</div>
+              </div>
+              <!-- Seconds -->
+              <div class="dg-uptime-unit is-seconds">
+                <div class="dg-uptime-val" id="uptimeSeconds">00</div>
+                <div class="dg-uptime-name">วินาที</div>
+              </div>
+            </div>
+            <!-- Start Label Text placed to the right of the blocks -->
+            <div class="dg-uptime-start-label-vertical" id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569
+            </div>
+          </div>
+
+        </div>
+
+         <!-- Right: Stacked Mission & Vision --> 
+        <div class="dg-mission-vision-stacked" id="vision">
+          <div class="dg-mv-item">
+            <span class="dg-mv-label">OUR MISSION • พันธกิจหลัก</span>
+            <p class="dg-mv-desc">
+              สร้างแรงบันดาลใจและเสริมสร้างวินัยผ่านการเป็นแบบอย่างที่ดี ปลูกฝังจิตสาธารณะและความรับผิดชอบต่อส่วนรวม
+              ดูแลความสงบเรียบร้อยและความปลอดภัยตลอดเวลาในรั้วโรงเรียนเดชะปัตตนยานุกูล
+              เพื่อให้ทุกคนเรียนรู้อย่างมีความสุข
+            </p>
+          </div>
+          <div class="dg-mv-item">
+            <span class="dg-mv-label">OUR VISION • วิสัยทัศน์</span>
+            <p class="dg-mv-desc">
+              มุ่งสู่การเป็นองค์กรตัวแทนนักเรียนต้นแบบที่มีระบบการทำงานโปร่งใส ยุติธรรม ทันสมัยด้วยเทคโนโลยีดิจิทัล
+              และเป็นที่พึ่งพาที่ไว้วางใจได้ของเพื่อนนักเรียนและคณะครูอาจารย์อย่างแท้จริง
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ============ NEWS & ACTIVITIES SECTION (ข่าวสารและกิจกรรม) ============ -->
+  <section class="dg-news-section" id="news">
+    <div class="dg-container">
+      <div class="dg-news-header">
+        <div class="dg-news-header-left">
+          <span class="dg-section-tag">NEWS & ACTIVITIES • ข่าวสารและกิจกรรม</span>
+          <h2 class="dg-section-title">
+            News & Live Activities.<br>
+            Captured in action, every day.
+          </h2>
+          <p class="dg-section-desc">
+            ติดตามภาพบรรยากาศการปฏิบัติหน้าที่ กิจกรรมสำคัญ และข่าวสารประชาสัมพันธ์ล่าสุด สามารถกดเปิดดูโพสต์ Facebook,
+            Instagram หรืออัลบั้มภาพบน Google Photos ได้ทันที
+          </p>
+        </div>
+        <div class="dg-news-header-actions">
+          <a href="activities.html" class="dg-arrow-link" id="viewAllActivitiesLink">
+            <span>ดูรายการทั้งหมด</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+          <div class="dg-news-carousel-nav">
+            <button class="dg-carousel-btn" id="newsPrevBtn" type="button" aria-label="ข่าวก่อนหน้า"
+              title="ข่าวก่อนหน้า">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <button class="dg-carousel-btn" id="newsNextBtn" type="button" aria-label="ข่าวถัดไป" title="ข่าวถัดไป">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel / Grid Track -->
+      <div class="dg-news-track-wrap" id="newsTrackWrap">
+        <div class="dg-news-track" id="newsCardsTrack">
+          <!-- Rendered dynamically by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INTEGRATED OPERATIONS SECTION (3 Essential Digital Services) ============ -->
+  <section class="dg-ops-section" id="operations">
+    <div class="dg-container">
+      <div class="dg-section-header">
+        <span class="dg-section-tag">ONLINE SERVICES • รวมระบบปฏิบัติการ</span>
+        <h2 class="dg-section-title">
+          Digital Operations. Integrated<br>
+          for speed, safety, & trust.
+        </h2>
+        <p class="dg-section-desc">
+          รวมระบบปฏิบัติการออนไลน์ไว้ในที่เดียว แยกการประมวลผลเพื่อความรวดเร็ว ปลอดภัย และโปร่งใส
+          เข้าถึงได้ทุกที่ทุกเวลา
+        </p>
+      </div>
+
+      <div class="dg-ops-grid"
+        style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1080px; margin: 0 auto; gap: 24px;">
+
+        <!-- Card 1: Feedback & Wishlist (สิ่งที่อยากให้สารวัตรทำ) -->
+        <div onclick="openModal('feedbackModal')" role="button" tabindex="0" class="dg-ops-card theme-feedback"
+          data-reveal="scale" data-delay="80" style="cursor: pointer;">
+          <div>
+            <div class="dg-ops-icon-box">
+              <i data-lucide="message-square-heart"></i>
+            </div>
+            <h3>สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+            <p>
+              เสนอแนะสิ่งที่อยากให้สารวัตรช่วยดูแล แนะนำจุดตรวจ ความปลอดภัย กิจกรรมสร้างสรรค์
+              หรือสิ่งที่นักเรียนอยากเห็น
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>ส่งข้อเสนอแนะ / สิ่งที่อยากให้ทำ</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- Card 2: Report & Anonymous Complaints (รายงานการทำงาน / ร้องเรียน - ป๊อปอัปตรงนี้โดยไม่ต้องเพิ่มหน้าใหม่) -->
+        <div onclick="openModal('complaintModal')" role="button" tabindex="0" class="dg-ops-card theme-complaint"
+          data-reveal="scale" data-delay="160" style="cursor: pointer;">
+          <div>
+            <div class="dg-ops-icon-box">
+              <i data-lucide="scale"></i>
+            </div>
+            <h3>รายงานการทำงาน / ร้องเรียน</h3>
+            <p>
+              สะท้อนปัญหา แจ้งเรื่องร้องเรียน หรือรายงานพฤติกรรมการปฏิบัติหน้าที่ ข้อมูลจะถูกปิดบังตัวตน 100%
+              ส่งตรงถึงครูที่ปรึกษา
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>ส่งเรื่องรายงาน / ร้องเรียน (นิรนาม)</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- Card 3: SI-ROSTER (The Green Featured Link Card) -->
+        <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer"
+          class="dg-ops-card theme-roster" data-reveal="scale" data-delay="240">
+          <div>
+            <div class="dg-ops-icon-box">
+              <i data-lucide="calendar-check"></i>
+            </div>
+            <h3>ระบบลงหน้าที่ (SI-ROSTER)</h3>
+            <p>
+              ตรวจสอบตารางเวร จุดตรวจ และบันทึกเวลาปฏิบัติหน้าที่ ประจำภาคเรียนที่ 2/2569 ผ่านระบบออนไลน์
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>เข้าสู่ระบบเวร (SI-ROSTER)</span>
+            <i data-lucide="arrow-up-right"></i>
+          </div>
+        </a>
+
+        <!-- Card 4: Recruitment (ระบบรับสมัครสารวัตรนักเรียน) -->
+        <a href="recruit.html" class="dg-ops-card theme-recruit" data-reveal="scale" data-delay="320">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div class="dg-ops-icon-box" style="margin-bottom: 0;">
+                <i data-lucide="user-plus"></i>
+              </div>
+              <span id="opsRecruitStatusBadge" style="font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 99px; background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">
+                🛠️ กำลังปรับปรุงพัฒนา
+              </span>
+            </div>
+            <h3>ระบบรับสมัครสารวัตรนักเรียน</h3>
+            <p>
+              ระบบรับสมัครสารวัตรนักเรียนกำลังอยู่ระหว่างการปรับปรุงพัฒนา เพื่อเตรียมความพร้อมสำหรับการเปิดรับสมัครในรอบถัดไป
+            </p>
+          </div>
+          <div class="dg-ops-card-action">
+            <span>ดูรายละเอียด</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHIEF OF TRUANT PATROL VISION SECTION (วิสัยทัศน์ประธานสารวัตร) ============ -->
+  <section class="dg-chief-section" id="team">
+    <div class="dg-container">
+      <div class="dg-section-header">
+        <span class="dg-section-tag">LEADERSHIP • วิสัยทัศน์ประธาน</span>
+        <h2 class="dg-section-title">
+          Lead with Empathy.<br>
+          Discipline by Example.
+        </h2>
+        <p class="dg-section-desc">
+          วิสัยทัศน์และแนวทางการขับเคลื่อนระเบียบวินัยเชิงบวก โดยประธานคณะกรรมการสารวัตรนักเรียน
+          โรงเรียนเดชะปัตตนยานุกูล
+        </p>
+      </div>
+
+      <div class="dg-chief-grid">
+        <!-- Left: Chief Portrait Card -->
+        <div class="dg-chief-portrait-card" data-reveal="left">
+          <div class="dg-chief-photo-wrap">
+            <img src="assets/images/president.jpg" alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
+              id="chiefPortraitImg" style="object-position: center 20%;" />
+          </div>
+          <div class="dg-chief-portrait-meta">
+            <h3 class="dg-chief-name">นายอะห์นัฟ สหสันติวรกุล</h3>
+            <p class="dg-chief-role">ประธานคณะกรรมการสารวัตรนักเรียน • ชั้นมัธยมศึกษาปีที่ 5/1</p>
+          </div>
+        </div>
+
+        <!-- Right: Vision Content & Commitments -->
+        <div class="dg-chief-content" data-reveal="right">
+          <blockquote class="dg-chief-quote">
+            "วินัยที่ยั่งยืน ไม่ได้เกิดจากความเกรงกลัว แต่เกิดจากความเข้าใจ ความเคารพซึ่งกันและกัน
+            และการมีแบบอย่างที่ดีในทุกๆ วัน"
+          </blockquote>
+
+          <div class="dg-chief-pillars">
+            <!-- Pillar 1 -->
+            <div class="dg-chief-pillar-item" data-reveal="fade" data-delay="80">
+              <div class="dg-chief-pillar-icon">
+                <i data-lucide="heart-handshake"></i>
+              </div>
+              <div class="dg-chief-pillar-text">
+                <h4>มิตรภาพและความเข้าอกเข้าใจ (Empathy & Respect)</h4>
+                <p>เปลี่ยนภาพลักษณ์สารวัตรนักเรียนจากผู้บังคับกฎ สู่การเป็นเพื่อนร่วมโรงเรียนที่พร้อมรับฟัง ให้คำแนะนำ
+                  และดูแลความปลอดภัยด้วยความสุภาพ</p>
+              </div>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="dg-chief-pillar-item" data-reveal="fade" data-delay="160">
+              <div class="dg-chief-pillar-icon">
+                <i data-lucide="scale"></i>
+              </div>
+              <div class="dg-chief-pillar-text">
+                <h4>ความยุติธรรมและโปร่งใส (Integrity & Fairness)</h4>
+                <p>ปฏิบัติหน้าที่บนพื้นฐานของความเท่าเทียม ปราศจากอคติ ตรวจสอบได้
+                  และรับฟังความคิดเห็นจากเพื่อนนักเรียนเพื่อพัฒนาโรงเรียนไปด้วยกัน</p>
+              </div>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="dg-chief-pillar-item" data-reveal="fade" data-delay="240">
+              <div class="dg-chief-pillar-icon">
+                <i data-lucide="cpu"></i>
+              </div>
+              <div class="dg-chief-pillar-text">
+                <h4>ทันสมัยด้วยระบบดิจิทัล (Digital Efficiency)</h4>
+                <p>ยกระดับการปฏิบัติงานด้วยระบบออนไลน์ เช่น SI-ROSTER และระบบแจ้งเหตุเร่งด่วน เพื่อความสะดวก รวดเร็ว
+                  และแม่นยำ</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button to Team Page -->
+          <div class="dg-chief-actions">
+            <a href="team.html" class="dg-btn-black" style="padding: 14px 28px; font-size: 0.95rem;">
+              <span>ไปยังหน้าคณะทำงาน (Meet the Team)</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ACADEMIC & ACTIVITIES CALENDAR SECTION (ตารางกิจกรรมโรงเรียน) ============ -->
+  <section class="dg-calendar-section" id="calendar">
+    <div class="dg-container">
+      <div class="dg-section-header">
+        <span class="dg-section-tag">ACTIVITIES SCHEDULE • ปฏิทินโรงเรียน</span>
+        <h2 class="dg-section-title">
+          School Calendar & Agenda.<br>
+          Never miss an event.
+        </h2>
+        <p class="dg-section-desc">
+          ปฏิทินนี้จัดทำขึ้นโดยอ้างอิงข้อมูลข่าวสารและปฏิทินวิชาการภายในโรงเรียน ทั้งนี้ กำหนดการและรายละเอียดต่าง ๆ
+          อาจมีการเปลี่ยนแปลง แก้ไข หรือปรับปรุงได้ตลอดเวลาตามความเหมาะสมและสถานการณ์
+        </p>
+      </div>
+
+      <!-- Upcoming Events Container (Top ~5 items) -->
+      <div class="dg-events-list" id="upcomingEventsList" style="margin-top: 36px;">
+        <div style="text-align: center; padding: 40px; color: var(--dg-text-muted);">
+          <div class="loading-spinner"></div> กำลังโหลดกิจกรรมที่กำลังจะมาถึง...
+        </div>
+      </div>
+
+      <!-- "ดูกิจกรรมทั้งหมด" Button (linking to calendar.html) -->
+      <div class="dg-calendar-more-wrap" style="margin-top: 36px; text-align: center;">
+        <a href="calendar.html" class="dg-btn-more-events" style="text-decoration: none;">
+          <span>ดูกิจกรรมทั้งหมด</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FAQ ACCORDION ("Questions? Answers." from Diego) ============ -->
+  <section class="dg-faq-section" id="faq">
+    <div class="dg-container">
+      <div class="dg-faq-grid">
+        <!-- Left: Big Title + Contact Card -->
+        <div class="dg-faq-left">
+          <h2 class="dg-faq-title">
+            Questions?<br>
+            Answers.
+          </h2>
+          <div class="dg-faq-contact-card">
+            <p>
+              มีข้อสงสัยเกี่ยวกับการปฏิบัติงาน หรือต้องการสอบถามข้อมูลเพิ่มเติม สามารถติดต่อคณะสารวัตรได้ทันที
+            </p>
+            <a href="#contact" class="dg-btn-black">
+              <span>ติดต่อสอบถาม</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Accordion -->
+        <div class="dg-accordion-list" data-reveal="fade" data-delay="120">
+          <!-- Accordion 1 (Active by default): สารวัตรนักเรียนมีหน้าที่อะไรบ้าง? -->
+          <div class="dg-accordion-item active">
+            <button class="dg-accordion-trigger" type="button">
+              <span>สารวัตรนักเรียนมีหน้าที่อะไรบ้าง?</span>
+              <div class="dg-accordion-icon">—</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                สารวัตรนักเรียนมีบทบาทและภารกิจสำคัญในการดูแลความสงบเรียบร้อยและความปลอดภัยบริเวณโดยรอบโรงเรียน
+                ตรวจสอบความเป็นระเบียบเรียบร้อยและความสะอาดภายในอาคารเรียน ปฏิบัติหน้าที่รักษาความปลอดภัยในทุกวันทำการ
+                พร้อมทั้งดูแลความปลอดภัยเป็นพิเศษระหว่างช่วงงานกิจกรรมของโรงเรียน
+                ตลอดจนร่วมปฏิบัติหน้าที่จิตอาสาในกิจกรรมต่าง ๆ
+                ตามที่ได้รับมอบหมายจากทางโรงเรียนและกลุ่มงานกิจการนักเรียน
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 2: การปฏิบัติหน้าที่สารวัตรจะกระทบต่อเวลาเรียนหรือไม่? -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>การปฏิบัติหน้าที่สารวัตรจะกระทบต่อเวลาเรียนหรือไม่?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                ไม่กระทบต่อเวลาเรียนครับ เนื่องจากระบบได้จัดสรรตารางการปฏิบัติหน้าที่เฉพาะช่วงเข้าแถวเคารพธงชาติ (เวลา
+                07:50 – 08:10 น.)
+                และในช่วงที่มีกิจกรรมของโรงเรียนเท่านั้น ทั้งนี้
+                ในทุกกิจกรรมที่นักเรียนสารวัตรได้รับมอบหมายให้ปฏิบัติหน้าที่
+                จะได้รับการบันทึกเวลาเข้าร่วมอย่างเป็นทางการและไม่มีการหักชั่วโมงเรียนแต่อย่างใด
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 3: ใครสามารถสมัครเป็นสารวัตรนักเรียนได้บ้าง? -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>ใครสามารถสมัครเป็นสารวัตรนักเรียนได้บ้าง?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                นักเรียนโรงเรียนเดชะปัตตนยานุกูลระดับชั้นมัธยมศึกษาปีที่ 4 ถึง 5 ที่มีความประพฤติเรียบร้อย
+                มีระเบียบวินัย มีจิตสาธารณะ
+                พร้อมเสียสละเพื่อส่วนรวม มีผลการเรียนเฉลี่ยสะสม (GPAX) ไม่ต่ำกว่า 2.50
+                และมีคุณสมบัติตามกฎเกณฑ์ที่กลุ่มงานกิจการนักเรียนกำหนด
+                ทั้งนี้ ระบบรับสมัครจะเปิดให้บริการตามช่วงวันและเวลาที่มีการกำหนดไว้ในโอกาสต่อไป
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 4: หากพบเห็นเหตุการณ์ฉุกเฉินหรือพฤติกรรมไม่เหมาะสม แจ้งทางไหนได้เร็วที่สุด? -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>หากพบเห็นเหตุการณ์ฉุกเฉินหรือพฤติกรรมไม่เหมาะสม แจ้งทางไหนได้เร็วที่สุด?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                สามารถส่งข้อความแจ้งเตือนมายัง Facebook Page คณะสารวัตรนักเรียน
+                หรือสามารถแจ้งต่อนักเรียนสารวัตรที่ประจำจุดตรวจในบริเวณใกล้เคียงเพื่อเข้าตรวจสอบและระงับเหตุได้อย่างทันท่วงที
+              </p>
+            </div>
+          </div>
+
+          <!-- Accordion 5: ระบบลงหน้าที่ (SI-ROSTER) คืออะไร? -->
+          <div class="dg-accordion-item">
+            <button class="dg-accordion-trigger" type="button">
+              <span>ระบบลงหน้าที่ (SI-ROSTER) คืออะไร?</span>
+              <div class="dg-accordion-icon">+</div>
+            </button>
+            <div class="dg-accordion-body">
+              <p>
+                SI-ROSTER คือระบบบริหารจัดการการปฏิบัติหน้าที่ออนไลน์ของสารวัตรนักเรียน
+                พัฒนาขึ้นเพื่อให้สมาชิกทุกคนสามารถตรวจสอบตารางเวร จุดประจำการ บันทึกเวลาปฏิบัติหน้าที่
+                ตลอดจนประสานงานขอสลับหน้าที่ได้อย่างเป็นระเบียบ ถูกต้อง โปร่งใส และมีประสิทธิภาพสูงสุด
+                ทั้งนี้ ตัวระบบได้รับการออกแบบและพัฒนาร่วมกันโดย <a href="https://www.instagram.com/pansa.jpeg"
+                  target="_blank" rel="noopener noreferrer"
+                  style="color: var(--dg-text-primary); font-weight: 700; text-decoration: underline; text-underline-offset: 3px;">Rujira
+                  Wattanakitpaisal</a> (ผู้พัฒนาเว็บไซต์นี้) ร่วมกับ <a href="https://www.instagram.com/peth_2861"
+                  target="_blank" rel="noopener noreferrer"
+                  style="color: var(--dg-text-primary); font-weight: 700; text-decoration: underline; text-underline-offset: 3px;">Phatchara
+                  Kaewla-iad</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRE-FOOTER CTA & FOOTER ============ -->
+  <footer class="dg-footer" id="contact">
+    <div class="dg-container">
+      <!-- Pre-Footer CTA (Exact Diego Layout) -->
+      <div class="dg-pre-footer-grid" data-reveal="fade">
+        <div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
+            <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+              style="height: 52px; width: auto; object-fit: contain;" />
+            <span style="display: inline-block; width: 1px; height: 36px; background: var(--dg-border);"></span>
+            <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+              style="height: 50px; width: auto; object-fit: contain;" />
+          </div>
+          <h2 class="dg-pre-footer-title">
+            Have any questions<br>
+            in your mind!
+          </h2>
+          <a href="https://web.facebook.com/sarawatdechaa" target="_blank" class="dg-arrow-link">
+            <span>ส่งข้อความหาเราผ่าน Facebook</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- 3-Column Footer Links -->
+        <div class="dg-footer-columns">
+          <div class="dg-footer-col">
+            <h5>ส่วนสำคัญ</h5>
+            <div class="dg-footer-nav-list">
+              <a href="#hero">หน้าหลัก</a>
+              <a href="#news">ข่าวสารกิจกรรมล่าสุด</a>
+              <a href="activities.html">คลังกิจกรรมทั้งหมด</a>
+              <a href="#vision">วิสัยทัศน์ & พันธกิจ</a>
+              <a href="#operations">รวมระบบออนไลน์</a>
+              <a href="#team">วิสัยทัศน์ประธาน</a>
+              <a href="#calendar">ตารางกิจกรรมโรงเรียน</a>
+              <a href="team.html">หน้าคณะทำงาน</a>
+            </div>
+          </div>
+
+          <div class="dg-footer-col">
+            <h5>บริการออนไลน์</h5>
+            <div class="dg-footer-service-list">
+              <a href="https://sarawatdc.site/warn/" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="ร้องเรียนการทำงาน (Complaint)">
+                <span>ร้องเรียนการทำงาน (Complaint)</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="https://sarawatdc.site/si-roster/" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
+                <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="dg-footer-col dg-footer-col-contact">
+            <h5>ช่องทางติดต่อ</h5>
+            <div class="dg-contact-btn-list">
+              <a href="https://web.facebook.com/sarawatdechaa" target="_blank" rel="noopener noreferrer"
+                class="dg-contact-btn dg-btn-facebook" title="Facebook Page สารวัตรนักเรียน">
+                <span class="dg-contact-btn-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path
+                      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                  </svg>
+                </span>
+                <span class="dg-contact-btn-label">Facebook Page</span>
+                <i data-lucide="arrow-up-right" class="dg-contact-btn-arrow"></i>
+              </a>
+
+              <a href="https://www.instagram.com/sarawat_decha/" target="_blank" rel="noopener noreferrer"
+                class="dg-contact-btn dg-btn-instagram" title="Instagram">
+                <span class="dg-contact-btn-icon">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path
+                      d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                  </svg>
+                </span>
+                <span class="dg-contact-btn-label">Instagram</span>
+                <i data-lucide="arrow-up-right" class="dg-contact-btn-arrow"></i>
+              </a>
+
+              <a href="https://decha.ac.th" target="_blank" rel="noopener noreferrer"
+                class="dg-contact-btn dg-btn-school" title="เว็บไซต์โรงเรียนเดชะปัตตนยานุกูล">
+                <span class="dg-contact-btn-icon">
+                  <img src="assets/icons/school-logo.png" alt="โลโก้โรงเรียนเดชะปัตตนยานุกูล"
+                    class="dg-contact-school-img" />
+                </span>
+                <span class="dg-contact-btn-label">เว็บไซต์โรงเรียนเดชะฯ</span>
+                <i data-lucide="arrow-up-right" class="dg-contact-btn-arrow"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="dg-footer-bottom">
+        <div class="dg-footer-bottom-copy">
+          <span>©2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล. All rights reserved.</span>
+        </div>
+        <div class="dg-footer-bottom-meta">
+          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank">Rujira
+              Wattanakitpaisal</a></span>
+          <span class="dg-footer-meta-sep">•</span>
+          <a href="admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span>ระบบจัดการหน้าเว็บ (Admin)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ MODALS FOR ONLINE OPERATIONS ============ -->
+  <!-- 1. Feedback & Request Modal (ป๊อปอัปสิ่งที่อยากให้สารวัตรทำ) -->
+  <div class="dg-modal-backdrop" id="feedbackModal">
+    <div class="dg-modal-box">
+      <button class="dg-modal-close-btn" onclick="closeModal('feedbackModal')" aria-label="Close modal">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="dg-modal-header">
+        <div class="dg-modal-header-icon" style="background: #dbeafe; color: #2563eb;">
+          <i data-lucide="message-square-heart"></i>
+        </div>
+        <div class="dg-modal-header-text">
+          <h3>สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+          <p>ส่งความคิดเห็น เสนอแนะกิจกรรม หรือสิ่งที่อยากให้สารวัตรช่วยดูแล</p>
+        </div>
+      </div>
+      <form id="feedbackForm" onsubmit="submitFeedbackForm(event)">
+        <!-- Anti-Spam Bot Protection Honeypot -->
+        <input type="text" name="website_hp" id="fb_hp" style="display:none !important;" tabindex="-1" autocomplete="off" />
+        <div class="dg-form-group">
+          <label>หมวดหมู่เรื่อง</label>
+          <select id="fbCategory" required
+            style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #ffffff;">
+            <option value="สิ่งที่อยากให้สารวัตรช่วยทำ">🎯 สิ่งที่อยากให้สารวัตรช่วยทำ / จัดกิจกรรม</option>
+            <option value="ความปลอดภัย/จุดตรวจ">🛡️ เสนอแนะจุดตรวจ / ความปลอดภัย</option>
+            <option value="ข้อเสนอแนะปรับปรุงการทำงาน">⚡ ข้อเสนอแนะปรับปรุงการทำงาน</option>
+            <option value="คำชื่นชมและให้กำลังใจ">💖 คำชื่นชมและให้กำลังใจ</option>
+            <option value="อื่นๆ">📌 อื่นๆ</option>
+          </select>
+        </div>
+        <div class="dg-form-group">
+          <label>หัวข้อเรื่อง</label>
+          <input type="text" id="fbTitle"
+            placeholder="เช่น อยากให้มีสารวัตรช่วยดูแลช่วงข้ามถนน, เสนอจัดกิจกรรมสัปดาห์สอบ" required />
+        </div>
+        <div class="dg-form-group">
+          <label>จุดหรือบริเวณที่เกี่ยวข้อง (ถ้ามี)</label>
+          <input type="text" id="fbLocation" placeholder="เช่น บริเวณโรงอาหาร, ประตู 1, อาคาร 3" />
+        </div>
+        <div class="dg-form-group">
+          <label>รายละเอียดข้อเสนอแนะ</label>
+          <textarea id="fbDetail" rows="4" placeholder="บอกสิ่งที่คุณอยากให้ทำ หรือข้อเสนอแนะอย่างละเอียด..."
+            required></textarea>
+        </div>
+        <div class="dg-form-group">
+          <label>ชื่อผู้ส่ง หรือระดับชั้น (ระบุหรือไม่ระบุก็ได้)</label>
+          <input type="text" id="fbSender" placeholder="เช่น ตัวแทน ม.4/1 หรือเว้นว่างเพื่อส่งแบบไม่ระบุชื่อ" />
+        </div>
+        <div class="dg-form-group">
+          <label>ช่องทางติดต่อกลับ (LINE ID / เบอร์โทร ถ้าต้องการให้สารวัตรติดต่อกลับ)</label>
+          <input type="text" id="fbContact" placeholder="ไม่บังคับ กรอกเฉพาะกรณีต้องการให้ติดต่อกลับ" />
+        </div>
+        <button type="submit" id="fbSubmitBtn" class="dg-modal-submit-btn" style="background: #2563eb; color: #ffffff;">
+          <i data-lucide="send"></i>
+          <span>ส่งข้อเสนอแนะถึงสารวัตร</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Complaint & Work Report Modal (ป๊อปอัปรายงานการทำงานและข้อร้องเรียนนิรนาม) -->
+  <div class="dg-modal-backdrop" id="complaintModal">
+    <div class="dg-modal-box">
+      <button class="dg-modal-close-btn" onclick="closeModal('complaintModal')" aria-label="Close modal">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="dg-modal-header">
+        <div class="dg-modal-header-icon" style="background: #fee2e2; color: #dc2626;">
+          <i data-lucide="scale"></i>
+        </div>
+        <div class="dg-modal-header-text">
+          <h3>รายงานการทำงาน / ร้องเรียนการปฏิบัติหน้าที่</h3>
+          <p>ข้อมูลทั้งหมดจะถูกปกปิดตัวตน 100% และส่งตรงถึงครูที่ปรึกษา</p>
+        </div>
+      </div>
+      <form id="complaintForm" onsubmit="submitComplaintForm(event)">
+        <!-- Anti-Spam Bot Protection Honeypot -->
+        <input type="text" name="website_hp" id="cp_hp" style="display:none !important;" tabindex="-1" autocomplete="off" />
+        <div class="dg-form-group">
+          <label>หมวดหมู่การรายงาน</label>
+          <select id="cpCategory" required
+            style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #ffffff;">
+            <option value="การใช้วาจาและมารยาท">🗣️ การใช้วาจาและมารยาทการปฏิบัติหน้าที่</option>
+            <option value="การละเลยหน้าที่หรือจุดเวร">📍 การละเลยการปฏิบัติหน้าที่ / จุดตรวจ</option>
+            <option value="รายงานจุดอันตรายหรือพฤติกรรมเสี่ยง">⚠️ รายงานจุดเสี่ยงความปลอดภัยในโรงเรียน</option>
+            <option value="อื่นๆ">📌 อื่นๆ</option>
+          </select>
+        </div>
+        <div class="dg-form-group">
+          <label>หัวข้อเรื่อง</label>
+          <input type="text" id="cpTitle" placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบไม่เป็นธรรม"
+            required />
+        </div>
+        <div class="dg-form-group">
+          <label>วันที่และจุดปฏิบัติงาน / สถานที่เกิดเหตุ</label>
+          <input type="text" id="cpLocation" placeholder="เช่น วันจันทร์ที่ผ่านมา บริเวณหน้าประตู 1" required />
+        </div>
+        <div class="dg-form-group">
+          <label>เจ้าหน้าที่หรือสารวัตรที่เกี่ยวข้อง (ถ้าทราบ / ไม่ทราบให้เว้นว่างได้)</label>
+          <input type="text" id="cpTarget" placeholder="ระบุชื่อหรือลักษณะสารวัตรที่เกี่ยวข้อง (ไม่บังคับ)" />
+        </div>
+        <div class="dg-form-group">
+          <label>รายละเอียดเหตุการณ์</label>
+          <textarea id="cpDetail" rows="4"
+            placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใสและเป็นธรรม..." required></textarea>
+        </div>
+        <button type="submit" id="cpSubmitBtn" class="dg-modal-submit-btn" style="background: #dc2626; color: #ffffff;">
+          <i data-lucide="shield-check"></i>
+          <span>ส่งรายงาน / เรื่องร้องเรียน (นิรนาม)</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. News & Activity Detail Modal (ป๊อปอัปแสดงรายละเอียดข่าวสารและกิจกรรม) -->
+  <div class="dg-modal-backdrop" id="newsDetailModal" style="display: none;">
+    <div class="dg-modal-box dg-news-modal-box">
+      <button class="dg-modal-close-btn" onclick="closeModal('newsDetailModal')" aria-label="ปิดหน้าต่าง">
+        <i data-lucide="x"></i>
+      </button>
+
+      <div class="dg-news-modal-inner" id="newsModalContent">
+        <!-- Injected dynamically by openNewsDetailModal(id) -->
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ============ CIRCULAR SCROLL PROGRESS BACK-TO-TOP ============ -->
+  <button class="dg-scroll-top-btn" id="backToTop" aria-label="เลื่อนขึ้นด้านบน">
+    <svg class="dg-progress-ring" width="50" height="50" viewBox="0 0 50 50">
+      <circle class="dg-progress-ring-bg" cx="25" cy="25" r="20" />
+      <circle class="dg-progress-ring-bar" id="progressRingBar" cx="25" cy="25" r="20" />
+    </svg>
+    <div class="dg-scroll-icon-wrap">
+      <i data-lucide="arrow-up"></i>
+    </div>
+  </button>
+
+  <!-- Black Mourning Ribbon (ริบบิ้นไว้ทุกข์มุมล่างซ้าย) -->
+  <img
+    src="https://github.com/KongNontawatDev/Black-Mourning-Ribbon/blob/2150640c0e623c7fbcca07024287b597f7999a84/ribbon_bottom_left.png?raw=true"
+    alt="Black mourning ribbon for websites, bottom left corner, ริบบิ้นไว้ทุกข์สีดำ มุมล่างซ้าย สำหรับแสดงความอาลัยบนเว็บไซต์"
+    style="position:fixed; bottom:0; left:0; width:80px; opacity:0.9; z-index:9999; pointer-events:none;"
+    onerror="this.src='assets/icons/ribbon_bottom_left.png';" />
+
+  <!-- Scripts -->
+  <script>
+    // --- Modal Handler Functions ---
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    async function submitFeedbackForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('fbSubmitBtn');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">⏳ กำลังบันทึกข้อมูลลงระบบ...</span>';
+      }
+
+      const payload = {
+        type: 'feedback',
+        category: document.getElementById('fbCategory')?.value || 'ทั่วไป',
+        title: (document.getElementById('fbTitle')?.value || '').trim(),
+        location: (document.getElementById('fbLocation')?.value || '').trim(),
+        detail: (document.getElementById('fbDetail')?.value || '').trim(),
+        senderName: (document.getElementById('fbSender')?.value || '').trim() || 'ไม่ระบุตัวตน (Anonymous)',
+        contact: (document.getElementById('fbContact')?.value || '').trim(),
+        website_hp: (document.getElementById('fb_hp')?.value || '').trim()
+      };
+
+      try {
+        if (window.SarawatApi) {
+          await window.SarawatApi.submitFeedback(payload);
+        }
+        alert('✨ ส่งข้อเสนอแนะถึงคณะสารวัตรนักเรียนเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลเรียบร้อยแล้ว ขอบคุณสำหรับเสียงสะท้อนเพื่อพัฒนาโรงเรียน');
+        document.getElementById('feedbackForm')?.reset();
+        closeModal('feedbackModal');
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    async function submitComplaintForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('cpSubmitBtn');
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">⏳ กำลังบันทึกข้อมูลนิรนาม...</span>';
+      }
+
+      const payload = {
+        type: 'complaint',
+        category: document.getElementById('cpCategory')?.value || 'ทั่วไป',
+        title: (document.getElementById('cpTitle')?.value || '').trim(),
+        location: (document.getElementById('cpLocation')?.value || '').trim(),
+        targetPerson: (document.getElementById('cpTarget')?.value || '').trim(),
+        detail: (document.getElementById('cpDetail')?.value || '').trim(),
+        senderName: 'ไม่ระบุตัวตน (Anonymous)',
+        website_hp: (document.getElementById('cp_hp')?.value || '').trim()
+      };
+
+      try {
+        if (window.SarawatApi) {
+          await window.SarawatApi.submitFeedback(payload);
+        }
+        alert('🛡️ ส่งข้อมูลถึงครูที่ปรึกษาสารวัตรนักเรียนเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลโดยปกปิดตัวตนของคุณ 100% ขอบคุณที่ร่วมสร้างความโปร่งใส');
+        document.getElementById('complaintForm')?.reset();
+        closeModal('complaintModal');
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+      }
+    }
+
+    function handleModalSubmit(e, successMsg) {
+      e.preventDefault();
+      alert(successMsg);
+      const modal = e.target.closest('.dg-modal-backdrop');
+      if (modal) {
+        closeModal(modal.id);
+      }
+      e.target.reset();
+    }
+
+    // ==========================================================
+    // NEWS & ACTIVITIES SYSTEM FUNCTIONS
+    // ==========================================================
+    const DEFAULT_NEWS_IMAGE = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
+    const DEFAULT_NEWS_ITEMS = [];
+
+    // ==========================================================
+    // THAI CALENDAR & DATE PARSER FOR ACTIVITIES
+    // ==========================================================
+    const THAI_MONTHS_SHORT = [
+      'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+      'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+    ];
+    const THAI_MONTHS_FULL = [
+      'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ];
+
+    function parseDateToTimestamp(item) {
+      if (!item) return 0;
+      if (item.dateIso) {
+        const ts = new Date(item.dateIso + 'T12:00:00Z').getTime();
+        if (!isNaN(ts)) return ts;
+      }
+      const dateStr = item.date || ((item.day || '') + ' ' + (item.month || ''));
+      if (!dateStr || typeof dateStr !== 'string') return 0;
+
+      const isoMatch = dateStr.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (isoMatch) {
+        return Date.UTC(parseInt(isoMatch[1], 10), parseInt(isoMatch[2], 10) - 1, parseInt(isoMatch[3], 10), 12, 0, 0);
+      }
+
+      let month = -1;
+      for (let i = 0; i < THAI_MONTHS_SHORT.length; i++) {
+        if (dateStr.includes(THAI_MONTHS_SHORT[i]) || dateStr.includes(THAI_MONTHS_FULL[i])) {
+          month = i;
+          break;
+        }
+      }
+
+      const numbers = dateStr.match(/\d+/g);
+      if (!numbers) return 0;
+
+      let day = parseInt(numbers[0], 10);
+      if (numbers.length >= 3 && dateStr.includes('-')) {
+        day = parseInt(numbers[1], 10);
+      }
+
+      let year = new Date().getFullYear();
+      const lastNum = parseInt(numbers[numbers.length - 1], 10);
+      if (lastNum > 2400) {
+        year = lastNum - 543;
+      } else if (lastNum >= 50 && lastNum < 100) {
+        year = (2500 + lastNum) - 543;
+      } else if (lastNum > 2000 && lastNum < 2100) {
+        year = lastNum;
+      }
+
+      if (month === -1) month = 0;
+      return Date.UTC(year, month, day || 1, 12, 0, 0);
+    }
+
+    function getNewsData() {
+      let items = DEFAULT_NEWS_ITEMS;
+      try {
+        const stored = localStorage.getItem('dg_sarawat_news_items');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) items = parsed;
+        }
+      } catch (err) {
+        console.warn('Error reading news from localStorage:', err);
+      }
+      // Sort chronologically descending: latest activity date is ALWAYS first (#1)
+      return items.slice().sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
+    }
+
+    // ==========================================================
+    // NEWS & ACTIVITIES RENDERING (PUBLIC VIEW)
+    // ==========================================================
+    function renderNewsCards() {
+      const track = document.getElementById('newsCardsTrack');
+      if (!track) return;
+
+      const allItems = getNewsData();
+      if (allItems.length === 0) {
+        track.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); width: 100%;">ยังไม่มีข่าวสารและกิจกรรมในขณะนี้</div>';
+        return;
+      }
+      // Show ONLY the latest 5 news/activities in the main page carousel
+      const items = allItems.slice(0, 5);
+
+      const cardsHtml = items.map((item, index) => {
+        const hasFb = Boolean(item.fbUrl && item.fbUrl.trim());
+        const hasIg = Boolean(item.igUrl && item.igUrl.trim());
+        const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
+        const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
+        const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
+
+        const fbBtn = hasFb ? `
+          <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-fb" title="Facebook" aria-label="Facebook" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+        ` : '';
+
+        const igBtn = hasIg ? `
+          <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-ig" title="Instagram" aria-label="Instagram" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        ` : '';
+
+        const reelsBtn = hasReels ? `
+          <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-reels" title="Instagram Reels" aria-label="Instagram Reels" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
+              <path d="M2.5 8h19"/>
+              <path d="m8 2.5-2.5 5.5"/>
+              <path d="m14 2.5-2.5 5.5"/>
+              <path d="m20 2.5-2.5 5.5"/>
+              <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+        ` : '';
+
+        const photoBtn = hasPhoto ? `
+          <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-btn dg-btn-photo" title="Google Photos" aria-label="Google Photos" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/>
+              <path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/>
+              <path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/>
+              <path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/>
+            </svg>
+          </a>
+        ` : '';
+
+        return `
+          <article class="dg-news-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
+            <div class="dg-news-cover-wrap">
+              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
+              <span class="dg-news-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+            </div>
+            <div class="dg-news-content">
+              <h3 class="dg-news-card-title">${escapeHtml(item.title)}</h3>
+              <p class="dg-news-card-desc">${escapeHtml(item.desc)}</p>
+
+              ${hasAnyLinks ? `
+                <div class="dg-news-actions-row">
+                  ${fbBtn}
+                  ${igBtn}
+                  ${reelsBtn}
+                  ${photoBtn}
+                </div>
+              ` : ''}
+
+              <div class="dg-news-card-meta-bar">
+                <span class="dg-news-counter-tag">${index === 0 ? '🔥 กิจกรรมล่าสุด (LATEST)' : `ACTIVITY #${index + 1}`}</span>
+                <span class="dg-news-read-more-btn">
+                  <span>ดูรายละเอียด</span>
+                  <i data-lucide="arrow-up-right"></i>
+                </span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Append the "ดูเพิ่มเติม" card at the end of the 5 cards
+      const moreCardHtml = `
+        <a href="activities.html" class="dg-news-card dg-news-more-card" title="คลิกเพื่อดูข่าวสารและกิจกรรมทั้งหมด">
+          <div class="dg-news-more-card-body">
+            <div>
+              <div class="dg-news-more-icon-badge">
+                <i data-lucide="arrow-right"></i>
+              </div>
+              <div class="dg-news-more-content">
+                <span class="dg-news-more-tag">ARCHIVE • คลังกิจกรรม</span>
+                <h3 class="dg-news-more-title">
+                  <span>ดูเพิ่มเติม</span>
+                  <i data-lucide="arrow-right" style="width: 20px; height: 20px;"></i>
+                </h3>
+                <p class="dg-news-more-desc">
+                  รวบรวมภาพข่าวสาร และประมวลภาพกิจกรรมการปฏิบัติหน้าที่ของสารวัตรนักเรียนทั้งหมด (${allItems.length} รายการ)
+                </p>
+              </div>
+            </div>
+            <div class="dg-news-more-footer">
+              <span class="dg-news-more-action-text">เปิดหน้ารวมกิจกรรม</span>
+              <div class="dg-news-more-arrow-btn">
+                <i data-lucide="arrow-up-right"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+
+      track.innerHTML = cardsHtml + moreCardHtml;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function openNewsDetailModal(id) {
+      const items = getNewsData();
+      const item = items.find(it => String(it.id) === String(id));
+      if (!item) return;
+
+      const container = document.getElementById('newsModalContent');
+      if (!container) return;
+
+      const hasFb = Boolean(item.fbUrl && item.fbUrl.trim());
+      const hasIg = Boolean(item.igUrl && item.igUrl.trim());
+      const hasReels = Boolean(item.reelsUrl && item.reelsUrl.trim());
+      const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
+      const hasAnyLinks = hasFb || hasIg || hasReels || hasPhoto;
+
+
+
+      container.innerHTML = `
+        <div class="dg-news-modal-header">
+          <div class="dg-news-modal-meta-top">
+            <span class="dg-news-modal-badge">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+            ${item.date ? `
+              <span class="dg-news-modal-date">
+                <i data-lucide="calendar"></i>
+                <span>${escapeHtml(item.date)}</span>
+              </span>
+            ` : ''}
+          </div>
+          <h2 class="dg-news-modal-title">${escapeHtml(item.title)}</h2>
+        </div>
+
+        <div class="dg-news-modal-cover">
+          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
+        </div>
+
+        <div class="dg-news-modal-body">
+          <div class="dg-news-modal-desc">
+            <p>${escapeHtml(item.desc || '')}</p>
+            ${item.detail ? `
+              <div class="dg-news-modal-subdesc">
+                ${escapeHtml(item.detail)}
+              </div>
+            ` : ''}
+          </div>
+
+          ${hasAnyLinks ? `
+            <div class="dg-news-modal-links-section">
+              <h4 class="dg-news-modal-links-title">
+                <i data-lucide="external-link"></i> ช่องทางรับชมรูปภาพและสื่อเพิ่มเติม
+              </h4>
+              <div class="dg-news-modal-links-grid">
+                ${hasFb ? `
+                  <a href="${escapeHtml(item.fbUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-fb">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                      <span>ดูโพสต์บน Facebook</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+
+                ${hasIg ? `
+                  <a href="${escapeHtml(item.igUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-ig">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                      </svg>
+                      <span>เปิดดูบน Instagram</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+
+                ${hasReels ? `
+                  <a href="${escapeHtml(item.reelsUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-reels">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2.5" y="2.5" width="19" height="19" rx="5" ry="5"/>
+                        <path d="M2.5 8h19"/>
+                        <path d="m8 2.5-2.5 5.5"/>
+                        <path d="m14 2.5-2.5 5.5"/>
+                        <path d="m20 2.5-2.5 5.5"/>
+                        <polygon points="10 11 16 14.5 10 18 10 11" fill="currentColor" stroke="none"/>
+                      </svg>
+                      <span>รับชมคลิป Reels</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+
+                ${hasPhoto ? `
+                  <a href="${escapeHtml(item.photoUrl.trim())}" target="_blank" rel="noopener noreferrer" class="dg-news-modal-btn btn-photo">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path fill="#EA4335" d="M12 12V4.5a3.5 3.5 0 0 0-7 0V12h7z"/>
+                        <path fill="#4285F4" d="M12 12h7.5a3.5 3.5 0 0 0 0-7H12v7z"/>
+                        <path fill="#34A853" d="M12 12v7.5a3.5 3.5 0 0 0 7 0V12h-7z"/>
+                        <path fill="#FBBC05" d="M12 12H4.5a3.5 3.5 0 0 0 0 7H12v-7z"/>
+                      </svg>
+                      <span>อัลบั้ม Google Photos</span>
+                    </span>
+                    <i data-lucide="arrow-up-right"></i>
+                  </a>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="dg-news-modal-footer">
+          <button type="button" class="dg-btn-black" onclick="closeModal('newsDetailModal')" style="cursor: pointer;">
+            <span>ปิดหน้าต่าง</span>
+          </button>
+        </div>
+      `;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+      openModal('newsDetailModal');
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // ==========================================================
+    // UPCOMING SCHOOL EVENTS (TOP ~5 CHRONOLOGICAL)
+    // ==========================================================
+    async function renderUpcomingEvents() {
+      const container = document.getElementById('upcomingEventsList');
+      if (!container) return;
+
+      try {
+        let events = [];
+        if (window.SarawatApi) {
+          events = await window.SarawatApi.getEvents({ upcoming: true, limit: 5 });
+        }
+        if (!events || !Array.isArray(events) || events.length === 0) {
+          container.innerHTML = `
+            <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: var(--dg-radius-md); padding: 50px 24px; text-align: center;">
+              <div style="width: 52px; height: 52px; border-radius: 50%; background: #f1f5f9; color: #64748b; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <i data-lucide="calendar-check" style="width: 26px; height: 26px;"></i>
+              </div>
+              <h3 style="font-family: var(--dg-font-sans); font-size: 1.15rem; font-weight: 750; color: var(--dg-black); margin-bottom: 8px;">ยังไม่มีกิจกรรมใหม่ที่กำลังจะมาถึงในขณะนี้</h3>
+              <p style="font-size: 0.9rem; color: var(--dg-text-secondary); margin-bottom: 0;">สามารถตรวจสอบกำหนดการหรือกิจกรรมย้อนหลังได้ที่หน้าปฏิทินโรงเรียน</p>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+          return;
+        }
+
+        container.innerHTML = events.map(evt => {
+          const catClass = `cat-${evt.category || 'general'}`;
+          const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป');
+          const dayDisplay = evt.day || '-';
+          const monthDisplay = evt.month || '';
+          const weekdayDisplay = evt.weekday || '';
+
+          return `
+            <div class="dg-event-card">
+              <div class="dg-event-date-box">
+                <span class="day-num">${escapeHtml(dayDisplay)}</span>
+                <span class="month-str">${escapeHtml(monthDisplay)}</span>
+                ${weekdayDisplay ? `<span class="weekday-str">${escapeHtml(weekdayDisplay)}</span>` : ''}
+              </div>
+              <div class="dg-event-details">
+                <div class="dg-event-header-row">
+                  <span class="dg-event-category-badge ${catClass}">${escapeHtml(catLabel)}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
+                    <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+                    <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
+                  </span>
+                  ${evt.location ? `
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
+                      <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i>
+                      <span>${escapeHtml(evt.location)}</span>
+                    </span>
+                  ` : ''}
+                  ${evt.audience ? `
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
+                      <i data-lucide="users" style="width: 13px; height: 13px;"></i>
+                      <span>${escapeHtml(evt.audience)}</span>
+                    </span>
+                  ` : ''}
+                </div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--dg-black); margin: 4px 0 2px; letter-spacing: -0.01em;">
+                  ${escapeHtml(evt.title || '')}
+                </h3>
+                ${evt.desc ? `
+                  <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${escapeHtml(evt.desc)}
+                  </p>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        console.error('renderUpcomingEvents error:', err);
+        container.innerHTML = '<div style="text-align: center; padding: 30px; color: #ef4444;">ไม่สามารถโหลดกิจกรรมได้ในขณะนี้</div>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // --- Nav scroll effect & Reading Progress Bar ---
+      const nav = document.getElementById('dgNav');
+      const scrollProgress = document.getElementById('scrollProgress');
+      const progressRingBar = document.getElementById('progressRingBar');
+      const backToTop = document.getElementById('backToTop');
+      const heroScrollCue = document.getElementById('heroScrollCue');
+
+      // Circumference for r=20 circle: 2 * PI * 20 ~= 125.66
+      const circumference = 2 * Math.PI * 20;
+      if (progressRingBar) {
+        progressRingBar.style.strokeDasharray = `${circumference}`;
+        progressRingBar.style.strokeDashoffset = `${circumference}`;
+      }
+
+      function handleScroll() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollFraction = docHeight > 0 ? Math.min(Math.max(scrollTop / docHeight, 0), 1) : 0;
+        const percent = scrollFraction * 100;
+
+        // 1. Top progress bar
+        if (scrollProgress) {
+          scrollProgress.style.width = `${percent}%`;
+        }
+
+        // 2. Circular progress ring on back to top button
+        if (progressRingBar) {
+          const offset = circumference - (scrollFraction * circumference);
+          progressRingBar.style.strokeDashoffset = offset;
+        }
+
+        // 3. Back to top button visibility
+        if (backToTop) {
+          backToTop.classList.toggle('visible', scrollTop > 350);
+        }
+
+        // 4. Navbar background shift
+        if (nav) {
+          nav.classList.toggle('scrolled', scrollTop > 40);
+        }
+
+        // 5. Hero scroll cue fade
+        if (heroScrollCue) {
+          if (scrollTop > 80) {
+            heroScrollCue.classList.add('faded');
+          } else {
+            heroScrollCue.classList.remove('faded');
+          }
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      handleScroll();
+
+      // Click back to top
+      if (backToTop) {
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // --- Live Operational Uptime Counter (Dynamic from localStorage or default) ---
+      const elMonths = document.getElementById('uptimeMonths');
+      const elDays = document.getElementById('uptimeDays');
+      const elHours = document.getElementById('uptimeHours');
+      const elMinutes = document.getElementById('uptimeMinutes');
+      const elSeconds = document.getElementById('uptimeSeconds');
+
+      function updateDutyUptime() {
+        const storedStart = localStorage.getItem('dg_sarawat_uptime_start');
+        const dutyStartDate = storedStart ? new Date(storedStart) : new Date('2026-05-23T07:00:00');
+        const storedLabel = localStorage.getItem('dg_sarawat_uptime_label');
+        const labelEl = document.getElementById('dutyStartLabel');
+        const labelElMobile = document.getElementById('dutyStartLabelMobile');
+        if (storedLabel) {
+          if (labelEl) labelEl.textContent = storedLabel;
+          if (labelElMobile) labelElMobile.textContent = storedLabel;
+        }
+
+        const now = new Date();
+
+        let yDiff = now.getFullYear() - dutyStartDate.getFullYear();
+        let mDiff = now.getMonth() - dutyStartDate.getMonth();
+        let dDiff = now.getDate() - dutyStartDate.getDate();
+        let hDiff = now.getHours() - dutyStartDate.getHours();
+        let minDiff = now.getMinutes() - dutyStartDate.getMinutes();
+        let sDiff = now.getSeconds() - dutyStartDate.getSeconds();
+
+        if (sDiff < 0) {
+          sDiff += 60;
+          minDiff--;
+        }
+        if (minDiff < 0) {
+          minDiff += 60;
+          hDiff--;
+        }
+        if (hDiff < 0) {
+          hDiff += 24;
+          dDiff--;
+        }
+        if (dDiff < 0) {
+          const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+          dDiff += prevMonth.getDate();
+          mDiff--;
+        }
+        if (mDiff < 0) {
+          mDiff += 12;
+          yDiff--;
+        }
+        const totalMonths = Math.max(0, (yDiff * 12) + mDiff);
+
+        if (elMonths) elMonths.textContent = String(totalMonths).padStart(2, '0');
+        if (elDays) elDays.textContent = String(Math.max(0, dDiff)).padStart(2, '0');
+        if (elHours) elHours.textContent = String(Math.max(0, hDiff)).padStart(2, '0');
+        if (elMinutes) elMinutes.textContent = String(Math.max(0, minDiff)).padStart(2, '0');
+        if (elSeconds) elSeconds.textContent = String(Math.max(0, sDiff)).padStart(2, '0');
+      }
+
+      updateDutyUptime();
+      setInterval(updateDutyUptime, 1000);
+
+      // --- Scrollspy for Navbar & Side Dot Matrix ---
+      const spySections = [
+        { id: 'hero', navLink: document.querySelector('.dg-nav-links a[href="#hero"]'), dot: document.querySelector('.dg-side-dot[data-section="hero"]') },
+        { id: 'vision', navLink: document.querySelector('.dg-nav-links a[href="#vision"]'), dot: document.querySelector('.dg-side-dot[data-section="vision"]') },
+        { id: 'news', navLink: document.querySelector('.dg-nav-links a[href="#news"]'), dot: document.querySelector('.dg-side-dot[data-section="news"]') },
+        { id: 'operations', navLink: document.querySelector('.dg-nav-links a[href="#operations"]'), dot: document.querySelector('.dg-side-dot[data-section="operations"]') },
+        { id: 'team', navLink: document.querySelector('.dg-nav-links a[href="#team"]'), dot: document.querySelector('.dg-side-dot[data-section="team"]') },
+        { id: 'calendar', navLink: document.querySelector('.dg-nav-links a[href="#calendar"]'), dot: document.querySelector('.dg-side-dot[data-section="calendar"]') },
+        { id: 'faq', navLink: document.querySelector('.dg-nav-links a[href="#faq"]'), dot: document.querySelector('.dg-side-dot[data-section="faq"]') },
+        { id: 'contact', navLink: null, dot: document.querySelector('.dg-side-dot[data-section="contact"]') }
+      ];
+
+      function updateScrollspy() {
+        const scrollPosition = window.scrollY + 220;
+        let currentId = 'hero';
+
+        for (const sec of spySections) {
+          const el = document.getElementById(sec.id);
+          if (el && el.offsetTop <= scrollPosition) {
+            currentId = sec.id;
+          }
+        }
+
+        spySections.forEach(sec => {
+          const isCurrent = sec.id === currentId;
+          if (sec.navLink) sec.navLink.classList.toggle('active', isCurrent);
+          if (sec.dot) sec.dot.classList.toggle('active', isCurrent);
+        });
+      }
+
+      window.addEventListener('scroll', updateScrollspy, { passive: true });
+      updateScrollspy();
+
+      // --- Scroll Reveal System (IntersectionObserver) ---
+      const revealItems = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const delay = entry.target.getAttribute('data-delay') || 0;
+              setTimeout(() => {
+                entry.target.classList.add('is-revealed');
+              }, parseInt(delay, 10));
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealItems.forEach(item => revealObserver.observe(item));
+      } else {
+        // Fallback for older browsers
+        revealItems.forEach(item => item.classList.add('is-revealed'));
+      }
+
+
+
+      // --- 3D Interactive Card Tilt on Mousemove ---
+      const tiltCards = document.querySelectorAll('.dg-ops-card, .dg-chief-portrait-card');
+      tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -3.5;
+          const rotateY = ((x - centerX) / centerX) * 3.5;
+
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+
+      // --- Mobile menu toggle ---
+      const toggle = document.getElementById('dgNavToggle');
+      const menu = document.getElementById('dgNavLinks');
+      if (toggle && menu) {
+        toggle.addEventListener('click', () => {
+          menu.classList.toggle('active');
+          const icon = toggle.querySelector('i');
+          if (icon) {
+            icon.setAttribute('data-lucide', menu.classList.contains('active') ? 'x' : 'menu');
+            lucide.createIcons();
+          }
+        });
+
+        menu.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', () => {
+            menu.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'menu');
+              lucide.createIcons();
+            }
+          });
+        });
+      }
+
+      // --- Interactive Accordion (Diego FAQ) ---
+      const accordionItems = document.querySelectorAll('.dg-accordion-item');
+      accordionItems.forEach(item => {
+        const trigger = item.querySelector('.dg-accordion-trigger');
+        const icon = item.querySelector('.dg-accordion-icon');
+
+        trigger.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+
+          // Close all items
+          accordionItems.forEach(otherItem => {
+            otherItem.classList.remove('active');
+            const otherIcon = otherItem.querySelector('.dg-accordion-icon');
+            if (otherIcon) otherIcon.textContent = '+';
+          });
+
+          // Toggle current item
+          if (!isActive) {
+            item.classList.add('active');
+            if (icon) icon.textContent = '—';
+          }
+        });
+      });
+
+      // --- Smooth scroll for anchor links ---
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+          const targetId = link.getAttribute('href');
+          if (targetId && targetId !== '#') {
+            const targetEl = document.querySelector(targetId);
+            if (targetEl) {
+              e.preventDefault();
+              const navHeight = nav ? nav.offsetHeight : 70;
+              window.scrollTo({
+                top: targetEl.offsetTop - navHeight,
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+
+      // Close modal when clicking backdrop
+      document.querySelectorAll('.dg-modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', (e) => {
+          if (e.target === backdrop) {
+            closeModal(backdrop.id);
+          }
+        });
+      });
+
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.dg-modal-backdrop.active').forEach(modal => {
+            closeModal(modal.id);
+          });
+        }
+      });
+      // --- Dynamic Calendar & News Initialization ---
+      renderNewsCards();
+      renderUpcomingEvents();
+
+      // Background Sync from MySQL Backend API if server is connected
+      if (window.SarawatApi) {
+        window.SarawatApi.getNews().then(items => {
+          if (items && Array.isArray(items)) {
+            try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch (e) { }
+            renderNewsCards();
+          }
+        }).catch(() => { });
+
+        // Refresh upcoming events
+        renderUpcomingEvents();
+
+        // Sync recruitment status for Operations Card Badge
+        if (window.SarawatApi.getRecruitmentStatus) {
+          window.SarawatApi.getRecruitmentStatus().then(st => {
+            const badge = document.getElementById('opsRecruitStatusBadge');
+            if (badge) {
+              if (st && st.isMaintenance) {
+                badge.style.background = '#fef3c7';
+                badge.style.color = '#92400e';
+                badge.style.borderColor = '#fde68a';
+                badge.textContent = '🛠️ กำลังปรับปรุงพัฒนา';
+              } else if (st && st.isOpen) {
+                badge.style.background = '#dcfce7';
+                badge.style.color = '#15803d';
+                badge.style.borderColor = '#bbf7d0';
+                badge.textContent = '🟢 กำลังเปิดรับสมัคร';
+              } else {
+                badge.style.background = '#fee2e2';
+                badge.style.color = '#991b1b';
+                badge.style.borderColor = '#fecaca';
+                badge.textContent = '🔒 ปิดรับสมัคร';
+              }
+            }
+          }).catch(() => {});
+        }
+      }
+
+      const newsTrackWrap = document.getElementById('newsTrackWrap');
+      const newsPrevBtn = document.getElementById('newsPrevBtn');
+      const newsNextBtn = document.getElementById('newsNextBtn');
+      if (newsTrackWrap && newsPrevBtn && newsNextBtn) {
+        newsPrevBtn.addEventListener('click', () => {
+          newsTrackWrap.scrollBy({ left: -360, behavior: 'smooth' });
+        });
+        newsNextBtn.addEventListener('click', () => {
+          newsTrackWrap.scrollBy({ left: 360, behavior: 'smooth' });
+        });
+      }
+    });
+  </script>
+
+  <!-- Image Protection & Anti-Copy System -->
+  <script src="js/image-protection.js"></script>
+</body>
+
+</html>

@@ -1986,6 +1986,7 @@
           <button type="button" class="dg-filter-btn" data-admin-cat="affairs" onclick="filterAdminEventsCategory('affairs')">กิจการนักเรียน</button>
           <button type="button" class="dg-filter-btn" data-admin-cat="academic" onclick="filterAdminEventsCategory('academic')">วิชาการ</button>
           <button type="button" class="dg-filter-btn" data-admin-cat="prefect" onclick="filterAdminEventsCategory('prefect')">ภารกิจสารวัตร</button>
+          <button type="button" class="dg-filter-btn" data-admin-cat="holiday" onclick="filterAdminEventsCategory('holiday')">วันหยุด</button>
         </div>
         <div style="position: relative; min-width: 260px;">
           <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #94a3b8;"></i>
@@ -3311,6 +3312,7 @@
                 <option value="affairs">กิจการนักเรียน (affairs)</option>
                 <option value="academic">วิชาการ (academic)</option>
                 <option value="prefect">ภารกิจสารวัตร (prefect)</option>
+                <option value="holiday">วันหยุด (holiday)</option>
               </select>
             </div>
             <div class="dg-form-group">
@@ -3623,9 +3625,30 @@
     }
 
     async function checkAuth() {
+      const overlay = document.getElementById('pinOverlay');
+
+      // 1. Verify with backend session if available
+      if (window.SarawatApi && typeof window.SarawatApi.verifyAuth === 'function' && window.SarawatApi.getBaseUrl()) {
+        const token = window.SarawatApi.getAuthToken();
+        if (token) {
+          const authCheck = await window.SarawatApi.verifyAuth();
+          if (authCheck && authCheck.valid && authCheck.user) {
+            currentAdminUser = {
+              username: authCheck.user.username || 'Admin',
+              role: authCheck.user.role || 'Admin'
+            };
+            sessionStorage.setItem('sarawat_admin_auth', 'true');
+            sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
+            if (overlay) overlay.style.display = 'none';
+            applyRolePermissions(currentAdminUser.role, currentAdminUser.username);
+            return;
+          }
+        }
+      }
+
+      // 2. Check local session storage if offline / local mode
       const isAuth = sessionStorage.getItem('sarawat_admin_auth');
       const savedUserStr = sessionStorage.getItem('sarawat_admin_user');
-      const overlay = document.getElementById('pinOverlay');
 
       if (isAuth === 'true' && savedUserStr) {
         try {
@@ -4268,8 +4291,11 @@
       }
     }
 
-    function handleLogout() {
+    async function handleLogout() {
       if (confirm('คุณต้องการออกจากระบบ Admin ใช่หรือไม่?')) {
+        if (window.SarawatApi && typeof window.SarawatApi.logout === 'function') {
+          try { await window.SarawatApi.logout(); } catch (e) {}
+        }
         sessionStorage.removeItem('sarawat_admin_auth');
         sessionStorage.removeItem('sarawat_admin_user');
         window.location.reload();
@@ -5478,7 +5504,7 @@
           : '<span style="background:#f1f5f9; color:#64748b; border: 1px solid #e2e8f0; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">ผ่านมาแล้ว</span>';
 
         const catClass = `cat-${evt.category || 'general'}`;
-        const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป');
+        const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป');
 
         const displayDate = evt.day && evt.month ? `${evt.day} ${evt.month}` : (evt.dateStart || '-');
 

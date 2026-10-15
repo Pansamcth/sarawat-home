@@ -119,6 +119,139 @@
       return window.SARAWAT_API_BASE;
     },
 
+    // ==========================================
+    // 🔐 AUTH TOKEN & SESSION MANAGEMENT
+    // ==========================================
+    TOKEN_KEY: 'dg_sarawat_auth_token',
+    USER_KEY: 'dg_sarawat_auth_user',
+
+    getAuthToken: function () {
+      try {
+        return localStorage.getItem(this.TOKEN_KEY) || sessionStorage.getItem(this.TOKEN_KEY) || '';
+      } catch (e) {
+        return '';
+      }
+    },
+
+    setAuthToken: function (token, rememberMe = true) {
+      if (!token) return;
+      try {
+        if (rememberMe) {
+          localStorage.setItem(this.TOKEN_KEY, token);
+        } else {
+          sessionStorage.setItem(this.TOKEN_KEY, token);
+        }
+      } catch (e) {}
+    },
+
+    getAuthUser: function () {
+      try {
+        const stored = localStorage.getItem(this.USER_KEY) || sessionStorage.getItem(this.USER_KEY);
+        return stored ? JSON.parse(stored) : null;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    setAuthUser: function (user, rememberMe = true) {
+      if (!user) return;
+      try {
+        const str = JSON.stringify(user);
+        if (rememberMe) {
+          localStorage.setItem(this.USER_KEY, str);
+        } else {
+          sessionStorage.setItem(this.USER_KEY, str);
+        }
+      } catch (e) {}
+    },
+
+    clearAuth: function () {
+      try {
+        localStorage.removeItem(this.TOKEN_KEY);
+        sessionStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USER_KEY);
+        sessionStorage.removeItem(this.USER_KEY);
+      } catch (e) {}
+    },
+
+    getAuthHeaders: function (customHeaders = {}) {
+      const headers = { ...customHeaders };
+      const token = this.getAuthToken();
+      if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
+      return headers;
+    },
+
+    verifyAuth: async function () {
+      const base = this.getBaseUrl();
+      const token = this.getAuthToken();
+      if (!base || !token) {
+        return { valid: false, reason: 'No token or offline' };
+      }
+      try {
+        const res = await fetch(`${base}/api/auth/verify`, {
+          headers: this.getAuthHeaders({ 'Accept': 'application/json' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.valid && data.user) {
+            this.setAuthUser(data.user);
+            return { valid: true, user: data.user };
+          }
+        }
+        if (res.status === 401) {
+          this.clearAuth();
+        }
+        return { valid: false, status: res.status };
+      } catch (err) {
+        const user = this.getAuthUser();
+        return { valid: !!user, user: user, offline: true, error: err.message };
+      }
+    },
+
+    logout: async function () {
+      const base = this.getBaseUrl();
+      const token = this.getAuthToken();
+      if (base && token) {
+        try {
+          await fetch(`${base}/api/logout`, {
+            method: 'POST',
+            headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({ token })
+          });
+        } catch (e) {}
+      }
+      this.clearAuth();
+      return { success: true };
+    },
+
+    getSettings: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return {};
+      try {
+        const res = await fetch(`${base}/api/settings`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.warn('[SarawatApi] getSettings failed:', err.message);
+        return {};
+      }
+    },
+
+    saveSettings: async function (settings) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/settings`, {
+        method: 'POST',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(settings)
+      });
+      if (!res.ok) throw new Error(`บันทึกการตั้งค่าไม่สำเร็จ (HTTP ${res.status})`);
+      return await res.json();
+    },
+
+
     // ตรวจสอบสถานะการทำงานของระบบฐานข้อมูล
     checkHealth: async function () {
       const base = this.getBaseUrl();
@@ -161,7 +294,7 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/news`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(item)
       });
       if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการบันทึกข่าว (HTTP ${res.status})`);
@@ -173,7 +306,8 @@
       const base = this.getBaseUrl();
       if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/news/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
       });
       if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการลบข่าว (HTTP ${res.status})`);
       return await res.json();
@@ -188,6 +322,7 @@
 
       const res = await fetch(`${base}/api/upload`, {
         method: 'POST',
+        headers: this.getAuthHeaders(),
         body: formData
       });
 
@@ -330,7 +465,7 @@
 
       const res = await fetch(`${base}/api/events`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(payload)
       });
 
@@ -360,7 +495,8 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูลหลัก');
 
       const res = await fetch(`${base}/api/events/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
       });
 
       if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการลบกิจกรรม (HTTP ${res.status})`);
@@ -384,7 +520,8 @@
         { key: 'general', label: 'กิจกรรมทั่วไป', desc: 'กิจกรรมทั่วไปของโรงเรียน', color: 'cat-general' },
         { key: 'affairs', label: 'งานกิจการนักเรียน', desc: 'กิจกรรมที่เกี่ยวข้องกับฝ่าย/กลุ่มงานกิจการนักเรียน', color: 'cat-affairs' },
         { key: 'academic', label: 'งานวิชาการ', desc: 'กิจกรรมด้านการเรียน การสอบ การแข่งขัน หรือภารกิจทางวิชาการ', color: 'cat-academic' },
-        { key: 'prefect', label: 'ภารกิจสารวัตร', desc: 'กิจกรรมหรือภารกิจที่เกี่ยวข้องกับสารวัตรนักเรียน', color: 'cat-prefect' }
+        { key: 'prefect', label: 'ภารกิจสารวัตร', desc: 'กิจกรรมหรือภารกิจที่เกี่ยวข้องกับสารวัตรนักเรียน', color: 'cat-prefect' },
+        { key: 'holiday', label: 'วันหยุด', desc: 'วันหยุดนักขัตฤกษ์ วันหยุดราชการ หรือวันหยุดพิเศษของโรงเรียน', color: 'cat-holiday' }
       ];
     },
 
@@ -408,7 +545,7 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
       const res = await fetch(`${base}/api/featured`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(item)
       });
       if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการบันทึกกิจกรรมเด่น (HTTP ${res.status})`);
@@ -478,6 +615,12 @@
           err.isAuthError = true;
           throw err;
         }
+        if (data.token) {
+          this.setAuthToken(data.token, true);
+        }
+        if (data.user) {
+          this.setAuthUser({ username: data.user, role: data.role || 'Admin' }, true);
+        }
         return data;
       };
 
@@ -509,7 +652,9 @@
       const base = this.getBaseUrl();
       if (!base) return null;
       try {
-        const res = await fetch(`${base}/api/admins`);
+        const res = await fetch(`${base}/api/admins`, {
+          headers: this.getAuthHeaders()
+        });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
       } catch (err) {
@@ -523,7 +668,7 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
       const res = await fetch(`${base}/api/admins`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ username, password, role })
       });
       const data = await res.json();
@@ -537,7 +682,8 @@
       const base = this.getBaseUrl();
       if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
       const res = await fetch(`${base}/api/admins/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
@@ -551,7 +697,7 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
       const res = await fetch(`${base}/api/admins/${encodeURIComponent(id)}/reset-password`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ newPassword })
       });
       const data = await res.json();
@@ -566,7 +712,7 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อเซิร์ฟเวอร์หลังบ้าน');
       const res = await fetch(`${base}/api/admins/change-password`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ username, currentPassword, newPassword })
       });
       const data = await res.json();
@@ -591,7 +737,7 @@
           if (options.q && options.q.trim()) params.append('q', options.q.trim());
 
           const url = `${base}/api/feedbacks` + (params.toString() ? `?${params.toString()}` : '');
-          const res = await fetch(url);
+          const res = await fetch(url, { headers: this.getAuthHeaders() });
           if (res.ok) {
             list = await res.json();
             if (Array.isArray(list)) {
@@ -647,6 +793,7 @@
         location: item.location || '',
         targetPerson: item.targetPerson || item.target_person || '',
         detail: item.detail || '',
+        website_hp: item.website_hp || item._hp || '',
         senderName: item.senderName || item.sender_name || 'ไม่ระบุตัวตน (Anonymous)',
         contact: item.contact || '',
         status: item.status || 'pending',
@@ -691,7 +838,7 @@
 
       const res = await fetch(`${base}/api/feedbacks/${encodeURIComponent(id)}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(updateData)
       });
 
@@ -720,7 +867,8 @@
       if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
 
       const res = await fetch(`${base}/api/feedbacks/${encodeURIComponent(id)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
       });
 
       if (!res.ok) {
@@ -829,7 +977,7 @@
       const base = this.getBaseUrl();
       if (!base) return { total: 0, byStatus: {}, byGrade: {} };
       try {
-        const res = await fetch(`${base}/api/recruitment/stats`);
+        const res = await fetch(`${base}/api/recruitment/stats`, { headers: this.getAuthHeaders() });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
       } catch (err) {
@@ -849,7 +997,7 @@
       if (params.page) q.set('page', params.page);
       if (params.limit) q.set('limit', params.limit);
 
-      const res = await fetch(`${base}/api/recruitment/applicants?${q.toString()}`);
+      const res = await fetch(`${base}/api/recruitment/applicants?${q.toString()}`, { headers: this.getAuthHeaders() });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     },
@@ -857,7 +1005,7 @@
     adminGetApplicantDetail: async function (id) {
       const base = this.getBaseUrl();
       if (!base) throw new Error('Offline');
-      const res = await fetch(`${base}/api/recruitment/applicant/${id}`);
+      const res = await fetch(`${base}/api/recruitment/applicant/${id}`, { headers: this.getAuthHeaders() });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
       return data;
@@ -868,7 +1016,7 @@
       if (!base) throw new Error('Offline');
       const res = await fetch(`${base}/api/recruitment/applicant/${id}/status`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(data)
       });
       const resData = await res.json();
@@ -879,7 +1027,7 @@
     adminGetRecruitmentSettings: async function () {
       const base = this.getBaseUrl();
       if (!base) throw new Error('Offline');
-      const res = await fetch(`${base}/api/recruitment/settings`);
+      const res = await fetch(`${base}/api/recruitment/settings`, { headers: this.getAuthHeaders() });
       return await res.json();
     },
 
@@ -888,7 +1036,7 @@
       if (!base) throw new Error('Offline');
       const res = await fetch(`${base}/api/recruitment/settings`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(settings)
       });
       const data = await res.json();
@@ -899,7 +1047,7 @@
     adminGetRecruitmentClubs: async function () {
       const base = this.getBaseUrl();
       if (!base) return { clubs: [] };
-      const res = await fetch(`${base}/api/recruitment/admin-clubs`);
+      const res = await fetch(`${base}/api/recruitment/admin-clubs`, { headers: this.getAuthHeaders() });
       return await res.json();
     },
 
@@ -908,7 +1056,7 @@
       if (!base) throw new Error('Offline');
       const res = await fetch(`${base}/api/recruitment/admin-clubs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(data)
       });
       return await res.json();
@@ -919,7 +1067,7 @@
       if (!base) throw new Error('Offline');
       const res = await fetch(`${base}/api/recruitment/admin-clubs/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(data)
       });
       return await res.json();
@@ -929,7 +1077,8 @@
       const base = this.getBaseUrl();
       if (!base) throw new Error('Offline');
       const res = await fetch(`${base}/api/recruitment/admin-clubs/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
       });
       return await res.json();
     },
@@ -938,7 +1087,8 @@
       const base = this.getBaseUrl();
       if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
       const res = await fetch(`${base}/api/recruitment/applicant/${id}?admin=${encodeURIComponent(admin)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'ลบใบสมัครไม่สำเร็จ');
@@ -950,7 +1100,7 @@
       if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
       const res = await fetch(`${base}/api/recruitment/applicants/clear`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ admin })
       });
       const data = await res.json();
@@ -961,13 +1111,15 @@
     getRecruitmentExportUrl: function (format = 'xlsx', status = 'all', grade = 'all') {
       const base = this.getBaseUrl();
       const q = new URLSearchParams({ format, status, grade });
+      const token = this.getAuthToken();
+      if (token) q.set('token', token);
       return `${base}/api/recruitment/export?${q.toString()}`;
     },
 
     adminGetRecruitmentLogs: async function () {
       const base = this.getBaseUrl();
       if (!base) return { logs: [] };
-      const res = await fetch(`${base}/api/recruitment/logs`);
+      const res = await fetch(`${base}/api/recruitment/logs`, { headers: this.getAuthHeaders() });
       return await res.json();
     }
   };

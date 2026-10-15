@@ -344,6 +344,12 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    .dg-cal-event-bar.cat-holiday {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
     .dg-cal-event-bar.cat-general {
       background: linear-gradient(135deg, #334155 0%, #475569 100%);
       color: #ffffff;
@@ -375,6 +381,13 @@
       color: #5b21b6;
       border: 1px solid #ede9fe;
       border-left: 3.5px solid #7c3aed;
+    }
+
+    .dg-cal-event-bar.is-single-day.cat-holiday {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-left: 3.5px solid #10b981;
     }
 
     .dg-cal-event-bar.is-single-day.cat-general {
@@ -417,6 +430,7 @@
     .dg-cal-event-bar.is-single-day.cat-academic .dg-cal-bar-dot { background: #2563eb; }
     .dg-cal-event-bar.is-single-day.cat-affairs .dg-cal-bar-dot { background: #e11d48; }
     .dg-cal-event-bar.is-single-day.cat-prefect .dg-cal-bar-dot { background: #7c3aed; }
+    .dg-cal-event-bar.is-single-day.cat-holiday .dg-cal-bar-dot { background: #10b981; }
     .dg-cal-event-bar.is-single-day.cat-general .dg-cal-bar-dot { background: #475569; }
 
     .dg-cal-bar-title {
@@ -683,6 +697,9 @@
           <button type="button" class="dg-act-pill-btn" data-category="prefect" onclick="filterCalendarCategory('prefect')">
             <span>ภารกิจสารวัตร</span>
           </button>
+          <button type="button" class="dg-act-pill-btn" data-category="holiday" onclick="filterCalendarCategory('holiday')">
+            <span>วันหยุด</span>
+          </button>
         </div>
       </div>
 
@@ -780,6 +797,10 @@
               <span class="dg-cal-legend-pill">
                 <span class="dg-cal-legend-dot" style="background: #475569;"></span>
                 <span>กิจกรรมทั่วไป</span>
+              </span>
+              <span class="dg-cal-legend-pill">
+                <span class="dg-cal-legend-dot" style="background: #10b981;"></span>
+                <span>วันหยุด</span>
               </span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 600;">
@@ -1465,7 +1486,8 @@
         const catLabel = evt.categoryLabel || (
           evt.category === 'affairs' ? 'งานกิจการนักเรียน' :
           evt.category === 'academic' ? 'งานวิชาการ' :
-          evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป'
+          evt.category === 'prefect' ? 'ภารกิจสารวัตร' :
+          evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป'
         );
 
         const dayDisplay = evt.day || '-';
@@ -1549,7 +1571,8 @@
       const catLabel = evt.categoryLabel || (
         evt.category === 'affairs' ? 'งานกิจการนักเรียน' :
         evt.category === 'academic' ? 'งานวิชาการ' :
-        evt.category === 'prefect' ? 'ภารกิจสารวัตร' : 'กิจกรรมทั่วไป'
+        evt.category === 'prefect' ? 'ภารกิจสารวัตร' :
+        evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป'
       );
       const status = getEventStatus(evt);
 

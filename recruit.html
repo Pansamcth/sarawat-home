@@ -1158,6 +1158,8 @@
 
         <!-- FORM CONTAINER -->
         <form id="recruitForm" novalidate onsubmit="return false;">
+          <!-- Anti-Spam Bot Protection Honeypot -->
+          <input type="text" name="website_hp" id="recruit_hp" style="display:none !important;" tabindex="-1" autocomplete="off" />
 
           <!-- ==================== STEP 1: FORM INPUTS ==================== -->
           <div id="stepPane1">
@@ -2596,6 +2598,7 @@
         formData.append('province', document.getElementById('inpProvince').value.trim());
         formData.append('postal_code', document.getElementById('inpPostalCode').value.trim());
         formData.append('pdpa_consent', 'true');
+        formData.append('website_hp', (document.getElementById('recruit_hp')?.value || '').trim());
 
         // Loading state
         const btnTxt = document.getElementById('txtBtnSubmit');
