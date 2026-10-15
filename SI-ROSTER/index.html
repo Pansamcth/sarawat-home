@@ -53,7 +53,34 @@
         return HARDCODED_TUNNEL_URL;
       }
 
-      function createGoogleScriptRunner() {
+      
+    function goToRosterAdmin(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const path = window.location.pathname;
+      if (/\/si-roster(\/.*)?$/i.test(path)) {
+        const basePath = path.match(/^.*\/si-roster/i)[0];
+        window.location.href = basePath + '/admin.html';
+        return;
+      }
+      if (window.location.protocol === 'file:') {
+        window.location.href = 'admin.html';
+        return;
+      }
+      window.location.href = 'admin.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const btn = document.getElementById('adminLoginBtn');
+      if (btn) {
+        const path = window.location.pathname;
+        if (/\/si-roster(\/.*)?$/i.test(path)) {
+          const basePath = path.match(/^.*\/si-roster/i)[0];
+          btn.href = basePath + '/admin.html';
+        }
+      }
+    });
+
+    function createGoogleScriptRunner() {
         let successHandler = null;
         let errorHandler = null;
 
@@ -3735,7 +3762,7 @@
                 <span style="font-weight: 500;">SQL: Checking...</span>
               </div>
 
-              <a href="admin.html" id="adminLoginBtn" class="minimal-link"
+              <a href="admin.html" id="adminLoginBtn" class="minimal-link" onclick="goToRosterAdmin(event)"
                 style="margin-top: 0; height: 24px;">
                 <i id="adminIcon" class="fa-solid fa-door-open" style="margin-right: 6px; font-size: 0.85rem;"></i>
                 <span id="adminLoginText">Admin Login</span> <i class="fa-solid fa-arrow-right-long arrow-icon"></i>

@@ -53,7 +53,33 @@
         return HARDCODED_TUNNEL_URL;
       }
 
-      function createGoogleScriptRunner() {
+      
+    function goToRosterStudent(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const path = window.location.pathname;
+      if (/\/si-roster(\/.*)?$/i.test(path)) {
+        const basePath = path.match(/^.*\/si-roster/i)[0];
+        window.location.href = basePath + '/index.html';
+        return;
+      }
+      if (window.location.protocol === 'file:') {
+        window.location.href = 'index.html';
+        return;
+      }
+      window.location.href = 'index.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('a[href="index.html"]').forEach(function (a) {
+        const path = window.location.pathname;
+        if (/\/si-roster(\/.*)?$/i.test(path)) {
+          const basePath = path.match(/^.*\/si-roster/i)[0];
+          a.href = basePath + '/index.html';
+        }
+      });
+    });
+
+    function createGoogleScriptRunner() {
         let successHandler = null;
         let errorHandler = null;
 
@@ -3876,7 +3902,7 @@
     // Override closeDashboard on admin.html to navigate to student view
     const _origCloseDashboard = closeDashboard;
     closeDashboard = function () {
-      window.location.href = 'index.html';
+      goToRosterStudent();
     };
 
     function loadInitialData() {
