@@ -12,7 +12,7 @@ echo.
 git config user.name >nul 2>&1
 if errorlevel 1 (
     git config --global user.name "Pansamcth"
-    git config --global user.email "rujra.wattanakitpaisal@gmail.com"
+    git config --global user.email "rujira.wattanakitpaisal@gmail.com"
 )
 
 :: 2. Check Remote URL
