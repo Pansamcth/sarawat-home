@@ -10,12 +10,9 @@ cd /d "F:\MP"
 :: 1. ตรวจสอบ Git User
 git config user.name > nul 2>&1
 if %ERRORLEVEL% neq 0 (
-    echo 👤 ยังไม่ได้ตั้งค่าชื่อผู้ใช้สำหรับ Git
-    set /p GIT_NAME="กรุณากรอกชื่อหรือ GitHub Username: "
-    set /p GIT_EMAIL="กรุณากรอกอีเมล GitHub: "
-    if not "%GIT_NAME%"=="" git config --global user.name "%GIT_NAME%"
-    if not "%GIT_EMAIL%"=="" git config --global user.email "%GIT_EMAIL%"
-    echo.
+    echo 👤 กำหนดข้อมูลผู้ใช้ Git เริ่มต้น...
+    git config --global user.name "Pansamcth"
+    git config --global user.email "rujra.wattanakitpaisal@gmail.com"
 )
 
 :: 2. ตรวจสอบว่ามี .git หรือยัง
@@ -25,19 +22,27 @@ if not exist ".git" (
 )
 
 :: 3. ตรวจสอบการตั้งค่า Remote Repository
-git remote get-url origin > nul 2>&1
-if %ERRORLEVEL% neq 0 (
+set CURRENT_URL=
+for /f "tokens=*" %%u in ('git remote get-url origin 2^>nul') do set CURRENT_URL=%%u
+echo %CURRENT_URL% | findstr /I "<USERNAME> <REPO_NAME>" >nul
+if %ERRORLEVEL% equ 0 set CURRENT_URL=
+
+if "%CURRENT_URL%"=="" (
     echo.
-    echo ⚠️ ยังไม่ได้เชื่อมต่อกับ GitHub Repository!
-    echo ตัวอย่าง URL: https://github.com/USERNAME/REPO_NAME.git
-    set /p REPO_URL="กรุณากรอก GitHub Repository URL ของคุณ: "
+    echo ⚠️ ยังไม่ได้ตั้งค่า URL ของ GitHub Repository จริง!
+    echo ตัวอย่าง URL: https://github.com/Pansamcth/ชื่อ-repo-ของคุณ.git
+    echo.
+    set /p REPO_URL="กรุณากรอกหรือวาง GitHub Repository URL ของคุณ: "
     if not "%REPO_URL%"=="" (
+        git remote remove origin 2>nul
         git remote add origin %REPO_URL%
     ) else (
-        echo ❌ ยกเลิกการทำงาน เนื่องจากไม่ได้ใส่ URL
+        echo ❌ ยกเลิกการทำงาน เนื่องจากไม่ได้ระบุ URL
         pause
         exit /b
     )
+) else (
+    echo 🔗 เชื่อมต่อกับ: %CURRENT_URL%
 )
 
 echo.
@@ -46,9 +51,10 @@ git add -A
 
 echo.
 echo [3/4] กำลังบันทึกสถานะ (Commit)...
-for /f "tokens=1-4 delims=/ " %%a in ('date /t') do set mydate=%%a-%%b-%%c
-for /f "tokens=1-2 delims=: " %%a in ('time /t') do set mytime=%%a:%%b
-git commit -m "Update website: %mydate% %mytime%"
+git commit -m "Update latest website (%date% %time%)" 2>nul
+if %ERRORLEVEL% neq 0 (
+    git commit -m "Update latest website" 2>nul
+)
 
 echo.
 echo [4/4] กำลังผลักข้อมูลขึ้น GitHub ไปยัง branch main...
@@ -63,9 +69,18 @@ if %ERRORLEVEL% equ 0 (
     echo ========================================================
 ) else (
     echo.
-    echo ⚠️ เกิดข้อผิดพลาดในการ Push หรือติดสิทธิ์การเข้าถึง
-    echo หากบน GitHub มีประวัติเก่าที่ต้องการแทนที่ด้วยเครื่องนี้ทั้งหมด
-    echo สามารถพิมพ์คำสั่ง: git push -u origin main --force
+    echo ========================================================
+    echo ⚠️ ยัง Push ไม่ผ่าน (อาจเป็นเพราะบน GitHub มีประวัติไฟล์เก่าอยู่)
+    echo กำลังลองบังคับเขียนทับ (--force) เพื่อให้ GitHub เหมือนในเครื่องเป๊ะ 100%...
+    echo ========================================================
+    git push -u origin main --force
+    if %ERRORLEVEL% equ 0 (
+        echo.
+        echo   ✅ บังคับซิงค์ขึ้น GitHub สำเร็จ 100%!
+    ) else (
+        echo.
+        echo ❌ หากยังไม่ผ่าน กรุณาตรวจสอบสิทธิ์การเข้าถึง GitHub (Login หรือ Token)
+    )
 )
 
 echo.
