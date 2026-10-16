@@ -14,23 +14,23 @@
 
   <!-- Open Graph / Facebook / Discord Preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sarawatdc.site/activities" />
-  <meta property="og:title" content="คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta property="og:url" content="https://sarawatdc.site/activities" id="ogUrl" />
+  <meta property="og:title" content="คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" id="ogTitle" />
   <meta property="og:description"
-    content="ติดตามข่าวประชาสัมพันธ์ ประกาศ และประมวลภาพกิจกรรมของสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ทั้งการปฏิบัติหน้าที่ การสนับสนุนกิจกรรมของโรงเรียน การอบรมพัฒนาศักยภาพ และกิจกรรมจิตอาสา เพื่อเผยแพร่ผลงานและประชาสัมพันธ์ข่าวสารของหน่วยงาน" />
-  <meta property="og:image" content="https://sarawatdc.site/assets/images/activities-cover.jpg" />
+    content="ติดตามข่าวประชาสัมพันธ์ ประกาศ และประมวลภาพกิจกรรมของสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ทั้งการปฏิบัติหน้าที่ การสนับสนุนกิจกรรมของโรงเรียน การอบรมพัฒนาศักยภาพ และกิจกรรมจิตอาสา เพื่อเผยแพร่ผลงานและประชาสัมพันธ์ข่าวสารของหน่วยงาน" id="ogDesc" />
+  <meta property="og:image" content="https://sarawatdc.site/assets/images/activities-cover.jpg" id="ogImage" />
   <meta property="og:site_name" content="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
   <meta property="og:locale" content="th_TH" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta name="twitter:title" content="คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" id="twitterTitle" />
   <meta name="twitter:description"
-    content="ติดตามข่าวประชาสัมพันธ์ ประกาศ และประมวลภาพกิจกรรมของสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ทั้งการปฏิบัติหน้าที่ การสนับสนุนกิจกรรมของโรงเรียน การอบรมพัฒนาศักยภาพ และกิจกรรมจิตอาสา เพื่อเผยแพร่ผลงานและประชาสัมพันธ์ข่าวสารของหน่วยงาน" />
-  <meta name="twitter:image" content="https://sarawatdc.site/assets/images/activities-cover.jpg" />
+    content="ติดตามข่าวประชาสัมพันธ์ ประกาศ และประมวลภาพกิจกรรมของสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ทั้งการปฏิบัติหน้าที่ การสนับสนุนกิจกรรมของโรงเรียน การอบรมพัฒนาศักยภาพ และกิจกรรมจิตอาสา เพื่อเผยแพร่ผลงานและประชาสัมพันธ์ข่าวสารของหน่วยงาน" id="twitterDesc" />
+  <meta name="twitter:image" content="https://sarawatdc.site/assets/images/activities-cover.jpg" id="twitterImage" />
 
   <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" id="schemaJsonLd">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -47,6 +47,109 @@
       }
     }
   }
+  </script>
+
+  <!-- Early Head SEO Banner Replacement for Query Parameters -->
+  <script>
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var targetId = params.get('id') || params.get('activity') || params.get('post');
+        var targetCat = params.get('category') || params.get('cat');
+        var targetQ = params.get('q') || params.get('search');
+
+        if (targetId || targetCat || targetQ) {
+          var items = [];
+          try {
+            var stored = localStorage.getItem('dg_sarawat_news_items');
+            if (stored) items = JSON.parse(stored);
+          } catch (e) { }
+
+          if (!items || items.length === 0) {
+            items = [
+              {
+                id: 'news-1',
+                title: 'พิธีแต่งตั้งและมอบปลอกแขนสารวัตรนักเรียน ประจำปีการศึกษา 2569',
+                desc: 'ผู้อำนวยการโรงเรียนเดชะปัตตนยานุกูล ให้เกียรติเป็นประธานในพิธีมอบปลอกแขนและเข็มเกียรติยศแก่คณะสารวัตรนักเรียน',
+                image: 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&'
+              },
+              {
+                id: 'news-2',
+                title: 'โครงการรณรงค์วินัยจราจรและเสริมสร้างความปลอดภัยหน้าโรงเรียน',
+                desc: 'สารวัตรนักเรียนร่วมมือกับงานจราจร ดูแลความสะดวกและระเบียบการข้ามถนนของนักเรียนทุกระดับชั้นในช่วงเช้าและหลังเลิกเรียนอย่างเคร่งครัด',
+                image: 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&'
+              },
+              {
+                id: 'news-3',
+                title: 'กิจกรรมจิตอาสาพัฒนาสิ่งแวดล้อมและพื้นที่ส่วนรวมโรงเรียน',
+                desc: 'รวมพลังสารวัตรนักเรียนและตัวแทนห้องเรียน ร่วมบำเพ็ญประโยชน์ ปรับภูมิทัศน์และดูแลความสะอาดบริเวณลานกิจกรรมและอาคารเรียน',
+                image: 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&'
+              }
+            ];
+          }
+
+          var found = null;
+          if (targetId) {
+            var cleanId = String(targetId).trim().toLowerCase();
+            found = items.find(function (it) {
+              return String(it.id).toLowerCase() === cleanId ||
+                String(it.id).toLowerCase() === 'news-' + cleanId ||
+                (it.title && it.title.trim().toLowerCase() === cleanId) ||
+                (it.title && it.title.toLowerCase().indexOf(cleanId) !== -1);
+            });
+          }
+          if (!found && targetCat) {
+            found = items.find(function (it) {
+              return it.tag && it.tag.indexOf(targetCat) !== -1;
+            });
+          }
+          if (!found && targetQ) {
+            var q = targetQ.toLowerCase();
+            found = items.find(function (it) {
+              return (it.title && it.title.toLowerCase().indexOf(q) !== -1) ||
+                (it.desc && it.desc.toLowerCase().indexOf(q) !== -1);
+            });
+          }
+
+          if (found && found.image) {
+            var fullUrl = found.image;
+            if (fullUrl.indexOf('http://') !== 0 && fullUrl.indexOf('https://') !== 0 && fullUrl.indexOf('data:') !== 0) {
+              fullUrl = window.location.origin + (fullUrl.indexOf('/') === 0 ? fullUrl : '/' + fullUrl);
+            }
+            var ogImg = document.getElementById('ogImage');
+            if (ogImg) ogImg.setAttribute('content', fullUrl);
+            var twImg = document.getElementById('twitterImage');
+            if (twImg) twImg.setAttribute('content', fullUrl);
+
+            var titleStr = found.title + ' | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล';
+            document.title = titleStr;
+            var ogTitle = document.getElementById('ogTitle');
+            if (ogTitle) ogTitle.setAttribute('content', titleStr);
+            var twTitle = document.getElementById('twitterTitle');
+            if (twTitle) twTitle.setAttribute('content', titleStr);
+
+            var descStr = found.desc || found.detail || '';
+            if (descStr) {
+              var ogDesc = document.getElementById('ogDesc');
+              if (ogDesc) ogDesc.setAttribute('content', descStr);
+              var twDesc = document.getElementById('twitterDesc');
+              if (twDesc) twDesc.setAttribute('content', descStr);
+            }
+
+            var schemaScript = document.getElementById('schemaJsonLd');
+            if (schemaScript) {
+              try {
+                var schemaData = JSON.parse(schemaScript.textContent);
+                schemaData.name = titleStr;
+                schemaData.description = descStr || schemaData.description;
+                schemaData.image = fullUrl;
+                schemaScript.textContent = JSON.stringify(schemaData, null, 2);
+              } catch (e) { }
+            }
+          }
+        }
+      } catch (err) { }
+    })();
   </script>
 
   <!-- Theme Color -->
@@ -778,6 +881,9 @@
 
       openModal('newsDetailModal');
 
+      // Replace SEO Banner with this activity's image and info
+      updateSeoBanner(item);
+
       // Sync Address Bar with Query Param (?id=...)
       try {
         const u = new URL(window.location.href);
@@ -805,20 +911,99 @@
       modal.classList.remove('active');
       document.body.style.overflow = '';
 
-      if (modalId === 'newsDetailModal' && !fromPopState) {
-        try {
-          const u = new URL(window.location.href);
-          const hadId = u.searchParams.has('id') || u.searchParams.has('activity') || u.searchParams.has('post');
-          if (hadId) {
-            u.searchParams.delete('id');
-            u.searchParams.delete('activity');
-            u.searchParams.delete('post');
-            const newUrl = u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : '');
-            window.history.replaceState({}, '', newUrl);
+      if (modalId === 'newsDetailModal') {
+        // Revert SEO banner back to default activities cover
+        updateSeoBanner(null);
+
+        if (!fromPopState) {
+          try {
+            const u = new URL(window.location.href);
+            const hadId = u.searchParams.has('id') || u.searchParams.has('activity') || u.searchParams.has('post');
+            if (hadId) {
+              u.searchParams.delete('id');
+              u.searchParams.delete('activity');
+              u.searchParams.delete('post');
+              const newUrl = u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : '');
+              window.history.replaceState({}, '', newUrl);
+            }
+          } catch (e) {
+            console.error('Failed to clear modal URL param:', e);
           }
-        } catch (e) {
-          console.error('Failed to clear modal URL param:', e);
         }
+      }
+    }
+
+    // ==========================================================
+    // SEO BANNER & METADATA SYNCHRONIZATION
+    // ==========================================================
+    const DEFAULT_SEO_IMAGE = 'https://sarawatdc.site/assets/images/activities-cover.jpg';
+    const DEFAULT_SEO_TITLE = 'คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)';
+    const DEFAULT_SEO_DESC = 'ติดตามข่าวประชาสัมพันธ์ ประกาศ และประมวลภาพกิจกรรมของสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ทั้งการปฏิบัติหน้าที่ การสนับสนุนกิจกรรมของโรงเรียน การอบรมพัฒนาศักยภาพ และกิจกรรมจิตอาสา เพื่อเผยแพร่ผลงานและประชาสัมพันธ์ข่าวสารของหน่วยงาน';
+
+    function updateSeoBanner(item) {
+      try {
+        const ogImg = document.getElementById('ogImage') || document.querySelector('meta[property="og:image"]');
+        const twImg = document.getElementById('twitterImage') || document.querySelector('meta[name="twitter:image"]');
+        const ogTitle = document.getElementById('ogTitle') || document.querySelector('meta[property="og:title"]');
+        const twTitle = document.getElementById('twitterTitle') || document.querySelector('meta[name="twitter:title"]');
+        const ogDesc = document.getElementById('ogDesc') || document.querySelector('meta[property="og:description"]');
+        const twDesc = document.getElementById('twitterDesc') || document.querySelector('meta[name="twitter:description"]');
+        const ogUrl = document.getElementById('ogUrl') || document.querySelector('meta[property="og:url"]');
+        const schemaScript = document.getElementById('schemaJsonLd') || document.querySelector('script[type="application/ld+json"]');
+
+        if (item && item.image) {
+          let resolved = window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image;
+          if (resolved && !resolved.startsWith('http://') && !resolved.startsWith('https://') && !resolved.startsWith('data:')) {
+            resolved = window.location.origin + (resolved.startsWith('/') ? resolved : '/' + resolved);
+          }
+
+          if (ogImg) ogImg.setAttribute('content', resolved);
+          if (twImg) twImg.setAttribute('content', resolved);
+
+          const actTitle = (item.title ? item.title + ' | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล' : DEFAULT_SEO_TITLE);
+          const actDesc = item.desc || item.detail || DEFAULT_SEO_DESC;
+
+          document.title = actTitle;
+          if (ogTitle) ogTitle.setAttribute('content', actTitle);
+          if (twTitle) twTitle.setAttribute('content', actTitle);
+          if (ogDesc) ogDesc.setAttribute('content', actDesc);
+          if (twDesc) twDesc.setAttribute('content', actDesc);
+          if (ogUrl) ogUrl.setAttribute('content', window.location.href);
+
+          if (schemaScript) {
+            try {
+              const schemaData = JSON.parse(schemaScript.textContent);
+              schemaData.name = actTitle;
+              schemaData.description = actDesc;
+              schemaData.image = resolved;
+              schemaData.url = window.location.href;
+              schemaScript.textContent = JSON.stringify(schemaData, null, 2);
+            } catch (e) { }
+          }
+        } else {
+          // Revert to default
+          if (ogImg) ogImg.setAttribute('content', DEFAULT_SEO_IMAGE);
+          if (twImg) twImg.setAttribute('content', DEFAULT_SEO_IMAGE);
+          document.title = DEFAULT_SEO_TITLE;
+          if (ogTitle) ogTitle.setAttribute('content', DEFAULT_SEO_TITLE);
+          if (twTitle) twTitle.setAttribute('content', DEFAULT_SEO_TITLE);
+          if (ogDesc) ogDesc.setAttribute('content', DEFAULT_SEO_DESC);
+          if (twDesc) twDesc.setAttribute('content', DEFAULT_SEO_DESC);
+          if (ogUrl) ogUrl.setAttribute('content', 'https://sarawatdc.site/activities');
+
+          if (schemaScript) {
+            try {
+              const schemaData = JSON.parse(schemaScript.textContent);
+              schemaData.name = DEFAULT_SEO_TITLE;
+              schemaData.description = DEFAULT_SEO_DESC;
+              schemaData.image = DEFAULT_SEO_IMAGE;
+              schemaData.url = 'https://sarawatdc.site/activities';
+              schemaScript.textContent = JSON.stringify(schemaData, null, 2);
+            } catch (e) { }
+          }
+        }
+      } catch (err) {
+        console.error('Error updating SEO banner:', err);
       }
     }
 
@@ -851,6 +1036,17 @@
           );
           if (found) {
             openNewsDetailModal(found.id, false);
+            updateSeoBanner(found);
+          }
+        } else if (catParam || qParam) {
+          const allItems = getNewsData();
+          const matched = allItems.find(it => {
+            const matchesCat = !catParam || catParam === 'all' || (it.tag && it.tag.includes(catParam));
+            const matchesQ = !qParam || (it.title && it.title.toLowerCase().includes(qParam.toLowerCase())) || (it.desc && it.desc.toLowerCase().includes(qParam.toLowerCase()));
+            return matchesCat && matchesQ;
+          });
+          if (matched) {
+            updateSeoBanner(matched);
           }
         }
       } catch (err) {
@@ -867,6 +1063,7 @@
 
         if (!idParam && modal && modal.classList.contains('active')) {
           closeModal('newsDetailModal', true);
+          updateSeoBanner(null);
         } else if (idParam) {
           const items = getNewsData();
           const cleanId = String(idParam).trim().toLowerCase();
@@ -876,7 +1073,10 @@
             (it.title && it.title.trim().toLowerCase() === cleanId) ||
             (it.title && it.title.toLowerCase().includes(cleanId))
           );
-          if (found) openNewsDetailModal(found.id, false);
+          if (found) {
+            openNewsDetailModal(found.id, false);
+            updateSeoBanner(found);
+          }
         }
 
         const catParam = params.get('category') || params.get('cat') || 'all';
