@@ -22,6 +22,54 @@
       "source": "/roster.html",
       "destination": "/si-roster",
       "permanent": true
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(bot|facebookexternalhit|discordbot|slackbot|twitterbot|whatsapp|telegrambot|line-poker).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(bot|facebookexternalhit|discordbot|slackbot|twitterbot|whatsapp|telegrambot|line-poker).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "post"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(bot|facebookexternalhit|discordbot|slackbot|twitterbot|whatsapp|telegrambot|line-poker).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
     }
   ],
   "rewrites": [
