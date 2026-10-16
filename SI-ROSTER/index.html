@@ -2823,7 +2823,7 @@
   </div>
 
   <!-- Detail Modal -->
-  <div class="modal-overlay" id="detailModal">
+  <div class="modal-overlay" id="detailModal" onclick="if(event.target === this) closeModal('detailModal')">
     <div class="modal-content">
       <div class="modal-header">
         <div class="close-modal" onclick="closeModal('detailModal')"><i class="fa-solid fa-xmark"></i></div>
@@ -4238,6 +4238,7 @@
                 rBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> รีเฟรชข้อมูล';
                 rBtn.disabled = false;
               }
+              handleRosterQueryParams();
             } catch (err) {
               console.error(err);
               document.getElementById('feedLoading').innerHTML = '<div style="color:red">พบปัญหาการเรนเดอร์ข้อมูล: ' + err.message.replace(/^Error:\s*/, '') + '<br>' + err.stack + '</div>';
@@ -4280,6 +4281,7 @@
             buildFeed(currentActivities);
           }
           document.getElementById('feedLoading').style.display = 'none';
+          handleRosterQueryParams();
         }, 500);
       }
     }
@@ -4847,7 +4849,7 @@
     }
 
     // --- Detail Modal ---
-    function openModal(activity) {
+    function openModal(activity, updateHistory = true) {
       if (countdownIntervals['modalTimerValue']) {
         clearInterval(countdownIntervals['modalTimerValue']);
       }
@@ -4886,7 +4888,7 @@
         timerContainer.style.display = 'flex';
         timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> เปิดลงชื่ออีก:';
         startCountdown('modalTimerValue', activity.startTime, null, null, () => {
-          openModal(activity); // Reload when open
+          openModal(activity, false); // Reload when open without re-pushing history
         });
       } else if (activity.deadline) {
         timerContainer.style.display = 'flex';
@@ -4911,15 +4913,109 @@
       document.getElementById('adminEditBtnContainer').style.display = isAdmin ? 'block' : 'none';
       document.getElementById('detailModal').classList.add('active');
       loadSignups(activity.sheetName, activity.duties);
+
+      // Sync Address Bar with Query Param (?activity=...)
+      try {
+        const u = new URL(window.location.href);
+        const paramVal = activity.title || activity.sheetName;
+        if (paramVal) {
+          u.searchParams.set('activity', paramVal);
+          if (updateHistory) {
+            window.history.pushState({ modal: 'detailModal', activity: paramVal }, '', u.toString());
+          } else {
+            window.history.replaceState({ modal: 'detailModal', activity: paramVal }, '', u.toString());
+          }
+        }
+      } catch (e) {
+        console.error('Failed to sync URL parameter:', e);
+      }
     }
 
-    function closeModal(modalId) {
+    function closeModal(modalId, fromPopState = false) {
       const el = document.getElementById(modalId);
       if (el) el.classList.remove('active');
       if (modalId === 'detailModal') {
         if (typeof stopUserRealtimeSync === 'function') stopUserRealtimeSync();
+        if (!fromPopState) {
+          try {
+            const u = new URL(window.location.href);
+            const hadParam = u.searchParams.has('activity') || u.searchParams.has('event') || u.searchParams.has('sheet') || u.searchParams.has('date');
+            if (hadParam) {
+              u.searchParams.delete('activity');
+              u.searchParams.delete('event');
+              u.searchParams.delete('sheet');
+              u.searchParams.delete('date');
+              const newUrl = u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : '');
+              window.history.replaceState({}, '', newUrl);
+            }
+          } catch (e) {
+            console.error('Failed to clear URL parameter:', e);
+          }
+        }
       }
     }
+
+    // --- Query Parameter Handler for Roster ---
+    function handleRosterQueryParams() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const targetActivity = params.get('activity') || params.get('event');
+        const targetSheet = params.get('sheet');
+        const targetDate = params.get('date');
+
+        if (!targetActivity && !targetSheet && !targetDate) return;
+        if (!Array.isArray(currentActivities) || currentActivities.length === 0) return;
+
+        let found = null;
+        if (targetActivity) {
+          const cleanTarget = targetActivity.trim().toLowerCase();
+          found = currentActivities.find(a =>
+            (a.title && a.title.trim().toLowerCase() === cleanTarget) ||
+            (a.sheetName && a.sheetName.toLowerCase() === cleanTarget)
+          ) || currentActivities.find(a =>
+            a.title && a.title.toLowerCase().includes(cleanTarget)
+          );
+        }
+        if (!found && targetSheet) {
+          const cleanSheet = targetSheet.trim().toLowerCase();
+          found = currentActivities.find(a => a.sheetName && a.sheetName.toLowerCase() === cleanSheet);
+        }
+        if (!found && targetDate) {
+          const cleanDate = targetDate.trim();
+          found = currentActivities.find(a => a.date && a.date === cleanDate);
+        }
+
+        if (found) {
+          openModal(found, false);
+        }
+      } catch (err) {
+        console.error('Error handling roster query params:', err);
+      }
+    }
+
+    // Handle Browser Back / Forward navigation
+    window.addEventListener('popstate', function (event) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const targetActivity = params.get('activity') || params.get('event') || params.get('sheet') || params.get('date');
+        const modal = document.getElementById('detailModal');
+        if (!targetActivity && modal && modal.classList.contains('active')) {
+          closeModal('detailModal', true);
+        } else if (targetActivity) {
+          handleRosterQueryParams();
+        }
+      } catch (err) {
+        console.error('Error in popstate handler:', err);
+      }
+    });
+
+    // Close modal on Escape key
+    window.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        const activeModal = document.querySelector('.modal-overlay.active');
+        if (activeModal) closeModal(activeModal.id);
+      }
+    });
     window.stopRealtimeSync = function () {
       if (typeof stopUserRealtimeSync === 'function') stopUserRealtimeSync();
     };

@@ -471,17 +471,45 @@
     let selectedCategory = 'all';
     let searchQuery = '';
 
-    function filterByCategory(cat) {
+    function filterByCategory(cat, updateUrl = true) {
       selectedCategory = cat;
       document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-category') === cat);
       });
       renderActivities();
+      if (updateUrl) {
+        try {
+          const u = new URL(window.location.href);
+          if (cat && cat !== 'all') {
+            u.searchParams.set('category', cat);
+          } else {
+            u.searchParams.delete('category');
+            u.searchParams.delete('cat');
+          }
+          window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+        } catch (e) {
+          console.error('Failed to update category URL param:', e);
+        }
+      }
     }
 
-    function handleSearchInput(val) {
+    function handleSearchInput(val, updateUrl = true) {
       searchQuery = val.trim().toLowerCase();
       renderActivities();
+      if (updateUrl) {
+        try {
+          const u = new URL(window.location.href);
+          if (searchQuery) {
+            u.searchParams.set('q', val.trim());
+          } else {
+            u.searchParams.delete('q');
+            u.searchParams.delete('search');
+          }
+          window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+        } catch (e) {
+          console.error('Failed to update search URL param:', e);
+        }
+      }
     }
 
     // ==========================================================
@@ -600,15 +628,31 @@
       document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-category') === 'all');
       });
+      try {
+        const u = new URL(window.location.href);
+        u.searchParams.delete('category');
+        u.searchParams.delete('cat');
+        u.searchParams.delete('q');
+        u.searchParams.delete('search');
+        window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+      } catch (e) {
+        console.error('Failed to clear filter params:', e);
+      }
       renderActivities();
     }
 
     // ==========================================================
     // DETAIL POP-UP MODAL LOGIC
     // ==========================================================
-    function openNewsDetailModal(id) {
+    function openNewsDetailModal(id, updateHistory = true) {
       const items = getNewsData();
-      const item = items.find(it => String(it.id) === String(id));
+      const cleanId = String(id).trim().toLowerCase();
+      const item = items.find(it =>
+        String(it.id).toLowerCase() === cleanId ||
+        String(it.id).toLowerCase() === 'news-' + cleanId ||
+        (it.title && it.title.trim().toLowerCase() === cleanId) ||
+        (it.title && it.title.toLowerCase().includes(cleanId))
+      );
       if (!item) return;
 
       const container = document.getElementById('newsModalContent');
@@ -733,6 +777,19 @@
       }
 
       openModal('newsDetailModal');
+
+      // Sync Address Bar with Query Param (?id=...)
+      try {
+        const u = new URL(window.location.href);
+        u.searchParams.set('id', item.id);
+        if (updateHistory) {
+          window.history.pushState({ modal: 'newsDetailModal', id: item.id }, '', u.toString());
+        } else {
+          window.history.replaceState({ modal: 'newsDetailModal', id: item.id }, '', u.toString());
+        }
+      } catch (e) {
+        console.error('Failed to sync modal URL param:', e);
+      }
     }
 
     function openModal(modalId) {
@@ -742,12 +799,100 @@
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal(modalId) {
+    function closeModal(modalId, fromPopState = false) {
       const modal = document.getElementById(modalId);
       if (!modal) return;
       modal.classList.remove('active');
       document.body.style.overflow = '';
+
+      if (modalId === 'newsDetailModal' && !fromPopState) {
+        try {
+          const u = new URL(window.location.href);
+          const hadId = u.searchParams.has('id') || u.searchParams.has('activity') || u.searchParams.has('post');
+          if (hadId) {
+            u.searchParams.delete('id');
+            u.searchParams.delete('activity');
+            u.searchParams.delete('post');
+            const newUrl = u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : '');
+            window.history.replaceState({}, '', newUrl);
+          }
+        } catch (e) {
+          console.error('Failed to clear modal URL param:', e);
+        }
+      }
     }
+
+    // ==========================================================
+    // QUERY PARAMETER SYSTEM FOR ACTIVITIES
+    // ==========================================================
+    function handleActivitiesQueryParams() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get('category') || params.get('cat');
+        const qParam = params.get('q') || params.get('search');
+        const idParam = params.get('id') || params.get('activity') || params.get('post');
+
+        if (catParam) {
+          filterByCategory(catParam, false);
+        }
+        if (qParam) {
+          const input = document.getElementById('actSearchInput');
+          if (input) input.value = qParam;
+          handleSearchInput(qParam, false);
+        }
+        if (idParam) {
+          const items = getNewsData();
+          const cleanId = String(idParam).trim().toLowerCase();
+          const found = items.find(it =>
+            String(it.id).toLowerCase() === cleanId ||
+            String(it.id).toLowerCase() === 'news-' + cleanId ||
+            (it.title && it.title.trim().toLowerCase() === cleanId) ||
+            (it.title && it.title.toLowerCase().includes(cleanId))
+          );
+          if (found) {
+            openNewsDetailModal(found.id, false);
+          }
+        }
+      } catch (err) {
+        console.error('Error handling activities query params:', err);
+      }
+    }
+
+    // Handle Browser Back / Forward navigation
+    window.addEventListener('popstate', (e) => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const idParam = params.get('id') || params.get('activity') || params.get('post');
+        const modal = document.getElementById('newsDetailModal');
+
+        if (!idParam && modal && modal.classList.contains('active')) {
+          closeModal('newsDetailModal', true);
+        } else if (idParam) {
+          const items = getNewsData();
+          const cleanId = String(idParam).trim().toLowerCase();
+          const found = items.find(it =>
+            String(it.id).toLowerCase() === cleanId ||
+            String(it.id).toLowerCase() === 'news-' + cleanId ||
+            (it.title && it.title.trim().toLowerCase() === cleanId) ||
+            (it.title && it.title.toLowerCase().includes(cleanId))
+          );
+          if (found) openNewsDetailModal(found.id, false);
+        }
+
+        const catParam = params.get('category') || params.get('cat') || 'all';
+        const qParam = params.get('q') || params.get('search') || '';
+        const input = document.getElementById('actSearchInput');
+        if (input && input.value !== qParam) input.value = qParam;
+        searchQuery = qParam.trim().toLowerCase();
+        selectedCategory = catParam;
+        document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-category') === catParam);
+        });
+        renderActivities();
+      } catch (err) {
+        console.error('Error in popstate handler:', err);
+      }
+    });
 
     // Close on Escape key
     window.addEventListener('keydown', (e) => {
@@ -770,6 +915,7 @@
     // Initialize on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       renderActivities();
+      handleActivitiesQueryParams();
 
       // Background Sync from MySQL Backend API if server is connected
       if (window.SarawatApi) {
@@ -777,6 +923,7 @@
           if (items && Array.isArray(items) && items.length > 0) {
             try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch (e) { }
             renderActivities();
+            handleActivitiesQueryParams();
           }
         }).catch(() => { });
       }
