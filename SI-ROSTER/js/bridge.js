@@ -48,24 +48,62 @@
   // Navigation helpers
   window.goToRosterAdmin = function(e) {
     if (e && e.preventDefault) e.preventDefault();
-    const path = window.location.pathname;
+    const rawPath = window.location.pathname || '';
+    const path = rawPath.toLowerCase();
+
+    // If inside SI-ROSTER directory on current URL
     if (/\/si-roster(\/.*)?$/i.test(path)) {
-      const basePath = path.match(/^.*\/si-roster/i)[0];
+      const basePath = rawPath.match(/^.*\/si-roster/i)[0];
       window.location.href = basePath + '/admin.html';
       return;
     }
-    window.location.href = 'admin.html';
+
+    // If on /roster or /roster.html or similar rewrite
+    if (/\/roster(\.html)?(\/.*)?$/i.test(path)) {
+      const origin = window.location.origin || '';
+      window.location.href = origin + '/SI-ROSTER/admin.html';
+      return;
+    }
+
+    // If on local filesystem file:///
+    if (window.location.protocol === 'file:') {
+      window.location.href = 'admin.html';
+      return;
+    }
+
+    // Universal fallback: ALWAYS navigate to SI-ROSTER admin, NEVER root admin.html!
+    const origin = window.location.origin || '';
+    window.location.href = origin + '/SI-ROSTER/admin.html';
   };
 
   window.goToRosterStudent = function(e) {
     if (e && e.preventDefault) e.preventDefault();
-    const path = window.location.pathname;
+    const rawPath = window.location.pathname || '';
+    const path = rawPath.toLowerCase();
+
+    // If inside SI-ROSTER directory on current URL
     if (/\/si-roster(\/.*)?$/i.test(path)) {
-      const basePath = path.match(/^.*\/si-roster/i)[0];
+      const basePath = rawPath.match(/^.*\/si-roster/i)[0];
       window.location.href = basePath + '/index.html';
       return;
     }
-    window.location.href = 'index.html';
+
+    // If on /roster or /roster.html
+    if (/\/roster(\.html)?(\/.*)?$/i.test(path)) {
+      const origin = window.location.origin || '';
+      window.location.href = origin + '/SI-ROSTER/index.html';
+      return;
+    }
+
+    // If on local filesystem file:///
+    if (window.location.protocol === 'file:') {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    // Universal fallback: ALWAYS navigate to SI-ROSTER student index, NEVER root index.html!
+    const origin = window.location.origin || '';
+    window.location.href = origin + '/SI-ROSTER/index.html';
   };
 
   function createGoogleScriptRunner() {

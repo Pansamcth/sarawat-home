@@ -40,16 +40,28 @@
       "destination": "/SI-ROSTER/index.html"
     },
     {
+      "source": "/roster/admin",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/roster/admin.html",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
       "source": "/si-roster/:path*",
       "destination": "/SI-ROSTER/:path*"
     },
     {
+      "source": "/SI-ROSTER/:path*",
+      "destination": "/SI-ROSTER/:path*"
+    },
+    {
       "source": "/api/:path*",
-      "destination": "https://justify-clearing-changelog-reserved.trycloudflare.com/api/:path*"
+      "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://justify-clearing-changelog-reserved.trycloudflare.com/uploads/:path*"
+      "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/uploads/:path*"
     }
   ]
 }
