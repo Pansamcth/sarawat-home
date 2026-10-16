@@ -22,6 +22,102 @@
       "source": "/roster.html",
       "destination": "/si-roster",
       "permanent": true
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebook|[Dd]iscord|[Ss]lack|[Tt]witter|[Ww]hats[Aa]pp|[Tt]elegram|[Ll]ine|[Pp]review).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebook|[Dd]iscord|[Ss]lack|[Tt]witter|[Ww]hats[Aa]pp|[Tt]elegram|[Ll]ine|[Pp]review).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "post"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebook|[Dd]iscord|[Ss]lack|[Tt]witter|[Ww]hats[Aa]pp|[Tt]elegram|[Ll]ine|[Pp]review).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebook|[Dd]iscord|[Ss]lack|[Tt]witter|[Ww]hats[Aa]pp|[Tt]elegram|[Ll]ine|[Pp]review).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebook|[Dd]iscord|[Ss]lack|[Tt]witter|[Ww]hats[Aa]pp|[Tt]elegram|[Ll]ine|[Pp]review).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "post"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebook|[Dd]iscord|[Ss]lack|[Tt]witter|[Ww]hats[Aa]pp|[Tt]elegram|[Ll]ine|[Pp]review).*"
+        }
+      ],
+      "destination": "/api/activities",
+      "permanent": false
     }
   ],
   "rewrites": [
