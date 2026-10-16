@@ -12,6 +12,16 @@
       "source": "/recruit.html",
       "destination": "/admissions",
       "permanent": true
+    },
+    {
+      "source": "/roster",
+      "destination": "/si-roster",
+      "permanent": true
+    },
+    {
+      "source": "/roster.html",
+      "destination": "/si-roster",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -41,10 +51,6 @@
     },
     {
       "source": "/si-roster/",
-      "destination": "/SI-ROSTER"
-    },
-    {
-      "source": "/roster",
       "destination": "/SI-ROSTER"
     },
     {
