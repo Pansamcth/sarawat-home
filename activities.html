@@ -111,8 +111,8 @@
             });
           }
 
-          if (found && found.image) {
-            var fullUrl = found.image;
+          if (found) {
+            var fullUrl = found.image || found.img || 'assets/images/activities-cover.jpg';
             if (fullUrl.indexOf('discordapp.com') !== -1 || fullUrl.indexOf('discord.com') !== -1) {
               fullUrl = 'assets/images/activities-cover.jpg';
             }

@@ -194,7 +194,7 @@
           <div class="dg-what-visual">
             <div class="dg-what-image-wrapper">
               <img src="assets/images/what-we-do-1.jpg" alt="การปฏิบัติหน้าที่สารวัตรนักเรียน"
-                onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
+                onerror="this.src='assets/images/activities-cover.jpg';" />
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@
           <div class="dg-what-visual">
             <div class="dg-what-image-wrapper">
               <img src="assets/images/what-we-do-2.jpg" alt="หน้าที่สารวัตรนักเรียน"
-                onerror="this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';" />
+                onerror="this.src='assets/images/activities-cover.jpg';" />
             </div>
           </div>
 
@@ -1044,7 +1044,7 @@
     // ==========================================================
     // NEWS & ACTIVITIES SYSTEM FUNCTIONS
     // ==========================================================
-    const DEFAULT_NEWS_IMAGE = window.DEFAULT_ACTIVITY_IMAGE || 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
+    const DEFAULT_NEWS_IMAGE = window.DEFAULT_ACTIVITY_IMAGE || 'assets/images/activities-cover.jpg';
     const DEFAULT_NEWS_ITEMS = [];
 
     // ==========================================================
@@ -1185,7 +1185,7 @@
         return `
           <article class="dg-news-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
             <div class="dg-news-cover-wrap">
-              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
+              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
               <span class="dg-news-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
             </div>
             <div class="dg-news-content">
@@ -1280,7 +1280,7 @@
         </div>
 
         <div class="dg-news-modal-cover">
-          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';}" />
+          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
         </div>
 
         <div class="dg-news-modal-body">

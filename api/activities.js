@@ -67,8 +67,8 @@ module.exports = async function handler(req, res) {
     );
 
     if (found) {
-      let resolvedImage = found.image || 'https://www.sarawatdc.site/assets/images/activities-cover.jpg';
-      if (resolvedImage.includes('discordapp.com') || resolvedImage.includes('discord.com')) {
+      let resolvedImage = found.image || found.img || 'https://www.sarawatdc.site/assets/images/activities-cover.jpg';
+      if (resolvedImage.includes('discordapp.com') || resolvedImage.includes('discord.com') || resolvedImage.startsWith('data:')) {
         resolvedImage = 'https://www.sarawatdc.site/assets/images/activities-cover.jpg';
       }
       if (resolvedImage.startsWith('/')) {
