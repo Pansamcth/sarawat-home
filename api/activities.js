@@ -68,10 +68,11 @@ module.exports = async function handler(req, res) {
 
     if (found) {
       let resolvedImage = found.image || found.img || 'https://www.sarawatdc.site/assets/images/activities-cover.jpg';
-      if (resolvedImage.includes('discordapp.com') || resolvedImage.includes('discord.com') || resolvedImage.startsWith('data:')) {
+      if (resolvedImage.includes('discordapp.com') || resolvedImage.includes('discord.com')) {
         resolvedImage = 'https://www.sarawatdc.site/assets/images/activities-cover.jpg';
-      }
-      if (resolvedImage.startsWith('/')) {
+      } else if (resolvedImage.startsWith('data:')) {
+        resolvedImage = 'https://www.sarawatdc.site/api/activity-image?id=' + encodeURIComponent(found.id);
+      } else if (resolvedImage.startsWith('/')) {
         resolvedImage = 'https://www.sarawatdc.site' + resolvedImage;
       } else if (!resolvedImage.startsWith('http://') && !resolvedImage.startsWith('https://')) {
         resolvedImage = 'https://www.sarawatdc.site/' + resolvedImage;

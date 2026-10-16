@@ -4945,12 +4945,26 @@
 
         const fileInput = document.getElementById('adminNewsImgFile');
         if (fileInput && fileInput.files && fileInput.files[0] && currentNewsImageState?.mode === 'upload') {
-          if (submitBtn) submitBtn.innerHTML = '<span>กำลังบีบอัดรูปภาพ...</span>';
+          let fileToUpload = fileInput.files[0];
+          if (submitBtn) submitBtn.innerHTML = '<span>กำลังประมวลผลรูปภาพ...</span>';
           try {
             const comp = await compressImageFile(fileInput.files[0]);
-            img = comp.base64;
+            if (comp && comp.file) fileToUpload = comp.file;
+            if (comp && comp.base64) img = comp.base64;
           } catch (cErr) {
             console.warn('Compression error:', cErr);
+          }
+
+          if (window.SarawatApi && typeof window.SarawatApi.uploadImage === 'function' && window.SarawatApi.getBaseUrl()) {
+            if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพไปยังเซิร์ฟเวอร์...</span>';
+            try {
+              const upRes = await window.SarawatApi.uploadImage(fileToUpload);
+              if (upRes && upRes.url) {
+                img = upRes.url;
+              }
+            } catch (upErr) {
+              console.warn('Server upload error, falling back to compressed base64:', upErr);
+            }
           }
         }
 

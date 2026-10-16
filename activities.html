@@ -115,8 +115,9 @@
             var fullUrl = found.image || found.img || 'assets/images/activities-cover.jpg';
             if (fullUrl.indexOf('discordapp.com') !== -1 || fullUrl.indexOf('discord.com') !== -1) {
               fullUrl = 'assets/images/activities-cover.jpg';
-            }
-            if (fullUrl.indexOf('http://') !== 0 && fullUrl.indexOf('https://') !== 0 && fullUrl.indexOf('data:') !== 0) {
+            } else if (fullUrl.indexOf('data:') === 0) {
+              fullUrl = window.location.origin + '/api/activity-image?id=' + encodeURIComponent(found.id);
+            } else if (fullUrl.indexOf('http://') !== 0 && fullUrl.indexOf('https://') !== 0) {
               fullUrl = window.location.origin + (fullUrl.indexOf('/') === 0 ? fullUrl : '/' + fullUrl);
             }
             var ogImg = document.getElementById('ogImage');
