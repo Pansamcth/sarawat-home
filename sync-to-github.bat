@@ -48,14 +48,11 @@ echo [2/3] Committing changes...
 git commit -m "Update latest website (%date% %time%)" 2>nul
 if errorlevel 1 git commit -m "Update latest website" 2>nul
 
-echo [3/3] Pushing to GitHub main branch...
+echo [3/3] Pushing to GitHub branches...
 git branch -M main
-git push -u origin main
-if errorlevel 1 (
-    echo.
-    echo [WARNING] Normal push failed. Attempting force sync...
-    git push -u origin main --force
-)
+git push -u origin main --force
+git push origin main:master --force
+git push origin main:Pansamcth-patch-1 --force
 
 if not errorlevel 1 (
     echo.
