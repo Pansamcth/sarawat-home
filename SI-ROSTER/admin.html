@@ -4526,18 +4526,55 @@
     }
 
     // ---------------------------------------------------------
-    // ⚡ REAL-TIME SSE & IN-PLACE SYNC ENGINE (SQLITE OPTIMIZED)
+    // ⚡ ULTRA-FAST REAL-TIME SYNC ENGINE (SQLITE + SSE + FAST HASH)
     // ---------------------------------------------------------
     let rosterEventSource = null;
     let isRosterSSEConnected = false;
     let rosterReconnectTimer = null;
-    let feedRealtimeInterval = null;
+    let rosterSyncStateInterval = null;
+    let lastSignupsHash = null;
+    let lastActivitiesHash = null;
+    let lastLogsHash = null;
+
+    // Local Inter-Tab Channel (0ms sync across tabs in same browser)
+    const rosterBroadcastChannel = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('roster_live_channel') : null;
+    if (rosterBroadcastChannel) {
+      rosterBroadcastChannel.onmessage = function (ev) {
+        if (ev && ev.data) {
+          handleIncomingRosterEvent(ev.data);
+        }
+      };
+    }
+
+    function broadcastLocalRosterChange(type, payload = {}) {
+      if (rosterBroadcastChannel) {
+        try {
+          rosterBroadcastChannel.postMessage({ type, payload, timestamp: Date.now() });
+        } catch (e) {}
+      }
+    }
 
     function initRosterRealtimeSync() {
-      if (typeof EventSource === 'undefined') {
-        console.warn('[Roster SSE] Browser does not support EventSource; using polling fallback');
-        return;
+      // 1. Start Server-Sent Events (SSE)
+      startSSEStream();
+
+      // 2. Start Ultra-Fast State Polling (1.5s fallback/fast check)
+      startRosterSyncStatePolling();
+
+      // 3. Bind instant focus & visibility sync
+      if (!window._rosterFocusSyncBound) {
+        window._rosterFocusSyncBound = true;
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) checkRosterSyncState();
+        });
+        window.addEventListener('focus', () => {
+          checkRosterSyncState();
+        });
       }
+    }
+
+    function startSSEStream() {
+      if (typeof EventSource === 'undefined') return;
       if (rosterEventSource) {
         try { rosterEventSource.close(); } catch (e) {}
         rosterEventSource = null;
@@ -4551,16 +4588,13 @@
 
         rosterEventSource.onopen = function () {
           isRosterSSEConnected = true;
-          console.log('[Roster SSE] Connected to real-time events stream (Admin)');
         };
 
         rosterEventSource.onmessage = function (event) {
           try {
             const data = JSON.parse(event.data);
             handleIncomingRosterEvent(data);
-          } catch (e) {
-            console.error('[Roster SSE] Error parsing event message:', e);
-          }
+          } catch (e) {}
         };
 
         rosterEventSource.onerror = function () {
@@ -4568,11 +4602,57 @@
           try { rosterEventSource.close(); } catch (e) {}
           rosterEventSource = null;
           clearTimeout(rosterReconnectTimer);
-          rosterReconnectTimer = setTimeout(initRosterRealtimeSync, 5000);
+          rosterReconnectTimer = setTimeout(startSSEStream, 5000);
         };
-      } catch (err) {
-        console.error('[Roster SSE] Failed to initialize EventSource:', err);
-      }
+      } catch (err) {}
+    }
+
+    async function checkRosterSyncState() {
+      if (document.hidden) return;
+      const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
+      const url = `${apiBase}/api/roster/syncState?_t=${Date.now()}`;
+      try {
+        const res = await fetch(url, {
+          headers: { 'Bypass-Tunnel-Reminder': 'true' }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data || !data.success) return;
+
+        // Initial seed: don't trigger events on very first load
+        if (lastSignupsHash === null) {
+          lastSignupsHash = data.s;
+          lastActivitiesHash = data.a;
+          lastLogsHash = data.l;
+          return;
+        }
+
+        let signupChanged = (lastSignupsHash !== data.s);
+        let activityChanged = (lastActivitiesHash !== data.a);
+        let logsChanged = (lastLogsHash !== data.l);
+
+        lastSignupsHash = data.s;
+        lastActivitiesHash = data.a;
+        lastLogsHash = data.l;
+
+        if (signupChanged) {
+          handleIncomingRosterEvent({ type: 'roster_signup_change', payload: {} });
+        }
+        if (activityChanged) {
+          handleIncomingRosterEvent({ type: 'roster_activity_change', payload: {} });
+        }
+        if (logsChanged && typeof loadAdminLogsTab === 'function') {
+          const tabLogs = document.getElementById('tab-logs');
+          if (tabLogs && tabLogs.classList.contains('active')) {
+            loadAdminLogsTab();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function startRosterSyncStatePolling() {
+      if (rosterSyncStateInterval) clearInterval(rosterSyncStateInterval);
+      rosterSyncStateInterval = setInterval(checkRosterSyncState, 1500);
     }
 
     function handleIncomingRosterEvent(evt) {
@@ -4717,21 +4797,13 @@
     }
 
     function startFeedRealtimeSync() {
-      if (feedRealtimeInterval) {
-        clearInterval(feedRealtimeInterval);
-      }
-      feedRealtimeInterval = setInterval(() => {
-        // Fallback polling only when SSE is not actively connected
-        if (!document.hidden && !isRosterSSEConnected) {
-          fetchFeedRealtimeData();
-        }
-      }, 5000);
+      // Managed by Ultra-Fast Sync Engine
     }
 
     function stopFeedRealtimeSync() {
-      if (feedRealtimeInterval) {
-        clearInterval(feedRealtimeInterval);
-        feedRealtimeInterval = null;
+      if (rosterSyncStateInterval) {
+        clearInterval(rosterSyncStateInterval);
+        rosterSyncStateInterval = null;
       }
     }
 
@@ -4742,7 +4814,6 @@
     function loadUpcomingActivities() {
       setupAdminDutyGrid();
       renderActivityFeed();
-      startFeedRealtimeSync();
       initRosterRealtimeSync();
     }
 
