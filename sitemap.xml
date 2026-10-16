@@ -32,9 +32,9 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- ระบบรับสมัครสารวัตรนักเรียน (Recruitment Portal) -->
+  <!-- ระบบรับสมัครสารวัตรนักเรียน (SARAWAT ADMISSIONS 70) -->
   <url>
-    <loc>https://www.sarawatdc.site/recruit</loc>
+    <loc>https://www.sarawatdc.site/admissions</loc>
     <lastmod>2026-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

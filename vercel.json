@@ -2,7 +2,23 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/recruit",
+      "destination": "/admissions",
+      "permanent": true
+    },
+    {
+      "source": "/recruit.html",
+      "destination": "/admissions",
+      "permanent": true
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/admissions",
+      "destination": "/admissions.html"
+    },
     {
       "source": "/si-roster/admin",
       "destination": "/SI-ROSTER/admin"
