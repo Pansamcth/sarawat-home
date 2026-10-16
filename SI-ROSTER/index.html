@@ -4533,6 +4533,28 @@
       }
     }
 
+    // Unique session ID for visitor telemetry & active user tracking
+    let rosterSessionId = sessionStorage.getItem('roster_session_id');
+    if (!rosterSessionId) {
+      rosterSessionId = 's_' + Math.random().toString(36).substring(2, 9) + '_' + Date.now();
+      sessionStorage.setItem('roster_session_id', rosterSessionId);
+    }
+    const rosterPageKey = 'roster_student';
+
+    function notifyRosterLeave() {
+      const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
+      const url = `${apiBase}/api/dashboard/beacon?action=leave&sid=${encodeURIComponent(rosterSessionId)}&page=${rosterPageKey}`;
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+      } else {
+        try {
+          fetch(url, { method: 'POST', keepalive: true });
+        } catch(e) {}
+      }
+    }
+    window.addEventListener('pagehide', notifyRosterLeave);
+    window.addEventListener('beforeunload', notifyRosterLeave);
+
     function initRosterRealtimeSync() {
       // 1. Start Server-Sent Events (SSE)
       startSSEStream();
@@ -4560,7 +4582,7 @@
       }
 
       const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
-      const sseUrl = `${apiBase}/api/roster/events`;
+      const sseUrl = `${apiBase}/api/roster/events?sid=${encodeURIComponent(rosterSessionId)}&page=${rosterPageKey}`;
 
       try {
         rosterEventSource = new EventSource(sseUrl);
@@ -4589,10 +4611,14 @@
     async function checkRosterSyncState() {
       if (document.hidden) return;
       const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
-      const url = `${apiBase}/api/roster/syncState?_t=${Date.now()}`;
+      const url = `${apiBase}/api/roster/syncState?sid=${encodeURIComponent(rosterSessionId)}&page=${rosterPageKey}&_t=${Date.now()}`;
       try {
         const res = await fetch(url, {
-          headers: { 'Bypass-Tunnel-Reminder': 'true' }
+          headers: {
+            'Bypass-Tunnel-Reminder': 'true',
+            'X-Session-ID': rosterSessionId,
+            'X-Page-Key': rosterPageKey
+          }
         });
         if (!res.ok) return;
         const data = await res.json();
