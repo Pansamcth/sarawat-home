@@ -58,6 +58,66 @@
       "destination": "/SI-ROSTER/:path*"
     },
     {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        }
+      ],
+      "destination": "/api/activities"
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        }
+      ],
+      "destination": "/api/activities"
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "query",
+          "key": "post"
+        }
+      ],
+      "destination": "/api/activities"
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        }
+      ],
+      "destination": "/api/activities"
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        }
+      ],
+      "destination": "/api/activities"
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "post"
+        }
+      ],
+      "destination": "/api/activities"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/api/:path*"
     },

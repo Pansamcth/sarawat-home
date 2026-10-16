@@ -55,24 +55,21 @@
   // 🖼️ ภาพกิจกรรมเริ่มต้น (Default Activity Fallback Image)
   // หากกิจกรรมไม่ได้ระบุรูปภาพ หรือรูปภาพไม่สามารถแสดงผล/Preview ได้
   // =========================================================================
-  window.DEFAULT_ACTIVITY_IMAGE = 'https://cdn.discordapp.com/attachments/1479543947729572056/1557028658848469082/Your_paragraph_text.png?backend=b2&ex=6ac64f70&is=6ac4fdf0&hm=810cd2a997d892b5ab2fc596108867ffd95742c92c2244df4aeae31d4da944c5&';
-  window.LOCAL_ACTIVITY_IMAGE_FALLBACK = 'assets/images/default-activity.png';
+  window.DEFAULT_ACTIVITY_IMAGE = 'assets/images/activities-cover.jpg';
+  window.LOCAL_ACTIVITY_IMAGE_FALLBACK = 'assets/images/activities-cover.jpg';
 
   /**
    * จัดการเมื่อรูปภาพกิจกรรมโหลดไม่สำเร็จ (onerror)
-   * 1. สลับไปใช้ DEFAULT_ACTIVITY_IMAGE ตามที่ผู้ใช้กำหนด
-   * 2. หากยังโหลดไม่ได้อีก (เช่น Discord ลิงก์หมดอายุ) สลับเป็น Local PNG สำรอง
+   * ป้องกันรูปภาพแตกโดยการสลับไปใช้รูปหน้าปกกิจกรรมมาตรฐานของระบบ
    */
   window.handleActivityImageError = function (img) {
     if (!img) return;
-    const primaryFallback = window.DEFAULT_ACTIVITY_IMAGE;
-    const localFallback = window.LOCAL_ACTIVITY_IMAGE_FALLBACK || 'assets/images/default-activity.png';
-
-    if (img.src !== primaryFallback && !img.dataset.hasFailedDiscordFallback) {
-      img.dataset.hasFailedDiscordFallback = 'true';
-      img.src = primaryFallback;
+    const fallback = window.DEFAULT_ACTIVITY_IMAGE || 'assets/images/activities-cover.jpg';
+    if (img.src && !img.src.includes('activities-cover.jpg')) {
+      img.src = fallback;
+    } else if (!img.src.includes('default-activity.png')) {
+      img.src = 'assets/images/default-activity.png';
     } else {
-      img.src = localFallback;
       img.onerror = null;
     }
   };
@@ -80,14 +77,20 @@
   /**
    * แปลงที่อยู่รูปภาพให้สมบูรณ์
    * - หากไม่มีรูปภาพ ให้ใช้ DEFAULT_ACTIVITY_IMAGE
-   * - หากเป็น /uploads/... และมี API Server จะต่อ URL เซิร์ฟเวอร์ให้
+   * - หากเป็นลิงก์ Discord เก่าที่หมดอายุ ให้สลับเป็นภาพปกมาตรฐานอัตโนมัติ
+   * - หากเป็น /uploads/... จะแปลงให้เป็นลิงก์สมบูรณ์
    * - หากเป็น https:// หรือ data: จะใช้ตามปกติ
    */
   window.resolveImageUrl = function (imgUrl) {
     if (!imgUrl || typeof imgUrl !== 'string' || imgUrl.trim() === '') {
-      return window.DEFAULT_ACTIVITY_IMAGE;
+      return window.DEFAULT_ACTIVITY_IMAGE || 'assets/images/activities-cover.jpg';
     }
     const cleanUrl = imgUrl.trim();
+
+    // แทนที่ลิงก์ Discord CDN ที่หมดอายุ (404/403) ด้วยภาพปกมาตรฐาน
+    if (cleanUrl.includes('discordapp.com') || cleanUrl.includes('discord.com')) {
+      return window.DEFAULT_ACTIVITY_IMAGE || 'assets/images/activities-cover.jpg';
+    }
 
     // กรองและถอดภาพ AI ทั้งระบบออก แล้วแทนที่ด้วยภาพกิจกรรมเริ่มต้น
     const AI_IMAGE_NAMES = [
@@ -99,7 +102,7 @@
       'hero-assembly'
     ];
     if (AI_IMAGE_NAMES.some(aiName => cleanUrl.toLowerCase().includes(aiName))) {
-      return window.DEFAULT_ACTIVITY_IMAGE;
+      return window.DEFAULT_ACTIVITY_IMAGE || 'assets/images/activities-cover.jpg';
     }
 
     if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://') || cleanUrl.startsWith('data:')) {
@@ -108,6 +111,7 @@
     if (cleanUrl.startsWith('/uploads/')) {
       const base = window.SARAWAT_API_BASE || getActiveApiBase();
       if (base) return base + cleanUrl;
+      return cleanUrl;
     }
     return cleanUrl;
   };
