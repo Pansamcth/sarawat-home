@@ -233,6 +233,24 @@
       loadInitialData();
     };
 
+    // Close autocomplete dropdowns when clicking outside
+    document.addEventListener('pointerdown', function (e) {
+      const centralInput = document.getElementById('centralNameInput');
+      const centralDropdown = document.getElementById('centralAutocomplete');
+      if (centralDropdown && centralInput && centralDropdown.style.display !== 'none') {
+        if (!centralInput.contains(e.target) && !centralDropdown.contains(e.target)) {
+          centralDropdown.style.display = 'none';
+        }
+      }
+      const statusInput = document.getElementById('statusSearchInput');
+      const statusDropdown = document.getElementById('statusAutocomplete');
+      if (statusDropdown && statusInput && statusDropdown.style.display !== 'none') {
+        if (!statusInput.contains(e.target) && !statusDropdown.contains(e.target)) {
+          statusDropdown.style.display = 'none';
+        }
+      }
+    });
+
     function loadInitialData() {
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
@@ -352,10 +370,24 @@
       document.getElementById('statusSearchModal').classList.add('active');
     }
 
+    function selectStatusStudent(fullName) {
+      const inputEl = document.getElementById('statusSearchInput');
+      const dropdown = document.getElementById('statusAutocomplete');
+      if (inputEl) {
+        inputEl.value = fullName;
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      if (dropdown) {
+        dropdown.style.display = 'none';
+        dropdown.innerHTML = '';
+      }
+    }
+
     function filterStatusStudents() {
       const inputEl = document.getElementById('statusSearchInput');
       const dropdown = document.getElementById('statusAutocomplete');
-      if (!dropdown) return;
+      if (!inputEl || !dropdown) return;
       const val = inputEl.value.toLowerCase().trim();
       dropdown.innerHTML = '';
 
@@ -371,10 +403,47 @@
         const fullName = s.name + (s.grade ? ' ' + s.grade : '');
         const div = document.createElement('div');
         div.textContent = fullName;
-        div.onclick = function () {
-          inputEl.value = fullName;
-          dropdown.style.display = 'none';
+        div.setAttribute('role', 'button');
+        div.setAttribute('tabindex', '0');
+
+        div.onmousedown = function (e) {
+          e.preventDefault();
+          selectStatusStudent(fullName);
         };
+
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isTouchScroll = false;
+
+        div.addEventListener('touchstart', function (e) {
+          if (e.touches && e.touches.length > 0) {
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+            isTouchScroll = false;
+          }
+        }, { passive: true });
+
+        div.addEventListener('touchmove', function (e) {
+          if (e.touches && e.touches.length > 0) {
+            const dy = Math.abs(e.touches[0].clientY - touchStartY);
+            const dx = Math.abs(e.touches[0].clientX - touchStartX);
+            if (dy > 8 || dx > 8) {
+              isTouchScroll = true;
+            }
+          }
+        }, { passive: true });
+
+        div.addEventListener('touchend', function (e) {
+          if (!isTouchScroll) {
+            e.preventDefault();
+            selectStatusStudent(fullName);
+          }
+        });
+
+        div.onclick = function (e) {
+          selectStatusStudent(fullName);
+        };
+
         dropdown.appendChild(div);
       });
 
@@ -382,13 +451,22 @@
     }
 
     function checkMyStatus() {
-      const name = document.getElementById('statusSearchInput').value.trim();
+      const inputEl = document.getElementById('statusSearchInput');
+      let name = inputEl ? inputEl.value.trim() : '';
       const btn = document.getElementById('btnStatusSearch');
       const container = document.getElementById('statusResultContainer');
 
       if (!name) {
         showToast('กรุณากรอกชื่อของคุณ', 'error');
         return;
+      }
+
+      const studentObj = studentNamesList.find(s => (s.name + (s.grade ? ' ' + s.grade : '')) === name) ||
+                         studentNamesList.find(s => s.name.trim() === name);
+      if (studentObj && inputEl) {
+        const resolved = studentObj.name + (studentObj.grade ? ' ' + studentObj.grade : '');
+        inputEl.value = resolved;
+        name = resolved;
       }
 
       btn.disabled = true;
@@ -1702,7 +1780,7 @@
                       ${optionsHtml}
                   </select>
                   <div style="position: relative;">
-                      <input type="text" id="centralNameInput" class="input-control" placeholder="ค้นหาชื่อ-นามสกุลของคุณ" autocomplete="off" oninput="filterCentralStudents()" onfocus="filterCentralStudents()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitCentralSignup(); }" onblur="setTimeout(() => { let d = document.getElementById('centralAutocomplete'); if(d) d.style.display='none'; }, 200)">
+                      <input type="text" id="centralNameInput" class="input-control" placeholder="ค้นหาชื่อ-นามสกุลของคุณ" autocomplete="off" oninput="filterCentralStudents()" onfocus="filterCentralStudents()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitCentralSignup(); }" onblur="setTimeout(() => { let d = document.getElementById('centralAutocomplete'); if(d) d.style.display='none'; }, 350)">
                       <div id="centralAutocomplete" class="autocomplete-dropdown" style="display:none; width:100%;"></div>
                   </div>
                   <button class="btn btn-primary btn-block" id="btnCentralSubmit" onclick="submitCentralSignup()">
@@ -1893,10 +1971,24 @@
       if (wrapper) wrapper.innerHTML = cardsHtml;
     }
 
+    function selectCentralStudent(fullName) {
+      const inputEl = document.getElementById('centralNameInput');
+      const dropdown = document.getElementById('centralAutocomplete');
+      if (inputEl) {
+        inputEl.value = fullName;
+        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      if (dropdown) {
+        dropdown.style.display = 'none';
+        dropdown.innerHTML = '';
+      }
+    }
+
     function filterCentralStudents() {
       const inputEl = document.getElementById('centralNameInput');
       const dropdown = document.getElementById('centralAutocomplete');
-      if (!dropdown) return;
+      if (!inputEl || !dropdown) return;
       const val = inputEl.value.toLowerCase().trim();
       dropdown.innerHTML = '';
 
@@ -1912,10 +2004,47 @@
         const fullName = s.name + (s.grade ? ' ' + s.grade : '');
         const div = document.createElement('div');
         div.textContent = fullName;
-        div.onclick = function () {
-          inputEl.value = fullName;
-          dropdown.style.display = 'none';
+        div.setAttribute('role', 'button');
+        div.setAttribute('tabindex', '0');
+
+        div.onmousedown = function (e) {
+          e.preventDefault();
+          selectCentralStudent(fullName);
         };
+
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isTouchScroll = false;
+
+        div.addEventListener('touchstart', function (e) {
+          if (e.touches && e.touches.length > 0) {
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+            isTouchScroll = false;
+          }
+        }, { passive: true });
+
+        div.addEventListener('touchmove', function (e) {
+          if (e.touches && e.touches.length > 0) {
+            const dy = Math.abs(e.touches[0].clientY - touchStartY);
+            const dx = Math.abs(e.touches[0].clientX - touchStartX);
+            if (dy > 8 || dx > 8) {
+              isTouchScroll = true;
+            }
+          }
+        }, { passive: true });
+
+        div.addEventListener('touchend', function (e) {
+          if (!isTouchScroll) {
+            e.preventDefault();
+            selectCentralStudent(fullName);
+          }
+        });
+
+        div.onclick = function (e) {
+          selectCentralStudent(fullName);
+        };
+
         dropdown.appendChild(div);
       });
 
@@ -1925,7 +2054,7 @@
     function submitCentralSignup() {
       const duty = document.getElementById('centralDutySelect').value;
       const inputEl = document.getElementById('centralNameInput');
-      const name = inputEl.value.trim();
+      let name = inputEl.value.trim();
       const btnEl = document.getElementById('btnCentralSubmit');
 
       if (!duty) {
@@ -1938,12 +2067,29 @@
         return;
       }
 
-      const studentObj = studentNamesList.find(s => (s.name + (s.grade ? ' ' + s.grade : '')) === name);
+      let studentObj = studentNamesList.find(s => (s.name + (s.grade ? ' ' + s.grade : '')) === name);
+      if (!studentObj) {
+        // Fallback 1: match exact name without grade
+        studentObj = studentNamesList.find(s => s.name.trim() === name);
+      }
+      if (!studentObj) {
+        // Fallback 2: if dropdown is visible and has only 1 matching student
+        const dropdown = document.getElementById('centralAutocomplete');
+        if (dropdown && dropdown.style.display !== 'none' && dropdown.children.length === 1) {
+          const autoName = dropdown.children[0].textContent;
+          studentObj = studentNamesList.find(s => (s.name + (s.grade ? ' ' + s.grade : '')) === autoName);
+        }
+      }
       if (!studentObj) {
         showToast('ไม่อนุญาตให้พิมพ์ชื่อเอง กรุณาเลือกรายชื่อที่มีในระบบเท่านั้น', 'error');
         inputEl.focus();
         return;
       }
+
+      const resolvedFullName = studentObj.name + (studentObj.grade ? ' ' + studentObj.grade : '');
+      inputEl.value = resolvedFullName;
+      name = resolvedFullName;
+
       const sendName = studentObj.name;
       const sendGrade = studentObj.grade || '';
 
