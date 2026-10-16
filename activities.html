@@ -2,6 +2,7 @@
 <html lang="th">
 
 <head>
+  <base href="/" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>คลังข่าวสารและกิจกรรม | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
@@ -170,14 +171,14 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- API & Cloudflare Tunnel Config -->
-  <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.2.0"></script>
+  <script src="/cloudflare-config.js"></script>
+  <script src="/js/api-config.js?v=2.2.0"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
-  <link rel="stylesheet" href="css/diego.css" />
+  <link rel="stylesheet" href="/css/diego.css" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+  <link rel="icon" type="image/png" href="/assets/icons/sarawat-logo.png" />
 </head>
 
 <body class="dg-activities-page">
@@ -188,11 +189,11 @@
   <nav class="dg-nav" id="dgNav">
     <div class="dg-nav-container">
       <a href="index.html" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
-        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+        <img src="/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span
           style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
-        <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+        <img src="/assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span class="dg-brand-text">SARAWAT</span>
       </a>
@@ -251,7 +252,7 @@
       <!-- Activity Featured Hero Banner (Shown when query parameter targets an activity) -->
       <div id="actHeaderBannerWrap" style="display: none; margin: 26px 0 20px 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--dg-border); background: #0b0f19; box-shadow: 0 16px 40px rgba(0,0,0,0.12); position: relative;">
         <div style="position: relative; width: 100%; height: 380px; max-height: 52vh; overflow: hidden;">
-          <img id="actHeaderBannerImg" src="assets/images/activities-cover.jpg" alt="ภาพกิจกรรม" style="width: 100%; height: 100%; object-fit: cover;" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}" />
+          <img id="actHeaderBannerImg" src="/assets/images/activities-cover.jpg" alt="ภาพกิจกรรม" style="width: 100%; height: 100%; object-fit: cover;" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}" />
           <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.82) 100%);"></div>
           <div style="position: absolute; bottom: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px;">
             <div style="color: #ffffff; max-width: 720px;">
@@ -357,10 +358,10 @@
       <div class="dg-pre-footer-grid">
         <div>
           <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
-            <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+            <img src="/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
               style="height: 52px; width: auto; object-fit: contain;" />
             <span style="display: inline-block; width: 1px; height: 36px; background: var(--dg-border);"></span>
-            <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+            <img src="/assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
               style="height: 50px; width: auto; object-fit: contain;" />
           </div>
           <h2 class="dg-pre-footer-title">
@@ -1324,10 +1325,10 @@
     src="https://github.com/KongNontawatDev/Black-Mourning-Ribbon/blob/2150640c0e623c7fbcca07024287b597f7999a84/ribbon_bottom_left.png?raw=true"
     alt="Black mourning ribbon for websites, bottom left corner, ริบบิ้นไว้ทุกข์สีดำ มุมล่างซ้าย สำหรับแสดงความอาลัยบนเว็บไซต์"
     style="position:fixed; bottom:0; left:0; width:80px; opacity:0.9; z-index:9999; pointer-events:none;"
-    onerror="this.src='assets/icons/ribbon_bottom_left.png';" />
+    onerror="this.src='/assets/icons/ribbon_bottom_left.png';" />
 
   <!-- Image Protection & Anti-Copy System -->
-  <script src="js/image-protection.js"></script>
+  <script src="/js/image-protection.js"></script>
 </body>
 
 </html>
