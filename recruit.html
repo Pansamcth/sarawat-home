@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 | โรงเรียนเดชะปัตตนยานุกูล</title>
+  <meta name="description"
+    content="ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 โรงเรียนเดชะปัตตนยานุกูล กรอกใบสมัครออนไลน์ ตรวจสอบคุณสมบัติ และติดตามสถานะใบสมัคร" />
+  <meta name="keywords"
+    content="รับสมัครสารวัตรนักเรียน, สารวัตรนักเรียน 2570, เดชะปัตตนยานุกูล, สารวัตรนักเรียน เดชะ" />
+  <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://sarawatdc.site/recruit" />
+
+  <!-- Open Graph / Discord Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sarawatdc.site/recruit" />
+  <meta property="og:title" content="🛡️ ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570" />
+  <meta property="og:description"
+    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สมัครออนไลน์และตรวจสอบสถานะ" />
+  <meta property="og:image" content="assets/icons/sarawat-logo.png" />
+  <meta property="og:site_name" content="Sarawat - Dechapattanayanukul School" />
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Google Fonts: Plus Jakarta Sans + Outfit + Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Central API Config -->
+  <script src="cloudflare-config.js"></script>
+  <script src="js/api-config.js?v=2.7.2"></script>
+
+  <!-- Diego Minimalist Swiss Agency Design System -->
+  <link rel="stylesheet" href="css/diego.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+
+  <style>
+    /* ========================================================
+       RECRUITMENT PORTAL (ปีการศึกษา 2570) STYLING
+       ======================================================== */
+    html,
+    body,
+    input,
+    select,
+    textarea,
+    button,
+    label {
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
+    }
+
+    /* Tab Switcher (สมัครใหม่ vs ตรวจสอบสถานะ) */
+    .recruit-nav-tabs {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 9999px;
+      gap: 6px;
+      margin-bottom: 32px;
+      border: 1px solid var(--dg-border);
+    }
+
+    .recruit-tab-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--dg-text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .recruit-tab-btn:hover {
+      color: var(--dg-text-primary);
+    }
+
+    .recruit-tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Top PDPA Button in Header Title Row */
+    .pdpa-top-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #0f172a;
+      font-size: 0.90rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .pdpa-top-btn:hover {
+      background: #f8fafc;
+      border-color: #0f172a;
+      color: #0f172a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .pdpa-top-btn:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 640px) {
+      .dg-act-title-actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+      }
+    }
+
+    /* Notice Banner */
+    .recruit-schedule-banner {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    @media (max-width: 768px) {
+      .recruit-schedule-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    .schedule-badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .schedule-badge-status.open {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .schedule-badge-status.closed {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    /* Step Indicator Bar */
+    .recruit-steps-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .recruit-step-node {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .recruit-step-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: 2px solid transparent;
+      transition: all 0.25s ease;
+    }
+
+    .recruit-step-label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #64748b;
+      transition: color 0.25s ease;
+    }
+
+    .recruit-step-node.active .recruit-step-circle {
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+    }
+
+    .recruit-step-node.active .recruit-step-label {
+      color: #0f172a;
+    }
+
+    .recruit-step-node.completed .recruit-step-circle {
+      background: #10b981;
+      color: #ffffff;
+    }
+
+    .recruit-step-node.completed .recruit-step-label {
+      color: #047857;
+    }
+
+    .recruit-step-line {
+      width: 48px;
+      height: 2px;
+      background: #e2e8f0;
+    }
+
+    @media (max-width: 640px) {
+      .recruit-step-label {
+        display: none;
+      }
+
+      .recruit-step-line {
+        width: 28px;
+      }
+    }
+
+    /* Form Section Cards */
+    .recruit-card {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 20px;
+      padding: 32px 36px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      text-align: left;
+    }
+
+    @media (max-width: 640px) {
+      .recruit-card {
+        padding: 24px 20px;
+        border-radius: 16px;
+      }
+    }
+
+    .recruit-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .recruit-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    .recruit-card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .recruit-card-subtitle {
+      font-size: 0.84rem;
+      color: #64748b;
+      margin: 2px 0 0;
+    }
+
+    /* Grid Form Layout */
+    .recruit-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .col-12 {
+      grid-column: span 12;
+    }
+
+    .col-6 {
+      grid-column: span 6;
+    }
+
+    .col-4 {
+      grid-column: span 4;
+    }
+
+    .col-3 {
+      grid-column: span 3;
+    }
+
+    .col-8 {
+      grid-column: span 8;
+    }
+
+    @media (max-width: 768px) {
+
+      .col-6,
+      .col-4,
+      .col-3,
+      .col-8 {
+        grid-column: span 12;
+      }
+    }
+
+    /* Form Inputs */
+    .recruit-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .recruit-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .recruit-label .req {
+      color: #ef4444;
+      margin-left: 3px;
+    }
+
+    .recruit-label .opt {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .recruit-input,
+    .recruit-select {
+      width: 100%;
+      height: 46px;
+      padding: 0 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      font-size: 0.95rem;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .recruit-input:focus,
+    .recruit-select:focus {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+
+    .recruit-input.has-error,
+    .recruit-select.has-error {
+      border-color: #ef4444 !important;
+      background: #fff5f5;
+    }
+
+    .recruit-field-error {
+      font-size: 0.78rem;
+      color: #ef4444;
+      font-weight: 600;
+      display: none;
+      margin-top: 2px;
+    }
+
+    .recruit-help-text {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Photo Upload Area */
+    .photo-upload-container {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .photo-preview-wrap {
+      width: 130px;
+      height: 165px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .photo-preview-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-preview-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #94a3b8;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .photo-preview-placeholder span {
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+
+    .photo-upload-meta {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .photo-btn-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      padding: 9px 18px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .photo-btn-select:hover {
+      background: #e2e8f0;
+    }
+
+    /* Action Buttons Row */
+    .recruit-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-step-prev {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-step-prev:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-step-next {
+      background: #0f172a;
+      color: #ffffff;
+      border: none;
+      padding: 13px 32px;
+      border-radius: 9999px;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+      margin-left: auto;
+    }
+
+    .btn-step-next:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+    }
+
+    /* Review Dossier (Step 2) */
+    .dossier-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .dossier-header {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .dossier-thumb {
+      width: 72px;
+      height: 92px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+    }
+
+    .dossier-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 20px;
+    }
+
+    @media (max-width: 640px) {
+      .dossier-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dossier-item-label {
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .dossier-item-value {
+      font-size: 0.95rem;
+      color: #0f172a;
+      font-weight: 750;
+    }
+
+    /* PDPA Consent Box */
+    .pdpa-consent-box {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pdpa-consent-box:hover {
+      border-color: #0f172a;
+      background: #fbfcfe;
+    }
+
+    .pdpa-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      accent-color: #0f172a;
+      margin-top: 2px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Success Card (Step 3) */
+    .success-card {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 24px;
+      padding: 48px 36px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+    }
+
+    .success-icon-badge {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #ecfdf5;
+      color: #10b981;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .ref-code-card {
+      background: #f8fafc;
+      border: 1.5px dashed #0f172a;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 24px 0;
+      text-align: center;
+    }
+
+    .ref-code-num {
+      font-family: var(--dg-font-sans);
+      font-size: 2rem;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: 0.05em;
+    }
+
+    /* SCREENSHOT ALERT BANNER (CRITICAL REQUIREMENT) */
+    .screenshot-alert-banner {
+      background: #fef3c7;
+      border: 1.5px solid #f59e0b;
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 24px 0;
+      text-align: left;
+    }
+
+    .screenshot-alert-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #d97706;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);
+    }
+
+    .screenshot-alert-text {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #92400e;
+      line-height: 1.45;
+    }
+
+    /* Status Tracking Card */
+    .status-check-card {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 0.88rem;
+    }
+
+    .status-badge.pending {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .status-badge.reviewing {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .status-badge.approved {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+
+    .status-badge.rejected {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .status-badge.correction_needed {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #ffedd5;
+    }
+
+    /* Correction Needed Alert Box */
+    .correction-box {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 18px;
+      text-align: left;
+    }
+
+    /* Modal Backdrop & Box */
+    .pdpa-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pdpa-modal-box {
+      background: #ffffff;
+      border-radius: 20px;
+      max-width: 620px;
+      width: 100%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .pdpa-modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pdpa-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #334155;
+      white-space: pre-line;
+    }
+
+    .pdpa-modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #e2e8f0;
+      text-align: right;
+    }
+
+    /* ========================================================
+       RECRUITMENT CLOSED & BLUR SYSTEM
+       ======================================================== */
+    .form-blurred {
+      filter: blur(8px) !important;
+      -webkit-filter: blur(8px) !important;
+      opacity: 0.32 !important;
+      pointer-events: none !important;
+      user-select: none !important;
+      transition: filter 0.35s ease, opacity 0.35s ease;
+    }
+
+    #recruitClosedOverlay {
+      margin-bottom: 36px;
+      animation: fadeInDown 0.35s ease forwards;
+    }
+
+    .recruit-closed-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 38px 28px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .recruit-closed-icon-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    }
+
+    .recruit-closed-icon-wrap.closed {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #ef4444;
+    }
+
+    /* Editing Mode Banner (ปลดล็อคให้แก้ไขข้อมูลแม้ระบบปิดรับสมัคร) */
+    .editing-mode-banner {
+      background: #fff7ed;
+      border: 1.5px solid #fdba74;
+      border-radius: 18px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(234, 88, 12, 0.08);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .editing-mode-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .editing-mode-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .editing-mode-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #ffedd5;
+      color: #ea580c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid #fed7aa;
+    }
+
+    .editing-mode-text {
+      flex: 1;
+    }
+
+    .editing-mode-title {
+      font-size: 1.05rem;
+      font-weight: 850;
+      color: #9a3412;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .editing-mode-id-badge {
+      background: #ea580c;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      letter-spacing: 0.03em;
+    }
+
+    .editing-mode-desc {
+      font-size: 0.88rem;
+      color: #c2410c;
+      line-height: 1.5;
+      margin: 0 0 10px;
+    }
+
+    .editing-mode-note-card {
+      background: #ffffff;
+      border: 1.5px dashed #fb923c;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 6px;
+    }
+
+    .editing-mode-note-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #ea580c;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .editing-mode-note-val {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .btn-cancel-edit {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 9999px;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 750;
+      color: #64748b;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-cancel-edit:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+      background: #fef2f2;
+    }
+
+
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-dot.green { background: #16a34a; }
+    .status-dot.red { background: #dc2626; }
+    .status-dot.amber { background: #d97706; }
+  </style>
+</head>
+
+<body>
+  <!-- ============ SCROLL PROGRESS BAR ============ -->
+  <div class="dg-scroll-progress" id="scrollProgress"></div>
+
+  <!-- ============ MINIMALIST TOP NAVIGATION BAR ============ -->
+  <nav class="dg-nav" id="dgNav">
+    <div class="dg-nav-container">
+      <a href="index.html" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+          style="width: 36px; height: 36px; object-fit: contain;" />
+        <span
+          style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
+        <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+          style="width: 36px; height: 36px; object-fit: contain;" />
+        <span class="dg-brand-text">SARAWAT</span>
+      </a>
+
+      <div class="dg-nav-links" id="dgNavLinks">
+        <a href="index.html">หน้าแรก</a>
+        <a href="activities.html">ข่าวสารกิจกรรม</a>
+        <a href="calendar.html">ตารางกิจกรรม</a>
+        <a href="team.html">คณะทำงาน</a>
+      </div>
+
+      <div class="dg-nav-actions">
+        <a href="index.html#contact" class="dg-btn-black">
+          <span>ติดต่อเรา</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+        <button class="dg-nav-toggle" id="dgNavToggle" aria-label="Toggle menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ PAGE HEADER ============ -->
+  <header class="dg-act-page-header">
+    <div class="dg-container">
+      <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">
+          <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+          <span>หน้าแรก</span>
+        </a>
+        <span class="sep">/</span>
+        <span style="color: var(--dg-black); font-weight: 750;">ระบบรับสมัครสารวัตรนักเรียน</span>
+      </nav>
+
+      <div class="dg-act-title-row">
+        <div>
+          <span class="dg-section-tag">Truant Patrol Register • ปีการศึกษา 2570</span>
+          <h1 class="dg-act-main-title">
+            Register System.<br>
+            ระบบรับสมัครสารวัตรนักเรียน 2570
+          </h1>
+          <p class="dg-act-subtitle">
+            คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล • เปิดรับสมัครนักเรียนชั้น ม.4 และ ม.5
+          </p>
+        </div>
+        <div class="dg-act-title-actions">
+          <button type="button" class="pdpa-top-btn" id="btnOpenPdpaHeader" title="อ่านนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)">
+            <i data-lucide="shield-check" style="width: 17px; height: 17px; color: #16a34a;"></i>
+            <span>นโยบาย PDPA</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="dg-activities-section" style="padding: 40px 20px 80px;">
+    <div class="dg-container" style="max-width: 860px; text-align: center;">
+
+      <!-- Mode Switcher Tabs (ยื่นใบสมัครใหม่ vs ตรวจสอบสถานะใบสมัคร) -->
+      <div style="display: flex; justify-content: center; margin-bottom: 32px;">
+        <div class="recruit-nav-tabs">
+          <button type="button" class="recruit-tab-btn active" id="tabBtnApply">
+            <i data-lucide="file-plus-2" style="width: 18px; height: 18px;"></i>
+            <span>กรอกใบสมัคร</span>
+          </button>
+          <button type="button" class="recruit-tab-btn" id="tabBtnStatus">
+            <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+            <span>ตรวจสอบสถานะใบสมัคร</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           VIEW A: APPLICATION WIZARD (3 STEPS)
+           ======================================================== -->
+      <section id="viewApplication">
+
+        <!-- Recruitment Closed / Scheduled Notice Overlay -->
+        <div id="recruitClosedOverlay" style="display: none;">
+          <div class="recruit-closed-card">
+            <div class="recruit-closed-icon-wrap closed" id="closedNoticeIconWrap">
+              <i data-lucide="lock" id="closedNoticeIcon" style="width: 28px; height: 28px;"></i>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+              <span class="schedule-badge-status closed" id="closedNoticeBadge">
+                <span class="status-dot red"></span>
+                <span>ปิดรับสมัคร</span>
+              </span>
+            </div>
+
+            <h2 id="closedNoticeTitle" style="font-size: 1.48rem; font-weight: 850; color: #0f172a; margin: 0 0 10px;">
+              ขณะนี้ระบบปิดรับสมัครสารวัตรนักเรียน
+            </h2>
+
+            <p id="closedNoticeDesc" style="color: #64748b; font-size: 0.94rem; line-height: 1.6; margin: 0 0 24px; max-width: 540px; margin-left: auto; margin-right: auto;">
+              ขณะนี้ระบบปิดรับสมัคร หรือยังไม่ถึงกำหนดเวลาในการเปิดรับสมัครออนไลน์
+            </p>
+
+            <!-- Action buttons in closed state -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px;">
+              <button type="button" class="photo-btn-select" id="btnClosedGoStatus" style="padding: 10px 22px; font-size: 0.9rem; font-weight: 750; background: #f1f5f9;">
+                <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                <span>ตรวจสอบสถานะใบสมัคร</span>
+              </button>
+              <a href="index.html" class="btn-step-prev" style="padding: 10px 22px; font-size: 0.9rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                <i data-lucide="home" style="width: 16px; height: 16px;"></i>
+                <span>กลับสู่หน้าหลัก</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM WRAPPER (Subject to blur if closed) -->
+        <div id="recruitFormWrapper">
+
+        <!-- EDITING MODE BANNER (ปลดล็อคให้แก้ไขข้อมูลแม้ระบบปิดรับสมัคร) -->
+        <div id="editingModeBanner" class="editing-mode-banner" style="display: none;">
+          <div class="editing-mode-inner">
+            <div class="editing-mode-left">
+              <div class="editing-mode-icon">
+                <i data-lucide="edit-3" style="width: 22px; height: 22px;"></i>
+              </div>
+              <div class="editing-mode-text">
+                <div class="editing-mode-title">
+                  <span>โหมดแก้ไขข้อมูลใบสมัคร</span>
+                  <span class="editing-mode-id-badge" id="txtEditingStudentIdBadge">รหัส -</span>
+                </div>
+                <p class="editing-mode-desc">
+                  ระบบปลดล็อคแบบฟอร์มให้ท่านแก้ไขข้อมูลตามคำขอของคณะกรรมการ แม้ระบบจะปิดรับสมัครใหม่แล้ว
+                </p>
+                <div class="editing-mode-note-card" id="boxEditingCorrectionNote" style="display: none;">
+                  <div class="editing-mode-note-label">
+                    <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i>
+                    <span>สิ่งที่คณะกรรมการแจ้งให้แก้ไข:</span>
+                  </div>
+                  <div class="editing-mode-note-val" id="txtEditingCorrectionNote">-</div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-cancel-edit" id="btnCancelEditMode" title="ยกเลิกโหมดแก้ไขและกลับสู่หน้าปกติ">
+              <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              <span>ยกเลิกการแก้ไข</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="recruit-steps-bar">
+          <div class="recruit-step-node active" id="stepNode1">
+            <div class="recruit-step-circle">1</div>
+            <div class="recruit-step-label">กรอกข้อมูล</div>
+          </div>
+          <div class="recruit-step-line"></div>
+          <div class="recruit-step-node" id="stepNode2">
+            <div class="recruit-step-circle">2</div>
+            <div class="recruit-step-label">ตรวจสอบข้อมูล & PDPA</div>
+          </div>
+          <div class="recruit-step-line"></div>
+          <div class="recruit-step-node" id="stepNode3">
+            <div class="recruit-step-circle">3</div>
+            <div class="recruit-step-label">ยืนยันสำเร็จ</div>
+          </div>
+        </div>
+
+        <!-- FORM CONTAINER -->
+        <form id="recruitForm" novalidate onsubmit="return false;">
+          <!-- Anti-Spam Bot Protection Honeypot -->
+          <input type="text" name="website_hp" id="recruit_hp" style="display:none !important;" tabindex="-1" autocomplete="off" />
+
+          <!-- ==================== STEP 1: FORM INPUTS ==================== -->
+          <div id="stepPane1">
+
+            <!-- CARD 1: PHOTO UPLOAD -->
+            <div class="recruit-card">
+              <div class="recruit-card-header">
+                <div class="recruit-card-icon">
+                  <i data-lucide="camera" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 class="recruit-card-title">1. รูปถ่ายหน้าตรง <span style="color: #ef4444;">*</span></h3>
+                  <p class="recruit-card-subtitle">แนบรูปถ่ายหน้าตรง เห็นใบหน้าชัดเจน ไม่มีสิ่งปิดบัง (รองรับไฟล์ JPG, PNG,
+                    WebP ขนาดไม่เกิน 5 MB)</p>
+                </div>
+              </div>
+
+              <div class="photo-upload-container">
+                <div class="photo-preview-wrap" id="photoDropzone">
+                  <img id="photoPreviewImg" alt="รูปถ่ายหน้าตรง" />
+                  <div class="photo-preview-placeholder" id="photoPlaceholder">
+                    <i data-lucide="user" style="width: 32px; height: 32px; color: #94a3b8;"></i>
+                    <span>ยังไม่มีรูปภาพ</span>
+                  </div>
+                </div>
+
+                <div class="photo-upload-meta">
+                  <input type="file" id="applicantPhoto" accept="image/jpeg,image/png,image/webp"
+                    style="display: none;" />
+                  <button type="button" class="photo-btn-select" id="btnChoosePhoto">
+                    <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
+                    <span id="txtBtnPhoto">เลือกไฟล์รูปถ่าย</span>
+                  </button>
+                  <button type="button" class="photo-btn-select" id="btnRemovePhoto"
+                    style="display: none; color: #ef4444; border-color: #fecaca; margin-left: 8px;">
+                    <i data-lucide="trash-2" style="width: 15px; height: 15px;"></i>
+                    <span>ลบรูป</span>
+                  </button>
+                  <div class="recruit-help-text" style="margin-top: 10px;">
+                    💡 ไม่บังคับเครื่องแต่งกาย แต่ต้องเห็นใบหน้าชัดเจน หน้าตรง เพื่อใช้ติดบัตรและตรวจสอบตัวตน
+                  </div>
+                  <div class="recruit-field-error" id="errPhoto">กรุณาแนบรูปถ่ายหน้าตรงของผู้สมัคร</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 2: PERSONAL INFO -->
+            <div class="recruit-card">
+              <div class="recruit-card-header">
+                <div class="recruit-card-icon">
+                  <i data-lucide="user-check" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 class="recruit-card-title">2. ข้อมูลประจำตัวนักเรียน</h3>
+                  <p class="recruit-card-subtitle">รหัสประจำตัวนักเรียนและระดับชั้นสำหรับปีการศึกษา 2570</p>
+                </div>
+              </div>
+
+              <div class="recruit-grid">
+                <!-- รหัสประจำตัวนักเรียน -->
+                <div class="col-4">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpStudentId">
+                      <span>รหัสประจำตัวนักเรียน <span class="req">*</span></span>
+                    </label>
+                    <input type="tel" class="recruit-input" id="inpStudentId" maxlength="5" placeholder="เช่น 48123" />
+                    <div class="recruit-field-error" id="errStudentId">กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก</div>
+                  </div>
+                </div>
+
+                <!-- คำนำหน้า -->
+                <div class="col-4">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="selPrefix">
+                      <span>คำนำหน้าชื่อ <span class="req">*</span></span>
+                    </label>
+                    <select class="recruit-select" id="selPrefix">
+                      <option value="">-- เลือกคำนำหน้า --</option>
+                      <option value="เด็กชาย">เด็กชาย</option>
+                      <option value="เด็กหญิง">เด็กหญิง</option>
+                      <option value="นาย">นาย</option>
+                      <option value="นางสาว">นางสาว</option>
+                    </select>
+                    <div class="recruit-field-error" id="errPrefix">กรุณาเลือกคำนำหน้าชื่อ</div>
+                  </div>
+                </div>
+
+                <!-- ช่องว่างเพื่อเว้นจังหวะ -->
+                <div class="col-4"></div>
+
+                <!-- ชื่อจริง -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpFirstName">
+                      <span>ชื่อจริง (ภาษาไทย) <span class="req">*</span></span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpFirstName" placeholder="เช่น ภานุวัฒน์" />
+                    <div class="recruit-field-error" id="errFirstName">กรุณากรอกชื่อจริง</div>
+                  </div>
+                </div>
+
+                <!-- นามสกุล -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpLastName">
+                      <span>นามสกุล (ภาษาไทย) <span class="req">*</span></span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpLastName" placeholder="เช่น วงศ์สุวรรณ" />
+                    <div class="recruit-field-error" id="errLastName">กรุณากรอกนามสกุล</div>
+                  </div>
+                </div>
+
+                <!-- ระดับชั้น -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="selGrade">
+                      <span>ระดับชั้น <span class="req">*</span></span>
+                      <span class="opt">(เฉพาะ ม.4 และ ม.5)</span>
+                    </label>
+                    <select class="recruit-select" id="selGrade">
+                      <option value="">-- เลือกระดับชั้น --</option>
+                      <option value="ม.4">มัธยมศึกษาปีที่ 4 (ม.4)</option>
+                      <option value="ม.5">มัธยมศึกษาปีที่ 5 (ม.5)</option>
+                    </select>
+                    <div class="recruit-field-error" id="errGrade">เปิดรับเฉพาะนักเรียนชั้น ม.4 และ ม.5</div>
+                  </div>
+                </div>
+
+                <!-- ห้องเรียน -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpClassroom">
+                      <span>ห้องเรียน <span class="req">*</span></span>
+                      <span class="opt">(เฉพาะเลขห้องเท่านั้น)</span>
+                    </label>
+                    <input type="number" class="recruit-input" id="inpClassroom" min="1" max="15"
+                      placeholder="ระบุห้อง เช่น 2" />
+                    <div class="recruit-field-error" id="errClassroom">กรุณาระบุห้องเรียน</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 3: CONTACT & GPAX -->
+            <div class="recruit-card">
+              <div class="recruit-card-header">
+                <div class="recruit-card-icon">
+                  <i data-lucide="phone-call" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 class="recruit-card-title">3. ข้อมูลติดต่อและผลการเรียน</h3>
+                  <p class="recruit-card-subtitle">เบอร์โทรศัพท์ที่ติดต่อได้ และเกรดเฉลี่ยสะสม (GPAX)</p>
+                </div>
+              </div>
+
+              <div class="recruit-grid">
+                <!-- เบอร์โทรศัพท์ -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpPhone">
+                      <span>เบอร์โทรศัพท์ที่ติดต่อได้ <span class="req">*</span></span>
+                    </label>
+                    <input type="tel" class="recruit-input" id="inpPhone" maxlength="10"
+                      placeholder="เช่น 0812345678" />
+                    <div class="recruit-field-error" id="errPhone">กรุณากรอกเบอร์โทรศัพท์ 10 หลักขึ้นต้นด้วย 0</div>
+                  </div>
+                </div>
+
+                <!-- GPAX -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpGpax">
+                      <span>เกรดเฉลี่ยสะสม (GPAX) <span class="req">*</span></span>
+                      <span class="opt" id="labelMinGpax">(เกณฑ์ขั้นต่ำ 2.50)</span>
+                    </label>
+                    <input type="number" step="0.01" min="0" max="4.00" class="recruit-input" id="inpGpax"
+                      placeholder="เช่น 3.45" />
+                    <div class="recruit-field-error" id="errGpax">เกรดเฉลี่ยสะสมต้องไม่ต่ำกว่าเกณฑ์ที่กำหนด (2.50)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 4: CLUBS -->
+            <div class="recruit-card">
+              <div class="recruit-card-header">
+                <div class="recruit-card-icon">
+                  <i data-lucide="flag" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 class="recruit-card-title">4. ข้อมูลชุมนุม (อ้างอิงปีการศึกษา 2570)</h3>
+                  <p class="recruit-card-subtitle">เลือกชุมนุมที่ต้องการปฏิบัติหน้าที่สารวัตรนักเรียน</p>
+                </div>
+              </div>
+
+              <div
+                style="background: #f1f5f9; border-radius: 10px; padding: 10px 14px; font-size: 0.84rem; color: #475569; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="info" style="width: 16px; height: 16px; color: #2563eb; flex-shrink: 0;"></i>
+                <span>เบื้องต้น ขอแนะนำให้ผู้สมัครเลือกชุมนุม “สารวัตรนักเรียนเสมารักษ์” เพียงชุมนุมเดียว
+                  หากประสงค์จะปฏิบัติหน้าที่สารวัตรนักเรียนเป็นหลัก อย่างไรก็ตาม
+                  หากผู้สมัครประสงค์จะเข้าร่วมชุมนุมอื่นควบคู่กัน
+                  สามารถเลือกได้เฉพาะชุมนุมที่สารวัตรนักเรียนอนุญาตตามรายชื่อที่กำหนดไว้ด้านล่างเท่านั้น</span>
+              </div>
+
+              <div class="recruit-grid">
+                <!-- ชุมนุม -->
+                <div class="col-12">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="selClub">
+                      <span>ชุมนุมที่เลือก <span class="req">*</span></span>
+                    </label>
+                    <select class="recruit-select" id="selClub">
+                      <option value="">-- กำลังโหลดรายชื่อชุมนุม... --</option>
+                    </select>
+                    <div class="recruit-field-error" id="errClub">กรุณาเลือกชุมนุม</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CARD 5: ADDRESS -->
+            <div class="recruit-card">
+              <div class="recruit-card-header">
+                <div class="recruit-card-icon">
+                  <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 class="recruit-card-title">5. ข้อมูลที่อยู่</h3>
+                  <p class="recruit-card-subtitle">กรอกข้อมูลที่อยู่ปัจจุบันของผู้สมัครตามความเป็นจริง</p>
+                </div>
+              </div>
+
+              <div class="recruit-grid">
+                <!-- บ้านเลขที่ -->
+                <div class="col-4">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpHouseNo">
+                      <span>บ้านเลขที่ <span class="req">*</span></span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpHouseNo" placeholder="เช่น 123/45" />
+                    <div class="recruit-field-error" id="errHouseNo">กรุณากรอกบ้านเลขที่</div>
+                  </div>
+                </div>
+
+                <!-- หมู่ที่ -->
+                <div class="col-4">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpVillageNo">
+                      <span>หมู่ที่</span>
+                      <span class="opt">(ถ้ามี)</span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpVillageNo" placeholder="เช่น หมู่ 2" />
+                  </div>
+                </div>
+
+                <!-- อาคาร / หมู่บ้าน -->
+                <div class="col-4">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpBuilding">
+                      <span>อาคาร / หมู่บ้าน</span>
+                      <span class="opt">(ถ้ามี)</span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpBuilding" placeholder="เช่น หมู่บ้านสุขสมบูรณ์" />
+                  </div>
+                </div>
+
+                <!-- ซอย -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpSoi">
+                      <span>ซอย</span>
+                      <span class="opt">(ถ้ามี)</span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpSoi" placeholder="เช่น ซอย 5" />
+                  </div>
+                </div>
+
+                <!-- ถนน -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpRoad">
+                      <span>ถนน</span>
+                      <span class="opt">(ถ้ามี)</span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpRoad" placeholder="เช่น ถนนพิพิธ" />
+                  </div>
+                </div>
+
+                <!-- ตำบล / แขวง -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpSubdistrict">
+                      <span>ตำบล / แขวง <span class="req">*</span></span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpSubdistrict" placeholder="เช่น สะบารัง" />
+                    <div class="recruit-field-error" id="errSubdistrict">กรุณากรอกตำบล/แขวง</div>
+                  </div>
+                </div>
+
+                <!-- อำเภอ / เขต -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpDistrict">
+                      <span>อำเภอ / เขต <span class="req">*</span></span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpDistrict" placeholder="เช่น เมืองปัตตานี" />
+                    <div class="recruit-field-error" id="errDistrict">กรุณากรอกอำเภอ/เขต</div>
+                  </div>
+                </div>
+
+                <!-- จังหวัด -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpProvince">
+                      <span>จังหวัด <span class="req">*</span></span>
+                    </label>
+                    <input type="text" class="recruit-input" id="inpProvince" placeholder="เช่น ปัตตานี" />
+                    <div class="recruit-field-error" id="errProvince">กรุณากรอกจังหวัด</div>
+                  </div>
+                </div>
+
+                <!-- รหัสไปรษณีย์ -->
+                <div class="col-6">
+                  <div class="recruit-form-group">
+                    <label class="recruit-label" for="inpPostalCode">
+                      <span>รหัสไปรษณีย์ <span class="req">*</span></span>
+                    </label>
+                    <input type="tel" class="recruit-input" id="inpPostalCode" maxlength="5" placeholder="เช่น 94000" />
+                    <div class="recruit-field-error" id="errPostalCode">รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTON STEP 1 -->
+            <div class="recruit-actions-row">
+              <a href="index.html" class="btn-step-prev">
+                <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                <span>กลับหน้าหลัก</span>
+              </a>
+              <button type="button" class="btn-step-next" id="btnGoToStep2">
+                <span>ตรวจสอบข้อมูล (ขั้นตอนถัดไป)</span>
+                <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ==================== STEP 2: REVIEW & PDPA ==================== -->
+          <div id="stepPane2" style="display: none;">
+
+            <div class="recruit-card">
+              <div class="recruit-card-header">
+                <div class="recruit-card-icon">
+                  <i data-lucide="clipboard-check" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 class="recruit-card-title">ตรวจสอบข้อมูลก่อนส่งใบสมัคร</h3>
+                  <p class="recruit-card-subtitle">โปรดตรวจสอบความถูกต้องของข้อมูลทั้งหมดก่อนกดยืนยัน</p>
+                </div>
+              </div>
+
+              <!-- DOSSIER CARD -->
+              <div class="dossier-box">
+                <div class="dossier-header">
+                  <img id="reviewPhoto" class="dossier-thumb" alt="รูปถ่ายผู้สมัคร" />
+                  <div>
+                    <div style="font-size: 1.25rem; font-weight: 850; color: #0f172a;" id="reviewFullName">-</div>
+                    <div style="font-size: 0.9rem; color: #475569; margin-top: 4px;">
+                      รหัสนักเรียน: <strong id="reviewStudentId">-</strong> • ชั้น <span id="reviewGradeRoom">-</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="dossier-grid">
+                  <div>
+                    <div class="dossier-item-label">เบอร์โทรศัพท์ที่ติดต่อได้</div>
+                    <div class="dossier-item-value" id="reviewPhone">-</div>
+                  </div>
+                  <div>
+                    <div class="dossier-item-label">เกรดเฉลี่ยสะสม (GPAX)</div>
+                    <div class="dossier-item-value" id="reviewGpax">-</div>
+                  </div>
+                  <div style="grid-column: span 2;">
+                    <div class="dossier-item-label">ชุมนุมที่เลือก (ปี 2570)</div>
+                    <div class="dossier-item-value" id="reviewClub">-</div>
+                  </div>
+                  <div style="grid-column: span 2;">
+                    <div class="dossier-item-label">ที่อยู่ปัจจุบัน</div>
+                    <div class="dossier-item-value" id="reviewAddress">-</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PDPA CONSENT SECTION -->
+              <div class="pdpa-consent-box" id="boxPdpaConsent">
+                <input type="checkbox" id="chkPdpa" class="pdpa-checkbox" />
+                <label for="chkPdpa" style="font-size: 0.88rem; color: #1e293b; cursor: pointer; line-height: 1.6;">
+                  <strong>ข้าพเจ้าได้ตรวจสอบข้อมูลถูกต้องครบถ้วน และรับทราบนโยบายคุ้มครองข้อมูลส่วนบุคคล
+                    (PDPA)</strong><br>
+                  ยินยอมให้คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล
+                  จัดเก็บและใช้ข้อมูลนี้เพื่อการคัดเลือกสารวัตรนักเรียน ประจำปีการศึกษา 2570
+                  (<a href="javascript:void(0)" id="linkReadPdpa"
+                    style="color: #2563eb; text-decoration: underline; font-weight: 700;">อ่านประกาศนโยบายฉบับเต็ม</a>)
+                </label>
+              </div>
+              <div class="recruit-field-error" id="errPdpa" style="margin-bottom: 14px; text-align: left;">
+                ⚠️ กรุณาทำเครื่องหมายยินยอมรับทราบประกาศนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ก่อนส่งใบสมัคร
+              </div>
+
+              <!-- ACTIONS STEP 2 -->
+              <div class="recruit-actions-row">
+                <button type="button" class="btn-step-prev" id="btnBackToStep1">
+                  <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                  <span>ย้อนกลับไปแก้ไข</span>
+                </button>
+                <button type="button" class="btn-step-next" id="btnSubmitApplication" style="background: #10b981;">
+                  <span id="txtBtnSubmit">ยืนยันและส่งใบสมัคร</span>
+                  <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ==================== STEP 3: SUBMIT SUCCESS ==================== -->
+          <div id="stepPane3" style="display: none;">
+
+            <div class="success-card">
+              <div class="success-icon-badge">
+                <i data-lucide="check" style="width: 40px; height: 40px;"></i>
+              </div>
+
+              <h2 style="font-size: 1.75rem; font-weight: 850; color: #0f172a; margin: 0 0 10px;">
+                ส่งใบสมัครสำเร็จแล้ว!
+              </h2>
+              <p style="font-size: 0.95rem; color: #475569; margin: 0 0 20px;">
+                ระบบได้บันทึกใบสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 เรียบร้อยแล้ว
+              </p>
+
+              <!-- REFERENCE CODE DISPLAY -->
+              <div class="ref-code-card">
+                <div style="font-size: 0.82rem; font-weight: 700; color: #64748b; margin-bottom: 6px;">
+                  เลขอ้างอิงใบสมัครของคุณ (Application Reference Code)
+                </div>
+                <div class="ref-code-num" id="successRefCode">SP70-0000</div>
+                <div style="font-size: 0.88rem; color: #334155; margin-top: 6px;" id="successApplicantMeta">
+                  ผู้สมัคร: <strong>-</strong> • ส่งเมื่อ: <span>-</span>
+                </div>
+              </div>
+
+              <!-- CRITICAL SCREENSHOT WARNING BANNER -->
+              <div class="screenshot-alert-banner">
+                <div class="screenshot-alert-icon">
+                  <i data-lucide="camera" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div class="screenshot-alert-text">
+                  📸 กรุณาถ่ายภาพหน้าจอ (Screenshot) หรือบันทึกหน้านี้ไว้เป็นหลักฐาน!<br>
+                  เพื่อใช้เลขอ้างอิงและรหัสประจำตัวนักเรียนในการตรวจสอบสถานะใบสมัคร
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px;">
+                <button type="button" class="btn-step-next" id="btnGoTrackStatus" style="margin: 0;">
+                  <i data-lucide="search" style="width: 17px; height: 17px;"></i>
+                  <span>ตรวจสอบสถานะใบสมัครของคุณ</span>
+                </button>
+                <a href="index.html" class="btn-step-prev">
+                  <span>กลับสู่หน้าหลัก</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+
+        </div><!-- end #recruitFormWrapper -->
+
+      </section>
+
+      <!-- ========================================================
+           VIEW B: STATUS TRACKING & SELF-CORRECTION
+           ======================================================== -->
+      <section id="viewStatus" style="display: none;">
+
+        <div class="status-check-card">
+          <div
+            style="width: 60px; height: 60px; border-radius: 50%; background: #f8fafc; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; justify-content: center; color: #0f172a; margin-bottom: 18px;">
+            <i data-lucide="search" style="width: 28px; height: 28px;"></i>
+          </div>
+
+          <h2 style="font-size: 1.5rem; font-weight: 850; color: #0f172a; margin: 0 0 8px;">
+            ตรวจสอบสถานะใบสมัคร
+          </h2>
+          <p style="font-size: 0.92rem; color: #64748b; margin: 0 0 24px;">
+            กรอกรหัสประจำตัวนักเรียน 5 หลัก เพื่อตรวจสอบผลการพิจารณาใบสมัคร
+          </p>
+
+          <!-- Search Input Box -->
+          <div style="display: flex; gap: 10px; max-width: 440px; margin: 0 auto 20px;">
+            <input type="tel" id="inpSearchStudentId" maxlength="5" class="recruit-input"
+              placeholder="กรอกรหัสนักเรียน 5 หลัก"
+              style="font-size: 1.05rem; text-align: center; letter-spacing: 0.08em; font-weight: 750;" />
+            <button type="button" class="dg-btn-black" id="btnSearchStatus"
+              style="padding: 0 24px; border-radius: 10px;">
+              <span>ค้นหา</span>
+            </button>
+          </div>
+          <div class="recruit-field-error" id="errSearchStatus" style="text-align: center;">
+            กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก</div>
+
+          <!-- RESULT CARD (HIDDEN INITIALLY) -->
+          <div id="statusResultBox"
+            style="display: none; margin-top: 28px; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 24px;">
+
+            <div
+              style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0;">
+              <div>
+                <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">เลขอ้างอิงใบสมัคร</span>
+                <div style="font-size: 1.15rem; font-weight: 900; color: #0f172a;" id="stRefCode">SP70-XXXX</div>
+              </div>
+              <div>
+                <span class="status-badge pending" id="stBadge">
+                  <span style="width: 7px; height: 7px; border-radius: 50%; background: currentColor;"></span>
+                  <span id="stBadgeText">รอการตรวจสอบ</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="dossier-grid">
+              <div>
+                <div class="dossier-item-label">ชื่อผู้สมัคร</div>
+                <div class="dossier-item-value" id="stFullName">-</div>
+              </div>
+              <div>
+                <div class="dossier-item-label">ระดับชั้น / ห้องเรียน</div>
+                <div class="dossier-item-value" id="stGradeRoom">-</div>
+              </div>
+              <div>
+                <div class="dossier-item-label">ชุมนุมที่เลือก</div>
+                <div class="dossier-item-value" id="stClub">-</div>
+              </div>
+              <div>
+                <div class="dossier-item-label">วันที่ส่งใบสมัคร</div>
+                <div class="dossier-item-value" id="stSubmittedDate">-</div>
+              </div>
+            </div>
+
+            <!-- CORRECTION BOX (IF CORRECTION_NEEDED) -->
+            <div class="correction-box" id="stCorrectionBox" style="display: none;">
+              <div
+                style="display: flex; align-items: center; gap: 8px; font-weight: 800; color: #c2410c; margin-bottom: 6px;">
+                <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
+                <span style="font-size: 1.02rem;">คณะกรรมการขอให้ท่านแก้ไขข้อมูลใบสมัคร</span>
+              </div>
+              <div style="font-size: 0.92rem; color: #7c2d12; margin-bottom: 14px; background: rgba(254, 215, 170, 0.4); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #ea580c; line-height: 1.5;" id="stCorrectionNote">
+                -
+              </div>
+
+              <!-- Direct Unlock Button (ไม่ต้องกรอกเบอร์โทรศัพท์ ปลดล็อคเบลอทันที) -->
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button type="button" class="dg-btn-black" id="btnUnlockCorrection"
+                  style="width: 100%; height: 46px; font-size: 0.95rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #ea580c; border-color: #ea580c; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.25);">
+                  <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+                  <span>ปลดล็อคและเข้าสู่หน้าแก้ไขข้อมูลใบสมัคร</span>
+                </button>
+                <p style="font-size: 0.8rem; color: #9a3412; margin: 0; text-align: center;">
+                  * ระบบจะปลดล็อคหน้าแบบฟอร์มที่เบลออยู่ และดึงข้อมูลเดิมของท่านขึ้นมาแก้ไขได้ทันที แม้จะปิดรับสมัครแล้ว
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ============ PDPA MODAL ============ -->
+  <div class="pdpa-modal-backdrop" id="pdpaModal">
+    <div class="pdpa-modal-box">
+      <div class="pdpa-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div
+            style="width: 32px; height: 32px; border-radius: 8px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0;">
+            นโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)
+          </h3>
+        </div>
+        <button type="button" id="btnClosePdpa"
+          style="background: transparent; border: none; cursor: pointer; color: #94a3b8;">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+
+      <div class="pdpa-modal-body" id="txtPdpaModalBody">
+        กำลังโหลดข้อความประกาศความเป็นส่วนตัว...
+      </div>
+
+      <div class="pdpa-modal-footer">
+        <button type="button" class="dg-btn-black" id="btnAcknowledgePdpa"
+          style="padding: 8px 24px; font-size: 0.9rem;">
+          <span>รับทราบและปิด</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <!-- ============ PRE-FOOTER CTA & FOOTER (FLOATING ELEVATED CARD) ============ -->
+  <footer class="dg-footer dg-footer-wrap" id="contact">
+    <div class="dg-footer-floating-card" data-reveal="fade">
+      <!-- Giant Watermark Typography Inside the Card (Fading Bottom to Top) -->
+      <div class="dg-footer-card-watermark" aria-hidden="true">
+        <span>SARAWAT DECHA</span>
+      </div>
+
+      <!-- Pre-Footer CTA (Exact Diego Layout) -->
+      <div class="dg-pre-footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
+            <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+              style="height: 52px; width: auto; object-fit: contain;" />
+            <span style="display: inline-block; width: 1px; height: 36px; background: var(--dg-border);"></span>
+            <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+              style="height: 50px; width: auto; object-fit: contain;" />
+          </div>
+          <h2 class="dg-pre-footer-title">
+            Have any questions<br>
+            in your mind!
+          </h2>
+          <a href="https://web.facebook.com/sarawatdechaa" target="_blank" class="dg-arrow-link">
+            <span>ส่งข้อความหาเราผ่าน Facebook</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+
+          <!-- ช่องทางติดต่อแบบไอคอน เพื่อเพิ่มพื้นที่ว่าง -->
+          <div class="dg-footer-social-icons">
+            <a href="https://web.facebook.com/sarawatdechaa" target="_blank" rel="noopener noreferrer"
+              class="dg-social-icon-btn" title="Facebook Page สารวัตรนักเรียน" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/sarawat_decha/" target="_blank" rel="noopener noreferrer"
+              class="dg-social-icon-btn" title="Instagram สารวัตรนักเรียน" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </a>
+            <a href="https://decha.ac.th" target="_blank" rel="noopener noreferrer"
+              class="dg-social-icon-btn" title="เว็บไซต์โรงเรียนเดชะปัตตนยานุกูล" aria-label="Website">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- 2-Column Footer Links (Spacious) -->
+        <div class="dg-footer-columns">
+          <div class="dg-footer-col">
+            <h5>ส่วนสำคัญ</h5>
+            <div class="dg-footer-nav-list">
+              <a href="index.html#hero">หน้าหลัก</a>
+              <a href="index.html#news">ข่าวสารกิจกรรมล่าสุด</a>
+              <a href="activities.html">คลังกิจกรรมทั้งหมด</a>
+              <a href="index.html#vision">วิสัยทัศน์ & พันธกิจ</a>
+              <a href="index.html#operations">รวมระบบออนไลน์</a>
+              <a href="index.html#team">วิสัยทัศน์ประธาน</a>
+              <a href="calendar.html">ตารางกิจกรรมโรงเรียน</a>
+              <a href="team.html">หน้าคณะทำงาน</a>
+            </div>
+          </div>
+
+          <div class="dg-footer-col">
+            <h5>บริการออนไลน์</h5>
+            <div class="dg-footer-service-list">
+              <a href="index.html#operations" onclick="if(window.openModal && document.getElementById('feedbackModal')){openModal('feedbackModal'); return false;}"
+                class="dg-footer-arrow-link" title="สิ่งที่อยากให้สารวัตรทำ">
+                <span>สิ่งที่อยากให้สารวัตรทำ</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="https://sarawatdc.site/warn/" onclick="if(window.openModal && document.getElementById('complaintModal')){openModal('complaintModal'); return false;}" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="รายงานการทำงาน / ร้องเรียน">
+                <span>รายงานการทำงาน / ร้องเรียน</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="recruit.html" class="dg-footer-arrow-link" title="ระบบรับสมัครสารวัตรนักเรียน">
+                <span>ระบบรับสมัครสารวัตรนักเรียน</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="roster.html" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
+                <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="dg-footer-bottom">
+        <div class="dg-footer-bottom-copy">
+          <span>© 2569 Truant Patrol Decha. All rights reserved.</span>
+        </div>
+        <div class="dg-footer-bottom-meta">
+          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira
+              Wattanakitpaisal</a></span>
+          <span class="dg-footer-meta-sep">•</span>
+          <a href="admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span>ระบบจัดการหน้าเว็บ (Admin)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ FRONTEND JAVASCRIPT LOGIC ============ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Initialize Lucide Icons
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+      document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('is-revealed'));
+
+      // 2. Navigation bar scroll effect
+      const nav = document.getElementById('dgNav');
+      const scrollProgress = document.getElementById('scrollProgress');
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        if (scrollProgress) scrollProgress.style.width = `${percent}%`;
+        if (nav) nav.classList.toggle('scrolled', scrollTop > 40);
+      }, { passive: true });
+
+      // 3. Application State
+      let systemSettings = {
+        isOpen: true,
+        academicYear: '2570',
+        minGpax: 2.50,
+        pdpaContent: ''
+      };
+      let availableClubs = [];
+      let selectedPhotoFile = null;
+      let isEditingMode = false;
+      let editingStudentId = null;
+      let verifiedUnlockPhone = '';
+
+      // DOM Elements
+      const tabBtnApply = document.getElementById('tabBtnApply');
+      const tabBtnStatus = document.getElementById('tabBtnStatus');
+      const viewApplication = document.getElementById('viewApplication');
+      const viewStatus = document.getElementById('viewStatus');
+
+      const stepPane1 = document.getElementById('stepPane1');
+      const stepPane2 = document.getElementById('stepPane2');
+      const stepPane3 = document.getElementById('stepPane3');
+
+      const stepNode1 = document.getElementById('stepNode1');
+      const stepNode2 = document.getElementById('stepNode2');
+      const stepNode3 = document.getElementById('stepNode3');
+
+      // Buttons
+      const btnGoToStep2 = document.getElementById('btnGoToStep2');
+      const btnBackToStep1 = document.getElementById('btnBackToStep1');
+      const btnSubmitApplication = document.getElementById('btnSubmitApplication');
+      const btnGoTrackStatus = document.getElementById('btnGoTrackStatus');
+
+      // Photo upload elements
+      const applicantPhoto = document.getElementById('applicantPhoto');
+      const btnChoosePhoto = document.getElementById('btnChoosePhoto');
+      const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+      const photoPreviewImg = document.getElementById('photoPreviewImg');
+      const photoPlaceholder = document.getElementById('photoPlaceholder');
+      const photoDropzone = document.getElementById('photoDropzone');
+
+      // PDPA Modal elements
+      const pdpaModal = document.getElementById('pdpaModal');
+      const linkReadPdpa = document.getElementById('linkReadPdpa');
+      const btnOpenPdpaHeader = document.getElementById('btnOpenPdpaHeader');
+      const btnClosePdpa = document.getElementById('btnClosePdpa');
+      const btnAcknowledgePdpa = document.getElementById('btnAcknowledgePdpa');
+      const txtPdpaModalBody = document.getElementById('txtPdpaModalBody');
+
+      // ==========================================
+      // FORM LOCK & BLUR STATE MANAGER
+      // ==========================================
+      function updateFormLockState() {
+        const recruitFormWrapper = document.getElementById('recruitFormWrapper');
+        const recruitClosedOverlay = document.getElementById('recruitClosedOverlay');
+        const editingModeBanner = document.getElementById('editingModeBanner');
+        const txtBtnSubmit = document.getElementById('txtBtnSubmit');
+
+        if (isEditingMode) {
+          // โหมดแก้ไขข้อมูล: ปลดล็อคเบลอ ปลดล็อคฟอร์ม และซ่อนการ์ดแจ้งเตือนปิดรับสมัครเสมอ
+          if (recruitFormWrapper) {
+            recruitFormWrapper.classList.remove('form-blurred');
+            recruitFormWrapper.style.filter = 'none';
+            recruitFormWrapper.style.webkitFilter = 'none';
+            recruitFormWrapper.style.opacity = '1';
+            recruitFormWrapper.style.pointerEvents = 'auto';
+            recruitFormWrapper.style.userSelect = 'auto';
+          }
+          if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'none';
+          if (editingModeBanner) editingModeBanner.style.display = 'block';
+          if (btnGoToStep2) {
+            btnGoToStep2.disabled = false;
+            btnGoToStep2.style.opacity = '1';
+            btnGoToStep2.style.cursor = 'pointer';
+          }
+          if (txtBtnSubmit) txtBtnSubmit.textContent = 'บันทึกการแก้ไขและส่งตรวจใหม่';
+        } else {
+          // โหมดปกติ (ยื่นใบสมัครใหม่)
+          if (editingModeBanner) editingModeBanner.style.display = 'none';
+          if (txtBtnSubmit) txtBtnSubmit.textContent = 'ยืนยันและส่งใบสมัคร';
+
+          if (!systemSettings.isOpen) {
+            // ระบบปิดรับสมัคร: เบลอแบบฟอร์ม และแสดงการ์ดแจ้งเตือน
+            if (recruitFormWrapper) {
+              recruitFormWrapper.classList.add('form-blurred');
+              recruitFormWrapper.style.filter = '';
+              recruitFormWrapper.style.webkitFilter = '';
+              recruitFormWrapper.style.opacity = '';
+              recruitFormWrapper.style.pointerEvents = '';
+              recruitFormWrapper.style.userSelect = '';
+            }
+            if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'block';
+            if (btnGoToStep2) {
+              btnGoToStep2.disabled = true;
+              btnGoToStep2.style.opacity = '0.5';
+              btnGoToStep2.style.cursor = 'not-allowed';
+            }
+          } else {
+            // ระบบเปิดรับสมัคร: ปลดเบลอ และซ่อนการ์ดแจ้งเตือน
+            if (recruitFormWrapper) {
+              recruitFormWrapper.classList.remove('form-blurred');
+              recruitFormWrapper.style.filter = 'none';
+              recruitFormWrapper.style.webkitFilter = 'none';
+              recruitFormWrapper.style.opacity = '1';
+              recruitFormWrapper.style.pointerEvents = 'auto';
+              recruitFormWrapper.style.userSelect = 'auto';
+            }
+            if (recruitClosedOverlay) recruitClosedOverlay.style.display = 'none';
+            if (btnGoToStep2) {
+              btnGoToStep2.disabled = false;
+              btnGoToStep2.style.opacity = '1';
+              btnGoToStep2.style.cursor = 'pointer';
+            }
+          }
+        }
+      }
+
+      // Exit Edit Mode
+      function exitEditMode() {
+        if (!isEditingMode) return;
+        if (!confirm('ต้องการยกเลิกโหมดแก้ไขข้อมูลและกลับสู่หน้าตรวจสอบสถานะหรือไม่?')) return;
+
+        isEditingMode = false;
+        editingStudentId = null;
+        verifiedUnlockPhone = '';
+        selectedPhotoFile = null;
+        sessionStorage.removeItem('recruit_editing_student_id');
+
+        document.getElementById('recruitForm').reset();
+        document.getElementById('inpStudentId').disabled = false;
+        photoPreviewImg.src = '';
+        photoPreviewImg.style.display = 'none';
+        photoPlaceholder.style.display = 'flex';
+        btnRemovePhoto.style.display = 'none';
+
+        stepPane1.style.display = 'block';
+        stepPane2.style.display = 'none';
+        stepPane3.style.display = 'none';
+        stepNode1.className = 'recruit-step-node active';
+        stepNode2.className = 'recruit-step-node';
+        stepNode3.className = 'recruit-step-node';
+
+        updateFormLockState();
+        switchTab('status');
+      }
+
+      // Centralized Function to activate Edit Mode (ปลดล็อคเบลอสำหรับผู้ที่ต้องแก้ไขข้อมูล)
+      async function startCorrectionForStudent(studentId) {
+        const sid = String(studentId || '').trim();
+        if (!/^\d{5}$/.test(sid)) {
+          alert('กรุณากรอกรหัสประจำตัวนักเรียนเป็นตัวเลข 5 หลัก');
+          return false;
+        }
+
+        try {
+          const res = await window.SarawatAPI.getApplicantForCorrection(sid);
+          if (!res.success || !res.applicant) {
+            throw new Error(res.error || 'ไม่พบข้อมูลใบสมัคร');
+          }
+
+          const app = res.applicant;
+          isEditingMode = true;
+          editingStudentId = app.studentId;
+          sessionStorage.setItem('recruit_editing_student_id', app.studentId);
+
+          // Populate form fields
+          document.getElementById('inpStudentId').value = app.studentId;
+          document.getElementById('inpStudentId').disabled = true; // Lock student ID
+          if (document.getElementById('selPrefix')) document.getElementById('selPrefix').value = app.prefix || 'นาย';
+          if (document.getElementById('inpFirstName')) document.getElementById('inpFirstName').value = app.firstName || '';
+          if (document.getElementById('inpLastName')) document.getElementById('inpLastName').value = app.lastName || '';
+          if (document.getElementById('selGrade')) document.getElementById('selGrade').value = app.gradeLevel || 'ม.4';
+          if (document.getElementById('inpClassroom')) document.getElementById('inpClassroom').value = app.classroom || '';
+          if (document.getElementById('inpPhone')) document.getElementById('inpPhone').value = app.phone || '';
+          if (document.getElementById('inpGpax')) document.getElementById('inpGpax').value = app.gpax || '';
+          if (document.getElementById('selClub')) document.getElementById('selClub').value = app.club || '';
+          const elSelAff = document.getElementById('selAffiliation');
+          if (elSelAff) elSelAff.value = app.affiliation || '';
+
+          if (document.getElementById('inpHouseNo')) document.getElementById('inpHouseNo').value = app.houseNo || '';
+          if (document.getElementById('inpVillageNo')) document.getElementById('inpVillageNo').value = app.villageNo || '';
+          if (document.getElementById('inpBuilding')) document.getElementById('inpBuilding').value = app.building || '';
+          if (document.getElementById('inpSoi')) document.getElementById('inpSoi').value = app.soi || '';
+          if (document.getElementById('inpRoad')) document.getElementById('inpRoad').value = app.road || '';
+          if (document.getElementById('inpSubdistrict')) document.getElementById('inpSubdistrict').value = app.subdistrict || '';
+          if (document.getElementById('inpDistrict')) document.getElementById('inpDistrict').value = app.district || '';
+          if (document.getElementById('inpProvince')) document.getElementById('inpProvince').value = app.province || '';
+          if (document.getElementById('inpPostalCode')) document.getElementById('inpPostalCode').value = app.postalCode || '';
+
+          if (app.photoUrl) {
+            const fullUrl = app.photoUrl.startsWith('http') ? app.photoUrl : (window.SarawatAPI.getBaseUrl() + app.photoUrl);
+            photoPreviewImg.src = fullUrl;
+            photoPreviewImg.style.display = 'block';
+            photoPlaceholder.style.display = 'none';
+            btnRemovePhoto.style.display = 'inline-flex';
+          }
+
+          // Update editing banner content
+          const badgeId = document.getElementById('txtEditingStudentIdBadge');
+          if (badgeId) badgeId.textContent = `รหัส ${app.studentId}`;
+          const boxNote = document.getElementById('boxEditingCorrectionNote');
+          const txtNote = document.getElementById('txtEditingCorrectionNote');
+          if (app.correctionNote && app.correctionNote.trim()) {
+            if (txtNote) txtNote.textContent = app.correctionNote;
+            if (boxNote) boxNote.style.display = 'block';
+          } else {
+            if (boxNote) boxNote.style.display = 'none';
+          }
+
+          // Switch back to Apply tab in editing mode
+          switchTab('apply');
+          stepPane2.style.display = 'none';
+          stepPane3.style.display = 'none';
+          stepPane1.style.display = 'block';
+          stepNode1.className = 'recruit-step-node active';
+          stepNode2.className = 'recruit-step-node';
+          stepNode3.className = 'recruit-step-node';
+
+          // UNBLUR AND REMOVE ALL LOCKS
+          updateFormLockState();
+          if (window.lucide) lucide.createIcons();
+
+          window.scrollTo({ top: 350, behavior: 'smooth' });
+          return true;
+        } catch (err) {
+          alert('ไม่สามารถเข้าสู่โหมดแก้ไขข้อมูลได้: ' + (err.message || 'เกิดข้อผิดพลาด'));
+          return false;
+        }
+      }
+
+      const btnCancelEditMode = document.getElementById('btnCancelEditMode');
+      if (btnCancelEditMode) btnCancelEditMode.addEventListener('click', exitEditMode);
+
+      // ==========================================
+      // TAB SWITCHING (Apply vs Status)
+      // ==========================================
+      function switchTab(mode) {
+        if (mode === 'apply') {
+          tabBtnApply.classList.add('active');
+          tabBtnStatus.classList.remove('active');
+          viewApplication.style.display = 'block';
+          viewStatus.style.display = 'none';
+          updateFormLockState();
+        } else {
+          tabBtnApply.classList.remove('active');
+          tabBtnStatus.classList.add('active');
+          viewApplication.style.display = 'none';
+          viewStatus.style.display = 'block';
+        }
+      }
+
+      tabBtnApply.addEventListener('click', () => switchTab('apply'));
+      tabBtnStatus.addEventListener('click', () => switchTab('status'));
+
+      // Check URL hash for direct tab navigation e.g. #status
+      if (window.location.hash === '#status') {
+        switchTab('status');
+      }
+
+      // Helper: Format Thai Date & Time (แบบเวลารับสมัครให้ผู้ใช้)
+      function formatThaiDateTime(dateStr) {
+        if (!dateStr) return 'ไม่ระบุเวลา';
+        try {
+          const d = new Date(dateStr);
+          if (isNaN(d.getTime())) return dateStr;
+          const thaiMonths = [
+            'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+            'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+          ];
+          const day = d.getDate();
+          const month = thaiMonths[d.getMonth()];
+          const year = d.getFullYear() + 543;
+          const hours = String(d.getHours()).padStart(2, '0');
+          const mins = String(d.getMinutes()).padStart(2, '0');
+          return `${day} ${month} ${year} เวลา ${hours}:${mins} น.`;
+        } catch (e) {
+          return dateStr;
+        }
+      }
+
+      // ==========================================
+      // LOAD LIVE RECRUITMENT STATUS & CLUBS
+      // ==========================================
+      async function loadStatusAndClubs() {
+        try {
+          const statusRes = await window.SarawatAPI.getRecruitmentStatus();
+          if (statusRes) {
+            systemSettings = {
+              isOpen: Boolean(statusRes.isOpen),
+              academicYear: statusRes.academicYear || '2570',
+              minGpax: Number(statusRes.minGpax) || 2.50,
+              pdpaContent: statusRes.pdpaContent || ''
+            };
+
+            const labelMinGpax = document.getElementById('labelMinGpax');
+            if (labelMinGpax) {
+              labelMinGpax.textContent = `(เกณฑ์ขั้นต่ำ ${systemSettings.minGpax.toFixed(2)})`;
+            }
+
+            const now = new Date();
+            const startDt = statusRes.startDatetime ? new Date(statusRes.startDatetime) : null;
+            const endDt = statusRes.endDatetime ? new Date(statusRes.endDatetime) : null;
+
+            const isBeforeStart = startDt && !isNaN(startDt.getTime()) && now < startDt;
+            const isAfterEnd = endDt && !isNaN(endDt.getTime()) && now > endDt;
+
+            const recruitFormWrapper = document.getElementById('recruitFormWrapper');
+            const recruitClosedOverlay = document.getElementById('recruitClosedOverlay');
+
+            if (!statusRes.isOpen) {
+              const badge = document.getElementById('closedNoticeBadge');
+              const iconWrap = document.getElementById('closedNoticeIconWrap');
+              const title = document.getElementById('closedNoticeTitle');
+              const desc = document.getElementById('closedNoticeDesc');
+
+              if (isBeforeStart) {
+                // ยังไม่ถึงเวลารับสมัคร
+                if (badge) {
+                  badge.className = 'schedule-badge-status reviewing';
+                  badge.innerHTML = '<span class="status-dot amber"></span><span>ยังไม่ถึงเวลารับสมัคร</span>';
+                }
+                if (iconWrap) {
+                  iconWrap.className = 'recruit-closed-icon-wrap waiting';
+                  iconWrap.innerHTML = '<i data-lucide="clock" style="width: 30px; height: 30px;"></i>';
+                }
+                if (title) title.textContent = 'ยังไม่ถึงกำหนดเวลาเปิดรับสมัครสารวัตรนักเรียน';
+                if (desc) desc.textContent = `ระบบจะเปิดรับสมัครในวันที่ ${formatThaiDateTime(statusRes.startDatetime)} โปรดกลับมาตรวจสอบใหม่อีกครั้งเมื่อถึงกำหนดเวลา`;
+              } else if (isAfterEnd) {
+                // หมดเวลารับสมัครแล้ว
+                if (badge) {
+                  badge.className = 'schedule-badge-status closed';
+                  badge.innerHTML = '<span class="status-dot red"></span><span>หมดเวลารับสมัครแล้ว</span>';
+                }
+                if (iconWrap) {
+                  iconWrap.className = 'recruit-closed-icon-wrap closed';
+                  iconWrap.innerHTML = '<i data-lucide="calendar-x" style="width: 30px; height: 30px;"></i>';
+                }
+                if (title) title.textContent = 'หมดกำหนดเวลารับสมัครสารวัตรนักเรียนแล้ว';
+                if (desc) desc.textContent = `ระบบได้ปิดรับสมัครสำหรับปีการศึกษา ${statusRes.academicYear || '2570'} แล้วเมื่อวันที่ ${formatThaiDateTime(statusRes.endDatetime)} (หากท่านยื่นใบสมัครแล้ว สามารถตรวจสอบสถานะได้ที่แท็บด้านบน)`;
+              } else {
+                // ปิดรับสมัครชั่วคราวโดยผู้ดูแลระบบ
+                if (badge) {
+                  badge.className = 'schedule-badge-status closed';
+                  badge.innerHTML = '<span class="status-dot red"></span><span>ปิดรับสมัครชั่วคราว</span>';
+                }
+                if (iconWrap) {
+                  iconWrap.className = 'recruit-closed-icon-wrap closed';
+                  iconWrap.innerHTML = '<i data-lucide="lock" style="width: 30px; height: 30px;"></i>';
+                }
+                if (title) title.textContent = 'ขณะนี้ระบบปิดรับสมัครสารวัตรนักเรียน';
+                if (desc) desc.textContent = statusRes.scheduleNotice || 'ระบบรับสมัครปิดให้บริการชั่วคราวโดยผู้ดูแลระบบ หรืออยู่ระหว่างการประมวลผลข้อมูล';
+              }
+
+              if (window.lucide) lucide.createIcons();
+            }
+
+            // Sync lock/blur state based on isEditingMode & isOpen
+            updateFormLockState();
+
+            // Hook Quick Status Button in Closed Overlay
+            const btnClosedGoStatus = document.getElementById('btnClosedGoStatus');
+            if (btnClosedGoStatus && !btnClosedGoStatus.dataset.bound) {
+              btnClosedGoStatus.dataset.bound = 'true';
+              btnClosedGoStatus.addEventListener('click', () => switchTab('status'));
+            }
+          }
+
+          // Load Clubs
+          const clubsRes = await window.SarawatAPI.getRecruitmentClubs();
+          const selClub = document.getElementById('selClub');
+
+          selClub.innerHTML = '<option value="">-- เลือกชุมนุมที่สมัคร --</option>';
+
+          if (clubsRes.clubs && clubsRes.clubs.length > 0) {
+            availableClubs = clubsRes.clubs;
+            clubsRes.clubs.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = c.name;
+              opt.textContent = c.name + (c.quota > 0 ? ` (รับ ${c.applicantCount}/${c.quota} คน)` : '');
+              if (c.isFull) {
+                opt.disabled = true;
+                opt.textContent += ' [เต็มแล้ว]';
+              }
+              selClub.appendChild(opt);
+            });
+          }
+        } catch (err) {
+          console.warn('Load settings error:', err);
+        }
+      }
+
+      await loadStatusAndClubs();
+
+      // ==========================================
+      // PHOTO UPLOAD & PREVIEW LOGIC
+      // ==========================================
+      btnChoosePhoto.addEventListener('click', () => applicantPhoto.click());
+
+      applicantPhoto.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Check file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+          alert('รองรับเฉพาะไฟล์รูปภาพ JPG, PNG, หรือ WebP เท่านั้น');
+          applicantPhoto.value = '';
+          return;
+        }
+
+        // Check size <= 5MB
+        if (file.size > 5 * 1024 * 1024) {
+          alert('ขนาดไฟล์ต้องไม่เกิน 5 MB');
+          applicantPhoto.value = '';
+          return;
+        }
+
+        selectedPhotoFile = file;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          photoPreviewImg.src = evt.target.result;
+          photoPreviewImg.style.display = 'block';
+          photoPlaceholder.style.display = 'none';
+          btnRemovePhoto.style.display = 'inline-flex';
+          document.getElementById('txtBtnPhoto').textContent = 'เปลี่ยนรูปถ่าย';
+          document.getElementById('errPhoto').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      });
+
+      btnRemovePhoto.addEventListener('click', () => {
+        selectedPhotoFile = null;
+        applicantPhoto.value = '';
+        photoPreviewImg.src = '';
+        photoPreviewImg.style.display = 'none';
+        photoPlaceholder.style.display = 'flex';
+        btnRemovePhoto.style.display = 'none';
+        document.getElementById('txtBtnPhoto').textContent = 'เลือกไฟล์รูปถ่าย';
+      });
+
+      // Drag and drop for photo
+      photoDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        photoDropzone.style.borderColor = '#0f172a';
+      });
+      photoDropzone.addEventListener('dragleave', () => {
+        photoDropzone.style.borderColor = '#cbd5e1';
+      });
+      photoDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        photoDropzone.style.borderColor = '#cbd5e1';
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          applicantPhoto.files = e.dataTransfer.files;
+          applicantPhoto.dispatchEvent(new Event('change'));
+        }
+      });
+
+      // ==========================================
+      // PDPA MODAL CONTROLS
+      // ==========================================
+      function openPdpaModal() {
+        txtPdpaModalBody.textContent = systemSettings.pdpaContent || 'ข้อความประกาศคุ้มครองข้อมูลส่วนบุคคล (PDPA) สำหรับการรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 โรงเรียนเดชะปัตตนยานุกูล';
+        pdpaModal.style.display = 'flex';
+      }
+      function closePdpaModal() {
+        pdpaModal.style.display = 'none';
+      }
+
+      if (linkReadPdpa) linkReadPdpa.addEventListener('click', openPdpaModal);
+      if (btnOpenPdpaHeader) btnOpenPdpaHeader.addEventListener('click', openPdpaModal);
+      if (btnClosePdpa) btnClosePdpa.addEventListener('click', closePdpaModal);
+      if (btnAcknowledgePdpa) btnAcknowledgePdpa.addEventListener('click', closePdpaModal);
+
+      // ==========================================
+      // STEP 1 -> STEP 2 VALIDATION & REVIEW
+      // ==========================================
+      btnGoToStep2.addEventListener('click', () => {
+        let hasError = false;
+
+        // Reset errors
+        document.querySelectorAll('.recruit-field-error').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.recruit-input, .recruit-select').forEach(el => el.classList.remove('has-error'));
+
+        // 1. Photo validation
+        if (!selectedPhotoFile && !isEditingMode) {
+          document.getElementById('errPhoto').style.display = 'block';
+          hasError = true;
+        }
+
+        // 2. Student ID (5 digits)
+        const studentId = document.getElementById('inpStudentId').value.trim();
+        if (!/^\d{5}$/.test(studentId)) {
+          document.getElementById('inpStudentId').classList.add('has-error');
+          document.getElementById('errStudentId').style.display = 'block';
+          hasError = true;
+        }
+
+        // 3. Prefix
+        const prefix = document.getElementById('selPrefix').value;
+        if (!prefix) {
+          document.getElementById('selPrefix').classList.add('has-error');
+          document.getElementById('errPrefix').style.display = 'block';
+          hasError = true;
+        }
+
+        // 4. Names
+        const firstName = document.getElementById('inpFirstName').value.trim();
+        if (!firstName) {
+          document.getElementById('inpFirstName').classList.add('has-error');
+          document.getElementById('errFirstName').style.display = 'block';
+          hasError = true;
+        }
+        const lastName = document.getElementById('inpLastName').value.trim();
+        if (!lastName) {
+          document.getElementById('inpLastName').classList.add('has-error');
+          document.getElementById('errLastName').style.display = 'block';
+          hasError = true;
+        }
+
+        // 5. Grade & Room
+        const grade = document.getElementById('selGrade').value;
+        if (grade !== 'ม.4' && grade !== 'ม.5') {
+          document.getElementById('selGrade').classList.add('has-error');
+          document.getElementById('errGrade').style.display = 'block';
+          hasError = true;
+        }
+        const room = document.getElementById('inpClassroom').value.trim();
+        if (!room) {
+          document.getElementById('inpClassroom').classList.add('has-error');
+          document.getElementById('errClassroom').style.display = 'block';
+          hasError = true;
+        }
+
+        // 6. Phone (10 digits)
+        const phone = document.getElementById('inpPhone').value.trim().replace(/[-\s]/g, '');
+        if (!/^0\d{9}$/.test(phone)) {
+          document.getElementById('inpPhone').classList.add('has-error');
+          document.getElementById('errPhone').style.display = 'block';
+          hasError = true;
+        }
+
+        // 7. GPAX
+        const gpaxVal = parseFloat(document.getElementById('inpGpax').value);
+        if (isNaN(gpaxVal) || gpaxVal < systemSettings.minGpax || gpaxVal > 4.00) {
+          document.getElementById('inpGpax').classList.add('has-error');
+          const errG = document.getElementById('errGpax');
+          errG.textContent = `เกรดเฉลี่ยสะสมต้องอยู่ระหว่าง ${systemSettings.minGpax.toFixed(2)} ถึง 4.00`;
+          errG.style.display = 'block';
+          hasError = true;
+        }
+
+        // 8. Club
+        const club = document.getElementById('selClub').value;
+        if (!club) {
+          document.getElementById('selClub').classList.add('has-error');
+          document.getElementById('errClub').style.display = 'block';
+          hasError = true;
+        }
+
+        // 9. Address fields
+        const houseNo = document.getElementById('inpHouseNo').value.trim();
+        if (!houseNo) {
+          document.getElementById('inpHouseNo').classList.add('has-error');
+          document.getElementById('errHouseNo').style.display = 'block';
+          hasError = true;
+        }
+        const subdistrict = document.getElementById('inpSubdistrict').value.trim();
+        if (!subdistrict) {
+          document.getElementById('inpSubdistrict').classList.add('has-error');
+          document.getElementById('errSubdistrict').style.display = 'block';
+          hasError = true;
+        }
+        const district = document.getElementById('inpDistrict').value.trim();
+        if (!district) {
+          document.getElementById('inpDistrict').classList.add('has-error');
+          document.getElementById('errDistrict').style.display = 'block';
+          hasError = true;
+        }
+        const province = document.getElementById('inpProvince').value.trim();
+        if (!province) {
+          document.getElementById('inpProvince').classList.add('has-error');
+          document.getElementById('errProvince').style.display = 'block';
+          hasError = true;
+        }
+        const postalCode = document.getElementById('inpPostalCode').value.trim();
+        if (!/^\d{5}$/.test(postalCode)) {
+          document.getElementById('inpPostalCode').classList.add('has-error');
+          document.getElementById('errPostalCode').style.display = 'block';
+          hasError = true;
+        }
+
+        if (hasError) {
+          const firstErr = document.querySelector('.has-error, .recruit-field-error[style*="block"]');
+          if (firstErr) {
+            firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        // Populate Review Dossier
+        document.getElementById('reviewPhoto').src = photoPreviewImg.src;
+        document.getElementById('reviewFullName').textContent = `${prefix}${firstName} ${lastName}`;
+        document.getElementById('reviewStudentId').textContent = studentId;
+        document.getElementById('reviewGradeRoom').textContent = `${grade}/${room}`;
+        document.getElementById('reviewPhone').textContent = phone;
+        document.getElementById('reviewGpax').textContent = gpaxVal.toFixed(2);
+        document.getElementById('reviewClub').textContent = club;
+
+        const vNo = document.getElementById('inpVillageNo').value.trim();
+        const bld = document.getElementById('inpBuilding').value.trim();
+        const soi = document.getElementById('inpSoi').value.trim();
+        const road = document.getElementById('inpRoad').value.trim();
+        const fullAddr = [
+          `บ้านเลขที่ ${houseNo}`,
+          vNo ? `หมู่ ${vNo}` : '',
+          bld ? bld : '',
+          soi ? `ซอย ${soi}` : '',
+          road ? `ถนน ${road}` : '',
+          `ตำบล${subdistrict}`,
+          `อำเภอ${district}`,
+          `จังหวัด${province}`,
+          postalCode
+        ].filter(Boolean).join(' ');
+
+        document.getElementById('reviewAddress').textContent = fullAddr;
+
+        // Switch to Step 2
+        stepPane1.style.display = 'none';
+        stepPane2.style.display = 'block';
+        stepNode1.className = 'recruit-step-node completed';
+        stepNode2.className = 'recruit-step-node active';
+
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+      });
+
+      // Back to Step 1
+      btnBackToStep1.addEventListener('click', () => {
+        stepPane2.style.display = 'none';
+        stepPane1.style.display = 'block';
+        stepNode2.className = 'recruit-step-node';
+        stepNode1.className = 'recruit-step-node active';
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+      });
+
+      // ==========================================
+      // STEP 2 SUBMIT APPLICATION
+      // ==========================================
+      btnSubmitApplication.addEventListener('click', async () => {
+        const chkPdpa = document.getElementById('chkPdpa');
+        const errPdpa = document.getElementById('errPdpa');
+
+        if (!chkPdpa.checked) {
+          errPdpa.style.display = 'block';
+          chkPdpa.focus();
+          return;
+        }
+        errPdpa.style.display = 'none';
+
+        // Prepare FormData
+        const formData = new FormData();
+        if (selectedPhotoFile) {
+          formData.append('photo', selectedPhotoFile);
+        }
+
+        formData.append('student_id', document.getElementById('inpStudentId').value.trim());
+        formData.append('prefix', document.getElementById('selPrefix').value);
+        formData.append('first_name', document.getElementById('inpFirstName').value.trim());
+        formData.append('last_name', document.getElementById('inpLastName').value.trim());
+        formData.append('grade_level', document.getElementById('selGrade').value);
+        formData.append('classroom', document.getElementById('inpClassroom').value.trim());
+        formData.append('phone', document.getElementById('inpPhone').value.trim().replace(/[-\s]/g, ''));
+        formData.append('gpax', document.getElementById('inpGpax').value.trim());
+        formData.append('club', document.getElementById('selClub').value);
+        formData.append('affiliation', '');
+
+        formData.append('house_no', document.getElementById('inpHouseNo').value.trim());
+        formData.append('village_no', document.getElementById('inpVillageNo').value.trim());
+        formData.append('building', document.getElementById('inpBuilding').value.trim());
+        formData.append('soi', document.getElementById('inpSoi').value.trim());
+        formData.append('road', document.getElementById('inpRoad').value.trim());
+        formData.append('subdistrict', document.getElementById('inpSubdistrict').value.trim());
+        formData.append('district', document.getElementById('inpDistrict').value.trim());
+        formData.append('province', document.getElementById('inpProvince').value.trim());
+        formData.append('postal_code', document.getElementById('inpPostalCode').value.trim());
+        formData.append('pdpa_consent', 'true');
+        formData.append('website_hp', (document.getElementById('recruit_hp')?.value || '').trim());
+
+        // Loading state
+        const btnTxt = document.getElementById('txtBtnSubmit');
+        const origTxt = btnTxt.textContent;
+        btnTxt.textContent = 'กำลังส่งใบสมัคร...';
+        btnSubmitApplication.disabled = true;
+
+        try {
+          let res;
+          if (isEditingMode && editingStudentId) {
+            const currentEditingId = editingStudentId;
+            res = await window.SarawatAPI.submitApplicantCorrection(currentEditingId, formData);
+            alert('แก้ไขข้อมูลและส่งตรวจใหม่เรียบร้อยแล้ว!');
+
+            isEditingMode = false;
+            editingStudentId = null;
+            verifiedUnlockPhone = '';
+            selectedPhotoFile = null;
+            sessionStorage.removeItem('recruit_editing_student_id');
+
+            document.getElementById('recruitForm').reset();
+            document.getElementById('inpStudentId').disabled = false;
+            photoPreviewImg.src = '';
+            photoPreviewImg.style.display = 'none';
+            photoPlaceholder.style.display = 'flex';
+            btnRemovePhoto.style.display = 'none';
+
+            stepPane1.style.display = 'block';
+            stepPane2.style.display = 'none';
+            stepPane3.style.display = 'none';
+            stepNode1.className = 'recruit-step-node active';
+            stepNode2.className = 'recruit-step-node';
+            stepNode3.className = 'recruit-step-node';
+
+            updateFormLockState();
+            switchTab('status');
+            document.getElementById('inpSearchStudentId').value = currentEditingId;
+            document.getElementById('btnSearchStatus').click();
+            return;
+          } else {
+            res = await window.SarawatAPI.submitRecruitmentApplication(formData);
+          }
+
+          if (res.success) {
+            // Populate Step 3
+            document.getElementById('successRefCode').textContent = res.applicationCode;
+            document.getElementById('successApplicantMeta').innerHTML = `
+              ผู้สมัคร: <strong>${res.applicantName}</strong> (รหัส ${res.studentId}) • ส่งเมื่อ: <span>${res.submittedAt}</span>
+            `;
+
+            // Switch to Step 3
+            stepPane2.style.display = 'none';
+            stepPane3.style.display = 'block';
+            stepNode2.className = 'recruit-step-node completed';
+            stepNode3.className = 'recruit-step-node completed active';
+
+            window.scrollTo({ top: 250, behavior: 'smooth' });
+          }
+        } catch (err) {
+          alert('เกิดข้อผิดพลาด: ' + (err.message || 'ไม่สามารถส่งใบสมัครได้'));
+        } finally {
+          btnTxt.textContent = origTxt;
+          btnSubmitApplication.disabled = false;
+        }
+      });
+
+      // Step 3 button to track status
+      btnGoTrackStatus.addEventListener('click', () => {
+        const studentId = document.getElementById('inpStudentId').value.trim();
+        switchTab('status');
+        if (studentId) {
+          document.getElementById('inpSearchStudentId').value = studentId;
+          document.getElementById('btnSearchStatus').click();
+        }
+      });
+
+      // ==========================================
+      // STATUS TRACKING LOGIC
+      // ==========================================
+      const btnSearchStatus = document.getElementById('btnSearchStatus');
+      const inpSearchStudentId = document.getElementById('inpSearchStudentId');
+      const statusResultBox = document.getElementById('statusResultBox');
+      const errSearchStatus = document.getElementById('errSearchStatus');
+
+      btnSearchStatus.addEventListener('click', async () => {
+        const studentId = inpSearchStudentId.value.trim();
+        if (!/^\d{5}$/.test(studentId)) {
+          errSearchStatus.style.display = 'block';
+          errSearchStatus.textContent = 'กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก';
+          statusResultBox.style.display = 'none';
+          return;
+        }
+        errSearchStatus.style.display = 'none';
+
+        btnSearchStatus.disabled = true;
+        btnSearchStatus.textContent = 'ค้นหา...';
+
+        try {
+          const res = await window.SarawatAPI.checkApplicantStatus(studentId);
+          if (res.success) {
+            document.getElementById('stRefCode').textContent = res.applicationCode;
+            document.getElementById('stFullName').textContent = res.applicantName;
+            document.getElementById('stGradeRoom').textContent = `${res.gradeLevel}/${res.classroom}`;
+            document.getElementById('stClub').textContent = res.club;
+            const elStAff = document.getElementById('stAffiliation');
+            if (elStAff) elStAff.textContent = res.affiliation || '-';
+            document.getElementById('stSubmittedDate').textContent = res.submittedAt ? new Date(res.submittedAt).toLocaleString('th-TH') : '-';
+
+            const stBadge = document.getElementById('stBadge');
+            const stBadgeText = document.getElementById('stBadgeText');
+            stBadge.className = `status-badge ${res.status}`;
+            stBadgeText.textContent = res.statusLabel;
+
+            // Handle Correction Needed mode
+            const stCorrectionBox = document.getElementById('stCorrectionBox');
+            if (res.status === 'correction_needed') {
+              stCorrectionBox.style.display = 'block';
+              document.getElementById('stCorrectionNote').textContent = res.correctionNote || 'คณะกรรมการขอให้ท่านตรวจสอบและแก้ไขข้อมูลให้ถูกต้อง';
+              document.getElementById('btnUnlockCorrection').dataset.studentId = res.studentId;
+            } else {
+              stCorrectionBox.style.display = 'none';
+            }
+
+            statusResultBox.style.display = 'block';
+          }
+        } catch (err) {
+          errSearchStatus.style.display = 'block';
+          errSearchStatus.textContent = err.message || 'ไม่พบข้อมูลใบสมัคร';
+          statusResultBox.style.display = 'none';
+        } finally {
+          btnSearchStatus.disabled = false;
+          btnSearchStatus.textContent = 'ค้นหา';
+        }
+      });
+
+      // Unlock for correction button on Status tab (ไม่ต้องกรอกเบอร์โทรศัพท์)
+      const btnUnlockCorrection = document.getElementById('btnUnlockCorrection');
+      if (btnUnlockCorrection) {
+        btnUnlockCorrection.addEventListener('click', async () => {
+          const studentId = btnUnlockCorrection.dataset.studentId;
+          if (!studentId) return;
+
+          btnUnlockCorrection.disabled = true;
+          const origHtml = btnUnlockCorrection.innerHTML;
+          btnUnlockCorrection.innerHTML = '<span>กำลังปลดล็อคแบบฟอร์ม...</span>';
+
+          try {
+            await startCorrectionForStudent(studentId);
+          } finally {
+            btnUnlockCorrection.disabled = false;
+            btnUnlockCorrection.innerHTML = origHtml;
+            if (window.lucide) lucide.createIcons();
+          }
+        });
+      }
+
+      // Automatically check URL and SessionStorage for Edit Mode
+      // e.g. recruit.html?edit=36463 or #edit-36463
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editFromQuery = urlParams.get('edit');
+        const hashMatch = window.location.hash.match(/#edit-(\d{5})/);
+        const editFromHash = hashMatch ? hashMatch[1] : null;
+        const editFromSession = sessionStorage.getItem('recruit_editing_student_id');
+
+        const targetEditStudentId = editFromQuery || editFromHash || editFromSession;
+        if (targetEditStudentId && /^\d{5}$/.test(targetEditStudentId)) {
+          console.log('Activating correction mode for student:', targetEditStudentId);
+          await startCorrectionForStudent(targetEditStudentId);
+        }
+      } catch (e) {
+        console.warn('Auto correction check error:', e);
+      }
+
+    });
+  </script>
+</body>
+
+</html>

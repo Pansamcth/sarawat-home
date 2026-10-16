@@ -1,0 +1,67 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/si-roster",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/si-roster/",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/SI-ROSTER",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/SI-ROSTER/",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/si-roster/admin",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/si-roster/admin.html",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/SI-ROSTER/admin",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/SI-ROSTER/admin.html",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/roster",
+      "destination": "/SI-ROSTER/index.html"
+    },
+    {
+      "source": "/roster/admin",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/roster/admin.html",
+      "destination": "/SI-ROSTER/admin.html"
+    },
+    {
+      "source": "/si-roster/:path*",
+      "destination": "/SI-ROSTER/:path*"
+    },
+    {
+      "source": "/SI-ROSTER/:path*",
+      "destination": "/SI-ROSTER/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/uploads/:path*"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+*.log
+.vercel
+.env*
+
+# Local backend & uploads (DO NOT upload to GitHub - runs on your PC/Server only)
+server/
+uploads/
+scratch/
+*.db
+*.sqlite
+*.sql
+*.bak
