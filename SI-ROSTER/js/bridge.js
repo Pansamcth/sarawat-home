@@ -7,17 +7,12 @@
   window.google = window.google || {};
   window.google.script = window.google.script || {};
 
-  const HARDCODED_TUNNEL_URL = 'https://justify-clearing-changelog-reserved.trycloudflare.com';
-
   function getApiBase() {
     if (window.SARAWAT_API_BASE && window.SARAWAT_API_BASE.trim()) {
-      return window.SARAWAT_API_BASE.replace(/\/+$/, '');
+      return window.SARAWAT_API_BASE.trim().replace(/\/+$/, '');
     }
-    try {
-      const saved = localStorage.getItem('dg_sarawat_api_url');
-      if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
-    } catch (e) {}
 
+    const tunnelUrl = (window.CLOUDFLARE_TUNNEL_URL || window.HARDCODED_TUNNEL_URL || '').trim().replace(/\/+$/, '');
     const hostname = window.location.hostname || '';
     const port = window.location.port || '';
     const protocol = window.location.protocol || '';
@@ -34,20 +29,44 @@
 
     // 3. If accessed on localhost / 127.0.0.1
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      if (port === '' || port === '80' || port === '443') return '';
+      if (port === '' || port === '80' || port === '443') return tunnelUrl || 'http://localhost:5000';
       return 'http://localhost:5000';
     }
 
     // 4. If accessed via LAN IP on local Wi-Fi / Ethernet
     if (/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(hostname)) {
-      if (port === '' || port === '80' || port === '443') return '';
+      if (port === '' || port === '80' || port === '443') return tunnelUrl || `${protocol}//${hostname}:5000`;
       return `${protocol}//${hostname}:5000`;
     }
 
     // 5. External static hosts (sarawatdc.site, GitHub Pages, Vercel, mobile, file://)
-    // Must route API requests directly to Cloudflare Tunnel database backend
-    return HARDCODED_TUNNEL_URL;
+    return tunnelUrl;
   }
+
+  window.getRosterApiBase = getApiBase;
+
+  // Navigation helpers
+  window.goToRosterAdmin = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const path = window.location.pathname;
+    if (/\/si-roster(\/.*)?$/i.test(path)) {
+      const basePath = path.match(/^.*\/si-roster/i)[0];
+      window.location.href = basePath + '/admin.html';
+      return;
+    }
+    window.location.href = 'admin.html';
+  };
+
+  window.goToRosterStudent = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const path = window.location.pathname;
+    if (/\/si-roster(\/.*)?$/i.test(path)) {
+      const basePath = path.match(/^.*\/si-roster/i)[0];
+      window.location.href = basePath + '/index.html';
+      return;
+    }
+    window.location.href = 'index.html';
+  };
 
   function createGoogleScriptRunner() {
     let successHandler = null;
@@ -98,18 +117,20 @@
               const err = new Error(errMsg);
               if (typeof errorHandler === 'function') {
                 errorHandler(err);
+                return null;
               } else {
                 console.error(`[Roster API Error] ${method}:`, err);
+                throw err;
               }
-              throw err;
             }
           } catch (netErr) {
             if (typeof errorHandler === 'function') {
               errorHandler(netErr);
+              return null;
             } else {
               console.error(`[Roster Network Error] ${method}:`, netErr);
+              throw netErr;
             }
-            throw netErr;
           }
         };
       }

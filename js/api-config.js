@@ -6,35 +6,47 @@
 
 (function () {
   // =========================================================================
-  // ⚙️ กำหนด URL ของ Cloudflare Tunnel (หรือโดเมนหลังบ้านของคุณ)
-  // หากคุณเปิด Cloudflare Tunnel แล้วได้ลิงก์ เช่น https://xxxx.trycloudflare.com
-  // สามารถนำมาวางในเครื่องหมายคำพูดด้านล่างนี้ เพื่อให้ผู้ใช้ภายนอก/มือถือทุกคนเชื่อมต่อได้ทันที
+  // ⚙️ ลิงก์ Cloudflare Tunnel อ่านค่าจาก cloudflare-config.js เป็นหลัก
   // =========================================================================
-  const HARDCODED_TUNNEL_URL = 'https://justify-clearing-changelog-reserved.trycloudflare.com'; // <-- ลิงก์ Cloudflare ที่กำลังออนไลน์อยู่ขณะนี้
+  const HARDCODED_TUNNEL_URL = (window.CLOUDFLARE_TUNNEL_URL || window.HARDCODED_TUNNEL_URL || '').trim().replace(/\/+$/, '');
 
   function getActiveApiBase() {
-    const isLocal = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
-
-    // 1. อ่านจากค่าที่ผู้ดูแลระบบตั้งไว้ในหน้า Admin Settings (LocalStorage)
-    const saved = localStorage.getItem('dg_sarawat_api_url');
-    if (saved && saved.trim().length > 0) {
-      const cleanSaved = saved.trim().replace(/\/+$/, '');
-      // หากอยู่ในเครื่องตนเอง แต่ URL ที่บันทึกไว้เป็น Tunnel ภายนอกที่อาจปิดไปแล้ว 
-      // ให้ลองใช้ แต่ถ้าล้มเหลวระบบจะมี fallback ไป localhost:5000 อัตโนมัติ
-      return cleanSaved;
+    if (window.SARAWAT_API_BASE && window.SARAWAT_API_BASE.trim().length > 0) {
+      return window.SARAWAT_API_BASE.trim().replace(/\/+$/, '');
     }
 
-    // 2. หากรันบนเครื่องตนเอง (Localhost หรือเปิดไฟล์ HTML โดยตรง) ให้ชี้ไปที่พอร์ต 5000 ของ Node.js อัตโนมัติ
-    if (isLocal) {
+    const hostname = window.location.hostname || '';
+    const port = window.location.port || '';
+    const protocol = window.location.protocol || '';
+
+    // 1. ถ้าเข้าผ่านโดเมน Cloudflare โดยตรง
+    if (hostname.endsWith('.trycloudflare.com')) {
+      return '';
+    }
+
+    // 2. ถ้าเข้าผ่านพอร์ต 5000 ของ Node.js
+    if (port === '5000') {
+      return '';
+    }
+
+    // 3. ถ้าอยู่บน Localhost / 127.0.0.1
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      if (port === '' || port === '80' || port === '443') {
+        return HARDCODED_TUNNEL_URL || 'http://localhost:5000';
+      }
       return 'http://localhost:5000';
     }
 
-    // 3. หากมีกำหนด Hardcoded Cloudflare URL ไว้ (สำหรับผู้ใช้งานจากมือถือ / Vercel)
-    if (HARDCODED_TUNNEL_URL && HARDCODED_TUNNEL_URL.trim().length > 0) {
-      return HARDCODED_TUNNEL_URL.trim().replace(/\/+$/, '');
+    // 4. ถ้าอยู่บนวงแลนเดียวกัน (192.168.x.x)
+    if (/^(192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(hostname)) {
+      if (port === '' || port === '80' || port === '443') {
+        return HARDCODED_TUNNEL_URL || `${protocol}//${hostname}:5000`;
+      }
+      return `${protocol}//${hostname}:5000`;
     }
 
-    return '';
+    // 5. ผู้ใช้งานภายนอก (มือถือ, Vercel, sarawatdc.site, file://)
+    return HARDCODED_TUNNEL_URL;
   }
 
   window.SARAWAT_API_BASE = getActiveApiBase();

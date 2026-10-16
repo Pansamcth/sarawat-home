@@ -15,8 +15,8 @@
   const apiBridge = window.SarawatApi;
   if (!apiBridge.getBaseUrl) {
     apiBridge.getBaseUrl = function () {
-      const saved = localStorage.getItem('dg_sarawat_api_url');
-      if (saved && saved.trim()) return saved.trim().replace(/\/+$/, '');
+      if (window.SARAWAT_API_BASE) return window.SARAWAT_API_BASE;
+      if (window.CLOUDFLARE_TUNNEL_URL) return window.CLOUDFLARE_TUNNEL_URL;
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
         return 'http://localhost:5000';
       }
