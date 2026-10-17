@@ -2273,8 +2273,8 @@
             const startDt = statusRes.startDatetime ? new Date(statusRes.startDatetime) : null;
             const endDt = statusRes.endDatetime ? new Date(statusRes.endDatetime) : null;
 
-            const isBeforeStart = startDt && !isNaN(startDt.getTime()) && now < startDt;
-            const isAfterEnd = endDt && !isNaN(endDt.getTime()) && now > endDt;
+            const isBeforeStart = statusRes.isBeforeStart !== undefined ? statusRes.isBeforeStart : (startDt && !isNaN(startDt.getTime()) && now < startDt);
+            const isAfterEnd = statusRes.isAfterEnd !== undefined ? statusRes.isAfterEnd : (endDt && !isNaN(endDt.getTime()) && now > endDt);
 
             const recruitFormWrapper = document.getElementById('recruitFormWrapper');
             const recruitClosedOverlay = document.getElementById('recruitClosedOverlay');
@@ -2285,7 +2285,19 @@
               const title = document.getElementById('closedNoticeTitle');
               const desc = document.getElementById('closedNoticeDesc');
 
-              if (isBeforeStart) {
+              if (statusRes.error) {
+                // Connection or server error
+                if (badge) {
+                  badge.className = 'schedule-badge-status closed';
+                  badge.innerHTML = '<span class="status-dot red"></span><span>ไม่สามารถเชื่อมต่อระบบได้</span>';
+                }
+                if (iconWrap) {
+                  iconWrap.className = 'recruit-closed-icon-wrap closed';
+                  iconWrap.innerHTML = '<i data-lucide="wifi-off" style="width: 30px; height: 30px;"></i>';
+                }
+                if (title) title.textContent = 'ไม่สามารถเชื่อมต่อระบบรับสมัครได้ชั่วคราว';
+                if (desc) desc.textContent = 'ระบบไม่สามารถดึงข้อมูลสถานะได้ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ต หรือลองใหม่อีกครั้ง';
+              } else if (isBeforeStart) {
                 // ยังไม่ถึงเวลารับสมัคร
                 if (badge) {
                   badge.className = 'schedule-badge-status reviewing';

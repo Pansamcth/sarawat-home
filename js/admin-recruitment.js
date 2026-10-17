@@ -221,20 +221,29 @@
       const res = await getApi().adminGetRecruitmentSettings();
       if (res && res.success && res.settings) {
         recruitmentSettingsCache = res.settings;
-        const isOpen = Number(res.settings.is_open) === 1;
+        const s = res.settings;
+        const isManualOpen = Number(s.is_open) === 1;
 
         const pill = document.getElementById('adminRecruitStatusPill');
         const txtStatus = document.getElementById('txtAdminRecruitStatus');
         const btnToggle = document.getElementById('txtBtnToggleRecruit');
 
-        if (isOpen) {
-          pill.className = 'schedule-badge-status open';
-          txtStatus.textContent = 'เปิดรับสมัคร';
-          if (btnToggle) btnToggle.textContent = 'ปิดรับสมัครทันที';
-        } else {
-          pill.className = 'schedule-badge-status closed';
-          txtStatus.textContent = 'ปิดรับสมัคร';
+        if (!isManualOpen) {
+          if (pill) pill.className = 'schedule-badge-status closed';
+          if (txtStatus) txtStatus.textContent = 'ปิดรับสมัคร (ปิดชั่วคราว)';
           if (btnToggle) btnToggle.textContent = 'เปิดรับสมัครทันที';
+        } else if (s.isBeforeStart) {
+          if (pill) pill.className = 'schedule-badge-status reviewing';
+          if (txtStatus) txtStatus.textContent = 'รอเปิดรับสมัครตามกำหนดเวลา';
+          if (btnToggle) btnToggle.textContent = 'ปิดรับสมัครทันที';
+        } else if (s.isAfterEnd) {
+          if (pill) pill.className = 'schedule-badge-status closed';
+          if (txtStatus) txtStatus.textContent = 'หมดเวลารับสมัครแล้ว';
+          if (btnToggle) btnToggle.textContent = 'เปิดรับสมัครทันที';
+        } else {
+          if (pill) pill.className = 'schedule-badge-status open';
+          if (txtStatus) txtStatus.textContent = 'เปิดรับสมัคร (ตามกำหนดเวลา)';
+          if (btnToggle) btnToggle.textContent = 'ปิดรับสมัครทันที';
         }
       }
     } catch (err) {
@@ -829,6 +838,7 @@
             academic_year: document.getElementById('cfgAcademicYear').value.trim(),
             min_gpax: parseFloat(document.getElementById('cfgMinGpax').value),
             allowed_grades: document.getElementById('cfgAllowedGrades').value.trim(),
+            is_open: parseInt(document.getElementById('cfgIsOpen')?.value) || 1,
             start_datetime: document.getElementById('cfgStartDatetime').value || null,
             end_datetime: document.getElementById('cfgEndDatetime').value || null,
             announcement_text: document.getElementById('cfgAnnouncementText').value.trim(),
@@ -887,8 +897,11 @@
         setVal('cfgAllowedGrades', s.allowed_grades || 'ม.4,ม.5');
         setVal('cfgAnnouncementText', s.announcement_text || '');
         setVal('cfgPdpaContent', s.pdpa_content || '');
-        if (s.start_datetime) setVal('cfgStartDatetime', s.start_datetime.slice(0, 16));
-        if (s.end_datetime) setVal('cfgEndDatetime', s.end_datetime.slice(0, 16));
+        setVal('cfgIsOpen', String(s.is_open !== undefined ? s.is_open : 1));
+        if (s.start_datetime) setVal('cfgStartDatetime', s.start_datetime.replace(' ', 'T').slice(0, 16));
+        else setVal('cfgStartDatetime', '');
+        if (s.end_datetime) setVal('cfgEndDatetime', s.end_datetime.replace(' ', 'T').slice(0, 16));
+        else setVal('cfgEndDatetime', '');
       }
     } catch (e) {
       console.warn('Error loading recruitment settings form:', e);
