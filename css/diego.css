@@ -1429,8 +1429,9 @@ svg:not([data-lucide]),
 }
 
 .dg-section-tag {
+  font-family: 'Kanit', sans-serif !important;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 500 !important; /* Kanit Medium */
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dg-text-muted);
@@ -3495,17 +3496,38 @@ svg:not([data-lucide]),
 }
 
 .dg-act-main-title {
-  font-family: var(--dg-font-sans);
+  font-family: 'Plus Jakarta Sans', 'Outfit', var(--dg-font-sans);
   font-size: clamp(2.2rem, 4.5vw, 3.4rem);
   font-weight: 850;
   letter-spacing: -0.035em;
-  line-height: 1.1;
+  line-height: 1.15;
   color: var(--dg-text-primary);
   margin: 0 0 12px;
 }
 
+.dg-act-main-title .dg-title-en,
+.dg-act-main-title > span:first-child:not(.dg-title-th) {
+  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;
+  font-weight: 850 !important;
+  letter-spacing: -0.035em;
+  display: inline-block;
+}
+
+.dg-act-main-title .dg-title-th,
+.dg-act-main-title > span:last-child:not(.dg-title-en) {
+  font-family: 'Kanit', sans-serif !important;
+  font-weight: 600 !important; /* Kanit SemiBold */
+  font-size: 0.82em !important; /* ตัวเล็กกว่าภาษาอังกฤษนิดนึง */
+  letter-spacing: -0.01em !important;
+  color: var(--dg-text-primary) !important;
+  display: inline-block;
+  margin-top: 4px;
+}
+
 .dg-act-subtitle {
-  font-size: 1.02rem;
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 1.02rem !important;
+  font-weight: 400 !important; /* Kanit Regular */
   line-height: 1.6;
   color: var(--dg-text-secondary);
   max-width: 680px;
