@@ -238,9 +238,24 @@
       transform: scale(0.96);
     }
 
-    body>*:not(.toast-container):not(.modal-overlay):not(.dashboard-container) {
+    body>*:not(.toast-container):not(.modal-overlay):not(.dashboard-container):not(.dg-nav):not(.dg-scroll-progress) {
       position: relative;
       z-index: 1;
+    }
+
+    .dg-nav {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 1000 !important;
+    }
+
+    .dg-scroll-progress {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      z-index: 1001 !important;
     }
 
     /* ===== HEADER ===== */
