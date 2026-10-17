@@ -647,18 +647,30 @@
       }
 
       #btnRefreshData {
-        flex: 0 0 40px;
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 9999px;
+        flex: 0 0 40px !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        max-width: 40px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 9999px !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
       }
 
-      #btnRefreshData span {
-        display: none;
+      #btnRefreshData span,
+      #btnRefreshData .btn-refresh-text {
+        display: none !important;
+      }
+
+      #btnRefreshData i {
+        margin: 0 !important;
+        line-height: 1 !important;
+        font-size: 0.92rem !important;
       }
 
       .dg-act-pill-btn-status {
@@ -1670,57 +1682,72 @@
       }
     }
 
-    .timer-container {
+    .modal-header-meta {
       display: flex;
-      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .modal-header-meta .modal-date {
+      margin-bottom: 0;
+    }
+
+    .timer-container {
+      display: inline-flex;
       align-items: center;
       background: #0a0a0c;
       color: #ffffff;
-      padding: 16px 22px;
-      border-radius: 14px;
+      padding: 4px 12px;
+      border-radius: 9999px;
       border: 1px solid #1f2937;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      margin-bottom: 0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      gap: 6px;
+      transition: all 0.2s ease;
     }
 
     .timer-container.expired {
-      background: #f8fafc;
-      border-color: #e2e8f0;
+      background: #fef2f2;
+      border-color: #fecaca;
       box-shadow: none;
     }
 
     .timer-text {
       font-weight: 700;
       color: #94a3b8;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
+      gap: 5px;
+      font-size: 0.82rem;
     }
 
     .timer-text i {
-      color: #ffffff;
+      color: #f59e0b;
+      font-size: 0.82rem;
     }
 
     .timer-container.expired .timer-text {
-      color: #64748b;
+      color: #dc2626;
     }
 
     .timer-container.expired .timer-text i {
-      color: #94a3b8;
+      color: #dc2626;
       animation: none;
     }
 
     .timer-value {
       font-family: 'Kanit', sans-serif;
-      font-size: 1.35rem;
+      font-size: 0.86rem;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       color: #ffffff;
     }
 
     .timer-container.expired .timer-value {
-      color: #64748b;
+      color: #991b1b;
+      font-weight: 800;
     }
 
     /* ===== DUTY CARD (DIEGO MINIMALIST) ===== */
@@ -2556,8 +2583,8 @@
       }
 
       .timer-container {
-        padding: 14px 16px;
-        margin-bottom: 12px;
+        padding: 4px 10px;
+        margin-bottom: 0;
       }
 
       .duty-card {
@@ -3493,10 +3520,10 @@
         <!-- Action Controls -->
         <div class="dg-roster-controls-right">
           <button type="button" class="dg-act-pill-btn" id="btnRefreshData"
-            onclick="this.innerHTML='<i class=&quot;fa-solid fa-rotate-right fa-spin&quot;></i> โหลด...'; this.disabled=true; loadUpcomingActivities();"
+            onclick="refreshRosterActivities(this)"
             title="รีเฟรชข้อมูลกิจกรรมล่าสุด">
             <i class="fa-solid fa-rotate-right" style="font-size: 0.88rem;"></i>
-            <span>รีเฟรชข้อมูล</span>
+            <span class="btn-refresh-text">รีเฟรชข้อมูล</span>
           </button>
 
           <button type="button" class="dg-act-pill-btn dg-act-pill-btn-status" onclick="openStatusSearchModal()"
@@ -3660,7 +3687,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="close-modal" onclick="closeModal('detailModal')"><i class="fa-solid fa-xmark"></i></div>
-        <div class="modal-date" id="modalDate"><i class="fa-regular fa-calendar"></i> <span></span></div>
+        <div class="modal-header-meta">
+          <div class="modal-date" id="modalDate"><i class="fa-regular fa-calendar"></i> <span></span></div>
+          <div class="timer-container" id="modalTimerContainer" style="display: none;">
+            <span class="timer-text" id="modalTimerText"><i class="fa-solid fa-hourglass-half"></i> เหลือเวลาอีก:</span>
+            <span class="timer-value" id="modalTimerValue">--:--:--</span>
+          </div>
+        </div>
         <h2 class="modal-title" id="modalTitle">รายละเอียดกิจกรรม</h2>
       </div>
 
@@ -3669,12 +3702,6 @@
           style="font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 1.05rem;"><i
             class="fa-solid fa-circle-info"></i> รายละเอียดกิจกรรม</div>
         <div class="modal-desc toastui-editor-contents" id="modalDesc"></div>
-
-        <div class="timer-container" id="modalTimerContainer">
-          <div class="timer-text" id="modalTimerText"><i class="fa-solid fa-hourglass-half"></i> หมดเวลาลงชื่อในอีก:
-          </div>
-          <div class="timer-value" id="modalTimerValue">--:--:--</div>
-        </div>
 
         <div id="adminEditBtnContainer" style="display:none; margin-bottom: 15px;">
           <div class="admin-buttons-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -5071,26 +5098,19 @@
                 buildFeed(currentActivities);
               }
               document.getElementById('feedLoading').style.display = 'none';
-              const rBtn = document.getElementById('btnRefreshData');
-              if (rBtn) {
-                rBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> รีเฟรชข้อมูล';
-                rBtn.disabled = false;
-              }
+              resetRefreshButton();
               handleRosterQueryParams();
             } catch (err) {
               console.error(err);
               document.getElementById('feedLoading').innerHTML = '<div style="color:red">พบปัญหาการเรนเดอร์ข้อมูล: ' + err.message.replace(/^Error:\s*/, '') + '<br>' + err.stack + '</div>';
+              resetRefreshButton();
             }
           })
           .withFailureHandler(function (error) {
             let safeMsg = error.message.replace(/^Error:\s*/, '');
             showToast(safeMsg, 'error');
             document.getElementById('feedLoading').innerHTML = '<div style="color:red; padding: 20px; text-align: center; font-weight: 600;">' + safeMsg + '</div>';
-            const rBtn = document.getElementById('btnRefreshData');
-            if (rBtn) {
-              rBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i> รีเฟรชข้อมูล';
-              rBtn.disabled = false;
-            }
+            resetRefreshButton();
           });
 
         if (isAdmin) {
@@ -5119,8 +5139,26 @@
             buildFeed(currentActivities);
           }
           document.getElementById('feedLoading').style.display = 'none';
+          resetRefreshButton();
           handleRosterQueryParams();
         }, 500);
+      }
+    }
+
+    function refreshRosterActivities(btn) {
+      if (!btn) btn = document.getElementById('btnRefreshData');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-rotate-right fa-spin" style="font-size: 0.88rem;"></i><span class="btn-refresh-text"> โหลด...</span>';
+      }
+      loadUpcomingActivities();
+    }
+
+    function resetRefreshButton() {
+      const rBtn = document.getElementById('btnRefreshData');
+      if (rBtn) {
+        rBtn.innerHTML = '<i class="fa-solid fa-rotate-right" style="font-size: 0.88rem;"></i><span class="btn-refresh-text">รีเฟรชข้อมูล</span>';
+        rBtn.disabled = false;
       }
     }
 
@@ -5917,29 +5955,31 @@
       let isNotStarted = activity.startTime && (activity.startTime > now);
 
       if (activity.isFull) {
-        timerContainer.style.display = 'flex';
+        timerContainer.style.display = 'inline-flex';
         timerContainer.classList.add('expired');
-        timerText.innerHTML = '<i class="fa-solid fa-users-slash"></i> สถานะ:';
-        timerValue.textContent = 'คนลงชื่อเต็มแล้ว';
+        timerText.innerHTML = '<i class="fa-solid fa-users-slash"></i>';
+        timerValue.textContent = 'เต็มแล้ว';
       } else if (isNotStarted) {
-        timerContainer.style.display = 'flex';
-        timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> เปิดลงชื่ออีก:';
+        timerContainer.style.display = 'inline-flex';
+        timerContainer.classList.remove('expired');
+        timerText.innerHTML = '<i class="fa-regular fa-clock"></i> เปิดในอีก:';
         startCountdown('modalTimerValue', activity.startTime, null, null, () => {
           openModal(activity, false); // Reload when open without re-pushing history
         });
       } else if (activity.deadline) {
-        timerContainer.style.display = 'flex';
+        timerContainer.style.display = 'inline-flex';
         const distance = activity.deadline - now;
         if (distance < 0) {
           timerContainer.classList.add('expired');
-          timerText.innerHTML = '<i class="fa-solid fa-clock"></i> สถานะ:';
-          timerValue.textContent = 'หมดเวลาลงชื่อ';
+          timerText.innerHTML = '<i class="fa-solid fa-lock"></i>';
+          timerValue.textContent = 'ปิดรับแล้ว';
         } else {
-          timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> หมดเวลาลงชื่อในอีก:';
+          timerContainer.classList.remove('expired');
+          timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> เหลือเวลาอีก:';
           startCountdown('modalTimerValue', activity.deadline, null, null, () => {
             timerContainer.classList.add('expired');
-            timerText.innerHTML = '<i class="fa-solid fa-clock"></i> สถานะ:';
-            timerValue.textContent = 'หมดเวลาลงชื่อ';
+            timerText.innerHTML = '<i class="fa-solid fa-lock"></i>';
+            timerValue.textContent = 'ปิดรับแล้ว';
             loadSignups(activity.sheetName, activity.duties); // reload to disable buttons
           });
         }
