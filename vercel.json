@@ -5,13 +5,57 @@
   "redirects": [
     {
       "source": "/recruit",
-      "destination": "/admissions",
-      "permanent": true
+      "destination": "https://admissions.sarawatdc.site/",
+      "permanent": false
     },
     {
       "source": "/recruit.html",
-      "destination": "/admissions",
-      "permanent": true
+      "destination": "https://admissions.sarawatdc.site/",
+      "permanent": false
+    },
+    {
+      "source": "/admissions",
+      "has": [
+        {
+          "type": "host",
+          "value": "(?!admissions\\.).*"
+        }
+      ],
+      "destination": "https://admissions.sarawatdc.site/",
+      "permanent": false
+    },
+    {
+      "source": "/admissions.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "(?!admissions\\.).*"
+        }
+      ],
+      "destination": "https://admissions.sarawatdc.site/",
+      "permanent": false
+    },
+    {
+      "source": "/admissions",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/admissions.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
     },
     {
       "source": "/roster",
@@ -121,6 +165,16 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/((?!assets|css|js|api|favicon|cloudflare-config).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html"
+    },
     {
       "source": "/admissions",
       "destination": "/admissions.html"

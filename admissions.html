@@ -2,6 +2,7 @@
 <html lang="th">
 
 <head>
+  <base href="/" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
@@ -9,8 +10,15 @@
       try {
         if (window.history && window.history.replaceState && window.location.protocol !== 'file:') {
           var p = window.location.pathname;
-          if (p.endsWith('/admissions.html') || p.includes('/recruit')) {
-            window.history.replaceState(null, '', '/admissions' + window.location.search + window.location.hash);
+          var isSubdomain = window.location.hostname.startsWith('admissions.');
+          if (isSubdomain) {
+            if (p.endsWith('/admissions.html') || p.includes('/recruit') || p === '/admissions') {
+              window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
+            }
+          } else {
+            if (p.endsWith('/admissions.html') || p.includes('/recruit')) {
+              window.history.replaceState(null, '', '/admissions' + window.location.search + window.location.hash);
+            }
           }
         }
       } catch(e) {}
@@ -77,14 +85,14 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Central API Config -->
-  <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.7.2"></script>
+  <script src="/cloudflare-config.js"></script>
+  <script src="/js/api-config.js?v=2.7.2"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
-  <link rel="stylesheet" href="css/diego.css" />
+  <link rel="stylesheet" href="/css/diego.css" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
+  <link rel="icon" type="image/png" href="/assets/icons/sarawat-logo.png" />
 
   <style>
     /* ========================================================
@@ -2815,6 +2823,34 @@
         }
       } catch (e) {
         console.warn('Auto correction check error:', e);
+      }
+
+      // When hosted on admissions.sarawatdc.site subdomain, ensure navigation links point back to the main site
+      if (window.location.hostname.startsWith('admissions.')) {
+        try {
+          const mainSiteUrl = 'https://sarawat-home.vercel.app';
+          const navBrand = document.querySelector('.dg-brand');
+          if (navBrand) navBrand.href = mainSiteUrl;
+
+          const links = document.querySelectorAll('#dgNavLinks a, .dg-act-breadcrumb a, .btn-step-prev, .dg-footer-nav-list a, .dg-nav-actions a');
+          links.forEach(a => {
+            const href = a.getAttribute('href');
+            if (!href || href.startsWith('http') || href.startsWith('javascript:')) return;
+            if (href.startsWith('#')) return;
+            if (href.startsWith('index.html')) {
+              const target = href.replace(/^index\.html/, '');
+              a.href = mainSiteUrl + (target.startsWith('#') ? '/' + target : target || '/');
+            } else if (href === 'activities.html' || href === '/activities') {
+              a.href = mainSiteUrl + '/activities';
+            } else if (href === 'calendar.html' || href === '/calendar') {
+              a.href = mainSiteUrl + '/calendar';
+            } else if (href === 'team.html' || href === '/team') {
+              a.href = mainSiteUrl + '/team';
+            }
+          });
+        } catch (linkErr) {
+          console.warn('Subdomain link routing warning:', linkErr);
+        }
       }
 
     });
