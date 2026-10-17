@@ -8048,10 +8048,13 @@
     // ==========================================
     // 📜 ACTIVITY HISTORY (ประวัติกิจกรรมที่ผ่านมา)
     // ==========================================
+    // Tab: Activity History (ประวัติกิจกรรม & จัดการคนในหน้าที่)
+    // ==========================================
     let historyAllActivities = [];
     let currentHistoryFilter = 'past'; // 'past', 'all', 'ongoing'
     let selectedHistorySheetName = null;
     let currentHistoryActivity = null;
+    let currentHistorySignups = [];
 
     function escapeHtml(str) {
       if (str === null || str === undefined) return '';
@@ -8099,6 +8102,40 @@
             }
           })
           .getAllActivities();
+      } else {
+        // Fallback for local testing / mock
+        setTimeout(function() {
+          if (typeof currentActivities !== 'undefined' && currentActivities.length > 0) {
+            historyAllActivities = currentActivities;
+          } else {
+            historyAllActivities = [
+              {
+                sheetName: 'act_mock_1',
+                title: 'ตรวจแถวหน้าเสาธงและเวรประจำวัน',
+                dateStr: '2026-10-15',
+                endDateStr: '2026-10-15',
+                description: 'ดูแลความเรียบร้อยของนักเรียนบริเวณหน้าเสาธงและตรวจเครื่องแบบ',
+                duties: [
+                  { duty: 'ประตู 1', quota: 2 },
+                  { duty: 'ประตู 2', quota: 2 },
+                  { duty: 'หัวแถวหน้าเสาธง', quota: 3 }
+                ]
+              },
+              {
+                sheetName: 'act_mock_2',
+                title: 'กิจกรรมวันแม่แห่งชาติและจิตอาสา',
+                dateStr: '2026-10-10',
+                endDateStr: '2026-10-10',
+                description: 'จัดเตรียมสถานที่และอำนวยความสะดวกผู้ปกครอง',
+                duties: [
+                  { duty: 'ฝ่ายต้อนรับ', quota: 4 },
+                  { duty: 'ฝ่ายโสตทัศนูปกรณ์', quota: 2 }
+                ]
+              }
+            ];
+          }
+          renderHistoryList();
+        }, 200);
       }
     }
 
@@ -8251,7 +8288,8 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function(signups) {
-            renderHistoryDetails(act, Array.isArray(signups) ? signups : []);
+            currentHistorySignups = Array.isArray(signups) ? signups : [];
+            renderHistoryDetails(act, currentHistorySignups);
           })
           .withFailureHandler(function(err) {
             if (contentEl) {
@@ -8264,22 +8302,36 @@
             }
           })
           .getSignupsForActivity(sheetName);
+      } else {
+        setTimeout(function() {
+          let mockSignups = [
+            { duty: (act.duties && act.duties[0]) ? act.duties[0].duty : 'หน้าที่ 1', name: 'นายสมชาย ใจดี ม.4/1', grade: 'ม.4/1', row: 2, timestamp: Date.now() - 3600000 },
+            { duty: (act.duties && act.duties[0]) ? act.duties[0].duty : 'หน้าที่ 1', name: 'นางสาวสมหญิง จริงใจ ม.4/2', grade: 'ม.4/2', row: 3, timestamp: Date.now() - 1800000 }
+          ];
+          currentHistorySignups = mockSignups;
+          renderHistoryDetails(act, currentHistorySignups);
+        }, 300);
       }
     }
 
+    function refreshHistorySignups() {
+      if (!currentHistoryActivity) return;
+      selectHistoryActivity(currentHistoryActivity.sheetName);
+    }
+
     function renderHistoryDetails(act, signups) {
+      currentHistorySignups = Array.isArray(signups) ? signups : [];
       const contentEl = document.getElementById('historyDetailContent');
       if (!contentEl) return;
 
-      const dateDisplay = formatThaiDateRange(act.dateStr, act.endDateStr);
+      const dateDisplay = formatThaiDateRange(act.dateStr || act.date, act.endDateStr);
       const isPast = isActivityPast(act);
       const duties = Array.isArray(act.duties) ? act.duties : [];
       const activeDuties = duties.filter(function(d) { return parseInt(d.quota) > 0; });
       const totalDutiesCount = activeDuties.length;
       const totalQuota = activeDuties.reduce(function(sum, d) { return sum + parseInt(d.quota || 0); }, 0);
-      const totalSignupsCount = signups.length;
+      const totalSignupsCount = currentHistorySignups.length;
       const fillPercent = totalQuota > 0 ? Math.round((totalSignupsCount / totalQuota) * 100) : 0;
-      const actDutiesEncoded = encodeURIComponent(JSON.stringify(duties));
 
       // Build Status Badge
       const statusBadge = isPast
@@ -8305,16 +8357,16 @@
       let descHtml = '';
       if (act.description && act.description.trim()) {
         descHtml = `
-          <div style="margin-bottom: 24px; padding: 18px 20px; background: rgba(248, 250, 252, 0.8); border: 1px solid var(--border-light); border-radius: 12px;">
-            <div style="font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 0.95rem; display:flex; align-items:center; gap:8px;">
+          <div style="margin-bottom: 22px; padding: 16px 20px; background: rgba(248, 250, 252, 0.85); border: 1px solid var(--border-light); border-radius: 12px;">
+            <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px; font-size: 0.95rem; display:flex; align-items:center; gap:8px;">
               <i class="fa-solid fa-circle-info"></i> รายละเอียดกิจกรรม
             </div>
-            <div class="modal-desc toastui-editor-contents" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main); white-space: pre-wrap;">${escapeHtml(act.description)}</div>
+            <div class="modal-desc toastui-editor-contents" style="font-size: 0.92rem; line-height: 1.6; color: var(--text-main); white-space: pre-wrap;">${escapeHtml(act.description)}</div>
           </div>
         `;
       }
 
-      // Build Duty Breakdown Cards (Identical to index.html renderDuties)
+      // Build Duties Breakdown Cards
       let dutiesCardsHtml = '';
       if (activeDuties.length === 0) {
         dutiesCardsHtml = '<p class="empty-signups" style="padding: 24px; text-align: center; color: var(--text-dim);"><i class="fa-regular fa-folder-open"></i> ไม่มีกำหนดหน้าที่สำหรับกิจกรรมนี้</p>';
@@ -8322,7 +8374,7 @@
         activeDuties.forEach(function(item) {
           const dutyName = item.duty;
           const quota = parseInt(item.quota);
-          const dutySignups = signups.filter(function(s) { return s.duty === dutyName; });
+          const dutySignups = currentHistorySignups.filter(function(s) { return s.duty === dutyName; });
           const currentCount = dutySignups.length;
           const isFull = currentCount >= quota;
 
@@ -8347,16 +8399,24 @@
                 : '';
 
               signupsListHtml += `
-                <li style="padding: 12px 18px; background: rgba(255, 255, 255, 0.95); border-radius: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-light); box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
-                  <div class="signup-name-container" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:rgba(15, 23, 42, 0.06); font-size:0.75rem; font-weight:700; color:var(--text-main);">${sIndex + 1}</span>
-                    <i class="fa-solid fa-circle-check" style="color:var(--success);"></i>
+                <li style="padding: 12px 16px; background: rgba(255, 255, 255, 0.98); border-radius: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border-light); box-shadow: 0 2px 6px rgba(0,0,0,0.02); gap: 10px; flex-wrap: wrap;">
+                  <div class="signup-name-container" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; flex:1; min-width:240px;">
+                    <input type="checkbox" class="history-signup-cb" data-row="${s.row}" data-name="${escapeHtml(s.name)}" data-duty="${escapeHtml(dutyName)}"
+                           onchange="updateHistoryBulkDeleteBtn()"
+                           style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--danger); flex-shrink:0;">
+                    <span style="display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:rgba(15, 23, 42, 0.06); font-size:0.75rem; font-weight:700; color:var(--text-main); flex-shrink:0;">${sIndex + 1}</span>
+                    <i class="fa-solid fa-circle-check" style="color:var(--success); flex-shrink:0;"></i>
                     <span style="font-weight:600; font-size:0.95rem; color:var(--text-main);">${escapeHtml(s.name)}</span>
                     ${gradeBadge}
                     ${timeHtml}
                   </div>
-                  <div>
-                    <span style="background:rgba(16, 185, 129, 0.1); color:#059669; font-size:0.75rem; padding:3px 8px; border-radius:6px; font-weight:600;"><i class="fa-solid fa-check"></i> บันทึกแล้ว</span>
+                  <div style="flex-shrink:0;">
+                    <button type="button" class="btn btn-sm" onclick="historyDeleteSingle(${s.row}, '${escapeHtml(s.name)}', '${escapeHtml(dutyName)}')"
+                            style="background: #ffffff; border: 1px solid var(--danger); color: var(--danger); padding: 5px 12px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s ease;"
+                            onmouseover="this.style.background='var(--danger)'; this.style.color='#fff';"
+                            onmouseout="this.style.background='#fff'; this.style.color='var(--danger)';">
+                      <i class="fa-solid fa-trash-can"></i> ลบ
+                    </button>
                   </div>
                 </li>
               `;
@@ -8370,12 +8430,28 @@
           const quotaText = isFull ? `เต็มแล้ว (${currentCount}/${quota})` : `ลงชื่อ ${currentCount}/${quota} คน (ว่าง ${quota - currentCount})`;
 
           dutiesCardsHtml += `
-            <div class="duty-card" style="padding: 18px 22px; margin-bottom: 14px; border-radius: 14px; border: 1px solid var(--border-light); background: #ffffff;">
-              <div class="duty-header" style="margin-bottom: 14px; display:flex; justify-content:space-between; align-items:center;">
-                <div class="duty-title" style="font-size: 1.15rem; font-weight:700;">
-                  <i class="fa-solid fa-clipboard-user" style="color:var(--accent);"></i> ${escapeHtml(dutyName)}
+            <div class="duty-card" style="padding: 18px 22px; margin-bottom: 16px; border-radius: 14px; border: 1px solid var(--border-light); background: #ffffff;">
+              <div class="duty-header" style="margin-bottom: 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                  <div class="duty-title" style="font-size: 1.15rem; font-weight:700; margin:0;">
+                    <i class="fa-solid fa-clipboard-user" style="color:var(--accent);"></i> ${escapeHtml(dutyName)}
+                  </div>
+                  <div class="${quotaBadgeClass}">${quotaText}</div>
                 </div>
-                <div class="${quotaBadgeClass}">${quotaText}</div>
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-sm" onclick="historyRandomizeSingle('${escapeHtml(dutyName)}', this)"
+                          ${isFull ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : 'style="cursor:pointer;"'}
+                          style="padding: 6px 12px; font-size: 0.82rem; font-weight:600; border-radius:8px; border:1px solid #c4b5fd; background:#f5f3ff; color:#7c3aed; display:inline-flex; align-items:center; gap:6px;"
+                          title="${isFull ? 'หน้าที่นี้เต็มโควตาแล้ว ไม่สามารถสุ่มเพิ่มได้' : 'สุ่มเพิ่มคนในหน้าที่นี้'}">
+                    <i class="fa-solid fa-dice"></i> สุ่มเฉพาะหน้าที่นี้
+                  </button>
+                  ${currentCount > 0 ? `
+                    <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.82rem; font-weight:600; color:var(--text-muted); cursor:pointer; user-select:none; margin:0; background:rgba(241, 245, 249, 0.8); padding:5px 10px; border-radius:8px; border:1px solid var(--border-light);">
+                      <input type="checkbox" class="history-select-all-duty-cb" data-duty="${escapeHtml(dutyName)}" onchange="toggleHistoryDutySelectAll('${escapeHtml(dutyName)}', this)" style="accent-color:var(--danger); width:16px; height:16px; cursor:pointer;">
+                      <span>เลือกทั้งหมด</span>
+                    </label>
+                  ` : ''}
+                </div>
               </div>
               ${signupsListHtml}
             </div>
@@ -8400,15 +8476,78 @@
               ${timingHtml}
             </div>
             
-            <!-- Export PDF & Actions Button Group -->
+            <!-- Action Toolbar (Add / Randomize / Bulk Delete / Export PDF / Refresh) -->
             <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-              <button class="btn btn-primary" onclick="exportHistoryActivityPDF()" style="padding: 10px 20px; font-size: 0.95rem; font-weight:600; display:flex; align-items:center; gap:8px; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);">
-                <i class="fa-solid fa-file-pdf" style="font-size: 1.1rem;"></i> ส่งออกเอกสาร PDF
+              <button type="button" class="btn btn-primary" onclick="toggleHistoryInlineAddForm()" style="padding: 9px 16px; font-size: 0.9rem; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-user-plus"></i> เพิ่มคนเข้าหน้าที่
               </button>
-              <button class="btn btn-secondary" onclick="selectHistoryActivity('${act.sheetName}')" title="รีเฟรชรายชื่อกิจกรรมนี้" style="padding: 10px 14px;">
+
+              <button type="button" class="btn" onclick="historyRandomizeAll()" style="background:#8b5cf6; color:#ffffff; padding: 9px 16px; font-size: 0.9rem; font-weight:600; display:inline-flex; align-items:center; gap:8px; border:none; box-shadow: 0 2px 6px rgba(139, 92, 246, 0.25); cursor:pointer;">
+                <i class="fa-solid fa-shuffle"></i> สุ่มทุกหน้าที่
+              </button>
+
+              <button type="button" id="historyBulkDeleteBtn" class="btn btn-danger" onclick="historyBulkDelete()" style="display:none; background:#ef4444; color:#ffffff; padding: 9px 16px; font-size: 0.9rem; font-weight:600; align-items:center; gap:8px; border:none; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25); cursor:pointer;">
+                <i class="fa-solid fa-trash-can"></i> ลบที่เลือก (<span id="historyBulkDeleteCount">0</span>)
+              </button>
+
+              <button type="button" class="btn btn-secondary" onclick="exportHistoryActivityPDF()" style="padding: 9px 16px; font-size: 0.9rem; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-file-pdf" style="color:#ef4444;"></i> ส่งออก PDF
+              </button>
+
+              <button type="button" class="btn btn-secondary" onclick="refreshHistorySignups()" title="รีเฟรชรายชื่อกิจกรรมนี้" style="padding: 9px 13px;">
                 <i class="fa-solid fa-arrows-rotate"></i>
               </button>
             </div>
+          </div>
+        </div>
+
+        <!-- Inline Expandable Add Member Form -->
+        <div id="historyInlineAddForm" style="display:none; margin-bottom: 24px; padding: 20px; background: #ffffff; border: 1.5px solid var(--primary); border-radius: 14px; box-shadow: 0 8px 24px rgba(59, 130, 246, 0.08);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+            <div style="font-weight: 700; font-size: 1.05rem; color: var(--primary); display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-user-plus"></i> เพิ่มคนเข้าหน้าที่ (Admin)
+            </div>
+            <button type="button" onclick="toggleHistoryInlineAddForm(false)" style="background:none; border:none; font-size:1.2rem; color:var(--text-dim); cursor:pointer; padding:4px 8px;">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 16px;">
+            <!-- Duty Select -->
+            <div>
+              <label style="display:block; font-size:0.88rem; font-weight:600; margin-bottom:6px; color:var(--text-main);">
+                <i class="fa-solid fa-clipboard-list" style="color:var(--accent);"></i> เลือกหน้าที่ <span style="color:var(--danger);">*</span>
+              </label>
+              <select id="historyAddDutySelect" class="input-control" style="width:100%; padding:10px 14px; border-radius:10px; border:1px solid var(--border-light); font-size:0.92rem; background:#fff;">
+              </select>
+            </div>
+
+            <!-- Student Search Input with Autocomplete -->
+            <div style="position:relative;">
+              <label style="display:block; font-size:0.88rem; font-weight:600; margin-bottom:6px; color:var(--text-main);">
+                <i class="fa-solid fa-user" style="color:var(--primary);"></i> ค้นหาชื่อนักเรียน <span style="color:var(--danger);">*</span>
+              </label>
+              <div style="position:relative;">
+                <input type="text" id="historyAddStudentInput" class="input-control" placeholder="พิมพ์ชื่อ-นามสกุล หรือชั้นเรียน..." autocomplete="off"
+                       oninput="filterHistoryAddStudents()" onfocus="filterHistoryAddStudents()"
+                       onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitHistoryAddSignup(); }"
+                       onblur="setTimeout(() => { let d = document.getElementById('historyAddAutocomplete'); if(d) d.style.display='none'; }, 300)"
+                       style="width:100%; padding:10px 14px; border-radius:10px; border:1px solid var(--border-light); font-size:0.92rem;">
+                <div id="historyAddAutocomplete" class="autocomplete-dropdown" style="display:none; position:absolute; top:100%; left:0; width:100%; z-index:1000; background:#fff; border:1px solid var(--border-light); border-radius:10px; max-height:220px; overflow-y:auto; box-shadow:0 10px 25px rgba(0,0,0,0.12); margin-top:4px;"></div>
+              </div>
+              <small style="display:block; color:var(--text-dim); font-size:0.75rem; margin-top:4px;">
+                * เลือกลงได้เฉพาะหน้าที่ว่าง และห้ามชื่อซ้ำในกิจกรรมเดียวกัน
+              </small>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; align-items:center;">
+            <button type="button" class="btn btn-secondary" onclick="toggleHistoryInlineAddForm(false)" style="padding:8px 16px; font-size:0.9rem;">
+              ยกเลิก
+            </button>
+            <button type="button" id="btnHistoryAddSubmit" class="btn btn-primary" onclick="submitHistoryAddSignup()" style="padding:8px 20px; font-size:0.9rem; font-weight:600;">
+              <i class="fa-solid fa-check"></i> บันทึกเพิ่มคน
+            </button>
           </div>
         </div>
 
@@ -8436,7 +8575,7 @@
         ${descHtml}
 
         <!-- Duties Breakdown List Header -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px; flex-wrap:wrap; gap:8px;">
           <h3 style="margin:0; font-size:1.15rem; color:var(--text-main); font-weight:700; display:flex; align-items:center; gap:8px;">
             <i class="fa-solid fa-clipboard-user" style="color:var(--accent);"></i> รายการหน้าที่และผู้ปฏิบัติหน้าที่
           </h3>
@@ -8450,6 +8589,443 @@
           ${dutiesCardsHtml}
         </div>
       `;
+    }
+
+    // --- History Admin Operations: Add Member, Randomize, Single & Bulk Delete ---
+
+    function toggleHistoryInlineAddForm(show) {
+      const formEl = document.getElementById('historyInlineAddForm');
+      if (!formEl) return;
+      
+      const shouldShow = typeof show === 'boolean' ? show : (formEl.style.display === 'none' || formEl.style.display === '');
+      if (shouldShow) {
+        formEl.style.display = 'block';
+        populateHistoryAddDutyOptions();
+        const inputEl = document.getElementById('historyAddStudentInput');
+        if (inputEl) {
+          inputEl.value = '';
+          delete inputEl.dataset.name;
+          delete inputEl.dataset.grade;
+        }
+        const dropdown = document.getElementById('historyAddAutocomplete');
+        if (dropdown) dropdown.style.display = 'none';
+        formEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        formEl.style.display = 'none';
+        const dropdown = document.getElementById('historyAddAutocomplete');
+        if (dropdown) dropdown.style.display = 'none';
+      }
+    }
+
+    function populateHistoryAddDutyOptions() {
+      const selectEl = document.getElementById('historyAddDutySelect');
+      if (!selectEl || !currentHistoryActivity) return;
+      
+      const duties = Array.isArray(currentHistoryActivity.duties) ? currentHistoryActivity.duties : [];
+      const activeDuties = duties.filter(d => parseInt(d.quota) > 0);
+      
+      let html = '<option value="">-- เลือกหน้าที่ --</option>';
+      let firstAvailable = '';
+
+      activeDuties.forEach(d => {
+        const dutyName = d.duty;
+        const quota = parseInt(d.quota);
+        const currentCount = currentHistorySignups.filter(s => s.duty === dutyName).length;
+        const remaining = quota - currentCount;
+        const isFull = remaining <= 0;
+
+        if (isFull) {
+          html += `<option value="${escapeHtml(dutyName)}" disabled>${escapeHtml(dutyName)} (เต็มแล้ว - ${currentCount}/${quota} คน)</option>`;
+        } else {
+          html += `<option value="${escapeHtml(dutyName)}">${escapeHtml(dutyName)} (ว่าง ${remaining}/${quota} คน)</option>`;
+          if (!firstAvailable) firstAvailable = dutyName;
+        }
+      });
+
+      selectEl.innerHTML = html;
+      if (firstAvailable) {
+        selectEl.value = firstAvailable;
+      }
+    }
+
+    function filterHistoryAddStudents() {
+      const inputEl = document.getElementById('historyAddStudentInput');
+      const dropdown = document.getElementById('historyAddAutocomplete');
+      if (!inputEl || !dropdown) return;
+
+      if ((!studentNamesList || studentNamesList.length === 0) && typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function(stus) {
+            if (Array.isArray(stus)) {
+              studentNamesList = stus;
+              filterHistoryAddStudents();
+            }
+          })
+          .getStudents();
+      }
+      
+      const val = inputEl.value.toLowerCase().trim();
+      dropdown.innerHTML = '';
+      
+      if (!Array.isArray(studentNamesList) || studentNamesList.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+      }
+
+      const filtered = studentNamesList.filter(s => {
+        const text = ((s.name || '') + (s.grade ? ' ' + s.grade : '')).toLowerCase();
+        return text.includes(val);
+      });
+
+      if (filtered.length === 0) {
+        dropdown.innerHTML = `<div style="padding:10px 14px; color:var(--text-dim); font-size:0.85rem; text-align:center;">ไม่พบรายชื่อนักเรียน</div>`;
+        dropdown.style.display = 'block';
+        return;
+      }
+
+      const existingNames = new Set(currentHistorySignups.map(s => (s.name || '').trim()));
+
+      const resultsToShow = filtered.slice(0, 40);
+      resultsToShow.forEach(s => {
+        const fullName = s.name + (s.grade ? ' ' + s.grade : '');
+        const isAlreadyIn = existingNames.has(s.name.trim()) || existingNames.has(fullName.trim());
+
+        const div = document.createElement('div');
+        div.style.padding = '10px 14px';
+        div.style.cursor = isAlreadyIn ? 'not-allowed' : 'pointer';
+        div.style.fontSize = '0.9rem';
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'space-between';
+        div.style.borderBottom = '1px solid rgba(0,0,0,0.04)';
+        div.style.background = isAlreadyIn ? 'rgba(241, 245, 249, 0.6)' : 'transparent';
+
+        let badgeHtml = '';
+        if (isAlreadyIn) {
+          badgeHtml = '<span style="font-size:0.75rem; color:#ef4444; background:rgba(239,68,68,0.1); padding:2px 8px; border-radius:6px; font-weight:600;"><i class="fa-solid fa-ban"></i> มีชื่อในกิจกรรมนี้แล้ว</span>';
+        } else if (s.grade) {
+          badgeHtml = `<span style="font-size:0.75rem; color:#0284c7; background:rgba(14,165,233,0.1); padding:2px 8px; border-radius:6px; font-weight:600;">ชั้น ${escapeHtml(s.grade)}</span>`;
+        }
+
+        div.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <i class="fa-solid ${isAlreadyIn ? 'fa-user-xmark' : 'fa-user'}" style="color:${isAlreadyIn ? '#94a3b8' : 'var(--primary)'}; font-size:0.85rem;"></i>
+            <span style="font-weight:${isAlreadyIn ? '400' : '600'}; color:${isAlreadyIn ? 'var(--text-muted)' : 'var(--text-main)'};">${escapeHtml(s.name)}</span>
+          </div>
+          <div>${badgeHtml}</div>
+        `;
+
+        if (!isAlreadyIn) {
+          div.onmousedown = function(e) {
+            e.preventDefault();
+            selectHistoryAddStudent(fullName, s.name, s.grade || '');
+          };
+          div.onclick = function() {
+            selectHistoryAddStudent(fullName, s.name, s.grade || '');
+          };
+        }
+
+        dropdown.appendChild(div);
+      });
+
+      dropdown.style.display = 'block';
+    }
+
+    function selectHistoryAddStudent(fullName, name, grade) {
+      const inputEl = document.getElementById('historyAddStudentInput');
+      const dropdown = document.getElementById('historyAddAutocomplete');
+      if (inputEl) {
+        inputEl.value = fullName;
+        inputEl.dataset.name = name;
+        inputEl.dataset.grade = grade || '';
+      }
+      if (dropdown) dropdown.style.display = 'none';
+    }
+
+    function submitHistoryAddSignup() {
+      if (!currentHistoryActivity) {
+        showToast('กรุณาเลือกกิจกรรมก่อนดำเนินการ', 'error');
+        return;
+      }
+
+      const dutySelect = document.getElementById('historyAddDutySelect');
+      const inputEl = document.getElementById('historyAddStudentInput');
+      const btnEl = document.getElementById('btnHistoryAddSubmit');
+      
+      const duty = dutySelect ? dutySelect.value : '';
+      let enteredName = inputEl ? inputEl.value.trim() : '';
+
+      if (!duty) {
+        showToast('กรุณาเลือกหน้าที่ที่ต้องการเพิ่ม', 'error');
+        if (dutySelect) dutySelect.focus();
+        return;
+      }
+      if (!enteredName) {
+        showToast('กรุณาเลือกรายชื่อนักเรียน', 'error');
+        if (inputEl) inputEl.focus();
+        return;
+      }
+
+      // Check quota
+      const duties = currentHistoryActivity.duties || [];
+      const dutyConfig = duties.find(d => d.duty === duty);
+      const quota = dutyConfig ? parseInt(dutyConfig.quota) : 0;
+      const currentDutySignups = currentHistorySignups.filter(s => s.duty === duty);
+      if (currentDutySignups.length >= quota) {
+        showToast(`หน้าที่ "${duty}" มีผู้ปฏิบัติหน้าที่เต็มโควตาแล้ว (${currentDutySignups.length}/${quota} คน) ไม่สามารถเพิ่มได้`, 'error');
+        return;
+      }
+
+      // Match student from studentNamesList
+      let studentObj = null;
+      if (inputEl && inputEl.dataset.name) {
+        studentObj = { name: inputEl.dataset.name, grade: inputEl.dataset.grade || '' };
+      } else {
+        studentObj = studentNamesList.find(s => (s.name + (s.grade ? ' ' + s.grade : '')) === enteredName) ||
+                     studentNamesList.find(s => s.name.trim() === enteredName);
+      }
+
+      if (!studentObj) {
+        showToast('ไม่อนุญาตให้พิมพ์ชื่อเอง กรุณาเลือกรายชื่อที่มีอยู่ในระบบเท่านั้น', 'error');
+        if (inputEl) inputEl.focus();
+        return;
+      }
+
+      const sendName = studentObj.name;
+      const sendGrade = studentObj.grade || '';
+
+      // Strict Duplicate Check across the entire activity
+      const isAlreadyInActivity = currentHistorySignups.find(s => s.name.trim() === sendName.trim() || s.name.trim() === (sendName + (sendGrade ? ' ' + sendGrade : '')).trim());
+      if (isAlreadyInActivity) {
+        showToast(`"${sendName}" มีรายชื่อในกิจกรรมนี้แล้ว (หน้าที่: ${isAlreadyInActivity.duty}) ไม่อนุญาตให้ลงชื่อซ้ำในกิจกรรมเดียวกัน`, 'error');
+        return;
+      }
+
+      const adminName = (typeof adminInfo !== 'undefined' && adminInfo && adminInfo.name) ? adminInfo.name : 'Admin';
+      const originalBtnText = btnEl ? btnEl.innerHTML : '';
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+      }
+
+      if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            if (btnEl) {
+              btnEl.disabled = false;
+              btnEl.innerHTML = originalBtnText;
+            }
+            showToast(res && res.message ? res.message : `เพิ่ม ${sendName} เข้าหน้าที่ ${duty} สำเร็จ`);
+            toggleHistoryInlineAddForm(false);
+            refreshHistorySignups();
+          })
+          .withFailureHandler(function(err) {
+            if (btnEl) {
+              btnEl.disabled = false;
+              btnEl.innerHTML = originalBtnText;
+            }
+            showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+          })
+          .adminAddSignup(currentHistoryActivity.dateStr || currentHistoryActivity.date, currentHistoryActivity.sheetName, duty, sendName, sendGrade, adminName);
+      } else {
+        setTimeout(function() {
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = originalBtnText;
+          }
+          currentHistorySignups.push({
+            duty: duty,
+            name: sendName + (sendGrade ? ' ' + sendGrade : ''),
+            grade: sendGrade,
+            row: currentHistorySignups.length + 2,
+            timestamp: Date.now()
+          });
+          showToast(`เพิ่ม ${sendName} เข้าหน้าที่ ${duty} เรียบร้อยแล้ว (Mock)`);
+          toggleHistoryInlineAddForm(false);
+          renderHistoryDetails(currentHistoryActivity, currentHistorySignups);
+        }, 600);
+      }
+    }
+
+    function historyDeleteSingle(row, name, dutyName) {
+      if (!currentHistoryActivity) return;
+      const sheetName = currentHistoryActivity.sheetName;
+      const adminName = (typeof adminInfo !== 'undefined' && adminInfo && adminInfo.name) ? adminInfo.name : 'Admin';
+
+      showCustomConfirm(`ยืนยันการลบชื่อ "${name}" ออกจากหน้าที่ ${dutyName} หรือไม่?`, function() {
+        if (typeof google !== 'undefined' && google.script) {
+          showToast('กำลังลบรายชื่อ...', 'info');
+          google.script.run
+            .withSuccessHandler(function(res) {
+              showToast(res && res.message ? res.message : `ลบ "${name}" สำเร็จ`);
+              refreshHistorySignups();
+            })
+            .withFailureHandler(function(err) {
+              showToast('ลบไม่สำเร็จ: ' + err.message, 'error');
+              refreshHistorySignups();
+            })
+            .deleteSignup(sheetName, row, adminName);
+        } else {
+          currentHistorySignups = currentHistorySignups.filter(s => s.row !== row);
+          showToast(`ลบ "${name}" สำเร็จ (Mock)`);
+          renderHistoryDetails(currentHistoryActivity, currentHistorySignups);
+        }
+      });
+    }
+
+    function updateHistoryBulkDeleteBtn() {
+      const checkboxes = document.querySelectorAll('.history-signup-cb:checked');
+      const btn = document.getElementById('historyBulkDeleteBtn');
+      const countSpan = document.getElementById('historyBulkDeleteCount');
+      
+      const count = checkboxes.length;
+      if (btn) {
+        if (count > 0) {
+          btn.style.display = 'inline-flex';
+          if (countSpan) countSpan.textContent = count;
+        } else {
+          btn.style.display = 'none';
+        }
+      }
+
+      // Sync each duty master checkbox
+      document.querySelectorAll('.history-select-all-duty-cb').forEach(masterCb => {
+        const duty = masterCb.getAttribute('data-duty');
+        const dutyCbs = document.querySelectorAll(`.history-signup-cb[data-duty="${duty}"]`);
+        if (dutyCbs.length > 0) {
+          const checkedDutyCbs = document.querySelectorAll(`.history-signup-cb[data-duty="${duty}"]:checked`);
+          masterCb.checked = checkedDutyCbs.length === dutyCbs.length;
+          masterCb.indeterminate = checkedDutyCbs.length > 0 && checkedDutyCbs.length < dutyCbs.length;
+        }
+      });
+    }
+
+    function toggleHistoryDutySelectAll(dutyName, masterCb) {
+      const cbs = document.querySelectorAll(`.history-signup-cb[data-duty="${dutyName}"]`);
+      cbs.forEach(cb => {
+        cb.checked = masterCb.checked;
+      });
+      updateHistoryBulkDeleteBtn();
+    }
+
+    function historyBulkDelete() {
+      const checkboxes = document.querySelectorAll('.history-signup-cb:checked');
+      if (checkboxes.length === 0) {
+        showToast('กรุณาเลือกรายชื่อที่ต้องการลบอย่างน้อย 1 คน', 'warning');
+        return;
+      }
+      if (!currentHistoryActivity) return;
+
+      const count = checkboxes.length;
+      const rowsToDelete = Array.from(checkboxes).map(cb => parseInt(cb.dataset.row));
+      const sheetName = currentHistoryActivity.sheetName;
+      const adminName = (typeof adminInfo !== 'undefined' && adminInfo && adminInfo.name) ? adminInfo.name : 'Admin';
+
+      showCustomConfirm(`คุณต้องการลบรายชื่อที่เลือกทั้งหมด ${count} รายการออกจากกิจกรรมนี้ใช่หรือไม่?`, function() {
+        if (typeof google !== 'undefined' && google.script) {
+          showToast(`กำลังลบรายชื่อ ${count} รายการ...`, 'info');
+          google.script.run
+            .withSuccessHandler(function(res) {
+              showToast(res && res.message ? res.message : `ลบรายชื่อที่เลือก ${count} รายการเรียบร้อยแล้ว`);
+              refreshHistorySignups();
+            })
+            .withFailureHandler(function(err) {
+              showToast('เกิดข้อผิดพลาดในการลบ: ' + err.message, 'error');
+              refreshHistorySignups();
+            })
+            .bulkDeleteSignups(sheetName, rowsToDelete, adminName);
+        } else {
+          currentHistorySignups = currentHistorySignups.filter(s => !rowsToDelete.includes(s.row));
+          showToast(`ลบรายชื่อที่เลือก ${count} รายการเรียบร้อยแล้ว (Mock)`);
+          renderHistoryDetails(currentHistoryActivity, currentHistorySignups);
+        }
+      });
+    }
+
+    function historyRandomizeSingle(dutyName, btn) {
+      if (!currentHistoryActivity) return;
+      const act = currentHistoryActivity;
+
+      const duties = act.duties || [];
+      const dutyConfig = duties.find(d => d.duty === dutyName);
+      const quota = dutyConfig ? parseInt(dutyConfig.quota) : 0;
+      const currentCount = currentHistorySignups.filter(s => s.duty === dutyName).length;
+      if (currentCount >= quota) {
+        showToast(`หน้าที่ "${dutyName}" มีคนเต็มโควตาแล้ว (${currentCount}/${quota})`, 'warning');
+        return;
+      }
+
+      promptRandomizeCondition(act, function(excludeSheetName) {
+        const originalHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังสุ่ม...';
+          btn.disabled = true;
+        }
+
+        let dateStr = act.dateStr || act.date || new Date().toISOString();
+        if (!dateStr.includes('T')) dateStr += 'T12:00:00';
+
+        if (typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (btn) {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+              }
+              showToast(res && res.message ? res.message : `สุ่มคนเข้าหน้าที่ ${dutyName} สำเร็จ`);
+              refreshHistorySignups();
+            })
+            .withFailureHandler(function(err) {
+              if (btn) {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+              }
+              showToast('เกิดข้อผิดพลาดในการสุ่ม: ' + err.message, 'error');
+            })
+            .randomizeSignups(dateStr, act.sheetName, dutyName, excludeSheetName);
+        } else {
+          setTimeout(function() {
+            if (btn) {
+              btn.innerHTML = originalHtml;
+              btn.disabled = false;
+            }
+            showToast(`สุ่มคนเข้าหน้าที่ ${dutyName} สำเร็จ (Mock)`);
+            refreshHistorySignups();
+          }, 1000);
+        }
+      });
+    }
+
+    function historyRandomizeAll() {
+      if (!currentHistoryActivity) {
+        showToast('กรุณาเลือกกิจกรรมก่อนดำเนินการ', 'error');
+        return;
+      }
+      const act = currentHistoryActivity;
+
+      promptRandomizeCondition(act, function(excludeSheetName) {
+        let dateStr = act.dateStr || act.date || new Date().toISOString();
+        if (!dateStr.includes('T')) dateStr += 'T12:00:00';
+
+        showToast('กำลังดำเนินการสุ่มทุกหน้าที่...', 'info');
+
+        if (typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              showToast(res && res.message ? res.message : 'สุ่มรายชื่อทุกหน้าที่เรียบร้อยแล้ว');
+              refreshHistorySignups();
+            })
+            .withFailureHandler(function(err) {
+              showToast('เกิดข้อผิดพลาดในการสุ่ม: ' + err.message, 'error');
+            })
+            .randomizeSignups(dateStr, act.sheetName, null, excludeSheetName);
+        } else {
+          setTimeout(function() {
+            showToast('สุ่มรายชื่อทุกหน้าที่เรียบร้อยแล้ว (Mock)');
+            refreshHistorySignups();
+          }, 1000);
+        }
+      });
     }
 
     function exportHistoryActivityPDF() {
@@ -9348,9 +9924,12 @@
     }
 
     function promptRandomizeCondition(act, onConfirm) {
-      const options = currentActivities
+      const allActs = (typeof currentActivities !== 'undefined' && currentActivities.length > 0)
+        ? currentActivities
+        : ((typeof historyAllActivities !== 'undefined' && historyAllActivities.length > 0) ? historyAllActivities : []);
+      const options = allActs
         .filter(a => a.sheetName !== act.sheetName)
-        .map(a => `<option value="${a.sheetName}">${a.title} (${a.date})</option>`)
+        .map(a => `<option value="${a.sheetName}">${escapeHtml(a.title)} (${escapeHtml(a.date || a.dateStr || '')})</option>`)
         .join('');
 
       Swal.fire({
