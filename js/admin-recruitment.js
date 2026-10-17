@@ -554,7 +554,7 @@
         if (boxEditLink && inpDirectLink && btnOpenPage) {
           if (a.student_id && (selStatus.value === 'correction_needed' || a.status === 'correction_needed')) {
             const origin = window.location.origin;
-            const fullLink = `${origin}/admissions?edit=${a.student_id}`;
+            const fullLink = `${origin}/admission?edit=${a.student_id}`;
             inpDirectLink.value = fullLink;
             btnOpenPage.href = fullLink;
             boxEditLink.style.display = 'block';
