@@ -353,40 +353,13 @@
     /* ===== ACTIVITY FEED ===== */
     .activity-feed-container {
       width: 100%;
-      max-width: 1200px;
-      margin: 36px auto 60px;
-      padding: 0 24px;
-      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
       opacity: 0;
     }
 
     /* Diego Header Integration for SI-ROSTER */
-    .dg-roster-status-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 22px;
-      background: #0a0a0c;
-      color: #ffffff;
-      border: 1px solid #0a0a0c;
-      border-radius: 9999px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-      text-decoration: none;
-    }
-    .dg-roster-status-btn:hover {
-      background: #1f242e;
-      border-color: #1f242e;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-    }
-    .dg-roster-status-btn:active {
-      transform: translateY(0);
-    }
 
     .dg-act-controls-bar {
       display: flex;
@@ -593,8 +566,8 @@
       }
 
       .activity-feed-container {
-        margin: 20px auto 40px;
-        padding: 0 16px;
+        margin: 0;
+        padding: 0;
       }
 
       .dg-act-controls-bar {
@@ -2826,7 +2799,7 @@
 
   <!-- ============ PAGE HEADER ============ -->
   <header class="dg-act-page-header">
-    <div class="dg-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+    <div class="dg-container">
       <!-- Breadcrumb -->
       <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
         <a href="/">
@@ -2841,19 +2814,17 @@
         <div>
           <span class="dg-section-tag" id="rosterSectionTag">DUTY ROSTER • ระบบเลือกหน้าที่อิเล็กทรอนิกส์</span>
           <h1 class="dg-act-main-title" id="rosterMainTitle">
-            SI-ROSTER.<br>
-            ระบบเลือกหน้าที่สารวัตรนักเรียนออนไลน์
+            <span style="font-weight: 850; display: inline-block;">SI-ROSTER.</span><br>
+            <span style="font-weight: 400; font-size: 0.88em; color: var(--dg-text-primary, #0a0a0c); display: inline-block; margin-top: 4px;">ระบบเลือกหน้าที่สารวัตรนักเรียนออนไลน์</span>
           </h1>
           <p class="dg-act-subtitle" id="rosterSubtitle">
             ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก
           </p>
         </div>
-        <div class="dg-act-title-actions" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-          <button type="button" class="dg-roster-status-btn" onclick="openStatusSearchModal()" title="ตรวจสอบหน้าที่และเวรปฏิบัติงานของฉัน">
-            <i data-lucide="user-check" style="width: 18px; height: 18px; color: #10b981;"></i>
-            <span>เช็คหน้าที่ของฉัน</span>
-            <i data-lucide="arrow-right" style="width: 14px; height: 14px; opacity: 0.7;"></i>
-          </button>
+        <div class="dg-act-stats-badge" id="rosterStatsBadge">
+          <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+          <span>กิจกรรมในระบบทั้งหมด:</span>
+          <strong id="rosterTotalBadge">0 รายการ</strong>
         </div>
       </div>
 
@@ -2894,13 +2865,9 @@
     </div>
   </header>
 
-  <div class="activity-feed-container" id="activityFeed">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
-      <div class="section-title" style="margin: 0; font-size: 1.15rem; font-weight: 750; color: var(--text-main); display: flex; align-items: center; gap: 10px;">
-        <i class="fa-solid fa-calendar-check" style="color: var(--accent);"></i>
-        <span>กิจกรรมและตารางเวรปฏิบัติหน้าที่</span>
-      </div>
-    </div>
+  <main class="dg-activities-section" style="padding: 40px 0 80px; width: 100%; background: #ffffff;">
+    <div class="dg-container">
+      <div class="activity-feed-container" id="activityFeed">
 
     <div id="feedLoading" style="width: 100%;">
       <div id="skeletonContainer" class="list-view">
@@ -2944,6 +2911,8 @@
     <div id="calendarContent" style="display:none;">
     </div>
   </div>
+</div>
+</main>
 
   <!-- Custom Confirm Modal -->
   <div class="modal-overlay" id="customConfirmModal" style="z-index: 10001;">
@@ -4778,6 +4747,11 @@
 
       const feed = document.getElementById('feedContent');
       feed.innerHTML = '';
+
+      const totalBadge = document.getElementById('rosterTotalBadge');
+      if (totalBadge && activities) {
+        totalBadge.textContent = activities.length + ' รายการ';
+      }
 
       const nowObj = new Date();
       nowObj.setHours(0, 0, 0, 0);
