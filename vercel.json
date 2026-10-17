@@ -4,28 +4,6 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "^admissions?\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/admission",
-      "permanent": false
-    },
-    {
-      "source": "/index.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "^admissions?\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/admission",
-      "permanent": false
-    },
-    {
       "source": "/recruit",
       "has": [
         {
@@ -199,6 +177,26 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/admission"
+    },
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/admission"
+    },
     {
       "source": "/admission",
       "destination": "/api/admission"
