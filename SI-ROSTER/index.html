@@ -1692,62 +1692,17 @@
 
     .modal-header-meta .modal-date {
       margin-bottom: 0;
+      height: 32px;
+      box-sizing: border-box;
     }
 
-    .timer-container {
-      display: inline-flex;
-      align-items: center;
-      background: #0a0a0c;
-      color: #ffffff;
+    .modal-header-meta .status-badge {
+      font-size: 0.82rem;
       padding: 4px 12px;
-      border-radius: 9999px;
-      border: 1px solid #1f2937;
+      height: 32px;
+      box-sizing: border-box;
+      line-height: 1;
       margin-bottom: 0;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .timer-container.expired {
-      background: #fef2f2;
-      border-color: #fecaca;
-      box-shadow: none;
-    }
-
-    .timer-text {
-      font-weight: 700;
-      color: #94a3b8;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.82rem;
-    }
-
-    .timer-text i {
-      color: #f59e0b;
-      font-size: 0.82rem;
-    }
-
-    .timer-container.expired .timer-text {
-      color: #dc2626;
-    }
-
-    .timer-container.expired .timer-text i {
-      color: #dc2626;
-      animation: none;
-    }
-
-    .timer-value {
-      font-family: 'Kanit', sans-serif;
-      font-size: 0.86rem;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      color: #ffffff;
-    }
-
-    .timer-container.expired .timer-value {
-      color: #991b1b;
-      font-weight: 800;
     }
 
     /* ===== DUTY CARD (DIEGO MINIMALIST) ===== */
@@ -2582,9 +2537,9 @@
         font-size: 1.05rem;
       }
 
-      .timer-container {
+      .modal-header-meta .status-badge {
         padding: 4px 10px;
-        margin-bottom: 0;
+        font-size: 0.8rem;
       }
 
       .duty-card {
@@ -3689,10 +3644,7 @@
         <div class="close-modal" onclick="closeModal('detailModal')"><i class="fa-solid fa-xmark"></i></div>
         <div class="modal-header-meta">
           <div class="modal-date" id="modalDate"><i class="fa-regular fa-calendar"></i> <span></span></div>
-          <div class="timer-container" id="modalTimerContainer" style="display: none;">
-            <span class="timer-text" id="modalTimerText"><i class="fa-solid fa-hourglass-half"></i> เหลือเวลาอีก:</span>
-            <span class="timer-value" id="modalTimerValue">--:--:--</span>
-          </div>
+          <div class="status-badge" id="modalTimerContainer" style="display: none;"></div>
         </div>
         <h2 class="modal-title" id="modalTitle">รายละเอียดกิจกรรม</h2>
       </div>
@@ -5946,40 +5898,34 @@
       // removed creatorName display in modal
 
       const timerContainer = document.getElementById('modalTimerContainer');
-      const timerValue = document.getElementById('modalTimerValue');
-      const timerText = document.getElementById('modalTimerText');
-
-      timerContainer.classList.remove('expired');
 
       let now = new Date().getTime();
       let isNotStarted = activity.startTime && (activity.startTime > now);
 
       if (activity.isFull) {
         timerContainer.style.display = 'inline-flex';
-        timerContainer.classList.add('expired');
-        timerText.innerHTML = '<i class="fa-solid fa-users-slash"></i>';
-        timerValue.textContent = 'เต็มแล้ว';
+        timerContainer.className = 'status-badge status-closed';
+        timerContainer.innerHTML = '<i class="fa-solid fa-users-slash"></i> <span class="status-badge-label">ปิดรับแล้ว</span> <span class="status-badge-sep">•</span> <span><strong id="modalTimerValue" class="status-timer-val">คนลงชื่อเต็มแล้ว</strong></span>';
       } else if (isNotStarted) {
         timerContainer.style.display = 'inline-flex';
-        timerContainer.classList.remove('expired');
-        timerText.innerHTML = '<i class="fa-regular fa-clock"></i> เปิดในอีก:';
-        startCountdown('modalTimerValue', activity.startTime, null, null, () => {
+        timerContainer.className = 'status-badge status-waiting';
+        timerContainer.innerHTML = '<i class="fa-regular fa-clock"></i> <span class="status-badge-label">รอเปิด</span> <span class="status-badge-sep">•</span> <span><span class="status-badge-prefix">เปิดในอีก </span><strong id="modalTimerValue" class="status-timer-val">กำลังคำนวณ...</strong></span>';
+        startCountdown('modalTimerValue', activity.startTime, 'modalTimerContainer', null, () => {
           openModal(activity, false); // Reload when open without re-pushing history
-        });
+        }, true);
       } else if (activity.deadline) {
         timerContainer.style.display = 'inline-flex';
         const distance = activity.deadline - now;
         if (distance < 0) {
-          timerContainer.classList.add('expired');
-          timerText.innerHTML = '<i class="fa-solid fa-lock"></i>';
-          timerValue.textContent = 'ปิดรับแล้ว';
+          timerContainer.className = 'status-badge status-closed';
+          timerContainer.innerHTML = '<i class="fa-solid fa-lock"></i> <span class="status-badge-label">ปิดรับแล้ว</span>';
         } else {
-          timerContainer.classList.remove('expired');
-          timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> เหลือเวลาอีก:';
-          startCountdown('modalTimerValue', activity.deadline, null, null, () => {
-            timerContainer.classList.add('expired');
-            timerText.innerHTML = '<i class="fa-solid fa-lock"></i>';
-            timerValue.textContent = 'ปิดรับแล้ว';
+          const isWarning = distance < 3600000;
+          timerContainer.className = `status-badge ${isWarning ? 'status-warning' : 'status-open'}`;
+          timerContainer.innerHTML = `<i class="fa-solid ${isWarning ? 'fa-hourglass-half' : 'fa-door-open'}"></i> <span class="status-badge-label">${isWarning ? 'ใกล้หมดเวลา' : 'เปิดรับ'}</span> <span class="status-badge-sep">•</span> <span><span class="status-badge-prefix">เหลือเวลาอีก </span><strong id="modalTimerValue" class="status-timer-val">กำลังคำนวณ...</strong></span>`;
+          startCountdown('modalTimerValue', activity.deadline, 'modalTimerContainer', null, () => {
+            timerContainer.className = 'status-badge status-closed';
+            timerContainer.innerHTML = '<i class="fa-solid fa-lock"></i> <span class="status-badge-label">ปิดรับแล้ว</span>';
             loadSignups(activity.sheetName, activity.duties); // reload to disable buttons
           });
         }

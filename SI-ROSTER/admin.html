@@ -6082,40 +6082,42 @@
       const timerValue = document.getElementById('modalTimerValue');
       const timerText = document.getElementById('modalTimerText');
 
-      timerContainer.classList.remove('expired');
+      if (timerContainer) {
+        timerContainer.classList.remove('expired');
 
-      let now = new Date().getTime();
-      let isNotStarted = activity.startTime && (activity.startTime > now);
+        let now = new Date().getTime();
+        let isNotStarted = activity.startTime && (activity.startTime > now);
 
-      if (activity.isFull) {
-        timerContainer.style.display = 'flex';
-        timerContainer.classList.add('expired');
-        timerText.innerHTML = '<i class="fa-solid fa-users-slash"></i> สถานะ:';
-        timerValue.textContent = 'คนลงชื่อเต็มแล้ว';
-      } else if (isNotStarted) {
-        timerContainer.style.display = 'flex';
-        timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> เปิดลงชื่ออีก:';
-        startCountdown('modalTimerValue', activity.startTime, null, null, () => {
-          openModal(activity); // Reload when open
-        });
-      } else if (activity.deadline) {
-        timerContainer.style.display = 'flex';
-        const distance = activity.deadline - now;
-        if (distance < 0) {
+        if (activity.isFull) {
+          timerContainer.style.display = 'flex';
           timerContainer.classList.add('expired');
-          timerText.innerHTML = '<i class="fa-solid fa-clock"></i> สถานะ:';
-          timerValue.textContent = 'หมดเวลาลงชื่อ';
-        } else {
-          timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> หมดเวลาลงชื่อในอีก:';
-          startCountdown('modalTimerValue', activity.deadline, null, null, () => {
-            timerContainer.classList.add('expired');
-            timerText.innerHTML = '<i class="fa-solid fa-clock"></i> สถานะ:';
-            timerValue.textContent = 'หมดเวลาลงชื่อ';
-            loadSignups(activity.sheetName, activity.duties); // reload to disable buttons
+          if (timerText) timerText.innerHTML = '<i class="fa-solid fa-users-slash"></i> สถานะ:';
+          if (timerValue) timerValue.textContent = 'คนลงชื่อเต็มแล้ว';
+        } else if (isNotStarted) {
+          timerContainer.style.display = 'flex';
+          if (timerText) timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> เปิดลงชื่ออีก:';
+          startCountdown('modalTimerValue', activity.startTime, null, null, () => {
+            openModal(activity); // Reload when open
           });
+        } else if (activity.deadline) {
+          timerContainer.style.display = 'flex';
+          const distance = activity.deadline - now;
+          if (distance < 0) {
+            timerContainer.classList.add('expired');
+            if (timerText) timerText.innerHTML = '<i class="fa-solid fa-clock"></i> สถานะ:';
+            if (timerValue) timerValue.textContent = 'หมดเวลาลงชื่อ';
+          } else {
+            if (timerText) timerText.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> หมดเวลาลงชื่อในอีก:';
+            startCountdown('modalTimerValue', activity.deadline, null, null, () => {
+              timerContainer.classList.add('expired');
+              if (timerText) timerText.innerHTML = '<i class="fa-solid fa-clock"></i> สถานะ:';
+              if (timerValue) timerValue.textContent = 'หมดเวลาลงชื่อ';
+              loadSignups(activity.sheetName, activity.duties); // reload to disable buttons
+            });
+          }
+        } else {
+          timerContainer.style.display = 'none';
         }
-      } else {
-        timerContainer.style.display = 'none';
       }
 
       document.getElementById('adminEditBtnContainer').style.display = isAdmin ? 'block' : 'none';
