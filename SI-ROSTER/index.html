@@ -135,6 +135,8 @@
     }
 
     :root {
+      --dg-font-sans: 'Kanit', sans-serif;
+      --dg-font-display: 'Kanit', sans-serif;
       --primary: #0F172A;
       --primary-hover: #1E293B;
       --primary-light: #F1F5F9;
@@ -171,7 +173,7 @@
     input,
     select,
     textarea {
-      font-family: inherit;
+      font-family: 'Kanit', sans-serif;
     }
 
     body {
@@ -191,6 +193,12 @@
       padding: 0;
       position: relative;
       overflow-x: hidden;
+    }
+
+    /* Main Large Title: Keep bold agency display font */
+    .dg-act-main-title,
+    .dg-act-main-title span:first-child {
+      font-family: 'Plus Jakarta Sans', 'Outfit', 'Kanit', sans-serif !important;
     }
 
     /* SweetAlert2 Custom Overrides */
@@ -1057,7 +1065,7 @@
     }
 
     .card-title {
-      font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);
+      font-family: 'Kanit', sans-serif;
       font-size: 1.35rem;
       font-weight: 800;
       line-height: 1.35;
@@ -1123,7 +1131,7 @@
     }
 
     .status-timer-val {
-      font-family: var(--dg-font-sans, 'Kanit', monospace);
+      font-family: 'Kanit', sans-serif;
       font-weight: 800;
       letter-spacing: 0.3px;
     }
@@ -1167,7 +1175,7 @@
       border: 1.5px solid #e5e7eb;
       width: 100%;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-      font-family: var(--dg-font-sans);
+      font-family: 'Kanit', sans-serif;
       letter-spacing: -0.01em;
       transition: all 0.2s ease;
     }
@@ -1204,7 +1212,7 @@
       width: 100%;
       padding: 11px 20px;
       border-radius: 9999px;
-      font-family: var(--dg-font-sans);
+      font-family: 'Kanit', sans-serif;
       letter-spacing: -0.01em;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
@@ -1358,7 +1366,7 @@
     }
 
     .modal-title {
-      font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);
+      font-family: 'Kanit', sans-serif;
       font-size: 1.75rem;
       color: #0a0a0c;
       font-weight: 850;
@@ -1473,7 +1481,7 @@
     }
 
     .timer-value {
-      font-family: var(--dg-font-sans, 'Kanit', monospace);
+      font-family: 'Kanit', sans-serif;
       font-size: 1.35rem;
       font-weight: 800;
       letter-spacing: 0.5px;
@@ -1753,7 +1761,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-family: var(--dg-font-sans, 'Kanit', sans-serif);
+      font-family: 'Kanit', sans-serif;
       white-space: nowrap;
     }
 
@@ -4990,9 +4998,8 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        let display = "";
-        if (days > 0) display += days + "วัน ";
-        display += String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+        let timeStr = String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+        let display = (days > 0 ? (days + " วัน ") : "") + timeStr;
         el.innerHTML = display;
 
         if (badgeEl) {
@@ -5002,6 +5009,8 @@
             if (iconEl) iconEl.className = 'fa-regular fa-clock';
             const labelEl = badgeEl.querySelector('.status-badge-label');
             if (labelEl) labelEl.textContent = 'รอเปิด';
+            const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+            if (prefixEl) prefixEl.textContent = 'เปิดในอีก ';
             if (cardEl) cardEl.className = 'activity-card card-status-waiting';
           } else {
             const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
@@ -5011,6 +5020,8 @@
               if (iconEl) iconEl.className = 'fa-solid fa-hourglass-half';
               const labelEl = badgeEl.querySelector('.status-badge-label');
               if (labelEl) labelEl.textContent = 'ใกล้หมดเวลา';
+              const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+              if (prefixEl) prefixEl.textContent = 'เหลือเวลาอีก ';
               if (cardEl) cardEl.className = 'activity-card card-status-warning';
             } else {
               badgeEl.className = 'status-badge status-open';
@@ -5018,6 +5029,8 @@
               if (iconEl) iconEl.className = 'fa-solid fa-door-open';
               const labelEl = badgeEl.querySelector('.status-badge-label');
               if (labelEl) labelEl.textContent = 'เปิดรับ';
+              const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+              if (prefixEl) prefixEl.textContent = 'เหลือเวลาอีก ';
               if (cardEl) cardEl.className = 'activity-card card-status-open';
             }
           }
@@ -5229,7 +5242,7 @@
                 <i class="fa-regular fa-clock"></i>
                 <span class="status-badge-label">รอเปิด</span>
                 <span class="status-badge-sep">•</span>
-                <span><span class="status-badge-prefix">รอเปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิดลงชื่อ...</strong></span>
+                <span><span class="status-badge-prefix">เปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิดลงชื่อ...</strong></span>
               </div>
             `;
           } else if (isExpired) {
@@ -5251,7 +5264,7 @@
                 <i class="fa-solid ${isWarning ? 'fa-hourglass-half' : 'fa-door-open'}"></i>
                 <span class="status-badge-label">${isWarning ? 'ใกล้หมดเวลา' : 'เปิดรับ'}</span>
                 <span class="status-badge-sep">•</span>
-                <span><span class="status-badge-prefix">เหลืออีก </span><strong id="${timerId}" class="status-timer-val">กำลังคำนวณ...</strong></span>
+                <span><span class="status-badge-prefix">เหลือเวลาอีก </span><strong id="${timerId}" class="status-timer-val">กำลังคำนวณ...</strong></span>
               </div>
             `;
           }
@@ -5262,7 +5275,7 @@
               <i class="fa-regular fa-clock"></i>
               <span class="status-badge-label">รอเปิด</span>
               <span class="status-badge-sep">•</span>
-              <span><span class="status-badge-prefix">รอเปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิดลงชื่อ...</strong></span>
+              <span><span class="status-badge-prefix">เปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิดลงชื่อ...</strong></span>
             </div>
           `;
         } else {
