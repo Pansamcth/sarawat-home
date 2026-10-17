@@ -1226,15 +1226,14 @@
                   <i data-lucide="camera" style="width: 18px; height: 18px;"></i>
                 </div>
                 <div>
-                  <h3 class="recruit-card-title">1. รูปถ่ายหน้าตรง <span style="color: #ef4444;">*</span></h3>
-                  <p class="recruit-card-subtitle">แนบรูปถ่ายหน้าตรง เห็นใบหน้าชัดเจน ไม่มีสิ่งปิดบัง (รองรับไฟล์ JPG, PNG,
-                    WebP ขนาดไม่เกิน 5 MB)</p>
+                  <h3 class="recruit-card-title">1. รูปถ่ายหน้าตรงชุดนักเรียน <span style="color: #ef4444;">*</span></h3>
+                  <p class="recruit-card-subtitle">บังคับเป็นรูปถ่ายหน้าตรงในชุดนักเรียนเดชะปัตตนยานุกูล ทรงผมและเครื่องแต่งกายเรียบร้อยถูกต้องตามระเบียบของโรงเรียน</p>
                 </div>
               </div>
 
               <div class="photo-upload-container">
                 <div class="photo-preview-wrap" id="photoDropzone">
-                  <img id="photoPreviewImg" alt="รูปถ่ายหน้าตรง" />
+                  <img id="photoPreviewImg" alt="รูปถ่ายหน้าตรงชุดนักเรียน" />
                   <div class="photo-preview-placeholder" id="photoPlaceholder">
                     <i data-lucide="user" style="width: 32px; height: 32px; color: #94a3b8;"></i>
                     <span>ยังไม่มีรูปภาพ</span>
@@ -1253,10 +1252,22 @@
                     <i data-lucide="trash-2" style="width: 15px; height: 15px;"></i>
                     <span>ลบรูป</span>
                   </button>
-                  <div class="recruit-help-text" style="margin-top: 10px;">
-                    💡 ไม่บังคับเครื่องแต่งกาย แต่ต้องเห็นใบหน้าชัดเจน หน้าตรง เพื่อใช้ติดบัตรและตรวจสอบตัวตน
+
+                  <!-- School Uniform & Photo Guidelines -->
+                  <div style="margin-top: 12px; padding: 12px 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.82rem; color: #334155; line-height: 1.6;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                      <i data-lucide="shield-check" style="width: 16px; height: 16px; color: #2563eb;"></i>
+                      <span>ข้อกำหนดรูปถ่ายตามระเบียบโรงเรียนเดชะปัตตนยานุกูล:</span>
+                    </div>
+                    <ul style="margin: 0; padding-left: 18px; color: #475569;">
+                      <li><strong>เครื่องแบบ:</strong> สวมชุดนักเรียนโรงเรียนเดชะปัตตนยานุกูลถูกต้องตามระเบียบ (ติดเข็ม/ปักอักษรย่อและชื่อ-สกุลถูกต้องเรียบร้อย)</li>
+                      <li><strong>อิริยาบถ:</strong> ถ่ายหน้าตรง ไม่เอียงคอ ไม่สวมหมวก ไม่ใส่แว่นตาดำ และเปิดใบหน้าให้เห็นชัดเจน</li>
+                      <li><strong>ทรงผม:</strong> ทรงผมเรียบร้อยถูกต้องตามกฎระเบียบของโรงเรียน</li>
+                      <li><strong>พื้นหลัง:</strong> พื้นหลังสีสุภาพ (สีขาว, สีฟ้า หรือสีน้ำเงิน) ไม่มีสิ่งรบกวนสายตา</li>
+                      <li><strong>ขนาดไฟล์:</strong> รองรับไฟล์รูปภาพ JPG, PNG, หรือ WebP ขนาดไม่เกิน 5 MB</li>
+                    </ul>
                   </div>
-                  <div class="recruit-field-error" id="errPhoto">กรุณาแนบรูปถ่ายหน้าตรงของผู้สมัคร</div>
+                  <div class="recruit-field-error" id="errPhoto">กรุณาแนบรูปถ่ายหน้าตรงในชุดนักเรียนเดชะปัตตนยานุกูลให้ถูกต้องตามระเบียบโรงเรียน</div>
                 </div>
               </div>
             </div>
@@ -1511,36 +1522,42 @@
                   </div>
                 </div>
 
-                <!-- ตำบล / แขวง -->
+                <!-- จังหวัด -->
                 <div class="col-6">
                   <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpSubdistrict">
-                      <span>ตำบล / แขวง <span class="req">*</span></span>
+                    <label class="recruit-label" for="selProvince">
+                      <span>จังหวัด <span class="req">*</span></span>
                     </label>
-                    <input type="text" class="recruit-input" id="inpSubdistrict" placeholder="เช่น สะบารัง" />
-                    <div class="recruit-field-error" id="errSubdistrict">กรุณากรอกตำบล/แขวง</div>
+                    <select class="recruit-select" id="selProvince">
+                      <option value="">-- เลือกจังหวัด --</option>
+                    </select>
+                    <div class="recruit-field-error" id="errProvince">กรุณาเลือกจังหวัด</div>
                   </div>
                 </div>
 
                 <!-- อำเภอ / เขต -->
                 <div class="col-6">
                   <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpDistrict">
+                    <label class="recruit-label" for="selDistrict">
                       <span>อำเภอ / เขต <span class="req">*</span></span>
                     </label>
-                    <input type="text" class="recruit-input" id="inpDistrict" placeholder="เช่น เมืองปัตตานี" />
-                    <div class="recruit-field-error" id="errDistrict">กรุณากรอกอำเภอ/เขต</div>
+                    <select class="recruit-select" id="selDistrict" disabled>
+                      <option value="">-- กรุณาเลือกจังหวัดก่อน --</option>
+                    </select>
+                    <div class="recruit-field-error" id="errDistrict">กรุณาเลือกอำเภอ/เขต</div>
                   </div>
                 </div>
 
-                <!-- จังหวัด -->
+                <!-- ตำบล / แขวง -->
                 <div class="col-6">
                   <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpProvince">
-                      <span>จังหวัด <span class="req">*</span></span>
+                    <label class="recruit-label" for="selSubdistrict">
+                      <span>ตำบล / แขวง <span class="req">*</span></span>
                     </label>
-                    <input type="text" class="recruit-input" id="inpProvince" placeholder="เช่น ปัตตานี" />
-                    <div class="recruit-field-error" id="errProvince">กรุณากรอกจังหวัด</div>
+                    <select class="recruit-select" id="selSubdistrict" disabled>
+                      <option value="">-- กรุณาเลือกอำเภอก่อน --</option>
+                    </select>
+                    <div class="recruit-field-error" id="errSubdistrict">กรุณาเลือกตำบล/แขวง</div>
                   </div>
                 </div>
 
@@ -1549,6 +1566,7 @@
                   <div class="recruit-form-group">
                     <label class="recruit-label" for="inpPostalCode">
                       <span>รหัสไปรษณีย์ <span class="req">*</span></span>
+                      <span class="opt">(ดึงข้อมูลอัตโนมัติ)</span>
                     </label>
                     <input type="tel" class="recruit-input" id="inpPostalCode" maxlength="5" placeholder="เช่น 94000" />
                     <div class="recruit-field-error" id="errPostalCode">รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</div>
@@ -2145,6 +2163,17 @@
         photoPreviewImg.style.display = 'none';
         photoPlaceholder.style.display = 'flex';
         btnRemovePhoto.style.display = 'none';
+        if (typeof populateProvinces === 'function') {
+          populateProvinces();
+          if (selDistrict) {
+            selDistrict.innerHTML = '<option value="">-- กรุณาเลือกจังหวัดก่อน --</option>';
+            selDistrict.disabled = true;
+          }
+          if (selSubdistrict) {
+            selSubdistrict.innerHTML = '<option value="">-- กรุณาเลือกอำเภอก่อน --</option>';
+            selSubdistrict.disabled = true;
+          }
+        }
 
         stepPane1.style.display = 'block';
         stepPane2.style.display = 'none';
@@ -2195,10 +2224,18 @@
           if (document.getElementById('inpBuilding')) document.getElementById('inpBuilding').value = app.building || '';
           if (document.getElementById('inpSoi')) document.getElementById('inpSoi').value = app.soi || '';
           if (document.getElementById('inpRoad')) document.getElementById('inpRoad').value = app.road || '';
-          if (document.getElementById('inpSubdistrict')) document.getElementById('inpSubdistrict').value = app.subdistrict || '';
-          if (document.getElementById('inpDistrict')) document.getElementById('inpDistrict').value = app.district || '';
-          if (document.getElementById('inpProvince')) document.getElementById('inpProvince').value = app.province || '';
           if (document.getElementById('inpPostalCode')) document.getElementById('inpPostalCode').value = app.postalCode || '';
+
+          if (app.province) {
+            if (!thaiAddressData) await initThaiAddressData();
+            populateProvinces(app.province);
+            if (app.district) {
+              populateDistricts(app.province, app.district);
+              if (app.subdistrict) {
+                populateSubdistricts(app.district, app.subdistrict);
+              }
+            }
+          }
 
           if (app.photoUrl) {
             const fullUrl = app.photoUrl.startsWith('http') ? app.photoUrl : (window.SarawatAPI.getBaseUrl() + app.photoUrl);
@@ -2417,6 +2454,190 @@
       await loadStatusAndClubs();
 
       // ==========================================
+      // THAI ADDRESS CASCADING DROPDOWNS (จังหวัด -> อำเภอ -> ตำบล -> รหัสไปรษณีย์)
+      // ==========================================
+      let thaiAddressData = null;
+      const selProvince = document.getElementById('selProvince');
+      const selDistrict = document.getElementById('selDistrict');
+      const selSubdistrict = document.getElementById('selSubdistrict');
+      const inpPostalCode = document.getElementById('inpPostalCode');
+
+      async function initThaiAddressData() {
+        if (thaiAddressData) return;
+        try {
+          const res = await fetch('/assets/data/thai-address.json');
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          thaiAddressData = await res.json();
+          populateProvinces();
+        } catch (err) {
+          console.warn('Could not load local thai-address.json, falling back to CDN...', err);
+          try {
+            const fallbackRes = await fetch('https://raw.githubusercontent.com/kamthorn/thailand-provinces/master/v2/address.json');
+            thaiAddressData = await fallbackRes.json();
+            populateProvinces();
+          } catch (e) {
+            console.error('Failed to load thai address data:', e);
+          }
+        }
+      }
+
+      function populateProvinces(selectedProvinceName = '') {
+        if (!thaiAddressData || !selProvince) return;
+        selProvince.innerHTML = '<option value="">-- เลือกจังหวัด --</option>';
+
+        const priorityProvinces = ['ปัตตานี', 'ยะลา', 'นราธิวาส', 'สงขลา'];
+        const priorityGroup = [];
+        const otherGroup = [];
+
+        thaiAddressData.p.forEach(p => {
+          if (priorityProvinces.includes(p[1])) {
+            priorityGroup.push(p);
+          } else {
+            otherGroup.push(p);
+          }
+        });
+
+        priorityGroup.sort((a, b) => priorityProvinces.indexOf(a[1]) - priorityProvinces.indexOf(b[1]));
+        otherGroup.sort((a, b) => a[1].localeCompare(b[1], 'th'));
+
+        const optGroup1 = document.createElement('optgroup');
+        optGroup1.label = '⭐️ พื้นที่โรงเรียนและใกล้เคียง (เดชะปัตตนยานุกูล)';
+        priorityGroup.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p[1];
+          opt.textContent = p[1];
+          opt.dataset.code = p[0];
+          optGroup1.appendChild(opt);
+        });
+        selProvince.appendChild(optGroup1);
+
+        const optGroup2 = document.createElement('optgroup');
+        optGroup2.label = '📌 จังหวัดอื่น ๆ ทั่วประเทศ (77 จังหวัด)';
+        otherGroup.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p[1];
+          opt.textContent = p[1];
+          opt.dataset.code = p[0];
+          optGroup2.appendChild(opt);
+        });
+        selProvince.appendChild(optGroup2);
+
+        if (selectedProvinceName) {
+          selProvince.value = selectedProvinceName;
+        }
+      }
+
+      function populateDistricts(provinceName, selectedDistrictName = '') {
+        if (!thaiAddressData || !selDistrict) return;
+        selDistrict.innerHTML = '<option value="">-- เลือกอำเภอ / เขต --</option>';
+        if (selSubdistrict) {
+          selSubdistrict.innerHTML = '<option value="">-- กรุณาเลือกอำเภอก่อน --</option>';
+          selSubdistrict.disabled = true;
+        }
+
+        if (!provinceName) {
+          selDistrict.disabled = true;
+          selDistrict.innerHTML = '<option value="">-- กรุณาเลือกจังหวัดก่อน --</option>';
+          return;
+        }
+
+        const provinceObj = thaiAddressData.p.find(p => p[1] === provinceName);
+        if (!provinceObj) return;
+
+        const pCode = provinceObj[0];
+        const matchedDistricts = thaiAddressData.d
+          .filter(d => Math.floor(d[0] / 100) === pCode)
+          .sort((a, b) => a[1].localeCompare(b[1], 'th'));
+
+        matchedDistricts.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d[1];
+          opt.textContent = d[1];
+          opt.dataset.code = d[0];
+          selDistrict.appendChild(opt);
+        });
+
+        selDistrict.disabled = false;
+        if (selectedDistrictName) {
+          selDistrict.value = selectedDistrictName;
+        }
+      }
+
+      function populateSubdistricts(districtName, selectedSubdistrictName = '') {
+        if (!thaiAddressData || !selSubdistrict) return;
+        selSubdistrict.innerHTML = '<option value="">-- เลือกตำบล / แขวง --</option>';
+
+        if (!districtName) {
+          selSubdistrict.disabled = true;
+          selSubdistrict.innerHTML = '<option value="">-- กรุณาเลือกอำเภอก่อน --</option>';
+          return;
+        }
+
+        const provName = selProvince?.value;
+        const provinceObj = thaiAddressData.p.find(p => p[1] === provName);
+        const pCode = provinceObj ? provinceObj[0] : null;
+        if (!pCode) return;
+
+        const districtObj = thaiAddressData.d.find(d => d[1] === districtName && Math.floor(d[0] / 100) === pCode);
+        if (!districtObj) return;
+
+        const dCode = districtObj[0];
+        const matchedSubdistricts = thaiAddressData.s
+          .filter(s => Math.floor(s[0] / 100) === dCode)
+          .sort((a, b) => a[1].localeCompare(b[1], 'th'));
+
+        matchedSubdistricts.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s[1];
+          opt.textContent = s[1];
+          opt.dataset.zip = s[3];
+          selSubdistrict.appendChild(opt);
+        });
+
+        selSubdistrict.disabled = false;
+        if (selectedSubdistrictName) {
+          selSubdistrict.value = selectedSubdistrictName;
+        }
+      }
+
+      if (selProvince) {
+        selProvince.addEventListener('change', () => {
+          populateDistricts(selProvince.value);
+          if (inpPostalCode) inpPostalCode.value = '';
+          const errP = document.getElementById('errProvince');
+          if (errP) errP.style.display = 'none';
+          selProvince.classList.remove('has-error');
+        });
+      }
+
+      if (selDistrict) {
+        selDistrict.addEventListener('change', () => {
+          populateSubdistricts(selDistrict.value);
+          if (inpPostalCode) inpPostalCode.value = '';
+          const errD = document.getElementById('errDistrict');
+          if (errD) errD.style.display = 'none';
+          selDistrict.classList.remove('has-error');
+        });
+      }
+
+      if (selSubdistrict) {
+        selSubdistrict.addEventListener('change', () => {
+          const selOpt = selSubdistrict.options[selSubdistrict.selectedIndex];
+          if (selOpt && selOpt.dataset.zip && inpPostalCode) {
+            inpPostalCode.value = selOpt.dataset.zip;
+            inpPostalCode.classList.remove('has-error');
+            const errZ = document.getElementById('errPostalCode');
+            if (errZ) errZ.style.display = 'none';
+          }
+          const errS = document.getElementById('errSubdistrict');
+          if (errS) errS.style.display = 'none';
+          selSubdistrict.classList.remove('has-error');
+        });
+      }
+
+      await initThaiAddressData();
+
+      // ==========================================
       // PHOTO UPLOAD & PREVIEW LOGIC
       // ==========================================
       btnChoosePhoto.addEventListener('click', () => applicantPhoto.click());
@@ -2621,22 +2842,22 @@
           document.getElementById('errHouseNo').style.display = 'block';
           hasError = true;
         }
-        const subdistrict = document.getElementById('inpSubdistrict').value.trim();
-        if (!subdistrict) {
-          document.getElementById('inpSubdistrict').classList.add('has-error');
-          document.getElementById('errSubdistrict').style.display = 'block';
+        const province = (document.getElementById('selProvince')?.value || '').trim();
+        if (!province) {
+          document.getElementById('selProvince').classList.add('has-error');
+          document.getElementById('errProvince').style.display = 'block';
           hasError = true;
         }
-        const district = document.getElementById('inpDistrict').value.trim();
+        const district = (document.getElementById('selDistrict')?.value || '').trim();
         if (!district) {
-          document.getElementById('inpDistrict').classList.add('has-error');
+          document.getElementById('selDistrict').classList.add('has-error');
           document.getElementById('errDistrict').style.display = 'block';
           hasError = true;
         }
-        const province = document.getElementById('inpProvince').value.trim();
-        if (!province) {
-          document.getElementById('inpProvince').classList.add('has-error');
-          document.getElementById('errProvince').style.display = 'block';
+        const subdistrict = (document.getElementById('selSubdistrict')?.value || '').trim();
+        if (!subdistrict) {
+          document.getElementById('selSubdistrict').classList.add('has-error');
+          document.getElementById('errSubdistrict').style.display = 'block';
           hasError = true;
         }
         const postalCode = document.getElementById('inpPostalCode').value.trim();
@@ -2690,14 +2911,17 @@
         const bld = document.getElementById('inpBuilding').value.trim();
         const soi = document.getElementById('inpSoi').value.trim();
         const road = document.getElementById('inpRoad').value.trim();
+        const isBkk = province === 'กรุงเทพมหานคร';
+        const subPrefix = isBkk ? 'แขวง' : 'ตำบล';
+        const distPrefix = isBkk ? 'เขต' : 'อำเภอ';
         const fullAddr = [
           `บ้านเลขที่ ${houseNo}`,
           vNo ? `หมู่ ${vNo}` : '',
           bld ? bld : '',
           soi ? `ซอย ${soi}` : '',
           road ? `ถนน ${road}` : '',
-          `ตำบล${subdistrict}`,
-          `อำเภอ${district}`,
+          `${subPrefix}${subdistrict}`,
+          `${distPrefix}${district}`,
           `จังหวัด${province}`,
           postalCode
         ].filter(Boolean).join(' ');
@@ -2758,9 +2982,9 @@
         formData.append('building', document.getElementById('inpBuilding').value.trim());
         formData.append('soi', document.getElementById('inpSoi').value.trim());
         formData.append('road', document.getElementById('inpRoad').value.trim());
-        formData.append('subdistrict', document.getElementById('inpSubdistrict').value.trim());
-        formData.append('district', document.getElementById('inpDistrict').value.trim());
-        formData.append('province', document.getElementById('inpProvince').value.trim());
+        formData.append('subdistrict', (document.getElementById('selSubdistrict')?.value || document.getElementById('inpSubdistrict')?.value || '').trim());
+        formData.append('district', (document.getElementById('selDistrict')?.value || document.getElementById('inpDistrict')?.value || '').trim());
+        formData.append('province', (document.getElementById('selProvince')?.value || document.getElementById('inpProvince')?.value || '').trim());
         formData.append('postal_code', document.getElementById('inpPostalCode').value.trim());
         formData.append('pdpa_consent', 'true');
         formData.append('website_hp', (document.getElementById('recruit_hp')?.value || '').trim());
@@ -2790,6 +3014,17 @@
             photoPreviewImg.style.display = 'none';
             photoPlaceholder.style.display = 'flex';
             btnRemovePhoto.style.display = 'none';
+            if (typeof populateProvinces === 'function') {
+              populateProvinces();
+              if (selDistrict) {
+                selDistrict.innerHTML = '<option value="">-- กรุณาเลือกจังหวัดก่อน --</option>';
+                selDistrict.disabled = true;
+              }
+              if (selSubdistrict) {
+                selSubdistrict.innerHTML = '<option value="">-- กรุณาเลือกอำเภอก่อน --</option>';
+                selSubdistrict.disabled = true;
+              }
+            }
 
             stepPane1.style.display = 'block';
             stepPane2.style.display = 'none';
@@ -2885,12 +3120,12 @@
             stBadge.className = `status-badge ${res.status}`;
             stBadgeText.textContent = res.statusLabel;
 
-            // Low GPAX status alert
+            // Low GPAX status alert: ถ้าสถานะผ่านการคัดเลือกแล้ว (approved) ไม่ต้องแสดงคำเตือนในหน้าผู้ใช้
             const stLowGpaxAlert = document.getElementById('stLowGpaxAlert');
             const stLowGpaxText = document.getElementById('stLowGpaxText');
             if (stLowGpaxAlert) {
               const isLow = Boolean(res.isBelowMinGpax) || (res.gpax !== null && res.gpax !== undefined && Number(res.gpax) < Number(res.minGpax || systemSettings.minGpax || 2.50));
-              if (isLow) {
+              if (isLow && res.status !== 'approved') {
                 stLowGpaxAlert.style.display = 'block';
                 if (stLowGpaxText) {
                   const gVal = res.gpax !== null && res.gpax !== undefined ? Number(res.gpax).toFixed(2) : '-';
