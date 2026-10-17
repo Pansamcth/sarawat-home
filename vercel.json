@@ -4,6 +4,28 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/admissions",
+      "permanent": false
+    },
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/admissions",
+      "permanent": false
+    },
+    {
       "source": "/recruit",
       "has": [
         {
@@ -156,28 +178,8 @@
   ],
   "rewrites": [
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/api/admissions"
-    },
-    {
-      "source": "/((?!assets|css|js|api|favicon|cloudflare-config).*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/api/admissions"
-    },
-    {
       "source": "/admissions",
-      "destination": "/admissions.html"
+      "destination": "/api/admissions"
     },
     {
       "source": "/si-roster/admin",

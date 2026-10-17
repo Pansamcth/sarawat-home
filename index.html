@@ -2,6 +2,18 @@
 <html lang="th">
 
 <head>
+  <script>
+    (function() {
+      try {
+        if (window.location.protocol === 'file:') return;
+        var h = window.location.hostname;
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        if (!isLocal && /^admissions?\./i.test(h)) {
+          window.location.replace('/admissions' + window.location.search + window.location.hash);
+        }
+      } catch(e) {}
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>สารวัตรนักเรียน | โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>

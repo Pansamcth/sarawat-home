@@ -8,17 +8,22 @@
   <script>
     (function() {
       try {
-        if (window.history && window.history.replaceState && window.location.protocol !== 'file:') {
-          var p = window.location.pathname;
-          var isSubdomain = window.location.hostname.startsWith('admissions.');
-          if (isSubdomain) {
-            if (p.endsWith('/admissions.html') || p.includes('/recruit') || p === '/admissions') {
-              window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
-            }
-          } else {
-            if (p.endsWith('/admissions.html') || p.includes('/recruit')) {
-              window.history.replaceState(null, '', '/admissions' + window.location.search + window.location.hash);
-            }
+        if (window.location.protocol === 'file:') return;
+        var h = window.location.hostname;
+        var p = window.location.pathname;
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isAdmissionsSubdomain = /^admissions?\./i.test(h);
+
+        // กฎหลัก: หน้า admissions.html อนุญาตให้เข้าถึงผ่าน admissions.sarawatdc.site เท่านั้น
+        if (!isLocal && !isAdmissionsSubdomain) {
+          window.location.replace('https://admissions.sarawatdc.site' + window.location.search + window.location.hash);
+          return;
+        }
+
+        // เมื่ออยู่บนซับโดเมน admissions ให้คง URL ในแถบแอดเดรสเป็นลิงก์เพียว ๆ (/)
+        if (isAdmissionsSubdomain && window.history && window.history.replaceState) {
+          if (p.endsWith('/admissions.html') || p.includes('/recruit') || p === '/admissions') {
+            window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
           }
         }
       } catch(e) {}
