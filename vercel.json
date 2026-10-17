@@ -5,12 +5,24 @@
   "redirects": [
     {
       "source": "/recruit",
-      "destination": "https://admissions.sarawatdc.site/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+        }
+      ],
+      "destination": "https://admissions.sarawatdc.site",
       "permanent": false
     },
     {
       "source": "/recruit.html",
-      "destination": "https://admissions.sarawatdc.site/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+        }
+      ],
+      "destination": "https://admissions.sarawatdc.site",
       "permanent": false
     },
     {
@@ -18,10 +30,10 @@
       "has": [
         {
           "type": "host",
-          "value": "(?!admissions\\.).*"
+          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
         }
       ],
-      "destination": "https://admissions.sarawatdc.site/",
+      "destination": "https://admissions.sarawatdc.site",
       "permanent": false
     },
     {
@@ -29,109 +41,10 @@
       "has": [
         {
           "type": "host",
-          "value": "(?!admissions\\.).*"
+          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
         }
       ],
-      "destination": "https://admissions.sarawatdc.site/",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/index.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/admissions",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/activities",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/activities.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/calendar",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/calendar.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/team",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
-      "permanent": false
-    },
-    {
-      "source": "/team.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "admissions\\.sarawatdc\\.site"
-        }
-      ],
-      "destination": "/admissions.html",
+      "destination": "https://admissions.sarawatdc.site",
       "permanent": false
     },
     {
@@ -243,6 +156,16 @@
   ],
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/api/admissions"
+    },
+    {
       "source": "/((?!assets|css|js|api|favicon|cloudflare-config).*)",
       "has": [
         {
@@ -250,7 +173,7 @@
           "value": "admissions\\.sarawatdc\\.site"
         }
       ],
-      "destination": "/admissions.html"
+      "destination": "/api/admissions"
     },
     {
       "source": "/admissions",
