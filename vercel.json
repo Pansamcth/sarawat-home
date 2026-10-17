@@ -36,6 +36,28 @@
       "permanent": false
     },
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
       "source": "/admissions",
       "has": [
         {
@@ -43,18 +65,73 @@
           "value": "admissions\\.sarawatdc\\.site"
         }
       ],
-      "destination": "/",
+      "destination": "/admissions.html",
       "permanent": false
     },
     {
-      "source": "/admissions.html",
+      "source": "/activities",
       "has": [
         {
           "type": "host",
           "value": "admissions\\.sarawatdc\\.site"
         }
       ],
-      "destination": "/",
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
+      "source": "/activities.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
+      "source": "/calendar",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
+      "source": "/calendar.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
+      "source": "/team",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
+      "permanent": false
+    },
+    {
+      "source": "/team.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "admissions\\.sarawatdc\\.site"
+        }
+      ],
+      "destination": "/admissions.html",
       "permanent": false
     },
     {
