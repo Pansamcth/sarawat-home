@@ -935,28 +935,59 @@ svg:not([data-lucide]),
   transform: scale(1.1);
 }
 
-/* Button variants */
-.dg-btn-fb:hover {
-  background: #eff6ff;
-  border-color: #93c5fd;
+/* Button variants - Full brand colors */
+.dg-btn-fb {
+  background: #f0f7ff;
+  border-color: #bfdbfe;
   color: #1877f2;
 }
+.dg-btn-fb:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #ffffff;
+}
 
-.dg-btn-ig:hover {
+.dg-btn-fb-reels {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #0866ff;
+}
+.dg-btn-fb-reels:hover {
+  background: #0866ff;
+  border-color: #0866ff;
+  color: #ffffff;
+}
+
+.dg-btn-ig {
   background: #fdf2f8;
   border-color: #fbcfe8;
   color: #e1306c;
 }
-
-.dg-btn-reels:hover {
-  background: #fff1f2;
-  border-color: #fda4af;
-  color: #e11d48;
+.dg-btn-ig:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-color: transparent;
+  color: #ffffff;
 }
 
+.dg-btn-reels {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #e1306c;
+}
+.dg-btn-reels:hover {
+  background: #e1306c;
+  border-color: #e1306c;
+  color: #ffffff;
+}
+
+.dg-btn-photo {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
 .dg-btn-photo:hover {
   background: #f8fafc;
-  border-color: #cbd5e1;
+  border-color: #94a3b8;
   color: #0f172a;
 }
 
@@ -3205,24 +3236,55 @@ svg:not([data-lucide]),
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
+.dg-news-modal-btn.btn-fb {
+  background: #f0f7ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
 .dg-news-modal-btn.btn-fb:hover {
   background: #1877f2;
   color: #ffffff;
   border-color: #1877f2;
 }
 
+.dg-news-modal-btn.btn-fb-reels {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+.dg-news-modal-btn.btn-fb-reels:hover {
+  background: #0866ff;
+  color: #ffffff;
+  border-color: #0866ff;
+}
+
+.dg-news-modal-btn.btn-ig {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #831843;
+}
 .dg-news-modal-btn.btn-ig:hover {
   background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
   color: #ffffff;
   border-color: transparent;
 }
 
+.dg-news-modal-btn.btn-reels {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #831843;
+}
 .dg-news-modal-btn.btn-reels:hover {
-  background: #e11d48;
+  background: #e1306c;
   color: #ffffff;
-  border-color: #e11d48;
+  border-color: #e1306c;
 }
 
+.dg-news-modal-btn.btn-photo {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
 .dg-news-modal-btn.btn-photo:hover {
   background: #0f172a;
   color: #ffffff;
@@ -3693,7 +3755,6 @@ svg:not([data-lucide]),
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--dg-text-primary);
   text-decoration: none;
   transition: all 0.18s ease;
 }
@@ -3705,13 +3766,60 @@ svg:not([data-lucide]),
 
 .dg-act-social-btn:hover {
   transform: translateY(-2px);
-  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
+.dg-act-social-btn.dg-act-social-fb {
+  background: #f0f7ff;
+  border-color: #bfdbfe;
+  color: #1877f2;
+}
+.dg-act-social-btn.dg-act-social-fb:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #ffffff;
+}
+
+.dg-act-social-btn.dg-act-social-fb-reels {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #0866ff;
+}
+.dg-act-social-btn.dg-act-social-fb-reels:hover {
+  background: #0866ff;
+  border-color: #0866ff;
+  color: #ffffff;
+}
+
+.dg-act-social-btn.dg-act-social-ig {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #e1306c;
+}
+.dg-act-social-btn.dg-act-social-ig:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.dg-act-social-btn.dg-act-social-reels {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #e1306c;
+}
 .dg-act-social-btn.dg-act-social-reels:hover {
-  background: #fff1f2;
-  border-color: #fda4af;
-  color: #e11d48;
+  background: #e1306c;
+  border-color: #e1306c;
+  color: #ffffff;
+}
+
+.dg-act-social-btn.dg-act-social-photo {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+.dg-act-social-btn.dg-act-social-photo:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
 }
 
 

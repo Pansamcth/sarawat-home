@@ -610,6 +610,11 @@
       color: #1d4ed8;
     }
 
+    .link-tag.has-fb-reels {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
     .link-tag.has-ig {
       background: #fdf2f8;
       color: #be185d;
@@ -3154,6 +3159,10 @@
           <input type="url" id="adminNewsFb" placeholder="https://www.facebook.com/..." />
         </div>
         <div class="dg-form-group">
+          <label>ลิงก์ Facebook Reels (ถ้ามี)</label>
+          <input type="url" id="adminNewsFbReels" placeholder="https://www.facebook.com/reel/..." />
+        </div>
+        <div class="dg-form-group">
           <label>ลิงก์โพสต์ Instagram (ถ้ามี)</label>
           <input type="url" id="adminNewsIg" placeholder="https://www.instagram.com/p/..." />
         </div>
@@ -4947,6 +4956,7 @@
         const desc = document.getElementById('adminNewsDesc').value.trim();
         const detail = document.getElementById('adminNewsDetail')?.value.trim() || '';
         const fb = document.getElementById('adminNewsFb')?.value.trim() || '';
+        const fbReels = document.getElementById('adminNewsFbReels')?.value.trim() || '';
         const ig = document.getElementById('adminNewsIg')?.value.trim() || '';
         const reels = document.getElementById('adminNewsReels')?.value.trim() || '';
         const photo = document.getElementById('adminNewsPhoto')?.value.trim() || '';
@@ -4987,7 +4997,7 @@
           img = currentNewsImageState.url;
         }
 
-        const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso, dateStart: dateIso, dateEnd: endDateIso };
+        const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, fbReelsUrl: fbReels, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso, dateStart: dateIso, dateEnd: endDateIso };
         if (id) payload.id = id;
 
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
@@ -5083,6 +5093,9 @@
       
       const fbInput = document.getElementById('adminNewsFb');
       if (fbInput) fbInput.value = item.fbUrl || item.linkFb || '';
+      
+      const fbReelsInput = document.getElementById('adminNewsFbReels');
+      if (fbReelsInput) fbReelsInput.value = item.fbReelsUrl || item.linkFbReels || item.fb_reels_url || '';
       
       const igInput = document.getElementById('adminNewsIg');
       if (igInput) igInput.value = item.igUrl || item.linkIg || '';
@@ -5193,8 +5206,9 @@
                 <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
                 <div class="admin-news-links-indicator">
                   ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> FB</span>` : ''}
+                  ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" style="width:12px;height:12px;"></i> FB Reels</span>` : ''}
                   ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> IG</span>` : ''}
-                  ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Reels</span>` : ''}
+                  ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Reels (IG)</span>` : ''}
                   ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> รูปภาพ</span>` : ''}
                 </div>
                 <div class="admin-card-actions">
