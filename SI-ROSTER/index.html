@@ -913,103 +913,162 @@
       }
     }
 
-    /* ===== ACTIVITY CARD (BENTO) ===== */
+    /* ===== ACTIVITY CARD (DIEGO MINIMALIST) ===== */
     .activity-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-radius: var(--border-radius);
-      padding: 30px;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 26px 28px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
       display: flex;
       flex-direction: column;
-      gap: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      gap: 20px;
+      border: 1.5px solid var(--dg-border, #e5e7eb);
       position: relative;
       overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       cursor: pointer;
-      animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-
-    .activity-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
-      pointer-events: none;
-      z-index: 1;
+      animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .activity-card:hover {
-      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.18);
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+      transform: translateY(-4px);
+      border-color: #cbd5e1;
     }
 
     .activity-card.card-status-open {
-      border: 2px solid var(--success);
-      background-color: var(--card-bg);
-      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+      border: 1.5px solid #10b981;
+      background-color: #ffffff;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.08);
+    }
+
+    .activity-card.card-status-open:hover {
+      border-color: #059669;
+      box-shadow: 0 14px 32px rgba(16, 185, 129, 0.15);
     }
 
     .activity-card.card-status-waiting {
-      border: 2px solid var(--waiting);
-      background-color: var(--card-bg);
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+      border: 1.5px solid #6366f1;
+      background-color: #ffffff;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
+    }
+
+    .activity-card.card-status-waiting:hover {
+      border-color: #4f46e5;
+      box-shadow: 0 14px 32px rgba(99, 102, 241, 0.15);
     }
 
     .activity-card.card-status-warning {
-      border: 2px solid var(--warning);
-      background-color: var(--card-bg);
-      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.15);
+      border: 1.5px solid #f59e0b;
+      background-color: #ffffff;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.08);
+    }
+
+    .activity-card.card-status-warning:hover {
+      border-color: #d97706;
+      box-shadow: 0 14px 32px rgba(245, 158, 11, 0.15);
     }
 
     .activity-card.card-status-closed {
-      border: 1px solid var(--border-light);
-      background-color: #F8FAFC;
-      /* Slightly darker background to indicate closed */
+      border: 1.5px solid #e2e8f0;
+      background-color: #f8fafc;
+      opacity: 0.94;
+    }
+
+    .activity-card.card-status-closed:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     }
 
     .card-left {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      flex: 1;
     }
 
     .card-date {
-      font-size: 0.9rem;
-      color: #000000;
-      background: #CBD5E1;
-      padding: 5px 12px;
-      border-radius: 8px;
-      font-weight: 800;
+      font-size: 0.82rem;
+      color: #0f172a;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-weight: 750;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       width: fit-content;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      letter-spacing: -0.01em;
+    }
+
+    .card-date i {
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    .card-time-remaining {
+      font-size: 0.82rem;
+      font-weight: 750;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      letter-spacing: -0.01em;
+    }
+
+    .card-time-remaining.future {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .card-time-remaining.future i {
+      color: #16a34a;
+    }
+
+    .card-time-remaining.past {
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .card-time-remaining.past i {
+      color: #94a3b8;
     }
 
     .card-title {
-      font-size: 1.6rem;
+      font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);
+      font-size: 1.35rem;
       font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #000000 0%, #1e1b4b 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: #000000;
-      /* Fallback */
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      color: #0a0a0c;
+      margin: 2px 0 0;
     }
 
     .card-desc {
-      font-size: 1rem;
-      color: var(--text-muted);
-      line-height: 1.5;
+      font-size: 0.94rem;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    .card-creator,
+    .card-editor {
+      font-size: 0.84rem;
+      color: #64748b;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-creator i,
+    .card-editor i {
+      color: #94a3b8;
+      font-size: 0.85rem;
     }
 
     .card-right {
@@ -1019,67 +1078,133 @@
       width: 100%;
     }
 
+    /* Status badge pill */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-weight: 750;
+      font-size: 0.82rem;
+      letter-spacing: -0.01em;
+      width: fit-content;
+      border: 1px solid transparent;
+    }
+
+    .status-badge.status-open {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+
+    .status-badge.status-waiting {
+      background: #eef2ff;
+      color: #4f46e5;
+      border-color: #c7d2fe;
+    }
+
+    .status-badge.status-warning {
+      background: #fffbeb;
+      color: #b45309;
+      border-color: #fde68a;
+    }
+
+    .status-badge.status-closed {
+      background: #fef2f2;
+      color: #dc2626;
+      border-color: #fecaca;
+    }
+
     /* ===== COUNTDOWN ===== */
     .countdown-badge {
-      background: var(--bg-white);
-      color: var(--primary);
-      padding: 12px 16px;
+      background: #ffffff;
+      color: #0a0a0c;
+      padding: 10px 16px;
       border-radius: 12px;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      border: 1px solid var(--border-light);
+      border: 1.5px solid #e5e7eb;
       width: 100%;
-    }
-
-    .countdown-badge.expired {
-      background: rgba(15, 23, 42, 0.04);
-      color: var(--text-dim);
-      border-color: transparent;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      font-family: var(--dg-font-sans);
+      letter-spacing: -0.01em;
+      transition: all 0.2s ease;
     }
 
     .countdown-badge i {
-      color: var(--accent);
+      color: #0a0a0c;
+      font-size: 0.9rem;
+    }
+
+    .countdown-badge.expired {
+      background: #f8fafc;
+      color: #94a3b8;
+      border-color: #e2e8f0;
+      box-shadow: none;
     }
 
     .countdown-badge.expired i {
+      color: #94a3b8;
       animation: none;
-      color: var(--text-dim);
     }
 
     .action-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      font-size: 1rem;
+      background: #0a0a0c;
+      color: #ffffff;
+      border: 1.5px solid #0a0a0c;
+      font-size: 0.92rem;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: var(--transition);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
       width: 100%;
-      padding: 12px 16px;
-      border-radius: 12px;
+      padding: 11px 20px;
+      border-radius: 9999px;
+      font-family: var(--dg-font-sans);
+      letter-spacing: -0.01em;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
-    .activity-card:hover .action-btn {
-      background: var(--accent);
-      color: white;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    .action-btn i {
+      transition: transform 0.25s ease;
+      font-size: 0.85rem;
+    }
+
+    .activity-card:hover .action-btn:not(.disabled) {
+      background: #1f242e;
+      border-color: #1f242e;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+    }
+
+    .activity-card:hover .action-btn:not(.disabled) i {
+      transform: translateX(4px);
     }
 
     .action-btn.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+      background: #ffffff;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
     }
 
     .activity-card:hover .action-btn.disabled {
-      background: var(--primary);
-      box-shadow: none;
+      background: #0a0a0c;
+      color: #ffffff;
+      border-color: #0a0a0c;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .activity-card:hover .action-btn.disabled i {
+      transform: translateX(4px);
     }
 
     .empty-state {
@@ -1097,16 +1222,16 @@
       margin-bottom: 15px;
     }
 
-    /* ===== MODAL (BENTO & GLASS) ===== */
+    /* ===== MODAL (DIEGO MINIMALIST) ===== */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
+      background: rgba(10, 10, 12, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -1114,6 +1239,7 @@
       opacity: 0;
       visibility: hidden;
       transition: var(--transition);
+      padding: 20px;
     }
 
     .modal-overlay.active {
@@ -1122,24 +1248,22 @@
     }
 
     .modal-content {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--border-radius);
-      width: 94%;
+      background: #ffffff;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 20px;
+      width: 100%;
       max-width: 720px;
-      max-height: 85vh;
+      max-height: 88vh;
       display: flex;
       flex-direction: column;
-      box-shadow: var(--shadow-hover);
-      transform: scale(0.95) translateY(10px);
-      transition: var(--transition);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25);
+      transform: scale(0.96) translateY(12px);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
       overflow: hidden;
     }
 
     .modal-content.small {
-      max-width: 420px;
+      max-width: 440px;
     }
 
     .modal-overlay.active .modal-content {
@@ -1147,70 +1271,81 @@
     }
 
     .modal-header {
-      padding: 30px 40px;
-      background: rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid var(--border-light);
+      padding: 26px 36px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
       position: relative;
     }
 
     .close-modal {
       position: absolute;
-      top: 24px;
-      right: 30px;
-      font-size: 1.2rem;
+      top: 22px;
+      right: 28px;
+      font-size: 1.1rem;
       cursor: pointer;
-      color: var(--text-muted);
-      transition: var(--transition);
-      background: var(--bg-white);
-      width: 40px;
-      height: 40px;
+      color: #64748b;
+      transition: all 0.2s ease;
+      background: #f1f5f9;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid var(--border-light);
+      border: 1px solid #e2e8f0;
     }
 
     .close-modal:hover {
-      background: var(--danger);
-      color: white;
+      background: #0a0a0c;
+      color: #ffffff;
       transform: rotate(90deg);
-      border-color: var(--danger);
+      border-color: #0a0a0c;
     }
 
     .modal-date {
-      font-size: 1rem;
-      color: var(--accent);
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-      display: flex;
+      font-size: 0.84rem;
+      color: #0f172a;
+      font-weight: 750;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 9999px;
+    }
+
+    .modal-date i {
+      color: #64748b;
     }
 
     .modal-title {
-      font-size: 2rem;
-      color: var(--text-main);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
+      font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);
+      font-size: 1.75rem;
+      color: #0a0a0c;
+      font-weight: 850;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      margin: 8px 0 0;
     }
 
     .modal-body {
-      padding: 40px;
+      padding: 32px 36px;
       overflow-y: auto;
-      background: transparent;
+      background: #ffffff;
     }
 
     .modal-desc {
-      color: var(--text-main);
-      margin-bottom: 12px;
-      line-height: 1.6;
-      font-size: 1.05rem;
-      background: rgba(15, 23, 42, 0.03);
-      padding: 20px;
-      border-radius: 16px;
+      color: #334155;
+      margin-bottom: 18px;
+      line-height: 1.65;
+      font-size: 0.98rem;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 18px 22px;
+      border-radius: 14px;
       white-space: pre-wrap;
     }
 
@@ -1264,60 +1399,69 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
-      background-size: 200% 200%;
-      padding: 20px 24px;
-      border-radius: 16px;
-      border: 1px solid rgba(0, 0, 0, 0.3);
-      margin-bottom: 12px;
+      background: #0a0a0c;
+      color: #ffffff;
+      padding: 16px 22px;
+      border-radius: 14px;
+      border: 1px solid #1f2937;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     }
 
     .timer-container.expired {
-      background: rgba(15, 23, 42, 0.04);
-      border-color: var(--border-light);
-      animation: none;
+      background: #f8fafc;
+      border-color: #e2e8f0;
       box-shadow: none;
     }
 
     .timer-text {
       font-weight: 700;
-      color: var(--primary);
+      color: #94a3b8;
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1.1rem;
+      font-size: 0.95rem;
     }
 
+    .timer-text i {
+      color: #ffffff;
+    }
 
     .timer-container.expired .timer-text {
-      color: var(--text-dim);
+      color: #64748b;
     }
 
     .timer-container.expired .timer-text i {
+      color: #94a3b8;
       animation: none;
     }
 
     .timer-value {
-      font-family: 'Kanit', monospace;
-      font-size: 1.4rem;
+      font-family: var(--dg-font-sans, 'Kanit', monospace);
+      font-size: 1.35rem;
       font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--primary);
+      letter-spacing: 0.5px;
+      color: #ffffff;
     }
 
-    /* Duty Card */
+    .timer-container.expired .timer-value {
+      color: #64748b;
+    }
+
+    /* ===== DUTY CARD (DIEGO MINIMALIST) ===== */
     .duty-card {
-      background: rgba(255, 255, 255, 1);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 12px;
-      border: 1px solid var(--card-border);
-      transition: var(--transition);
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 14px;
+      border: 1.5px solid #e5e7eb;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
     }
 
     .duty-card:hover {
-      box-shadow: var(--shadow-hover);
+      border-color: #cbd5e1;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
       transform: translateY(-2px);
     }
 
@@ -1325,90 +1469,141 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      gap: 12px;
     }
 
     .duty-title {
       font-weight: 800;
-      font-size: 1.25rem;
-      color: var(--text-main);
+      font-size: 1.15rem;
+      color: #0a0a0c;
       display: flex;
       align-items: center;
       gap: 10px;
+      letter-spacing: -0.015em;
     }
 
     .duty-title i {
-      color: var(--accent);
+      color: #0a0a0c;
+      font-size: 1rem;
     }
 
     .duty-quota {
-      font-size: 0.95rem;
-      background: var(--primary-light);
-      color: var(--primary);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 700;
+      font-size: 0.84rem;
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-weight: 750;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .duty-quota.full {
-      background: rgba(239, 68, 68, 0.1);
-      color: var(--danger);
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
     }
 
     .signup-list {
       list-style-type: none;
-      margin-bottom: 20px;
+      padding: 0;
+      margin: 14px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .signup-list li {
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.9);
+      padding: 11px 16px;
+      background: #f8fafc;
       border-radius: 12px;
-      margin-bottom: 8px;
-      font-size: 1rem;
+      margin: 0;
+      font-size: 0.94rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      color: var(--text-main);
-      border: 1px solid var(--border-light);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+    }
+
+    .signup-list li:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
     }
 
     .signup-name-container {
       display: flex;
       align-items: center;
-      font-weight: 600;
+      font-weight: 650;
+      color: #0a0a0c;
     }
 
-    .signup-list li i {
-      color: var(--success);
-      margin-right: 12px;
-      font-size: 1.1rem;
+    .signup-list li i.fa-circle-check {
+      color: #10b981;
+      margin-right: 10px;
+      font-size: 1rem;
     }
 
     .delete-btn {
-      color: var(--danger);
-      background: rgba(239, 68, 68, 0.1);
-      border: none;
+      color: #dc2626;
+      background: #ffffff;
+      border: 1px solid #fecaca;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 6px 12px;
       cursor: pointer;
-      font-size: 0.85rem;
-      transition: var(--transition);
-      font-weight: 600;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .delete-btn:hover {
-      background: var(--danger);
-      color: white;
+      background: #dc2626;
+      border-color: #dc2626;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+    }
+
+    .move-btn {
+      color: #b45309;
+      background: #ffffff;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-right: 8px;
+    }
+
+    .move-btn:hover {
+      background: #f59e0b;
+      border-color: #f59e0b;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
     }
 
     .empty-signups {
-      color: var(--text-dim);
-      font-size: 0.95rem;
-      font-style: italic;
-      margin-bottom: 20px;
-      padding-left: 10px;
+      color: #94a3b8;
+      font-size: 0.88rem;
+      font-style: normal;
+      margin: 12px 0 0;
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* Forms */
@@ -1421,37 +1616,37 @@
 
     .form-group label {
       font-weight: 700;
-      color: var(--text-main);
-      font-size: 1rem;
+      color: #0a0a0c;
+      font-size: 0.95rem;
     }
 
     .input-control {
-      padding: 14px 18px;
-      border: 1px solid var(--border-light);
-      border-radius: 16px;
-      font-size: 1rem;
+      padding: 12px 16px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.95rem;
       outline: none;
-      background: rgba(255, 255, 255, 0.8);
-      color: var(--text-main);
+      background: #ffffff;
+      color: #0a0a0c;
       transition: var(--transition);
       width: 100%;
       font-family: 'Kanit', sans-serif;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
     }
 
     .input-control:focus {
-      background: #FFFFFF;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-light);
+      background: #ffffff;
+      border-color: #0a0a0c;
+      box-shadow: 0 0 0 3px rgba(10, 10, 12, 0.08);
     }
 
     .input-control::placeholder {
-      color: var(--text-dim);
+      color: #94a3b8;
     }
 
     .input-control:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+      background: #f8fafc;
     }
 
     textarea.input-control {
@@ -1461,36 +1656,76 @@
 
     .signup-form {
       display: flex;
+      flex-direction: column;
       gap: 12px;
-      background: rgba(15, 23, 42, 0.02);
-      padding: 16px;
+      background: #f8fafc;
+      padding: 22px;
       border-radius: 16px;
-      border: 1px solid var(--border-light);
+      border: 1.5px solid #e5e7eb;
+      margin-bottom: 24px;
+    }
+
+    .signup-form-title {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #0a0a0c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .signup-form-full {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      padding: 22px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .signup-form-full-icon {
+      width: 48px;
+      height: 48px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.12);
+      color: #dc2626;
+      font-size: 1.25rem;
     }
 
     /* Buttons */
     .btn {
-      background: var(--primary);
+      background: #0a0a0c;
       color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 12px;
+      border: 1.5px solid #0a0a0c;
+      padding: 10px 22px;
+      border-radius: 9999px;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: var(--transition);
-      display: flex;
+      font-weight: 700;
+      font-size: 0.92rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-family: 'Kanit', sans-serif;
+      gap: 8px;
+      font-family: var(--dg-font-sans, 'Kanit', sans-serif);
       white-space: nowrap;
     }
 
     .btn:hover:not(:disabled) {
-      background: var(--primary-hover);
-      box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.15);
-      transform: translateY(-2px);
+      background: #1f242e;
+      border-color: #1f242e;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
     }
 
     .btn:disabled {
@@ -1503,35 +1738,41 @@
     }
 
     .btn.btn-outline {
-      background: white;
-      color: var(--primary);
-      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: #ffffff;
+      color: #0a0a0c;
+      border: 1.5px solid #e5e7eb;
     }
 
     .btn.btn-outline:hover:not(:disabled) {
-      background: #F8FAFC;
-      box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.08);
-      transform: translateY(-2px);
+      background: #0a0a0c;
+      color: #ffffff;
+      border-color: #0a0a0c;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
     }
 
     .btn.btn-danger {
-      background: var(--danger);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+      background: #dc2626;
+      border-color: #dc2626;
+      color: #ffffff;
     }
 
     .btn.btn-danger:hover:not(:disabled) {
-      background: #DC2626;
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+      background: #b91c1c;
+      border-color: #b91c1c;
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.25);
     }
 
     .btn.btn-primary {
-      background: var(--accent);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      background: #0a0a0c;
+      border-color: #0a0a0c;
+      color: #ffffff;
     }
 
     .btn.btn-primary:hover:not(:disabled) {
-      background: #333333;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      background: #1f242e;
+      border-color: #1f242e;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
 
     .btn.btn-secondary {
@@ -2871,34 +3112,32 @@
 
     <div id="feedLoading" style="width: 100%;">
       <div id="skeletonContainer" class="list-view">
-        <div class="activity-card skeleton-card"
-          style="border: 1px solid var(--border-light); pointer-events: none; background: var(--card-bg);">
+        <div class="activity-card skeleton-card" style="pointer-events: none;">
           <div class="card-left" style="width: 100%;">
-            <div class="skeleton" style="width: 120px; height: 26px; border-radius: 8px; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 70%; height: 32px; border-radius: 8px; margin-bottom: 16px;"></div>
-            <div class="skeleton" style="width: 90%; height: 20px; border-radius: 6px; margin-bottom: 8px;"></div>
-            <div class="skeleton" style="width: 60%; height: 20px; border-radius: 6px;"></div>
+            <div class="skeleton" style="width: 120px; height: 24px; border-radius: 9999px; margin-bottom: 12px;"></div>
+            <div class="skeleton" style="width: 70%; height: 30px; border-radius: 8px; margin-bottom: 14px;"></div>
+            <div class="skeleton" style="width: 90%; height: 18px; border-radius: 6px; margin-bottom: 8px;"></div>
+            <div class="skeleton" style="width: 60%; height: 18px; border-radius: 6px;"></div>
           </div>
           <div class="card-right">
             <div class="skeleton"
-              style="width: 100px; height: 32px; border-radius: 20px; align-self: flex-end; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 100%; height: 50px; border-radius: 12px; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 100%; height: 48px; border-radius: 12px;"></div>
+              style="width: 100px; height: 28px; border-radius: 9999px; align-self: flex-end; margin-bottom: 12px;"></div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 12px; margin-bottom: 12px;"></div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 9999px;"></div>
           </div>
         </div>
-        <div class="activity-card skeleton-card"
-          style="border: 1px solid var(--border-light); pointer-events: none; background: var(--card-bg);">
+        <div class="activity-card skeleton-card" style="pointer-events: none;">
           <div class="card-left" style="width: 100%;">
-            <div class="skeleton" style="width: 120px; height: 26px; border-radius: 8px; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 50%; height: 32px; border-radius: 8px; margin-bottom: 16px;"></div>
-            <div class="skeleton" style="width: 80%; height: 20px; border-radius: 6px; margin-bottom: 8px;"></div>
-            <div class="skeleton" style="width: 40%; height: 20px; border-radius: 6px;"></div>
+            <div class="skeleton" style="width: 120px; height: 24px; border-radius: 9999px; margin-bottom: 12px;"></div>
+            <div class="skeleton" style="width: 50%; height: 30px; border-radius: 8px; margin-bottom: 14px;"></div>
+            <div class="skeleton" style="width: 80%; height: 18px; border-radius: 6px; margin-bottom: 8px;"></div>
+            <div class="skeleton" style="width: 40%; height: 18px; border-radius: 6px;"></div>
           </div>
           <div class="card-right">
             <div class="skeleton"
-              style="width: 100px; height: 32px; border-radius: 20px; align-self: flex-end; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 100%; height: 50px; border-radius: 12px; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 100%; height: 48px; border-radius: 12px;"></div>
+              style="width: 100px; height: 28px; border-radius: 9999px; align-self: flex-end; margin-bottom: 12px;"></div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 12px; margin-bottom: 12px;"></div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 9999px;"></div>
           </div>
         </div>
       </div>
@@ -3042,62 +3281,42 @@
 
         <div id="modalLoading" style="display: none; flex-direction: column; width: 100%;">
           <!-- Central form skeleton -->
-          <div class="signup-form"
-            style="display:flex; flex-direction:column; gap:10px; margin-bottom: 25px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-radius: 8px;">
-            <div style="font-weight:700; color:var(--primary); margin-bottom: 5px;">แบบฟอร์มลงชื่อ (เลือกลงได้ 1
-              หน้าที่/คน)</div>
-            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 8px;"></div>
-            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 8px;"></div>
-            <div class="skeleton" style="width: 100%; height: 46px; border-radius: 8px;"></div>
+          <div class="signup-form">
+            <div class="signup-form-title"><i class="fa-solid fa-user-pen"></i> แบบฟอร์มลงชื่อ</div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 12px;"></div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 12px;"></div>
+            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 9999px;"></div>
           </div>
 
           <!-- Duty cards skeleton -->
-          <div class="duty-card skeleton-card"
-            style="padding: 15px 20px; margin-bottom: 12px; border: 1px solid var(--border-light); background: var(--card-bg); border-radius: var(--border-radius);">
-            <div class="duty-header"
-              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-              <div class="duty-title"
-                style="display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--text-main);">
-                <i class="fa-solid fa-clipboard-user" style="color: var(--accent);"></i>
-                <div class="skeleton" style="width: 120px; height: 24px; border-radius: 4px;"></div>
+          <div class="duty-card skeleton-card">
+            <div class="duty-header">
+              <div class="duty-title">
+                <i class="fa-solid fa-clipboard-user"></i>
+                <div class="skeleton" style="width: 120px; height: 22px; border-radius: 6px;"></div>
               </div>
-              <div class="skeleton" style="width: 70px; height: 28px; border-radius: 20px;"></div>
+              <div class="skeleton" style="width: 70px; height: 26px; border-radius: 9999px;"></div>
             </div>
-            <ul class="signup-list" style="margin-bottom:0; margin-top: 15px; list-style-type: none; padding: 0;">
-              <li
-                style="padding: 12px 18px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 8px; display: flex; align-items: center; border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);">
-                <div class="skeleton"
-                  style="width: 20px; height: 20px; border-radius: 50%; margin-right: 12px; flex-shrink: 0;"></div>
-                <div class="skeleton" style="width: 150px; height: 18px; border-radius: 4px;"></div>
+            <ul class="signup-list" style="list-style-type: none; padding: 0;">
+              <li>
+                <div class="skeleton" style="width: 18px; height: 18px; border-radius: 50%; margin-right: 10px; flex-shrink: 0;"></div>
+                <div class="skeleton" style="width: 150px; height: 18px; border-radius: 6px;"></div>
               </li>
-              <li
-                style="padding: 12px 18px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 8px; display: flex; align-items: center; border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);">
-                <div class="skeleton"
-                  style="width: 20px; height: 20px; border-radius: 50%; margin-right: 12px; flex-shrink: 0;"></div>
-                <div class="skeleton" style="width: 180px; height: 18px; border-radius: 4px;"></div>
+              <li>
+                <div class="skeleton" style="width: 18px; height: 18px; border-radius: 50%; margin-right: 10px; flex-shrink: 0;"></div>
+                <div class="skeleton" style="width: 180px; height: 18px; border-radius: 6px;"></div>
               </li>
             </ul>
           </div>
 
-          <div class="duty-card skeleton-card"
-            style="padding: 15px 20px; margin-bottom: 12px; border: 1px solid var(--border-light); background: var(--card-bg); border-radius: var(--border-radius);">
-            <div class="duty-header"
-              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-              <div class="duty-title"
-                style="display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; color: var(--text-main);">
-                <i class="fa-solid fa-clipboard-user" style="color: var(--accent);"></i>
-                <div class="skeleton" style="width: 150px; height: 24px; border-radius: 4px;"></div>
+          <div class="duty-card skeleton-card">
+            <div class="duty-header">
+              <div class="duty-title">
+                <i class="fa-solid fa-clipboard-user"></i>
+                <div class="skeleton" style="width: 150px; height: 22px; border-radius: 6px;"></div>
               </div>
-              <div class="skeleton" style="width: 70px; height: 28px; border-radius: 20px;"></div>
+              <div class="skeleton" style="width: 70px; height: 26px; border-radius: 9999px;"></div>
             </div>
-            <ul class="signup-list" style="margin-bottom:0; margin-top: 15px; list-style-type: none; padding: 0;">
-              <li
-                style="padding: 12px 18px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 8px; display: flex; align-items: center; border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);">
-                <div class="skeleton"
-                  style="width: 20px; height: 20px; border-radius: 50%; margin-right: 12px; flex-shrink: 0;"></div>
-                <div class="skeleton" style="width: 140px; height: 18px; border-radius: 4px;"></div>
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -4919,8 +5138,7 @@
 
         if (act.isFull) {
           isExpired = true;
-          const badgeStyle = "color: #ffffff; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: fit-content;";
-          statusHtml = `<span class="status-badge" style="background-color: var(--danger); ${badgeStyle}"><i class="fa-solid fa-lock"></i> ปิดรับแล้ว</span>`;
+          statusHtml = `<span class="status-badge status-closed"><i class="fa-solid fa-lock"></i> ปิดรับแล้ว</span>`;
           card.className = 'activity-card card-status-closed';
           timerHtml = `
             <div class="countdown-badge expired" id="badge-${timerId}">
@@ -4932,20 +5150,19 @@
           const distance = act.deadline - now;
           isExpired = distance < 0;
 
-          const badgeStyle = "color: #ffffff; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: fit-content;";
           if (isNotStarted) {
-            statusHtml = `<span class="status-badge" style="background-color: var(--waiting); ${badgeStyle}"><i class="fa-regular fa-clock"></i> รอเปิด</span>`;
+            statusHtml = `<span class="status-badge status-waiting"><i class="fa-regular fa-clock"></i> รอเปิด</span>`;
             card.className = 'activity-card card-status-waiting';
           } else if (isExpired) {
-            statusHtml = `<span class="status-badge" style="background-color: var(--danger); ${badgeStyle}"><i class="fa-solid fa-lock"></i> ปิดรับแล้ว</span>`;
+            statusHtml = `<span class="status-badge status-closed"><i class="fa-solid fa-lock"></i> ปิดรับแล้ว</span>`;
             card.className = 'activity-card card-status-closed';
           } else {
             const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
             if (hoursLeft < 1) {
-              statusHtml = `<span class="status-badge" style="background-color: var(--warning); ${badgeStyle}"><i class="fa-solid fa-hourglass-half"></i> ใกล้หมดเวลา</span>`;
+              statusHtml = `<span class="status-badge status-warning"><i class="fa-solid fa-hourglass-half"></i> ใกล้หมดเวลา</span>`;
               card.className = 'activity-card card-status-warning';
             } else {
-              statusHtml = `<span class="status-badge" style="background-color: var(--success); ${badgeStyle}"><i class="fa-solid fa-door-open"></i> เปิดรับ</span>`;
+              statusHtml = `<span class="status-badge status-open"><i class="fa-solid fa-door-open"></i> เปิดรับ</span>`;
               card.className = 'activity-card card-status-open';
             }
           }
@@ -4957,6 +5174,8 @@
             </div>
           `;
         } else if (isNotStarted) {
+          statusHtml = `<span class="status-badge status-waiting"><i class="fa-regular fa-clock"></i> รอเปิด</span>`;
+          card.className = 'activity-card card-status-waiting';
           timerHtml = `
             <div class="countdown-badge" id="badge-${timerId}">
               <i class="fa-solid fa-clock"></i>
@@ -4986,24 +5205,24 @@
           let displayHours = diffHoursTime === 0 ? 1 : diffHoursTime;
           timeRemainingText = (isFutureTime ? 'อีก ' : 'ผ่านไปแล้ว ') + displayHours + ' ชั่วโมง';
         }
-        let timeRemainingBadge = timeRemainingText ? `<div style="font-size: 0.85rem; background: ${isFutureTime ? '#ffffff' : '#F1F5F9'}; color: ${isFutureTime ? '#000000' : '#64748B'}; padding: 5px 12px; border-radius: 8px; font-weight: 800; border: 1px solid ${isFutureTime ? 'rgba(0,0,0,0.1)' : '#E2E8F0'}; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"><i class="fa-solid ${isFutureTime ? 'fa-clock' : 'fa-clock-rotate-left'}"></i> ${timeRemainingText}</div>` : '';
+        let timeRemainingBadge = timeRemainingText ? `<div class="card-time-remaining ${isFutureTime ? 'future' : 'past'}"><i class="fa-solid ${isFutureTime ? 'fa-clock' : 'fa-clock-rotate-left'}"></i> ${timeRemainingText}</div>` : '';
 
         card.innerHTML = `
           <div class="card-left">
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
               <div class="card-date"><i class="fa-regular fa-calendar-check"></i> ${dateDisplay}</div>
               ${timeRemainingBadge}
             </div>
             <div class="card-title">${act.title}</div>
-            <div class="card-desc toastui-editor-contents" style="margin-bottom: 5px;">${act.description ? marked.parse(act.description) : ''}</div>
+            <div class="card-desc toastui-editor-contents">${act.description ? marked.parse(act.description) : ''}</div>
             ${(() => {
             if (!act.creatorName) return '';
             const parts = act.creatorName.split('|');
             const creator = parts[0];
             const editor = parts.length > 1 ? parts[parts.length - 1] : null;
-            let html = `<div class="card-creator" style="font-size: 0.9rem; color: #000000; font-weight: 700; margin-top: 8px;"><i class="fa-solid fa-user-pen"></i> สร้างโดย: ${creator}</div>`;
+            let html = `<div class="card-creator" style="margin-top: 6px;"><i class="fa-solid fa-user-pen"></i> สร้างโดย: ${creator}</div>`;
             if (editor && editor !== creator) {
-              html += `<div class="card-editor" style="font-size: 0.9rem; color: #000000; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-user-edit"></i> แก้ไขล่าสุดโดย: ${editor}</div>`;
+              html += `<div class="card-editor" style="margin-top: 3px;"><i class="fa-solid fa-user-edit"></i> แก้ไขล่าสุดโดย: ${editor}</div>`;
             }
             return html;
           })()}
@@ -5329,8 +5548,8 @@
           const isMulti = selectedDateInfo.activity && selectedDateInfo.activity.allowMultipleDuties !== false;
           const formTitleText = isMulti ? 'แบบฟอร์มลงชื่อ (เลือกลงได้หลายหน้าที่)' : 'แบบฟอร์มลงชื่อ (เลือกลงได้ 1 หน้าที่/คน)';
           centralFormHtml = `
-              <div class="signup-form" style="display:flex; flex-direction:column; gap:10px; margin-bottom: 25px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-radius: 8px;">
-                  <div style="font-weight:700; color:var(--primary); margin-bottom: 5px;">${formTitleText}</div>
+              <div class="signup-form">
+                  <div class="signup-form-title"><i class="fa-solid fa-user-pen"></i> ${formTitleText}</div>
                   <select id="centralDutySelect" class="input-control">
                       ${optionsHtml}
                   </select>
@@ -5339,19 +5558,19 @@
                       <div id="centralAutocomplete" class="autocomplete-dropdown" style="display:none; width:100%;"></div>
                   </div>
                   <button class="btn btn-primary btn-block" id="btnCentralSubmit" onclick="submitCentralSignup()">
-                      <i class="fa-solid fa-pen-to-square"></i> ${isAdmin ? 'เพิ่มรายชื่อ (Admin)' : 'ลงชื่อปฏิบัติหน้าที่'}
+                      <i class="fa-solid fa-arrow-right"></i> ${isAdmin ? 'เพิ่มรายชื่อ (Admin)' : 'ลงชื่อปฏิบัติหน้าที่'}
                   </button>
               </div>
             `;
         } else {
           centralFormHtml = `
-            <div style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.15); padding: 24px; border-radius: 16px; text-align: center; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px;">
-              <div style="width: 54px; height: 54px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);">
-                <i class="fa-solid fa-lock" style="font-size: 1.4rem; color: var(--danger);"></i>
+            <div class="signup-form-full">
+              <div class="signup-form-full-icon">
+                <i class="fa-solid fa-lock"></i>
               </div>
               <div style="display: flex; flex-direction: column; gap: 4px;">
-                <span style="font-weight: 700; font-size: 1.15rem; color: var(--danger);">หน้าที่เต็มหมดแล้ว</span>
-                <span style="font-size: 0.95rem; color: var(--text-muted);">ขออภัย ไม่สามารถลงชื่อเพิ่มเติมได้ในขณะนี้</span>
+                <span style="font-weight: 750; font-size: 1.1rem; color: #dc2626;">หน้าที่เต็มหมดแล้ว</span>
+                <span style="font-size: 0.92rem; color: #64748b;">ขออภัย ไม่สามารถลงชื่อเพิ่มเติมได้ในขณะนี้</span>
               </div>
             </div>
           `;
@@ -5375,10 +5594,10 @@
           // Show only counts, no names
         } else {
           if (currentCount > 0) {
-            signupHtml = '<ul class="signup-list" style="margin-bottom:0; margin-top: 15px;">';
+            signupHtml = '<ul class="signup-list">';
             dutySignups.forEach(s => {
-              let deleteBtnHtml = isAdmin ? `<button class="delete-btn" style="background-color: white; border: 1px solid var(--danger); color: var(--danger); min-width: 70px; padding: 10px;" onclick="event.preventDefault(); event.stopPropagation(); deleteSignup(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-trash-can"></i> ลบ</button>` : '';
-              let moveBtnHtml = isAdmin ? `<button class="delete-btn" style="background-color: white; border: 1px solid var(--warning); color: var(--warning); margin-right: 15px; min-width: 70px; padding: 10px;" onclick="event.preventDefault(); event.stopPropagation(); openMoveModal(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย</button>` : '';
+              let deleteBtnHtml = isAdmin ? `<button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteSignup(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-trash-can"></i> ลบ</button>` : '';
+              let moveBtnHtml = isAdmin ? `<button class="move-btn" onclick="event.preventDefault(); event.stopPropagation(); openMoveModal(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย</button>` : '';
 
               let timeHtml = '';
               if (s.timestamp) {
@@ -5393,7 +5612,7 @@
                 timeHtml = `<span style="font-size: 0.75rem; color: var(--text-dim); margin-left: 8px; font-weight: 400;">${d}/${month}/${yy} ${h}:${m}:${sec}:${ms}</span>`;
               }
 
-              let checkboxHtml = isAdmin ? `<input type="checkbox" class="bulk-delete-cb" data-row="${s.row}" data-name="${s.name}" data-duty="${dutyName}" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--danger);" onchange="toggleBulkDeleteBtn()">` : '';
+              let checkboxHtml = isAdmin ? `<input type="checkbox" class="bulk-delete-cb" data-row="${s.row}" data-name="${s.name}" data-duty="${dutyName}" style="margin-right: 10px; width: 16px; height: 16px; cursor: pointer; accent-color: #dc2626;" onchange="toggleBulkDeleteBtn()">` : '';
 
               signupHtml += `<li>
                   <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">${checkboxHtml}<i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${timeHtml}</div>
@@ -5402,20 +5621,20 @@
             });
             signupHtml += '</ul>';
           } else {
-            signupHtml = '<p class="empty-signups" style="margin-bottom:0; margin-top: 15px;">ยังไม่มีผู้ลงชื่อในหน้าที่นี้</p>';
+            signupHtml = '<p class="empty-signups"><i class="fa-solid fa-info-circle"></i> ยังไม่มีผู้ลงชื่อในหน้าที่นี้</p>';
           }
         }
 
         const quotaBadgeClass = isFull ? 'duty-quota full' : 'duty-quota';
         const quotaText = isFull ? 'เต็มแล้ว' : `ว่าง ${quota - currentCount}/${quota}`;
 
-        let singleRandomBtn = isAdmin ? `<button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem; border-color: rgba(197,165,90,0.3); color: var(--accent); margin-right: 10px;" onclick="randomizeSingleDutyBtn('${dutyName}', this)" ${isFull ? 'disabled' : ''}><i class="fa-solid fa-shuffle"></i> สุ่ม</button>` : '';
+        let singleRandomBtn = isAdmin ? `<button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 9999px; margin-right: 6px;" onclick="randomizeSingleDutyBtn('${dutyName}', this)" ${isFull ? 'disabled' : ''}><i class="fa-solid fa-shuffle"></i> สุ่ม</button>` : '';
 
         cardsHtml += `
-          <div class="duty-card" style="padding: 15px 20px; margin-bottom: 12px;">
-            <div class="duty-header" style="${(currentViewMode === 'counts' && !isAdmin) ? 'margin-bottom:0;' : 'margin-bottom: 0;'}">
-              <div class="duty-title" style="font-size: 1.1rem;"><i class="fa-solid fa-clipboard-user"></i> ${dutyName}</div>
-              <div style="display: flex; align-items: center;">
+          <div class="duty-card">
+            <div class="duty-header">
+              <div class="duty-title"><i class="fa-solid fa-clipboard-user"></i> ${dutyName}</div>
+              <div style="display: flex; align-items: center; gap: 8px;">
                 ${singleRandomBtn}
                 <div class="${quotaBadgeClass}">${quotaText}</div>
               </div>
@@ -5476,10 +5695,10 @@
           // Show only counts
         } else {
           if (currentCount > 0) {
-            signupHtml = '<ul class="signup-list" style="margin-bottom:0; margin-top: 15px;">';
+            signupHtml = '<ul class="signup-list">';
             dutySignups.forEach(s => {
-              let deleteBtnHtml = isAdmin ? `<button class="delete-btn" style="background-color: white; border: 1px solid var(--danger); color: var(--danger); min-width: 70px; padding: 10px;" onclick="event.preventDefault(); event.stopPropagation(); deleteSignup(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-trash-can"></i> ลบ</button>` : '';
-              let moveBtnHtml = isAdmin ? `<button class="delete-btn" style="background-color: white; border: 1px solid var(--warning); color: var(--warning); margin-right: 15px; min-width: 70px; padding: 10px;" onclick="event.preventDefault(); event.stopPropagation(); openMoveModal(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย</button>` : '';
+              let deleteBtnHtml = isAdmin ? `<button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteSignup(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-trash-can"></i> ลบ</button>` : '';
+              let moveBtnHtml = isAdmin ? `<button class="move-btn" onclick="event.preventDefault(); event.stopPropagation(); openMoveModal(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย</button>` : '';
 
               let timeHtml = '';
               if (s.timestamp) {
@@ -5500,19 +5719,19 @@
             });
             signupHtml += '</ul>';
           } else {
-            signupHtml = '<p class="empty-signups" style="margin-bottom:0; margin-top: 15px;">ยังไม่มีผู้ลงชื่อในหน้าที่นี้</p>';
+            signupHtml = '<p class="empty-signups"><i class="fa-solid fa-info-circle"></i> ยังไม่มีผู้ลงชื่อในหน้าที่นี้</p>';
           }
         }
 
         const quotaBadgeClass = isFull ? 'duty-quota full' : 'duty-quota';
         const quotaText = isFull ? 'เต็มแล้ว' : `ว่าง ${quota - currentCount}/${quota}`;
-        let singleRandomBtn = isAdmin ? `<button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem; border-color: rgba(197,165,90,0.3); color: var(--accent); margin-right: 10px;" onclick="randomizeSingleDutyBtn('${dutyName}', this)" ${isFull ? 'disabled' : ''}><i class="fa-solid fa-shuffle"></i> สุ่ม</button>` : '';
+        let singleRandomBtn = isAdmin ? `<button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 9999px; margin-right: 6px;" onclick="randomizeSingleDutyBtn('${dutyName}', this)" ${isFull ? 'disabled' : ''}><i class="fa-solid fa-shuffle"></i> สุ่ม</button>` : '';
 
         cardsHtml += `
-          <div class="duty-card" style="padding: 15px 20px; margin-bottom: 12px;">
-            <div class="duty-header" style="${(currentViewMode === 'counts' && !isAdmin) ? 'margin-bottom:0;' : 'margin-bottom: 0;'}">
-              <div class="duty-title" style="font-size: 1.1rem;"><i class="fa-solid fa-clipboard-user"></i> ${dutyName}</div>
-              <div style="display: flex; align-items: center;">
+          <div class="duty-card">
+            <div class="duty-header">
+              <div class="duty-title"><i class="fa-solid fa-clipboard-user"></i> ${dutyName}</div>
+              <div style="display: flex; align-items: center; gap: 8px;">
                 ${singleRandomBtn}
                 <div class="${quotaBadgeClass}">${quotaText}</div>
               </div>
