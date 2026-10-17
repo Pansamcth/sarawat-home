@@ -610,25 +610,76 @@
       .dg-act-controls-bar {
         flex-direction: column;
         align-items: stretch;
-        gap: 14px;
+        gap: 12px;
+        padding-top: 16px;
+        margin-top: 16px;
       }
 
       .dg-act-search-box {
         max-width: 100%;
         min-width: 100%;
+        width: 100%;
+      }
+
+      .dg-act-search-box input {
+        padding: 10px 16px 10px 42px;
+        font-size: 0.95rem;
       }
 
       .dg-roster-controls-right {
         width: 100%;
         display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
       }
 
       .dg-act-pill-btn {
+        padding: 8px 14px;
+        font-size: 0.84rem;
+        white-space: nowrap;
+      }
+
+      #btnRefreshData {
+        flex: 0 0 auto;
+        padding: 8px 12px;
+        height: 40px;
+        border-radius: 9999px;
+      }
+
+      #btnRefreshData span {
+        display: none;
+      }
+
+      .dg-act-pill-btn-status {
         flex: 1;
         justify-content: center;
+        font-size: 0.84rem;
+        height: 40px;
+        border-radius: 9999px;
+      }
+
+      .view-toggle {
+        display: inline-flex;
+        background: #f1f5f9;
+        padding: 3px;
+        border-radius: 9999px;
+        border: 1px solid var(--border-light);
+        gap: 2px;
+        flex: 0 0 auto;
+        height: 40px;
+        box-sizing: border-box;
+      }
+
+      .view-btn {
+        padding: 0;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.88rem;
+        border-radius: 9999px;
       }
 
       .header-container {
@@ -637,11 +688,11 @@
       }
 
       .modal-header {
-        padding: 20px;
+        padding: 18px 20px 14px;
       }
 
       .modal-body {
-        padding: 20px;
+        padding: 16px 20px 24px;
       }
 
       #feedContent.list-view .activity-card {
@@ -653,7 +704,6 @@
         width: 100%;
       }
 
-
       .footer-credits {
         flex-direction: column;
         gap: 8px !important;
@@ -663,31 +713,8 @@
         display: none;
       }
 
-      .view-toggle {
-        order: 2;
-        margin-left: auto;
-      }
-
-      .feed-actions-group {
-        order: 3;
-        width: 100%;
-        margin-left: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .search-container-mobile {
-        order: 3;
-      }
-
       .section-title {
         font-size: 1.1rem;
-      }
-
-      .view-btn {
-        padding: 6px 10px;
-        font-size: 1rem;
       }
     }
 
@@ -1905,6 +1932,92 @@
       margin-bottom: 4px;
     }
 
+    .form-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .form-field-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e293b;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .field-step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #0a0a0c;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 750;
+      flex-shrink: 0;
+    }
+
+    .signup-select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .signup-select,
+    .signup-input {
+      min-height: 48px;
+      height: 48px;
+      font-size: 16px;
+      border-radius: 12px;
+      padding: 10px 16px;
+      border: 1.5px solid #e2e8f0;
+      background-color: #ffffff;
+      color: #0a0a0c;
+      width: 100%;
+      outline: none;
+      font-family: 'Kanit', sans-serif;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .signup-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 16px;
+      padding-right: 40px !important;
+      cursor: pointer;
+    }
+
+    .signup-select:focus,
+    .signup-input:focus {
+      border-color: #0a0a0c;
+      box-shadow: 0 0 0 3px rgba(10, 10, 12, 0.08);
+      background-color: #ffffff;
+    }
+
+    .btn-signup-submit {
+      min-height: 48px;
+      height: 48px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      width: 100%;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
     .signup-form-full {
       background: #fef2f2;
       border: 1.5px solid #fecaca;
@@ -2365,17 +2478,48 @@
         font-size: 1.8rem;
       }
 
+      #detailModal.modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+      }
+
+      #detailModal .modal-content {
+        max-width: 100%;
+        max-height: 92vh;
+        border-radius: 24px 24px 0 0;
+        border-bottom: none;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+        transform: translateY(100%);
+      }
+
+      #detailModal.modal-overlay.active .modal-content {
+        transform: translateY(0);
+      }
+
+      #detailModal .modal-header {
+        padding: 16px 20px 14px;
+        position: relative;
+      }
+
+      #detailModal .modal-header::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background: #cbd5e1;
+        border-radius: 9999px;
+        margin: -4px auto 12px;
+      }
+
+      #detailModal .modal-body {
+        padding: 14px 18px 28px;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+      }
+
       .modal-title {
         font-size: 1.25rem;
         line-height: 1.25;
-      }
-
-      .modal-header {
-        padding: 14px 16px;
-      }
-
-      .modal-body {
-        padding: 14px 16px;
       }
 
       .modal-desc {
@@ -2385,25 +2529,33 @@
       }
 
       .close-modal {
-        top: 12px;
-        right: 12px;
-        width: 28px;
-        height: 28px;
-        font-size: 0.9rem;
+        top: 14px;
+        right: 16px;
+        width: 38px;
+        height: 38px;
+        font-size: 1.05rem;
       }
 
       .timer-container {
         padding: 14px 16px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
 
       .duty-card {
         padding: 16px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+        border-radius: 14px;
       }
 
       .duty-title {
-        font-size: 1.1rem;
+        font-size: 1.08rem;
+      }
+
+      .signup-list li {
+        padding: 12px 14px;
+        font-size: 0.92rem;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
       .activity-card {
@@ -2420,6 +2572,23 @@
 
       .signup-form {
         flex-direction: column;
+        padding: 16px;
+        gap: 12px;
+        border-radius: 14px;
+        margin-bottom: 18px;
+      }
+
+      .signup-select,
+      .signup-input {
+        min-height: 48px;
+        height: 48px;
+        font-size: 16px;
+      }
+
+      .btn-signup-submit {
+        min-height: 48px;
+        height: 48px;
+        font-size: 1rem;
       }
 
       .duty-quota-grid {
@@ -3290,11 +3459,6 @@
           <p class="dg-act-subtitle" id="rosterSubtitle">
             ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก
           </p>
-        </div>
-        <div class="dg-act-stats-badge" id="rosterStatsBadge">
-          <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
-          <span>กิจกรรมในระบบทั้งหมด:</span>
-          <strong id="rosterTotalBadge">0 รายการ</strong>
         </div>
       </div>
 
@@ -5995,16 +6159,30 @@
           const formTitleText = isMulti ? 'แบบฟอร์มลงชื่อ (เลือกลงได้หลายหน้าที่)' : 'แบบฟอร์มลงชื่อ (เลือกลงได้ 1 หน้าที่/คน)';
           centralFormHtml = `
               <div class="signup-form">
-                  <div class="signup-form-title"><i class="fa-solid fa-user-pen"></i> ${formTitleText}</div>
-                  <select id="centralDutySelect" class="input-control">
-                      ${optionsHtml}
-                  </select>
-                  <div style="position: relative;">
-                      <input type="text" id="centralNameInput" class="input-control" placeholder="ค้นหาชื่อ-นามสกุลของคุณ" autocomplete="off" oninput="filterCentralStudents()" onfocus="filterCentralStudents()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitCentralSignup(); }" onblur="setTimeout(() => { let d = document.getElementById('centralAutocomplete'); if(d) d.style.display='none'; }, 350)">
-                      <div id="centralAutocomplete" class="autocomplete-dropdown" style="display:none; width:100%;"></div>
+                  <div class="signup-form-title"><i class="fa-solid fa-user-pen"></i> <span>${formTitleText}</span></div>
+                  <div class="form-field-group">
+                      <label class="form-field-label" for="centralDutySelect">
+                          <span class="field-step-badge">1</span>
+                          <span>เลือกหน้าที่:</span>
+                      </label>
+                      <div class="signup-select-wrapper">
+                          <select id="centralDutySelect" class="input-control signup-select">
+                              ${optionsHtml}
+                          </select>
+                      </div>
                   </div>
-                  <button class="btn btn-primary btn-block" id="btnCentralSubmit" onclick="submitCentralSignup()">
-                      <i class="fa-solid fa-arrow-right"></i> ${isAdmin ? 'เพิ่มรายชื่อ (Admin)' : 'ลงชื่อปฏิบัติหน้าที่'}
+                  <div class="form-field-group">
+                      <label class="form-field-label" for="centralNameInput">
+                          <span class="field-step-badge">2</span>
+                          <span>ค้นหาชื่อ-นามสกุล:</span>
+                      </label>
+                      <div style="position: relative; width: 100%;">
+                          <input type="text" id="centralNameInput" class="input-control signup-input" placeholder="พิมพ์ชื่อ-นามสกุลเพื่อค้นหา..." autocomplete="off" oninput="filterCentralStudents()" onfocus="filterCentralStudents()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitCentralSignup(); }" onblur="setTimeout(() => { let d = document.getElementById('centralAutocomplete'); if(d) d.style.display='none'; }, 350)">
+                          <div id="centralAutocomplete" class="autocomplete-dropdown" style="display:none; width:100%;"></div>
+                      </div>
+                  </div>
+                  <button class="btn btn-primary btn-signup-submit" id="btnCentralSubmit" onclick="submitCentralSignup()">
+                      <i class="fa-solid fa-check"></i> <span>${isAdmin ? 'เพิ่มรายชื่อ (Admin)' : 'ลงชื่อปฏิบัติหน้าที่'}</span>
                   </button>
               </div>
             `;
