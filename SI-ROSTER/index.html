@@ -555,9 +555,11 @@
     }
 
     #feedContent.list-view .card-right {
-      width: 280px;
+      width: auto;
+      min-width: 260px;
       flex-shrink: 0;
       justify-content: center;
+      align-items: flex-end;
     }
 
     @media (max-width: 768px) {
@@ -1078,18 +1080,37 @@
       width: 100%;
     }
 
-    /* Status badge pill */
+    /* Status badge pill with integrated countdown */
     .status-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
+      gap: 7px;
+      padding: 6px 14px;
       border-radius: 9999px;
       font-weight: 750;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       letter-spacing: -0.01em;
       width: fit-content;
-      border: 1px solid transparent;
+      border: 1.5px solid transparent;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .status-badge i {
+      font-size: 0.85rem;
+    }
+
+    .status-badge-sep {
+      opacity: 0.35;
+      font-weight: 400;
+      font-size: 0.85rem;
+      margin: 0 1px;
+    }
+
+    .status-timer-val {
+      font-family: var(--dg-font-sans, 'Kanit', monospace);
+      font-weight: 800;
+      letter-spacing: 0.3px;
     }
 
     .status-badge.status-open {
@@ -3121,8 +3142,7 @@
           </div>
           <div class="card-right">
             <div class="skeleton"
-              style="width: 100px; height: 28px; border-radius: 9999px; align-self: flex-end; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 12px; margin-bottom: 12px;"></div>
+              style="width: 170px; height: 32px; border-radius: 9999px; margin-bottom: 10px;"></div>
             <div class="skeleton" style="width: 100%; height: 44px; border-radius: 9999px;"></div>
           </div>
         </div>
@@ -3135,8 +3155,7 @@
           </div>
           <div class="card-right">
             <div class="skeleton"
-              style="width: 100px; height: 28px; border-radius: 9999px; align-self: flex-end; margin-bottom: 12px;"></div>
-            <div class="skeleton" style="width: 100%; height: 44px; border-radius: 12px; margin-bottom: 12px;"></div>
+              style="width: 170px; height: 32px; border-radius: 9999px; margin-bottom: 10px;"></div>
             <div class="skeleton" style="width: 100%; height: 44px; border-radius: 9999px;"></div>
           </div>
         </div>
@@ -4541,6 +4560,31 @@
               card.classList.add('card-status-open');
             }
 
+            const badge = card.querySelector('.status-badge');
+            if (badge) {
+              if (act.isFull) {
+                badge.className = 'status-badge status-closed';
+                const iconEl = badge.querySelector('i');
+                if (iconEl) iconEl.className = 'fa-solid fa-users-slash';
+                const labelEl = badge.querySelector('.status-badge-label');
+                if (labelEl) labelEl.textContent = 'ปิดรับแล้ว';
+                const timerSpan = badge.querySelector('.status-timer-val') || badge.querySelector('[id^="card-timer-"]');
+                if (timerSpan) timerSpan.textContent = 'คนลงชื่อเต็มแล้ว';
+                const prefixEl = badge.querySelector('.status-badge-prefix');
+                if (prefixEl) prefixEl.textContent = '';
+              } else if (isExpired) {
+                badge.className = 'status-badge status-closed';
+                const iconEl = badge.querySelector('i');
+                if (iconEl) iconEl.className = 'fa-solid fa-lock';
+                const labelEl = badge.querySelector('.status-badge-label');
+                if (labelEl) labelEl.textContent = 'ปิดรับแล้ว';
+                const timerSpan = badge.querySelector('.status-timer-val') || badge.querySelector('[id^="card-timer-"]');
+                if (timerSpan) timerSpan.textContent = 'หมดเวลาลงชื่อ';
+                const prefixEl = badge.querySelector('.status-badge-prefix');
+                if (prefixEl) prefixEl.textContent = '';
+              }
+            }
+
             const actionBtn = card.querySelector('.action-btn');
             if (actionBtn) {
               if (isExpired) {
@@ -4902,7 +4946,7 @@
         const now = new Date().getTime();
         const distance = deadlineTs - now;
         const el = document.getElementById(elementId);
-        const badgeEl = badgeId ? document.getElementById(badgeId) : document.getElementById('badge-' + elementId);
+        const badgeEl = badgeId ? document.getElementById(badgeId) : null;
         const cardEl = cardId ? document.getElementById(cardId) : null;
         if (!el) {
           clearInterval(countdownIntervals[elementId]);
@@ -4913,8 +4957,13 @@
           clearInterval(countdownIntervals[elementId]);
           el.innerHTML = "หมดเวลา";
           if (badgeEl) {
-            badgeEl.style.backgroundColor = '#ffffff';
-            badgeEl.style.color = 'var(--danger)';
+            badgeEl.className = 'status-badge status-closed';
+            const iconEl = badgeEl.querySelector('i');
+            if (iconEl) iconEl.className = 'fa-solid fa-lock';
+            const labelEl = badgeEl.querySelector('.status-badge-label');
+            if (labelEl) labelEl.textContent = 'ปิดรับแล้ว';
+            const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+            if (prefixEl) prefixEl.textContent = '';
           }
           if (cardEl) cardEl.className = 'activity-card card-status-closed';
           if (onExpire) onExpire();
@@ -4933,18 +4982,27 @@
 
         if (badgeEl) {
           if (isWaitingToOpen) {
-            badgeEl.style.backgroundColor = '#ffffff';
-            badgeEl.style.color = 'var(--accent)';
+            badgeEl.className = 'status-badge status-waiting';
+            const iconEl = badgeEl.querySelector('i');
+            if (iconEl) iconEl.className = 'fa-regular fa-clock';
+            const labelEl = badgeEl.querySelector('.status-badge-label');
+            if (labelEl) labelEl.textContent = 'รอเปิด';
             if (cardEl) cardEl.className = 'activity-card card-status-waiting';
           } else {
             const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
             if (hoursLeft < 1) {
-              badgeEl.style.backgroundColor = '#ffffff';
-              badgeEl.style.color = 'var(--warning)';
+              badgeEl.className = 'status-badge status-warning';
+              const iconEl = badgeEl.querySelector('i');
+              if (iconEl) iconEl.className = 'fa-solid fa-hourglass-half';
+              const labelEl = badgeEl.querySelector('.status-badge-label');
+              if (labelEl) labelEl.textContent = 'ใกล้หมดเวลา';
               if (cardEl) cardEl.className = 'activity-card card-status-warning';
             } else {
-              badgeEl.style.backgroundColor = '#ffffff';
-              badgeEl.style.color = 'var(--success)';
+              badgeEl.className = 'status-badge status-open';
+              const iconEl = badgeEl.querySelector('i');
+              if (iconEl) iconEl.className = 'fa-solid fa-door-open';
+              const labelEl = badgeEl.querySelector('.status-badge-label');
+              if (labelEl) labelEl.textContent = 'เปิดรับ';
               if (cardEl) cardEl.className = 'activity-card card-status-open';
             }
           }
@@ -5123,7 +5181,7 @@
 
         let dateDisplay = formatThaiDateRange(act.date, act.endDateStr);
 
-        let timerHtml = '';
+        let statusBadgeHtml = '';
         let timerId = 'card-timer-' + index;
         isExpired = false;
         let isNotStarted = false;
@@ -5134,15 +5192,14 @@
           isNotStarted = distStart > 0;
         }
 
-        let statusHtml = '';
-
         if (act.isFull) {
           isExpired = true;
-          statusHtml = `<span class="status-badge status-closed"><i class="fa-solid fa-lock"></i> ปิดรับแล้ว</span>`;
           card.className = 'activity-card card-status-closed';
-          timerHtml = `
-            <div class="countdown-badge expired" id="badge-${timerId}">
+          statusBadgeHtml = `
+            <div class="status-badge status-closed" id="badge-${timerId}">
               <i class="fa-solid fa-users-slash"></i>
+              <span class="status-badge-label">ปิดรับแล้ว</span>
+              <span class="status-badge-sep">•</span>
               <span id="${timerId}">คนลงชื่อเต็มแล้ว</span>
             </div>
           `;
@@ -5151,35 +5208,54 @@
           isExpired = distance < 0;
 
           if (isNotStarted) {
-            statusHtml = `<span class="status-badge status-waiting"><i class="fa-regular fa-clock"></i> รอเปิด</span>`;
             card.className = 'activity-card card-status-waiting';
+            statusBadgeHtml = `
+              <div class="status-badge status-waiting" id="badge-${timerId}">
+                <i class="fa-regular fa-clock"></i>
+                <span class="status-badge-label">รอเปิด</span>
+                <span class="status-badge-sep">•</span>
+                <span><span class="status-badge-prefix">รอเปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิดลงชื่อ...</strong></span>
+              </div>
+            `;
           } else if (isExpired) {
-            statusHtml = `<span class="status-badge status-closed"><i class="fa-solid fa-lock"></i> ปิดรับแล้ว</span>`;
             card.className = 'activity-card card-status-closed';
+            statusBadgeHtml = `
+              <div class="status-badge status-closed" id="badge-${timerId}">
+                <i class="fa-solid fa-lock"></i>
+                <span class="status-badge-label">ปิดรับแล้ว</span>
+                <span class="status-badge-sep">•</span>
+                <span id="${timerId}">หมดเวลาลงชื่อ</span>
+              </div>
+            `;
           } else {
             const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
-            if (hoursLeft < 1) {
-              statusHtml = `<span class="status-badge status-warning"><i class="fa-solid fa-hourglass-half"></i> ใกล้หมดเวลา</span>`;
-              card.className = 'activity-card card-status-warning';
-            } else {
-              statusHtml = `<span class="status-badge status-open"><i class="fa-solid fa-door-open"></i> เปิดรับ</span>`;
-              card.className = 'activity-card card-status-open';
-            }
+            const isWarning = hoursLeft < 1;
+            card.className = isWarning ? 'activity-card card-status-warning' : 'activity-card card-status-open';
+            statusBadgeHtml = `
+              <div class="status-badge ${isWarning ? 'status-warning' : 'status-open'}" id="badge-${timerId}">
+                <i class="fa-solid ${isWarning ? 'fa-hourglass-half' : 'fa-door-open'}"></i>
+                <span class="status-badge-label">${isWarning ? 'ใกล้หมดเวลา' : 'เปิดรับ'}</span>
+                <span class="status-badge-sep">•</span>
+                <span><span class="status-badge-prefix">เหลืออีก </span><strong id="${timerId}" class="status-timer-val">กำลังคำนวณ...</strong></span>
+              </div>
+            `;
           }
-
-          timerHtml = `
-            <div class="countdown-badge ${isExpired ? 'expired' : ''}" id="badge-${timerId}">
-              <i class="fa-solid fa-clock"></i>
-              <span id="${timerId}">${isExpired ? 'หมดเวลาลงชื่อ' : (isNotStarted ? 'รอเปิดลงชื่อ...' : 'กำลังคำนวณ...')}</span>
+        } else if (isNotStarted) {
+          card.className = 'activity-card card-status-waiting';
+          statusBadgeHtml = `
+            <div class="status-badge status-waiting" id="badge-${timerId}">
+              <i class="fa-regular fa-clock"></i>
+              <span class="status-badge-label">รอเปิด</span>
+              <span class="status-badge-sep">•</span>
+              <span><span class="status-badge-prefix">รอเปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิดลงชื่อ...</strong></span>
             </div>
           `;
-        } else if (isNotStarted) {
-          statusHtml = `<span class="status-badge status-waiting"><i class="fa-regular fa-clock"></i> รอเปิด</span>`;
-          card.className = 'activity-card card-status-waiting';
-          timerHtml = `
-            <div class="countdown-badge" id="badge-${timerId}">
-              <i class="fa-solid fa-clock"></i>
-              <span id="${timerId}">รอเปิดลงชื่อ...</span>
+        } else {
+          card.className = 'activity-card card-status-open';
+          statusBadgeHtml = `
+            <div class="status-badge status-open" id="badge-${timerId}">
+              <i class="fa-solid fa-door-open"></i>
+              <span class="status-badge-label">เปิดรับ</span>
             </div>
           `;
         }
@@ -5228,8 +5304,7 @@
           })()}
           </div>
           <div class="card-right">
-            ${statusHtml}
-            ${timerHtml}
+            ${statusBadgeHtml}
             <button class="action-btn ${isExpired ? 'disabled' : ''}">
               ${isExpired ? 'ดูรายละเอียด' : 'ลงชื่อปฏิบัติหน้าที่'} <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -5245,7 +5320,15 @@
         } else if (act.deadline && !isExpired) {
           startCountdown(timerId, act.deadline, 'badge-' + timerId, cardId, () => {
             const badgeEl = document.getElementById('badge-' + timerId);
-            if (badgeEl) badgeEl.classList.add('expired');
+            if (badgeEl) {
+              badgeEl.className = 'status-badge status-closed';
+              const iconEl = badgeEl.querySelector('i');
+              if (iconEl) iconEl.className = 'fa-solid fa-lock';
+              const labelEl = badgeEl.querySelector('.status-badge-label');
+              if (labelEl) labelEl.textContent = 'ปิดรับแล้ว';
+              const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+              if (prefixEl) prefixEl.textContent = '';
+            }
             const btn = card.querySelector('.action-btn');
             if (btn) {
               btn.classList.add('disabled');
