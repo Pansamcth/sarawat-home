@@ -149,6 +149,43 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
+    @media (max-width: 640px) {
+      .recruit-nav-tabs {
+        width: 100%;
+        max-width: 390px;
+        display: flex;
+        padding: 4px;
+        gap: 4px;
+        margin-bottom: 20px;
+      }
+
+      .recruit-tab-btn {
+        flex: 1;
+        padding: 8px 10px;
+        font-size: 0.84rem;
+        gap: 6px;
+        justify-content: center;
+        white-space: nowrap;
+      }
+
+      .recruit-tab-btn svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .recruit-tab-btn {
+        padding: 7px 5px;
+        font-size: 0.78rem;
+        gap: 4px;
+      }
+      .recruit-tab-btn svg {
+        width: 14px !important;
+        height: 14px !important;
+      }
+    }
+
     /* Top PDPA Button in Header Title Row */
     .pdpa-top-btn {
       display: inline-flex;
@@ -184,6 +221,17 @@
         width: 100%;
         display: flex;
         justify-content: flex-start;
+      }
+
+      .pdpa-top-btn {
+        padding: 7px 14px;
+        font-size: 0.80rem;
+        gap: 6px;
+      }
+
+      .pdpa-top-btn svg {
+        width: 15px !important;
+        height: 15px !important;
       }
     }
 
@@ -584,6 +632,184 @@
       background: #1e293b;
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+    }
+
+    /* Responsive Button Text Utilities */
+    .btn-text-short {
+      display: none;
+    }
+    .btn-text-full {
+      display: inline;
+    }
+
+    @media (max-width: 640px) {
+      .btn-text-full {
+        display: none;
+      }
+      .btn-text-short {
+        display: inline;
+      }
+
+      .recruit-actions-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 20px;
+        padding-top: 16px;
+        width: 100%;
+      }
+
+      .btn-step-prev {
+        padding: 9px 12px;
+        font-size: 0.84rem;
+        gap: 6px;
+        flex-shrink: 0;
+        white-space: nowrap;
+        justify-content: center;
+      }
+
+      .btn-step-prev svg {
+        width: 15px !important;
+        height: 15px !important;
+      }
+
+      .btn-step-next {
+        padding: 9px 14px;
+        font-size: 0.85rem;
+        gap: 6px;
+        flex: 1;
+        justify-content: center;
+        text-align: center;
+        margin-left: 0;
+        white-space: nowrap;
+      }
+
+      .btn-step-next svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+
+      .recruit-main-section {
+        padding: 24px 12px 60px !important;
+      }
+
+      .recruit-card {
+        padding: 20px 16px;
+        border-radius: 16px;
+        margin-bottom: 18px;
+      }
+
+      .recruit-card-header {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        gap: 10px;
+      }
+
+      .recruit-card-title {
+        font-size: 1.05rem;
+      }
+
+      .recruit-card-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+      }
+
+      .recruit-card-icon svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+
+      .recruit-input,
+      .recruit-select {
+        height: 42px;
+        font-size: 0.90rem;
+        padding: 0 12px;
+      }
+
+      .recruit-step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+      }
+
+      .recruit-steps-bar {
+        margin-bottom: 24px;
+        gap: 8px;
+      }
+
+      .photo-btn-select {
+        padding: 7px 14px;
+        font-size: 0.82rem;
+      }
+
+      .photo-upload-container {
+        gap: 16px;
+      }
+
+      .photo-preview-wrap {
+        width: 110px;
+        height: 140px;
+      }
+
+      .status-check-card {
+        padding: 24px 16px;
+        border-radius: 16px;
+      }
+
+      #btnSearchStatus {
+        padding: 0 16px !important;
+        font-size: 0.88rem !important;
+        height: 44px;
+      }
+
+      #inpSearchStudentId {
+        height: 44px;
+        font-size: 0.95rem !important;
+      }
+
+      #btnUnlockCorrection {
+        height: 42px !important;
+        font-size: 0.86rem !important;
+        padding: 0 14px !important;
+      }
+
+      .btn-cancel-edit {
+        width: 100%;
+        justify-content: center;
+        padding: 7px 14px;
+      }
+
+      .recruit-success-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+      }
+
+      .recruit-success-actions .btn-step-next,
+      .recruit-success-actions .btn-step-prev {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 0.88rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .recruit-actions-row {
+        gap: 6px;
+      }
+
+      .btn-step-prev {
+        padding: 8px 10px;
+        font-size: 0.80rem;
+      }
+
+      .btn-step-next {
+        padding: 8px 10px;
+        font-size: 0.80rem;
+      }
     }
 
     /* Review Dossier (Step 2) */
@@ -1101,11 +1327,11 @@
   </header>
 
   <!-- ============ MAIN CONTENT ============ -->
-  <main class="dg-activities-section" style="padding: 40px 20px 80px;">
+  <main class="dg-activities-section recruit-main-section" style="padding: 40px 20px 80px;">
     <div class="dg-container" style="max-width: 860px; text-align: center;">
 
       <!-- Mode Switcher Tabs (ยื่นใบสมัครใหม่ vs ตรวจสอบสถานะใบสมัคร) -->
-      <div style="display: flex; justify-content: center; margin-bottom: 32px;">
+      <div class="recruit-tabs-wrapper" style="display: flex; justify-content: center; margin-bottom: 32px;">
         <div class="recruit-nav-tabs">
           <button type="button" class="recruit-tab-btn active" id="tabBtnApply">
             <i data-lucide="file-plus-2" style="width: 18px; height: 18px;"></i>
@@ -1113,7 +1339,8 @@
           </button>
           <button type="button" class="recruit-tab-btn" id="tabBtnStatus">
             <i data-lucide="search" style="width: 18px; height: 18px;"></i>
-            <span>ตรวจสอบสถานะใบสมัคร</span>
+            <span class="btn-text-full">ตรวจสอบสถานะใบสมัคร</span>
+            <span class="btn-text-short">ตรวจสอบสถานะ</span>
           </button>
         </div>
       </div>
@@ -1579,10 +1806,12 @@
             <div class="recruit-actions-row">
               <a href="index.html" class="btn-step-prev">
                 <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-                <span>กลับหน้าหลัก</span>
+                <span class="btn-text-full">กลับหน้าหลัก</span>
+                <span class="btn-text-short">หน้าแรก</span>
               </a>
               <button type="button" class="btn-step-next" id="btnGoToStep2">
-                <span>ตรวจสอบข้อมูล (ขั้นตอนถัดไป)</span>
+                <span class="btn-text-full">ตรวจสอบข้อมูล (ขั้นตอนถัดไป)</span>
+                <span class="btn-text-short">ตรวจสอบข้อมูล</span>
                 <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
               </button>
             </div>
@@ -1665,7 +1894,8 @@
               <div class="recruit-actions-row">
                 <button type="button" class="btn-step-prev" id="btnBackToStep1">
                   <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-                  <span>ย้อนกลับไปแก้ไข</span>
+                  <span class="btn-text-full">ย้อนกลับไปแก้ไข</span>
+                  <span class="btn-text-short">ย้อนกลับ</span>
                 </button>
                 <button type="button" class="btn-step-next" id="btnSubmitApplication" style="background: #10b981;">
                   <span id="txtBtnSubmit">ยืนยันและส่งใบสมัคร</span>
@@ -1725,10 +1955,10 @@
                 </div>
               </div>
 
-              <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px;">
+              <div class="recruit-success-actions" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px;">
                 <button type="button" class="btn-step-next" id="btnGoTrackStatus" style="margin: 0;">
                   <i data-lucide="search" style="width: 17px; height: 17px;"></i>
-                  <span>ตรวจสอบสถานะใบสมัครของคุณ</span>
+                  <span>ตรวจสอบสถานะใบสมัคร</span>
                 </button>
                 <a href="index.html" class="btn-step-prev">
                   <span>กลับสู่หน้าหลัก</span>
@@ -1763,7 +1993,7 @@
           </p>
 
           <!-- Search Input Box -->
-          <div style="display: flex; gap: 10px; max-width: 440px; margin: 0 auto 20px;">
+          <div class="status-search-box" style="display: flex; gap: 10px; max-width: 440px; margin: 0 auto 20px;">
             <input type="tel" id="inpSearchStudentId" maxlength="5" class="recruit-input"
               placeholder="กรอกรหัสนักเรียน 5 หลัก"
               style="font-size: 1.05rem; text-align: center; letter-spacing: 0.08em; font-weight: 750;" />
