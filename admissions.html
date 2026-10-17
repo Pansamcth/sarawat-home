@@ -14,15 +14,15 @@
         var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
         var isAdmissionsSubdomain = /^admissions?\./i.test(h);
 
-        // กฎหลัก: หน้า admissions.html อนุญาตให้เข้าถึงผ่าน admissions.sarawatdc.site เท่านั้น
+        // กฎหลัก: หน้า admissions.html อนุญาตให้เข้าถึงผ่าน admission.sarawatdc.site เท่านั้น
         if (!isLocal && !isAdmissionsSubdomain) {
-          window.location.replace('https://admissions.sarawatdc.site' + window.location.search + window.location.hash);
+          window.location.replace('https://admission.sarawatdc.site' + window.location.search + window.location.hash);
           return;
         }
 
-        // เมื่ออยู่บนซับโดเมน admissions ให้คง URL ในแถบแอดเดรสเป็นลิงก์เพียว ๆ (/)
+        // เมื่ออยู่บนซับโดเมน admission ให้คง URL ในแถบแอดเดรสเป็นลิงก์เพียว ๆ (/)
         if (isAdmissionsSubdomain && window.history && window.history.replaceState) {
-          if (p.endsWith('/admissions.html') || p.includes('/recruit') || p === '/admissions') {
+          if (p.endsWith('/admissions.html') || p.endsWith('/admission.html') || p.includes('/recruit') || p === '/admissions' || p === '/admission') {
             window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
           }
         }
@@ -30,30 +30,30 @@
     })();
   </script>
 
-  <title>SARAWAT ADMISSIONS 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
+  <title>SARAWAT ADMISSION 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
   <meta name="description"
-    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSIONS 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่" />
+    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSION 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่" />
   <meta name="keywords"
-    content="SARAWAT ADMISSIONS 70, รับสมัครสารวัตรนักเรียน, สารวัตรนักเรียน 2570, เดชะปัตตนยานุกูล, Truant Patrol, สารวัตรนักเรียน เดชะ, admissions" />
+    content="SARAWAT ADMISSION 70, รับสมัครสารวัตรนักเรียน, สารวัตรนักเรียน 2570, เดชะปัตตนยานุกูล, Truant Patrol, สารวัตรนักเรียน เดชะ, admission, admissions" />
   <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://sarawatdc.site/admissions" />
+  <link rel="canonical" href="https://sarawatdc.site/admission" />
 
   <!-- Open Graph / Facebook / Discord Preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sarawatdc.site/admissions" />
-  <meta property="og:title" content="SARAWAT ADMISSIONS 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta property="og:url" content="https://sarawatdc.site/admission" />
+  <meta property="og:title" content="SARAWAT ADMISSION 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
   <meta property="og:description"
-    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSIONS 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่" />
+    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSION 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่" />
   <meta property="og:image" content="https://sarawatdc.site/assets/images/recruit-cover.jpg" />
   <meta property="og:site_name" content="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
   <meta property="og:locale" content="th_TH" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="SARAWAT ADMISSIONS 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta name="twitter:title" content="SARAWAT ADMISSION 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
   <meta name="twitter:description"
-    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSIONS 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่" />
+    content="ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSION 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่" />
   <meta name="twitter:image" content="https://sarawatdc.site/assets/images/recruit-cover.jpg" />
 
   <!-- Schema.org JSON-LD -->
@@ -61,9 +61,9 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "SARAWAT ADMISSIONS 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)",
-    "url": "https://sarawatdc.site/admissions",
-    "description": "ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSIONS 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่",
+    "name": "SARAWAT ADMISSION 70 | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)",
+    "url": "https://sarawatdc.site/admission",
+    "description": "ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 (SARAWAT ADMISSION 70) สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย มีจิตสาธารณะ และพร้อมเสียสละเพื่อส่วนรวม ศึกษาคุณสมบัติ หลักเกณฑ์การสมัคร ขั้นตอนการคัดเลือก และรายละเอียดการรับสมัครได้ที่นี่",
     "image": "https://sarawatdc.site/assets/images/recruit-cover.jpg",
     "publisher": {
       "@type": "Organization",
@@ -1076,15 +1076,15 @@
           <span>หน้าแรก</span>
         </a>
         <span class="sep">/</span>
-        <span style="color: var(--dg-black); font-weight: 750;">SARAWAT ADMISSIONS 70</span>
+        <span style="color: var(--dg-black); font-weight: 750;">SARAWAT ADMISSION 70</span>
       </nav>
 
       <div class="dg-act-title-row">
         <div>
-          <span class="dg-section-tag">Truant Patrol • SARAWAT ADMISSIONS 70</span>
+          <span class="dg-section-tag">Truant Patrol • SARAWAT ADMISSION 70</span>
           <h1 class="dg-act-main-title">
             ระบบรับสมัครสารวัตรนักเรียนปี 2570<br>
-            SARAWAT ADMISSIONS 70
+            SARAWAT ADMISSION 70
           </h1>
           <p class="dg-act-subtitle">
             คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล • เปิดรับสมัครนักเรียนชั้น ม.4 และ ม.5 ประจำปีการศึกษา 2570
@@ -1913,8 +1913,8 @@
                 <span>รายงานการทำงาน / ร้องเรียน</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="/admissions" class="dg-footer-arrow-link" title="SARAWAT ADMISSIONS 70">
-                <span>SARAWAT ADMISSIONS 70</span>
+              <a href="/admission" class="dg-footer-arrow-link" title="SARAWAT ADMISSION 70">
+                <span>SARAWAT ADMISSION 70</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
               <a href="/si-roster" target="_blank" rel="noopener noreferrer"
@@ -2830,8 +2830,8 @@
         console.warn('Auto correction check error:', e);
       }
 
-      // When hosted on admissions.sarawatdc.site subdomain, ensure navigation links point back to the main site
-      if (window.location.hostname.startsWith('admissions.')) {
+      // When hosted on admission.sarawatdc.site subdomain, ensure navigation links point back to the main site
+      if (/^admissions?\./i.test(window.location.hostname)) {
         try {
           const mainSiteUrl = 'https://sarawat-home.vercel.app';
           const navBrand = document.querySelector('.dg-brand');

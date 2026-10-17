@@ -32,10 +32,10 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- ระบบรับสมัครสารวัตรนักเรียน (SARAWAT ADMISSIONS 70) -->
+  <!-- ระบบรับสมัครสารวัตรนักเรียน (SARAWAT ADMISSION 70) -->
   <url>
-    <loc>https://www.sarawatdc.site/admissions</loc>
-    <lastmod>2026-10-16</lastmod>
+    <loc>https://www.sarawatdc.site/admission</loc>
+    <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

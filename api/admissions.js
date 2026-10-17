@@ -3,7 +3,10 @@ const path = require('path');
 
 module.exports = async function handler(req, res) {
   try {
-    const filePath = path.join(process.cwd(), 'admissions.html');
+    let filePath = path.join(process.cwd(), 'admissions.html');
+    if (!fs.existsSync(filePath)) {
+      filePath = path.join(process.cwd(), 'admission.html');
+    }
     const html = fs.readFileSync(filePath, 'utf8');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
