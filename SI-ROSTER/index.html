@@ -71,14 +71,21 @@
   }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=Source+Code+Pro:wght@700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&family=Sarabun:wght@300;400;500;600;700&family=Source+Code+Pro:wght@700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+  <!-- Diego Minimalist Swiss Agency Design System -->
+  <link rel="stylesheet" href="/css/diego.css" onerror="this.onerror=null;this.href='../css/diego.css';" />
+
   <style>
     .toastui-editor-contents,
     .toastui-editor-contents p,
@@ -180,10 +187,8 @@
       font-family: 'Kanit', sans-serif;
       line-height: 1.6;
       letter-spacing: 0.2px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
+      margin: 0;
+      padding: 0;
       position: relative;
       overflow-x: hidden;
     }
@@ -348,9 +353,119 @@
     /* ===== ACTIVITY FEED ===== */
     .activity-feed-container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
+      margin: 36px auto 60px;
+      padding: 0 24px;
+      box-sizing: border-box;
       animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
       opacity: 0;
+    }
+
+    /* Diego Header Integration for SI-ROSTER */
+    .dg-roster-status-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 22px;
+      background: #0a0a0c;
+      color: #ffffff;
+      border: 1px solid #0a0a0c;
+      border-radius: 9999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      text-decoration: none;
+    }
+    .dg-roster-status-btn:hover {
+      background: #1f242e;
+      border-color: #1f242e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+    }
+    .dg-roster-status-btn:active {
+      transform: translateY(0);
+    }
+
+    .dg-act-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0 0;
+      margin-top: 24px;
+      border-top: 1px solid var(--dg-border, #e5e7eb);
+    }
+    .dg-act-search-box {
+      position: relative;
+      min-width: 280px;
+      max-width: 440px;
+      flex: 1;
+    }
+    .dg-act-search-box input {
+      width: 100%;
+      padding: 11px 16px 11px 42px;
+      border: 1px solid var(--dg-border, #e5e7eb);
+      border-radius: 9999px;
+      background: var(--dg-bg-subtle, #f7f8fa);
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--text-main, #0a0a0c);
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+    .dg-act-search-box input:focus {
+      background: #ffffff;
+      border-color: #0a0a0c;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+    .dg-act-search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-dim, #94a3b8);
+      pointer-events: none;
+    }
+    .dg-act-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: #ffffff;
+      border: 1px solid var(--dg-border, #e5e7eb);
+      border-radius: 9999px;
+      color: var(--text-main, #0a0a0c);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+    .dg-act-pill-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+    .dg-act-pill-btn-status {
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #059669;
+    }
+    .dg-act-pill-btn-status:hover {
+      background: #f0fdf4;
+      border-color: #10b981;
+      color: #047857;
+    }
+    .dg-act-pill-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     #feedContent {
@@ -474,7 +589,36 @@
 
     @media (max-width: 768px) {
       body {
-        padding: 15px 10px;
+        padding: 0;
+      }
+
+      .activity-feed-container {
+        margin: 20px auto 40px;
+        padding: 0 16px;
+      }
+
+      .dg-act-controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .dg-act-search-box {
+        max-width: 100%;
+        min-width: 100%;
+      }
+
+      .dg-roster-controls-right {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: space-between;
+      }
+
+      .dg-act-pill-btn {
+        flex: 1;
+        justify-content: center;
       }
 
       .header-container {
@@ -2645,46 +2789,116 @@
   <!-- Datalist for autocomplete student names -->
   <datalist id="studentList"></datalist>
 
-  <div class="header-container">
-    <div
-      style="font-size: clamp(1rem, 3vw, 1.4rem); font-weight: 700; color: var(--text-main); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">
-      ระบบเลือกหน้าที่อิเล็กทรอนิกส์</div>
-    <h1 class="header-title"
-      style="margin-bottom: 5px; font-size: clamp(4rem, 12vw, 6rem); font-weight: 900; letter-spacing: -1.5px; background: url('https://raw.githubusercontent.com/Pansamcth/Pansamcth.github.io/main/si-roster/assets/images/wallpaper.PNG') center / cover no-repeat; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);">
-      SI-ROSTER</h1>
-    <div style="font-size: clamp(0.9rem, 3.5vw, 1.3rem); font-weight: 500; color: var(--text-muted);">
-      สารวัตรนักเรียน - โรงเรียนเดชะปัตตนยานุกูล</div>
-  </div>
+  <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
+  <div class="dg-scroll-progress" id="scrollProgress"></div>
 
-  <div class="activity-feed-container" id="activityFeed">
-    <div class="feed-header-flex">
-      <div class="section-title"><i class="fa-solid fa-list-ul"></i> กิจกรรมที่กำลังจะมาถึง</div>
-      <div class="feed-actions-group" style="flex-wrap: wrap;">
-        <div class="search-container-mobile" style="position: relative; flex: 1; min-width: 200px;">
-          <i class="fa-solid fa-magnifying-glass"
-            style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-dim);"></i>
-          <input type="text" id="activitySearchInput" class="input-control"
-            placeholder="ค้นหากิจกรรม (ชื่อ, รายละเอียด)..."
-            style="padding-left: 40px; border-radius: 12px; font-size: 0.95rem; width: 100%; box-sizing: border-box; margin: 0; height: 100%; min-height: 40px;"
-            onkeyup="buildFeed(currentActivities)">
+  <!-- ============ NAVIGATION BAR ============ -->
+  <nav class="dg-nav" id="dgNav">
+    <div class="dg-nav-container">
+      <a href="/" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
+        <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';" alt="โรงเรียนเดชะปัตตนยานุกูล"
+          style="width: 36px; height: 36px; object-fit: contain;" />
+        <span
+          style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
+        <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';" alt="สารวัตรนักเรียน"
+          style="width: 36px; height: 36px; object-fit: contain;" />
+        <span class="dg-brand-text">SARAWAT</span>
+      </a>
+
+      <div class="dg-nav-links" id="dgNavLinks">
+        <a href="/">หน้าแรก</a>
+        <a href="/activities.html">ข่าวสารกิจกรรม</a>
+        <a href="/calendar.html">ตารางกิจกรรม</a>
+        <a href="/team.html">คณะทำงาน</a>
+      </div>
+
+      <div class="dg-nav-actions">
+        <a href="/#contact" class="dg-btn-black">
+          <span>ติดต่อเรา</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+        <button class="dg-nav-toggle" id="dgNavToggle" aria-label="Toggle menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ PAGE HEADER ============ -->
+  <header class="dg-act-page-header">
+    <div class="dg-container" style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+      <!-- Breadcrumb -->
+      <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">
+          <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+          <span>หน้าแรก</span>
+        </a>
+        <span class="sep">/</span>
+        <span style="color: var(--dg-black, #0a0a0c); font-weight: 750;" id="rosterBreadcrumbCurrent">ระบบลงหน้าที่ (SI-ROSTER)</span>
+      </nav>
+
+      <div class="dg-act-title-row">
+        <div>
+          <span class="dg-section-tag" id="rosterSectionTag">DUTY ROSTER • ระบบเลือกหน้าที่อิเล็กทรอนิกส์</span>
+          <h1 class="dg-act-main-title" id="rosterMainTitle">
+            SI-ROSTER.<br>
+            ระบบเลือกหน้าที่สารวัตรนักเรียนออนไลน์
+          </h1>
+          <p class="dg-act-subtitle" id="rosterSubtitle">
+            ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก
+          </p>
         </div>
-        <div class="action-buttons-container" style="display: flex; gap: 10px; flex: 1;">
-          <button class="btn btn-outline" id="btnRefreshData"
-            style="flex: 1; padding: 8px 16px; border-radius: 12px; font-size: 0.95rem; border-color: var(--success); color: var(--success); box-shadow: none; white-space: nowrap;"
-            onclick="this.innerHTML='<i class=&quot;fa-solid fa-rotate-right fa-spin&quot;></i> โหลด...'; this.disabled=true; loadUpcomingActivities();"><i
-              class="fa-solid fa-rotate-right"></i> รีเฟรชข้อมูล</button>
-          <button class="btn btn-outline"
-            style="flex: 1; padding: 8px 16px; border-radius: 12px; font-size: 0.95rem; border-color: var(--accent); color: var(--accent); box-shadow: none; white-space: nowrap;"
-            onclick="openStatusSearchModal()"><i class="fa-solid fa-user-check"></i> เช็คหน้าที่ของฉัน</button>
+        <div class="dg-act-title-actions" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <button type="button" class="dg-roster-status-btn" onclick="openStatusSearchModal()" title="ตรวจสอบหน้าที่และเวรปฏิบัติงานของฉัน">
+            <i data-lucide="user-check" style="width: 18px; height: 18px; color: #10b981;"></i>
+            <span>เช็คหน้าที่ของฉัน</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px; opacity: 0.7;"></i>
+          </button>
         </div>
       </div>
-      <div class="view-toggle">
-        <button class="view-btn" id="btnViewGrid" onclick="changeFeedView('grid')" title="มุมมองการ์ด (Grid)"><i
-            class="fa-solid fa-border-all"></i></button>
-        <button class="view-btn active" id="btnViewList" onclick="changeFeedView('list')" title="มุมมองรายการ (List)"><i
-            class="fa-solid fa-bars"></i></button>
-        <button class="view-btn" id="btnViewCalendar" onclick="changeFeedView('calendar')"
-          title="มุมมองปฏิทิน (Calendar)"><i class="fa-regular fa-calendar-days"></i></button>
+
+      <!-- Controls: Search & Action Buttons -->
+      <div class="dg-act-controls-bar">
+        <!-- Search Box -->
+        <div class="dg-act-search-box">
+          <i data-lucide="search" class="dg-act-search-icon"></i>
+          <input type="text" id="activitySearchInput" placeholder="ค้นหากิจกรรม (ชื่อ, รายละเอียด, จุดปฏิบัติงาน)..."
+            onkeyup="buildFeed(currentActivities)" oninput="buildFeed(currentActivities)" />
+        </div>
+
+        <!-- Action Controls -->
+        <div class="dg-roster-controls-right" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="dg-act-pill-btn" id="btnRefreshData"
+            onclick="this.innerHTML='<i class=&quot;fa-solid fa-rotate-right fa-spin&quot;></i> โหลด...'; this.disabled=true; loadUpcomingActivities();"
+            title="รีเฟรชข้อมูลกิจกรรมล่าสุด">
+            <i class="fa-solid fa-rotate-right" style="font-size: 0.88rem;"></i>
+            <span>รีเฟรชข้อมูล</span>
+          </button>
+
+          <button type="button" class="dg-act-pill-btn dg-act-pill-btn-status" onclick="openStatusSearchModal()"
+            title="ตรวจสอบหน้าที่ของฉัน">
+            <i class="fa-solid fa-user-check" style="font-size: 0.88rem; color: #10b981;"></i>
+            <span>เช็คหน้าที่ของฉัน</span>
+          </button>
+
+          <div class="view-toggle">
+            <button class="view-btn" id="btnViewGrid" onclick="changeFeedView('grid')" title="มุมมองการ์ด (Grid)"><i
+                class="fa-solid fa-border-all"></i></button>
+            <button class="view-btn active" id="btnViewList" onclick="changeFeedView('list')" title="มุมมองรายการ (List)"><i
+                class="fa-solid fa-bars"></i></button>
+            <button class="view-btn" id="btnViewCalendar" onclick="changeFeedView('calendar')"
+              title="มุมมองปฏิทิน (Calendar)"><i class="fa-regular fa-calendar-days"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="activity-feed-container" id="activityFeed">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+      <div class="section-title" style="margin: 0; font-size: 1.15rem; font-weight: 750; color: var(--text-main); display: flex; align-items: center; gap: 10px;">
+        <i class="fa-solid fa-calendar-check" style="color: var(--accent);"></i>
+        <span>กิจกรรมและตารางเวรปฏิบัติหน้าที่</span>
       </div>
     </div>
 
@@ -5795,10 +6009,62 @@
         }
       }, 3000);
     }
-
   </script>
 
+  <!-- Navigation & Lucide Handler -->
+  <script>
+    // Scroll event for Navigation Bar & Scroll Progress
+    window.addEventListener('scroll', () => {
+      const dgNav = document.getElementById('dgNav');
+      if (dgNav) {
+        if (window.scrollY > 20) {
+          dgNav.classList.add('scrolled');
+        } else {
+          dgNav.classList.remove('scrolled');
+        }
+      }
+      const bar = document.getElementById('scrollProgress');
+      if (bar) {
+        const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = h > 0 ? (window.scrollY / h) * 100 : 0;
+        bar.style.width = progress + '%';
+      }
+    }, { passive: true });
 
+    // Mobile Navigation Drawer Toggle & Lucide initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('dgNavToggle');
+      const menu = document.getElementById('dgNavLinks');
+      if (toggle && menu) {
+        toggle.addEventListener('click', () => {
+          menu.classList.toggle('active');
+          const icon = toggle.querySelector('i');
+          if (icon && window.lucide) {
+            icon.setAttribute('data-lucide', menu.classList.contains('active') ? 'x' : 'menu');
+            lucide.createIcons();
+          }
+        });
+
+        menu.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', () => {
+            menu.classList.remove('active');
+            const icon = toggle.querySelector('i');
+            if (icon && window.lucide) {
+              icon.setAttribute('data-lucide', 'menu');
+              lucide.createIcons();
+            }
+          });
+        });
+      }
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+
+  <!-- Image Protection & Anti-Copy System -->
+  <script src="/js/image-protection.js" onerror="this.onerror=null;this.src='../js/image-protection.js';"></script>
 </body>
 
 </html>
