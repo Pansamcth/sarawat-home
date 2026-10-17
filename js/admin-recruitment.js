@@ -330,8 +330,13 @@
             <td style="padding: 12px 16px; color: #475569; white-space: nowrap;">
               ${a.grade_level}/${a.classroom}
             </td>
-            <td style="padding: 12px 16px; font-weight: 750; color: #0f172a;">
-              ${Number(a.gpax).toFixed(2)}
+            <td style="padding: 12px 16px; font-weight: 750; color: #0f172a; white-space: nowrap;">
+              <span>${Number(a.gpax).toFixed(2)}</span>
+              ${Number(a.gpax) < (recruitmentSettingsCache?.min_gpax || 2.50) ? `
+                <span title="ต่ำกว่าเกณฑ์ขั้นต่ำ (${(recruitmentSettingsCache?.min_gpax || 2.50).toFixed(2)})" style="display: inline-block; margin-left: 4px; padding: 1px 6px; font-size: 0.7rem; font-weight: 800; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: 9999px;">
+                  ⚠️ ต่ำกว่าเกณฑ์
+                </span>
+              ` : ''}
             </td>
             <td style="padding: 12px 16px; font-size: 0.86rem; color: #1e293b; font-weight: 700; max-width: 240px;">
               <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${a.club}</div>
@@ -510,7 +515,21 @@
       document.getElementById('mdlAppPhone').textContent = a.phone;
       const elPhoneLink = document.getElementById('mdlAppPhoneLink');
       if (elPhoneLink) elPhoneLink.href = `tel:${a.phone}`;
-      document.getElementById('mdlAppGpax').textContent = Number(a.gpax).toFixed(2);
+      const mdlGpaxEl = document.getElementById('mdlAppGpax');
+      if (mdlGpaxEl) {
+        const minG = (recruitmentSettingsCache?.min_gpax || 2.50);
+        const isLow = Number(a.gpax) < minG;
+        if (isLow) {
+          mdlGpaxEl.innerHTML = `
+            <span style="font-weight: 800; color: #b45309;">${Number(a.gpax).toFixed(2)}</span>
+            <span style="display: inline-block; margin-left: 6px; padding: 2px 8px; font-size: 0.76rem; font-weight: 700; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: 9999px;">
+              ⚠️ ต่ำกว่าเกณฑ์ (${minG.toFixed(2)}) - กำลังพิจารณา
+            </span>
+          `;
+        } else {
+          mdlGpaxEl.textContent = Number(a.gpax).toFixed(2);
+        }
+      }
       document.getElementById('mdlAppClub').textContent = a.club;
 
       const formattedDate = a.created_at ? new Date(a.created_at).toLocaleString('th-TH') : '-';
@@ -562,8 +581,9 @@
       const updateCorrectionLinkUI = () => {
         if (boxEditLink && inpDirectLink && btnOpenPage) {
           if (a.student_id && (selStatus.value === 'correction_needed' || a.status === 'correction_needed')) {
-            const origin = window.location.origin;
-            const fullLink = `${origin}/admission?edit=${a.student_id}`;
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const base = isLocal ? window.location.origin : 'https://admission.sarawatdc.site';
+            const fullLink = `${base}/?edit=${a.student_id}`;
             inpDirectLink.value = fullLink;
             btnOpenPage.href = fullLink;
             boxEditLink.style.display = 'block';

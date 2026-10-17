@@ -1392,7 +1392,15 @@
                     </label>
                     <input type="number" step="0.01" min="0" max="4.00" class="recruit-input" id="inpGpax"
                       placeholder="เช่น 3.45" />
-                    <div class="recruit-field-error" id="errGpax">เกรดเฉลี่ยสะสมต้องไม่ต่ำกว่าเกณฑ์ที่กำหนด (2.50)</div>
+                    <div class="recruit-field-error" id="errGpax">กรุณากรอกเกรดเฉลี่ยสะสมระหว่าง 0.00 ถึง 4.00</div>
+                    <div id="warnGpaxLow" style="display: none; margin-top: 6px; padding: 10px 12px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; font-size: 0.82rem; color: #b45309; line-height: 1.5;">
+                      <div style="display: flex; align-items: flex-start; gap: 8px;">
+                        <i data-lucide="alert-triangle" style="width: 16px; height: 16px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+                        <div>
+                          <strong>ข้อความแจ้งเตือน:</strong> เกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำ คุณยังสามารถส่งใบสมัครได้ โดยใบสมัครจะอยู่ในขั้นตอนกำลังพิจารณาเป็นกรณีพิเศษ
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1608,6 +1616,17 @@
                 </div>
               </div>
 
+              <!-- LOW GPAX NOTICE IN STEP 2 REVIEW -->
+              <div id="boxReviewGpaxNotice" style="display: none; margin-bottom: 20px; padding: 14px 16px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; font-size: 0.88rem; color: #92400e; line-height: 1.6;">
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                  <i data-lucide="alert-circle" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+                  <div>
+                    <strong style="font-weight: 800; color: #b45309;">แจ้งเตือนเรื่องเกรดเฉลี่ยสะสม (GPAX):</strong><br>
+                    <span id="txtReviewGpaxNotice">เกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำที่กำหนด แต่คุณยังสามารถส่งใบสมัครได้ โดยใบสมัครจะเข้าสู่ขั้นตอนการพิจารณาคุณสมบัติเป็นกรณีพิเศษโดยคณะกรรมการ</span>
+                  </div>
+                </div>
+              </div>
+
               <!-- PDPA CONSENT SECTION -->
               <div class="pdpa-consent-box" id="boxPdpaConsent">
                 <input type="checkbox" id="chkPdpa" class="pdpa-checkbox" />
@@ -1674,6 +1693,17 @@
                 <div class="screenshot-alert-text">
                   📸 กรุณาถ่ายภาพหน้าจอ (Screenshot) หรือบันทึกหน้านี้ไว้เป็นหลักฐาน!<br>
                   เพื่อใช้เลขอ้างอิงและรหัสประจำตัวนักเรียนในการตรวจสอบสถานะใบสมัคร
+                </div>
+              </div>
+
+              <!-- LOW GPAX SUCCESS NOTICE -->
+              <div id="successGpaxNotice" style="display: none; margin-top: 18px; padding: 14px 18px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; text-align: left; color: #92400e;">
+                <div style="display: flex; align-items: flex-start; gap: 10px;">
+                  <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+                  <div style="font-size: 0.88rem; line-height: 1.6;">
+                    <strong style="font-weight: 800; color: #b45309;">หมายเหตุการพิจารณาเป็นกรณีพิเศษ:</strong><br>
+                    เนื่องจากเกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำ คณะกรรมการจะนำใบสมัครของท่านเข้าสู่ขั้นตอนพิจารณาคุณสมบัติเป็นกรณีพิเศษ ท่านสามารถตรวจสอบความคืบหน้าได้ที่แท็บ "ตรวจสอบสถานะ"
+                  </div>
                 </div>
               </div>
 
@@ -1761,6 +1791,17 @@
               <div>
                 <div class="dossier-item-label">วันที่ส่งใบสมัคร</div>
                 <div class="dossier-item-value" id="stSubmittedDate">-</div>
+              </div>
+            </div>
+
+            <!-- LOW GPAX STATUS ALERT -->
+            <div id="stLowGpaxAlert" style="display: none; margin-top: 16px; padding: 14px 16px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; color: #92400e;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <i data-lucide="alert-triangle" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+                <div style="font-size: 0.88rem; line-height: 1.6;">
+                  <strong style="font-weight: 800; color: #b45309;">เกรดเฉลี่ยสะสมต่ำกว่าเกณฑ์ที่กำหนด</strong><br>
+                  <span id="stLowGpaxText">เกรดเฉลี่ยสะสมของท่านต่ำกว่าเกณฑ์ขั้นต่ำ ขณะนี้ใบสมัครของท่านอยู่ในขั้นตอนกำลังพิจารณาเป็นกรณีพิเศษโดยคณะกรรมการ</span>
+                </div>
               </div>
             </div>
 
@@ -2455,6 +2496,27 @@
       if (btnClosePdpa) btnClosePdpa.addEventListener('click', closePdpaModal);
       if (btnAcknowledgePdpa) btnAcknowledgePdpa.addEventListener('click', closePdpaModal);
 
+      // Real-time GPAX input listener to toggle low GPAX warning
+      const inpGpaxEl = document.getElementById('inpGpax');
+      if (inpGpaxEl) {
+        inpGpaxEl.addEventListener('input', () => {
+          const val = parseFloat(inpGpaxEl.value);
+          const warnG = document.getElementById('warnGpaxLow');
+          const errG = document.getElementById('errGpax');
+          if (!isNaN(val) && val >= 0.00 && val <= 4.00) {
+            if (errG) errG.style.display = 'none';
+            inpGpaxEl.classList.remove('has-error');
+            if (val < (systemSettings.minGpax || 2.50)) {
+              if (warnG) warnG.style.display = 'block';
+            } else {
+              if (warnG) warnG.style.display = 'none';
+            }
+          } else {
+            if (warnG) warnG.style.display = 'none';
+          }
+        });
+      }
+
       // ==========================================
       // STEP 1 -> STEP 2 VALIDATION & REVIEW
       // ==========================================
@@ -2523,14 +2585,25 @@
           hasError = true;
         }
 
-        // 7. GPAX
+        // 7. GPAX (อนุญาตให้เกรดต่ำกว่าเกณฑ์ส่งได้ โดยไม่บล็อก แต่ขึ้นแจ้งเตือน)
         const gpaxVal = parseFloat(document.getElementById('inpGpax').value);
-        if (isNaN(gpaxVal) || gpaxVal < systemSettings.minGpax || gpaxVal > 4.00) {
+        const errG = document.getElementById('errGpax');
+        const warnG = document.getElementById('warnGpaxLow');
+
+        if (isNaN(gpaxVal) || gpaxVal < 0.00 || gpaxVal > 4.00) {
           document.getElementById('inpGpax').classList.add('has-error');
-          const errG = document.getElementById('errGpax');
-          errG.textContent = `เกรดเฉลี่ยสะสมต้องอยู่ระหว่าง ${systemSettings.minGpax.toFixed(2)} ถึง 4.00`;
+          errG.textContent = 'กรุณากรอกเกรดเฉลี่ยสะสม (GPAX) เป็นตัวเลขระหว่าง 0.00 ถึง 4.00';
           errG.style.display = 'block';
+          if (warnG) warnG.style.display = 'none';
           hasError = true;
+        } else {
+          document.getElementById('inpGpax').classList.remove('has-error');
+          errG.style.display = 'none';
+          if (gpaxVal < systemSettings.minGpax) {
+            if (warnG) warnG.style.display = 'block';
+          } else {
+            if (warnG) warnG.style.display = 'none';
+          }
         }
 
         // 8. Club
@@ -2587,7 +2660,30 @@
         document.getElementById('reviewStudentId').textContent = studentId;
         document.getElementById('reviewGradeRoom').textContent = `${grade}/${room}`;
         document.getElementById('reviewPhone').textContent = phone;
-        document.getElementById('reviewGpax').textContent = gpaxVal.toFixed(2);
+
+        const isBelowMinGpax = gpaxVal < systemSettings.minGpax;
+        const elReviewGpax = document.getElementById('reviewGpax');
+        const boxReviewGpaxNotice = document.getElementById('boxReviewGpaxNotice');
+        const txtReviewGpaxNotice = document.getElementById('txtReviewGpaxNotice');
+
+        if (isBelowMinGpax) {
+          elReviewGpax.innerHTML = `
+            <span style="font-weight: 800; color: #b45309;">${gpaxVal.toFixed(2)}</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 2px 8px; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: 9999px; font-size: 0.76rem; font-weight: 700;">
+              ⚠️ ต่ำกว่าเกณฑ์ (กำลังพิจารณา)
+            </span>
+          `;
+          if (boxReviewGpaxNotice) {
+            boxReviewGpaxNotice.style.display = 'block';
+            if (txtReviewGpaxNotice) {
+              txtReviewGpaxNotice.textContent = `เกรดเฉลี่ยสะสมของคุณ (${gpaxVal.toFixed(2)}) ต่ำกว่าเกณฑ์ขั้นต่ำที่กำหนด (${systemSettings.minGpax.toFixed(2)}) แต่คุณยังสามารถส่งใบสมัครได้ โดยใบสมัครจะเข้าสู่ขั้นตอนการพิจารณาคุณสมบัติเป็นกรณีพิเศษโดยคณะกรรมการ`;
+            }
+          }
+        } else {
+          elReviewGpax.textContent = gpaxVal.toFixed(2);
+          if (boxReviewGpaxNotice) boxReviewGpaxNotice.style.display = 'none';
+        }
+
         document.getElementById('reviewClub').textContent = club;
 
         const vNo = document.getElementById('inpVillageNo').value.trim();
@@ -2718,6 +2814,14 @@
               ผู้สมัคร: <strong>${res.applicantName}</strong> (รหัส ${res.studentId}) • ส่งเมื่อ: <span>${res.submittedAt}</span>
             `;
 
+            // Display Low GPAX Warning on Step 3 if applicable
+            const successGpaxNotice = document.getElementById('successGpaxNotice');
+            if (successGpaxNotice) {
+              const currentGpax = parseFloat(document.getElementById('inpGpax').value);
+              const isLow = Boolean(res.isBelowMinGpax) || (!isNaN(currentGpax) && currentGpax < (systemSettings.minGpax || 2.50));
+              successGpaxNotice.style.display = isLow ? 'block' : 'none';
+            }
+
             // Switch to Step 3
             stepPane2.style.display = 'none';
             stepPane3.style.display = 'block';
@@ -2780,6 +2884,23 @@
             const stBadgeText = document.getElementById('stBadgeText');
             stBadge.className = `status-badge ${res.status}`;
             stBadgeText.textContent = res.statusLabel;
+
+            // Low GPAX status alert
+            const stLowGpaxAlert = document.getElementById('stLowGpaxAlert');
+            const stLowGpaxText = document.getElementById('stLowGpaxText');
+            if (stLowGpaxAlert) {
+              const isLow = Boolean(res.isBelowMinGpax) || (res.gpax !== null && res.gpax !== undefined && Number(res.gpax) < Number(res.minGpax || systemSettings.minGpax || 2.50));
+              if (isLow) {
+                stLowGpaxAlert.style.display = 'block';
+                if (stLowGpaxText) {
+                  const gVal = res.gpax !== null && res.gpax !== undefined ? Number(res.gpax).toFixed(2) : '-';
+                  const minGVal = Number(res.minGpax || systemSettings.minGpax || 2.50).toFixed(2);
+                  stLowGpaxText.textContent = `เกรดเฉลี่ยสะสมของท่าน (${gVal}) ต่ำกว่าเกณฑ์ขั้นต่ำ (${minGVal}) ขณะนี้ใบสมัครของท่านอยู่ในขั้นตอนกำลังพิจารณาเป็นกรณีพิเศษโดยคณะกรรมการ`;
+                }
+              } else {
+                stLowGpaxAlert.style.display = 'none';
+              }
+            }
 
             // Handle Correction Needed mode
             const stCorrectionBox = document.getElementById('stCorrectionBox');
