@@ -476,6 +476,12 @@
       cursor: not-allowed;
     }
 
+    .dg-roster-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
     #feedContent {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -631,19 +637,23 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        flex-wrap: nowrap;
+        flex-wrap: nowrap !important;
       }
 
       .dg-act-pill-btn {
-        padding: 8px 14px;
+        padding: 8px 12px;
         font-size: 0.84rem;
         white-space: nowrap;
       }
 
       #btnRefreshData {
-        flex: 0 0 auto;
-        padding: 8px 12px;
+        flex: 0 0 40px;
+        width: 40px;
         height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 9999px;
       }
 
@@ -653,10 +663,15 @@
 
       .dg-act-pill-btn-status {
         flex: 1;
+        min-width: 0;
         justify-content: center;
-        font-size: 0.84rem;
+        font-size: 0.82rem;
+        padding: 8px 10px;
         height: 40px;
         border-radius: 9999px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .view-toggle {
@@ -669,6 +684,10 @@
         flex: 0 0 auto;
         height: 40px;
         box-sizing: border-box;
+      }
+
+      #btnViewGrid {
+        display: none !important;
       }
 
       .view-btn {
@@ -3472,7 +3491,7 @@
         </div>
 
         <!-- Action Controls -->
-        <div class="dg-roster-controls-right" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div class="dg-roster-controls-right">
           <button type="button" class="dg-act-pill-btn" id="btnRefreshData"
             onclick="this.innerHTML='<i class=&quot;fa-solid fa-rotate-right fa-spin&quot;></i> โหลด...'; this.disabled=true; loadUpcomingActivities();"
             title="รีเฟรชข้อมูลกิจกรรมล่าสุด">
