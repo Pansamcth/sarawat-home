@@ -99,28 +99,28 @@
     :root {
       --primary: #0F172A;
       --primary-hover: #1E293B;
-      --primary-light: #F1F5F9;
+      --primary-light: #F8FAFC;
       --secondary: #FFFFFF;
       --accent: #000000;
       --accent-light: rgba(0, 0, 0, 0.04);
       --success: #10B981;
-      --danger: #F43F5E;
+      --danger: #EF4444;
       --warning: #F59E0B;
       --waiting: #6366F1;
-      --bg: #FAFAFA;
+      --bg: #F8FAFC;
       --bg-white: #FFFFFF;
       --card-bg: #FFFFFF;
-      --card-border: rgba(0, 0, 0, 0.06);
+      --card-border: #E2E8F0;
       --text-main: #0F172A;
       --text-muted: #64748B;
       --text-dim: #94A3B8;
-      --border-light: rgba(0, 0, 0, 0.06);
+      --border-light: #E2E8F0;
       --border-radius: 16px;
-      --transition: 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-      --shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.05);
-      --shadow-hover: 0 12px 32px -8px rgba(0, 0, 0, 0.1);
-      --glass-bg: rgba(255, 255, 255, 0.85);
-      --glass-border: rgba(255, 255, 255, 0.4);
+      --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      --glass-bg: #FFFFFF;
+      --glass-border: #E2E8F0;
     }
 
     * {
@@ -2087,68 +2087,243 @@
 
     .dashboard-container.active {
       display: flex;
-      animation: fadeIn 0.4s ease;
+      animation: fadeIn 0.3s ease;
     }
 
+    /* Light Minimalist Sidebar */
     .sidebar {
       width: 280px;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: #FFFFFF;
       display: flex;
       flex-direction: column;
       border-right: 1px solid var(--border-light);
-      z-index: 10;
-      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+      z-index: 100;
+      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.03);
+      transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .sidebar-header {
-      padding: 32px 24px;
-      font-size: 1.5rem;
-      font-weight: 800;
+    .sidebar-brand-box {
+      padding: 22px 20px 18px 20px;
       border-bottom: 1px solid var(--border-light);
       display: flex;
       align-items: center;
       gap: 12px;
+      position: relative;
+    }
+
+    .sidebar-logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-logos img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .sidebar-logos-divider {
+      width: 1px;
+      height: 26px;
+      background: var(--border-light);
+    }
+
+    .sidebar-brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .sidebar-brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
       color: var(--primary);
+      letter-spacing: -0.5px;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .sidebar-brand-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-close-btn {
+      display: none;
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      color: var(--text-main);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-quick-link-box {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-light);
+      background: #FAFAFA;
+    }
+
+    .sidebar-student-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-student-link:hover {
+      background: var(--primary-light);
+      border-color: #CBD5E1;
+      transform: translateX(2px);
     }
 
     .sidebar-nav {
       flex: 1;
-      padding: 24px 12px;
+      padding: 16px 12px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
 
+    .sidebar-section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 8px 12px 4px 12px;
+    }
+
     .sidebar-item {
-      padding: 14px 20px;
+      padding: 11px 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 14px;
-      color: var(--text-muted);
-      transition: var(--transition);
-      font-weight: 600;
-      font-size: 1.05rem;
-      border-radius: 12px;
+      gap: 12px;
+      color: #475569;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      user-select: none;
+    }
+
+    .sidebar-item i {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      color: #64748B;
+      transition: color 0.2s;
     }
 
     .sidebar-item:hover {
-      background: rgba(15, 23, 42, 0.04);
-      color: var(--text-main);
+      background: #F1F5F9;
+      color: var(--primary);
+    }
+
+    .sidebar-item:hover i {
+      color: var(--primary);
     }
 
     .sidebar-item.active {
       background: var(--primary);
-      color: white;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .sidebar-item.active i {
+      color: #FFFFFF;
     }
 
     .sidebar-footer {
-      padding: 24px;
+      padding: 16px;
       border-top: 1px solid var(--border-light);
+      background: #FAFAFA;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-admin-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 4px;
+    }
+
+    .sidebar-admin-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+
+    .sidebar-admin-meta {
+      flex: 1;
+      min-width: 0;
+      line-height: 1.25;
+    }
+
+    .sidebar-admin-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-admin-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-logout-btn {
+      width: 100%;
+      padding: 9px 14px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--danger);
+      background: #FFFFFF;
+      border: 1px solid #FEE2E2;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sidebar-logout-btn:hover {
+      background: #FEF2F2;
+      border-color: #FECACA;
     }
 
     .dashboard-main {
@@ -2156,17 +2331,27 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      background: transparent;
+      background: var(--bg);
     }
 
     .mobile-menu-btn {
       display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 1.15rem;
       color: var(--primary);
       cursor: pointer;
-      padding: 5px;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mobile-menu-btn:hover {
+      background: #F1F5F9;
     }
 
     .sidebar-backdrop {
@@ -2176,9 +2361,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.4);
+      background: rgba(15, 23, 42, 0.45);
       backdrop-filter: blur(4px);
-      z-index: 9;
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 99;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -2187,52 +2373,63 @@
       opacity: 1;
     }
 
-    @media (max-width: 1400px) {
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: -300px;
-        height: 100%;
-        transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
-      }
-
-      .sidebar.mobile-open {
-        left: 0;
-      }
-
-      .sidebar-backdrop.active {
-        display: block;
-      }
-
-      .dashboard-header {
-        padding: 15px 20px !important;
-      }
-    }
-
     .dashboard-header {
-      background: rgba(255, 255, 255, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 20px 40px;
+      background: #FFFFFF;
+      padding: 14px 28px;
       border-bottom: 1px solid var(--border-light);
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 5;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    }
+
+    .header-student-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .header-student-btn:hover {
+      background: #F1F5F9;
+      border-color: #CBD5E1;
+    }
+
+    .header-admin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--text-main);
     }
 
     .dashboard-content {
       flex: 1;
-      padding: 40px;
+      padding: 28px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .dash-tab {
       display: none;
+    }
+
+    .dash-tab.active {
+      display: block;
+      animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     .dash-tab.active {
@@ -2437,62 +2634,72 @@
       color: #fff;
     }
 
-    /* Data Panel */
+    /* Modern Data Panel & Table */
     .data-panel {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
+      background: #FFFFFF;
+      border-radius: 16px;
       border: 1px solid var(--border-light);
       overflow: hidden;
       box-shadow: var(--shadow);
-      margin-bottom: 30px;
+      margin-bottom: 24px;
     }
 
     .data-panel-header {
-      padding: 24px 32px;
+      padding: 18px 24px;
       border-bottom: 1px solid var(--border-light);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 255, 255, 0.5);
+      background: #FFFFFF;
     }
 
     .data-panel-header h2 {
       margin: 0;
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       color: var(--text-main);
-      font-weight: 800;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .data-table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 520px;
     }
 
     .data-table th,
     .data-table td {
-      padding: 18px 24px;
+      padding: 14px 20px;
       text-align: left;
-      border-bottom: 1px solid var(--border-light);
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 0.92rem;
     }
 
     .data-table th {
-      background: rgba(15, 23, 42, 0.02);
-      font-weight: 700;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      background: #F8FAFC;
+      font-weight: 600;
+      color: #475569;
+      font-size: 0.85rem;
+      letter-spacing: 0.3px;
+      border-bottom: 1px solid var(--border-light);
     }
 
     .data-table td {
       color: var(--text-main);
-      font-size: 1rem;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .data-table tr:hover {
-      background: rgba(255, 255, 255, 0.9);
+      background: #F8FAFC;
     }
 
     .data-table tr:last-child td {
@@ -2501,9 +2708,9 @@
 
     .add-form {
       display: flex;
-      gap: 16px;
-      padding: 24px 32px;
-      background: rgba(15, 23, 42, 0.01);
+      gap: 12px;
+      padding: 18px 24px;
+      background: #F8FAFC;
       border-bottom: 1px solid var(--border-light);
       align-items: center;
     }
@@ -2512,110 +2719,566 @@
       flex: 1;
     }
 
-    /* Split Layout */
-    .split-layout {
-      display: flex;
-      gap: 32px;
-      align-items: flex-start;
-    }
-
-    .split-left {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .split-right {
-      width: 460px;
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      position: sticky;
-      top: 0;
-    }
-
-    .editor-header {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: white;
-      padding: 24px 32px;
-      display: flex;
-      justify-content: space-between;
+    /* Modern Status Badges (Standardized with Public Roster) */
+    .status-badge {
+      display: inline-flex;
       align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      line-height: 1.4;
+      white-space: nowrap;
+      font-family: 'Kanit', sans-serif;
+      letter-spacing: 0.2px;
+      transition: all 0.2s ease;
     }
 
-    .editor-header h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .status-badge i {
+      font-size: 0.85rem;
     }
 
-    .editor-body {
-      padding: 32px;
+    .status-badge-sep {
+      opacity: 0.45;
+      margin: 0 2px;
+      font-weight: 400;
     }
 
-    .list-item-card {
-      background: rgba(255, 255, 255, 0.7);
+    .status-badge-prefix {
+      font-weight: 400;
+    }
+
+    .status-timer-val {
+      font-weight: 600;
+    }
+
+    .status-badge.status-open {
+      background: #ECFDF5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+    }
+
+    .status-badge.status-warning {
+      background: #FFFBEB;
+      color: #D97706;
+      border: 1px solid #FDE68A;
+      animation: pulse-badge 2s infinite ease-in-out;
+    }
+
+    .status-badge.status-waiting {
+      background: #EEF2FF;
+      color: #4F46E5;
+      border: 1px solid #C7D2FE;
+    }
+
+    .status-badge.status-closed {
+      background: #F1F5F9;
+      color: #475569;
+      border: 1px solid #CBD5E1;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.82; }
+    }
+
+    /* Admin Activity Card */
+    .admin-activity-card {
+      background: #FFFFFF;
       border: 1px solid var(--border-light);
       border-radius: 16px;
       padding: 20px 24px;
       margin-bottom: 16px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
       cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
     }
 
-    .list-item-card:hover {
-      border-color: white;
+    .admin-activity-card:hover {
+      border-color: #CBD5E1;
       box-shadow: var(--shadow-hover);
       transform: translateY(-2px);
     }
 
-    .list-item-card.active {
-      border-color: var(--accent);
-      background: white;
-      border-left: 6px solid var(--accent);
-      box-shadow: var(--shadow-hover);
+    .admin-activity-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary);
     }
 
-    .list-item-info h4 {
-      margin: 0 0 8px 0;
-      font-size: 1.15rem;
-      color: var(--text-main);
-      font-weight: 700;
+    .admin-activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .list-item-info p {
+    .admin-activity-title {
       margin: 0;
-      font-size: 0.95rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .admin-activity-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
       color: var(--text-muted);
+    }
+
+    .admin-activity-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-activity-duties {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      padding-top: 2px;
+    }
+
+    .admin-duty-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #F8FAFC;
+      border: 1px solid var(--border-light);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    .admin-duty-chip-count {
+      background: var(--primary);
+      color: #FFFFFF;
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .admin-activity-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid #F1F5F9;
+      flex-wrap: wrap;
+    }
+
+    .admin-activity-action-btns {
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    @media (max-width: 1400px) {
-      .split-layout {
-        flex-direction: column;
+    /* Duty Stepper & Dynamic Rows */
+    .dynamic-duty-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: #FFFFFF;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s;
+    }
+
+    .dynamic-duty-row:hover {
+      border-color: #CBD5E1;
+    }
+
+    .duty-drag-handle {
+      cursor: grab;
+      color: var(--text-dim);
+      padding: 0 6px;
+      font-size: 0.95rem;
+    }
+
+    .duty-drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .duty-stepper {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .stepper-btn {
+      background: #FFFFFF;
+      border: none;
+      width: 32px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      transition: background 0.15s;
+      font-size: 0.8rem;
+    }
+
+    .stepper-btn:hover {
+      background: #F1F5F9;
+    }
+
+    .stepper-btn:active {
+      background: #E2E8F0;
+    }
+
+    .duty-stepper input.duty-quota {
+      width: 50px !important;
+      height: 36px !important;
+      text-align: center;
+      border: none !important;
+      background: transparent !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .duty-remove-btn {
+      background: #FEF2F2;
+      border: 1px solid #FEE2E2;
+      color: var(--danger);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .duty-remove-btn:hover {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    /* Activity Editor Modal Components */
+    .editor-modal-content {
+      max-width: 780px !important;
+      width: 95% !important;
+      max-height: 90vh !important;
+      display: flex !important;
+      flex-direction: column !important;
+      background: #FFFFFF !important;
+      border-radius: 20px !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid var(--border-light) !important;
+      overflow: hidden !important;
+    }
+
+    .editor-modal-header {
+      padding: 18px 24px !important;
+      border-bottom: 1px solid var(--border-light) !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      background: #FFFFFF !important;
+    }
+
+    .editor-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .editor-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px !important;
+      background: var(--bg) !important;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .editor-card-section {
+      background: #FFFFFF;
+      border-radius: 14px;
+      border: 1px solid var(--border-light);
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .editor-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .editor-section-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .editor-section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+      font-family: 'Kanit', sans-serif;
+    }
+
+    .editor-section-subtext {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    .editor-form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .editor-options-box {
+      background: #F8FAFC;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-light);
+      margin-top: 12px;
+    }
+
+    .custom-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: #1E293B;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .form-hint {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-top: 5px;
+    }
+
+    .dynamic-duty-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .add-duty-btn {
+      width: 100%;
+      padding: 11px;
+      border: 2px dashed #CBD5E1;
+      background: transparent;
+      color: var(--text-main);
+      font-weight: 500;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .add-duty-btn:hover {
+      background: #F1F5F9;
+      border-color: var(--primary);
+    }
+
+    .duty-summary-container {
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: #F8FAFC;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      border-left: 3px solid var(--primary);
+      font-size: 0.9rem;
+    }
+
+    .duty-summary-header {
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .duty-summary-text {
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .editor-modal-footer {
+      padding: 16px 24px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-save-editor {
+      flex: 2;
+      min-width: 180px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .btn-delete-editor {
+      padding: 12px 18px;
+      font-size: 0.95rem;
+    }
+
+    .btn-cancel-editor {
+      padding: 12px 18px;
+      font-size: 0.95rem;
+    }
+
+    /* Responsive Mobile Overrides */
+    @media (max-width: 1200px) {
+      .mobile-menu-btn {
+        display: flex !important;
       }
 
-      .split-right {
-        width: 100%;
-        position: static;
+      .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: -320px !important;
+        height: 100% !important;
+        z-index: 1000 !important;
+      }
+
+      .sidebar.mobile-open {
+        left: 0 !important;
+      }
+
+      .sidebar-close-btn {
+        display: flex !important;
+      }
+
+      .sidebar-backdrop.active {
+        display: block !important;
+      }
+
+      .dashboard-header {
+        padding: 12px 18px !important;
+      }
+
+      .dashboard-content {
+        padding: 20px 16px !important;
+      }
+    }
+
+    @media (max-width: 992px) {
+      #historySplitLayout {
+        grid-template-columns: 1fr !important;
+      }
+
+      .editor-form-grid-2 {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hide-mobile {
+        display: none !important;
+      }
+
+      .admin-activity-card {
+        padding: 16px !important;
+        gap: 12px !important;
+      }
+
+      .admin-activity-header {
+        flex-direction: column !important;
+        gap: 10px !important;
+        align-items: flex-start !important;
+      }
+
+      .admin-activity-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+
+      .admin-activity-action-btns {
+        width: 100% !important;
+        justify-content: stretch !important;
+      }
+
+      .admin-activity-action-btns .btn {
+        flex: 1 !important;
+        text-align: center !important;
+        justify-content: center !important;
+      }
+
+      .data-panel-header {
+        padding: 16px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+
+      .add-form {
+        padding: 14px 16px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+
+      .editor-modal-footer {
+        flex-direction: column !important;
+        padding: 14px 16px !important;
+      }
+
+      .editor-modal-footer .btn {
+        width: 100% !important;
       }
     }
 
     /* Scrollbar */
     ::-webkit-scrollbar {
       width: 5px;
+      height: 5px;
     }
 
     ::-webkit-scrollbar-track {
@@ -2623,7 +3286,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #d5d0c6;
+      background: #CBD5E1;
       border-radius: 3px;
     }
 
@@ -3062,80 +3725,168 @@
   <div id="adminDashboard" class="dashboard-container">
     <div class="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
     <div class="sidebar" id="dashboardSidebar">
-      <div class="sidebar-header" style="justify-content: space-between; padding-right: 15px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span>Admin Panel</span>
+      <div class="sidebar-brand-box">
+        <div class="sidebar-logos">
+          <img src="../assets/icons/school-logo.png" onerror="if(this.src!=='/assets/icons/school-logo.png')this.src='/assets/icons/school-logo.png'" alt="School Crest">
+          <div class="sidebar-logos-divider"></div>
+          <img src="../assets/icons/sarawat-logo.png" onerror="if(this.src!=='/assets/icons/sarawat-logo.png')this.src='/assets/icons/sarawat-logo.png'" alt="Sarawat Emblem">
         </div>
-        <a href="/si-roster" onclick="goToRosterStudent(event)" style="color: #94a3b8; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 4px;" title="กลับไปยังหน้านักเรียน">
-          <i class="fa-solid fa-house"></i>
+        <div class="sidebar-brand-text">
+          <div class="sidebar-brand-title">SI-ROSTER</div>
+          <div class="sidebar-brand-badge">ADMIN PANEL</div>
+        </div>
+        <button type="button" class="sidebar-close-btn" onclick="toggleMobileSidebar()" title="ปิดแถบเมนู">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-quick-link-box">
+        <a href="/si-roster" onclick="goToRosterStudent(event)" class="sidebar-student-link" title="กลับสู่หน้านักเรียน">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>หน้านักเรียน (Student View)</span>
         </a>
       </div>
-      <div style="padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);">
-        <a href="/si-roster" onclick="goToRosterStudent(event)" style="color: #38bdf8; font-size: 0.85rem; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 500;">
-          <i class="fa-solid fa-arrow-left"></i> หน้านักเรียน (Student View)
-        </a>
-      </div>
+
       <div class="sidebar-nav">
-        
-        <div class="sidebar-item" onclick="switchDashTab('activities')"><i class="fa-solid fa-clipboard-list"></i>
-          จัดการกิจกรรม</div>
-        <div class="sidebar-item" onclick="switchDashTab('history')"><i class="fa-solid fa-clock-rotate-left"></i>
-          ประวัติกิจกรรม</div>
-        <div class="sidebar-item" onclick="switchDashTab('students')"><i class="fa-solid fa-users"></i> จัดการนักเรียน
+        <div class="sidebar-section-label">การจัดการระบบ</div>
+        <div class="sidebar-item" onclick="switchDashTab('activities')">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>จัดการกิจกรรม</span>
         </div>
-        <div class="sidebar-item" onclick="switchDashTab('duties')"><i class="fa-solid fa-location-dot"></i>
-          จัดการหน้าที่ที่รับผิดชอบ</div>
-        <div class="sidebar-item" id="adminMenuAdmins" onclick="switchDashTab('admins')"><i
-            class="fa-solid fa-user-tie"></i> จัดการแอดมิน
+        <div class="sidebar-item" onclick="switchDashTab('history')">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>ประวัติกิจกรรม</span>
         </div>
-        <div class="sidebar-item" id="adminMenuAdvisors" onclick="switchDashTab('advisors')" style="display:none;"><i
-            class="fa-solid fa-user-pen"></i> จัดการครูที่ปรึกษา
+        <div class="sidebar-item" onclick="switchDashTab('students')">
+          <i class="fa-solid fa-users"></i>
+          <span>จัดการนักเรียน</span>
         </div>
-        <div class="sidebar-item" onclick="switchDashTab('realtime')"><i class="fa-solid fa-satellite-dish"></i>
-          รายงานสรุป (แบบสด)
+        <div class="sidebar-item" onclick="switchDashTab('duties')">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>จัดการหน้าที่ที่รับผิดชอบ</span>
         </div>
-        <div class="sidebar-item" id="adminMenuLogs" onclick="switchDashTab('logs')" style="display:none;"><i
-            class="fa-solid fa-clock-rotate-left"></i>
-          ประวัติการแก้ไขกิจกรรม
+        <div class="sidebar-item" id="adminMenuAdmins" onclick="switchDashTab('admins')">
+          <i class="fa-solid fa-user-tie"></i>
+          <span>จัดการแอดมิน</span>
+        </div>
+        <div class="sidebar-item" id="adminMenuAdvisors" onclick="switchDashTab('advisors')" style="display:none;">
+          <i class="fa-solid fa-user-pen"></i>
+          <span>จัดการครูที่ปรึกษา</span>
         </div>
 
+        <div class="sidebar-section-label" style="margin-top: 10px;">รายงานและบันทึก</div>
+        <div class="sidebar-item" onclick="switchDashTab('realtime')">
+          <i class="fa-solid fa-satellite-dish"></i>
+          <span>รายงานสรุป (แบบสด)</span>
+        </div>
+        <div class="sidebar-item" id="adminMenuLogs" onclick="switchDashTab('logs')" style="display:none;">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>ประวัติการแก้ไขกิจกรรม</span>
+        </div>
       </div>
+
       <div class="sidebar-footer">
-        <button class="btn btn-secondary" style="width:100%" onclick="adminLogout()">ออกจากระบบ</button>
+        <div class="sidebar-admin-profile">
+          <div class="sidebar-admin-avatar">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div class="sidebar-admin-meta">
+            <div class="sidebar-admin-name" id="sidebarAdminName">Admin</div>
+            <div class="sidebar-admin-role" id="sidebarAdminRole">ผู้ดูแลระบบ</div>
+          </div>
+        </div>
+        <button type="button" class="sidebar-logout-btn" onclick="adminLogout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>ออกจากระบบ</span>
+        </button>
       </div>
     </div>
 
     <div class="dashboard-main">
       <div class="dashboard-header">
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <button type="button" class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle Navigation">
             <i class="fa-solid fa-bars"></i>
           </button>
-          <h2 id="dashTitle" style="margin:0; font-size:20px; color:var(--text-main);">ภาพรวมระบบ</h2>
+          <div>
+            <h2 id="dashTitle" style="margin:0; font-size: 1.25rem; font-weight: 600; color:var(--text-main); font-family: 'Kanit', sans-serif;">
+              จัดการกิจกรรม
+            </h2>
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">
+              ระบบบริหารจัดการหน้าที่ สารวัตรนักเรียน
+            </div>
+          </div>
         </div>
-        <div>
-          
-          <span id="dashAdminName" style="color:var(--text-muted); font-weight:500;">Admin</span>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="/si-roster" onclick="goToRosterStudent(event)" class="header-student-btn" title="กลับสู่หน้านักเรียน">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            <span class="hide-mobile">หน้านักเรียน</span>
+          </a>
+          <div class="header-admin-pill">
+            <i class="fa-solid fa-circle-user" style="color: var(--primary);"></i>
+            <span id="dashAdminName" style="font-weight: 500; font-size: 0.9rem;">Admin</span>
+          </div>
         </div>
       </div>
 
       <div class="dashboard-content">
         <!-- Overview Tab -->
 
-
         <!-- Activities Tab -->
         <div id="tab-activities" class="dash-tab">
           <div>
-            <div
-              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
-              <h2 style="margin: 0; font-size: 1.5rem; color: var(--text-main);"><i class="fa-solid fa-list"></i>
-                รายการกิจกรรมทั้งหมด</h2>
-              <button class="btn btn-primary" onclick="clearActivityEditor()"
-                style="padding: 10px 20px; font-size: 1.05rem; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);">
-                <i class="fa-solid fa-plus"></i> สร้างกิจกรรมใหม่
-              </button>
+            <!-- Header bar with Title & Create button -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 15px;">
+              <div>
+                <h2 style="margin: 0; font-size: 1.5rem; color: var(--text-main); display: flex; align-items: center; gap: 10px; font-weight: 600;">
+                  <i class="fa-solid fa-clipboard-list" style="color: var(--primary);"></i> รายการกิจกรรมทั้งหมด
+                </h2>
+                <p style="margin: 6px 0 0 0; color: var(--text-muted); font-size: 0.92rem;">
+                  สร้าง แก้ไข กำหนดเวลาลงชื่อ และจัดการโควต้าหน้าที่ของแต่ละกิจกรรม
+                </p>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-secondary" onclick="loadDashActivities(true)" style="padding: 10px 18px; font-size: 0.92rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-arrows-rotate"></i> รีเฟรช
+                </button>
+                <button type="button" class="btn btn-primary" onclick="clearActivityEditor()"
+                  style="padding: 10px 20px; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
+                  <i class="fa-solid fa-plus"></i> สร้างกิจกรรมใหม่
+                </button>
+              </div>
             </div>
+
+            <!-- Toolbar: Search & Segmented Filter -->
+            <div class="card" style="padding: 14px 18px; margin-bottom: 20px; border-radius: 14px; background: #ffffff; border: 1px solid var(--border-light); box-shadow: var(--shadow);">
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                <!-- Search Box -->
+                <div style="flex: 1; min-width: 260px; position: relative;">
+                  <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-dim);"></i>
+                  <input type="text" id="dashActSearchInput" class="input-control" placeholder="ค้นหากิจกรรม (ชื่อ, วันที่, หรือหน้าที่)..." oninput="renderDashActivities()" style="padding-left: 40px; margin: 0; background: var(--bg);">
+                </div>
+                <!-- Filter Segmented Tabs -->
+                <div style="display: flex; gap: 4px; background: var(--bg); padding: 4px; border-radius: 10px; border: 1px solid var(--border-light); flex-wrap: wrap;">
+                  <button type="button" class="btn dash-act-filter-btn active" id="btnDashFilterAll" data-filter="all" onclick="setDashActivitiesFilter('all')" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 8px; border: none; background: var(--primary); color: #ffffff;">
+                    <i class="fa-solid fa-layer-group"></i> ทั้งหมด
+                  </button>
+                  <button type="button" class="btn dash-act-filter-btn" id="btnDashFilterOpen" data-filter="open" onclick="setDashActivitiesFilter('open')" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 8px; border: none; background: transparent; color: var(--text-muted);">
+                    <i class="fa-solid fa-door-open"></i> เปิดรับอยู่
+                  </button>
+                  <button type="button" class="btn dash-act-filter-btn" id="btnDashFilterWaiting" data-filter="waiting" onclick="setDashActivitiesFilter('waiting')" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 8px; border: none; background: transparent; color: var(--text-muted);">
+                    <i class="fa-regular fa-clock"></i> รอเปิด
+                  </button>
+                  <button type="button" class="btn dash-act-filter-btn" id="btnDashFilterClosed" data-filter="closed" onclick="setDashActivitiesFilter('closed')" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 8px; border: none; background: transparent; color: var(--text-muted);">
+                    <i class="fa-solid fa-lock"></i> ปิดรับแล้ว
+                  </button>
+                </div>
+                <!-- Stats Match Badge -->
+                <div id="dashActStatsBadge" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); background: var(--bg); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border-light);">
+                  พบ <span id="dashActMatchCount" style="color: var(--primary); font-weight: 700;">0</span> กิจกรรม
+                </div>
+              </div>
+            </div>
+
+            <!-- Activities Cards List -->
             <div id="dashActivitiesList">
               <div style="text-align:center; padding: 40px; color: var(--text-dim);">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i><br>
@@ -3147,50 +3898,59 @@
 
         <!-- Dashboard Activity Editor Modal -->
         <div class="modal-overlay" id="dashActivityEditorModal">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="close-modal" onclick="closeModal('dashActivityEditorModal')"><i class="fa-solid fa-xmark"></i>
+          <div class="modal-content editor-modal-content">
+            <div class="modal-header editor-modal-header">
+              <div>
+                <h2 class="modal-title" id="editorTitle" style="margin: 0; font-size: 1.25rem; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-square-plus"></i> สร้างกิจกรรมใหม่
+                </h2>
+                <div class="editor-subtitle">กำหนดรายละเอียด วันที่ เวลา และโควต้าผู้ปฏิบัติงาน</div>
               </div>
-              <h2 class="modal-title" id="editorTitle"><i class="fa-solid fa-square-plus"></i> สร้างกิจกรรมใหม่</h2>
+              <button type="button" class="close-modal" onclick="closeModal('dashActivityEditorModal')" title="ปิดหน้าต่าง">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
             </div>
-            <div class="modal-body editor-body" style="background: var(--bg); padding: 20px;">
+
+            <div class="modal-body editor-body">
               <!-- Section 1: Basic Info -->
-              <div class="form-section"
-                style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                <div
-                  style="font-weight: 600; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                  <i class="fa-solid fa-circle-info"></i> ข้อมูลพื้นฐาน
+              <div class="editor-card-section">
+                <div class="editor-section-header">
+                  <span class="editor-section-badge"><i class="fa-solid fa-circle-info"></i></span>
+                  <span class="editor-section-title">1. ข้อมูลพื้นฐานกิจกรรม</span>
                 </div>
-                <div class="form-group" style="display: flex; gap: 10px;">
-                  <div style="flex: 1;">
-                    <label>เลือกวันที่จัดกิจกรรม (เริ่มต้น) <span style="color:var(--danger)">*</span></label>
-                    <input type="date" id="dashActDate" class="input-control" style="background-color: var(--bg);">
+
+                <div class="editor-form-grid-2">
+                  <div class="form-group">
+                    <label>วันที่จัดกิจกรรม (เริ่มต้น) <span style="color:var(--danger)">*</span></label>
+                    <input type="date" id="dashActDate" class="input-control">
                   </div>
-                  <div style="flex: 1;">
-                    <label>ถึงวันที่ (ไม่จำเป็น)</label>
-                    <input type="date" id="dashActEndDate" class="input-control" style="background-color: var(--bg);">
+                  <div class="form-group">
+                    <label>ถึงวันที่ (กรณีจัดหลายวัน / ไม่จำเป็น)</label>
+                    <input type="date" id="dashActEndDate" class="input-control">
                   </div>
                 </div>
+
                 <div class="form-group">
                   <label>ชื่อกิจกรรม <span style="color:var(--danger)">*</span></label>
-                  <input type="text" id="dashActTitle" class="input-control" placeholder="เช่น กิจกรรมหน้าเสาธง"
-                    style="background-color: var(--bg);">
+                  <input type="text" id="dashActTitle" class="input-control" placeholder="เช่น กิจกรรมวันสำคัญ หรือ เข้าแถวหน้าเสาธง">
                 </div>
+
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label>รายละเอียด</label>
-                  <div id="editor-dashActDesc" style="background-color: #fff;"></div>
+                  <label>รายละเอียดกิจกรรม (Markdown / รูปแบบข้อความ)</label>
+                  <div id="editor-dashActDesc" style="background-color: #ffffff;"></div>
                   <textarea id="dashActDesc" style="display:none;"></textarea>
                 </div>
-                <div class="form-group" style="margin-top: 15px; margin-bottom: 15px;">
-                  <label
-                    style="font-size: 14px; display:flex; align-items:center; gap: 8px; color:var(--text-main); cursor:pointer;">
+
+                <div class="editor-options-box">
+                  <label class="custom-checkbox-label">
                     <input type="checkbox" id="dashActAllowMultipleDuties">
-                    อนุญาตให้ 1 คนลงชื่อได้หลายหน้าที่ในกิจกรรมนี้
+                    <span>อนุญาตให้ 1 คนลงชื่อได้หลายหน้าที่ในกิจกรรมนี้</span>
                   </label>
                 </div>
-                <div class="form-group" style="margin-top: 15px; margin-bottom: 0;">
+
+                <div class="form-group" style="margin-top: 14px; margin-bottom: 0;">
                   <label>มุมมองการแสดงผลรายชื่อ (สำหรับนักเรียน)</label>
-                  <select id="dashActViewMode" class="input-control" style="background-color: var(--bg);">
+                  <select id="dashActViewMode" class="input-control">
                     <option value="counts">แสดงเฉพาะจำนวนคน (แนะนำ)</option>
                     <option value="full">แสดงรายชื่อทั้งหมด</option>
                   </select>
@@ -3198,64 +3958,65 @@
               </div>
 
               <!-- Section 2: Schedule -->
-              <div class="form-section"
-                style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                <div
-                  style="font-weight: 600; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
-                  <i class="fa-regular fa-clock"></i> ตั้งเวลาลงชื่อ
+              <div class="editor-card-section">
+                <div class="editor-section-header">
+                  <span class="editor-section-badge"><i class="fa-regular fa-clock"></i></span>
+                  <span class="editor-section-title">2. กำหนดเวลาเปิด-ปิดรับลงชื่อ</span>
                 </div>
-                <div class="form-group">
-                  <label>เวลาเปิดลงชื่อ (Start Time)</label>
-                  <input type="datetime-local" id="dashActStartTime" class="input-control"
-                    style="background-color: var(--bg);">
-                  <small style="color:var(--text-dim)"><i class="fa-solid fa-info-circle"></i> หากไม่กำหนด
-                    ระบบจะเปิดให้ลงชื่อทันที</small>
-                </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label>เวลาสิ้นสุด (Deadline)</label>
-                  <input type="datetime-local" id="dashActDeadline" class="input-control"
-                    style="background-color: var(--bg);">
-                  <small style="color:var(--text-dim)"><i class="fa-solid fa-info-circle"></i> หากไม่กำหนด
-                    จะเปิดให้ลงชื่อตลอดเวลา</small>
+
+                <div class="editor-form-grid-2">
+                  <div class="form-group">
+                    <label>เวลาเปิดลงชื่อ (Start Time)</label>
+                    <input type="datetime-local" id="dashActStartTime" class="input-control">
+                    <small class="form-hint"><i class="fa-solid fa-info-circle"></i> หากไม่กำหนด จะเปิดให้ลงชื่อทันที</small>
+                  </div>
+                  <div class="form-group">
+                    <label>เวลาสิ้นสุดรับลงชื่อ (Deadline)</label>
+                    <input type="datetime-local" id="dashActDeadline" class="input-control">
+                    <small class="form-hint"><i class="fa-solid fa-info-circle"></i> หากไม่กำหนด จะเปิดให้ลงชื่อตลอดเวลา</small>
+                  </div>
                 </div>
               </div>
 
               <!-- Section 3: Quota -->
-              <div class="form-section"
-                style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-light); box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                <div
-                  style="font-weight: 600; color: var(--primary); margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
-                  <div style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-users-gear"></i>
-                    โควต้าผู้ปฏิบัติงาน</div>
-                  <small style="color:var(--text-dim); font-weight: normal;">ใส่ 0 คือไม่เปิดรับ</small>
+              <div class="editor-card-section">
+                <div class="editor-section-header" style="justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="editor-section-badge"><i class="fa-solid fa-users-gear"></i></span>
+                    <span class="editor-section-title">3. โควต้าผู้ปฏิบัติงาน</span>
+                  </div>
+                  <span class="editor-section-subtext">แตะปุ่ม +/- เพื่อปรับจำนวน</span>
                 </div>
-                <div id="dynamicDutyList"
-                  style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+
+                <div id="dynamicDutyList" class="dynamic-duty-list-container">
                   <!-- Rendered by JS -->
                 </div>
-                <button type="button" class="btn btn-secondary" onclick="addDynamicDutyRow()"
-                  style="width: 100%; padding: 10px; border: 2px dashed var(--border); background: transparent; color: var(--text-main); font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+
+                <button type="button" class="btn btn-secondary add-duty-btn" onclick="addDynamicDutyRow()">
                   <i class="fa-solid fa-plus"></i> เพิ่มหน้าที่
                 </button>
 
-                <div id="dashDutySummary"
-                  style="margin-top: 15px; padding: 15px; background: rgba(59, 130, 246, 0.05); border-radius: 8px; border-left: 3px solid var(--accent); font-size: 0.95rem; line-height: 1.5;">
-                  <div style="font-weight: 600; margin-bottom: 5px; color: var(--text-main);">สรุปหน้าที่ที่เลือก:
+                <div id="dashDutySummary" class="duty-summary-container">
+                  <div class="duty-summary-header">
+                    <i class="fa-solid fa-chart-pie" style="color: var(--primary);"></i>
+                    <span>สรุปหน้าที่และโควต้าที่เลือก:</span>
                   </div>
-                  <div id="dashDutySummaryText" style="color: var(--text-muted);">ยังไม่ได้เลือกหน้าที่</div>
+                  <div id="dashDutySummaryText" class="duty-summary-text">ยังไม่ได้เลือกหน้าที่</div>
                 </div>
               </div>
+            </div>
 
-              <!-- Action Buttons -->
-              <div style="padding: 0 5px;">
-                <button class="btn btn-block btn-primary" id="btnSaveActivityDash" onclick="submitActivityFromEditor()"
-                  style="padding: 14px; font-size: 1.1rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(99,102,241,0.2);"><i
-                    class="fa-solid fa-floppy-disk"></i>
-                  บันทึกกิจกรรม</button>
-                <button class="btn btn-block btn-danger" id="btnDeleteActivityDash" onclick="deleteActivityFromEditor()"
-                  style="display:none; margin-top: 12px; padding: 12px; border-radius: 10px;"><i
-                    class="fa-solid fa-trash-can"></i> ลบกิจกรรมนี้</button>
-              </div>
+            <!-- Sticky Modal Footer -->
+            <div class="editor-modal-footer">
+              <button type="button" class="btn btn-primary btn-save-editor" id="btnSaveActivityDash" onclick="submitActivityFromEditor()">
+                <i class="fa-solid fa-floppy-disk"></i> บันทึกกิจกรรม
+              </button>
+              <button type="button" class="btn btn-danger btn-delete-editor" id="btnDeleteActivityDash" onclick="deleteActivityFromEditor()" style="display:none;">
+                <i class="fa-solid fa-trash-can"></i> ลบกิจกรรมนี้
+              </button>
+              <button type="button" class="btn btn-secondary btn-cancel-editor" onclick="closeModal('dashActivityEditorModal')">
+                ยกเลิก
+              </button>
             </div>
           </div>
         </div>
@@ -3482,20 +4243,22 @@
               <button class="btn btn-primary" onclick="addStudentFromDash()" id="btnAddStudent" style="flex:1;"><i
                   class="fa-solid fa-plus"></i> เพิ่ม</button>
             </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ชื่อ-นามสกุล</th>
-                  <th>ชั้น/ห้อง</th>
-                  <th style="width:120px; text-align:center;">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody id="studentsTableBody">
-                <tr>
-                  <td colspan="2" style="text-align:center; color:var(--text-dim);">กำลังโหลด...</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>ชั้น/ห้อง</th>
+                    <th style="width:120px; text-align:center;">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="studentsTableBody">
+                  <tr>
+                    <td colspan="3" style="text-align:center; color:var(--text-dim);">กำลังโหลด...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -3511,19 +4274,21 @@
               <button class="btn btn-primary" onclick="addDutyFromDash()" id="btnAddDuty"><i
                   class="fa-solid fa-plus"></i> เพิ่มหน้าที่ที่รับผิดชอบ</button>
             </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ชื่อหน้าที่ที่รับผิดชอบ</th>
-                  <th style="width:120px; text-align:center;">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody id="dutiesTableBody">
-                <tr>
-                  <td colspan="2" style="text-align:center; color:var(--text-dim);">กำลังโหลด...</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ชื่อหน้าที่ที่รับผิดชอบ</th>
+                    <th style="width:120px; text-align:center;">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="dutiesTableBody">
+                  <tr>
+                    <td colspan="2" style="text-align:center; color:var(--text-dim);">กำลังโหลด...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -3533,9 +4298,9 @@
             <div class="data-panel-header">
               <h2><i class="fa-solid fa-user-shield"></i> ผู้ดูแลระบบ (Admins)</h2>
             </div>
-            <h4 id="dashAdminFormTitle" style="margin: 10px 20px 0 20px; color: var(--primary-hover);">+
+            <h4 id="dashAdminFormTitle" style="margin: 16px 20px 0 20px; color: var(--text-main); font-size: 1rem; font-weight: 600;">+
               เพิ่มผู้ดูแลระบบใหม่</h4>
-            <div class="add-form" style="flex-wrap:wrap; background: rgba(15, 23, 42, 0.3);">
+            <div class="add-form" style="flex-wrap:wrap; background: #f8fafc; border-radius: 12px; margin: 12px 20px 20px 20px; border: 1px solid var(--border-light);">
               <input type="hidden" id="dashAdminEditOldUser" value="">
               <input type="text" id="dashAdminUser" class="input-control" placeholder="Username">
               <input type="password" id="dashAdminPass" class="input-control"
@@ -3553,21 +4318,23 @@
                   style="display:none;">ยกเลิก</button>
               </div>
             </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>ชื่อ-นามสกุล</th>
-                  <th>ระดับสิทธิ์</th>
-                  <th style="width:120px; text-align:center;">จัดการ</th>
-                </tr>
-              </thead>
-              <tbody id="dashAdminsTableBody">
-                <tr>
-                  <td colspan="3" style="text-align:center; color:var(--text-dim);">กำลังโหลด...</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>ระดับสิทธิ์</th>
+                    <th style="width:120px; text-align:center;">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="dashAdminsTableBody">
+                  <tr>
+                    <td colspan="4" style="text-align:center; color:var(--text-dim);">กำลังโหลด...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -3577,7 +4344,7 @@
             <div class="data-panel-header">
               <h2><i class="fa-solid fa-clock-rotate-left"></i> ประวัติการแก้ไขกิจกรรม (Logs)</h2>
             </div>
-            <div class="data-table-container">
+            <div class="table-responsive">
               <table class="data-table">
                 <thead>
                   <tr>
@@ -4194,6 +4961,17 @@
       });
     }
 
+    function stepDutyQuota(btn, delta) {
+      const stepper = btn.closest('.duty-stepper');
+      if (!stepper) return;
+      const input = stepper.querySelector('.duty-quota');
+      if (!input) return;
+      let val = parseInt(input.value) || 0;
+      val = Math.max(0, val + delta);
+      input.value = val;
+      updateDutySummary();
+    }
+
     function addDynamicDutyRow(dutyName = '', quota = 0) {
       const container = document.getElementById('dynamicDutyList');
       if (!container) return;
@@ -4201,15 +4979,6 @@
       const div = document.createElement('div');
       div.className = 'dynamic-duty-row';
       div.setAttribute('draggable', 'true');
-      div.style.display = 'flex';
-      div.style.gap = '10px';
-      div.style.alignItems = 'center';
-      div.style.background = 'var(--bg)';
-      div.style.padding = '10px';
-      div.style.borderRadius = '8px';
-      div.style.border = '1px solid var(--border-light)';
-      div.style.boxShadow = '0 1px 3px rgba(0,0,0,0.02)';
-      div.style.transition = 'all 0.2s';
 
       // Drag events
       div.addEventListener('dragstart', handleDragStart, false);
@@ -4220,17 +4989,21 @@
       div.addEventListener('dragend', handleDragEnd, false);
 
       div.innerHTML = `
-        <div style="cursor: grab; color: var(--text-dim); padding: 0 5px;" title="จับลากเพื่อเรียงลำดับ">
+        <div class="duty-drag-handle" title="จับลากเพื่อเรียงลำดับ">
           <i class="fa-solid fa-grip-vertical"></i>
         </div>
-        <div class="duty-custom-select">
-          <input type="text" class="input-control duty-select" placeholder="ค้นหาหรือเพิ่มหน้าที่..." value="${dutyName}" style="width: 100%; margin: 0; padding: 8px;" 
+        <div class="duty-custom-select" style="flex:1;">
+          <input type="text" class="input-control duty-select" placeholder="ค้นหาหรือเพิ่มหน้าที่..." value="${dutyName}" style="width: 100%; margin: 0; padding: 8px 12px;" 
                  onfocus="showDutyDropdown(this)" oninput="handleDutySearch(this)">
           <div class="duty-dropdown-list"></div>
         </div>
-        <input type="number" inputmode="numeric" pattern="[0-9]*" class="input-control duty-quota" value="${quota}" min="0" style="width: 80px; text-align: center; margin:0; padding:8px;" oninput="updateDutySummary()">
-        <button type="button" class="btn btn-icon" style="color: var(--danger); background: rgba(239,68,68,0.1); border:none;" onclick="this.closest('.dynamic-duty-row').remove(); updateDutySummary();" title="ลบ">
-          <i class="fa-solid fa-trash"></i>
+        <div class="duty-stepper">
+          <button type="button" class="stepper-btn stepper-minus" onclick="stepDutyQuota(this, -1)" title="ลดโควต้า"><i class="fa-solid fa-minus"></i></button>
+          <input type="number" inputmode="numeric" pattern="[0-9]*" class="input-control duty-quota" value="${quota}" min="0" oninput="updateDutySummary()">
+          <button type="button" class="stepper-btn stepper-plus" onclick="stepDutyQuota(this, 1)" title="เพิ่มโควต้า"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <button type="button" class="duty-remove-btn" onclick="this.closest('.dynamic-duty-row').remove(); updateDutySummary();" title="ลบหน้าที่นี้">
+          <i class="fa-solid fa-trash-can"></i>
         </button>
       `;
       container.appendChild(div);
@@ -4577,14 +5350,6 @@
     }
 
     function renderActivityFeed() {
-      if (typeof loadDashActivities === 'function') {
-        loadDashActivities();
-      }
-    }
-
-    function setupAdminDutyGrid() {}
-
-    function renderActivityFeed() {
       const feed = document.getElementById('feedContent');
       feed.innerHTML = '';
 
@@ -4913,8 +5678,18 @@
           clearInterval(countdownIntervals[elementId]);
           el.innerHTML = "หมดเวลา";
           if (badgeEl) {
-            badgeEl.style.backgroundColor = '#ffffff';
-            badgeEl.style.color = 'var(--danger)';
+            if (badgeEl.classList.contains('status-badge')) {
+              badgeEl.className = 'status-badge status-closed';
+              const iconEl = badgeEl.querySelector('i');
+              if (iconEl) iconEl.className = 'fa-solid fa-lock';
+              const labelEl = badgeEl.querySelector('.status-badge-label');
+              if (labelEl) labelEl.textContent = 'ปิดรับแล้ว';
+              const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+              if (prefixEl) prefixEl.textContent = '';
+            } else {
+              badgeEl.style.backgroundColor = '#ffffff';
+              badgeEl.style.color = 'var(--danger)';
+            }
           }
           if (cardEl) cardEl.className = 'activity-card card-status-closed';
           if (onExpire) onExpire();
@@ -4926,26 +5701,56 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        let display = "";
-        if (days > 0) display += days + "วัน ";
-        display += String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+        let timeStr = String(hours).padStart(2, '0') + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+        let display = (days > 0 ? (days + " วัน ") : "") + timeStr;
         el.innerHTML = display;
 
         if (badgeEl) {
-          if (isWaitingToOpen) {
-            badgeEl.style.backgroundColor = '#ffffff';
-            badgeEl.style.color = 'var(--accent)';
-            if (cardEl) cardEl.className = 'activity-card card-status-waiting';
-          } else {
-            const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
-            if (hoursLeft < 1) {
-              badgeEl.style.backgroundColor = '#ffffff';
-              badgeEl.style.color = 'var(--warning)';
-              if (cardEl) cardEl.className = 'activity-card card-status-warning';
+          if (badgeEl.classList.contains('status-badge')) {
+            if (isWaitingToOpen) {
+              badgeEl.className = 'status-badge status-waiting';
+              const iconEl = badgeEl.querySelector('i');
+              if (iconEl) iconEl.className = 'fa-regular fa-clock';
+              const labelEl = badgeEl.querySelector('.status-badge-label');
+              if (labelEl) labelEl.textContent = 'รอเปิด';
+              const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+              if (prefixEl) prefixEl.textContent = 'เปิดในอีก ';
             } else {
+              const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
+              if (hoursLeft < 1) {
+                badgeEl.className = 'status-badge status-warning';
+                const iconEl = badgeEl.querySelector('i');
+                if (iconEl) iconEl.className = 'fa-solid fa-hourglass-half';
+                const labelEl = badgeEl.querySelector('.status-badge-label');
+                if (labelEl) labelEl.textContent = 'ใกล้หมดเวลา';
+                const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+                if (prefixEl) prefixEl.textContent = 'เหลือเวลาอีก ';
+              } else {
+                badgeEl.className = 'status-badge status-open';
+                const iconEl = badgeEl.querySelector('i');
+                if (iconEl) iconEl.className = 'fa-solid fa-door-open';
+                const labelEl = badgeEl.querySelector('.status-badge-label');
+                if (labelEl) labelEl.textContent = 'เปิดรับ';
+                const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+                if (prefixEl) prefixEl.textContent = 'เหลือเวลาอีก ';
+              }
+            }
+          } else {
+            if (isWaitingToOpen) {
               badgeEl.style.backgroundColor = '#ffffff';
-              badgeEl.style.color = 'var(--success)';
-              if (cardEl) cardEl.className = 'activity-card card-status-open';
+              badgeEl.style.color = 'var(--accent)';
+              if (cardEl) cardEl.className = 'activity-card card-status-waiting';
+            } else {
+              const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
+              if (hoursLeft < 1) {
+                badgeEl.style.backgroundColor = '#ffffff';
+                badgeEl.style.color = 'var(--warning)';
+                if (cardEl) cardEl.className = 'activity-card card-status-warning';
+              } else {
+                badgeEl.style.backgroundColor = '#ffffff';
+                badgeEl.style.color = 'var(--success)';
+                if (cardEl) cardEl.className = 'activity-card card-status-open';
+              }
             }
           }
         }
@@ -5323,6 +6128,22 @@
       if (el) el.classList.remove('active');
       if (modalId === 'detailModal') {
         if (typeof stopUserRealtimeSync === 'function') stopUserRealtimeSync();
+      }
+      if (modalId === 'dashActivityEditorModal') {
+        setupAdminDutyGrid();
+        const titleEl = document.getElementById('dashActTitle');
+        if (titleEl) titleEl.value = '';
+        const dateEl = document.getElementById('dashActDate');
+        if (dateEl) dateEl.value = '';
+        const endDateEl = document.getElementById('dashActEndDate');
+        if (endDateEl) endDateEl.value = '';
+        const startEl = document.getElementById('dashActStartTime');
+        if (startEl) startEl.value = '';
+        const deadEl = document.getElementById('dashActDeadline');
+        if (deadEl) deadEl.value = '';
+        if (typeof dashEditor !== 'undefined' && dashEditor.setMarkdown) {
+          dashEditor.setMarkdown('');
+        }
       }
     }
     window.stopRealtimeSync = function () {
@@ -6142,6 +6963,12 @@
 
       const nameEl = document.getElementById('dashAdminName');
       if (nameEl && adminInfo) nameEl.innerText = adminInfo.name;
+      const sidebarNameEl = document.getElementById('sidebarAdminName');
+      if (sidebarNameEl && adminInfo) sidebarNameEl.innerText = adminInfo.name;
+      const sidebarRoleEl = document.getElementById('sidebarAdminRole');
+      if (sidebarRoleEl && adminInfo) {
+        sidebarRoleEl.innerText = (adminInfo.role === 'Superadmin' || adminInfo.role === "superadmin57'0tf^wfh") ? 'ผู้ดูแลระบบสูงสุด' : 'ผู้ดูแลระบบ';
+      }
 
       const mAdmins = document.getElementById('adminMenuAdmins');
       const mAdvisors = document.getElementById('adminMenuAdvisors');
@@ -6714,35 +7541,249 @@
       }
     }
 
+    let currentDashActivitiesFilter = 'all';
+
+    function setDashActivitiesFilter(filterType) {
+      currentDashActivitiesFilter = filterType;
+      document.querySelectorAll('.dash-act-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === filterType) {
+          btn.classList.add('active');
+          btn.style.background = 'var(--primary)';
+          btn.style.color = '#ffffff';
+        } else {
+          btn.classList.remove('active');
+          btn.style.background = 'transparent';
+          btn.style.color = 'var(--text-muted)';
+        }
+      });
+      renderDashActivities();
+    }
+
+    function viewActivityHistory(sheetName) {
+      switchDashTab('history');
+      setTimeout(() => {
+        if (typeof selectHistoryActivity === 'function') {
+          selectHistoryActivity(sheetName);
+        }
+      }, 150);
+    }
+
+    function quickDeleteActivity(sheetName, title) {
+      selectedDashActivityStr = sheetName;
+      deleteActivityFromEditor();
+    }
+
     function renderDashActivities() {
       const list = document.getElementById('dashActivitiesList');
       if (!list) return;
-      list.innerHTML = '';
+
+      // Clear existing card countdown intervals in admin
+      for (let key in countdownIntervals) {
+        if (key.startsWith('dash-timer-')) {
+          clearInterval(countdownIntervals[key]);
+          delete countdownIntervals[key];
+        }
+      }
+
       if (!Array.isArray(dashAllActivities) || dashAllActivities.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding: 40px; color:var(--text-dim); border: 2px dashed var(--border-light); border-radius: 16px;">ยังไม่มีกิจกรรมในระบบ</div>';
+        list.innerHTML = `
+          <div style="text-align:center; padding: 60px 20px; color:var(--text-dim); border: 2px dashed var(--border-light); border-radius: 16px; background:#ffffff;">
+            <i class="fa-regular fa-calendar-xmark" style="font-size:2.5rem; margin-bottom:12px; color:var(--text-dim);"></i><br>
+            <div style="font-weight:600; font-size:1.1rem; color:var(--text-main); margin-bottom:4px;">ยังไม่มีกิจกรรมในระบบ</div>
+            <p style="margin:0; font-size:0.9rem;">คลิกที่ปุ่ม "+ สร้างกิจกรรมใหม่" เพื่อเริ่มต้นสร้างกิจกรรม</p>
+          </div>`;
+        const countEl = document.getElementById('dashActMatchCount');
+        if (countEl) countEl.textContent = '0';
         return;
       }
-      dashAllActivities.forEach(act => {
-        // Date formatting: act.dateStr is YYYY-MM-DD
-        let dateDisplay = formatThaiDateRange(act.dateStr, act.endDateStr);
 
+      const searchInput = document.getElementById('dashActSearchInput');
+      const searchKeyword = (searchInput ? searchInput.value : '').trim().toLowerCase();
+      const now = new Date().getTime();
+
+      // Filter activities by status & search keyword
+      let filtered = dashAllActivities.filter(act => {
+        const isNotStarted = act.startTime && (act.startTime - now > 0);
+        const isExpired = act.isFull || (act.deadline && (act.deadline - now <= 0));
+        const isOpen = !isNotStarted && !isExpired;
+
+        if (currentDashActivitiesFilter === 'open' && !isOpen) return false;
+        if (currentDashActivitiesFilter === 'waiting' && !isNotStarted) return false;
+        if (currentDashActivitiesFilter === 'closed' && !isExpired) return false;
+
+        if (searchKeyword) {
+          const title = (act.title || '').toLowerCase();
+          const dateStr = (act.dateStr || '').toLowerCase();
+          const dateThai = formatThaiDateRange(act.dateStr, act.endDateStr).toLowerCase();
+          const dutiesStr = Array.isArray(act.duties) ? act.duties.map(d => d.duty || '').join(' ').toLowerCase() : '';
+          if (!title.includes(searchKeyword) && !dateStr.includes(searchKeyword) && !dateThai.includes(searchKeyword) && !dutiesStr.includes(searchKeyword)) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+      const countEl = document.getElementById('dashActMatchCount');
+      if (countEl) countEl.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div style="text-align:center; padding: 50px 20px; color:var(--text-dim); border: 2px dashed var(--border-light); border-radius: 16px; background:#ffffff;">
+            <i class="fa-solid fa-magnifying-glass" style="font-size:2rem; margin-bottom:12px; color:var(--text-dim);"></i><br>
+            <div style="font-weight:600; font-size:1.05rem; color:var(--text-main); margin-bottom:4px;">ไม่พบกิจกรรมที่ค้นหา</div>
+            <p style="margin:0; font-size:0.88rem;">ลองเปลี่ยนคำค้นหา หรือเลือกฟิลเตอร์ "ทั้งหมด"</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = '';
+
+      filtered.forEach((act, index) => {
+        const timerId = `dash-timer-${index}`;
+        const dateDisplay = formatThaiDateRange(act.dateStr, act.endDateStr);
         const isActive = selectedDashActivityStr === act.sheetName ? 'active' : '';
         const actDutiesStr = encodeURIComponent(JSON.stringify(act.duties || []));
 
+        const isNotStarted = act.startTime && (act.startTime - now > 0);
+        const isExpired = act.isFull || (act.deadline && (act.deadline - now <= 0));
+        const distance = act.deadline ? act.deadline - now : 0;
+        const hoursLeft = Math.floor(distance / (1000 * 60 * 60));
+        const isWarning = !isExpired && !isNotStarted && act.deadline && (hoursLeft < 1);
+
+        let statusBadgeHtml = '';
+        if (act.isFull) {
+          statusBadgeHtml = `
+            <div class="status-badge status-closed" id="badge-${timerId}">
+              <i class="fa-solid fa-users-slash"></i>
+              <span class="status-badge-label">ปิดรับแล้ว</span>
+              <span class="status-badge-sep">•</span>
+              <span>คนลงชื่อเต็มแล้ว</span>
+            </div>`;
+        } else if (isNotStarted) {
+          statusBadgeHtml = `
+            <div class="status-badge status-waiting" id="badge-${timerId}">
+              <i class="fa-regular fa-clock"></i>
+              <span class="status-badge-label">รอเปิด</span>
+              <span class="status-badge-sep">•</span>
+              <span><span class="status-badge-prefix">เปิดในอีก </span><strong id="${timerId}" class="status-timer-val">รอเปิด...</strong></span>
+            </div>`;
+        } else if (isExpired) {
+          statusBadgeHtml = `
+            <div class="status-badge status-closed" id="badge-${timerId}">
+              <i class="fa-solid fa-lock"></i>
+              <span class="status-badge-label">ปิดรับแล้ว</span>
+              <span class="status-badge-sep">•</span>
+              <span>หมดเวลาลงชื่อ</span>
+            </div>`;
+        } else if (act.deadline) {
+          statusBadgeHtml = `
+            <div class="status-badge ${isWarning ? 'status-warning' : 'status-open'}" id="badge-${timerId}">
+              <i class="fa-solid ${isWarning ? 'fa-hourglass-half' : 'fa-door-open'}"></i>
+              <span class="status-badge-label">${isWarning ? 'ใกล้หมดเวลา' : 'เปิดรับ'}</span>
+              <span class="status-badge-sep">•</span>
+              <span><span class="status-badge-prefix">เหลือเวลาอีก </span><strong id="${timerId}" class="status-timer-val">กำลังคำนวณ...</strong></span>
+            </div>`;
+        } else {
+          statusBadgeHtml = `
+            <div class="status-badge status-open" id="badge-${timerId}">
+              <i class="fa-solid fa-door-open"></i>
+              <span class="status-badge-label">เปิดรับ</span>
+            </div>`;
+        }
+
+        // Build duty chips
+        const duties = Array.isArray(act.duties) ? act.duties : [];
+        const activeDuties = duties.filter(d => parseInt(d.quota || 0) > 0);
+        const totalQuota = activeDuties.reduce((s, d) => s + parseInt(d.quota || 0), 0);
+        let dutiesHtml = '';
+        if (activeDuties.length > 0) {
+          dutiesHtml = activeDuties.map(d => `
+            <div class="admin-duty-chip">
+              <span>${escapeHtml(d.duty)}</span>
+              <span class="admin-duty-chip-count">${d.quota}</span>
+            </div>
+          `).join('');
+        } else {
+          dutiesHtml = '<span style="color:var(--text-dim); font-size:0.82rem;">ยังไม่ได้กำหนดหน้าที่</span>';
+        }
+
         const card = document.createElement('div');
-        card.className = `list-item-card ${isActive}`;
+        card.className = `admin-activity-card ${isActive}`;
+        card.id = `admin-act-card-${index}`;
         card.onclick = () => selectActivityInDash(act.sheetName);
+
         card.innerHTML = `
-          <div class="list-item-info">
-            <h4>${act.title}</h4>
-            <p><i class="fa-regular fa-calendar"></i> ${dateDisplay} ${act.deadline ? '<span style="color:var(--danger); margin-left:10px;"><i class="fa-solid fa-clock"></i> มีกำหนดเวลา</span>' : ''}</p>
+          <div class="admin-activity-header">
+            <div style="flex: 1; min-width: 240px;">
+              <h3 class="admin-activity-title">${escapeHtml(act.title)}</h3>
+              <div class="admin-activity-meta" style="margin-top: 6px;">
+                <div class="admin-activity-meta-item">
+                  <i class="fa-regular fa-calendar" style="color: var(--primary);"></i>
+                  <span>${dateDisplay}</span>
+                </div>
+                ${act.deadline ? `
+                  <div class="admin-activity-meta-item" style="color: var(--text-dim);">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>ปิดรับ ${new Date(act.deadline).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })} น.</span>
+                  </div>
+                ` : ''}
+                <div class="admin-activity-meta-item">
+                  <i class="fa-solid fa-user-group" style="color: var(--primary);"></i>
+                  <span>โควต้าทั้งหมด ${totalQuota} คน (${activeDuties.length} หน้าที่)</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              ${statusBadgeHtml}
+            </div>
           </div>
-          <div>
-            <button class="btn btn-secondary" style="color:#38bdf8; border:none; background:transparent; padding: 10px;" onclick="event.stopPropagation(); exportToPDFDash('${act.sheetName}', '${act.title}', '${dateDisplay}', '${actDutiesStr}')" title="ส่งออกข้อมูลเป็น PDF"><i class="fa-solid fa-file-pdf" style="font-size: 1.2rem;"></i></button>
-            <i class="fa-solid fa-chevron-right" style="color:var(--text-dim); margin-left: 10px;"></i>
+
+          <div class="admin-activity-duties">
+            ${dutiesHtml}
+          </div>
+
+          <div class="admin-activity-actions">
+            <div style="font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 6px;">
+              <i class="fa-regular fa-id-card"></i> <span>รหัส: ${escapeHtml(act.sheetName)}</span>
+            </div>
+            <div class="admin-activity-action-btns">
+              <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); selectActivityInDash('${act.sheetName}')" style="padding: 7px 14px; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;" title="แก้ไขกิจกรรม">
+                <i class="fa-solid fa-pen-to-square"></i> <span>แก้ไข</span>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); viewActivityHistory('${act.sheetName}')" style="padding: 7px 14px; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;" title="ดูรายชื่อผู้ลงชื่อ">
+                <i class="fa-solid fa-users"></i> <span>ดูรายชื่อ</span>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); exportToPDFDash('${act.sheetName}', '${escapeHtml(act.title)}', '${dateDisplay}', '${actDutiesStr}')" style="padding: 7px 12px; font-size: 0.88rem; color: #ef4444; border-color: #fee2e2; background: #fff5f5; display: flex; align-items: center; gap: 6px;" title="ส่งออกเป็น PDF">
+                <i class="fa-solid fa-file-pdf"></i> <span>PDF</span>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="event.stopPropagation(); quickDeleteActivity('${act.sheetName}', '${escapeHtml(act.title)}')" style="padding: 7px 12px; font-size: 0.88rem; color: #ef4444; border-color: #fecaca;" title="ลบกิจกรรม">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
           </div>
         `;
+
         list.appendChild(card);
+
+        // Register live countdown timer
+        if (isNotStarted && act.startTime) {
+          startCountdown(timerId, act.startTime, 'badge-' + timerId, `admin-act-card-${index}`, () => {
+            loadDashActivities();
+          }, true);
+        } else if (act.deadline && !isExpired) {
+          startCountdown(timerId, act.deadline, 'badge-' + timerId, `admin-act-card-${index}`, () => {
+            const badgeEl = document.getElementById('badge-' + timerId);
+            if (badgeEl) {
+              badgeEl.className = 'status-badge status-closed';
+              const iconEl = badgeEl.querySelector('i');
+              if (iconEl) iconEl.className = 'fa-solid fa-lock';
+              const labelEl = badgeEl.querySelector('.status-badge-label');
+              if (labelEl) labelEl.textContent = 'ปิดรับแล้ว';
+              const prefixEl = badgeEl.querySelector('.status-badge-prefix');
+              if (prefixEl) prefixEl.textContent = '';
+            }
+          });
+        }
       });
     }
 
@@ -7195,6 +8236,13 @@
             <span style="font-size:1rem; font-weight:500;">กำลังดึงรายละเอียดหน้าที่และรายชื่อผู้ลงชื่อ...</span>
           </div>
         `;
+      }
+
+      if (window.innerWidth <= 992) {
+        const detailCard = document.getElementById('historyDetailCard');
+        if (detailCard) {
+          detailCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
 
       // Fetch signups
