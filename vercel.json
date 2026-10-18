@@ -4,6 +4,57 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/admission",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/admission",
+      "permanent": false
+    },
+    {
+      "source": "/admission",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/admission",
+      "permanent": false
+    },
+    {
+      "source": "/admission.html",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/admission",
+      "permanent": false
+    },
+    {
       "source": "/recruit",
       "has": [
         {
