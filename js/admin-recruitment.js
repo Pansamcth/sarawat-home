@@ -389,13 +389,21 @@
 
       if (window.lucide) lucide.createIcons();
     } catch (err) {
+      console.warn('Error loading applicants from backend API:', err);
       tbody.innerHTML = `
         <tr>
-          <td colspan="9" style="padding: 30px; text-align: center; color: #ef4444;">
-            เกิดข้อผิดพลาดในการโหลดข้อมูล: ${err.message}
+          <td colspan="9" style="padding: 40px 20px; text-align: center; color: #64748b;">
+            <div style="font-weight: 700; color: #b45309; margin-bottom: 6px;">ระบบฐานข้อมูลรับสมัครออฟไลน์ (Offline Mode)</div>
+            <div style="font-size: 0.85rem; color: #94a3b8;">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์รับสมัครได้ในขณะนี้ กรุณาเปิดระบบเซิร์ฟเวอร์หรือ Cloudflare Tunnel</div>
           </td>
         </tr>
       `;
+      const meta = document.getElementById('adminApplicantPaginationMeta');
+      if (meta) meta.textContent = 'โหมดออฟไลน์';
+      const prev = document.getElementById('btnPrevPageApplicant');
+      if (prev) prev.disabled = true;
+      const next = document.getElementById('btnNextPageApplicant');
+      if (next) next.disabled = true;
     }
   }
 
@@ -431,12 +439,29 @@
     const displayName = name ? ` (${name})` : '';
     const displayCode = code || `ID #${id}`;
 
-    const confirmed = confirm(`ยืนยันการลบใบสมัคร ${displayCode}${displayName} หรือไม่?\n\nการลบนี้จะลบข้อมูลผู้สมัคร, ประวัติการพิจารณา และรูปถ่ายออกจากระบบอย่างถาวร (ไม่สามารถกู้คืนได้)`);
+    let confirmed = false;
+    if (typeof Swal !== 'undefined') {
+      const res = await Swal.fire({
+        title: 'ยืนยันการลบใบสมัคร?',
+        html: `คุณต้องการลบใบสมัคร <b>${escapeHtml(displayCode)}${escapeHtml(displayName)}</b> หรือไม่?<br><br><span style="color:#dc2626; font-size:0.88rem;">การลบนี้จะลบข้อมูลผู้สมัคร, ประวัติการพิจารณา และรูปถ่ายออกจากระบบอย่างถาวร (ไม่สามารถกู้คืนได้)</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบใบสมัคร',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      confirmed = res.isConfirmed;
+    } else {
+      confirmed = confirm(`ยืนยันการลบใบสมัคร ${displayCode}${displayName} หรือไม่?\n\nการลบนี้จะลบข้อมูลผู้สมัคร, ประวัติการพิจารณา และรูปถ่ายออกจากระบบอย่างถาวร (ไม่สามารถกู้คืนได้)`);
+    }
     if (!confirmed) return;
 
     try {
       const res = await getApi().adminDeleteApplicant(id, getActiveAdminName());
-      alert(res.message || 'ลบใบสมัครเรียบร้อยแล้ว');
+      if (window.showToast) window.showToast(res.message || 'ลบใบสมัครเรียบร้อยแล้ว', 'success');
+      else alert(res.message || 'ลบใบสมัครเรียบร้อยแล้ว');
 
       const modalReview = document.getElementById('adminApplicantReviewModal');
       if (modalReview) hideModalSafely(modalReview);
@@ -444,28 +469,62 @@
       await refreshRecruitmentStats();
       await loadApplicantsTable(currentPage);
     } catch (err) {
-      alert('เกิดข้อผิดพลาดในการลบใบสมัคร: ' + err.message);
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการลบใบสมัคร',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      } else {
+        alert('เกิดข้อผิดพลาดในการลบใบสมัคร: ' + err.message);
+      }
     }
   }
   window.confirmAndDeleteApplicant = confirmAndDeleteApplicant;
 
   async function confirmAndClearAllApplicants() {
-    const step1 = confirm(
-      '⚠️ คำเตือนสำคัญสูงสุด!\n\nคุณกำลังจะลบฐานข้อมูลผู้สมัครทั้งหมดออกจากระบบ:\n- ลบข้อมูลผู้สมัครทุกคน\n- ลบประวัติการพิจารณา/เปลี่ยนสถานะทั้งหมด\n- ลบรูปถ่ายที่อัปโหลดทั้งหมด\n\nการดำเนินการนี้ "ไม่สามารถย้อนกลับได้" ยืนยันที่จะทำต่อหรือไม่?'
-    );
-    if (!step1) return;
+    if (typeof Swal !== 'undefined') {
+      const step1 = await Swal.fire({
+        title: '⚠️ ล้างข้อมูลใบสมัครทั้งหมด?',
+        html: 'คำเตือนสำคัญสูงสุด! คุณกำลังจะลบฐานข้อมูลผู้สมัครทั้งหมดออกจากระบบ:<br><br><ul style="text-align:left; font-size:0.85rem; color:#64748b; line-height: 1.6;"><li>ลบข้อมูลผู้สมัครทุกคน</li><li>ลบประวัติการพิจารณา/เปลี่ยนสถานะทั้งหมด</li><li>ลบรูปถ่ายที่อัปโหลดทั้งหมด</li></ul><div style="margin-top:8px; font-weight:700; color:#dc2626;">การดำเนินการนี้ "ไม่สามารถย้อนกลับได้"</div>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ดำเนินการต่อ (พิมพ์ยืนยัน)',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      if (!step1.isConfirmed) return;
 
-    const inputConfirm = prompt(
-      'เพื่อความปลอดภัยสูงสุด โปรดพิมพ์คำว่า "ยืนยัน" เพื่อล้างฐานข้อมูลผู้สมัครทั้งหมด:'
-    );
-    if (inputConfirm !== 'ยืนยัน') {
-      if (inputConfirm !== null) {
-        alert('คำยืนยันไม่ถูกต้อง ("' + inputConfirm + '") ระบบได้ยกเลิกคำขอล้างข้อมูลแล้ว');
-      }
-      return;
+      const step2 = await Swal.fire({
+        title: 'พิมพ์ "ยืนยัน" เพื่อล้างข้อมูล',
+        text: 'เพื่อความปลอดภัยสูงสุด โปรดพิมพ์คำว่า "ยืนยัน" เพื่อล้างฐานข้อมูลผู้สมัครทั้งหมด:',
+        input: 'text',
+        inputPlaceholder: 'พิมพ์คำว่า ยืนยัน ที่นี่...',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ล้างข้อมูลทั้งหมดถาวร',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' },
+        inputValidator: (val) => {
+          if ((val || '').trim() !== 'ยืนยัน') {
+            return 'คุณต้องพิมพ์คำว่า "ยืนยัน" ให้ถูกต้อง!';
+          }
+        }
+      });
+      if (!step2.isConfirmed) return;
+    } else {
+      const step1 = confirm('⚠️ คำเตือนสำคัญสูงสุด! ยืนยันลบฐานข้อมูลผู้สมัครทั้งหมดหรือไม่?');
+      if (!step1) return;
+      const input = prompt('พิมพ์ "ยืนยัน" เพื่อล้างข้อมูล:');
+      if (input !== 'ยืนยัน') return;
     }
 
     const btnWipe = document.getElementById('btnWipeAllApplicants');
+    const originalHtml = btnWipe ? btnWipe.innerHTML : '';
     if (btnWipe) {
       btnWipe.disabled = true;
       btnWipe.innerHTML = '<i data-lucide="loader-2" class="spin" style="width: 15px; height: 15px;"></i><span>กำลังล้างข้อมูล...</span>';
@@ -474,15 +533,25 @@
 
     try {
       const res = await getApi().adminClearAllApplicants(getActiveAdminName());
-      alert(res.message || 'ล้างฐานข้อมูลผู้สมัครทั้งหมดเรียบร้อยแล้ว');
+      if (window.showToast) window.showToast(res.message || 'ล้างฐานข้อมูลผู้สมัครทั้งหมดเรียบร้อยแล้ว', 'success');
+      else alert(res.message || 'ล้างฐานข้อมูลเรียบร้อย');
       await refreshRecruitmentStats();
       await loadApplicantsTable(1);
     } catch (err) {
-      alert('เกิดข้อผิดพลาดในการล้างฐานข้อมูล: ' + err.message);
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการล้างฐานข้อมูล',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      } else {
+        alert('เกิดข้อผิดพลาดในการล้างฐานข้อมูล: ' + err.message);
+      }
     } finally {
       if (btnWipe) {
         btnWipe.disabled = false;
-        btnWipe.innerHTML = '<i data-lucide="trash-2" style="width: 15px; height: 15px; color: #ef4444;"></i><span>ล้างข้อมูลทั้งหมด</span>';
+        btnWipe.innerHTML = originalHtml || '<i data-lucide="trash-2" style="width: 15px; height: 15px; color: #ef4444;"></i><span>ล้างข้อมูลทั้งหมด</span>';
         if (window.lucide) lucide.createIcons();
       }
     }
@@ -725,8 +794,17 @@
         const correctionNote = document.getElementById('mdlCorrectionNote').value.trim();
 
         if (status === 'correction_needed' && !correctionNote) {
-          alert('กรุณากรอกข้อความแจ้งจุดที่ต้องการให้นักเรียนแก้ไข');
-          document.getElementById('mdlCorrectionNote').focus();
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'warning',
+              title: 'ข้อมูลไม่ครบถ้วน',
+              text: 'กรุณากรอกข้อความแจ้งจุดที่ต้องการให้นักเรียนแก้ไข',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          } else {
+            alert('กรุณากรอกข้อความแจ้งจุดที่ต้องการให้นักเรียนแก้ไข');
+          }
+          document.getElementById('mdlCorrectionNote')?.focus();
           return;
         }
 
@@ -742,13 +820,23 @@
           });
 
           if (res.success) {
-            alert(res.message || 'บันทึกผลการพิจารณาเรียบร้อยแล้ว');
+            if (window.showToast) window.showToast(res.message || 'บันทึกผลการพิจารณาเรียบร้อยแล้ว', 'success');
+            else alert(res.message || 'บันทึกผลการพิจารณาเรียบร้อยแล้ว');
             hideModalSafely(modalReview);
             await refreshRecruitmentStats();
             await loadApplicantsTable(currentPage);
           }
         } catch (err) {
-          alert('เกิดข้อผิดพลาดในการบันทึก: ' + err.message);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'เกิดข้อผิดพลาดในการบันทึก',
+              text: err.message,
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          } else {
+            alert('เกิดข้อผิดพลาดในการบันทึก: ' + err.message);
+          }
         } finally {
           btnSaveDecision.disabled = false;
           btnSaveDecision.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px;"></i><span>บันทึกผลการพิจารณา</span>';
@@ -785,7 +873,24 @@
         const newIsOpen = currentIsOpen ? 0 : 1;
         const actionLabel = newIsOpen ? 'เปิดรับสมัคร' : 'ปิดรับสมัคร';
 
-        if (!confirm(`ยืนยันการ${actionLabel}สารวัตรนักเรียนหรือไม่?`)) return;
+        let confirmed = false;
+        if (typeof Swal !== 'undefined') {
+          const res = await Swal.fire({
+            title: `ยืนยันการ${actionLabel}?`,
+            text: `คุณต้องการ${actionLabel}สารวัตรนักเรียนทันทีหรือไม่?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#0f172a',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: `ใช่, ${actionLabel}`,
+            cancelButtonText: 'ยกเลิก',
+            customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+          });
+          confirmed = res.isConfirmed;
+        } else {
+          confirmed = confirm(`ยืนยันการ${actionLabel}สารวัตรนักเรียนหรือไม่?`);
+        }
+        if (!confirmed) return;
 
         try {
           await getApi().adminUpdateRecruitmentSettings({
@@ -793,8 +898,18 @@
             updated_by: getActiveAdminName()
           });
           await refreshRecruitmentSettings();
+          if (window.showToast) window.showToast(`${actionLabel}เรียบร้อยแล้ว`, 'success');
         } catch (err) {
-          alert('เกิดข้อผิดพลาด: ' + err.message);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'เกิดข้อผิดพลาด',
+              text: err.message,
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          } else {
+            alert('เกิดข้อผิดพลาด: ' + err.message);
+          }
         }
       });
     }
@@ -867,10 +982,20 @@
           };
 
           await getApi().adminUpdateRecruitmentSettings(payload);
-          alert('บันทึกการตั้งค่าเรียบร้อยแล้ว');
+          if (window.showToast) window.showToast('บันทึกการตั้งค่ารับสมัครเรียบร้อยแล้ว', 'success');
+          else alert('บันทึกการตั้งค่าเรียบร้อยแล้ว');
           await refreshRecruitmentSettings();
         } catch (err) {
-          alert('เกิดข้อผิดพลาด: ' + err.message);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'เกิดข้อผิดพลาด',
+              text: err.message,
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          } else {
+            alert('เกิดข้อผิดพลาด: ' + err.message);
+          }
         }
       });
     }
@@ -893,12 +1018,38 @@
         const name = document.getElementById('inpNewClubName').value.trim();
         const quota = parseInt(document.getElementById('inpNewClubQuota').value) || 0;
 
-        if (!name) return alert('กรุณากรอกชื่อ');
+        if (!name) {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'warning',
+              title: 'กรุณากรอกชื่อ',
+              text: 'กรุณากรอกชื่อชุมนุมหรือสังกัด',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          } else {
+            alert('กรุณากรอกชื่อ');
+          }
+          return;
+        }
 
-        await getApi().adminCreateRecruitmentClub({ type, name, quota, admin: getActiveAdminName() });
-        document.getElementById('inpNewClubName').value = '';
-        boxAddClub.style.display = 'none';
-        loadClubsTable();
+        try {
+          await getApi().adminCreateRecruitmentClub({ type, name, quota, admin: getActiveAdminName() });
+          document.getElementById('inpNewClubName').value = '';
+          boxAddClub.style.display = 'none';
+          if (window.showToast) window.showToast('เพิ่มชุมนุม/สังกัดเรียบร้อยแล้ว', 'success');
+          loadClubsTable();
+        } catch (err) {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'เกิดข้อผิดพลาด',
+              text: err.message,
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          } else {
+            alert('เกิดข้อผิดพลาด: ' + err.message);
+          }
+        }
       });
     }
   }
@@ -959,9 +1110,28 @@
 
       document.querySelectorAll('.btn-del-club').forEach(btn => {
         btn.addEventListener('click', async () => {
-          if (!confirm('ยืนยันลบรายการนี้หรือไม่?')) return;
+          let confirmed = false;
+          if (typeof Swal !== 'undefined') {
+            const res = await Swal.fire({
+              title: 'ยืนยันลบรายการ?',
+              text: 'คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#dc2626',
+              cancelButtonColor: '#64748b',
+              confirmButtonText: 'ใช่, ลบ',
+              cancelButtonText: 'ยกเลิก',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+            confirmed = res.isConfirmed;
+          } else {
+            confirmed = confirm('ยืนยันลบรายการนี้หรือไม่?');
+          }
+          if (!confirmed) return;
+
           const id = btn.getAttribute('data-id');
           await getApi().adminDeleteRecruitmentClub(id);
+          if (window.showToast) window.showToast('ลบรายการเรียบร้อยแล้ว', 'success');
           loadClubsTable();
         });
       });

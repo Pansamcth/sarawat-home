@@ -3,6 +3,13 @@
  */
 
 let allMembers = [];
+let teamMemberSearchTerm = '';
+
+function handleTeamMemberSearch(term) {
+  teamMemberSearchTerm = (term || '').trim().toLowerCase();
+  renderTeamAdminUI();
+}
+window.handleTeamMemberSearch = handleTeamMemberSearch;
 
 async function loadTeamAdmin() {
   const container = document.getElementById('teamAdminContainer');
@@ -11,45 +18,85 @@ async function loadTeamAdmin() {
   container.innerHTML = `
     <div style="text-align: center; padding: 60px;">
       <i data-lucide="loader-2" class="dg-spin" style="width: 40px; height: 40px; color: var(--dg-primary);"></i>
-      <p style="margin-top: 16px;">กำลังโหลดข้อมูลจากฐานข้อมูล...</p>
+      <p style="margin-top: 16px;">กำลังโหลดข้อมูลคณะกรรมการ...</p>
     </div>
   `;
   if (window.lucide) window.lucide.createIcons();
 
+  let loadedOnline = false;
   try {
     const base = window.SarawatApi ? window.SarawatApi.getBaseUrl() : '';
-    const res = await fetch(base + '/api/settings');
-    const settingsData = await res.json();
-    
-    if (settingsData.team_members_db) {
-      allMembers = JSON.parse(settingsData.team_members_db);
-    } else {
+    if (base) {
+      const res = await fetch(base + '/api/settings');
+      if (res.ok) {
+        const settingsData = await res.json();
+        if (settingsData && settingsData.team_members_db) {
+          const parsed = typeof settingsData.team_members_db === 'string'
+            ? JSON.parse(settingsData.team_members_db)
+            : settingsData.team_members_db;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            allMembers = parsed;
+            loadedOnline = true;
+            try {
+              localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
+            } catch (e) {}
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Backend team API unavailable, using local backup:', err.message);
+  }
+
+  if (!loadedOnline) {
+    try {
+      const local = localStorage.getItem('dg_sarawat_team_members');
+      if (local) {
+        const parsed = JSON.parse(local);
+        if (Array.isArray(parsed)) allMembers = parsed;
+      }
+    } catch (e) {
       allMembers = [];
     }
-
-    renderTeamAdminUI();
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = `
-      <div style="text-align: center; padding: 60px; color: #ef4444;">
-        <i data-lucide="alert-triangle" style="width: 40px; height: 40px; margin-bottom: 16px;"></i>
-        <p>เกิดข้อผิดพลาดในการโหลดข้อมูล: ${err.message}</p>
-      </div>
-    `;
-    if (window.lucide) window.lucide.createIcons();
   }
+
+  renderTeamAdminUI();
 }
+window.loadTeamAdmin = loadTeamAdmin;
 
 function renderTeamAdminUI() {
   const container = document.getElementById('teamAdminContainer');
+  if (!container) return;
   
-  let presidents = allMembers.filter(m => m.role === 'ประธาน');
-  if(presidents.length === 0) presidents.push({ id: 'new_p', name: '', role: 'ประธาน', department: '', imageUrl: '' });
+  const countBadge = document.getElementById('teamCountBadge');
+  const activeTotal = allMembers.filter(m => m.name && m.name.trim() !== '').length;
+  if (countBadge) {
+    countBadge.innerHTML = `<i class="fa-solid fa-users"></i> ${activeTotal} สมาชิก`;
+  }
 
-  let vps = allMembers.filter(m => m.role === 'รองประธาน');
-  let secs = allMembers.filter(m => m.role === 'เลขานุการ');
-  let heads = allMembers.filter(m => m.role === 'หัวหน้าฝ่าย');
-  let members = allMembers.filter(m => m.role === 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน' || (!['ประธาน','รองประธาน','เลขานุการ','หัวหน้าฝ่าย'].includes(m.role)));
+  let filtered = allMembers;
+  if (teamMemberSearchTerm) {
+    filtered = allMembers.filter(m => 
+      (m.name && m.name.toLowerCase().includes(teamMemberSearchTerm)) ||
+      (m.role && m.role.toLowerCase().includes(teamMemberSearchTerm)) ||
+      (m.department && m.department.toLowerCase().includes(teamMemberSearchTerm))
+    );
+  }
+
+  let presidents = filtered.filter(m => m.role === 'ประธาน');
+  if (presidents.length === 0 && !teamMemberSearchTerm) {
+    let p = allMembers.find(m => m.role === 'ประธาน');
+    if (!p) {
+      p = { id: 'new_p', name: '', role: 'ประธาน', department: '', imageUrl: '' };
+      allMembers.push(p);
+    }
+    presidents.push(p);
+  }
+
+  let vps = filtered.filter(m => m.role === 'รองประธาน');
+  let secs = filtered.filter(m => m.role === 'เลขานุการ');
+  let heads = filtered.filter(m => m.role === 'หัวหน้าฝ่าย');
+  let members = filtered.filter(m => m.role === 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน' || (!['ประธาน','รองประธาน','เลขานุการ','หัวหน้าฝ่าย'].includes(m.role)));
 
   let html = `
     <style>
@@ -69,67 +116,90 @@ function renderTeamAdminUI() {
     </style>
   `;
 
+  // --- Search Notice if no results ---
+  if (teamMemberSearchTerm && filtered.length === 0) {
+    html += `
+      <div style="text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; margin-bottom: 24px;">
+        <i data-lucide="search-x" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i>
+        <div style="font-weight: 700; font-size: 1rem; color: #475569;">ไม่พบสมาชิกตรงกับคำค้นหา "${escapeHtml(teamMemberSearchTerm)}"</div>
+        <div style="font-size: 0.85rem; margin-top: 4px;">ลองค้นหาด้วยชื่ออื่น หรือสังกัดฝ่าย</div>
+      </div>
+    `;
+  }
+
   // --- President ---
-  html += buildEditorCard(presidents[0], 'ประธานคณะกรรมการสารวัตรนักเรียน', 'ประธาน', false, true);
+  if (presidents.length > 0) {
+    html += buildEditorCard(presidents[0], 'ประธานคณะกรรมการสารวัตรนักเรียน', 'ประธาน', false, true);
+  }
 
   // --- Vice Presidents ---
-  html += `
-    <div class="team-edit-card" style="background: var(--dg-bg-subtle); border: none;">
-      <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
-        <h3 class="team-edit-title">รองประธานคณะกรรมการ</h3>
-        <button class="dg-btn-white" onclick="addExecutive('รองประธาน')" style="padding: 6px 16px; font-size: 0.9rem;">+ เพิ่มรองประธาน</button>
-      </div>
-      <div>
-  `;
-  vps.forEach((vp, idx) => {
-    html += buildEditorCard(vp, 'รองประธานคนที่ ' + (idx+1), 'รองประธาน', true);
-  });
-  if(vps.length === 0) html += `<p style="text-align:center; color: #64748b; font-size: 0.9rem;">ยังไม่มีรองประธาน</p>`;
-  html += `</div></div>`;
+  if (!teamMemberSearchTerm || vps.length > 0) {
+    html += `
+      <div class="team-edit-card" style="background: var(--dg-bg-subtle); border: none;">
+        <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
+          <h3 class="team-edit-title">รองประธานคณะกรรมการ</h3>
+          <button class="dg-btn-white" onclick="addExecutive('รองประธาน')" style="padding: 6px 16px; font-size: 0.9rem;">+ เพิ่มรองประธาน</button>
+        </div>
+        <div>
+    `;
+    vps.forEach((vp, idx) => {
+      html += buildEditorCard(vp, 'รองประธานคนที่ ' + (idx+1), 'รองประธาน', true);
+    });
+    if(vps.length === 0) html += `<p style="text-align:center; color: #64748b; font-size: 0.9rem;">ยังไม่มีรองประธาน</p>`;
+    html += `</div></div>`;
+  }
 
   
   // --- Secretaries ---
-  html += `
-    <div class="team-edit-card" style="background: var(--dg-bg-subtle); border: none;">
-      <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
-        <h3 class="team-edit-title">ฝ่ายเลขานุการ</h3>
-        <button class="dg-btn-white" onclick="addExecutive('เลขานุการ')" style="padding: 6px 16px; font-size: 0.9rem;">+ เพิ่มเลขานุการ</button>
-      </div>
-      <div>
-  `;
-  secs.forEach(sec => {
-    html += buildEditorCard(sec, 'เลขานุการ', 'เลขานุการ', true);
-  });
-  if(secs.length === 0) {
-    html += `<p style="text-align:center; color: #64748b; font-size: 0.9rem;">ยังไม่มีเลขานุการ</p>`;
+  if (!teamMemberSearchTerm || secs.length > 0) {
+    html += `
+      <div class="team-edit-card" style="background: var(--dg-bg-subtle); border: none;">
+        <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
+          <h3 class="team-edit-title">ฝ่ายเลขานุการ</h3>
+          <button class="dg-btn-white" onclick="addExecutive('เลขานุการ')" style="padding: 6px 16px; font-size: 0.9rem;">+ เพิ่มเลขานุการ</button>
+        </div>
+        <div>
+    `;
+    secs.forEach(sec => {
+      html += buildEditorCard(sec, 'เลขานุการ', 'เลขานุการ', true);
+    });
+    if(secs.length === 0) {
+      html += `<p style="text-align:center; color: #64748b; font-size: 0.9rem;">ยังไม่มีเลขานุการ</p>`;
+    }
+    html += `</div></div>`;
   }
-  html += `</div></div>`;
 
   // --- Department Heads ---
-  html += `
-    <div class="team-edit-card" style="background: #f8fafc; border: none;">
-      <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
-        <h3 class="team-edit-title">หัวหน้าฝ่ายต่าง ๆ</h3>
-      </div>
-      <div>
-  `;
   const fixedDepts = ['ฝ่ายเอกสาร', 'ฝ่ายโสตทัศนศิลป์', 'ฝ่ายสารวัตรพยาบาล', 'ฝ่ายการเงิน', 'ฝ่ายกิจกรรม', 'ฝ่ายอุปกรณ์และ IT', 'ฝ่ายวินัย'];
-  fixedDepts.forEach(dept => {
-    let deptHeads = [];
-    deptHeads = allMembers.filter(m => m.role === 'หัวหน้าฝ่าย' && m.department === dept);
-    
-    if (deptHeads.length === 0) {
-      const h = { id: 'head_' + Date.now() + '_' + Math.random(), name: '', role: 'หัวหน้าฝ่าย', department: dept, imageUrl: '' };
-      allMembers.push(h);
-      deptHeads.push(h);
-    }
-    
-    const displayTitle = 'หัวหน้า' + dept;
-    deptHeads.forEach(h => {
-      html += buildEditorCard(h, displayTitle, h.role, false, true);
-    });
+  const matchedDepts = fixedDepts.filter(dept => {
+    if (!teamMemberSearchTerm) return true;
+    return filtered.some(m => m.role === 'หัวหน้าฝ่าย' && m.department === dept);
   });
-  html += `</div></div>`;
+
+  if (matchedDepts.length > 0) {
+    html += `
+      <div class="team-edit-card" style="background: #f8fafc; border: none;">
+        <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
+          <h3 class="team-edit-title">หัวหน้าฝ่ายต่าง ๆ</h3>
+        </div>
+        <div>
+    `;
+    matchedDepts.forEach(dept => {
+      let deptHeads = filtered.filter(m => m.role === 'หัวหน้าฝ่าย' && m.department === dept);
+      
+      if (deptHeads.length === 0 && !teamMemberSearchTerm) {
+        const h = { id: 'head_' + Date.now() + '_' + Math.random(), name: '', role: 'หัวหน้าฝ่าย', department: dept, imageUrl: '' };
+        allMembers.push(h);
+        deptHeads.push(h);
+      }
+      
+      const displayTitle = 'หัวหน้า' + dept;
+      deptHeads.forEach(h => {
+        html += buildEditorCard(h, displayTitle, h.role, false, true);
+      });
+    });
+    html += `</div></div>`;
+  }
 
   // --- General Members Table ---
   html += `
@@ -296,12 +366,35 @@ function addExecutive(role) {
   renderTeamAdminUI();
 }
 
-function deleteMember(id) {
-  if (confirm('ต้องการลบสมาชิกท่านนี้ใช่หรือไม่?')) {
-    allMembers = allMembers.filter(x => x.id !== id);
-    renderTeamAdminUI();
+async function deleteMember(id) {
+  let m = allMembers.find(x => x.id === id);
+  const name = m && m.name ? m.name : 'สมาชิกท่านนี้';
+  
+  if (typeof Swal !== 'undefined') {
+    const result = await Swal.fire({
+      title: 'ยืนยันการลบสมาชิก?',
+      text: `คุณต้องการลบ "${name}" ออกจากรายชื่อคณะบริหารใช่หรือไม่?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'ใช่, ลบข้อมูล',
+      cancelButtonText: 'ยกเลิก',
+      customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+    });
+    if (!result.isConfirmed) return;
+  } else {
+    if (!confirm(`ต้องการลบ "${name}" ใช่หรือไม่?`)) return;
   }
+
+  allMembers = allMembers.filter(x => x.id !== id);
+  try {
+    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
+  } catch (e) {}
+  renderTeamAdminUI();
+  if (window.showToast) window.showToast(`ลบ "${name}" เรียบร้อยแล้ว`, 'success');
 }
+window.deleteMember = deleteMember;
 
 async function handleImageSelect(id) {
   const fileInput = document.getElementById('file_' + id);
@@ -324,11 +417,23 @@ async function handleImageSelect(id) {
         allMembers.push(m);
       }
       m.imageUrl = res.url;
+      try {
+        localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
+      } catch (e) {}
       renderTeamAdminUI();
-      if(window.showToast) window.showToast('อัปโหลดรูปภาพสำเร็จ');
+      if(window.showToast) window.showToast('อัปโหลดรูปภาพสำเร็จ', 'success');
     }
   } catch (err) {
-    alert('อัปโหลดไม่สำเร็จ: ' + err.message);
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        icon: 'error',
+        title: 'อัปโหลดไม่สำเร็จ',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    } else {
+      alert('อัปโหลดไม่สำเร็จ: ' + err.message);
+    }
     renderTeamAdminUI();
   }
 }
@@ -337,6 +442,9 @@ function removeImage(id) {
   let m = allMembers.find(x => x.id === id);
   if(m) {
     m.imageUrl = '';
+    try {
+      localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
+    } catch (e) {}
     renderTeamAdminUI();
   }
 }
@@ -370,7 +478,19 @@ function saveMemberModal() {
   const role = document.getElementById('modalRole').value;
   const dept = document.getElementById('modalDept').value.trim();
   
-  if(!name) return alert('กรุณาระบุชื่อ-นามสกุล');
+  if(!name) {
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณาระบุชื่อ-นามสกุล',
+        text: 'ชื่อ-นามสกุลไม่สามารถเว้นว่างได้',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    } else {
+      alert('กรุณาระบุชื่อ-นามสกุล');
+    }
+    return;
+  }
 
   const existingIdx = allMembers.findIndex(x => x.id === id);
   if (existingIdx >= 0) {
@@ -381,37 +501,60 @@ function saveMemberModal() {
     allMembers.push({ id, name, role, department: dept, imageUrl: '' });
   }
   
+  try {
+    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
+  } catch (e) {}
+
   document.getElementById('memberModal').style.display = 'none';
   renderTeamAdminUI();
+  if (window.showToast) window.showToast('บันทึกข้อมูลสมาชิกแล้ว', 'success');
 }
 
 async function saveTeamSettings() {
+  const validMembers = allMembers.filter(m => m.name && m.name.trim() !== '');
+  try {
+    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(validMembers));
+  } catch (e) {}
+
+  let savedOnline = false;
   try {
     const payload = {
-      team_members_db: JSON.stringify(allMembers.filter(m => m.name.trim() !== ''))
+      team_members_db: JSON.stringify(validMembers)
     };
     
     if (window.SarawatApi && typeof window.SarawatApi.saveSettings === 'function') {
       await window.SarawatApi.saveSettings(payload);
+      savedOnline = true;
     } else {
       const base = window.SarawatApi ? window.SarawatApi.getBaseUrl() : '';
-      const headers = window.SarawatApi && typeof window.SarawatApi.getAuthHeaders === 'function'
-        ? window.SarawatApi.getAuthHeaders({ 'Content-Type': 'application/json' })
-        : { 'Content-Type': 'application/json' };
-      const res = await fetch(base + '/api/settings', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (base) {
+        const headers = window.SarawatApi && typeof window.SarawatApi.getAuthHeaders === 'function'
+          ? window.SarawatApi.getAuthHeaders({ 'Content-Type': 'application/json' })
+          : { 'Content-Type': 'application/json' };
+        const res = await fetch(base + '/api/settings', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) savedOnline = true;
+        else throw new Error('HTTP ' + res.status);
+      }
     }
 
-    if(window.showToast) window.showToast('บันทึกข้อมูลคณะทำงานสำเร็จ!');
-    else alert('บันทึกข้อมูลสำเร็จ!');
+    if (savedOnline) {
+      if (window.showToast) window.showToast('บันทึกข้อมูลคณะทำงานลงฐานข้อมูลเรียบร้อยแล้ว!', 'success');
+      else alert('บันทึกข้อมูลสำเร็จ!');
+    } else {
+      if (window.showToast) window.showToast('บันทึกข้อมูลคณะทำงานลงเครื่องเรียบร้อย (Local Draft)', 'warning');
+      else alert('บันทึกข้อมูลลงเครื่องเรียบร้อย!');
+    }
   } catch (err) {
-    alert('บันทึกไม่สำเร็จ: ' + err.message);
+    console.warn('API save team warning:', err);
+    if (window.showToast) window.showToast('บันทึกข้อมูลลงเครื่องเรียบร้อย (เซิร์ฟเวอร์ออฟไลน์)', 'warning');
+    else alert('บันทึกข้อมูลลงเครื่องเรียบร้อย');
   }
 }
+window.saveTeamSettings = saveTeamSettings;
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.admin-tab-btn');

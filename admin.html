@@ -17,6 +17,10 @@
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
+  <!-- FontAwesome 6 & SweetAlert2 (Matching SI-ROSTER Admin System) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Leaflet CSS & JS for OpenStreetMap -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -399,42 +403,321 @@
       width: 100%;
     }
 
+    /* Collapsible Desktop Sidebar Styles */
+    .admin-main.sidebar-collapsed {
+      grid-template-columns: 80px 1fr;
+      transition: grid-template-columns 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .admin-sidebar.sidebar-collapsed {
+      width: 80px;
+      padding: 16px 8px;
+      align-items: center;
+    }
+    .admin-sidebar.sidebar-collapsed .admin-sidebar-tag span,
+    .admin-sidebar.sidebar-collapsed .admin-sidebar-header > span,
+    .admin-sidebar.sidebar-collapsed .admin-nav-group-title,
+    .admin-sidebar.sidebar-collapsed .admin-tab-btn-content span,
+    .admin-sidebar.sidebar-collapsed .admin-badge,
+    .admin-sidebar.sidebar-collapsed .admin-role-badge,
+    .admin-sidebar.sidebar-collapsed .admin-sidebar-footer {
+      display: none !important;
+    }
+    .admin-sidebar.sidebar-collapsed .admin-sidebar-header {
+      justify-content: center;
+      padding: 2px 0 12px;
+      width: 100%;
+    }
+    .admin-sidebar.sidebar-collapsed .admin-tab-btn {
+      justify-content: center;
+      padding: 12px;
+      width: 100%;
+    }
+    .admin-sidebar.sidebar-collapsed .admin-tab-btn i,
+    .admin-sidebar.sidebar-collapsed .admin-tab-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Topbar Hamburger & Sidebar Action Buttons */
+    .admin-hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 1.15rem;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .admin-hamburger-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: scale(1.03);
+    }
+    .admin-sidebar-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .admin-sidebar-collapse-btn {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 0.85rem;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .admin-sidebar-collapse-btn:hover {
+      color: #0f172a;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .admin-sidebar-close-btn {
+      display: none;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      font-size: 0.95rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .admin-sidebar-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+      border-color: #fca5a5;
+    }
+
+    /* Mobile Drawer Backdrop */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 1050;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .sidebar-backdrop.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Modern Action Toolbars */
+    .admin-action-toolbar {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+    }
+    .admin-search-box {
+      position: relative;
+      min-width: 240px;
+      flex: 1;
+      max-width: 380px;
+    }
+    .admin-search-box input {
+      width: 100%;
+      padding: 9px 14px 9px 36px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 9999px;
+      font-size: 0.86rem;
+      font-family: inherit;
+      outline: none;
+      background: #ffffff;
+      transition: all 0.2s ease;
+    }
+    .admin-search-box input:focus {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+    .admin-search-box i {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.88rem;
+    }
+    .admin-filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .admin-filter-pill {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .admin-filter-pill:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .admin-filter-pill.active {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #ffffff;
+    }
+    .admin-counter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 11px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-radius: 9999px;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Modern Toast Notifications (Multi-type: success, error, warning, info) */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast {
+      pointer-events: auto;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.22);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      max-width: 380px;
+    }
+    .toast.success { border-left: 4px solid #10b981; }
+    .toast.success i { color: #10b981; }
+    .toast.error { border-left: 4px solid #ef4444; }
+    .toast.error i { color: #ef4444; }
+    .toast.warning { border-left: 4px solid #f59e0b; }
+    .toast.warning i { color: #f59e0b; }
+    .toast.info { border-left: 4px solid #3b82f6; }
+    .toast.info i { color: #3b82f6; }
+    .toast.hiding {
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+      transition: all 0.25s ease;
+    }
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* SweetAlert2 Modal Custom Classes matching SI-ROSTER */
+    .swal2-popup.custom-swal-popup {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.16) !important;
+      border-radius: 20px !important;
+      padding: 2rem 1.6rem !important;
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
+    }
+    .custom-swal-btn {
+      border-radius: 10px !important;
+      padding: 10px 22px !important;
+      font-size: 0.92rem !important;
+      font-weight: 700 !important;
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
+      transition: all 0.2s ease !important;
+    }
+
     @media (max-width: 1024px) {
       .admin-main {
         grid-template-columns: 1fr;
         gap: 20px;
+        padding: 16px 16px 60px;
+      }
+
+      .admin-hamburger-btn {
+        display: inline-flex !important;
+      }
+
+      .admin-sidebar-collapse-btn {
+        display: none !important;
+      }
+
+      .admin-sidebar-close-btn {
+        display: inline-flex !important;
       }
 
       .admin-sidebar {
-        position: sticky;
-        top: 72px;
-        z-index: 80;
-        max-height: none;
-        padding: 10px 12px;
-        border-radius: 12px;
+        position: fixed !important;
+        top: 0 !important;
+        left: -320px !important;
+        width: 290px !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-radius: 0 16px 16px 0 !important;
+        z-index: 1100 !important;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.18) !important;
+        background: #ffffff !important;
+        overflow-y: auto !important;
+        padding: 18px 14px !important;
+      }
+
+      .admin-sidebar.mobile-open {
+        left: 0 !important;
       }
 
       .admin-sidebar-header,
       .admin-sidebar-footer,
       .admin-nav-group-title {
-        display: none;
+        display: flex !important;
       }
 
       .admin-sidebar-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        gap: 6px;
-        padding-bottom: 4px;
-        scrollbar-width: none;
-      }
-      .admin-sidebar-nav::-webkit-scrollbar {
-        display: none;
+        flex-direction: column !important;
+        overflow-x: visible !important;
+        gap: 3px !important;
       }
 
       .admin-tab-btn {
-        width: auto;
-        flex-shrink: 0;
-        padding: 8px 14px;
+        width: 100% !important;
+        padding: 10px 12px !important;
       }
     }
 
@@ -1713,16 +1996,21 @@
   <!-- ============ ADMIN TOPBAR ============ -->
   <header class="admin-navbar">
     <div class="admin-nav-inner">
-      <a href="admin.html" class="admin-brand">
-        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
-          style="width: 32px; height: 32px; object-fit: contain;" />
-        <span style="display: inline-block; width: 1px; height: 20px; background: #e2e8f0; margin: 0 2px;"></span>
-        <img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo"
-          style="width: 32px; height: 32px; object-fit: contain;" />
-        <span class="admin-brand-text">
-          SARAWAT <span class="admin-badge">ADMIN PORTAL</span>
-        </span>
-      </a>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button type="button" class="admin-hamburger-btn" id="sidebarHamburgerBtn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu" title="เปิดเมนู">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="admin.html" class="admin-brand">
+          <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+            style="width: 32px; height: 32px; object-fit: contain;" />
+          <span style="display: inline-block; width: 1px; height: 20px; background: #e2e8f0; margin: 0 2px;"></span>
+          <img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo"
+            style="width: 32px; height: 32px; object-fit: contain;" />
+          <span class="admin-brand-text">
+            SARAWAT <span class="admin-badge">ADMIN PORTAL</span>
+          </span>
+        </a>
+      </div>
 
       <div class="admin-nav-actions">
         <!-- Role Badge -->
@@ -1750,8 +2038,11 @@
     </div>
   </header>
 
+  <!-- Mobile Sidebar Backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleMobileSidebar(false)"></div>
+
   <!-- ============ MAIN DASHBOARD ============ -->
-  <main class="admin-main">
+  <main class="admin-main" id="adminMainContainer">
     <!-- Sticky Sidebar Navigation (Side Menu) -->
     <aside class="admin-sidebar" id="adminSidebar">
       <div class="admin-sidebar-header">
@@ -1759,7 +2050,14 @@
           <i data-lucide="layout-grid"></i>
           <span>ระบบจัดการหลัก</span>
         </div>
-        <span style="font-size: 0.72rem; color: #94a3b8; font-weight: 700;">Admin Menu</span>
+        <div class="admin-sidebar-header-actions">
+          <button type="button" class="admin-sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarDesktop()" title="ย่อ/ขยายแถบเมนู">
+            <i class="fa-solid fa-bars-staggered" id="sidebarCollapseIcon"></i>
+          </button>
+          <button type="button" class="admin-sidebar-close-btn" onclick="toggleMobileSidebar(false)" title="ปิดเมนู">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
       </div>
 
       <nav class="admin-sidebar-nav">
@@ -1851,12 +2149,29 @@
       <div class="dg-admin-header-flex">
         <div>
           <h2 class="dg-admin-page-title">จัดการคณะบริหารสารวัตรนักเรียน</h2>
-          <p class="dg-admin-page-desc">อัปเดตข้อมูลและรูปภาพของคณะบริหาร (ข้อมูลฝ่ายจะซิงค์จาก Google Sheets อัตโนมัติ)</p>
+          <p class="dg-admin-page-desc">อัปเดตข้อมูลและรูปภาพของคณะบริหาร (ข้อมูลฝ่ายจะซิงค์จาก Google Sheets และเซิร์ฟเวอร์อัตโนมัติ)</p>
         </div>
-        <div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="dg-btn-outline" onclick="loadTeamAdmin()" style="padding: 10px 16px; font-size: 0.85rem;">
+            <i data-lucide="refresh-cw"></i> <span>รีเฟรช</span>
+          </button>
+          <button type="button" class="dg-btn-outline" onclick="openMemberModal()" style="padding: 10px 16px; font-size: 0.85rem;">
+            <i data-lucide="user-plus"></i> <span>+ เพิ่มสมาชิก</span>
+          </button>
           <button type="button" class="dg-btn-black" onclick="saveTeamSettings()">
             <i data-lucide="save"></i> <span>บันทึกข้อมูลคณะบริหาร</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Action Toolbar for Team -->
+      <div class="admin-action-toolbar">
+        <div class="admin-search-box" style="max-width: 420px;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="teamSearchInput" placeholder="ค้นหาชื่อสมาชิก หรือสังกัดฝ่าย..." oninput="if(typeof handleTeamMemberSearch==='function')handleTeamMemberSearch(this.value)" />
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="admin-counter-badge" id="teamCountBadge"><i class="fa-solid fa-users"></i> สมาชิกคณะทำงาน</span>
         </div>
       </div>
     
@@ -1874,11 +2189,33 @@
           <h2>จัดการข่าวสารและกิจกรรม (News & Activities)</h2>
           <p>ข้อมูลที่แก้ไขที่นี่จะแสดงผลบนหน้าแรก (index.html) ในส่วน News & Live Activities ทันที</p>
         </div>
-        <div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="dg-btn-outline" onclick="renderAdminNews()" style="padding: 10px 16px; font-size: 0.85rem;">
+            <i data-lucide="refresh-cw"></i>
+            <span>รีเฟรชข้อมูล</span>
+          </button>
           <button type="button" class="dg-btn-black" onclick="openAddNewsModal()">
             <i data-lucide="plus"></i>
-            <span>เพิ่มข่าวสารใหม่</span>
+            <span>+ เพิ่มข่าวสารใหม่</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Action Toolbar with Search & Category Filter Pills -->
+      <div class="admin-action-toolbar">
+        <div class="admin-filter-pills" id="adminNewsFilterPills">
+          <button type="button" class="admin-filter-pill active" data-news-tag="all" onclick="filterAdminNewsTag('all')">ทั้งหมด</button>
+          <button type="button" class="admin-filter-pill" data-news-tag="กิจกรรมสารวัตร" onclick="filterAdminNewsTag('กิจกรรมสารวัตร')">กิจกรรมสารวัตร</button>
+          <button type="button" class="admin-filter-pill" data-news-tag="ประชาสัมพันธ์" onclick="filterAdminNewsTag('ประชาสัมพันธ์')">ประชาสัมพันธ์</button>
+          <button type="button" class="admin-filter-pill" data-news-tag="รับสมัคร" onclick="filterAdminNewsTag('รับสมัคร')">รับสมัคร</button>
+          <button type="button" class="admin-filter-pill" data-news-tag="ภาพกิจกรรม" onclick="filterAdminNewsTag('ภาพกิจกรรม')">ภาพกิจกรรม</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1; justify-content: flex-end;">
+          <div class="admin-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="adminNewsSearchInput" placeholder="ค้นหาตามชื่อข่าวสาร, เนื้อหา, ป้ายกำกับ..." oninput="handleAdminNewsSearch(this.value)" />
+          </div>
+          <span class="admin-counter-badge" id="newsCountBadge">0 ข่าว</span>
         </div>
       </div>
 
@@ -3479,8 +3816,9 @@
     </div>
   </div>
 
-  <!-- Toast Element -->
-  <div class="admin-toast" id="adminToast">
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer"></div>
+  <div class="admin-toast" id="adminToast" style="display: none;">
     <i data-lucide="check-circle" style="color: #22c55e;"></i>
     <span id="adminToastMsg">บันทึกข้อมูลเรียบร้อยแล้ว</span>
   </div>
@@ -3498,6 +3836,42 @@
     const DEFAULT_CALENDAR_EVENTS = [];
 
     // ==========================================================
+    // 📱 RESPONSIVE SIDEBAR NAVIGATION
+    // ==========================================================
+    function toggleMobileSidebar(force) {
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (!sidebar) return;
+      const shouldOpen = force !== undefined ? !!force : !sidebar.classList.contains('mobile-open');
+      if (shouldOpen) {
+        sidebar.classList.add('mobile-open');
+        if (backdrop) backdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      } else {
+        sidebar.classList.remove('mobile-open');
+        if (backdrop) backdrop.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    window.toggleMobileSidebar = toggleMobileSidebar;
+
+    function toggleSidebarDesktop() {
+      const main = document.querySelector('.admin-main');
+      const sidebar = document.getElementById('adminSidebar');
+      if (!sidebar) return;
+      const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+      const nextState = !isCollapsed;
+
+      if (main) main.classList.toggle('sidebar-collapsed', nextState);
+      sidebar.classList.toggle('sidebar-collapsed', nextState);
+
+      try {
+        localStorage.setItem('dg_sarawat_sidebar_collapsed', nextState ? '1' : '0');
+      } catch (e) {}
+    }
+    window.toggleSidebarDesktop = toggleSidebarDesktop;
+
+    // ==========================================================
     // 🔐 AUTHENTICATION & ROLE-BASED ACCESS CONTROL (RBAC)
     // ==========================================================
     let currentAdminUser = {
@@ -3506,17 +3880,6 @@
     };
 
     function getLocalAdmins() {
-      try {
-        const raw = localStorage.getItem('dg_sarawat_admins');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) return parsed;
-        }
-      } catch (e) {
-        console.warn('Error reading local admins:', e);
-      }
-      return [];
-
       try {
         const raw = localStorage.getItem('dg_sarawat_admins');
         if (raw) {
@@ -3955,15 +4318,30 @@
       const r = document.getElementById('newAdminRole').value || 'Admin';
 
       if (!u || !p) {
-        alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+        Swal.fire({
+          icon: 'warning',
+          title: 'ข้อมูลไม่ครบถ้วน',
+          text: 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
       if (p.length < 4) {
-        alert('รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+        Swal.fire({
+          icon: 'warning',
+          title: 'รหัสผ่านสั้นเกินไป',
+          text: 'รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
       if (p !== cp) {
-        alert('รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน');
+        Swal.fire({
+          icon: 'warning',
+          title: 'รหัสผ่านไม่ตรงกัน',
+          text: 'รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
 
@@ -3978,32 +4356,57 @@
 
         const localAdmins = getLocalAdmins();
         if (localAdmins.some(a => a.username.toLowerCase() === u.toLowerCase())) {
-          alert('ชื่อผู้ใช้นี้มีในระบบแล้ว กรุณาเลือกชื่ออื่น');
+          Swal.fire({
+            icon: 'warning',
+            title: 'มีชื่อผู้ใช้นี้อยู่แล้ว',
+            text: 'ชื่อผู้ใช้นี้มีในระบบแล้ว กรุณาเลือกชื่ออื่น',
+            customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+          });
           return;
         }
         localAdmins.push({ id: Date.now(), username: u, password: p, role: r });
         saveLocalAdmins(localAdmins);
 
         e.target.reset();
-        showToast(`สร้างบัญชีผู้ดูแล "${u}" (${r}) เรียบร้อยแล้ว!`);
+        showToast(`สร้างบัญชีผู้ดูแล "${u}" (${r}) เรียบร้อยแล้ว!`, 'success');
         renderAdminsList();
       } catch (err) {
-        alert('เกิดข้อผิดพลาด: ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
     async function handleResetOtherAdminPassword(id, username) {
-      const newPwd = prompt(`กำหนดรหัสผ่านใหม่สำหรับผู้ดูแล "${username}" (อย่างน้อย 4 ตัวอักษร):`);
-      if (newPwd === null) return;
+      const { value: newPwd } = await Swal.fire({
+        title: `รีเซ็ตรหัสผ่าน "${username}"`,
+        text: 'กำหนดรหัสผ่านใหม่ (อย่างน้อย 4 ตัวอักษร):',
+        input: 'password',
+        inputPlaceholder: 'กรอกรหัสผ่านใหม่...',
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยันเปลี่ยนรหัสผ่าน',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' },
+        inputValidator: (val) => {
+          if (!val || val.trim().length < 4) {
+            return 'รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร!';
+          }
+        }
+      });
+
+      if (!newPwd) return;
       const clean = newPwd.trim();
-      if (clean.length < 4) {
-        alert('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
-        return;
-      }
 
       try {
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
-          await window.SarawatApi.resetAdminPassword(id, clean);
+          try {
+            await window.SarawatApi.resetAdminPassword(id, clean);
+          } catch (apiErr) {
+            console.warn('API reset password error:', apiErr);
+          }
         }
 
         const localAdmins = getLocalAdmins();
@@ -4013,14 +4416,30 @@
           saveLocalAdmins(localAdmins);
         }
 
-        showToast(`รีเซ็ตรหัสผ่านสำหรับ "${username}" เรียบร้อยแล้ว!`);
+        showToast(`รีเซ็ตรหัสผ่านสำหรับ "${username}" เรียบร้อยแล้ว!`, 'success');
       } catch (err) {
-        alert('เกิดข้อผิดพลาด: ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
     async function handleDeleteAdminAccount(id, username, role) {
-      if (!confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบบัญชีผู้ดูแล "${username}" (${role})?`)) return;
+      const result = await Swal.fire({
+        title: 'ยืนยันลบบัญชี?',
+        text: `คุณแน่ใจหรือไม่ว่าต้องการลบบัญชีผู้ดูแล "${username}" (${role})?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบบัญชี',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!result.isConfirmed) return;
 
       try {
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
@@ -4035,10 +4454,15 @@
         localAdmins = localAdmins.filter(a => a.username.toLowerCase() !== username.toLowerCase() && a.id != id);
         saveLocalAdmins(localAdmins);
 
-        showToast(`ลบบัญชี "${username}" เรียบร้อยแล้ว`);
+        showToast(`ลบบัญชี "${username}" เรียบร้อยแล้ว`, 'success');
         renderAdminsList();
       } catch (err) {
-        alert('เกิดข้อผิดพลาดในการลบ: ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการลบ',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
@@ -4050,15 +4474,30 @@
       const confP = (document.getElementById('myConfirmNewPassword').value || '').trim();
 
       if (!curP || !newP) {
-        alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+        Swal.fire({
+          icon: 'warning',
+          title: 'ข้อมูลไม่ครบถ้วน',
+          text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
       if (newP.length < 4) {
-        alert('รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร');
+        Swal.fire({
+          icon: 'warning',
+          title: 'รหัสผ่านสั้นเกินไป',
+          text: 'รหัสผ่านใหม่ต้องมีความยาวอย่างน้อย 4 ตัวอักษร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
       if (newP !== confP) {
-        alert('รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน');
+        Swal.fire({
+          icon: 'warning',
+          title: 'รหัสผ่านไม่ตรงกัน',
+          text: 'รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
 
@@ -4072,29 +4511,50 @@
         const found = localAdmins.find(a => a.username.toLowerCase() === currentAdminUser.username.toLowerCase());
         if (found) {
           if (found.password !== curP && (!window.SarawatApi || !window.SarawatApi.getBaseUrl())) {
-            alert('รหัสผ่านปัจจุบันไม่ถูกต้อง');
+            Swal.fire({
+              icon: 'error',
+              title: 'รหัสผ่านไม่ถูกต้อง',
+              text: 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
             return;
           }
           found.password = newP;
           saveLocalAdmins(localAdmins);
         }
 
-        showToast('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว!');
+        showToast('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว!', 'success');
         e.target.reset();
       } catch (err) {
-        alert('เกิดข้อผิดพลาด: ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
     async function handleLogout() {
-      if (confirm('คุณต้องการออกจากระบบ Admin ใช่หรือไม่?')) {
-        if (window.SarawatApi && typeof window.SarawatApi.logout === 'function') {
-          try { await window.SarawatApi.logout(); } catch (e) {}
-        }
-        sessionStorage.removeItem('sarawat_admin_auth');
-        sessionStorage.removeItem('sarawat_admin_user');
-        window.location.reload();
+      const result = await Swal.fire({
+        title: 'ออกจากระบบ Admin?',
+        text: 'คุณต้องการออกจากระบบ Admin ใช่หรือไม่?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#0f172a',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ออกจากระบบ',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!result.isConfirmed) return;
+
+      if (window.SarawatApi && typeof window.SarawatApi.logout === 'function') {
+        try { await window.SarawatApi.logout(); } catch (e) {}
       }
+      sessionStorage.removeItem('sarawat_admin_auth');
+      sessionStorage.removeItem('sarawat_admin_user');
+      window.location.reload();
     }
 
     // ==========================================================
@@ -5000,31 +5460,70 @@
         const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, fbReelsUrl: fbReels, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso, dateStart: dateIso, dateEnd: endDateIso };
         if (id) payload.id = id;
 
+        let savedToBackend = false;
         if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
-          const res = await window.SarawatApi.saveNews(payload);
-          if (!res || !res.success) throw new Error('บันทึกข้อมูลล้มเหลว');
+          try {
+            const res = await window.SarawatApi.saveNews(payload);
+            if (res && res.success) {
+              savedToBackend = true;
+              if (res.item && res.item.id) payload.id = res.item.id;
+            }
+          } catch (apiErr) {
+            console.warn('API saveNews failed, prompting fallback:', apiErr);
+          }
+        }
 
-          // Immediately sync updated news list to localStorage so SEO / Activities page picks it up instantly
+        if (!savedToBackend) {
+          // Cloudflare API server is offline or failed -> Prompt user to save as Local Draft
+          const confirmLocal = await Swal.fire({
+            title: 'เซิร์ฟเวอร์ยังไม่พร้อมเชื่อมต่อ',
+            text: 'ไม่สามารถบันทึกลงฐานข้อมูลออนไลน์ได้ในขณะนี้ คุณต้องการบันทึกข่าวสารนี้ลงในเครื่อง (Local Draft) หรือไม่?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0f172a',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'บันทึกลงเครื่อง (Local Draft)',
+            cancelButtonText: 'ยกเลิก',
+            customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+          });
+
+          if (!confirmLocal.isConfirmed) return;
+
+          if (!payload.id) payload.id = 'news_' + Date.now();
+          let localNews = getNews();
+          const existingIdx = localNews.findIndex(n => String(n.id) === String(payload.id));
+          if (existingIdx >= 0) {
+            localNews[existingIdx] = { ...localNews[existingIdx], ...payload };
+          } else {
+            localNews.unshift(payload);
+          }
+          saveNews(localNews);
+          showToast('บันทึกข่าวสารลงเครื่อง (Local Draft) เรียบร้อยแล้ว', 'success');
+        } else {
+          // Immediately sync updated news list to localStorage
           try {
             if (typeof window.SarawatApi.getNews === 'function') {
               const freshItems = await window.SarawatApi.getNews();
               if (Array.isArray(freshItems) && freshItems.length > 0) {
-                localStorage.setItem('dg_sarawat_news_items', JSON.stringify(freshItems));
+                saveNews(freshItems);
               }
             }
           } catch (syncErr) {
             console.warn('LocalStorage news sync warning:', syncErr);
           }
-        } else {
-          throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
+          showToast('บันทึกข่าวสารเรียบร้อยแล้ว', 'success');
         }
 
         await renderAdminNews();
         closeModal('adminNewsModal');
-        showToast('✅ บันทึกข่าวสารเรียบร้อยแล้ว');
       } catch (err) {
         console.error(err);
-        alert('⚠️ ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'บันทึกล้มเหลว',
+          text: err.message || 'เกิดข้อผิดพลาดในการบันทึกข่าวสาร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -5034,17 +5533,45 @@
     }
 
     async function handleDeleteNews(id) {
-      if (!confirm('คุณต้องการลบข่าวสารนี้ใช่หรือไม่?')) return;
+      const confirmDelete = await Swal.fire({
+        title: 'ยืนยันการลบข่าวสาร?',
+        text: 'คุณแน่ใจหรือไม่ว่าต้องการลบข่าวสารนี้ออกจากระบบ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบเลย',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirmDelete.isConfirmed) return;
+
       try {
-        if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
-        const res = await window.SarawatApi.deleteNews(id);
-        if (!res || !res.success) throw new Error('ลบข้อมูลล้มเหลว');
-        
+        let deletedOnline = false;
+        if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
+          try {
+            const res = await window.SarawatApi.deleteNews(id);
+            if (res && res.success) deletedOnline = true;
+          } catch (apiErr) {
+            console.warn('API deleteNews error:', apiErr);
+          }
+        }
+
+        // Also remove from local storage
+        let localNews = getNews();
+        localNews = localNews.filter(n => String(n.id) !== String(id));
+        saveNews(localNews);
+
         await renderAdminNews();
-        showToast('ลบข่าวสารเรียบร้อยแล้ว');
+        showToast('ลบข่าวสารเรียบร้อยแล้ว', 'success');
       } catch (err) {
         console.error(err);
-        alert('⚠️ ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'ลบล้มเหลว',
+          text: err.message || 'เกิดข้อผิดพลาดในการลบข่าวสาร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
     
@@ -5176,6 +5703,26 @@
       }
     }
 
+    let adminNewsCache = [];
+    let adminNewsTagFilter = 'all';
+    let adminNewsSearchTerm = '';
+
+    function filterAdminNewsTag(tag) {
+      adminNewsTagFilter = tag || 'all';
+      const pills = document.querySelectorAll('#adminNewsFilterPills .admin-filter-pill');
+      pills.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-news-tag') === adminNewsTagFilter);
+      });
+      renderAdminNewsListFiltered();
+    }
+    window.filterAdminNewsTag = filterAdminNewsTag;
+
+    function handleAdminNewsSearch(val) {
+      adminNewsSearchTerm = (val || '').trim().toLowerCase();
+      renderAdminNewsListFiltered();
+    }
+    window.handleAdminNewsSearch = handleAdminNewsSearch;
+
     async function renderAdminNews() {
       const grid = document.getElementById('adminNewsGrid');
       if (!grid) return;
@@ -5184,48 +5731,82 @@
       try {
         let news = await fetchNewsApi();
         if (!news || !Array.isArray(news)) news = [];
-        news = news.filter(Boolean);
+        adminNewsCache = news.filter(Boolean);
 
         // Sort chronologically descending: latest activity date comes first
-        news.sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
+        adminNewsCache.sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
 
-        if (news.length === 0) {
-          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;"><i data-lucide="newspaper" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ยังไม่มีข่าวสาร / กิจกรรมในระบบ</div>';
-        } else {
-          grid.innerHTML = news.map(item => {
-            const imgSrc = window.resolveImageUrl ? window.resolveImageUrl(item.image || item.img) : (item.image || item.img || window.DEFAULT_ACTIVITY_IMAGE);
-            return `
-            <div class="admin-news-item-card">
-              <img src="${imgSrc || 'assets/images/activities-cover.jpg'}" class="admin-news-thumb" alt="News Image" onerror="this.src='assets/images/activities-cover.jpg';">
-              <div class="admin-news-item-body">
-                <div class="admin-news-meta">
-                  <span>${escapeHtml(item.date || '')}</span>
-                  <span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>
-                </div>
-                <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
-                <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
-                <div class="admin-news-links-indicator">
-                  ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> Facebook Posts</span>` : ''}
-                  ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" style="width:12px;height:12px;"></i> Facebook Reels</span>` : ''}
-                  ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> Instagram Posts</span>` : ''}
-                  ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Instagram Reels</span>` : ''}
-                  ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> Google Photos</span>` : ''}
-                </div>
-                <div class="admin-card-actions">
-                  <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" style="width:14px;height:14px;"></i> แก้ไข</button>
-                  <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> ลบ</button>
-                </div>
-              </div>
-            </div>
-            `;
-          }).join('');
-        }
-
-        if (window.lucide) lucide.createIcons();
+        renderAdminNewsListFiltered();
       } catch (err) {
         console.error('renderAdminNews error:', err);
         grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #ef4444;">ไม่สามารถโหลดข้อมูลข่าวสารได้</div>';
       }
+    }
+    window.renderAdminNews = renderAdminNews;
+
+    function renderAdminNewsListFiltered() {
+      const grid = document.getElementById('adminNewsGrid');
+      const countBadge = document.getElementById('newsCountBadge');
+      if (!grid) return;
+
+      let filtered = adminNewsCache.slice();
+
+      if (adminNewsTagFilter && adminNewsTagFilter !== 'all') {
+        filtered = filtered.filter(item => {
+          const tag = (item.tag || '').trim();
+          return tag.toLowerCase() === adminNewsTagFilter.toLowerCase() || tag.includes(adminNewsTagFilter);
+        });
+      }
+
+      if (adminNewsSearchTerm) {
+        filtered = filtered.filter(item => {
+          const t = (item.title || item.desc || '').toLowerCase();
+          const d = (item.desc || item.detail || '').toLowerCase();
+          const tag = (item.tag || '').toLowerCase();
+          const date = (item.date || '').toLowerCase();
+          return t.includes(adminNewsSearchTerm) || d.includes(adminNewsSearchTerm) || tag.includes(adminNewsSearchTerm) || date.includes(adminNewsSearchTerm);
+        });
+      }
+
+      if (countBadge) {
+        countBadge.textContent = `${filtered.length} ข่าว`;
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;"><i data-lucide="newspaper" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i><br>ไม่พบข่าวสาร / กิจกรรมตามเงื่อนไขที่เลือก</div>';
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const imgSrc = window.resolveImageUrl ? window.resolveImageUrl(item.image || item.img) : (item.image || item.img || window.DEFAULT_ACTIVITY_IMAGE);
+        return `
+        <div class="admin-news-item-card">
+          <img src="${imgSrc || 'assets/images/activities-cover.jpg'}" class="admin-news-thumb" alt="News Image" onerror="this.src='assets/images/activities-cover.jpg';">
+          <div class="admin-news-item-body">
+            <div class="admin-news-meta">
+              <span>${escapeHtml(item.date || '')}</span>
+              <span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>
+            </div>
+            <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
+            <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
+            <div class="admin-news-links-indicator">
+              ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> Facebook Posts</span>` : ''}
+              ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" style="width:12px;height:12px;"></i> Facebook Reels</span>` : ''}
+              ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> Instagram Posts</span>` : ''}
+              ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Instagram Reels</span>` : ''}
+              ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> Google Photos</span>` : ''}
+            </div>
+            <div class="admin-card-actions">
+              <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" style="width:14px;height:14px;"></i> แก้ไข</button>
+              <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> ลบ</button>
+            </div>
+          </div>
+        </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
     }
 
     // ==========================================================
@@ -5474,21 +6055,47 @@
 
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.innerHTML = '<span>กำลังบันทึกลงฐานข้อมูล...</span>';
+          submitBtn.innerHTML = '<span>กำลังบันทึกข้อมูล...</span>';
         }
 
-        if (window.SarawatApi) {
-          await window.SarawatApi.saveEvent(payload);
-        } else {
-          throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+        let savedOnline = false;
+        if (window.SarawatApi && typeof window.SarawatApi.saveEvent === 'function') {
+          try {
+            await window.SarawatApi.saveEvent(payload);
+            savedOnline = true;
+          } catch (apiErr) {
+            console.warn('API saveEvent error, saving local draft:', apiErr);
+          }
         }
+
+        // Always sync with local storage
+        let localEvents = getEvents();
+        if (payload.id) {
+          const idx = localEvents.findIndex(ev => String(ev.id) === String(payload.id));
+          if (idx >= 0) localEvents[idx] = { ...localEvents[idx], ...payload };
+          else localEvents.unshift(payload);
+        } else {
+          payload.id = 'evt_' + Date.now();
+          localEvents.unshift(payload);
+        }
+        saveEvents(localEvents);
 
         await renderAdminEvents();
         closeModal('adminEventModal');
-        showToast('✅ บันทึกข้อมูลกิจกรรมเรียบร้อยแล้ว');
+
+        if (savedOnline) {
+          showToast('บันทึกข้อมูลกิจกรรมลงฐานข้อมูลเรียบร้อยแล้ว', 'success');
+        } else {
+          showToast('บันทึกข้อมูลกิจกรรมลงเครื่องเรียบร้อย (Local Draft)', 'warning');
+        }
       } catch (err) {
         console.error('Save event error:', err);
-        alert('⚠️ ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่สามารถบันทึกกิจกรรมได้',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -5498,19 +6105,44 @@
     }
 
     async function handleDeleteEvent(id) {
-      if (!confirm('คุณต้องการลบกิจกรรมนี้ออกจากปฏิทินโรงเรียนใช่หรือไม่?')) return;
+      const confirmResult = await Swal.fire({
+        title: 'ยืนยันการลบกิจกรรม?',
+        text: 'คุณต้องการลบกิจกรรมนี้ออกจากปฏิทินโรงเรียนใช่หรือไม่?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบกิจกรรม',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirmResult.isConfirmed) return;
+
       try {
-        if (window.SarawatApi) {
-          await window.SarawatApi.deleteEvent(id);
-        } else {
-          throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+        let deletedOnline = false;
+        if (window.SarawatApi && typeof window.SarawatApi.deleteEvent === 'function') {
+          try {
+            await window.SarawatApi.deleteEvent(id);
+            deletedOnline = true;
+          } catch (apiErr) {
+            console.warn('API deleteEvent error:', apiErr);
+          }
         }
 
+        let localEvents = getEvents();
+        localEvents = localEvents.filter(ev => String(ev.id) !== String(id));
+        saveEvents(localEvents);
+
         await renderAdminEvents();
-        showToast('🗑️ ลบกิจกรรมเรียบร้อยแล้ว');
+        showToast(deletedOnline ? 'ลบกิจกรรมออกจากระบบเรียบร้อยแล้ว' : 'ลบกิจกรรมออกจากเครื่องเรียบร้อยแล้ว', 'success');
       } catch (err) {
         console.error('Delete event error:', err);
-        alert('⚠️ ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการลบ',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
@@ -5824,11 +6456,89 @@
     }
 
     // ==========================================================
+    // DATA ACCESS HELPERS & STORAGE ENGINE
+    // ==========================================================
+    function getNews() {
+      try {
+        const raw = localStorage.getItem('dg_sarawat_news_items');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {}
+      return Array.isArray(DEFAULT_NEWS_ITEMS) ? DEFAULT_NEWS_ITEMS : [];
+    }
+    window.getNews = getNews;
+
+    function saveNews(items) {
+      try {
+        localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items || []));
+      } catch (e) {
+        console.warn('Error saving news to localStorage:', e);
+      }
+    }
+    window.saveNews = saveNews;
+
+    function getEvents() {
+      try {
+        const raw = localStorage.getItem('dg_sarawat_calendar_events');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {}
+      return Array.isArray(DEFAULT_CALENDAR_EVENTS) ? DEFAULT_CALENDAR_EVENTS : [];
+    }
+    window.getEvents = getEvents;
+
+    function saveEvents(items) {
+      try {
+        localStorage.setItem('dg_sarawat_calendar_events', JSON.stringify(items || []));
+      } catch (e) {
+        console.warn('Error saving events to localStorage:', e);
+      }
+    }
+    window.saveEvents = saveEvents;
+
+    function getFeatured() {
+      try {
+        const raw = localStorage.getItem('dg_sarawat_featured_event');
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return DEFAULT_FEATURED_EVENT || {
+        title: 'กิจกรรมสารวัตรนักเรียน',
+        day: '23',
+        month: 'พ.ค.',
+        category: 'prefect',
+        categoryLabel: 'ภารกิจสารวัตร',
+        time: 'เต็มวัน',
+        location: 'โรงเรียนเดชะปัตตนยานุกูล',
+        audience: 'สารวัตรนักเรียนทุกคน',
+        desc: 'ปฏิบัติหน้าที่ดูแลความเรียบร้อยและระเบียบวินัยนักเรียน'
+      };
+    }
+    window.getFeatured = getFeatured;
+
+    function saveFeatured(item) {
+      try {
+        localStorage.setItem('dg_sarawat_featured_event', JSON.stringify(item || {}));
+      } catch (e) {
+        console.warn('Error saving featured event to localStorage:', e);
+      }
+    }
+    window.saveFeatured = saveFeatured;
+
+    // ==========================================================
     // BACKUP & RESTORE (JSON EXPORT / IMPORT)
     // ==========================================================
     function handleExportJson() {
+      let teamData = [];
+      try {
+        teamData = JSON.parse(localStorage.getItem('dg_sarawat_team_members') || '[]');
+      } catch (e) {}
+
       const data = {
-        version: '1.2.0',
+        version: '2.8.0',
         exportedAt: new Date().toISOString(),
         currentUser: currentAdminUser.username,
         currentRole: currentAdminUser.role,
@@ -5836,7 +6546,8 @@
         uptimeLabel: localStorage.getItem('dg_sarawat_uptime_label') || 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569',
         newsItems: getNews(),
         featuredEvent: getFeatured(),
-        calendarEvents: []
+        calendarEvents: getEvents(),
+        teamMembers: teamData
       };
 
       const jsonStr = JSON.stringify(data, null, 2);
@@ -5849,19 +6560,37 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast('ดาวน์โหลดไฟล์สำรองข้อมูลเรียบร้อยแล้ว');
+      showToast('ดาวน์โหลดไฟล์สำรองข้อมูลเรียบร้อยแล้ว', 'success');
     }
 
-    function handleImportJson() {
+    async function handleImportJson() {
       const fileInput = document.getElementById('importJsonFileInput');
-      const file = fileInput.files[0];
+      const file = fileInput.files && fileInput.files[0];
       if (!file) {
-        alert('กรุณาเลือกไฟล์ JSON ก่อนทำการนำเข้า');
+        Swal.fire({
+          icon: 'warning',
+          title: 'ยังไม่ได้เลือกไฟล์',
+          text: 'กรุณาเลือกไฟล์ JSON ก่อนทำการนำเข้าข้อมูล',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
         return;
       }
 
+      const confirmResult = await Swal.fire({
+        title: 'ยืนยันการนำเข้าข้อมูล?',
+        text: 'ข้อมูลจากไฟล์นี้จะถูกนำมาผสานและอัปเดตลงในระบบ คุณต้องการดำเนินการต่อหรือไม่?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#0f172a',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ยืนยันนำเข้าข้อมูล',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirmResult.isConfirmed) return;
+
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = async function (e) {
         try {
           const data = JSON.parse(e.target.result);
           if (data.newsItems && Array.isArray(data.newsItems)) {
@@ -5872,6 +6601,9 @@
           }
           if (data.featuredEvent) {
             saveFeatured(data.featuredEvent);
+          }
+          if (data.teamMembers && Array.isArray(data.teamMembers)) {
+            localStorage.setItem('dg_sarawat_team_members', JSON.stringify(data.teamMembers));
           }
           if (data.uptimeStart) {
             localStorage.setItem('dg_sarawat_uptime_start', data.uptimeStart);
@@ -5884,24 +6616,43 @@
           }
 
           initDashboard();
-          showToast('นำเข้าและกู้คืนข้อมูลสำเร็จเรียบร้อย!');
+          if (typeof loadTeamAdmin === 'function') loadTeamAdmin();
+          showToast('นำเข้าและกู้คืนข้อมูลสำเร็จเรียบร้อย!', 'success');
           fileInput.value = '';
         } catch (err) {
-          alert('ไฟล์ JSON ไม่ถูกต้องหรือไม่ตรงรูปแบบ: ' + err.message);
+          Swal.fire({
+            icon: 'error',
+            title: 'รูปแบบไฟล์ไม่ถูกต้อง',
+            text: 'ไฟล์ JSON เสียหายหรือไม่ถูกต้อง: ' + err.message,
+            customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+          });
         }
       };
       reader.readAsText(file);
     }
 
-    function handleResetDefaults() {
-      if (!confirm('คำเตือน: คุณต้องการล้างข้อมูลที่แก้ไขทั้งหมด และรีเซ็ตกลับเป็นข้อมูลเริ่มต้นใช่หรือไม่?')) return;
+    async function handleResetDefaults() {
+      const confirmResult = await Swal.fire({
+        title: 'รีเซ็ตข้อมูลสู่ค่าเริ่มต้น?',
+        text: 'คำเตือน: คุณต้องการล้างข้อมูลที่แก้ไขทั้งหมด และรีเซ็ตกลับเป็นข้อมูลมาตรฐานของสารวัตรนักเรียนปี 2569 ใช่หรือไม่?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, รีเซ็ตข้อมูล',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirmResult.isConfirmed) return;
+
       saveNews(DEFAULT_NEWS_ITEMS);
       saveEvents(DEFAULT_CALENDAR_EVENTS);
       saveFeatured(DEFAULT_FEATURED_EVENT);
       localStorage.setItem('dg_sarawat_uptime_start', '2026-05-23T07:00:00');
       localStorage.setItem('dg_sarawat_uptime_label', 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569');
       initDashboard();
-      showToast('รีเซ็ตข้อมูลสู่ค่าเริ่มต้นเรียบร้อยแล้ว');
+      if (typeof loadTeamAdmin === 'function') loadTeamAdmin();
+      showToast('รีเซ็ตข้อมูลสู่ค่าเริ่มต้นเรียบร้อยแล้ว', 'success');
     }
 
     // ==========================================================
@@ -6092,10 +6843,33 @@
       }
     });
 
-    function showToast(msg) {
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      if (container) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        let iconHtml = '<i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.1rem;"></i>';
+        if (type === 'error') {
+          iconHtml = '<i class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 1.1rem;"></i>';
+        } else if (type === 'warning') {
+          iconHtml = '<i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 1.1rem;"></i>';
+        } else if (type === 'info') {
+          iconHtml = '<i class="fa-solid fa-circle-info" style="color: #3b82f6; font-size: 1.1rem;"></i>';
+        }
+        toast.innerHTML = `${iconHtml}<div style="flex: 1; word-break: break-word;">${escapeHtml(msg)}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          toast.style.transition = 'all 0.25s ease';
+          setTimeout(() => toast.remove(), 260);
+        }, 3200);
+        return;
+      }
       const toast = document.getElementById('adminToast');
       const msgEl = document.getElementById('adminToastMsg');
       if (toast && msgEl) {
+        toast.style.display = 'flex';
         msgEl.textContent = msg;
         toast.classList.add('show');
         setTimeout(() => {
@@ -6103,6 +6877,7 @@
         }, 3200);
       }
     }
+    window.showToast = showToast;
 
     function escapeHtml(text) {
       if (!text) return '';
@@ -6315,31 +7090,52 @@
       const adminNotes = document.getElementById('modalFbAdminNotes').value;
 
       try {
-        if (window.SarawatApi) {
+        if (window.SarawatApi && typeof window.SarawatApi.updateFeedback === 'function') {
           await window.SarawatApi.updateFeedback(id, { status, adminNotes });
         }
-        showToast('อัปเดตสถานะและบันทึกข้อมูลเรียบร้อยแล้ว');
+        showToast('อัปเดตสถานะและบันทึกข้อมูลเรียบร้อยแล้ว', 'success');
         closeModal('adminFeedbackModal');
         await renderAdminFeedbacks();
       } catch (err) {
-        alert('เกิดข้อผิดพลาดในการบันทึก: ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการบันทึก',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
     async function deleteAdminFeedback(id) {
-      if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? การกระทำนี้ไม่สามารถย้อนกลับได้')) return;
+      const result = await Swal.fire({
+        title: 'ยืนยันการลบรายการ?',
+        text: 'คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? การกระทำนี้ไม่สามารถย้อนกลับได้',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบรายการ',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      if (!result.isConfirmed) return;
 
       try {
-        if (window.SarawatApi) {
+        if (window.SarawatApi && typeof window.SarawatApi.deleteFeedback === 'function') {
           await window.SarawatApi.deleteFeedback(id);
         }
-        showToast('ลบรายการเรียบร้อยแล้ว');
+        showToast('ลบรายการเรียบร้อยแล้ว', 'success');
         if (document.getElementById('adminFeedbackModal')?.classList.contains('active')) {
           closeModal('adminFeedbackModal');
         }
         await renderAdminFeedbacks();
       } catch (err) {
-        alert('เกิดข้อผิดพลาดในการลบ: ' + err.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาดในการลบ',
+          text: err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
       }
     }
 
@@ -6352,9 +7148,7 @@
         const base = window.SarawatApi.getBaseUrl();
         if (base) {
           try {
-            
-            
-            
+            // Background sync if needed
           } catch (e) {
             console.warn('Sync from backend failed:', e);
           }
@@ -6368,6 +7162,9 @@
       renderAdminFeedbacks();
       initSettings();
       syncFromBackend();
+      if (typeof loadTeamAdmin === 'function') {
+        loadTeamAdmin();
+      }
       if (typeof loadRecruitmentAdmin === 'function') {
         loadRecruitmentAdmin();
       }
@@ -6376,6 +7173,11 @@
     function setupTabs() {
       document.querySelectorAll('.admin-tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+          // Auto close mobile drawer if open
+          if (typeof toggleMobileSidebar === 'function') {
+            toggleMobileSidebar(false);
+          }
+
           document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
           document.querySelectorAll('.admin-pane').forEach(p => p.style.display = 'none');
           btn.classList.add('active');
@@ -6383,11 +7185,21 @@
           if (paneId) {
             const pane = document.getElementById(paneId);
             if (pane) pane.style.display = 'block';
-            if (paneId === 'tab-feedbacks') {
+
+            if (paneId === 'tab-news') {
+              renderAdminNews();
+            } else if (paneId === 'tab-calendar') {
+              renderAdminEvents();
+            } else if (paneId === 'tab-team' && typeof loadTeamAdmin === 'function') {
+              loadTeamAdmin();
+            } else if (paneId === 'tab-feedbacks') {
               renderAdminFeedbacks();
-            }
-            if (paneId === 'tab-recruitment' && typeof loadRecruitmentAdmin === 'function') {
+            } else if (paneId === 'tab-recruitment' && typeof loadRecruitmentAdmin === 'function') {
               loadRecruitmentAdmin();
+            } else if (paneId === 'tab-admins') {
+              renderAdminsList();
+            } else if (paneId === 'tab-settings') {
+              initSettings();
             }
           }
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6397,6 +7209,15 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (localStorage.getItem('dg_sarawat_sidebar_collapsed') === '1' && window.innerWidth > 992) {
+          const main = document.querySelector('.admin-main');
+          const sidebar = document.getElementById('adminSidebar');
+          if (main) main.classList.add('sidebar-collapsed');
+          if (sidebar) sidebar.classList.add('sidebar-collapsed');
+        }
+      } catch (e) {}
+
       if (window.lucide) lucide.createIcons();
       checkAuth();
       setupImageUploadListener();
