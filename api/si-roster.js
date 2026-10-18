@@ -149,16 +149,6 @@ module.exports = async function handler(req, res) {
 
       // Pre-render modal title in DOM
       html = html.replace(/(<h2[^>]*id=["']modalTitle["'][^>]*>)([\s\S]*?)(<\/h2>)/i, `$1${escapeHtml(modalTitle)}$3`);
-
-      // Pre-render Hero Banner in DOM
-      const dateText = formatThaiDate(found.date, found.endDateStr);
-      html = html.replace(/id=["']rosterHeaderBannerWrap["']\s+style=["']display:\s*none;/i, 'id="rosterHeaderBannerWrap" style="display: block;');
-      html = html.replace(/(<h2[^>]*id=["']rosterBannerHeading["'][^>]*>)([\s\S]*?)(<\/h2>)/i, `$1${escapeHtml(modalTitle)}$3`);
-      html = html.replace(/(<p[^>]*id=["']rosterBannerDesc["'][^>]*>)([\s\S]*?)(<\/p>)/i, `$1${escapeHtml(modalDesc)}$3`);
-      if (dateText) {
-        html = html.replace(/(<span[^>]*id=["']rosterBannerDateText["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1${escapeHtml(dateText)}$3`);
-      }
-      html = html.replace(/(<span[^>]*id=["']rosterBreadcrumbCurrent["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1${escapeHtml(modalTitle)}$3`);
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

@@ -255,36 +255,6 @@
         </div>
       </div>
 
-      <!-- Activity Featured Hero Banner (Shown when query parameter targets an activity) -->
-      <div id="actHeaderBannerWrap" style="display: none; margin: 26px 0 20px 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--dg-border); background: #0b0f19; box-shadow: 0 16px 40px rgba(0,0,0,0.12); position: relative;">
-        <div style="position: relative; width: 100%; height: 380px; max-height: 52vh; overflow: hidden;">
-          <img id="actHeaderBannerImg" src="/assets/images/activities-cover.jpg" alt="ภาพกิจกรรม" style="width: 100%; height: 100%; object-fit: cover;" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}" />
-          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.82) 100%);"></div>
-          <div style="position: absolute; bottom: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px;">
-            <div style="color: #ffffff; max-width: 720px;">
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
-                <span id="actBannerTag" style="display: inline-block; padding: 4px 14px; border-radius: 30px; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px); font-size: 0.82rem; font-weight: 600;">กิจกรรม</span>
-                <span id="actBannerDate" style="font-size: 0.85rem; opacity: 0.95; display: inline-flex; align-items: center; gap: 6px;">
-                  <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> <span id="actBannerDateText"></span>
-                </span>
-              </div>
-              <h2 id="actBannerHeading" style="font-size: 1.55rem; font-weight: 800; line-height: 1.3; margin: 0 0 8px 0; color: #ffffff;"></h2>
-              <p id="actBannerDesc" style="font-size: 0.92rem; opacity: 0.92; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;"></p>
-            </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              <button type="button" id="actBannerDetailBtn" class="dg-btn-black" style="padding: 10px 22px; font-size: 0.88rem; background: #ffffff; color: #000000; border: none; font-weight: 700; box-shadow: 0 4px 16px rgba(0,0,0,0.3); border-radius: 30px;">
-                <span>เปิดดูรายละเอียดเต็ม</span>
-                <i data-lucide="arrow-up-right"></i>
-              </button>
-              <button type="button" onclick="resetFilters()" class="dg-btn-black" style="padding: 10px 20px; font-size: 0.88rem; background: rgba(255,255,255,0.18); color: #ffffff; border: 1px solid rgba(255,255,255,0.35); backdrop-filter: blur(10px); border-radius: 30px;">
-                <i data-lucide="rotate-ccw"></i>
-                <span>ดูทุกกิจกรรม</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Controls: Search & Category Pills -->
       <div class="dg-act-controls-bar">
         <!-- Search Box -->
@@ -1027,24 +997,11 @@
         const twImg = document.getElementById('twitterImage') || document.querySelector('meta[name="twitter:image"]');
         const ogTitle = document.getElementById('ogTitle') || document.querySelector('meta[property="og:title"]');
         const twTitle = document.getElementById('twitterTitle') || document.querySelector('meta[name="twitter:title"]');
+        const ogImgSec = document.getElementById('ogImageSecure') || document.querySelector('meta[property="og:image:secure_url"]');
         const ogDesc = document.getElementById('ogDesc') || document.querySelector('meta[property="og:description"]');
         const twDesc = document.getElementById('twitterDesc') || document.querySelector('meta[name="twitter:description"]');
         const ogUrl = document.getElementById('ogUrl') || document.querySelector('meta[property="og:url"]');
         const schemaScript = document.getElementById('schemaJsonLd') || document.querySelector('script[type="application/ld+json"]');
-
-        // Header DOM elements to synchronize
-        const mainTitleEl = document.getElementById('actMainTitle');
-        const subtitleEl = document.getElementById('actSubtitle');
-        const sectionTagEl = document.getElementById('actSectionTag');
-        const breadcrumbEl = document.getElementById('actBreadcrumbCurrent');
-        const bannerWrapEl = document.getElementById('actHeaderBannerWrap');
-        const bannerImgEl = document.getElementById('actHeaderBannerImg');
-        const bannerTagEl = document.getElementById('actBannerTag');
-        const bannerDateEl = document.getElementById('actBannerDate');
-        const bannerDateTextEl = document.getElementById('actBannerDateText');
-        const bannerHeadingEl = document.getElementById('actBannerHeading');
-        const bannerDescEl = document.getElementById('actBannerDesc');
-        const bannerDetailBtnEl = document.getElementById('actBannerDetailBtn');
 
         if (item) {
           // Resolve full absolute image URL
@@ -1057,50 +1014,7 @@
             resolved = window.location.origin + (resolved.startsWith('/') ? resolved : '/' + resolved);
           }
 
-          // 1. Synchronize Page Header Title & Subtitle to match the specific Activity
-          if (mainTitleEl) {
-            mainTitleEl.textContent = item.title;
-          }
-          if (subtitleEl) {
-            subtitleEl.textContent = item.desc || item.detail || '';
-          }
-          if (sectionTagEl) {
-            sectionTagEl.textContent = 'ACTIVITIES • ' + (item.tag ? item.tag : 'ข่าวสารและกิจกรรม');
-          }
-          if (breadcrumbEl) {
-            breadcrumbEl.textContent = item.title;
-          }
-
-          // 2. Synchronize and Show Activity Featured Banner Hero
-          if (bannerWrapEl) {
-            bannerWrapEl.style.display = 'block';
-          }
-          if (bannerImgEl) {
-            bannerImgEl.src = resolved;
-            bannerImgEl.alt = item.title || 'ภาพกิจกรรม';
-          }
-          if (bannerTagEl) {
-            bannerTagEl.textContent = item.tag || 'กิจกรรม';
-          }
-          if (bannerDateTextEl) {
-            bannerDateTextEl.textContent = item.date || '';
-          }
-          if (bannerDateEl) {
-            bannerDateEl.style.display = item.date ? 'inline-flex' : 'none';
-          }
-          if (bannerHeadingEl) {
-            bannerHeadingEl.textContent = item.title || '';
-          }
-          if (bannerDescEl) {
-            bannerDescEl.textContent = item.desc || item.detail || '';
-          }
-          if (bannerDetailBtnEl) {
-            bannerDetailBtnEl.onclick = function () {
-              openNewsDetailModal(item.id);
-            };
-          }
-
-          // 3. Synchronize Open Graph, Twitter & Page Title
+          // Synchronize Open Graph, Twitter & Page Title
           const actTitle = (item.title ? item.title + ' | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล' : DEFAULT_SEO_TITLE);
           const actDesc = item.desc || item.detail || DEFAULT_SEO_DESC;
 
@@ -1110,10 +1024,11 @@
           if (ogDesc) ogDesc.setAttribute('content', actDesc);
           if (twDesc) twDesc.setAttribute('content', actDesc);
           if (ogImg) ogImg.setAttribute('content', resolved);
+          if (ogImgSec) ogImgSec.setAttribute('content', resolved);
           if (twImg) twImg.setAttribute('content', resolved);
           if (ogUrl) ogUrl.setAttribute('content', window.location.href);
 
-          // 4. Synchronize Schema.org JSON-LD
+          // Synchronize Schema.org JSON-LD
           if (schemaScript) {
             try {
               const schemaData = JSON.parse(schemaScript.textContent);
@@ -1125,23 +1040,6 @@
             } catch (e) { }
           }
         } else {
-          // Revert Page Header back to default
-          if (mainTitleEl) {
-            mainTitleEl.innerHTML = 'All Activities & Events.<br>รวมภาพการปฏิบัติหน้าที่และกิจกรรมทั้งหมด';
-          }
-          if (subtitleEl) {
-            subtitleEl.textContent = 'ศูนย์รวมประมวลภาพกิจกรรม ข่าวสารประชาสัมพันธ์ และบันทึกการปฏิบัติหน้าที่ของคณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ครบทุกภารกิจ สามารถคลิกเพื่อดูรายละเอียดเพิ่มเติมและลิงก์ภาพความละเอียดสูง';
-          }
-          if (sectionTagEl) {
-            sectionTagEl.textContent = 'ACTIVITIES ARCHIVE • คลังข่าวสารและกิจกรรมทั้งหมด';
-          }
-          if (breadcrumbEl) {
-            breadcrumbEl.textContent = 'คลังข่าวสารและกิจกรรมทั้งหมด';
-          }
-          if (bannerWrapEl) {
-            bannerWrapEl.style.display = 'none';
-          }
-
           // Revert SEO Meta Tags
           document.title = DEFAULT_SEO_TITLE;
           if (ogTitle) ogTitle.setAttribute('content', DEFAULT_SEO_TITLE);
@@ -1149,7 +1047,6 @@
           if (ogDesc) ogDesc.setAttribute('content', DEFAULT_SEO_DESC);
           if (twDesc) twDesc.setAttribute('content', DEFAULT_SEO_DESC);
           if (ogImg) ogImg.setAttribute('content', DEFAULT_SEO_IMAGE);
-          const ogImgSec = document.getElementById('ogImageSecure') || document.querySelector('meta[property="og:image:secure_url"]');
           if (ogImgSec) ogImgSec.setAttribute('content', DEFAULT_SEO_IMAGE);
           if (twImg) twImg.setAttribute('content', DEFAULT_SEO_IMAGE);
           if (ogUrl) ogUrl.setAttribute('content', 'https://www.sarawatdc.site/activities');

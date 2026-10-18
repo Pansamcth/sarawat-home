@@ -3556,32 +3556,6 @@
         </div>
       </div>
 
-      <!-- Roster Featured Hero Banner (Shown when query parameter targets an activity) -->
-      <div id="rosterHeaderBannerWrap" style="display: none; margin: 24px 0 20px 0; border-radius: 20px; overflow: hidden; border: 1px solid rgba(229, 231, 235, 0.8); background: #0b0f19; box-shadow: 0 16px 40px rgba(0,0,0,0.12); position: relative;">
-        <div style="position: relative; width: 100%; height: 380px; max-height: 52vh; overflow: hidden;">
-          <img id="rosterHeaderBannerImg" src="/assets/images/si-roster-cover.jpg" alt="ระบบลงหน้าที่สารวัตรนักเรียน" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/images/si-roster-cover.jpg';" />
-          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.85) 100%);"></div>
-          <div style="position: absolute; bottom: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px;">
-            <div style="color: #ffffff; max-width: 720px;">
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
-                <span id="rosterBannerTag" style="display: inline-block; padding: 4px 14px; border-radius: 30px; background: rgba(255,255,255,0.25); backdrop-filter: blur(10px); font-size: 0.82rem; font-weight: 600;">กิจกรรมการปฏิบัติหน้าที่</span>
-                <span id="rosterBannerDate" style="font-size: 0.85rem; opacity: 0.95; display: inline-flex; align-items: center; gap: 6px;">
-                  <i class="fa-regular fa-calendar" style="font-size: 0.85rem;"></i> <span id="rosterBannerDateText"></span>
-                </span>
-              </div>
-              <h2 id="rosterBannerHeading" style="font-size: 1.55rem; font-weight: 800; line-height: 1.3; margin: 0 0 8px 0; color: #ffffff;"></h2>
-              <p id="rosterBannerDesc" style="font-size: 0.92rem; opacity: 0.92; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; color: rgba(255,255,255,0.9);"></p>
-            </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              <button type="button" id="rosterBannerDetailBtn" style="padding: 10px 22px; font-size: 0.88rem; background: #ffffff; color: #0a0a0c; border: none; font-weight: 700; box-shadow: 0 4px 16px rgba(0,0,0,0.3); border-radius: 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s ease;">
-                <span>ดูรายละเอียดกิจกรรมนี้</span>
-                <i class="fa-solid fa-arrow-right" style="font-size: 0.85rem;"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Controls: Search & Action Buttons -->
       <div class="dg-act-controls-bar">
         <!-- Search Box -->
@@ -6028,12 +6002,6 @@
         const twUrl = document.getElementById('twitterUrl') || document.querySelector('meta[name="twitter:url"]');
         const canUrl = document.getElementById('canonicalUrl') || document.querySelector('link[rel="canonical"]');
 
-        const bannerWrap = document.getElementById('rosterHeaderBannerWrap');
-        const bannerHeading = document.getElementById('rosterBannerHeading');
-        const bannerDesc = document.getElementById('rosterBannerDesc');
-        const bannerDateText = document.getElementById('rosterBannerDateText');
-        const bannerDetailBtn = document.getElementById('rosterBannerDetailBtn');
-
         if (activity) {
           const actTitle = (activity.title || '').trim();
           const cleanDesc = stripMarkdown(activity.description || '');
@@ -6055,19 +6023,6 @@
           if (ogUrl) ogUrl.setAttribute('content', fullUrl);
           if (twUrl) twUrl.setAttribute('content', fullUrl);
           if (canUrl) canUrl.setAttribute('href', fullUrl);
-
-          // Update Featured Hero Banner
-          if (bannerWrap) {
-            bannerWrap.style.display = 'block';
-            if (bannerHeading) bannerHeading.textContent = actTitle;
-            if (bannerDesc) bannerDesc.textContent = actDesc;
-            if (bannerDateText) bannerDateText.textContent = formatThaiDateRange(activity.date, activity.endDateStr);
-            if (bannerDetailBtn) {
-              bannerDetailBtn.onclick = function () {
-                openModal(activity, false);
-              };
-            }
-          }
         } else {
           document.title = DEFAULT_ROSTER_TITLE;
           if (ogTitle) ogTitle.setAttribute('content', DEFAULT_ROSTER_TITLE);
@@ -6081,10 +6036,6 @@
           if (ogUrl) ogUrl.setAttribute('content', DEFAULT_ROSTER_URL);
           if (twUrl) twUrl.setAttribute('content', DEFAULT_ROSTER_URL);
           if (canUrl) canUrl.setAttribute('href', DEFAULT_ROSTER_URL);
-
-          if (bannerWrap) {
-            bannerWrap.style.display = 'none';
-          }
         }
       } catch (err) {
         console.error('Error updating roster SEO:', err);

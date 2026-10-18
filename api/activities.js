@@ -94,21 +94,6 @@ module.exports = async function handler(req, res) {
       html = html.replace(/(<meta\s+name=["']twitter:description["']\s+content=["']).*?(["'])/i, `$1${escapeHtml(desc)}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:image["']\s+content=["']).*?(["'])/i, `$1${resolvedImage}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:url["']\s+content=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
-
-      // In Header DOM
-      html = html.replace(/(<h1[^>]*id=["']actMainTitle["'][^>]*>)([\s\S]*?)(<\/h1>)/i, `$1${escapeHtml(found.title)}$3`);
-      html = html.replace(/(<p[^>]*id=["']actSubtitle["'][^>]*>)([\s\S]*?)(<\/p>)/i, `$1${escapeHtml(desc)}$3`);
-      html = html.replace(/(<span[^>]*id=["']actBreadcrumbCurrent["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1${escapeHtml(found.title)}$3`);
-      html = html.replace(/(<span[^>]*id=["']actSectionTag["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1ACTIVITIES • ${escapeHtml(found.tag || 'ข่าวสารและกิจกรรม')}$3`);
-
-      // In Banner Hero
-      html = html.replace(/id=["']actHeaderBannerWrap["']\s+style=["']display:\s*none;/i, 'id="actHeaderBannerWrap" style="display: block;');
-      html = html.replace(/id=["']actHeaderBannerImg["']\s+src=["'][^"']*["']/i, `id="actHeaderBannerImg" src="${resolvedImage}"`);
-      html = html.replace(/(<h2[^>]*id=["']actBannerHeading["'][^>]*>)([\s\S]*?)(<\/h2>)/i, `$1${escapeHtml(found.title)}$3`);
-      html = html.replace(/(<p[^>]*id=["']actBannerDesc["'][^>]*>)([\s\S]*?)(<\/p>)/i, `$1${escapeHtml(desc)}$3`);
-      if (found.date) {
-        html = html.replace(/(<span[^>]*id=["']actBannerDateText["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1${escapeHtml(found.date)}$3`);
-      }
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
