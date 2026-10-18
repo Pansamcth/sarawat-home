@@ -82,13 +82,18 @@ module.exports = async function handler(req, res) {
       const desc = found.desc || found.detail || 'ติดตามข่าวประชาสัมพันธ์ ประกาศ และประมวลภาพกิจกรรมของสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล';
 
       // Replace head tags
+      const canonicalUrl = `https://www.sarawatdc.site/activities?id=${encodeURIComponent(found.id)}`;
       html = html.replace(/<title>.*?<\/title>/i, `<title>${escapeHtml(fullTitle)}</title>`);
       html = html.replace(/(<meta\s+property=["']og:title["']\s+content=["']).*?(["'])/i, `$1${escapeHtml(fullTitle)}$2`);
       html = html.replace(/(<meta\s+property=["']og:description["']\s+content=["']).*?(["'])/i, `$1${escapeHtml(desc)}$2`);
       html = html.replace(/(<meta\s+property=["']og:image["']\s+content=["']).*?(["'])/i, `$1${resolvedImage}$2`);
+      html = html.replace(/(<meta\s+property=["']og:image:secure_url["']\s+content=["']).*?(["'])/i, `$1${resolvedImage}$2`);
+      html = html.replace(/(<meta\s+property=["']og:url["']\s+content=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
+      html = html.replace(/(<link\s+rel=["']canonical["']\s+href=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:title["']\s+content=["']).*?(["'])/i, `$1${escapeHtml(fullTitle)}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:description["']\s+content=["']).*?(["'])/i, `$1${escapeHtml(desc)}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:image["']\s+content=["']).*?(["'])/i, `$1${resolvedImage}$2`);
+      html = html.replace(/(<meta\s+name=["']twitter:url["']\s+content=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
 
       // In Header DOM
       html = html.replace(/(<h1[^>]*id=["']actMainTitle["'][^>]*>)([\s\S]*?)(<\/h1>)/i, `$1${escapeHtml(found.title)}$3`);
