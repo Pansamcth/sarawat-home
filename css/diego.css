@@ -3640,7 +3640,7 @@ svg:not([data-lucide]),
 .dg-activities-section {
   padding: 50px 0 100px;
   background: var(--dg-bg-subtle);
-  min-height: 500px;
+  min-height: auto;
 }
 
 .dg-activities-grid {
