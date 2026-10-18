@@ -80,6 +80,102 @@
       "permanent": true
     },
     {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "query",
+          "key": "sheet"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sheet"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
       "source": "/activities",
       "has": [
         {
@@ -220,6 +316,66 @@
     {
       "source": "/roster/admin",
       "destination": "/SI-ROSTER/admin"
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "query",
+          "key": "sheet"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
+    {
+      "source": "/si-roster.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
+    {
+      "source": "/si-roster.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "activity"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
+    {
+      "source": "/si-roster.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "sheet"
+        }
+      ],
+      "destination": "/api/si-roster"
     },
     {
       "source": "/si-roster",

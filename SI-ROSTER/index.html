@@ -23,31 +23,32 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
-  <meta name="description"
+  <title id="pageTitle">ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
+  <meta name="description" id="metaDescription"
     content="SI-ROSTER ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก ช่วยให้การจัดเวร การประสานงาน และการบริหารกำลังพลเป็นระบบ สะดวก และมีประสิทธิภาพยิ่งขึ้น" />
   <meta name="keywords" content="SI-ROSTER, ระบบลงหน้าที่, สารวัตรนักเรียน, โรงเรียนเดชะปัตตนยานุกูล, Truant Patrol, ลงเวรสารวัตร" />
   <meta name="author" content="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://sarawatdc.site/si-roster" />
+  <link rel="canonical" id="canonicalUrl" href="https://sarawatdc.site/si-roster" />
   <link rel="icon" type="image/png" href="/assets/icons/sarawat-logo.png" />
 
   <!-- Open Graph / Facebook / Discord Preview -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sarawatdc.site/si-roster" />
-  <meta property="og:title" content="ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
-  <meta property="og:description"
+  <meta property="og:url" id="ogUrl" content="https://sarawatdc.site/si-roster" />
+  <meta property="og:title" id="ogTitle" content="ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta property="og:description" id="ogDesc"
     content="SI-ROSTER ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก ช่วยให้การจัดเวร การประสานงาน และการบริหารกำลังพลเป็นระบบ สะดวก และมีประสิทธิภาพยิ่งขึ้น" />
-  <meta property="og:image" content="https://sarawatdc.site/assets/images/si-roster-cover.jpg" />
+  <meta property="og:image" id="ogImage" content="https://sarawatdc.site/assets/images/si-roster-cover.jpg" />
   <meta property="og:site_name" content="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
   <meta property="og:locale" content="th_TH" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
-  <meta name="twitter:description"
+  <meta name="twitter:url" id="twitterUrl" content="https://sarawatdc.site/si-roster" />
+  <meta name="twitter:title" id="twitterTitle" content="ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta name="twitter:description" id="twitterDesc"
     content="SI-ROSTER ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก ช่วยให้การจัดเวร การประสานงาน และการบริหารกำลังพลเป็นระบบ สะดวก และมีประสิทธิภาพยิ่งขึ้น" />
-  <meta name="twitter:image" content="https://sarawatdc.site/assets/images/si-roster-cover.jpg" />
+  <meta name="twitter:image" id="twitterImage" content="https://sarawatdc.site/assets/images/si-roster-cover.jpg" />
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -5926,6 +5927,87 @@
       });
     }
 
+    // --- Dynamic SEO Management for SI-ROSTER ---
+    const DEFAULT_ROSTER_TITLE = 'ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)';
+    const DEFAULT_ROSTER_DESC = 'SI-ROSTER ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก ช่วยให้การจัดเวร การประสานงาน และการบริหารกำลังพลเป็นระบบ สะดวก และมีประสิทธิภาพยิ่งขึ้น';
+    const DEFAULT_ROSTER_IMAGE = 'https://sarawatdc.site/assets/images/si-roster-cover.jpg';
+    const DEFAULT_ROSTER_URL = 'https://sarawatdc.site/si-roster';
+
+    function stripMarkdown(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/^#+\s+/gm, '')
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/\*(.*?)\*/g, '$1')
+        .replace(/__(.*?)__/g, '$1')
+        .replace(/~~(.*?)~~/g, '$1')
+        .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+        .replace(/`{1,3}(.*?)`{1,3}/g, '$1')
+        .replace(/^\s*[-*+]\s+/gm, '')
+        .replace(/^\s*\d+\.\s+/gm, '')
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/\r?\n+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function updateRosterSeo(activity) {
+      try {
+        const ogTitle = document.getElementById('ogTitle') || document.querySelector('meta[property="og:title"]');
+        const twTitle = document.getElementById('twitterTitle') || document.querySelector('meta[name="twitter:title"]');
+        const ogDesc = document.getElementById('ogDesc') || document.querySelector('meta[property="og:description"]');
+        const twDesc = document.getElementById('twitterDesc') || document.querySelector('meta[name="twitter:description"]');
+        const metaDesc = document.getElementById('metaDescription') || document.querySelector('meta[name="description"]');
+        const ogImg = document.getElementById('ogImage') || document.querySelector('meta[property="og:image"]');
+        const twImg = document.getElementById('twitterImage') || document.querySelector('meta[name="twitter:image"]');
+        const ogUrl = document.getElementById('ogUrl') || document.querySelector('meta[property="og:url"]');
+        const twUrl = document.getElementById('twitterUrl') || document.querySelector('meta[name="twitter:url"]');
+        const canUrl = document.getElementById('canonicalUrl') || document.querySelector('link[rel="canonical"]');
+
+        if (activity) {
+          const actTitle = (activity.title || '').trim();
+          const cleanDesc = stripMarkdown(activity.description || '');
+          const actDesc = cleanDesc || DEFAULT_ROSTER_DESC;
+          const fullTitle = actTitle ? `${actTitle} | ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER)` : DEFAULT_ROSTER_TITLE;
+          const actId = activity.id || activity.sheetName || '';
+          const fullUrl = actId ? `https://sarawatdc.site/si-roster?id=${encodeURIComponent(actId)}` : DEFAULT_ROSTER_URL;
+          const coverImage = 'https://sarawatdc.site/assets/images/si-roster-cover.jpg';
+
+          document.title = fullTitle;
+          if (ogTitle) ogTitle.setAttribute('content', actTitle || fullTitle);
+          if (twTitle) twTitle.setAttribute('content', actTitle || fullTitle);
+          if (ogDesc) ogDesc.setAttribute('content', actDesc);
+          if (twDesc) twDesc.setAttribute('content', actDesc);
+          if (metaDesc) metaDesc.setAttribute('content', actDesc);
+          if (ogImg) ogImg.setAttribute('content', coverImage);
+          if (twImg) twImg.setAttribute('content', coverImage);
+          if (ogUrl) ogUrl.setAttribute('content', fullUrl);
+          if (twUrl) twUrl.setAttribute('content', fullUrl);
+          if (canUrl) canUrl.setAttribute('href', fullUrl);
+        } else {
+          document.title = DEFAULT_ROSTER_TITLE;
+          if (ogTitle) ogTitle.setAttribute('content', DEFAULT_ROSTER_TITLE);
+          if (twTitle) twTitle.setAttribute('content', DEFAULT_ROSTER_TITLE);
+          if (ogDesc) ogDesc.setAttribute('content', DEFAULT_ROSTER_DESC);
+          if (twDesc) twDesc.setAttribute('content', DEFAULT_ROSTER_DESC);
+          if (metaDesc) metaDesc.setAttribute('content', DEFAULT_ROSTER_DESC);
+          if (ogImg) ogImg.setAttribute('content', DEFAULT_ROSTER_IMAGE);
+          if (twImg) twImg.setAttribute('content', DEFAULT_ROSTER_IMAGE);
+          if (ogUrl) ogUrl.setAttribute('content', DEFAULT_ROSTER_URL);
+          if (twUrl) twUrl.setAttribute('content', DEFAULT_ROSTER_URL);
+          if (canUrl) canUrl.setAttribute('href', DEFAULT_ROSTER_URL);
+        }
+      } catch (err) {
+        console.error('Error updating roster SEO:', err);
+      }
+    }
+
     // --- Detail Modal ---
     function openModal(activity, updateHistory = true) {
       if (countdownIntervals['modalTimerValue']) {
@@ -5945,6 +6027,9 @@
         document.getElementById('modalDescTitle').style.display = 'none';
         document.getElementById('modalDesc').style.display = 'none';
       }
+
+      // Update SEO Meta Tags
+      updateRosterSeo(activity);
 
       // removed creatorName display in modal
 
@@ -6013,6 +6098,8 @@
       if (el) el.classList.remove('active');
       if (modalId === 'detailModal') {
         if (typeof stopUserRealtimeSync === 'function') stopUserRealtimeSync();
+        // Revert SEO Meta Tags to default
+        updateRosterSeo(null);
         if (!fromPopState) {
           try {
             const u = new URL(window.location.href);
