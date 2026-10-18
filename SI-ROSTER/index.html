@@ -5988,16 +5988,19 @@
       document.getElementById('detailModal').classList.add('active');
       loadSignups(activity.sheetName, activity.duties);
 
-      // Sync Address Bar with Query Param (?activity=...)
+      // Sync Address Bar with Query Param (?id=...)
       try {
         const u = new URL(window.location.href);
-        const paramVal = activity.title || activity.sheetName;
-        if (paramVal) {
-          u.searchParams.set('activity', paramVal);
+        const actId = activity.id || activity.sheetName || activity.title;
+        if (actId) {
+          u.searchParams.set('id', actId);
+          u.searchParams.delete('activity');
+          u.searchParams.delete('event');
+          u.searchParams.delete('sheet');
           if (updateHistory) {
-            window.history.pushState({ modal: 'detailModal', activity: paramVal }, '', u.toString());
+            window.history.pushState({ modal: 'detailModal', id: actId }, '', u.toString());
           } else {
-            window.history.replaceState({ modal: 'detailModal', activity: paramVal }, '', u.toString());
+            window.history.replaceState({ modal: 'detailModal', id: actId }, '', u.toString());
           }
         }
       } catch (e) {
@@ -6013,8 +6016,9 @@
         if (!fromPopState) {
           try {
             const u = new URL(window.location.href);
-            const hadParam = u.searchParams.has('activity') || u.searchParams.has('event') || u.searchParams.has('sheet') || u.searchParams.has('date');
+            const hadParam = u.searchParams.has('id') || u.searchParams.has('activity') || u.searchParams.has('event') || u.searchParams.has('sheet') || u.searchParams.has('date');
             if (hadParam) {
+              u.searchParams.delete('id');
               u.searchParams.delete('activity');
               u.searchParams.delete('event');
               u.searchParams.delete('sheet');
@@ -6033,26 +6037,32 @@
     function handleRosterQueryParams() {
       try {
         const params = new URLSearchParams(window.location.search);
-        const targetActivity = params.get('activity') || params.get('event');
-        const targetSheet = params.get('sheet');
+        const targetId = params.get('id') || params.get('activity') || params.get('event') || params.get('sheet');
         const targetDate = params.get('date');
 
-        if (!targetActivity && !targetSheet && !targetDate) return;
+        if (!targetId && !targetDate) return;
         if (!Array.isArray(currentActivities) || currentActivities.length === 0) return;
 
         let found = null;
-        if (targetActivity) {
-          const cleanTarget = targetActivity.trim().toLowerCase();
+        if (targetId) {
+          const cleanTarget = targetId.trim().toLowerCase();
+          // 1. Exact match by id or sheetName
           found = currentActivities.find(a =>
-            (a.title && a.title.trim().toLowerCase() === cleanTarget) ||
-            (a.sheetName && a.sheetName.toLowerCase() === cleanTarget)
-          ) || currentActivities.find(a =>
-            a.title && a.title.toLowerCase().includes(cleanTarget)
+            (a.id && String(a.id).trim().toLowerCase() === cleanTarget) ||
+            (a.sheetName && String(a.sheetName).trim().toLowerCase() === cleanTarget)
           );
-        }
-        if (!found && targetSheet) {
-          const cleanSheet = targetSheet.trim().toLowerCase();
-          found = currentActivities.find(a => a.sheetName && a.sheetName.toLowerCase() === cleanSheet);
+          // 2. Exact match by title
+          if (!found) {
+            found = currentActivities.find(a =>
+              a.title && a.title.trim().toLowerCase() === cleanTarget
+            );
+          }
+          // 3. Partial match by title
+          if (!found) {
+            found = currentActivities.find(a =>
+              a.title && a.title.toLowerCase().includes(cleanTarget)
+            );
+          }
         }
         if (!found && targetDate) {
           const cleanDate = targetDate.trim();
@@ -6071,11 +6081,11 @@
     window.addEventListener('popstate', function (event) {
       try {
         const params = new URLSearchParams(window.location.search);
-        const targetActivity = params.get('activity') || params.get('event') || params.get('sheet') || params.get('date');
+        const targetParam = params.get('id') || params.get('activity') || params.get('event') || params.get('sheet') || params.get('date');
         const modal = document.getElementById('detailModal');
-        if (!targetActivity && modal && modal.classList.contains('active')) {
+        if (!targetParam && modal && modal.classList.contains('active')) {
           closeModal('detailModal', true);
-        } else if (targetActivity) {
+        } else if (targetParam) {
           handleRosterQueryParams();
         }
       } catch (err) {
