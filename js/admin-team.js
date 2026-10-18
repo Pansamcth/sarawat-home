@@ -246,33 +246,56 @@ function renderTeamAdminUI() {
       </button>
     </div>
 
-    <!-- Modal for Members -->
-    <div class="modal-overlay" id="memberModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; align-items: center; justify-content: center;">
-      <div class="modal-content" style="background: #fff; border-radius: 12px; width: 100%; max-width: 400px; padding: 24px;">
-        <h3 id="modalTitle" style="margin-top: 0; margin-bottom: 20px; font-weight: 700;">สมาชิก</h3>
-        <input type="hidden" id="modalMemberId" />
-        <div class="dg-form-group">
-          <label>ชื่อ-นามสกุล *</label>
-          <input type="text" class="dg-input" id="modalName" />
+    <!-- Modal for Members (Bento & Frosted Glass) -->
+    <div class="modal-overlay" id="memberModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 9500; display: none; align-items: center; justify-content: center; padding: 16px;">
+      <div class="dg-modal-box" style="width: 100%; max-width: 440px; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(15,23,42,0.25);">
+        <!-- Header -->
+        <div class="dg-modal-header" style="padding: 18px 22px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); width: 36px; height: 36px;">
+              <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+            </div>
+            <div>
+              <h3 id="modalTitle" style="margin: 0; font-size: 1.12rem; font-weight: 700; color: #0f172a;">สมาชิก</h3>
+              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">จัดการข้อมูลและตำแหน่งหน้าที่</div>
+            </div>
+          </div>
+          <button type="button" class="dg-modal-close" onclick="document.getElementById('memberModal').style.display='none'" title="ปิดหน้าต่าง">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
         </div>
-        <div class="dg-form-group">
-          <label>กลุ่มตำแหน่ง</label>
-          <select class="dg-input" id="modalRole">
-            <option value="ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน">สมาชิกทั่วไป</option>
-            
-            <option value="หัวหน้าฝ่าย">หัวหน้าฝ่าย (จะแสดงในส่วนการ์ด)</option>
-            <option value="รองประธาน">รองประธาน (จะแสดงในส่วนการ์ด)</option>
-            <option value="เลขานุการ">เลขานุการ (จะแสดงในส่วนการ์ด)</option>
-            <option value="ประธาน">ประธาน</option>
-          </select>
+
+        <div style="padding: 22px;">
+          <input type="hidden" id="modalMemberId" />
+          
+          <div class="dg-form-group" style="margin-bottom: 14px;">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อ-นามสกุล <span style="color: #ef4444;">*</span></label>
+            <input type="text" class="recruit-input" id="modalName" placeholder="เช่น นายสมชาย ใจดี" />
+          </div>
+
+          <div class="dg-form-group" style="margin-bottom: 14px;">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">กลุ่มตำแหน่ง</label>
+            <select class="recruit-select" id="modalRole">
+              <option value="ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน">สมาชิกทั่วไป</option>
+              <option value="หัวหน้าฝ่าย">หัวหน้าฝ่าย (จะแสดงในส่วนการ์ด)</option>
+              <option value="รองประธาน">รองประธาน (จะแสดงในส่วนการ์ด)</option>
+              <option value="เลขานุการ">เลขานุการ (จะแสดงในส่วนการ์ด)</option>
+              <option value="ประธาน">ประธาน</option>
+            </select>
+          </div>
+
+          <div class="dg-form-group" style="margin-bottom: 6px;">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">สังกัดฝ่าย (Department)</label>
+            <input type="text" class="recruit-input" id="modalDept" placeholder="เช่น ฝ่ายเอกสาร, ฝ่ายสารวัตรกลาง" />
+          </div>
         </div>
-        <div class="dg-form-group">
-          <label>สังกัดฝ่าย (Department)</label>
-          <input type="text" class="dg-input" id="modalDept" placeholder="เช่น ฝ่ายเอกสาร" />
-        </div>
-        <div style="display: flex; gap: 12px; margin-top: 30px;">
-          <button class="dg-btn-white" style="flex: 1;" onclick="document.getElementById('memberModal').style.display='none'">ยกเลิก</button>
-          <button class="dg-btn-black" style="flex: 1;" onclick="saveMemberModal()">บันทึก</button>
+
+        <div class="dg-modal-actions" style="padding: 14px 22px;">
+          <button type="button" class="btn-step-prev" style="padding: 10px 18px; border-radius: 10px; font-size: 0.88rem;" onclick="document.getElementById('memberModal').style.display='none'">ยกเลิก</button>
+          <button type="button" class="dg-btn-black" style="padding: 10px 24px; border-radius: 10px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;" onclick="saveMemberModal()">
+            <i data-lucide="check" style="width: 15px; height: 15px;"></i>
+            <span>บันทึกข้อมูล</span>
+          </button>
         </div>
       </div>
     </div>

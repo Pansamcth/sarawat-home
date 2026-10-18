@@ -973,7 +973,7 @@
             academic_year: document.getElementById('cfgAcademicYear').value.trim(),
             min_gpax: parseFloat(document.getElementById('cfgMinGpax').value),
             allowed_grades: document.getElementById('cfgAllowedGrades').value.trim(),
-            is_open: parseInt(document.getElementById('cfgIsOpen')?.value) || 1,
+            is_open: document.getElementById('cfgIsOpen')?.value === '0' ? 0 : 1,
             start_datetime: document.getElementById('cfgStartDatetime').value || null,
             end_datetime: document.getElementById('cfgEndDatetime').value || null,
             announcement_text: document.getElementById('cfgAnnouncementText').value.trim(),
@@ -1069,6 +1069,9 @@
         setVal('cfgAnnouncementText', s.announcement_text || '');
         setVal('cfgPdpaContent', s.pdpa_content || '');
         setVal('cfgIsOpen', String(s.is_open !== undefined ? s.is_open : 1));
+        if (typeof window.syncMasterRecruitmentSwitchUI === 'function') {
+          window.syncMasterRecruitmentSwitchUI(s.is_open !== undefined ? s.is_open : 1);
+        }
         if (s.start_datetime) setVal('cfgStartDatetime', s.start_datetime.replace(' ', 'T').slice(0, 16));
         else setVal('cfgStartDatetime', '');
         if (s.end_datetime) setVal('cfgEndDatetime', s.end_datetime.replace(' ', 'T').slice(0, 16));

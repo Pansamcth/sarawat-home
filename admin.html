@@ -34,6 +34,62 @@
     window.SarawatApi = window.SarawatApi || {};
     window.SarawatAPI = window.SarawatApi;
 
+    window.syncMasterRecruitmentSwitchUI = function(isOpen) {
+      const chk = document.getElementById('chkMasterSwitch');
+      const card = document.getElementById('cardMasterSwitch');
+      const badge = document.getElementById('badgeMasterSwitch');
+      const title = document.getElementById('txtMasterSwitchTitle');
+      const desc = document.getElementById('txtMasterSwitchDesc');
+      const icon = document.getElementById('iconMasterSwitch');
+      const sel = document.getElementById('cfgIsOpen');
+
+      const boolVal = (isOpen === true || isOpen === '1' || isOpen === 1);
+      if (chk) chk.checked = boolVal;
+      if (sel) sel.value = boolVal ? '1' : '0';
+
+      if (card) {
+        if (boolVal) {
+          card.classList.remove('is-inactive');
+          card.classList.add('is-active');
+        } else {
+          card.classList.remove('is-active');
+          card.classList.add('is-inactive');
+        }
+      }
+
+      if (badge) {
+        badge.className = boolVal ? 'status-badge approved' : 'status-badge rejected';
+        badge.innerHTML = boolVal ? '<i class="fa-solid fa-circle-check"></i> เปิดรับสมัครอยู่' : '<i class="fa-solid fa-circle-xmark"></i> ปิดระบบชั่วคราว';
+      }
+
+      if (icon) {
+        icon.style.background = boolVal ? '#dcfce7' : '#fee2e2';
+        icon.style.color = boolVal ? '#15803d' : '#b91c1c';
+      }
+
+      if (title) {
+        title.textContent = boolVal ? '🟢 เปิดรับสมัคร (ระบบเปิดทำงาน)' : '🔴 ปิดรับสมัครทันที (ระบบระงับการรับสมัคร)';
+      }
+
+      if (desc) {
+        desc.textContent = boolVal 
+          ? 'แบบฟอร์มเปิดให้ส่งใบสมัครอัตโนมัติตามช่วงเวลา หรือเปิดตลอดหากไม่ระบุวันสิ้นสุด'
+          : 'ระบบปิดรับสมัครทันที ผู้สมัครจะไม่สามารถส่งแบบฟอร์มได้จนกว่าจะเปิดสวิตช์นี้อีกครั้ง';
+      }
+    };
+
+    window.toggleMasterRecruitmentSwitch = function() {
+      const chk = document.getElementById('chkMasterSwitch');
+      if (chk) {
+        chk.checked = !chk.checked;
+        window.syncMasterRecruitmentSwitchUI(chk.checked);
+      }
+    };
+
+    window.syncMasterRecruitmentSwitch = function(isChecked) {
+      window.syncMasterRecruitmentSwitchUI(isChecked);
+    };
+
     window.openRecruitSettingsModal = function() {
       const m = document.getElementById('adminRecruitSettingsModal');
       if (m) {
@@ -44,6 +100,11 @@
         m.style.pointerEvents = 'auto';
         m.style.zIndex = '9500';
         document.body.style.overflow = 'hidden';
+        const sel = document.getElementById('cfgIsOpen');
+        if (window.syncMasterRecruitmentSwitchUI) {
+          window.syncMasterRecruitmentSwitchUI(sel ? sel.value : 1);
+        }
+        if (window.lucide) lucide.createIcons();
       }
     };
     window.closeRecruitSettingsModal = function() {
@@ -1862,6 +1923,355 @@
       box-sizing: border-box;
       box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.06);
     }
+
+    /* ========================================================
+       MODERN UNIFIED MODAL SYSTEM (BENTO & FROSTED GLASS)
+       Inspired by SI-ROSTER Admin System
+       ======================================================== */
+    .dg-modal-backdrop,
+    .dg-modal-box,
+    .app-review-modal-box,
+    .modal-overlay,
+    #memberModal {
+      font-family: 'Plus Jakarta Sans', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Universal Form Control Typography Normalization */
+    .dg-modal-backdrop input,
+    .dg-modal-backdrop select,
+    .dg-modal-backdrop textarea,
+    .dg-modal-backdrop button,
+    .dg-modal-backdrop label,
+    .recruit-input,
+    .recruit-select,
+    .recruit-label,
+    .dg-input,
+    .dg-select,
+    .dg-textarea,
+    .modal-overlay input,
+    .modal-overlay select,
+    .modal-overlay textarea,
+    .modal-overlay button {
+      font-family: 'Plus Jakarta Sans', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Modal Backdrop with Frosted Blur */
+    .dg-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.62);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 9500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dg-modal-backdrop.active {
+      display: flex !important;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* Modern Bento Modal Box */
+    .dg-modal-box {
+      background: #ffffff;
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.3);
+      transform: translateY(12px) scale(0.97);
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dg-modal-backdrop.active .dg-modal-box {
+      transform: translateY(0) scale(1);
+    }
+
+    .dg-modal-box.modal-lg {
+      max-width: 880px;
+    }
+
+    .dg-modal-box.modal-xl {
+      max-width: 960px;
+    }
+
+    /* Sticky Frosted Header */
+    .dg-modal-header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .dg-modal-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .dg-modal-header-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #0f172a;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .dg-modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .dg-modal-close:hover {
+      background: #fee2e2;
+      color: #ef4444;
+      border-color: #fca5a5;
+      transform: rotate(90deg);
+    }
+
+    /* Scrollable Body Area */
+    .dg-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+
+    .dg-modal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dg-modal-body::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+
+    /* Segmented Navigation Pill Tabs */
+    .recruit-nav-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 14px;
+      gap: 6px;
+      margin-bottom: 22px;
+      border: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+    }
+
+    .recruit-tab-btn {
+      flex: 1;
+      min-width: 130px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif !important;
+    }
+
+    .recruit-tab-btn:hover {
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .recruit-tab-btn.active {
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+    }
+
+    /* Bento Cards for Settings & Form Sections */
+    .recruit-bento-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .recruit-bento-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .recruit-bento-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .recruit-bento-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .recruit-bento-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Master Switch Card & Toggle */
+    .recruit-toggle-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      margin-bottom: 16px;
+    }
+
+    .recruit-toggle-card:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .recruit-toggle-card.is-active {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+
+    .recruit-toggle-card.is-inactive {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+
+    .modern-switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .modern-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 34px;
+    }
+
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .modern-switch input:checked + .switch-slider {
+      background-color: #10b981;
+    }
+
+    .modern-switch input:checked + .switch-slider:before {
+      transform: translateX(24px);
+    }
+
+    /* Modal Actions Sticky Footer */
+    .dg-modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 16px 24px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 
@@ -2888,16 +3298,16 @@
          MODAL: APPLICANT REVIEW & STATUS DECISION
          ========================================== -->
     <div class="dg-modal-backdrop" id="adminApplicantReviewModal" style="display: none; z-index: 9500;" onclick="if(event.target === this) closeApplicantReviewModal()">
-      <div class="app-review-modal-box">
+      <div class="dg-modal-box modal-lg" style="max-height: 90vh;">
         <!-- Sticky Modern Header -->
-        <div class="app-review-header">
+        <div class="dg-modal-header">
           <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width: 44px; height: 44px; border-radius: 12px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.22); flex-shrink: 0;">
-              <i data-lucide="file-badge-2" style="width: 22px; height: 22px;"></i>
+            <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+              <i data-lucide="file-badge-2" style="width: 20px; height: 20px;"></i>
             </div>
             <div>
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <h3 style="font-size: 1.25rem; font-weight: 850; color: #0f172a; margin: 0; letter-spacing: -0.02em;">
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.01em;">
                   รายละเอียดและพิจารณาใบสมัคร
                 </h3>
                 <span id="mdlAppHeaderStatusBadge" class="status-badge pending" style="font-size: 0.74rem; padding: 2px 10px;">
@@ -2907,16 +3317,16 @@
               <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; font-size: 0.82rem; color: #64748b; flex-wrap: wrap;">
                 <span>เลขอ้างอิง: <strong id="mdlAppCode" style="color: #0f172a; font-family: monospace; font-size: 0.88rem; background: #f1f5f9; padding: 2px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">-</strong></span>
                 <span>•</span>
-                <span>ส่งเมื่อ: <span id="mdlAppSubmittedAt" style="color: #334155; font-weight: 700;">-</span></span>
+                <span>ส่งเมื่อ: <span id="mdlAppSubmittedAt" style="color: #334155; font-weight: 600;">-</span></span>
               </div>
             </div>
           </div>
-          <button type="button" class="dg-modal-close" id="btnCloseApplicantReview" onclick="closeApplicantReviewModal()" style="width: 38px; height: 38px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; cursor: pointer; color: #475569; transition: all 0.15s ease;">
+          <button type="button" class="dg-modal-close" id="btnCloseApplicantReview" onclick="closeApplicantReviewModal()" title="ปิดหน้าต่าง">
             <i data-lucide="x" style="width: 18px; height: 18px;"></i>
           </button>
         </div>
 
-        <div style="padding: 24px 28px;">
+        <div class="dg-modal-body" style="padding: 24px;">
           <!-- Hero Profile Card -->
           <div class="app-review-hero">
             <!-- Left: Photo Frame -->
@@ -2932,19 +3342,19 @@
 
             <!-- Right: Identity & Bento Grid -->
             <div>
-              <div style="font-size: 1.55rem; font-weight: 850; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.25;" id="mdlAppName">-</div>
+              <div style="font-size: 1.45rem; font-weight: 700; color: #0f172a; letter-spacing: -0.01em; margin-bottom: 8px; line-height: 1.25;" id="mdlAppName">-</div>
 
               <!-- Meta Pill Group -->
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
-                <span style="display: inline-flex; align-items: center; gap: 5px; background: #0f172a; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 750;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #0f172a; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 600;">
                   <i data-lucide="id-card" style="width: 13px; height: 13px;"></i>
                   <span>รหัส นร. <strong id="mdlAppStudentId" style="color: #38bdf8;">-</strong></span>
                 </span>
-                <span style="display: inline-flex; align-items: center; gap: 5px; background: #e2e8f0; color: #1e293b; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 750;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #e2e8f0; color: #1e293b; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 600;">
                   <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
                   <span>ชั้น <strong id="mdlAppGradeRoom">-</strong></span>
                 </span>
-                <span style="display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 800;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 700;">
                   <i data-lucide="award" style="width: 13px; height: 13px;"></i>
                   <span>GPAX <strong id="mdlAppGpax">-</strong></span>
                 </span>
@@ -2959,7 +3369,7 @@
                   </div>
                   <div style="flex: 1;">
                     <div class="app-bento-label">ชุมนุมที่เลือก (ปีการศึกษา 2570)</div>
-                    <div class="app-bento-value" id="mdlAppClub" style="color: #1e3a8a; font-size: 1.02rem;">-</div>
+                    <div class="app-bento-value" id="mdlAppClub" style="color: #1e3a8a; font-size: 1rem;">-</div>
                   </div>
                 </div>
 
@@ -2996,7 +3406,7 @@
                   </div>
                   <div style="flex: 1;">
                     <div class="app-bento-label">ที่อยู่ปัจจุบัน (Text Only)</div>
-                    <div class="app-bento-value" id="mdlAppAddress" style="font-size: 0.9rem; font-weight: 600; color: #334155; line-height: 1.5;">-</div>
+                    <div class="app-bento-value" id="mdlAppAddress" style="font-size: 0.9rem; font-weight: 500; color: #334155; line-height: 1.5;">-</div>
                   </div>
                 </div>
               </div>
@@ -3007,11 +3417,11 @@
           <div class="app-decision-panel">
             <div class="app-decision-header">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <div style="width: 32px; height: 32px; border-radius: 8px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center;">
-                  <i data-lucide="gavel" style="width: 16px; height: 16px;"></i>
+                <div style="width: 34px; height: 34px; border-radius: 10px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: center;">
+                  <i data-lucide="gavel" style="width: 17px; height: 17px;"></i>
                 </div>
                 <div>
-                  <h4 style="font-size: 1.02rem; font-weight: 850; color: #0f172a; margin: 0;">
+                  <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0;">
                     บันทึกผลการพิจารณาใบสมัคร
                   </h4>
                   <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
@@ -3026,7 +3436,7 @@
                 <label class="recruit-label">
                   <span>สถานะใบสมัคร <span class="req">*</span></span>
                 </label>
-                <select id="mdlSelectStatus" class="recruit-select" style="font-weight: 700; height: 46px;">
+                <select id="mdlSelectStatus" class="recruit-select" style="font-weight: 600; height: 46px;">
                   <option value="pending">⏳ รอการตรวจสอบ (Pending)</option>
                   <option value="reviewing">🔍 กำลังตรวจสอบ (Reviewing)</option>
                   <option value="approved">✅ ผ่านการคัดเลือก (Approved)</option>
@@ -3046,7 +3456,7 @@
             <!-- Correction note box (shown when correction_needed selected) -->
             <div id="mdlCorrectionNoteGroup" style="display: none; margin-bottom: 16px;">
               <div style="background: #fffbeb; border: 1.5px solid #fed7aa; border-radius: 14px; padding: 16px;">
-                <div style="display: flex; align-items: center; gap: 8px; font-weight: 800; color: #c2410c; margin-bottom: 8px; font-size: 0.88rem;">
+                <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #c2410c; margin-bottom: 8px; font-size: 0.88rem;">
                   <i data-lucide="alert-triangle" style="width: 16px; height: 16px;"></i>
                   <span>ข้อความแจ้งให้นักเรียนแก้ไขข้อมูล (จะแสดงผลในหน้าตรวจสอบสถานะของนักเรียน) *</span>
                 </div>
@@ -3085,7 +3495,7 @@
           <div class="app-timeline-box">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
               <i data-lucide="history" style="width: 16px; height: 16px; color: #64748b;"></i>
-              <h4 style="font-size: 0.95rem; font-weight: 850; color: #334155; margin: 0;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: #334155; margin: 0;">
                 ประวัติการเปลี่ยนแปลงสถานะ (Audit Trail)
               </h4>
             </div>
@@ -3101,181 +3511,268 @@
          MODAL: RECRUITMENT SETTINGS & CLUBS
          ========================================== -->
     <div class="dg-modal-backdrop" id="adminRecruitSettingsModal" style="display: none; z-index: 9500;" onclick="if(event.target === this) closeRecruitSettingsModal()">
-      <div class="dg-modal-box" style="max-width: 860px; max-height: 90vh; overflow-y: auto;">
+      <div class="dg-modal-box modal-lg">
+        <!-- Sticky Header -->
         <div class="dg-modal-header">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 34px; height: 34px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #0f172a;">
-              <i data-lucide="settings" style="width: 18px; height: 18px;"></i>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+              <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
             </div>
-            <h3 style="font-size: 1.2rem; font-weight: 850; color: #0f172a; margin: 0;">
-              ตั้งค่าระบบรับสมัครและจัดการโควตา (ปี 2570)
-            </h3>
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin: 0;">
+                ตั้งค่าระบบรับสมัครและจัดการโควตา
+              </h3>
+              <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">
+                กำหนดวันเวลา เกณฑ์คุณสมบัติ โควตาชุมนุม และตรวจสอบประวัติการแก้ไข
+              </div>
+            </div>
           </div>
-          <button type="button" class="dg-modal-close" id="btnCloseRecruitSettings" onclick="closeRecruitSettingsModal()">
-            <i data-lucide="x"></i>
+          <button type="button" class="dg-modal-close" id="btnCloseRecruitSettings" onclick="closeRecruitSettingsModal()" title="ปิดหน้าต่าง">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
           </button>
         </div>
 
-        <div style="padding: 24px;">
-          <!-- Tabs inside settings modal -->
-          <div class="recruit-nav-tabs" style="margin-bottom: 20px;">
+        <div class="dg-modal-body">
+          <!-- Segmented Navigation Tabs -->
+          <div class="recruit-nav-tabs">
             <button type="button" class="recruit-tab-btn active" id="tabBtnSetGeneral" onclick="switchRecruitSettingsTab('gen')">
+              <i data-lucide="calendar-clock" style="width: 16px; height: 16px;"></i>
               <span>ทั่วไป & กำหนดการ</span>
             </button>
             <button type="button" class="recruit-tab-btn" id="tabBtnSetClubs" onclick="switchRecruitSettingsTab('clubs')">
+              <i data-lucide="users" style="width: 16px; height: 16px;"></i>
               <span>จัดการชุมนุม & โควตา</span>
             </button>
             <button type="button" class="recruit-tab-btn" id="tabBtnSetLogs" onclick="switchRecruitSettingsTab('logs')">
-              <span>Audit Log</span>
+              <i data-lucide="shield-alert" style="width: 16px; height: 16px;"></i>
+              <span>Audit Log ประวัติระบบ</span>
             </button>
           </div>
 
-          <!-- PANE 1: GENERAL SETTINGS -->
+          <!-- ==========================================
+               PANE 1: GENERAL SETTINGS (BENTO CARDS)
+               ========================================== -->
           <div id="setPaneGeneral">
-            <div class="recruit-grid">
-              <div class="col-4">
-                <div class="recruit-form-group">
-                  <label class="recruit-label">ปีการศึกษา</label>
-                  <input type="text" id="cfgAcademicYear" class="recruit-input" value="2570" />
+            <!-- Bento Card 1: Master Switch & Schedule -->
+            <div class="recruit-bento-card">
+              <div class="recruit-bento-header">
+                <div class="recruit-bento-title">
+                  <div class="recruit-bento-icon" style="background: #e0f2fe; color: #0369a1;">
+                    <i data-lucide="power" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <span>สถานะการเปิดรับสมัคร & กำหนดการเวลา</span>
                 </div>
+                <span id="badgeMasterSwitch" class="status-badge approved" style="font-size: 0.76rem; padding: 3px 12px;">
+                  <i class="fa-solid fa-circle-check"></i> เปิดรับสมัครอยู่
+                </span>
               </div>
 
-              <div class="col-4">
-                <div class="recruit-form-group">
-                  <label class="recruit-label">เกณฑ์ GPAX ขั้นต่ำ</label>
-                  <input type="number" step="0.01" min="0" max="4.00" id="cfgMinGpax" class="recruit-input" value="2.50" />
-                </div>
-              </div>
-
-              <div class="col-4">
-                <div class="recruit-form-group">
-                  <label class="recruit-label">ระดับชั้นที่เปิดรับ</label>
-                  <input type="text" id="cfgAllowedGrades" class="recruit-input" value="ม.4,ม.5" />
-                </div>
-              </div>
-
-              <div class="col-12">
-                <div class="recruit-form-group">
-                  <label class="recruit-label">สถานะการเปิดรับสมัคร (Master Switch)</label>
-                  <select id="cfgIsOpen" class="recruit-input" style="font-weight: 700;">
-                    <option value="1">🟢 เปิดรับสมัคร (ทำงานอัตโนมัติตามกำหนดเวลา หรือเปิดตลอดเวลาหากไม่ตั้งเวลา)</option>
-                    <option value="0">🔴 ปิดรับสมัครทันที (บังคับปิดระบบชั่วคราว)</option>
-                  </select>
-                  <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">
-                    💡 หากเลือกเปิดรับสมัคร ระบบจะควบคุมการเปิด/ปิดฟอร์มตามวัน-เวลาที่ระบุด้านล่างโดยอัตโนมัติ
+              <!-- Interactive Master Switch Card -->
+              <div class="recruit-toggle-card is-active" id="cardMasterSwitch" onclick="toggleMasterRecruitmentSwitch()">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div class="recruit-bento-icon" id="iconMasterSwitch" style="width: 40px; height: 40px; border-radius: 12px; background: #dcfce7; color: #15803d;">
+                    <i data-lucide="power" style="width: 20px; height: 20px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.96rem; color: #0f172a;" id="txtMasterSwitchTitle">
+                      🟢 เปิดรับสมัคร (ระบบเปิดทำงาน)
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-top: 3px;" id="txtMasterSwitchDesc">
+                      แบบฟอร์มเปิดให้ส่งใบสมัครอัตโนมัติตามช่วงเวลา หรือเปิดตลอดหากไม่ระบุวันสิ้นสุด
+                    </div>
                   </div>
                 </div>
+                <label class="modern-switch" onclick="event.stopPropagation()">
+                  <input type="checkbox" id="chkMasterSwitch" onchange="syncMasterRecruitmentSwitch(this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+                <!-- Hidden Select preserving exact API bindings -->
+                <select id="cfgIsOpen" style="display: none;">
+                  <option value="1">1</option>
+                  <option value="0">0</option>
+                </select>
               </div>
 
-              <div class="col-6">
+              <!-- Start & End Date Grid -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
                 <div class="recruit-form-group">
-                  <label class="recruit-label">วัน-เวลาเปิดรับสมัคร (อัตโนมัติ)</label>
-                  <input type="datetime-local" id="cfgStartDatetime" class="recruit-input" />
+                  <label class="recruit-label">
+                    <span><i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> วัน-เวลาเปิดรับสมัคร (อัตโนมัติ)</span>
+                  </label>
+                  <input type="datetime-local" id="cfgStartDatetime" class="recruit-input" onclick="try{this.showPicker()}catch(e){}" />
+                  <div style="font-size: 0.74rem; color: #94a3b8;">เว้นว่างได้ = เปิดรับสมัครทันที</div>
                 </div>
-              </div>
 
-              <div class="col-6">
                 <div class="recruit-form-group">
-                  <label class="recruit-label">วัน-เวลาปิดรับสมัคร (อัตโนมัติ)</label>
-                  <input type="datetime-local" id="cfgEndDatetime" class="recruit-input" />
-                </div>
-              </div>
-
-              <div class="col-12">
-                <div class="recruit-form-group">
-                  <label class="recruit-label">ข้อความประกาศหน้าเว็บ</label>
-                  <input type="text" id="cfgAnnouncementText" class="recruit-input" placeholder="ข้อความแจ้งเตือนสำคัญ" />
-                </div>
-              </div>
-
-              <div class="col-12">
-                <div class="recruit-form-group">
-                  <label class="recruit-label">ข้อความประกาศนโยบายความเป็นส่วนตัว (PDPA)</label>
-                  <textarea id="cfgPdpaContent" class="recruit-input" style="height: 120px; padding: 10px 12px;"></textarea>
+                  <label class="recruit-label">
+                    <span><i data-lucide="clock" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> วัน-เวลาปิดรับสมัคร (อัตโนมัติ)</span>
+                  </label>
+                  <input type="datetime-local" id="cfgEndDatetime" class="recruit-input" onclick="try{this.showPicker()}catch(e){}" />
+                  <div style="font-size: 0.74rem; color: #94a3b8;">เว้นว่างได้ = เปิดตลอดเวลาไม่มีกำหนดสิ้นสุด</div>
                 </div>
               </div>
             </div>
 
-            <div style="text-align: right; margin-top: 20px;">
-              <button type="button" class="dg-btn-black" id="btnSaveGeneralSettings" style="padding: 10px 24px;">
+            <!-- Bento Card 2: Eligibility & Criteria -->
+            <div class="recruit-bento-card">
+              <div class="recruit-bento-header">
+                <div class="recruit-bento-title">
+                  <div class="recruit-bento-icon" style="background: #fef3c7; color: #92400e;">
+                    <i data-lucide="graduation-cap" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <span>คุณสมบัติและเกณฑ์รับสมัคร</span>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                <div class="recruit-form-group">
+                  <label class="recruit-label">
+                    <span>ปีการศึกษา</span>
+                  </label>
+                  <input type="text" id="cfgAcademicYear" class="recruit-input" value="2570" placeholder="เช่น 2570" />
+                </div>
+
+                <div class="recruit-form-group">
+                  <label class="recruit-label">
+                    <span>เกณฑ์ GPAX ขั้นต่ำ</span>
+                  </label>
+                  <input type="number" step="0.01" min="0" max="4.00" id="cfgMinGpax" class="recruit-input" value="2.50" placeholder="เช่น 2.50" />
+                </div>
+
+                <div class="recruit-form-group">
+                  <label class="recruit-label">
+                    <span>ระดับชั้นที่เปิดรับ</span>
+                  </label>
+                  <input type="text" id="cfgAllowedGrades" class="recruit-input" value="ม.4,ม.5" placeholder="เช่น ม.4,ม.5" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Bento Card 3: Announcement & PDPA -->
+            <div class="recruit-bento-card">
+              <div class="recruit-bento-header">
+                <div class="recruit-bento-title">
+                  <div class="recruit-bento-icon" style="background: #ede9fe; color: #6d28d9;">
+                    <i data-lucide="megaphone" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <span>ข้อความประกาศหน้าเว็บ & นโยบายความเป็นส่วนตัว (PDPA)</span>
+                </div>
+              </div>
+
+              <div class="recruit-form-group" style="margin-bottom: 14px;">
+                <label class="recruit-label">
+                  <span>ข้อความประกาศหน้าเว็บ (Announcement)</span>
+                </label>
+                <input type="text" id="cfgAnnouncementText" class="recruit-input" placeholder="เช่น ยินดีต้อนรับสู่การรับสมัครสารวัตรนักเรียน ปีการศึกษา 2570" />
+              </div>
+
+              <div class="recruit-form-group">
+                <label class="recruit-label">
+                  <span>ข้อความประกาศนโยบายความเป็นส่วนตัว (PDPA Consent)</span>
+                </label>
+                <textarea id="cfgPdpaContent" class="recruit-input" style="height: 110px;" placeholder="ระบุข้อตกลงและนโยบายคุ้มครองข้อมูลส่วนบุคคลสำหรับผู้สมัคร..."></textarea>
+              </div>
+            </div>
+
+            <!-- Save Action Button -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+              <button type="button" class="dg-btn-black" id="btnSaveGeneralSettings" style="padding: 12px 28px; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2); display: inline-flex; align-items: center; gap: 8px;">
+                <i data-lucide="check" style="width: 16px; height: 16px;"></i>
                 <span>บันทึกการตั้งค่า</span>
               </button>
             </div>
           </div>
 
-          <!-- PANE 2: CLUBS & AFFILIATIONS MANAGER -->
+          <!-- ==========================================
+               PANE 2: CLUBS & AFFILIATIONS MANAGER
+               ========================================== -->
           <div id="setPaneClubs" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-              <h4 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin: 0;">
-                รายชื่อชุมนุมและโควตาที่เปิดรับ
-              </h4>
-              <button type="button" class="dg-btn-black" id="btnAddNewClubRow" style="padding: 6px 14px; font-size: 0.8rem;">
-                <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
-                <span>เพิ่มรายการ</span>
-              </button>
-            </div>
+            <div class="recruit-bento-card">
+              <div class="recruit-bento-header">
+                <div class="recruit-bento-title">
+                  <div class="recruit-bento-icon" style="background: #e0e7ff; color: #4338ca;">
+                    <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <span>รายชื่อชุมนุมและโควตาที่เปิดรับ</span>
+                </div>
+                <button type="button" class="dg-btn-black" id="btnAddNewClubRow" style="padding: 8px 16px; font-size: 0.82rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;">
+                  <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                  <span>เพิ่มรายการใหม่</span>
+                </button>
+              </div>
 
-            <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.86rem;">
-                <thead>
-                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #475569;">
-                    <th style="padding: 10px 14px;">ประเภท</th>
-                    <th style="padding: 10px 14px;">ชื่อรายการ</th>
-                    <th style="padding: 10px 14px;">โควตา (คน)</th>
-                    <th style="padding: 10px 14px;">ยอดสมัคร</th>
-                    <th style="padding: 10px 14px; text-align: right;">การกระทำ</th>
-                  </tr>
-                </thead>
-                <tbody id="tblAdminClubsBody">
-                  <tr><td colspan="5" style="padding: 20px; text-align: center; color: #94a3b8;">กำลังโหลด...</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Add/Edit Club Form Box (hidden by default) -->
-            <div id="boxAddClubForm" style="display: none; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 16px;">
-              <h5 style="font-size: 0.92rem; font-weight: 800; color: #0f172a; margin: 0 0 12px;" id="txtAddClubFormTitle">
-                เพิ่มรายการใหม่
-              </h5>
-              <div class="recruit-grid">
+              <!-- Add/Edit Club Form Box (hidden by default) -->
+              <div id="boxAddClubForm" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 18px; margin-bottom: 20px; animation: modalFadeIn 0.2s ease;">
+                <h5 style="font-size: 0.95rem; font-weight: 700; color: #0f172a; margin: 0 0 14px;" id="txtAddClubFormTitle">
+                  เพิ่มรายการชุมนุม/สังกัดใหม่
+                </h5>
                 <input type="hidden" id="inpNewClubType" value="club" />
-                <div class="col-8">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
                   <div class="recruit-form-group">
-                    <label class="recruit-label">ชื่อชุมนุม</label>
-                    <input type="text" id="inpNewClubName" class="recruit-input" style="height: 38px;" placeholder="เช่น ชุมนุมสารวัตรนักเรียนฝ่ายจราจรและความปลอดภัย" />
+                    <label class="recruit-label">ชื่อชุมนุม / สังกัด *</label>
+                    <input type="text" id="inpNewClubName" class="recruit-input" placeholder="เช่น ชุมนุมสารวัตรนักเรียนฝ่ายจราจร" />
+                  </div>
+                  <div class="recruit-form-group">
+                    <label class="recruit-label">โควตาจำนวนรับ (คน, 0 = ไม่จำกัด)</label>
+                    <input type="number" id="inpNewClubQuota" class="recruit-input" value="15" min="0" />
                   </div>
                 </div>
-                <div class="col-4">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label">โควตา (0=ไม่จำกัด)</label>
-                    <input type="number" id="inpNewClubQuota" class="recruit-input" style="height: 38px;" value="15" min="0" />
-                  </div>
+                <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px;">
+                  <button type="button" class="btn-step-prev" id="btnCancelAddClub" style="padding: 8px 16px; font-size: 0.84rem; border-radius: 8px;">ยกเลิก</button>
+                  <button type="button" class="dg-btn-black" id="btnSaveNewClub" style="padding: 8px 20px; font-size: 0.84rem; border-radius: 8px;">บันทึกรายการ</button>
                 </div>
               </div>
-              <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px;">
-                <button type="button" class="btn-step-prev" id="btnCancelAddClub" style="padding: 6px 14px; font-size: 0.8rem; height: 34px;">ยกเลิก</button>
-                <button type="button" class="dg-btn-black" id="btnSaveNewClub" style="padding: 6px 18px; font-size: 0.8rem; height: 34px;">บันทึก</button>
+
+              <!-- Clubs Table -->
+              <div style="border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+                  <thead>
+                    <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #475569; text-align: left;">
+                      <th style="padding: 12px 16px; font-weight: 700;">ประเภท</th>
+                      <th style="padding: 12px 16px; font-weight: 700;">ชื่อรายการ</th>
+                      <th style="padding: 12px 16px; font-weight: 700;">โควตา (คน)</th>
+                      <th style="padding: 12px 16px; font-weight: 700;">ยอดสมัครปัจจุบัน</th>
+                      <th style="padding: 12px 16px; text-align: right; font-weight: 700;">การกระทำ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tblAdminClubsBody">
+                    <tr><td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">กำลังโหลดข้อมูล...</td></tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
 
-          <!-- PANE 3: AUDIT LOGS -->
+          <!-- ==========================================
+               PANE 3: AUDIT LOGS
+               ========================================== -->
           <div id="setPaneLogs" style="display: none;">
-            <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; max-height: 400px; overflow-y: auto;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
-                <thead>
-                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #475569;">
-                    <th style="padding: 8px 12px;">วันเวลา</th>
-                    <th style="padding: 8px 12px;">ผู้ดำเนินการ</th>
-                    <th style="padding: 8px 12px;">การกระทำ</th>
-                    <th style="padding: 8px 12px;">เป้าหมาย</th>
-                    <th style="padding: 8px 12px;">รายละเอียด</th>
-                  </tr>
-                </thead>
-                <tbody id="tblAdminLogsBody">
-                  <tr><td colspan="5" style="padding: 20px; text-align: center; color: #94a3b8;">กำลังโหลด Log...</td></tr>
-                </tbody>
-              </table>
+            <div class="recruit-bento-card">
+              <div class="recruit-bento-header">
+                <div class="recruit-bento-title">
+                  <div class="recruit-bento-icon" style="background: #fee2e2; color: #b91c1c;">
+                    <i data-lucide="shield-alert" style="width: 18px; height: 18px;"></i>
+                  </div>
+                  <span>Audit Log ประวัติการแก้ไขระบบรับสมัคร</span>
+                </div>
+              </div>
+
+              <div style="border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; max-height: 420px; overflow-y: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+                  <thead>
+                    <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #475569; text-align: left;">
+                      <th style="padding: 10px 14px; font-weight: 700;">วันเวลา</th>
+                      <th style="padding: 10px 14px; font-weight: 700;">ผู้ดำเนินการ</th>
+                      <th style="padding: 10px 14px; font-weight: 700;">การกระทำ</th>
+                      <th style="padding: 10px 14px; font-weight: 700;">เป้าหมาย</th>
+                      <th style="padding: 10px 14px; font-weight: 700;">รายละเอียด</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tblAdminLogsBody">
+                    <tr><td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">กำลังโหลด Log...</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -3288,14 +3785,26 @@
        MODAL 1: NEWS ADD / EDIT
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminNewsModal" style="display: none;">
-    <div class="dg-modal-box">
+    <div class="dg-modal-box modal-lg" style="max-height: 90vh;">
       <div class="dg-modal-header">
-        <h3 id="adminNewsModalTitle">เพิ่มข่าวสารและกิจกรรมใหม่</h3>
-        <button class="dg-modal-close" type="button" onclick="closeModal('adminNewsModal')">
-          <i data-lucide="x"></i>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+            <i data-lucide="newspaper" style="width: 20px; height: 20px;"></i>
+          </div>
+          <div>
+            <h3 id="adminNewsModalTitle" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
+              เพิ่มข่าวสารและกิจกรรมใหม่
+            </h3>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+              กรอกข้อมูลข่าวสาร กิจกรรม และภาพถ่ายเพื่อเผยแพร่บนหน้าเว็บ
+            </div>
+          </div>
+        </div>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminNewsModal')" title="ปิดหน้าต่าง">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
         </button>
       </div>
-      <form id="adminNewsForm" onsubmit="handleSaveNews(event)" class="dg-modal-form">
+      <form id="adminNewsForm" onsubmit="handleSaveNews(event)" class="dg-modal-form" style="overflow-y: auto; flex: 1;">
         <input type="hidden" id="adminNewsId" />
         <input type="hidden" id="adminNewsDateIso" />
         <input type="hidden" id="adminNewsEndDateIso" />
@@ -3525,21 +4034,28 @@
   <!-- ==========================================
        MODAL 2: CALENDAR EVENT ADD / EDIT
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminEventModal" style="display: none; align-items: center; justify-content: center;">
-    <div class="dg-modal-box" style="max-width: 650px; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; display: flex; flex-direction: column;">
-      <div class="dg-modal-header" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 1px solid #e2e8f0; padding: 24px 30px;">
-        <h3 id="adminEventModalTitle" style="margin: 0; font-size: 1.25rem; font-weight: 850; color: #0f172a; display: flex; align-items: center; gap: 10px;">
-          <div style="background: #38bdf8; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="calendar-plus" style="width: 18px; height: 18px;"></i>
+  <div class="dg-modal-backdrop" id="adminEventModal" style="display: none;">
+    <div class="dg-modal-box modal-lg" style="max-height: 90vh;">
+      <div class="dg-modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+            <i data-lucide="calendar-plus" style="width: 20px; height: 20px;"></i>
           </div>
-          เพิ่มกิจกรรมในตาราง
-        </h3>
-        <button class="dg-modal-close" type="button" onclick="closeModal('adminEventModal')" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s;">
-          <i data-lucide="x"></i>
+          <div>
+            <h3 id="adminEventModalTitle" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
+              เพิ่มกิจกรรมในตาราง
+            </h3>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+              กำหนดตารางกิจกรรม ปฏิทินปฏิบัติงาน และรายละเอียดสถานที่
+            </div>
+          </div>
+        </div>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminEventModal')" title="ปิดหน้าต่าง">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
         </button>
       </div>
       
-      <form id="adminEventForm" onsubmit="handleSaveEvent(event)" class="dg-modal-form" style="padding: 30px; overflow-y: auto; background: #ffffff;">
+      <form id="adminEventForm" onsubmit="handleSaveEvent(event)" class="dg-modal-form" style="padding: 24px; overflow-y: auto; flex: 1; background: #ffffff;">
         <input type="hidden" id="adminEventId" />
         <input type="hidden" id="adminEventDateIso" />
         <input type="hidden" id="adminEventEndDateIso" />
@@ -3717,36 +4233,43 @@
   <!-- ==========================================
        MODAL: ADMIN FEEDBACK & COMPLAINT DETAIL & MANAGEMENT
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminFeedbackModal" style="display: none; align-items: center; justify-content: center;">
-    <div class="dg-modal-box" style="max-width: 680px; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; display: flex; flex-direction: column;">
-      <div class="dg-modal-header" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 1px solid #e2e8f0; padding: 20px 28px;">
-        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 850; color: #0f172a; display: flex; align-items: center; gap: 10px;">
-          <div style="background: #2563eb; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="inbox" style="width: 18px; height: 18px;"></i>
+  <div class="dg-modal-backdrop" id="adminFeedbackModal" style="display: none;">
+    <div class="dg-modal-box modal-lg" style="max-height: 90vh;">
+      <div class="dg-modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
+            <i data-lucide="inbox" style="width: 20px; height: 20px;"></i>
           </div>
-          <span>รายละเอียด Feedback & จัดการเรื่อง</span>
-        </h3>
-        <button class="dg-modal-close" type="button" onclick="closeModal('adminFeedbackModal')" style="background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s;">
-          <i data-lucide="x"></i>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
+              รายละเอียด Feedback & จัดการเรื่อง
+            </h3>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+              ตรวจสอบข้อเสนอแนะ แจ้งปัญหา และบันทึกผลการดำเนินงาน
+            </div>
+          </div>
+        </div>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminFeedbackModal')" title="ปิดหน้าต่าง">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
         </button>
       </div>
 
-      <form id="adminFeedbackForm" onsubmit="handleSaveAdminFeedback(event)" style="padding: 24px 28px; overflow-y: auto; background: #ffffff;">
+      <form id="adminFeedbackForm" onsubmit="handleSaveAdminFeedback(event)" class="dg-modal-form" style="padding: 24px; overflow-y: auto; flex: 1; background: #ffffff;">
         <input type="hidden" id="modalFbId" />
 
         <!-- Top Badges -->
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <div id="modalFbTypeBadge"></div>
-            <span style="background: #f1f5f9; color: #475569; padding: 3px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 700;" id="modalFbCategory"></span>
+            <span style="background: #f1f5f9; color: #475569; padding: 3px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 600;" id="modalFbCategory"></span>
           </div>
           <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 600;" id="modalFbDate"></div>
         </div>
 
         <!-- Title -->
         <div style="margin-bottom: 16px;">
-          <div style="font-size: 0.8rem; font-weight: 750; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">หัวข้อเรื่อง</div>
-          <div id="modalFbTitle" style="font-size: 1.15rem; font-weight: 850; color: #0f172a; line-height: 1.4;"></div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">หัวข้อเรื่อง</div>
+          <div id="modalFbTitle" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; line-height: 1.4;"></div>
         </div>
 
         <!-- Meta info grid -->
@@ -6813,7 +7336,12 @@
       const modal = document.getElementById(id);
       if (modal) {
         modal.classList.add('active');
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.style.visibility = 'visible';
+        modal.style.pointerEvents = 'auto';
         document.body.style.overflow = 'hidden';
+        if (window.lucide) lucide.createIcons();
       }
     }
 
@@ -6821,6 +7349,10 @@
       const modal = document.getElementById(id);
       if (modal) {
         modal.classList.remove('active');
+        modal.style.display = 'none';
+        modal.style.opacity = '';
+        modal.style.visibility = '';
+        modal.style.pointerEvents = '';
         document.body.style.overflow = '';
       }
     }
