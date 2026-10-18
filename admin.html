@@ -634,20 +634,38 @@
       border: 1px solid #e2e8f0;
       color: #475569;
       font-size: 0.82rem;
-      font-weight: 700;
+      font-weight: 600;
       padding: 6px 14px;
       border-radius: 9999px;
       cursor: pointer;
       transition: all 0.2s ease;
+      font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif !important;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .admin-filter-pill:hover {
       background: #f1f5f9;
       color: #0f172a;
+      border-color: #cbd5e1;
     }
     .admin-filter-pill.active {
       background: #0f172a;
       border-color: #0f172a;
       color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.18);
+    }
+    .admin-filter-pill .tag-count {
+      font-size: 0.74rem;
+      opacity: 0.75;
+      font-weight: 600;
+      margin-left: 2px;
+    }
+    .admin-filter-pill.active .tag-count {
+      opacity: 0.95;
+      color: rgba(255, 255, 255, 0.9);
     }
     .admin-counter-badge {
       display: inline-flex;
@@ -806,28 +824,112 @@
 
 
 
+    /* ========================================================
+       STANDARDIZED UNIFIED SECTION HEADERS (ALL TABS)
+       ======================================================== */
     .admin-section-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
       flex-wrap: wrap;
       gap: 16px;
       margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--dg-border);
+    }
+
+    .admin-section-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .admin-section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      letter-spacing: 0.02em;
+    }
+
+    .admin-file-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      letter-spacing: 0.01em;
+    }
+
+    .admin-section-title {
+      flex: 1;
+      min-width: 280px;
     }
 
     .admin-section-title h2 {
-      font-family: var(--dg-font-sans);
-      font-size: 1.6rem;
-      font-weight: 850;
-      letter-spacing: -0.025em;
+      font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif !important;
+      font-size: 1.55rem;
+      font-weight: 700 !important;
+      letter-spacing: -0.015em;
       margin: 0 0 6px;
-      color: var(--dg-text-primary);
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .admin-section-title p {
-      font-size: 0.9rem;
-      color: var(--dg-text-secondary);
+      font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif !important;
+      font-size: 0.88rem;
+      color: #64748b;
       margin: 0;
+      line-height: 1.5;
+    }
+
+    .admin-section-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Universal Interactive & Button Typography Enforcement */
+    button,
+    input,
+    select,
+    textarea,
+    .dg-btn,
+    .dg-btn-black,
+    .dg-btn-white,
+    .dg-btn-outline,
+    .dg-btn-sm-outline,
+    .dg-btn-sm-danger,
+    .admin-filter-pill,
+    .admin-nav-item,
+    .admin-tab-btn,
+    .quick-pill-btn,
+    .btn-step-prev,
+    .btn-step-next,
+    .photo-btn-select,
+    .custom-swal-btn,
+    .status-badge {
+      font-family: 'Plus Jakarta Sans', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      -webkit-font-smoothing: antialiased !important;
+      -moz-osx-font-smoothing: grayscale !important;
+      text-rendering: optimizeLegibility !important;
     }
 
     /* Cards & Tables */
@@ -2556,12 +2658,16 @@
     
     <!-- ================= TEAM TAB ================= -->
     <div class="admin-pane" id="tab-team">
-      <div class="dg-admin-header-flex">
-        <div>
-          <h2 class="dg-admin-page-title">จัดการคณะบริหารสารวัตรนักเรียน</h2>
-          <p class="dg-admin-page-desc">อัปเดตข้อมูลและรูปภาพของคณะบริหาร (ข้อมูลฝ่ายจะซิงค์จาก Google Sheets และเซิร์ฟเวอร์อัตโนมัติ)</p>
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="users" style="width: 13px; height: 13px;"></i> EXECUTIVE TEAM • คณะกรรมการ</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: team.html, index.html</span>
+          </div>
+          <h2>ระบบจัดการทำเนียบและคณะกรรมการสารวัตรนักเรียน</h2>
+          <p>ปรับปรุงข้อมูล รายชื่อ ประธาน รองประธาน หัวหน้าฝ่าย และสมาชิกสารวัตรนักเรียนทุกสังกัด</p>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <div class="admin-section-actions">
           <button type="button" class="dg-btn-outline" onclick="loadTeamAdmin()" style="padding: 10px 16px; font-size: 0.85rem;">
             <i data-lucide="refresh-cw"></i> <span>รีเฟรช</span>
           </button>
@@ -2596,10 +2702,14 @@
     <div class="admin-pane active" id="tab-news">
       <div class="admin-section-header">
         <div class="admin-section-title">
-          <h2>จัดการข่าวสารและกิจกรรม (News & Activities)</h2>
-          <p>ข้อมูลที่แก้ไขที่นี่จะแสดงผลบนหน้าแรก (index.html) ในส่วน News & Live Activities ทันที</p>
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="newspaper" style="width: 13px; height: 13px;"></i> NEWS & ACTIVITIES • ข่าวสารและกิจกรรม</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: index.html, activities.html</span>
+          </div>
+          <h2>ระบบจัดการข่าวสารและกิจกรรมภาพถ่าย</h2>
+          <p>เพิ่ม แก้ไข และจัดหมวดหมู่ข่าวสารประชาสัมพันธ์ กิจกรรมสารวัตร และอัลบั้มรูปภาพที่จะนำไปแสดงในหน้าหลักและหน้ากิจกรรม</p>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <div class="admin-section-actions">
           <button type="button" class="dg-btn-outline" onclick="renderAdminNews()" style="padding: 10px 16px; font-size: 0.85rem;">
             <i data-lucide="refresh-cw"></i>
             <span>รีเฟรชข้อมูล</span>
@@ -2614,11 +2724,9 @@
       <!-- Action Toolbar with Search & Category Filter Pills -->
       <div class="admin-action-toolbar">
         <div class="admin-filter-pills" id="adminNewsFilterPills">
-          <button type="button" class="admin-filter-pill active" data-news-tag="all" onclick="filterAdminNewsTag('all')">ทั้งหมด</button>
-          <button type="button" class="admin-filter-pill" data-news-tag="กิจกรรมสารวัตร" onclick="filterAdminNewsTag('กิจกรรมสารวัตร')">กิจกรรมสารวัตร</button>
-          <button type="button" class="admin-filter-pill" data-news-tag="ประชาสัมพันธ์" onclick="filterAdminNewsTag('ประชาสัมพันธ์')">ประชาสัมพันธ์</button>
-          <button type="button" class="admin-filter-pill" data-news-tag="รับสมัคร" onclick="filterAdminNewsTag('รับสมัคร')">รับสมัคร</button>
-          <button type="button" class="admin-filter-pill" data-news-tag="ภาพกิจกรรม" onclick="filterAdminNewsTag('ภาพกิจกรรม')">ภาพกิจกรรม</button>
+          <button type="button" class="admin-filter-pill active" data-news-tag="all" onclick="filterAdminNewsTag('all')">
+            ทั้งหมด <span class="tag-count">(0)</span>
+          </button>
         </div>
         <div style="display: flex; align-items: center; gap: 12px; flex: 1; justify-content: flex-end;">
           <div class="admin-search-box">
@@ -2639,13 +2747,17 @@
          TAB 2: SCHOOL CALENDAR & AGENDA
          ========================================== -->
     <div class="admin-pane" id="tab-calendar">
-      <div class="admin-section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+      <div class="admin-section-header">
         <div class="admin-section-title">
-          <h2>ตารางกิจกรรมโรงเรียน (School Calendar & Agenda)</h2>
-          <p>จัดการกำหนดการ กิจกรรม วันสำคัญ และวาระงานของโรงเรียนและสารวัตรนักเรียน</p>
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="calendar" style="width: 13px; height: 13px;"></i> SCHOOL CALENDAR • ปฏิทินและวาระงาน</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: calendar.html, index.html</span>
+          </div>
+          <h2>ระบบจัดการตารางกิจกรรมและวาระงานโรงเรียน</h2>
+          <p>กำหนดการ วันสำคัญ ภารกิจปฏิบัติงาน และกิจกรรมสำคัญของโรงเรียนและสารวัตรนักเรียน</p>
         </div>
         <div class="admin-section-actions">
-          <button type="button" class="dg-btn-black" onclick="openAddEventModal()" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 99px; font-weight: 700;">
+          <button type="button" class="dg-btn-black" onclick="openAddEventModal()">
             <i data-lucide="calendar-plus"></i>
             <span>+ เพิ่มกิจกรรม</span>
           </button>
@@ -2722,11 +2834,15 @@
     <div class="admin-pane" id="tab-feedbacks">
       <div class="admin-section-header">
         <div class="admin-section-title">
-          <h2>กล่องข้อความ Feedback & เรื่องร้องเรียน (Inbox)</h2>
-          <p>ตรวจสอบสิ่งที่นักเรียนต้องการให้สารวัตรทำ ข้อเสนอแนะกิจกรรม และรายงานการปฏิบัติหน้าที่</p>
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="message-square" style="width: 13px; height: 13px;"></i> FEEDBACK & REPORTS • รับเรื่องและข้อเสนอแนะ</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> รับข้อมูลจาก: index.html (#feedback)</span>
+          </div>
+          <h2>ระบบรับเรื่องร้องเรียนและข้อเสนอแนะนักเรียน (Inbox)</h2>
+          <p>ตรวจสอบสิ่งที่นักเรียนต้องการให้สารวัตรทำ ข้อเสนอแนะเบาะแสความปลอดภัย และบันทึกผลการติดตามการแก้ไขปัญหา</p>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-          <button type="button" class="dg-btn-outline" onclick="renderAdminFeedbacks()" style="padding: 9px 16px; font-size: 0.84rem;">
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-outline" onclick="renderAdminFeedbacks()" style="padding: 10px 16px; font-size: 0.85rem;">
             <i data-lucide="refresh-cw"></i>
             <span>รีเฟรชข้อมูล</span>
           </button>
@@ -2817,8 +2933,12 @@
     <div class="admin-pane" id="tab-settings">
       <div class="admin-section-header">
         <div class="admin-section-title">
-          <h2>ตั้งค่าระบบ & เวลาปฏิบัติหน้าที่ (System Settings)</h2>
-          <p>ปรับแต่งวันเริ่มต้นนับเวลาปฏิบัติหน้าที่ (Duty Uptime) และรหัสความปลอดภัย</p>
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="settings" style="width: 13px; height: 13px;"></i> SYSTEM SETTINGS • ตั้งค่าระบบส่วนกลาง</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> การตั้งค่ากลาง: cloudflare-config.js, js/api-config.js</span>
+          </div>
+          <h2>การตั้งค่าระบบและสภาพแวดล้อมการทำงาน</h2>
+          <p>ตรวจสอบสถานะการเชื่อมต่อ API กำหนดค่าวันเริ่มต้นปฏิบัติหน้าที่ (Duty Uptime) และเปลี่ยนรหัสผ่านผู้ใช้</p>
         </div>
       </div>
 
@@ -2912,9 +3032,12 @@
     <div class="admin-pane" id="tab-backup">
       <div class="admin-section-header">
         <div class="admin-section-title">
-          <h2>สำรองและนำเข้าข้อมูล (Data Backup & Synchronization)</h2>
-          <p>เนื่องจากเว็บดีพลอยบน Vercel แบบ Static Web ข้อมูลจะถูกบันทึกในเบราว์เซอร์ คุณสามารถสำรองข้อมูลเป็นไฟล์
-            JSON เพื่อนำไปเปิดในเครื่องอื่น หรือเก็บไว้เป็นชุดข้อมูลสำรองได้ตลอดเวลา</p>
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="database" style="width: 13px; height: 13px;"></i> DATA MANAGEMENT • สำรองและกู้คืนข้อมูล</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> ฐานข้อมูลรวม: ทุกไฟล์ HTML ในระบบ</span>
+          </div>
+          <h2>ระบบสำรองและกู้คืนข้อมูลส่วนกลาง (Backup & Restore)</h2>
+          <p>ส่งออกไฟล์ฐานข้อมูล JSON สำรอง สำรองข้อมูลฉุกเฉิน และกู้คืนข้อมูลข่าวสารและกิจกรรมกลับสู่ระบบ</p>
         </div>
       </div>
 
@@ -2977,16 +3100,20 @@
     <div class="admin-pane" id="tab-admins">
       <div class="admin-section-header">
         <div class="admin-section-title">
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
-            <h2 style="margin: 0;">จัดการผู้ดูแลระบบ (Admin Accounts Management)</h2>
-            <span class="admin-role-badge super" style="font-size: 0.76rem; padding: 3px 10px;">👑 เฉพาะ Super Admin</span>
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="shield-check" style="width: 13px; height: 13px;"></i> ACCESS CONTROL • บัญชีผู้ดูแลระบบ</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> ควบคุมความปลอดภัย: admin.html</span>
+            <span class="admin-role-badge super" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
           </div>
-          <p>สร้าง กำหนดสิทธิ์ และควบคุมบัญชีผู้ดูแลระบบทั้งหมดในโรงเรียนเดชะปัตตนยานุกูล</p>
+          <h2>ระบบจัดการบัญชีผู้ดูแลระบบ (Admin Accounts)</h2>
+          <p>สร้าง กำหนดสิทธิ์การเข้าถึง เพิ่ม/ระงับบัญชีผู้ดูแล และตั้งรหัสผ่านสำหรับเข้าสู่ระบบส่วนกลาง</p>
         </div>
-        <button type="button" class="dg-btn-black" onclick="document.getElementById('newAdminUsername').focus()">
-          <i data-lucide="user-plus"></i>
-          <span>สร้างผู้ดูแลใหม่</span>
-        </button>
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-black" onclick="document.getElementById('newAdminUsername').focus()">
+            <i data-lucide="user-plus"></i>
+            <span>+ สร้างผู้ดูแลใหม่</span>
+          </button>
+        </div>
       </div>
 
       <!-- Quick Stats Grid -->
@@ -3146,29 +3273,21 @@
          ========================================== -->
     <div class="admin-pane" id="tab-recruitment" style="display: none;">
       <!-- Recruitment Pane Header -->
-      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--dg-border);">
-        <div>
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-            <span class="dg-section-tag" style="margin: 0;">RECRUITMENT 2570 • รับสมัครสารวัตร</span>
-            <span class="schedule-badge-status open" id="adminRecruitStatusPill" style="padding: 2px 10px; font-size: 0.75rem;">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="user-check" style="width: 13px; height: 13px;"></i> RECRUITMENT 2570 • รับสมัครสารวัตรนักเรียน</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: admission.html</span>
+            <span class="schedule-badge-status open" id="adminRecruitStatusPill" style="padding: 2px 10px; font-size: 0.74rem;">
               <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>
               <span id="txtAdminRecruitStatus">เปิดรับสมัคร</span>
             </span>
           </div>
-          <h2 style="font-size: 1.55rem; font-weight: 850; color: #0f172a; margin: 0;">
-            ระบบจัดการรับสมัครสารวัตรนักเรียน 2570
-          </h2>
-          <p style="font-size: 0.88rem; color: #64748b; margin: 4px 0 0;">
-            ตรวจสอบรายชื่อผู้สมัคร พิจารณาผลการคัดเลือก กำหนดเกณฑ์ และจัดการโควตาสังกัด
-          </p>
+          <h2>ระบบจัดการรับสมัครและคัดเลือกสารวัตรนักเรียน 2570</h2>
+          <p>ตรวจสอบรายชื่อผู้สมัคร พิจารณาผลการคัดเลือก รายงานสถิติ และกำหนดคุณสมบัติการรับสมัคร</p>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <button type="button" class="btn-step-prev" id="btnToggleRecruitmentOpen" style="padding: 8px 16px; font-size: 0.85rem;">
-            <i data-lucide="power" style="width: 15px; height: 15px;"></i>
-            <span id="txtBtnToggleRecruit">สลับสถานะเปิด/ปิด</span>
-          </button>
-
+        <div class="admin-section-actions">
           <div style="display: flex; gap: 6px;">
             <button type="button" class="photo-btn-select" id="btnExportRecruitXlsx" style="padding: 8px 16px; font-size: 0.85rem; background: #ecfdf5; border-color: #a7f3d0; color: #065f46;">
               <i data-lucide="sheet" style="width: 15px; height: 15px;"></i>
@@ -6234,11 +6353,70 @@
       adminNewsTagFilter = tag || 'all';
       const pills = document.querySelectorAll('#adminNewsFilterPills .admin-filter-pill');
       pills.forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-news-tag') === adminNewsTagFilter);
+        const pillTag = btn.getAttribute('data-news-tag') || '';
+        const isMatch = (adminNewsTagFilter === 'all' && pillTag === 'all') || 
+                        (adminNewsTagFilter !== 'all' && pillTag.toLowerCase() === adminNewsTagFilter.toLowerCase());
+        btn.classList.toggle('active', isMatch);
       });
       renderAdminNewsListFiltered();
     }
     window.filterAdminNewsTag = filterAdminNewsTag;
+
+    function renderAdminNewsFilterPills() {
+      const container = document.getElementById('adminNewsFilterPills');
+      if (!container) return;
+
+      const tagCounts = {};
+      const totalCount = adminNewsCache.length;
+
+      adminNewsCache.forEach(item => {
+        const rawTag = (item.tag || '').trim();
+        if (!rawTag) return;
+        const parts = rawTag.split(/[,/]/).map(p => p.trim()).filter(Boolean);
+        if (parts.length === 0 && rawTag) parts.push(rawTag);
+        parts.forEach(t => {
+          tagCounts[t] = (tagCounts[t] || 0) + 1;
+        });
+      });
+
+      if (adminNewsTagFilter !== 'all') {
+        const exists = Object.keys(tagCounts).some(t => t.toLowerCase() === adminNewsTagFilter.toLowerCase());
+        if (!exists) adminNewsTagFilter = 'all';
+      }
+
+      let pillsHtml = `
+        <button type="button" class="admin-filter-pill ${adminNewsTagFilter === 'all' ? 'active' : ''}" data-news-tag="all" onclick="filterAdminNewsTag('all')">
+          ทั้งหมด <span class="tag-count">(${totalCount})</span>
+        </button>
+      `;
+
+      const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a] || a.localeCompare(b, 'th'));
+
+      if (sortedTags.length === 0) {
+        const defaults = ['พิธีการสำคัญ', 'จิตอาสา', 'ความปลอดภัย', 'กิจกรรมโรงเรียน', 'ประชาสัมพันธ์'];
+        defaults.forEach(t => {
+          const isActive = adminNewsTagFilter.toLowerCase() === t.toLowerCase();
+          pillsHtml += `
+            <button type="button" class="admin-filter-pill ${isActive ? 'active' : ''}" data-news-tag="${escapeHtml(t)}" onclick="filterAdminNewsTag('${escapeHtml(t)}')">
+              ${escapeHtml(t)} <span class="tag-count">(0)</span>
+            </button>
+          `;
+        });
+      } else {
+        sortedTags.forEach(t => {
+          const count = tagCounts[t];
+          const isActive = adminNewsTagFilter.toLowerCase() === t.toLowerCase();
+          pillsHtml += `
+            <button type="button" class="admin-filter-pill ${isActive ? 'active' : ''}" data-news-tag="${escapeHtml(t)}" onclick="filterAdminNewsTag('${escapeHtml(t)}')">
+              ${escapeHtml(t)} <span class="tag-count">(${count})</span>
+            </button>
+          `;
+        });
+      }
+
+      container.innerHTML = pillsHtml;
+    }
+    window.renderAdminNewsFilterPills = renderAdminNewsFilterPills;
 
     function handleAdminNewsSearch(val) {
       adminNewsSearchTerm = (val || '').trim().toLowerCase();
@@ -6259,6 +6437,7 @@
         // Sort chronologically descending: latest activity date comes first
         adminNewsCache.sort((a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a));
 
+        renderAdminNewsFilterPills();
         renderAdminNewsListFiltered();
       } catch (err) {
         console.error('renderAdminNews error:', err);
@@ -6275,9 +6454,10 @@
       let filtered = adminNewsCache.slice();
 
       if (adminNewsTagFilter && adminNewsTagFilter !== 'all') {
+        const targetTag = adminNewsTagFilter.toLowerCase();
         filtered = filtered.filter(item => {
-          const tag = (item.tag || '').trim();
-          return tag.toLowerCase() === adminNewsTagFilter.toLowerCase() || tag.includes(adminNewsTagFilter);
+          const tag = (item.tag || '').trim().toLowerCase();
+          return tag === targetTag || tag.includes(targetTag);
         });
       }
 
