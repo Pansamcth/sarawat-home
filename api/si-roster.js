@@ -3,8 +3,8 @@ const path = require('path');
 
 const DEFAULT_TITLE = 'ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)';
 const DEFAULT_DESC = 'SI-ROSTER ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก ช่วยให้การจัดเวร การประสานงาน และการบริหารกำลังพลเป็นระบบ สะดวก และมีประสิทธิภาพยิ่งขึ้น';
-const DEFAULT_IMAGE = 'https://sarawatdc.site/assets/images/si-roster-cover.jpg';
-const DEFAULT_CANONICAL = 'https://sarawatdc.site/si-roster';
+const DEFAULT_IMAGE = 'https://www.sarawatdc.site/assets/images/si-roster-cover.jpg';
+const DEFAULT_CANONICAL = 'https://www.sarawatdc.site/si-roster';
 
 function stripMarkdown(text) {
   if (!text) return '';
@@ -38,6 +38,33 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function formatThaiDate(dateStr, endDateStr) {
+  if (!dateStr) return '';
+  const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+  try {
+    const p1 = dateStr.split('-');
+    if (p1.length === 3) {
+      const d1 = parseInt(p1[2], 10);
+      const m1 = months[parseInt(p1[1], 10) - 1];
+      const y1 = parseInt(p1[0], 10) + 543;
+      if (endDateStr && endDateStr !== dateStr) {
+        const p2 = endDateStr.split('-');
+        if (p2.length === 3) {
+          const d2 = parseInt(p2[2], 10);
+          const m2 = months[parseInt(p2[1], 10) - 1];
+          const y2 = parseInt(p2[0], 10) + 543;
+          if (p1[0] === p2[0] && p1[1] === p2[1]) {
+            return `${d1} - ${d2} ${m1} ${y1}`;
+          }
+          return `${d1} ${m1} - ${d2} ${m2} ${y2}`;
+        }
+      }
+      return `${d1} ${m1} ${y1}`;
+    }
+  } catch (e) {}
+  return dateStr;
 }
 
 module.exports = async function handler(req, res) {
@@ -77,19 +104,26 @@ module.exports = async function handler(req, res) {
     }
 
     const cleanTarget = targetId.toLowerCase();
-    const found = activities.find(a =>
-      (a.id && String(a.id).trim().toLowerCase() === cleanTarget) ||
-      (a.sheetName && String(a.sheetName).trim().toLowerCase() === cleanTarget) ||
-      (a.title && String(a.title).trim().toLowerCase() === cleanTarget) ||
-      (a.title && String(a.title).toLowerCase().includes(cleanTarget))
-    );
+    const cleanTargetNoPrefix = cleanTarget.replace(/^act_/, '');
+    const found = activities.find(a => {
+      const aId = (a.id ? String(a.id) : '').trim().toLowerCase();
+      const aSheet = (a.sheetName ? String(a.sheetName) : '').trim().toLowerCase();
+      const aSheetNoPrefix = aSheet.replace(/^act_/, '');
+      const aTitle = (a.title ? String(a.title) : '').trim().toLowerCase();
+
+      return (
+        (aId && (aId === cleanTarget || aId.replace(/^act_/, '') === cleanTargetNoPrefix)) ||
+        (aSheet && (aSheet === cleanTarget || aSheetNoPrefix === cleanTargetNoPrefix)) ||
+        (aTitle && (aTitle === cleanTarget || aTitle.includes(cleanTarget)))
+      );
+    });
 
     if (found) {
       const modalTitle = found.title || targetId;
       const fullTitle = `${modalTitle} | ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER)`;
       const modalDesc = stripMarkdown(found.description) || DEFAULT_DESC;
-      const bannerImage = 'https://sarawatdc.site/assets/images/si-roster-cover.jpg';
-      const canonicalUrl = `https://sarawatdc.site/si-roster?id=${encodeURIComponent(found.sheetName || found.id || targetId)}`;
+      const bannerImage = DEFAULT_IMAGE;
+      const canonicalUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(found.sheetName || found.id || targetId)}`;
 
       // Replace Title
       html = html.replace(/<title\b[^>]*>.*?<\/title>/i, `<title id="pageTitle">${escapeHtml(fullTitle)}</title>`);
@@ -101,6 +135,7 @@ module.exports = async function handler(req, res) {
       html = html.replace(/(<meta\s+property=["']og:title["'][^>]*content=["']).*?(["'])/i, `$1${escapeHtml(modalTitle)}$2`);
       html = html.replace(/(<meta\s+property=["']og:description["'][^>]*content=["']).*?(["'])/i, `$1${escapeHtml(modalDesc)}$2`);
       html = html.replace(/(<meta\s+property=["']og:image["'][^>]*content=["']).*?(["'])/i, `$1${bannerImage}$2`);
+      html = html.replace(/(<meta\s+property=["']og:image:secure_url["'][^>]*content=["']).*?(["'])/i, `$1${bannerImage}$2`);
       html = html.replace(/(<meta\s+property=["']og:url["'][^>]*content=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
 
       // Replace Twitter Tags
@@ -112,8 +147,18 @@ module.exports = async function handler(req, res) {
       // Replace Canonical
       html = html.replace(/(<link\s+rel=["']canonical["'][^>]*href=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
 
-      // Pre-render modal title and description in DOM
+      // Pre-render modal title in DOM
       html = html.replace(/(<h2[^>]*id=["']modalTitle["'][^>]*>)([\s\S]*?)(<\/h2>)/i, `$1${escapeHtml(modalTitle)}$3`);
+
+      // Pre-render Hero Banner in DOM
+      const dateText = formatThaiDate(found.date, found.endDateStr);
+      html = html.replace(/id=["']rosterHeaderBannerWrap["']\s+style=["']display:\s*none;/i, 'id="rosterHeaderBannerWrap" style="display: block;');
+      html = html.replace(/(<h2[^>]*id=["']rosterBannerHeading["'][^>]*>)([\s\S]*?)(<\/h2>)/i, `$1${escapeHtml(modalTitle)}$3`);
+      html = html.replace(/(<p[^>]*id=["']rosterBannerDesc["'][^>]*>)([\s\S]*?)(<\/p>)/i, `$1${escapeHtml(modalDesc)}$3`);
+      if (dateText) {
+        html = html.replace(/(<span[^>]*id=["']rosterBannerDateText["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1${escapeHtml(dateText)}$3`);
+      }
+      html = html.replace(/(<span[^>]*id=["']rosterBreadcrumbCurrent["'][^>]*>)([\s\S]*?)(<\/span>)/i, `$1${escapeHtml(modalTitle)}$3`);
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
