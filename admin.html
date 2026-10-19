@@ -7,6 +7,24 @@
   <title>ระบบจัดการข้อมูล (Admin) | สารวัตรนักเรียน</title>
   <meta name="robots" content="noindex, nofollow" />
 
+  <script>
+    (function() {
+      try {
+        if (window.location.protocol === 'file:') return;
+        var h = window.location.hostname || '';
+        var p = window.location.pathname || '';
+        var isAdminSubdomain = /^admin\./i.test(h);
+
+        // เมื่อเข้าผ่านซับโดเมน admin ให้ปรับ URL บน address bar ให้คลีนสวยงามเป็น /
+        if (isAdminSubdomain && window.history && window.history.replaceState) {
+          if (p.endsWith('/admin.html') || p === '/admin' || p === '/admin/') {
+            window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
+
   <!-- Google Fonts: Plus Jakarta Sans + Outfit + Kanit -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

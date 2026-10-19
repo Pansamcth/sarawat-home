@@ -10,6 +10,11 @@
         var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
         if (!isLocal && /^admissions?\./i.test(h)) {
           window.location.replace('/admission' + window.location.search + window.location.hash);
+          return;
+        }
+        if (!isLocal && /^admin\./i.test(h)) {
+          window.location.replace('/admin' + window.location.search + window.location.hash);
+          return;
         }
       } catch(e) {}
     })();
