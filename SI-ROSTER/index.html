@@ -15,6 +15,31 @@
           return;
         }
 
+        // เมื่อเปิดใช้งานผ่านซับโดเมน roster.sarawatdc.site:
+        if (!isLocal && !isVercel && /^rosters?\./i.test(h)) {
+          // ทดสอบว่าเว็บหลัก (www.sarawatdc.site) ออนไลน์แล้วหรือไม่
+          var pingImg = new Image();
+          pingImg.onload = function() {
+            // เมื่อเว็บหลักเปิดใช้งาน ให้เปลี่ยนเส้นทางไปยัง www.sarawatdc.site/si-roster อัตโนมัติทันที
+            var search = window.location.search || '';
+            var hash = window.location.hash || '';
+            window.location.replace('https://www.sarawatdc.site/si-roster' + search + hash);
+          };
+          pingImg.onerror = function() {
+            // เว็บหลักยังไม่เปิด (DNS ถูกถอดออก) ทำงานบน roster.sarawatdc.site ตามปกติ
+          };
+          pingImg.src = 'https://www.sarawatdc.site/assets/icons/sarawat-logo.png?_t=' + new Date().getTime();
+
+          // ปรับ URL บน address bar ของซับโดเมน roster ให้เป็น / สะอาดตา
+          if (window.history && window.history.replaceState) {
+            var p = window.location.pathname;
+            if (p === '/si-roster' || p === '/SI-ROSTER' || p.endsWith('/index.html')) {
+              window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
+            }
+          }
+          return;
+        }
+
         if (window.history && window.history.replaceState) {
           var p = window.location.pathname;
           if (p.includes('/SI-ROSTER') || p.includes('/roster') || p.endsWith('/index.html')) {
@@ -7872,6 +7897,22 @@
 
       if (window.lucide) {
         lucide.createIcons();
+      }
+
+      if (/^rosters?\./i.test(window.location.hostname)) {
+        try {
+          const mainSiteUrl = 'https://www.sarawatdc.site';
+          const navBrand = document.querySelector('.dg-brand');
+          if (navBrand) navBrand.href = mainSiteUrl;
+          document.querySelectorAll('#dgNavLinks a, .dg-nav-actions a').forEach(a => {
+            const href = a.getAttribute('href');
+            if (href === '/') a.href = mainSiteUrl;
+            else if (href === '/#contact') a.href = mainSiteUrl + '#contact';
+            else if (href === '/activities.html' || href === '/activities') a.href = mainSiteUrl + '/activities';
+            else if (href === '/calendar.html' || href === '/calendar') a.href = mainSiteUrl + '/calendar';
+            else if (href === '/team.html' || href === '/team') a.href = mainSiteUrl + '/team';
+          });
+        } catch (e) {}
       }
     });
   </script>

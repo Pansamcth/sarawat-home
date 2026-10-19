@@ -16,6 +16,10 @@
           window.location.replace('/admin' + window.location.search + window.location.hash);
           return;
         }
+        if (!isLocal && /^rosters?\./i.test(h)) {
+          window.location.replace('/si-roster' + window.location.search + window.location.hash);
+          return;
+        }
       } catch(e) {}
     })();
   </script>

@@ -13,6 +13,15 @@
           window.location.replace('https://www.sarawatdc.site/si-roster/privacy-policy' + window.location.search + window.location.hash);
           return;
         }
+        if (!isLocal && !isVercel && /^rosters?\./i.test(h)) {
+          var pingImg = new Image();
+          pingImg.onload = function() {
+            window.location.replace('https://www.sarawatdc.site/si-roster/privacy-policy' + window.location.search + window.location.hash);
+          };
+          pingImg.onerror = function() {};
+          pingImg.src = 'https://www.sarawatdc.site/assets/icons/sarawat-logo.png?_t=' + new Date().getTime();
+          return;
+        }
       } catch(e) {}
     })();
   </script>

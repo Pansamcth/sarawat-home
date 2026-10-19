@@ -67,8 +67,38 @@ function formatThaiDate(dateStr, endDateStr) {
   return dateStr;
 }
 
+const dns = require('dns');
+let mainSiteCache = { isOnline: false, checkedAt: 0 };
+function isMainSiteOnline() {
+  return new Promise((resolve) => {
+    const now = Date.now();
+    if (now - mainSiteCache.checkedAt < 10000) {
+      return resolve(mainSiteCache.isOnline);
+    }
+    dns.lookup('www.sarawatdc.site', (err, addr) => {
+      mainSiteCache.isOnline = !err && !!addr;
+      mainSiteCache.checkedAt = now;
+      resolve(mainSiteCache.isOnline);
+    });
+  });
+}
+
 module.exports = async function handler(req, res) {
   try {
+    const host = (req.headers['x-forwarded-host'] || req.headers.host || '').toLowerCase();
+    if (/^rosters?\./i.test(host)) {
+      const online = await isMainSiteOnline();
+      if (online) {
+        let reqUrl = req.url || '/si-roster';
+        if (!reqUrl.startsWith('/si-roster')) {
+          reqUrl = '/si-roster' + (reqUrl === '/' ? '' : reqUrl);
+        }
+        res.setHeader('Location', 'https://www.sarawatdc.site' + reqUrl);
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        return res.status(307).end();
+      }
+    }
+
     const filePath = path.join(process.cwd(), 'SI-ROSTER', 'index.html');
     let html = fs.readFileSync(filePath, 'utf8');
 

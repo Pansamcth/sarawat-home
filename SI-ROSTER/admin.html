@@ -28,6 +28,24 @@
           return;
         }
 
+        // เมื่อเปิดใช้งานผ่านซับโดเมน roster.sarawatdc.site:
+        if (!isLocal && !isVercel && /^rosters?\./i.test(h)) {
+          var pingImg = new Image();
+          pingImg.onload = function() {
+            window.location.replace('https://www.sarawatdc.site/si-roster/admin' + window.location.search + window.location.hash);
+          };
+          pingImg.onerror = function() {};
+          pingImg.src = 'https://www.sarawatdc.site/assets/icons/sarawat-logo.png?_t=' + new Date().getTime();
+
+          if (window.history && window.history.replaceState) {
+            var p = window.location.pathname;
+            if (p === '/si-roster/admin' || p.endsWith('/admin.html')) {
+              window.history.replaceState(null, '', '/admin' + window.location.search + window.location.hash);
+            }
+          }
+          return;
+        }
+
         if (window.history && window.history.replaceState) {
           var p = window.location.pathname;
           if (p.includes('/SI-ROSTER') || p.includes('/roster') || p.endsWith('/admin.html')) {
