@@ -8213,6 +8213,10 @@
           if (main) main.classList.add('sidebar-collapsed');
           if (sidebar) sidebar.classList.add('sidebar-collapsed');
         }
+
+        const isVercel = window.location.hostname.endsWith('.vercel.app');
+        const mainUrl = isVercel ? '/' : 'https://www.sarawatdc.site/';
+        document.querySelectorAll('a[href="index.html"]').forEach(a => a.href = mainUrl);
       } catch (e) {}
 
       if (window.lucide) lucide.createIcons();

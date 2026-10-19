@@ -12,10 +12,12 @@
         var h = window.location.hostname;
         var p = window.location.pathname;
         var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isVercel = h.endsWith('.vercel.app');
         var isAdmissionsSubdomain = /^admissions?\./i.test(h);
 
-        // กฎหลัก: หน้า admission.html อนุญาตให้เข้าถึงผ่าน admission.sarawatdc.site เท่านั้น
-        if (!isLocal && !isAdmissionsSubdomain) {
+        // หากเปิดผ่านโดเมนหลักจริง sarawatdc.site ให้ส่งต่อไปยัง admission.sarawatdc.site
+        // แต่ถ้าเปิดผ่าน vercel.app หรือ localhost ให้ทำงานบนโดเมนเดิมได้ตามปกติ (ไม่เด้งข้ามระบบ)
+        if (!isLocal && !isVercel && !isAdmissionsSubdomain) {
           window.location.replace('https://admission.sarawatdc.site' + window.location.search + window.location.hash);
           return;
         }
@@ -3447,17 +3449,23 @@
         console.warn('Auto correction check error:', e);
       }
 
-      // When hosted on admission.sarawatdc.site subdomain, ensure navigation links point back to the main site
+      // When hosted on admission.sarawatdc.site subdomain, ensure navigation links point strictly to the main site (not vercel.app)
       if (/^admissions?\./i.test(window.location.hostname)) {
         try {
-          const mainSiteUrl = 'https://sarawat-home.vercel.app';
+          const mainSiteUrl = 'https://www.sarawatdc.site';
           const navBrand = document.querySelector('.dg-brand');
           if (navBrand) navBrand.href = mainSiteUrl;
 
           const links = document.querySelectorAll('#dgNavLinks a, .dg-act-breadcrumb a, .btn-step-prev, .dg-footer-nav-list a, .dg-nav-actions a');
           links.forEach(a => {
             const href = a.getAttribute('href');
-            if (!href || href.startsWith('http') || href.startsWith('javascript:')) return;
+            if (!href || href.startsWith('javascript:')) return;
+            if (href.startsWith('http')) {
+              if (href.includes('vercel.app')) {
+                a.href = href.replace(/https?:\/\/[^/]+\.vercel\.app/i, 'https://www.sarawatdc.site');
+              }
+              return;
+            }
             if (href.startsWith('#')) return;
             if (href.startsWith('index.html')) {
               const target = href.replace(/^index\.html/, '');
@@ -3468,6 +3476,8 @@
               a.href = mainSiteUrl + '/calendar';
             } else if (href === 'team.html' || href === '/team') {
               a.href = mainSiteUrl + '/team';
+            } else if (href.startsWith('/')) {
+              a.href = mainSiteUrl + href;
             }
           });
         } catch (linkErr) {

@@ -111,7 +111,7 @@
       "has": [
         {
           "type": "host",
-          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+          "value": "^(www\\.)?sarawatdc\\.site$"
         }
       ],
       "destination": "https://admission.sarawatdc.site",
@@ -122,7 +122,7 @@
       "has": [
         {
           "type": "host",
-          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+          "value": "^(www\\.)?sarawatdc\\.site$"
         }
       ],
       "destination": "https://admission.sarawatdc.site",
@@ -133,7 +133,7 @@
       "has": [
         {
           "type": "host",
-          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+          "value": "^(www\\.)?sarawatdc\\.site$"
         }
       ],
       "destination": "https://admission.sarawatdc.site",
@@ -144,7 +144,7 @@
       "has": [
         {
           "type": "host",
-          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+          "value": "^(www\\.)?sarawatdc\\.site$"
         }
       ],
       "destination": "https://admission.sarawatdc.site",
@@ -155,7 +155,7 @@
       "has": [
         {
           "type": "host",
-          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+          "value": "^(www\\.)?sarawatdc\\.site$"
         }
       ],
       "destination": "https://admission.sarawatdc.site",
@@ -166,7 +166,7 @@
       "has": [
         {
           "type": "host",
-          "value": "^(www\\.)?sarawatdc\\.site$|^sarawat-home\\.vercel\\.app$"
+          "value": "^(www\\.)?sarawatdc\\.site$"
         }
       ],
       "destination": "https://admission.sarawatdc.site",
@@ -403,6 +403,34 @@
     {
       "source": "/admissions",
       "destination": "/api/admissions"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/admin",
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/api/admin"
     },
     {
       "source": "/si-roster/admin",
