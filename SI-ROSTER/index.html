@@ -3419,6 +3419,373 @@
       align-items: center;
       gap: 8px;
     }
+
+    /* ========================================================
+       MY DUTY STATUS SEARCH MODAL & TABS (Diego Modern Design)
+       ======================================================== */
+    #statusSearchModal .modal-content {
+      max-width: 620px;
+      width: 95%;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25);
+    }
+
+    .duty-profile-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(59, 130, 246, 0.06) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    body.dark-mode .duty-profile-summary,
+    [data-theme="dark"] .duty-profile-summary {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(59, 130, 246, 0.1) 100%);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .duty-profile-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .duty-avatar-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      flex-shrink: 0;
+    }
+
+    .duty-profile-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .duty-profile-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .duty-total-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #ffffff;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #059669;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    body.dark-mode .duty-total-badge,
+    [data-theme="dark"] .duty-total-badge {
+      background: #1e293b;
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    /* Tabs Segmented Control */
+    .duty-nav-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 14px;
+      gap: 6px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-light);
+    }
+
+    body.dark-mode .duty-nav-tabs,
+    [data-theme="dark"] .duty-nav-tabs {
+      background: #0f172a;
+    }
+
+    .duty-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .duty-tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .duty-tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    body.dark-mode .duty-tab-btn.active,
+    [data-theme="dark"] .duty-tab-btn.active {
+      background: #1e293b;
+      color: #f8fafc;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .duty-tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .duty-tab-count.upcoming {
+      background: rgba(16, 185, 129, 0.15);
+      color: #059669;
+    }
+
+    .duty-tab-btn.active .duty-tab-count.upcoming {
+      background: #10b981;
+      color: #ffffff;
+    }
+
+    .duty-tab-count.past {
+      background: rgba(100, 116, 139, 0.15);
+      color: #475569;
+    }
+
+    .duty-tab-btn.active .duty-tab-count.past {
+      background: #64748b;
+      color: #ffffff;
+    }
+
+    /* Modern Duty Card */
+    .duty-result-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .duty-result-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .duty-result-card.ongoing {
+      border-left: 5px solid #10b981;
+    }
+
+    .duty-result-card.upcoming {
+      border-left: 5px solid #3b82f6;
+    }
+
+    .duty-result-card.past {
+      border-left: 5px solid #94a3b8;
+    }
+
+    .duty-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .duty-card-title {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .duty-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .duty-status-badge.ongoing {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .duty-status-badge.upcoming {
+      background: rgba(59, 130, 246, 0.12);
+      color: #2563eb;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .duty-status-badge.past {
+      background: rgba(100, 116, 139, 0.12);
+      color: #475569;
+      border: 1px solid rgba(100, 116, 139, 0.2);
+    }
+
+    .duty-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .duty-card-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .duty-chips-container {
+      background: var(--bg-body, #f8fafc);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    body.dark-mode .duty-chips-container,
+    [data-theme="dark"] .duty-chips-container {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    .duty-chips-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .duty-chips-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .duty-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      background: #ffffff;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #047857;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    body.dark-mode .duty-badge-pill,
+    [data-theme="dark"] .duty-badge-pill {
+      background: #1e293b;
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .duty-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 14px;
+      margin-top: 6px;
+    }
+
+    .btn-duty-view-detail {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-duty-view-detail:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .status-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+      animation: dutyPulseDot 1.8s infinite;
+    }
+
+    @keyframes dutyPulseDot {
+      0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
   </style>
 
   <script>
@@ -3711,30 +4078,38 @@
   </div>
 
   <!-- Status Search Modal -->
-  <div class="modal-overlay" id="statusSearchModal">
-    <div class="modal-content small">
+  <div class="modal-overlay" id="statusSearchModal" onclick="if(event.target === this) closeModal('statusSearchModal')">
+    <div class="modal-content">
       <div class="modal-header">
         <div class="close-modal" onclick="closeModal('statusSearchModal')"><i class="fa-solid fa-xmark"></i></div>
-        <h2 class="modal-title"><i class="fa-solid fa-magnifying-glass"
-            style="margin-right:10px; color:var(--accent);"></i> เช็คหน้าที่ของฉัน</h2>
+        <h2 class="modal-title"><i class="fa-solid fa-user-check"
+            style="margin-right:10px; color:#10b981;"></i> เช็คหน้าที่ของฉัน</h2>
       </div>
-      <div class="modal-body">
-        <div class="form-group" style="position: relative;">
-          <label>ค้นหาชื่อ-นามสกุลของคุณ</label>
-          <input type="text" id="statusSearchInput" class="input-control" placeholder="พิมพ์ชื่อเพื่อค้นหา..."
-            autocomplete="off" oninput="filterStatusStudents()" onfocus="filterStatusStudents()"
-            onkeydown="if(event.key === 'Enter') { event.preventDefault(); checkMyStatus(); }"
-            onblur="setTimeout(() => { let d = document.getElementById('statusAutocomplete'); if(d) d.style.display='none'; }, 350)">
+      <div class="modal-body" style="padding: 24px; max-height: 78vh; overflow-y: auto;">
+        <div class="form-group" style="position: relative; margin-bottom: 14px;">
+          <label style="font-weight: 700; font-size: 0.92rem; color: var(--text-main); margin-bottom: 8px; display: block;">
+            ค้นหาชื่อ-นามสกุลของคุณ
+          </label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.95rem;"></i>
+            <input type="text" id="statusSearchInput" class="input-control" placeholder="พิมพ์ชื่อ-นามสกุล เพื่อค้นหาหน้าที่..."
+              style="padding-left: 44px; height: 48px; border-radius: 12px; font-size: 0.95rem;"
+              autocomplete="off" oninput="filterStatusStudents()" onfocus="filterStatusStudents()"
+              onkeydown="if(event.key === 'Enter') { event.preventDefault(); checkMyStatus(); }"
+              onblur="setTimeout(() => { let d = document.getElementById('statusAutocomplete'); if(d) d.style.display='none'; }, 350)">
+          </div>
           <div id="statusAutocomplete" class="autocomplete-dropdown" style="display:none; width: 100%;"></div>
         </div>
-        <button class="btn btn-block btn-primary" id="btnStatusSearch" onclick="checkMyStatus()"><i
-            class="fa-solid fa-search"></i> ตรวจสอบสถานะ</button>
+        <button class="btn btn-block btn-primary" id="btnStatusSearch" onclick="checkMyStatus()"
+          style="height: 46px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fa-solid fa-search"></i> <span>ตรวจสอบหน้าที่</span>
+        </button>
         <button class="btn btn-block btn-outline" id="btnAdminViewAllStatus" onclick="viewAllStatusAdmin()"
           style="display:none; margin-top: 10px; border-color: var(--accent); color: var(--accent);"><i
             class="fa-solid fa-users-viewfinder"></i> ดูรายชื่อทั้งหมด (Admin)</button>
 
-        <div id="statusResultContainer" style="margin-top: 20px; display: none;">
-          <!-- Results injected here -->
+        <div id="statusResultContainer" style="margin-top: 22px; display: none;">
+          <!-- Results injected dynamically -->
         </div>
       </div>
     </div>
@@ -4285,6 +4660,9 @@
         dropdown.style.display = 'none';
         dropdown.innerHTML = '';
       }
+      setTimeout(() => {
+        checkMyStatus();
+      }, 50);
     }
 
     function filterStatusStudents() {
@@ -4353,6 +4731,88 @@
       dropdown.style.display = 'block';
     }
 
+    function renderDutySkeleton() {
+      return `
+        <div style="padding: 4px 0;" aria-hidden="true">
+          <!-- Profile Summary Skeleton -->
+          <div class="duty-profile-summary" style="opacity: 0.9; margin-bottom: 16px;">
+            <div class="duty-profile-left">
+              <div class="skeleton" style="width: 44px; height: 44px; border-radius: 14px;"></div>
+              <div>
+                <div class="skeleton" style="width: 140px; height: 18px; margin-bottom: 6px;"></div>
+                <div class="skeleton" style="width: 90px; height: 13px;"></div>
+              </div>
+            </div>
+            <div class="skeleton" style="width: 95px; height: 28px; border-radius: 9999px;"></div>
+          </div>
+
+          <!-- Tabs Skeleton -->
+          <div style="display: flex; gap: 8px; margin-bottom: 18px;">
+            <div class="skeleton" style="flex: 1; height: 42px; border-radius: 10px;"></div>
+            <div class="skeleton" style="flex: 1; height: 42px; border-radius: 10px;"></div>
+          </div>
+
+          <!-- Card Skeleton 1 -->
+          <div class="duty-result-card" style="pointer-events: none; margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <div class="skeleton" style="width: 55%; height: 20px;"></div>
+              <div class="skeleton" style="width: 95px; height: 24px; border-radius: 9999px;"></div>
+            </div>
+            <div class="skeleton" style="width: 40%; height: 14px; margin-bottom: 14px;"></div>
+            <div class="skeleton" style="width: 100%; height: 48px; border-radius: 12px; margin-bottom: 12px;"></div>
+            <div style="display: flex; justify-content: flex-end;">
+              <div class="skeleton" style="width: 135px; height: 32px; border-radius: 9999px;"></div>
+            </div>
+          </div>
+
+          <!-- Card Skeleton 2 -->
+          <div class="duty-result-card" style="pointer-events: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <div class="skeleton" style="width: 45%; height: 20px;"></div>
+              <div class="skeleton" style="width: 90px; height: 24px; border-radius: 9999px;"></div>
+            </div>
+            <div class="skeleton" style="width: 35%; height: 14px; margin-bottom: 14px;"></div>
+            <div class="skeleton" style="width: 100%; height: 48px; border-radius: 12px;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    window.switchDutyTab = function (tabName) {
+      const tabUpcoming = document.getElementById('btnDutyTabUpcoming');
+      const tabPast = document.getElementById('btnDutyTabPast');
+      const panelUpcoming = document.getElementById('dutyPanelUpcoming');
+      const panelPast = document.getElementById('dutyPanelPast');
+
+      if (tabName === 'upcoming') {
+        if (tabUpcoming) tabUpcoming.classList.add('active');
+        if (tabPast) tabPast.classList.remove('active');
+        if (panelUpcoming) panelUpcoming.style.display = 'block';
+        if (panelPast) panelPast.style.display = 'none';
+      } else {
+        if (tabPast) tabPast.classList.add('active');
+        if (tabUpcoming) tabUpcoming.classList.remove('active');
+        if (panelPast) panelPast.style.display = 'block';
+        if (panelUpcoming) panelUpcoming.style.display = 'none';
+      }
+    };
+
+    window.viewDutyActivityDetail = function (sheetOrTitle) {
+      if (!sheetOrTitle) return;
+      const act = (currentActivities || []).find(a =>
+        (a.sheetName && a.sheetName === sheetOrTitle) ||
+        (a.title && (a.title.trim() === sheetOrTitle.trim() || a.title.includes(sheetOrTitle) || sheetOrTitle.includes(a.title)))
+      );
+      if (act && typeof openModal === 'function') {
+        closeModal('statusSearchModal');
+        setTimeout(() => {
+          openModal(act, true);
+        }, 180);
+      } else {
+        showToast('กำลังโหลดข้อมูลกิจกรรม กรุณาลองใหม่อีกครั้ง', 'info');
+      }
+    };
+
     function checkMyStatus() {
       const inputEl = document.getElementById('statusSearchInput');
       let name = inputEl ? inputEl.value.trim() : '';
@@ -4374,101 +4834,237 @@
 
       btn.disabled = true;
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังตรวจสอบ...';
-      container.style.display = 'none';
+
+      // Render modern Skeleton while loading
+      container.innerHTML = renderDutySkeleton();
+      container.style.display = 'block';
+
+      function handleResults(results) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-search"></i> <span>ตรวจสอบหน้าที่</span>';
+
+        if (!results || results.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state" style="padding: 40px 20px; text-align: center;">
+              <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(100, 116, 139, 0.1); color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; margin-bottom: 14px;">
+                <i class="fa-solid fa-clipboard-question"></i>
+              </div>
+              <h4 style="font-weight: 800; font-size: 1.05rem; color: var(--text-main); margin-bottom: 6px;">ไม่พบประวัติการลงชื่อปฏิบัติหน้าที่</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); max-width: 360px; margin: 0 auto; line-height: 1.5;">
+                ไม่พบหน้าที่สำหรับ "<strong>${escapeHtml(name)}</strong>" ในระบบ ลองตรวจสอบการสะกดชื่อหรือติดต่อฝ่ายสารวัตรนักเรียน
+              </p>
+            </div>
+          `;
+          return;
+        }
+
+        // Group results by activityTitle + date
+        const grouped = {};
+        results.forEach(r => {
+          const key = r.activityTitle + '|' + r.date;
+          if (!grouped[key]) {
+            grouped[key] = {
+              title: r.activityTitle,
+              date: r.date,
+              endDateStr: r.endDateStr,
+              duties: [],
+              sheetName: r.sheetName || ''
+            };
+          }
+          grouped[key].duties.push(r.duty);
+        });
+
+        // Current date in YYYY-MM-DD
+        const today = new Date();
+        const offset = today.getTimezoneOffset() * 60000;
+        const nowStr = (new Date(today.getTime() - offset)).toISOString().split('T')[0];
+
+        const upcomingList = [];
+        const pastList = [];
+
+        for (let key in grouped) {
+          const act = grouped[key];
+          let endDate = act.endDateStr && act.endDateStr !== act.date ? act.endDateStr : act.date;
+
+          // Cross-reference with currentActivities for metadata
+          const matched = (currentActivities || []).find(a =>
+            (a.sheetName && act.sheetName && a.sheetName === act.sheetName) ||
+            (a.title && (a.title.trim() === act.title.trim() || a.title.trim().includes(act.title.trim()) || act.title.trim().includes(a.title.trim())))
+          );
+          if (matched) {
+            act.matchedSheet = matched.sheetName || '';
+            act.location = matched.location || '';
+          }
+
+          if (nowStr > endDate) {
+            act.category = 'past';
+            pastList.push(act);
+          } else if (nowStr >= act.date && nowStr <= endDate) {
+            act.category = 'ongoing';
+            upcomingList.push(act);
+          } else {
+            act.category = 'upcoming';
+            upcomingList.push(act);
+          }
+        }
+
+        // Sort upcoming: chronological ascending (ongoing first, then closest upcoming)
+        upcomingList.sort((a, b) => {
+          if (a.category === 'ongoing' && b.category !== 'ongoing') return -1;
+          if (b.category === 'ongoing' && a.category !== 'ongoing') return 1;
+          return (a.date || '').localeCompare(b.date || '');
+        });
+
+        // Sort past: chronological descending (most recent past first)
+        pastList.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+        const totalDuties = results.length;
+        const studentDisplayName = escapeHtml(name);
+
+        function renderCard(act) {
+          let dateDisplay = formatThaiDateRange(act.date, act.endDateStr);
+          let statusBadge = '';
+          let cardClass = '';
+
+          if (act.category === 'ongoing') {
+            cardClass = 'ongoing';
+            statusBadge = `<span class="duty-status-badge ongoing"><span class="status-pulse-dot"></span> กำลังดำเนินกิจกรรมอยู่</span>`;
+          } else if (act.category === 'upcoming') {
+            cardClass = 'upcoming';
+            statusBadge = `<span class="duty-status-badge upcoming"><i class="fa-regular fa-clock"></i> กำลังจะมาถึง</span>`;
+          } else {
+            cardClass = 'past';
+            statusBadge = `<span class="duty-status-badge past"><i class="fa-solid fa-check"></i> เสร็จสิ้นแล้ว</span>`;
+          }
+
+          const hasDetailLink = Boolean(act.matchedSheet || act.title);
+
+          return `
+            <div class="duty-result-card ${cardClass}">
+              <div class="duty-card-header">
+                <div class="duty-card-title">${escapeHtml(act.title)}</div>
+                ${statusBadge}
+              </div>
+
+              <div class="duty-card-meta">
+                <div class="duty-card-meta-item">
+                  <i class="fa-regular fa-calendar" style="color: var(--primary);"></i>
+                  <span>${dateDisplay}</span>
+                </div>
+                ${act.location ? `
+                  <div class="duty-card-meta-item">
+                    <i class="fa-solid fa-location-dot" style="color: #ef4444;"></i>
+                    <span>${escapeHtml(act.location)}</span>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="duty-chips-container">
+                <div class="duty-chips-label">
+                  <i class="fa-solid fa-user-tag" style="color: #10b981;"></i>
+                  <span>หน้าที่ความรับผิดชอบ (${act.duties.length})</span>
+                </div>
+                <div class="duty-chips-list">
+                  ${act.duties.map(duty => `
+                    <span class="duty-badge-pill">
+                      <i class="fa-solid fa-clipboard-check"></i>
+                      <span>${escapeHtml(duty)}</span>
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+
+              ${hasDetailLink ? `
+                <div class="duty-card-footer">
+                  <button type="button" class="btn-duty-view-detail" onclick="viewDutyActivityDetail('${escapeHtml(act.matchedSheet || act.title)}')">
+                    <span>ดูรายละเอียดกิจกรรม</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.78rem;"></i>
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
+
+        const defaultTab = upcomingList.length > 0 ? 'upcoming' : 'past';
+
+        let html = `
+          <!-- Profile Header Summary -->
+          <div class="duty-profile-summary">
+            <div class="duty-profile-left">
+              <div class="duty-avatar-icon">
+                <i class="fa-solid fa-user-check"></i>
+              </div>
+              <div>
+                <div class="duty-profile-name">${studentDisplayName}</div>
+                <div class="duty-profile-sub">ตารางการปฏิบัติหน้าที่สารวัตรนักเรียน</div>
+              </div>
+            </div>
+            <div class="duty-total-badge">
+              <i class="fa-solid fa-list-check"></i>
+              <span>รวม ${totalDuties} หน้าที่</span>
+            </div>
+          </div>
+
+          <!-- Tabs (Segmented Control) -->
+          <div class="duty-nav-tabs" role="tablist">
+            <button type="button" class="duty-tab-btn ${defaultTab === 'upcoming' ? 'active' : ''}" id="btnDutyTabUpcoming" onclick="switchDutyTab('upcoming')" role="tab">
+              <i class="fa-regular fa-calendar-check"></i>
+              <span>กำลังจะมาถึง</span>
+              <span class="duty-tab-count upcoming">${upcomingList.length}</span>
+            </button>
+            <button type="button" class="duty-tab-btn ${defaultTab === 'past' ? 'active' : ''}" id="btnDutyTabPast" onclick="switchDutyTab('past')" role="tab">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <span>ผ่านไปแล้ว</span>
+              <span class="duty-tab-count past">${pastList.length}</span>
+            </button>
+          </div>
+
+          <!-- Panel 1: Upcoming -->
+          <div id="dutyPanelUpcoming" style="display: ${defaultTab === 'upcoming' ? 'block' : 'none'};">
+            ${upcomingList.length > 0 ? upcomingList.map(renderCard).join('') : `
+              <div class="empty-state" style="padding: 36px 16px; text-align: center; background: var(--card-bg); border: 1px dashed var(--border-light); border-radius: 16px;">
+                <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); color: #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 10px;">
+                  <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <h4 style="font-weight: 700; font-size: 0.98rem; color: var(--text-main); margin-bottom: 4px;">ไม่มีหน้าที่ที่กำลังจะมาถึง</h4>
+                <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">คุณไม่มีภารกิจหรือเวรปฏิบัติหน้าที่ในช่วงเวลานี้</p>
+              </div>
+            `}
+          </div>
+
+          <!-- Panel 2: Past -->
+          <div id="dutyPanelPast" style="display: ${defaultTab === 'past' ? 'block' : 'none'};">
+            ${pastList.length > 0 ? pastList.map(renderCard).join('') : `
+              <div class="empty-state" style="padding: 36px 16px; text-align: center; background: var(--card-bg); border: 1px dashed var(--border-light); border-radius: 16px;">
+                <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(100, 116, 139, 0.1); color: var(--text-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 10px;">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <h4 style="font-weight: 700; font-size: 0.98rem; color: var(--text-main); margin-bottom: 4px;">ยังไม่มีประวัติที่ผ่านมา</h4>
+                <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">ยังไม่มีกิจกรรมหรือหน้าที่ในอดีตที่บันทึกไว้</p>
+              </div>
+            `}
+          </div>
+        `;
+
+        container.innerHTML = html;
+        container.style.display = 'block';
+      }
 
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
-          .withSuccessHandler(function (results) {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-search"></i> ตรวจสอบสถานะ';
-
-            if (results.length === 0) {
-              container.innerHTML = '<div class="empty-state" style="padding: 20px;"><i class="fa-solid fa-circle-info" style="font-size: 2rem;"></i><p>ไม่พบสถานะการลงชื่อปฏิบัติหน้าที่ของคุณในระบบ</p></div>';
-            } else {
-              let html = '<h3 style="margin-bottom: 15px; font-size: 1.15rem; font-weight: 700; color: var(--primary); text-align: center;">สถานะการปฏิบัติหน้าที่ของคุณ</h3>';
-
-              // Group results by activityTitle + date
-              const grouped = {};
-              results.forEach(r => {
-                const key = r.activityTitle + '|' + r.date;
-                if (!grouped[key]) {
-                  grouped[key] = {
-                    title: r.activityTitle,
-                    date: r.date,
-                    endDateStr: r.endDateStr,
-                    duties: []
-                  };
-                }
-                grouped[key].duties.push(r.duty);
-              });
-
-              // Current date string in YYYY-MM-DD format (local time approximation)
-              const today = new Date();
-              const offset = today.getTimezoneOffset() * 60000;
-              const nowStr = (new Date(today.getTime() - offset)).toISOString().split('T')[0];
-
-              for (let key in grouped) {
-                const act = grouped[key];
-                let dateDisplay = formatThaiDateRange(act.date, act.endDateStr);
-                let endDate = act.endDateStr && act.endDateStr !== act.date ? act.endDateStr : act.date;
-
-                let statusBadge = '';
-                let borderStyle = '';
-
-                if (nowStr > endDate) {
-                  // Past
-                  borderStyle = '2px solid var(--danger)';
-                  statusBadge = '<span style="background: rgba(244, 63, 94, 0.1); color: var(--danger); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;"><i class="fa-solid fa-clock-rotate-left"></i> กิจกรรมผ่านไปแล้ว</span>';
-                } else if (nowStr >= act.date && nowStr <= endDate) {
-                  // Ongoing (Today or within date range)
-                  borderStyle = '2px solid var(--success)';
-                  statusBadge = '<span style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;"><i class="fa-solid fa-spinner fa-spin-pulse"></i> กำลังดำเนินกิจกรรมอยู่</span>';
-                } else {
-                  // Upcoming (nowStr < act.date)
-                  borderStyle = '2px solid var(--success)';
-                  statusBadge = '<span style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;"><i class="fa-solid fa-clock"></i> กำลังจะมาถึง</span>';
-                }
-
-                html += `
-                  <div style="background: var(--card-bg); border: ${borderStyle}; border-radius: 16px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
-                      <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-main);">${act.title}</div>
-                      ${statusBadge}
-                    </div>
-                    <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; display: flex; align-items: center; gap: 6px;">
-                      <i class="fa-regular fa-calendar" style="color: var(--primary);"></i> ${dateDisplay}
-                    </div>
-                    <div style="background: rgba(15, 23, 42, 0.02); border-radius: 10px; padding: 12px 15px;">
-                      <div style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 10px; font-weight: 600;">หน้าที่ความรับผิดชอบ:</div>
-                      <div style="display: flex; flex-direction: column; gap: 10px;">
-                        ${act.duties.map(duty => `
-                          <div style="display: flex; align-items: flex-start; gap: 10px;">
-                            <i class="fa-solid fa-thumbtack" style="color: var(--accent); margin-top: 3px; font-size: 0.9rem;"></i>
-                            <span style="color: var(--primary); font-weight: 600; font-size: 1rem;">${duty}</span>
-                          </div>
-                        `).join('')}
-                      </div>
-                    </div>
-                  </div>
-                `;
-              }
-              container.innerHTML = html;
-            }
-            container.style.display = 'block';
-          })
+          .withSuccessHandler(handleResults)
           .withFailureHandler(function (error) {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-search"></i> ตรวจสอบสถานะ';
+            btn.innerHTML = '<i class="fa-solid fa-search"></i> <span>ตรวจสอบหน้าที่</span>';
             showToast('ตรวจสอบไม่สำเร็จ: ' + error.message, 'error');
+            container.style.display = 'none';
           })
           .checkStudentStatus(name);
       } else {
         setTimeout(() => {
-          btn.disabled = false;
-          btn.innerHTML = '<i class="fa-solid fa-search"></i> ตรวจสอบสถานะ';
-          container.innerHTML = '<div class="empty-state" style="padding: 20px;"><i class="fa-solid fa-circle-info" style="font-size: 2rem;"></i><p>Mock Data: ไม่พบสถานะ</p></div>';
-          container.style.display = 'block';
-        }, 1000);
+          handleResults([]);
+        }, 600);
       }
     }
 
