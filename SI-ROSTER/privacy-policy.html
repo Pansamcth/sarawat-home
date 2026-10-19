@@ -23,19 +23,11 @@
   <meta property="og:site_name" content="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
   <meta property="og:locale" content="th_TH" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://www.sarawatdc.site/si-roster/privacy-policy" />
-  <meta name="twitter:title" content="นโยบายความเป็นส่วนตัว (Privacy Policy) | SI-ROSTER" />
-  <meta name="twitter:description"
-    content="มาตรฐานการคุ้มครอง การจัดเก็บ และสิทธิของเจ้าของข้อมูลส่วนบุคคลในระบบลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
-  <meta name="twitter:image" content="https://www.sarawatdc.site/assets/images/si-roster-cover.jpg" />
-
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Kanit, Outfit, Plus Jakarta Sans, Source Code Pro -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&family=Sarabun:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&family=Source+Code+Pro:wght@600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -44,31 +36,6 @@
   <link rel="stylesheet" href="/css/diego.css" onerror="this.onerror=null;this.href='../css/diego.css';" />
 
   <style>
-    :root {
-      --legal-primary: #0a0a0c;
-      --legal-bg: #f8fafc;
-      --legal-card-bg: #ffffff;
-      --legal-border: rgba(0, 0, 0, 0.08);
-      --legal-border-subtle: rgba(0, 0, 0, 0.04);
-      --legal-text: #18181b;
-      --legal-muted: #71717a;
-      --legal-accent: #10b981;
-      --legal-accent-soft: rgba(16, 185, 129, 0.08);
-      --legal-warning-bg: #fffbeb;
-      --legal-warning-border: #fef3c7;
-      --legal-warning-text: #92400e;
-      --legal-danger-bg: #fef2f2;
-      --legal-danger-border: #fee2e2;
-      --legal-danger-text: #991b1b;
-      --legal-success-bg: #f0fdf4;
-      --legal-success-border: #dcfce7;
-      --legal-success-text: #166534;
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --radius-pill: 9999px;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -76,8 +43,12 @@
     }
 
     body {
-      background-color: var(--legal-bg);
-      color: var(--legal-text);
+      background-color: #f8fafc;
+      background-image:
+        radial-gradient(circle at 10% 90%, rgba(0, 0, 0, 0.02) 0%, transparent 60%),
+        radial-gradient(circle at 90% 10%, rgba(0, 0, 0, 0.02) 0%, transparent 60%);
+      background-attachment: fixed;
+      color: #0a0a0c;
       font-family: 'Kanit', sans-serif;
       line-height: 1.7;
       letter-spacing: 0.1px;
@@ -88,391 +59,239 @@
       flex-direction: column;
     }
 
-    /* Top Brand & Navbar */
+    /* Brand Logo Text */
     .dg-brand-text {
       font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;
       font-weight: 900 !important;
       letter-spacing: -0.03em !important;
     }
 
-    /* Page Container */
-    .legal-page-wrapper {
-      flex: 1;
-      width: 100%;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 32px 24px 64px 24px;
-    }
-
-    /* Breadcrumb */
-    .legal-breadcrumb {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.88rem;
-      color: var(--legal-muted);
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      padding: 8px 18px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--legal-border);
-      margin-bottom: 28px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-    }
-
-    .legal-breadcrumb a {
-      color: var(--legal-muted);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.2s;
-    }
-
-    .legal-breadcrumb a:hover {
-      color: var(--legal-primary);
-    }
-
-    .legal-breadcrumb .sep {
-      color: rgba(0, 0, 0, 0.25);
-      font-weight: 300;
-    }
-
-    .legal-breadcrumb .current {
-      color: var(--legal-primary);
-      font-weight: 700;
-    }
-
-    /* Header & Hero Section */
-    .legal-hero {
-      background: #ffffff;
-      border: 1px solid var(--legal-border);
-      border-radius: var(--radius-lg);
-      padding: 40px;
-      margin-bottom: 32px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .legal-hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #10b981 0%, #2563eb 50%, #0a0a0c 100%);
-    }
-
-    .legal-badge-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.76rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      background: rgba(16, 185, 129, 0.08);
-      border-radius: var(--radius-pill);
-      color: #047857;
-      margin-bottom: 16px;
-    }
-
-    .legal-main-title {
-      font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 850;
-      color: var(--legal-primary);
-      line-height: 1.25;
-      margin-bottom: 12px;
+    /* Main Large Title: Keep bold agency display font for English, Kanit SemiBold for Thai */
+    .dg-act-main-title .dg-title-en {
+      font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif !important;
+      font-weight: 850 !important;
+      display: inline-block;
       letter-spacing: -0.02em;
     }
 
-    .legal-main-subtitle {
-      font-size: 1.05rem;
-      color: #52525b;
-      max-width: 820px;
-      line-height: 1.65;
-      margin-bottom: 24px;
+    .dg-act-main-title .dg-title-th {
+      font-family: 'Kanit', sans-serif !important;
+      font-weight: 600 !important;
+      font-size: 0.82em !important;
+      color: var(--dg-text-primary, #0a0a0c) !important;
+      display: inline-block;
+      margin-top: 4px;
     }
 
-    /* Meta Badges Grid */
-    .legal-meta-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      padding-top: 18px;
-      border-top: 1px dashed rgba(0, 0, 0, 0.08);
-    }
-
-    .legal-meta-item {
+    /* Navigation Bar: Single Action Button on right */
+    .dg-nav-actions a.dg-btn-black {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.85rem;
-      color: #4b5563;
-      background: #f8fafc;
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .legal-meta-item.verified {
-      background: #f0fdf4;
-      border-color: #bbf7d0;
-      color: #166534;
+      padding: 8px 18px;
+      background: #0a0a0c;
+      color: #ffffff;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-size: 0.88rem;
       font-weight: 600;
+      transition: all 0.2s ease;
     }
 
-    .legal-meta-item i {
-      font-size: 0.82rem;
+    .dg-nav-actions a.dg-btn-black:hover {
+      background: #27272a;
+      transform: translateY(-1px);
     }
 
-    /* Tab Switcher (Terms vs Privacy) */
-    .legal-tabs-wrapper {
+    /* Controls Bar & Policy Tabs */
+    .policy-controls-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      margin-bottom: 28px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
     }
 
-    .legal-segmented-nav {
+    .policy-segmented-tabs {
       display: inline-flex;
-      background: #ffffff;
+      background: #f1f5f9;
       padding: 5px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--legal-border);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      border-radius: 9999px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
       gap: 6px;
     }
 
-    .legal-tab-btn {
+    .policy-tab-item {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 22px;
-      border-radius: var(--radius-pill);
-      font-size: 0.92rem;
+      padding: 9px 20px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
       font-weight: 700;
       color: #52525b;
       background: transparent;
-      border: none;
-      cursor: pointer;
       text-decoration: none;
       transition: all 0.2s ease;
     }
 
-    .legal-tab-btn:hover {
-      color: var(--legal-primary);
-      background: rgba(0, 0, 0, 0.03);
+    .policy-tab-item:hover {
+      color: #0a0a0c;
     }
 
-    .legal-tab-btn.active {
+    .policy-tab-item.active {
       background: #0a0a0c;
       color: #ffffff;
       box-shadow: 0 4px 12px rgba(10, 10, 12, 0.15);
     }
 
-    .legal-actions-group {
+    .policy-utility-actions {
       display: inline-flex;
       align-items: center;
       gap: 10px;
     }
 
-    .btn-legal-action {
+    .policy-action-btn {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       padding: 9px 16px;
       background: #ffffff;
-      border: 1px solid var(--legal-border);
-      border-radius: var(--radius-pill);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 9999px;
       font-size: 0.85rem;
       font-weight: 600;
       color: #3f3f46;
       cursor: pointer;
-      text-decoration: none;
       transition: all 0.2s ease;
     }
 
-    .btn-legal-action:hover {
+    .policy-action-btn:hover {
       background: #f4f4f5;
       color: #0a0a0c;
-      border-color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(0, 0, 0, 0.2);
     }
 
-    /* Content Layout */
-    .legal-layout-grid {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 32px;
-      align-items: start;
+    /* Main Content Section */
+    .policy-content-section {
+      padding: 40px 0 60px;
+      flex: 1;
     }
 
-    /* Sticky Sidebar Navigation */
-    .legal-sidebar {
-      position: sticky;
-      top: 90px;
+    .policy-document-card {
       background: #ffffff;
-      border: 1px solid var(--legal-border);
-      border-radius: var(--radius-md);
-      padding: 24px 18px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 28px;
+      padding: 52px 48px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
     }
 
-    .legal-toc-title {
-      font-size: 0.8rem;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      text-transform: uppercase;
-      font-weight: 800;
-      color: var(--legal-muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 14px;
-      padding-left: 10px;
-    }
-
-    .legal-toc-nav {
+    /* Metadata Bar */
+    .policy-meta-banner {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
-      max-height: calc(100vh - 220px);
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .legal-toc-link {
-      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
       align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      color: #52525b;
-      font-size: 0.88rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      line-height: 1.4;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      margin-bottom: 36px;
     }
 
-    .legal-toc-link:hover {
-      color: var(--legal-primary);
-      background: #f4f4f5;
-    }
-
-    .legal-toc-link.active {
-      color: #0a0a0c;
-      background: #f1f5f9;
-      font-weight: 700;
-      border-left: 3px solid #10b981;
-    }
-
-    .legal-toc-num {
+    .policy-meta-pill {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      width: 20px;
-      height: 20px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      background: rgba(0, 0, 0, 0.05);
-      border-radius: 50%;
+      gap: 8px;
+      font-size: 0.85rem;
       color: #4b5563;
-      flex-shrink: 0;
     }
 
-    /* Main Content Body */
-    .legal-main-content {
-      background: #ffffff;
-      border: 1px solid var(--legal-border);
-      border-radius: var(--radius-lg);
-      padding: 48px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    .policy-meta-pill.verified {
+      color: #166534;
+      font-weight: 600;
+      background: #dcfce7;
+      padding: 4px 12px;
+      border-radius: 9999px;
     }
 
-    .legal-section-block {
-      margin-bottom: 48px;
+    /* Document Typography */
+    .policy-lead-box {
+      font-size: 1.08rem;
+      color: #1f2937;
+      line-height: 1.8;
+      padding: 24px 28px;
+      background: #f8fafc;
+      border-left: 4px solid #10b981;
+      border-radius: 0 16px 16px 0;
+      margin-bottom: 40px;
+    }
+
+    .policy-section {
+      margin-bottom: 44px;
       scroll-margin-top: 100px;
     }
 
-    .legal-section-block:last-child {
-      margin-bottom: 0;
-    }
-
-    .legal-section-header {
+    .policy-sec-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       margin-bottom: 18px;
       padding-bottom: 12px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     }
 
-    .legal-sec-badge {
+    .policy-sec-num {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       background: #10b981;
       color: #ffffff;
-      font-size: 0.85rem;
       font-weight: 800;
-      border-radius: 10px;
+      border-radius: 12px;
+      font-size: 0.95rem;
       flex-shrink: 0;
     }
 
-    .legal-sec-title {
+    .policy-sec-title {
       font-size: 1.35rem;
       font-weight: 700;
-      color: var(--legal-primary);
+      color: #0a0a0c;
       letter-spacing: -0.01em;
     }
 
-    .legal-p {
+    .policy-subheading {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 22px 0 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .policy-text {
       font-size: 1.02rem;
       color: #374151;
       line-height: 1.8;
       margin-bottom: 16px;
     }
 
-    .legal-lead {
-      font-size: 1.12rem;
-      color: #1f2937;
-      font-weight: 500;
-      line-height: 1.8;
-      padding: 20px 24px;
-      background: #f8fafc;
-      border-left: 4px solid #10b981;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      margin-bottom: 32px;
-    }
-
-    .legal-subheading {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #111827;
-      margin: 24px 0 12px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .legal-list {
+    .policy-list {
       list-style-type: none;
       padding: 0;
-      margin-bottom: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
-    .legal-list li {
+    .policy-list li {
       display: flex;
       align-items: flex-start;
       gap: 12px;
@@ -481,7 +300,7 @@
       line-height: 1.7;
     }
 
-    .legal-list-bullet {
+    .policy-list-dot {
       display: inline-block;
       width: 6px;
       height: 6px;
@@ -491,73 +310,56 @@
       flex-shrink: 0;
     }
 
-    .legal-list strong {
-      color: #111827;
-      font-weight: 700;
-    }
-
-    /* Callout & Alert Boxes */
-    .legal-callout {
-      padding: 20px 24px;
-      border-radius: var(--radius-md);
+    .policy-callout {
+      padding: 22px 26px;
+      border-radius: 18px;
       margin: 24px 0;
       display: flex;
       gap: 16px;
       align-items: flex-start;
     }
 
-    .legal-callout.info {
-      background: rgba(16, 185, 129, 0.08);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      color: #065f46;
+    .policy-callout.info {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
     }
 
-    .legal-callout.warning {
-      background: var(--legal-warning-bg);
-      border: 1px solid var(--legal-warning-border);
-      color: var(--legal-warning-text);
-    }
-
-    .legal-callout-icon {
-      font-size: 1.25rem;
+    .policy-callout-icon {
+      font-size: 1.35rem;
       margin-top: 2px;
       flex-shrink: 0;
     }
 
-    .legal-callout-body {
-      font-size: 0.96rem;
-      line-height: 1.65;
-    }
-
-    .legal-callout-title {
+    .policy-callout-title {
       font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 4px;
+      font-size: 1.02rem;
+      margin-bottom: 6px;
     }
 
     /* Rights Cards Grid */
-    .legal-rights-grid {
+    .policy-rights-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
       margin-top: 20px;
     }
 
-    .legal-right-card {
+    .policy-right-card {
       background: #f8fafc;
       border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: var(--radius-md);
-      padding: 20px;
+      border-radius: 18px;
+      padding: 22px;
       transition: all 0.2s ease;
     }
 
-    .legal-right-card:hover {
+    .policy-right-card:hover {
       background: #ffffff;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
       border-color: rgba(16, 185, 129, 0.3);
     }
 
-    .legal-right-title {
+    .policy-right-title {
       font-weight: 700;
       font-size: 0.98rem;
       color: #0a0a0c;
@@ -567,17 +369,17 @@
       gap: 8px;
     }
 
-    .legal-right-desc {
+    .policy-right-desc {
       font-size: 0.9rem;
       color: #4b5563;
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
-    /* Contact Card */
-    .legal-contact-box {
+    /* Contact Box */
+    .policy-contact-box {
       background: linear-gradient(135deg, #0a0a0c 0%, #1e293b 100%);
       color: #ffffff;
-      border-radius: var(--radius-md);
+      border-radius: 20px;
       padding: 32px;
       margin-top: 24px;
       display: flex;
@@ -585,98 +387,62 @@
       gap: 14px;
     }
 
-    .legal-contact-box a {
+    .policy-contact-box a {
       color: #38bdf8;
       text-decoration: none;
       word-break: break-all;
     }
 
-    .legal-contact-box a:hover {
+    .policy-contact-box a:hover {
       text-decoration: underline;
     }
 
-    /* Responsive Media Queries */
-    @media (max-width: 992px) {
-      .legal-layout-grid {
-        grid-template-columns: 1fr;
+    /* Responsive */
+    @media (max-width: 768px) {
+      .policy-document-card {
+        padding: 32px 20px;
+        border-radius: 20px;
       }
 
-      .legal-sidebar {
-        display: none;
-      }
-
-      .legal-main-content {
-        padding: 32px 24px;
-      }
-
-      .legal-hero {
-        padding: 28px 20px;
-      }
-
-      .legal-main-title {
-        font-size: 1.8rem;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .legal-tabs-wrapper {
+      .policy-controls-bar {
         flex-direction: column;
         align-items: stretch;
       }
 
-      .legal-segmented-nav {
-        width: 100%;
+      .policy-segmented-tabs {
         display: grid;
         grid-template-columns: 1fr 1fr;
         text-align: center;
       }
 
-      .legal-tab-btn {
+      .policy-tab-item {
         justify-content: center;
         padding: 8px 12px;
         font-size: 0.82rem;
       }
 
-      .legal-actions-group {
-        width: 100%;
+      .policy-utility-actions {
         justify-content: space-between;
-      }
-
-      .legal-main-content {
-        padding: 24px 16px;
       }
     }
 
-    /* Print Formatting */
+    /* Print Mode */
     @media print {
       body {
         background: #ffffff !important;
-        color: #000000 !important;
       }
 
       .dg-nav,
-      .legal-tabs-wrapper,
-      .legal-sidebar,
-      .legal-breadcrumb,
+      .policy-controls-bar,
       .site-footer-wrapper,
-      .btn-legal-action {
+      .policy-utility-actions {
         display: none !important;
       }
 
-      .legal-page-wrapper {
-        max-width: 100% !important;
-        padding: 0 !important;
-      }
-
-      .legal-main-content,
-      .legal-hero {
+      .policy-document-card {
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
-      }
-
-      .legal-section-block {
-        page-break-inside: avoid;
       }
     }
   </style>
@@ -684,344 +450,323 @@
 
 <body>
 
-  <!-- Top Navigation Bar -->
+  <!-- ============ NAVIGATION BAR ============ -->
   <nav class="dg-nav" id="dgNav">
     <div class="dg-nav-container">
-      <a href="/" class="dg-brand" aria-label="กลับสู่หน้าหลัก สารวัตรนักเรียน">
-        <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';" alt="ตราโรงเรียนเดชะปัตตนยานุกูล"
+      <a href="/si-roster" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
+        <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';" alt="โรงเรียนเดชะปัตตนยานุกูล"
           style="width: 36px; height: 36px; object-fit: contain;" />
-        <span style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
-        <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';" alt="ตราสารวัตรนักเรียน"
+        <span
+          style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
+        <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';" alt="สารวัตรนักเรียน"
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span class="dg-brand-text">SARAWAT</span>
       </a>
 
-      <div class="dg-nav-links" id="dgNavLinks">
-        <a href="/">หน้าแรก</a>
-        <a href="/activities.html">ข่าวและกิจกรรม</a>
-        <a href="/calendar.html">ปฏิทินงาน</a>
-        <a href="/team.html">บุคลากร</a>
-        <a href="/si-roster" style="color: var(--legal-primary); font-weight: 700;">ระบบลงหน้าที่ (SI-ROSTER)</a>
-      </div>
-
+      <!-- Right Side: Single Button "กลับไปหน้า SI-ROSTER" as requested -->
       <div class="dg-nav-actions">
         <a href="/si-roster" class="dg-btn-black">
-          <i data-lucide="calendar-check" style="width: 16px; height: 16px;"></i>
-          <span>เข้าสู่ระบบลงหน้าที่</span>
+          <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+          <span>กลับไปหน้า SI-ROSTER</span>
         </a>
       </div>
     </div>
   </nav>
 
-  <div class="legal-page-wrapper">
+  <!-- ============ PAGE HEADER (Exactly like SI-ROSTER) ============ -->
+  <header class="dg-act-page-header">
+    <div class="dg-container">
+      <!-- Breadcrumb: หน้าแรก / ระบบลงหน้าที่ (SI-ROSTER) / Privacy Policy -->
+      <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">
+          <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+          <span>หน้าแรก</span>
+        </a>
+        <span class="sep">/</span>
+        <a href="/si-roster">
+          <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
+        </a>
+        <span class="sep">/</span>
+        <span style="color: var(--dg-black, #0a0a0c); font-weight: 750;" id="rosterBreadcrumbCurrent">Privacy Policy</span>
+      </nav>
 
-    <!-- Breadcrumb: หน้าแรก / ระบบลงหน้าที่ (SI-ROSTER) / Privacy Policy -->
-    <nav class="legal-breadcrumb" aria-label="Breadcrumb">
-      <a href="/">
-        <i data-lucide="home" style="width: 14px; height: 14px;"></i>
-        <span>หน้าแรก</span>
-      </a>
-      <span class="sep">/</span>
-      <a href="/si-roster">
-        <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
-        <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
-      </a>
-      <span class="sep">/</span>
-      <span class="current" id="breadcrumbCurrent">Privacy Policy</span>
-    </nav>
-
-    <!-- Header Hero Banner -->
-    <header class="legal-hero">
-      <span class="legal-badge-tag">
-        <i data-lucide="shield-check" style="width: 13px; height: 13px; color: #10b981;"></i>
-        Data Protection & Privacy Notice
-      </span>
-      <h1 class="legal-main-title">
-        นโยบายความเป็นส่วนตัว<br>
-        <span style="font-size: 0.72em; font-weight: 600; color: #64748b;">(Privacy Policy)</span>
-      </h1>
-      <p class="legal-main-subtitle">
-        ระบบลงชื่อปฏิบัติหน้าที่ในกิจกรรมของสารวัตรนักเรียน <strong>(SI-ROSTER)</strong> ให้ความสำคัญเป็นอย่างยิ่งกับการคุ้มครองข้อมูลส่วนบุคคลของผู้ใช้งาน ตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)
-      </p>
-
-      <div class="legal-meta-grid">
-        <div class="legal-meta-item verified">
-          <i class="fa-solid fa-circle-check"></i>
-          <span>สถานะ: ตรวจสอบและมีผลบังคับใช้ (Verified)</span>
-        </div>
-        <div class="legal-meta-item">
-          <i class="fa-solid fa-user-pen"></i>
-          <span>ผู้เขียน: นายรุจิระ วัฒนกิจไพศาล (Rujira Wattanakitpaisal)</span>
-        </div>
-        <div class="legal-meta-item">
-          <i class="fa-regular fa-clock"></i>
-          <span>แก้ไขล่าสุด: 14 ตุลาคม 2569 เวลา 09:52 น.</span>
-        </div>
-        <div class="legal-meta-item">
-          <i class="fa-solid fa-school"></i>
-          <span>โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี</span>
+      <div class="dg-act-title-row">
+        <div>
+          <span class="dg-section-tag" id="rosterSectionTag">DUTY ROSTER • นโยบายการคุ้มครองข้อมูลส่วนบุคคล</span>
+          <h1 class="dg-act-main-title" id="rosterMainTitle">
+            <span class="dg-title-en">SI-ROSTER.</span><br>
+            <span class="dg-title-th">นโยบายความเป็นส่วนตัว (Privacy Policy)</span>
+          </h1>
+          <p class="dg-act-subtitle" id="rosterSubtitle">
+            ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก
+          </p>
         </div>
       </div>
-    </header>
 
-    <!-- Navigation Tabs & Utility Controls -->
-    <div class="legal-tabs-wrapper">
-      <div class="legal-segmented-nav">
-        <a href="/si-roster/terms-of-service" class="legal-tab-btn" id="tabBtnTerms">
-          <i class="fa-solid fa-file-contract"></i>
-          <span>ข้อตกลงการใช้บริการ (Terms of Service)</span>
-        </a>
-        <a href="/si-roster/privacy-policy" class="legal-tab-btn active" id="tabBtnPrivacy">
-          <i class="fa-solid fa-user-shield"></i>
-          <span>นโยบายความเป็นส่วนตัว (Privacy Policy)</span>
-        </a>
-      </div>
+      <!-- Controls & Policy Tabs Bar -->
+      <div class="policy-controls-bar">
+        <div class="policy-segmented-tabs">
+          <a href="/si-roster/terms-of-service" class="policy-tab-item">
+            <i class="fa-solid fa-file-contract"></i>
+            <span>ข้อตกลงการใช้บริการ (TOS)</span>
+          </a>
+          <a href="/si-roster/privacy-policy" class="policy-tab-item active">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>นโยบายความเป็นส่วนตัว (PP)</span>
+          </a>
+        </div>
 
-      <div class="legal-actions-group">
-        <button type="button" class="btn-legal-action" onclick="window.print()">
-          <i class="fa-solid fa-print"></i>
-          <span>พิมพ์เอกสาร / บันทึก PDF</span>
-        </button>
-        <button type="button" class="btn-legal-action" onclick="copyCurrentUrl()">
-          <i class="fa-solid fa-share-nodes"></i>
-          <span>แชร์ลิงก์</span>
-        </button>
+        <div class="policy-utility-actions">
+          <button type="button" class="policy-action-btn" onclick="window.print()">
+            <i class="fa-solid fa-print"></i>
+            <span>พิมพ์ / PDF</span>
+          </button>
+          <button type="button" class="policy-action-btn" onclick="copyCurrentUrl()">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>คัดลอกลิงก์</span>
+          </button>
+        </div>
       </div>
     </div>
+  </header>
 
-    <!-- Main Two-Column Layout -->
-    <div class="legal-layout-grid">
+  <!-- ============ MAIN CONTENT BODY ============ -->
+  <main class="policy-content-section">
+    <div class="dg-container">
+      <div class="policy-document-card">
 
-      <!-- Sticky Table of Contents Sidebar -->
-      <aside class="legal-sidebar" aria-label="สารบัญนโยบาย">
-        <div class="legal-toc-title">สารบัญหัวข้อ</div>
-        <nav class="legal-toc-nav" id="legalTocNav">
-          <a href="#section-1" class="legal-toc-link"><span class="legal-toc-num">1</span><span>ข้อมูลส่วนบุคคลที่เก็บรวบรวม</span></a>
-          <a href="#section-2" class="legal-toc-link"><span class="legal-toc-num">2</span><span>วัตถุประสงค์และฐานกฎหมาย</span></a>
-          <a href="#section-3" class="legal-toc-link"><span class="legal-toc-num">3</span><span>การเก็บรักษาและระยะเวลา</span></a>
-          <a href="#section-4" class="legal-toc-link"><span class="legal-toc-num">4</span><span>การเปิดเผยข้อมูลส่วนบุคคล</span></a>
-          <a href="#section-5" class="legal-toc-link"><span class="legal-toc-num">5</span><span>มาตรการรักษาความปลอดภัย</span></a>
-          <a href="#section-6" class="legal-toc-link"><span class="legal-toc-num">6</span><span>สิทธิ์ของเจ้าของข้อมูล</span></a>
-          <a href="#section-7" class="legal-toc-link"><span class="legal-toc-num">7</span><span>การเปลี่ยนแปลงนโยบาย</span></a>
-          <a href="#section-8" class="legal-toc-link"><span class="legal-toc-num">8</span><span>ช่องทางการติดต่อ</span></a>
-        </nav>
-      </aside>
+        <!-- Metadata Banner -->
+        <div class="policy-meta-banner">
+          <div class="policy-meta-pill verified">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>สถานะ: ตรวจสอบและมีผลบังคับใช้ (Verified)</span>
+          </div>
+          <div class="policy-meta-pill">
+            <i class="fa-solid fa-user-pen"></i>
+            <span>ผู้เขียน: นายรุจิระ วัฒนกิจไพศาล (Rujira Wattanakitpaisal)</span>
+          </div>
+          <div class="policy-meta-pill">
+            <i class="fa-regular fa-clock"></i>
+            <span>แก้ไขล่าสุด: 14 ตุลาคม 2569 เวลา 09:52 น.</span>
+          </div>
+          <div class="policy-meta-pill">
+            <i class="fa-solid fa-school"></i>
+            <span>โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี</span>
+          </div>
+        </div>
 
-      <!-- Main Legal Document Body -->
-      <main class="legal-main-content">
-
-        <!-- Preamble -->
-        <div class="legal-lead">
+        <!-- Preamble Lead Box -->
+        <div class="policy-lead-box">
           ระบบลงชื่อปฏิบัติหน้าที่ในกิจกรรมของสารวัตรนักเรียน (<em>"ระบบ"</em> หรือ <em>"เรา"</em>) ให้ความสำคัญเป็นอย่างยิ่งกับการคุ้มครองข้อมูลส่วนบุคคลของผู้ใช้งาน (นักเรียน คณะกรรมการสารวัตรนักเรียน และบุคลากรที่เกี่ยวข้อง) นโยบายความเป็นส่วนตัวฉบับนี้ถูกจัดทำขึ้นเพื่อให้สอดคล้องกับหลักการคุ้มครองข้อมูลส่วนบุคคล โดยมีจุดประสงค์เพื่ออธิบายอย่างละเอียดถึงวิธีการที่เราเก็บรวบรวม ใช้งาน เปิดเผย และปกป้องข้อมูลของคุณเมื่อคุณเข้าถึงหรือใช้งานระบบของเรา
         </div>
 
         <!-- Section 1 -->
-        <section class="legal-section-block" id="section-1">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">1</span>
-            <h2 class="legal-sec-title">ข้อมูลส่วนบุคคลที่เราเก็บรวบรวม</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">1</span>
+            <h2 class="policy-sec-title">ข้อมูลส่วนบุคคลที่เราเก็บรวบรวม</h2>
           </div>
-          <p class="legal-p">
+          <p class="policy-text">
             เมื่อคุณเข้าใช้งานระบบและทำการลงชื่อปฏิบัติหน้าที่ เราอาจมีความจำเป็นต้องเก็บรวบรวมข้อมูลส่วนบุคคลของคุณ ดังต่อไปนี้:
           </p>
 
-          <h3 class="legal-subheading"><i class="fa-solid fa-id-card" style="color: #10b981;"></i> 1.1 ข้อมูลที่ระบุตัวบุคคล (Personally Identifiable Information - PII)</h3>
-          <ul class="legal-list">
+          <h3 class="policy-subheading"><i class="fa-solid fa-id-card" style="color: #10b981;"></i> 1.1 ข้อมูลที่ระบุตัวบุคคล (Personally Identifiable Information - PII)</h3>
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ข้อมูลพื้นฐาน:</strong> ชื่อ นามสกุล ระดับชั้น ห้องเรียน หรือรหัสประจำตัวนักเรียน (หากมีการเรียกเก็บ) เพื่อใช้ในการระบุตัวตนของคุณอย่างถูกต้อง</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ข้อมูลการติดต่อ:</strong> (หากมีการระบุ) เช่น อีเมล หรือเบอร์โทรศัพท์ เพื่อใช้ในการสื่อสารในกรณีฉุกเฉินหรือแจ้งเตือนที่สำคัญ</div>
             </li>
           </ul>
 
-          <h3 class="legal-subheading"><i class="fa-solid fa-clipboard-check" style="color: #10b981;"></i> 1.2 ข้อมูลการปฏิบัติหน้าที่และการใช้งาน (Usage Data)</h3>
-          <ul class="legal-list">
+          <h3 class="policy-subheading"><i class="fa-solid fa-clipboard-check" style="color: #10b981;"></i> 1.2 ข้อมูลการปฏิบัติหน้าที่และการใช้งาน (Usage Data)</h3>
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ประวัติการลงชื่อ:</strong> ข้อมูลเกี่ยวกับกิจกรรม วัน เวลา สถานที่ และหน้าที่ที่คุณได้เลือกลงชื่อปฏิบัติงาน รวมถึงประวัติการยกเลิกหรือเปลี่ยนแปลงหน้าที่</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ข้อมูลการดำเนินงาน:</strong> สถิติการปฏิบัติหน้าที่ จำนวนครั้งที่เข้าร่วม เพื่อนำไปใช้เป็นข้อมูลประกอบการประเมินหรือสรุปผลกิจกรรมของสารวัตรนักเรียน</div>
             </li>
           </ul>
 
-          <h3 class="legal-subheading"><i class="fa-solid fa-microchip" style="color: #10b981;"></i> 1.3 ข้อมูลทางเทคนิค (Technical Data)</h3>
-          <ul class="legal-list">
+          <h3 class="policy-subheading"><i class="fa-solid fa-microchip" style="color: #10b981;"></i> 1.3 ข้อมูลทางเทคนิค (Technical Data)</h3>
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ข้อมูลระบบและอุปกรณ์:</strong> หมายเลข IP Address, ประเภทของเบราว์เซอร์ (Browser), อุปกรณ์ที่ใช้เข้าถึงระบบ และประวัติการเข้าชม (Log Files) เพื่อประโยชน์ในการวิเคราะห์ปัญหาทางเทคนิคและรักษาความปลอดภัยของระบบ</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>คุกกี้ (Cookies):</strong> ระบบอาจมีการใช้คุกกี้เพื่อจดจำสถานะการเข้าสู่ระบบ (Session) และอำนวยความสะดวกให้คุณไม่ต้องกรอกข้อมูลใหม่ซ้ำๆ เมื่อกลับมาใช้งานระบบอีกครั้ง</div>
             </li>
           </ul>
         </section>
 
         <!-- Section 2 -->
-        <section class="legal-section-block" id="section-2">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">2</span>
-            <h2 class="legal-sec-title">วัตถุประสงค์และฐานทางกฎหมายในการประมวลผลข้อมูล</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">2</span>
+            <h2 class="policy-sec-title">วัตถุประสงค์และฐานทางกฎหมายในการประมวลผลข้อมูล</h2>
           </div>
-          <p class="legal-p">
+          <p class="policy-text">
             เราจะทำการประมวลผลข้อมูลส่วนบุคคลของคุณภายใต้วัตถุประสงค์ที่ชัดเจนและจำกัดเฉพาะที่จำเป็นเท่านั้น ได้แก่:
           </p>
-          <ul class="legal-list">
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>เพื่อการให้บริการและการบริหารจัดการ (Contract/Service Provision):</strong> เพื่อบันทึกข้อมูลการลงชื่อ จัดสรรตารางเวร และแสดงผลรายชื่อผู้ปฏิบัติหน้าที่ในแต่ละกิจกรรมให้เป็นไปอย่างมีระบบและมีประสิทธิภาพ</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>เพื่อความปลอดภัยและผลประโยชน์อันชอบด้วยกฎหมาย (Legitimate Interest):</strong> เพื่อให้ผู้ดูแลระบบ (Admin) หรือครูที่ปรึกษาสามารถตรวจสอบยืนยันตัวตนของผู้ปฏิบัติหน้าที่ ป้องกันการแอบอ้างสวมรอย และรักษาความสงบเรียบร้อยในกิจกรรม</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>เพื่อการติดต่อสื่อสาร:</strong> ส่งการแจ้งเตือนเกี่ยวกับการเปลี่ยนแปลงหน้าที่ ยกเลิกกิจกรรม หรือการสื่อสารข้อมูลอื่นๆ ที่เกี่ยวข้องโดยตรงกับการปฏิบัติหน้าที่</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>เพื่อการปรับปรุงและพัฒนาระบบ:</strong> วิเคราะห์ข้อมูลการใช้งานโดยรวม (ในรูปแบบที่ไม่สามารถระบุตัวตนได้) เพื่อนำไปพัฒนาระบบให้มีความเสถียรและตอบสนองต่อผู้ใช้ได้ดียิ่งขึ้น</div>
             </li>
           </ul>
         </section>
 
         <!-- Section 3 -->
-        <section class="legal-section-block" id="section-3">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">3</span>
-            <h2 class="legal-sec-title">การเก็บรักษาและระยะเวลาในการเก็บข้อมูล</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">3</span>
+            <h2 class="policy-sec-title">การเก็บรักษาและระยะเวลาในการเก็บข้อมูล</h2>
           </div>
-          <ul class="legal-list">
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>สถานที่จัดเก็บ:</strong> ข้อมูลส่วนบุคคลของคุณจะถูกจัดเก็บในฐานข้อมูลของระบบ (เช่น Google Sheets หรือระบบฐานข้อมูลคลาวด์ที่ปลอดภัย) ซึ่งมีการควบคุมการเข้าถึงอย่างเคร่งครัด</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ระยะเวลา:</strong> เราจะเก็บรักษาข้อมูลของคุณไว้ตราบเท่าที่ยังมีความจำเป็นต่อวัตถุประสงค์ในการบริหารจัดการสารวัตรนักเรียน (เช่น เก็บไว้จนสิ้นสุดปีการศึกษา) หรือจนกว่าคุณจะร้องขอให้ลบข้อมูล ทั้งนี้ ข้อมูลสถิติบางส่วนอาจถูกจัดเก็บในรูปแบบที่ไม่สามารถระบุตัวบุคคลได้เพื่อการอ้างอิงในอนาคต</div>
             </li>
           </ul>
         </section>
 
         <!-- Section 4 -->
-        <section class="legal-section-block" id="section-4">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">4</span>
-            <h2 class="legal-sec-title">การเปิดเผยข้อมูลส่วนบุคคล</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">4</span>
+            <h2 class="policy-sec-title">การเปิดเผยข้อมูลส่วนบุคคล</h2>
           </div>
-          <div class="legal-callout info">
-            <i class="fa-solid fa-shield-halved legal-callout-icon"></i>
-            <div class="legal-callout-body">
-              <div class="legal-callout-title">คำมั่นสัญญาด้านความปลอดภัยของข้อมูล</div>
+          <div class="policy-callout info">
+            <i class="fa-solid fa-shield-halved policy-callout-icon"></i>
+            <div>
+              <div class="policy-callout-title">คำมั่นสัญญาด้านความปลอดภัยของข้อมูล</div>
               เราขอยืนยันว่าจะไม่มีการนำข้อมูลส่วนบุคคลของคุณไปจำหน่าย จ่ายแจก หรือเปิดเผยให้แก่บุคคลที่สามเพื่อผลประโยชน์ทางการค้าอย่างเด็ดขาด
             </div>
           </div>
 
-          <p class="legal-p">ข้อมูลของคุณอาจถูกเปิดเผยเฉพาะในกรณีที่จำเป็นอย่างยิ่ง ดังต่อไปนี้:</p>
-          <ul class="legal-list">
+          <p class="policy-text">ข้อมูลของคุณอาจถูกเปิดเผยเฉพาะในกรณีที่จำเป็นอย่างยิ่ง ดังต่อไปนี้:</p>
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ภายในองค์กร:</strong> ผู้ดูแลระบบ (Admin) หัวหน้าสารวัตรนักเรียน และครูที่ปรึกษาที่มีอำนาจหน้าที่เกี่ยวข้อง เพื่อใช้ในการตรวจสอบและบริหารจัดการกิจกรรม</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>หน้าแสดงผลของระบบ:</strong> ชื่อ-นามสกุลของคุณจะปรากฏต่อผู้ใช้งานรายอื่นที่เข้าสู่ระบบ ในฐานะ <em>"ผู้ร่วมปฏิบัติหน้าที่"</em> ในกิจกรรมนั้นๆ เพื่อความโปร่งใสในการจัดสรรเวร</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>ตามข้อกำหนดของกฎหมาย:</strong> หากมีการร้องขอจากหน่วยงานรัฐหรือเจ้าหน้าที่ที่มีอำนาจตามกฎหมาย</div>
             </li>
           </ul>
         </section>
 
         <!-- Section 5 -->
-        <section class="legal-section-block" id="section-5">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">5</span>
-            <h2 class="legal-sec-title">มาตรการรักษาความปลอดภัยของข้อมูล</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">5</span>
+            <h2 class="policy-sec-title">มาตรการรักษาความปลอดภัยของข้อมูล</h2>
           </div>
-          <p class="legal-p">
+          <p class="policy-text">
             เราได้กำหนดมาตรการรักษาความปลอดภัยที่เหมาะสมเพื่อป้องกันข้อมูลของคุณจากการสูญหาย การเข้าถึง การใช้งาน การแก้ไข หรือการเปิดเผยโดยไม่ได้รับอนุญาต ได้แก่:
           </p>
-          <ul class="legal-list">
+          <ul class="policy-list">
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>การจำกัดสิทธิ์การเข้าถึงฐานข้อมูล (Access Control):</strong> เฉพาะผู้ดูแลระบบที่ได้รับอนุญาตอย่างเป็นทางการเท่านั้น</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>การเข้ารหัสข้อมูล (Encryption):</strong> การใช้งานโปรโตคอลการเข้ารหัสข้อมูลที่ได้มาตรฐาน (HTTPS / TLS) ในการส่งผ่านข้อมูลระหว่างอุปกรณ์ของคุณและเซิร์ฟเวอร์</div>
             </li>
             <li>
-              <span class="legal-list-bullet"></span>
+              <span class="policy-list-dot"></span>
               <div><strong>การตรวจสอบประวัติ (Audit Log):</strong> การบันทึกและตรวจสอบประวัติการแก้ไขข้อมูลอย่างสม่ำเสมอเพื่อความโปร่งใส</div>
             </li>
           </ul>
         </section>
 
         <!-- Section 6 -->
-        <section class="legal-section-block" id="section-6">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">6</span>
-            <h2 class="legal-sec-title">สิทธิ์ของเจ้าของข้อมูลส่วนบุคคล (Data Subject Rights)</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">6</span>
+            <h2 class="policy-sec-title">สิทธิ์ของเจ้าของข้อมูลส่วนบุคคล (Data Subject Rights)</h2>
           </div>
-          <p class="legal-p">
+          <p class="policy-text">
             ในฐานะเจ้าของข้อมูลส่วนบุคคล คุณมีสิทธิ์ตามกฎหมายคุ้มครองข้อมูลส่วนบุคคลในการดำเนินการกับข้อมูลของตนเอง ดังนี้:
           </p>
 
-          <div class="legal-rights-grid">
-            <div class="legal-right-card">
-              <div class="legal-right-title">
+          <div class="policy-rights-grid">
+            <div class="policy-right-card">
+              <div class="policy-right-title">
                 <i class="fa-solid fa-eye" style="color:#10b981;"></i>
                 1. สิทธิ์ในการเข้าถึงและขอรับสำเนา
               </div>
-              <div class="legal-right-desc">
+              <div class="policy-right-desc">
                 คุณสามารถตรวจสอบข้อมูลการลงชื่อของตนเองผ่านอินเทอร์เฟซของระบบได้ตลอดเวลา
               </div>
             </div>
 
-            <div class="legal-right-card">
-              <div class="legal-right-title">
+            <div class="policy-right-card">
+              <div class="policy-right-title">
                 <i class="fa-solid fa-pen-to-square" style="color:#10b981;"></i>
                 2. สิทธิ์ในการขอแก้ไขข้อมูล
               </div>
-              <div class="legal-right-desc">
+              <div class="policy-right-desc">
                 หากพบว่าข้อมูลส่วนบุคคลของคุณไม่ถูกต้อง หรือไม่เป็นปัจจุบัน คุณมีสิทธิ์แจ้งผู้ดูแลระบบเพื่อทำการแก้ไข
               </div>
             </div>
 
-            <div class="legal-right-card">
-              <div class="legal-right-title">
+            <div class="policy-right-card">
+              <div class="policy-right-title">
                 <i class="fa-solid fa-trash-can" style="color:#10b981;"></i>
                 3. สิทธิ์ในการขอลบข้อมูล
               </div>
-              <div class="legal-right-desc">
+              <div class="policy-right-desc">
                 คุณสามารถถอนการลงชื่อออกจากกิจกรรม หรือแจ้งผู้ดูแลระบบให้ลบข้อมูลของคุณออกจากฐานข้อมูลได้ (เว้นแต่มีความจำเป็นตามกฎระเบียบของโรงเรียน)
               </div>
             </div>
 
-            <div class="legal-right-card">
-              <div class="legal-right-title">
+            <div class="policy-right-card">
+              <div class="policy-right-title">
                 <i class="fa-solid fa-pause" style="color:#10b981;"></i>
                 4. สิทธิ์ในการขอระงับการใช้
               </div>
-              <div class="legal-right-desc">
+              <div class="policy-right-desc">
                 คุณสามารถขอให้ระบบระงับการใช้ข้อมูลของคุณชั่วคราวในระหว่างที่มีการตรวจสอบความถูกต้อง
               </div>
             </div>
 
-            <div class="legal-right-card">
-              <div class="legal-right-title">
+            <div class="policy-right-card">
+              <div class="policy-right-title">
                 <i class="fa-solid fa-rotate-left" style="color:#10b981;"></i>
                 5. สิทธิ์ในการถอนความยินยอม
               </div>
-              <div class="legal-right-desc">
+              <div class="policy-right-desc">
                 คุณสามารถยกเลิกความยินยอมในการเก็บรวบรวมข้อมูลได้ทุกเมื่อ (ซึ่งอาจส่งผลให้ไม่สามารถลงชื่อปฏิบัติหน้าที่ได้)
               </div>
             </div>
@@ -1029,27 +774,27 @@
         </section>
 
         <!-- Section 7 -->
-        <section class="legal-section-block" id="section-7">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">7</span>
-            <h2 class="legal-sec-title">การเปลี่ยนแปลงนโยบายความเป็นส่วนตัว</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">7</span>
+            <h2 class="policy-sec-title">การเปลี่ยนแปลงนโยบายความเป็นส่วนตัว</h2>
           </div>
-          <p class="legal-p">
+          <p class="policy-text">
             เราอาจมีการปรับปรุง แก้ไข หรือเปลี่ยนแปลงนโยบายความเป็นส่วนตัวฉบับนี้เป็นครั้งคราว เพื่อให้สอดคล้องกับฟีเจอร์ใหม่ๆ ของระบบ หรือข้อกำหนดทางกฎหมายที่เปลี่ยนแปลงไป เราจะประกาศนโยบายฉบับปรับปรุงผ่านทางหน้าเว็บไซต์ของระบบ โดยการเปลี่ยนแปลงจะมีผลบังคับใช้ทันทีเมื่อมีการอัปเดต
           </p>
         </section>
 
         <!-- Section 8 -->
-        <section class="legal-section-block" id="section-8">
-          <div class="legal-section-header">
-            <span class="legal-sec-badge">8</span>
-            <h2 class="legal-sec-title">ช่องทางการติดต่อ</h2>
+        <section class="policy-section">
+          <div class="policy-sec-header">
+            <span class="policy-sec-num">8</span>
+            <h2 class="policy-sec-title">ช่องทางการติดต่อ</h2>
           </div>
-          <p class="legal-p">
+          <p class="policy-text">
             หากคุณมีคำถาม ข้อเสนอแนะ หรือต้องการใช้สิทธิ์ของคุณตามที่ระบุไว้ในนโยบายฉบับนี้ โปรดติดต่อเราได้ที่:
           </p>
 
-          <div class="legal-contact-box">
+          <div class="policy-contact-box">
             <div style="font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 10px;">
               <i class="fa-solid fa-address-book" style="color: #38bdf8;"></i>
               ทีมงานผู้พัฒนาระบบสารวัตรนักเรียน
@@ -1066,56 +811,264 @@
           </div>
         </section>
 
-      </main>
+      </div>
     </div>
+  </main>
 
-  </div>
-
-  <!-- Shared Modern Footer matching SI-ROSTER -->
+  <!-- ============ FOOTER (EXACTLY MATCHING SI-ROSTER) ============ -->
   <div class="site-footer-wrapper"
-    style="width: 100%; margin-top: 40px; padding: 0 20px 40px 20px; display: flex; justify-content: center; box-sizing: border-box;">
+    style="width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: 24px; padding: 0 20px 40px 20px; z-index: 10; display: flex; justify-content: center; background: transparent; overflow: hidden; box-sizing: border-box;">
+
+    <style>
+      .modern-footer-card {
+        padding: 60px 40px 30px 40px;
+      }
+
+      .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 10px;
+        position: relative;
+      }
+
+      .pulse-dot::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+
+        100% {
+          transform: scale(3.5);
+          opacity: 0;
+        }
+      }
+
+      .pulse-dot.success {
+        background-color: #10B981;
+      }
+
+      .pulse-dot.success::after {
+        border: 2px solid #10B981;
+      }
+
+      .pulse-dot.danger {
+        background-color: #EF4444;
+      }
+
+      .pulse-dot.danger::after {
+        border: 2px solid #EF4444;
+      }
+
+      .pulse-dot.warning {
+        background-color: #F59E0B;
+      }
+
+      .pulse-dot.warning::after {
+        border: 2px solid #F59E0B;
+      }
+
+      .minimal-link {
+        font-size: 0.9rem;
+        color: #6B7280;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: color 0.3s ease;
+        margin-top: 4px;
+        width: fit-content;
+      }
+
+      .minimal-link:hover {
+        color: #111827;
+      }
+
+      .minimal-link .arrow-icon {
+        margin-left: 8px;
+        font-size: 0.85rem;
+        opacity: 0;
+        transform: translateX(-8px);
+        transition: all 0.3s ease;
+      }
+
+      .minimal-link:hover .arrow-icon {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      @media (max-width: 768px) {
+        .modern-footer-card {
+          padding: 40px 20px 20px 20px !important;
+        }
+
+        .site-footer-wrapper {
+          padding: 0 10px 20px 10px !important;
+        }
+
+        .footer-right-cols {
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 15px !important;
+          width: 100% !important;
+        }
+      }
+    </style>
+
     <div class="modern-footer-card"
-      style="background: #FFFFFF; border-radius: 32px; width: 100%; max-width: 1180px; box-shadow: 0 4px 24px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); padding: 48px 40px 28px 40px; position: relative; overflow: hidden;">
+      style="background: #FFFFFF; border-radius: 32px; width: 100%; max-width: 1200px; box-shadow: 0 4px 24px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+
       <div style="position: relative; z-index: 2;">
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; margin-bottom: 40px;">
-          <!-- Left Branding -->
-          <div style="max-width: 480px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
-              <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';" alt="ตราโรงเรียน" style="width: 32px; height: 32px; object-fit: contain;">
-              <span style="width: 1px; height: 20px; background: #e5e7eb;"></span>
-              <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';" alt="ตราสารวัตร" style="width: 32px; height: 32px; object-fit: contain;">
-              <span style="font-weight: 800; font-size: 1.15rem; color: #111827;">SARAWAT DECHA</span>
+        <!-- Top part of footer -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; margin-bottom: 60px;">
+
+          <!-- Left side: Logo, Desc, Contact -->
+          <div style="flex: 1; min-width: 280px; max-width: 450px;">
+            <!-- Logo แบบหน้าหลัก (ตราโรงเรียนเดชะ + เส้นคั่น + ตราสารวัตร) -->
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
+              <img src="/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+                style="height: 52px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';" />
+              <span style="display: inline-block; width: 1px; height: 36px; background: #E5E7EB;"></span>
+              <img src="/assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+                style="height: 50px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';" />
             </div>
-            <p style="font-size: 0.9rem; color: #6b7280; line-height: 1.6; margin: 0;">
-              ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) พัฒนาเพื่อการบริหารจัดการกำลังพลและตารางเวรปฏิบัติหน้าที่อย่างโปร่งใส มีระเบียบวินัย และตรวจสอบได้
+
+            <p style="color: #6B7280; font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">
+              <strong style="color: #374151; font-weight: 700;">ผู้พัฒนา (Developer)</strong><br>
+              หากมีปัญหาทั่วไปเกี่ยวกับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ (Admin) แต่หากตัวเว็บไซต์มีปัญหา บัค
+              หรือลงชื่อแล้วเกิด Error สามารถติดต่อผู้พัฒนาได้โดยตรงตามช่องทางด้านล่างนี้
             </p>
+
+            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+              <a href="https://www.instagram.com/pansa.jpeg/" target="_blank" rel="noopener noreferrer"
+                style="color: #111827; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; font-size: 0.95rem; font-weight: 600;">
+                <i class="fa-brands fa-instagram" style="font-size: 1.25rem;"></i> Rujira Wattanakitpaisal
+              </a>
+              <a href="https://www.instagram.com/peth_040253" target="_blank" rel="noopener noreferrer"
+                style="color: #111827; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; font-size: 0.95rem; font-weight: 600;">
+                <i class="fa-brands fa-instagram" style="font-size: 1.25rem;"></i> Phatchara Kaewla-iad
+              </a>
+            </div>
           </div>
 
-          <!-- Quick Navigation Links -->
-          <div style="display: flex; gap: 32px; flex-wrap: wrap;">
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <div style="font-weight: 700; color: #111827; font-size: 0.92rem;">ระบบหลัก</div>
-              <a href="/si-roster" style="color: #6b7280; text-decoration: none; font-size: 0.88rem;">ลงชื่อปฏิบัติหน้าที่</a>
-              <a href="/si-roster/admin" style="color: #6b7280; text-decoration: none; font-size: 0.88rem;">ผู้ดูแลระบบ (Admin)</a>
-              <a href="https://admission.sarawatdc.site" style="color: #6b7280; text-decoration: none; font-size: 0.88rem;">รับสมัครสารวัตร (Admission)</a>
+          <!-- Right side columns -->
+          <style>
+            .footer-right-cols-grid {
+              display: grid;
+              grid-template-columns: auto auto;
+              column-gap: 60px;
+              row-gap: 24px;
+            }
+
+            .system-col {
+              grid-area: 1 / 1 / 2 / 2;
+            }
+
+            .time-col {
+              grid-area: 1 / 2 / 3 / 3;
+            }
+
+            .feedback-col-wrapper {
+              grid-area: 2 / 1 / 3 / 2;
+            }
+
+            @media (max-width: 768px) {
+              .footer-right-cols-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 15px !important;
+              }
+
+              .system-col {
+                grid-area: auto;
+              }
+
+              .time-col {
+                grid-area: auto;
+              }
+
+              .feedback-col-wrapper {
+                grid-area: auto;
+                grid-column: 1 / -1;
+                margin-top: 10px;
+              }
+            }
+          </style>
+          <div class="footer-right-cols footer-right-cols-grid">
+            <!-- System Column -->
+            <div class="system-col" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="font-weight: 700; color: #111827; font-size: 0.95rem;">System</div>
+
+              <a href="/si-roster/admin" id="adminLoginBtn" class="minimal-link"
+                style="margin-top: 0; height: 24px;">
+                <i id="adminIcon" class="fa-solid fa-door-open" style="margin-right: 6px; font-size: 0.85rem;"></i>
+                <span id="adminLoginText">Admin Login</span> <i class="fa-solid fa-arrow-right-long arrow-icon"></i>
+              </a>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <div style="font-weight: 700; color: #111827; font-size: 0.92rem;">เอกสารกฎหมาย</div>
-              <a href="/si-roster/terms-of-service" style="color: #6b7280; text-decoration: none; font-size: 0.88rem;">ข้อตกลงการใช้บริการ (TOS)</a>
-              <a href="/si-roster/privacy-policy" style="color: #111827; font-weight: 600; text-decoration: none; font-size: 0.88rem;">นโยบายความเป็นส่วนตัว (PP)</a>
+
+            <!-- Time Column -->
+            <div class="time-col" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="font-weight: 700; color: #111827; font-size: 0.95rem;">Time</div>
+
+              <div id="ntpClockContainer"
+                style="color: #6B7280; font-size: 0.9rem; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; align-items: center; height: 24px;">
+                  <span id="ntpClockDisplay"
+                    style="font-variant-numeric: tabular-nums; display: inline-block; min-width: 145px; text-align: left; font-family: 'Source Code Pro', monospace; font-weight: 600; color: #374151;">กำลังซิงค์...</span>
+                </div>
+                <div style="font-size: 0.75rem; color: #9CA3AF; line-height: 1.4; max-width: 140px;">
+                  อิงเวลามาตรฐานจาก time2.navy.mi.th
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback Column -->
+            <div class="feedback-col-wrapper" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="font-weight: 700; color: #111827; font-size: 0.95rem;">Feedback</div>
+              <a href="https://forms.gle/z8SEbeS7rojTjUYw5" target="_blank" rel="noopener noreferrer"
+                style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #18181b, #60A5FA); color: white; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(59,130,246,0.3);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)';">
+                <i class="fa-solid fa-comment-dots"></i> ข้อเสนอแนะ
+              </a>
             </div>
           </div>
         </div>
 
-        <div style="height: 1px; background: #f3f4f6; margin-bottom: 20px;"></div>
+        <!-- Bottom border line -->
+        <div style="height: 1px; background: #E5E7EB; margin-bottom: 24px; width: 100%;"></div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; color: #9ca3af;">
-          <div>&copy; 2026 Rujira Wattanakitpaisal. All rights reserved. โรงเรียนเดชะปัตตนยานุกูล</div>
-          <div style="display: flex; gap: 16px;">
-            <a href="/si-roster/terms-of-service" style="color: #6b7280; text-decoration: none;">Terms of Service</a>
-            <a href="/si-roster/privacy-policy" style="color: #6b7280; text-decoration: none;">Privacy Policy</a>
+        <!-- Bottom part: Copyright and Policy Links -->
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; width: 100%;">
+          <div style="color: #9CA3AF; font-size: 0.85rem; font-weight: 500;">
+            &copy; 2026 Rujira. All rights reserved.
+          </div>
+          <div style="display: flex; gap: 20px; font-size: 0.85rem; font-weight: 600;">
+            <a href="/si-roster/terms-of-service"
+              style="color: #9CA3AF; text-decoration: none; transition: color 0.2s;"
+              onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#9CA3AF'">Terms of
+              Service</a>
+            <a href="/si-roster/privacy-policy"
+              style="color: #111827; text-decoration: none; transition: color 0.2s;"
+              onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#111827'">Privacy Policy</a>
           </div>
         </div>
+      </div>
+
+      <!-- Giant Watermark Typography Inside the Card -->
+      <div class="dg-footer-card-watermark" aria-hidden="true" style="overflow: hidden; white-space: nowrap;">
+        <span>SARAWAT DECHA</span>
       </div>
     </div>
   </div>
@@ -1125,7 +1078,6 @@
       lucide.createIcons();
     }
 
-    // Copy link helper
     function copyCurrentUrl() {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(window.location.href).then(() => {
@@ -1138,26 +1090,28 @@
       }
     }
 
-    // Scroll spy for sidebar TOC
-    window.addEventListener('scroll', () => {
-      const sections = document.querySelectorAll('.legal-section-block');
-      const navLinks = document.querySelectorAll('.legal-toc-link');
-      let currentId = '';
-
-      sections.forEach(sec => {
-        const top = sec.getBoundingClientRect().top;
-        if (top <= 140) {
-          currentId = sec.getAttribute('id');
+    // Live NTP Standard Clock matching SI-ROSTER
+    let ntpTimeOffset = 0;
+    function initNtpClock() {
+      startNtpClock();
+    }
+    function startNtpClock() {
+      setInterval(() => {
+        const d = new Date(Date.now() + ntpTimeOffset);
+        const day = String(d.getDate()).padStart(2, '0');
+        const mo = String(d.getMonth() + 1).padStart(2, '0');
+        const yy = String(d.getFullYear() + 543).slice(-2);
+        const h = String(d.getHours()).padStart(2, '0');
+        const m = String(d.getMinutes()).padStart(2, '0');
+        const s = String(d.getSeconds()).padStart(2, '0');
+        const ms = String(d.getMilliseconds()).padStart(3, '0');
+        const display = document.getElementById('ntpClockDisplay');
+        if (display) {
+          display.textContent = `${day}/${mo}/${yy} ${h}:${m}:${s}:${ms}`;
         }
-      });
-
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (currentId && link.getAttribute('href') === '#' + currentId) {
-          link.classList.add('active');
-        }
-      });
-    });
+      }, 47);
+    }
+    document.addEventListener('DOMContentLoaded', initNtpClock);
   </script>
 </body>
 
