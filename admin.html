@@ -12,13 +12,43 @@
       try {
         if (window.location.protocol === 'file:') return;
         var h = window.location.hostname || '';
-        var p = window.location.pathname || '';
-        var isAdminSubdomain = /^admin\./i.test(h);
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isVercel = h.endsWith('.vercel.app');
+        if (!isLocal && !isVercel && /^admissions?\./i.test(h)) {
+          window.location.replace('https://admin.sarawatdc.site/admin' + window.location.search + window.location.hash);
+          return;
+        }
 
-        // เมื่อเข้าผ่านซับโดเมน admin ให้ปรับ URL บน address bar ให้คลีนสวยงามเป็น /
-        if (isAdminSubdomain && window.history && window.history.replaceState) {
-          if (p.endsWith('/admin.html') || p === '/admin' || p === '/admin/') {
-            window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
+        // เมื่อเปิดใช้งานผ่านซับโดเมน admin.sarawatdc.site:
+        if (!isLocal && !isVercel && /^admin\./i.test(h)) {
+          // ทดสอบว่าเว็บหลัก (www.sarawatdc.site) ออนไลน์แล้วหรือไม่
+          var pingImg = new Image();
+          pingImg.onload = function() {
+            // เมื่อเว็บหลักเปิดใช้งาน ให้เปลี่ยนเส้นทางไปยัง www.sarawatdc.site/admin อัตโนมัติทันที
+            var search = window.location.search || '';
+            var hash = window.location.hash || '';
+            window.location.replace('https://www.sarawatdc.site/admin' + search + hash);
+          };
+          pingImg.onerror = function() {
+            // เว็บหลักยังไม่เปิด (DNS ถูกถอดออก) ทำงานบน admin.sarawatdc.site ตามปกติ
+          };
+          pingImg.src = 'https://www.sarawatdc.site/assets/icons/sarawat-logo.png?_t=' + new Date().getTime();
+
+          // ปรับ URL บน address bar ของซับโดเมน admin ให้เป็น / สะอาดตา
+          if (window.history && window.history.replaceState) {
+            var p = window.location.pathname || '';
+            if (p.endsWith('/admin.html') || p === '/admin' || p === '/admin/') {
+              window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
+            }
+          }
+          return;
+        }
+
+        // เมื่อเปิดใช้งานผ่านโดเมนหลัก www.sarawatdc.site
+        if (window.history && window.history.replaceState) {
+          var p = window.location.pathname || '';
+          if (p.endsWith('/admin.html')) {
+            window.history.replaceState(null, '', '/admin' + window.location.search + window.location.hash);
           }
         }
       } catch(e) {}

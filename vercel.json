@@ -263,28 +263,6 @@
       "has": [
         {
           "type": "host",
-          "value": "^admin\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/admin",
-      "permanent": false
-    },
-    {
-      "source": "/index.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "^admin\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/admin",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
           "value": "^rosters?\\.sarawat(dc)?\\.site$"
         }
       ],

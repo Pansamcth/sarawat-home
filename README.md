@@ -30,9 +30,11 @@ flowchart TD
     end
 
     subgraph AutoSwitch["🔄 กระบวนการสลับเส้นทางอัตโนมัติ (Automated Live Transition)"]
-        Roster -.->|"ตรวจสอบการเชื่อมต่อ"| Ping{"🔍 สถานะโดเมนหลัก www"}
-        Ping -->|"ออนไลน์ (ตรวจพบ DNS)"| Redirect["🔁 HTTP 307 Redirect ไปยัง www.sarawatdc.site/si-roster"]
-        Ping -->|"ออฟไลน์ (ยังไม่เปิด DNS)"| Standalone["✅ ให้บริการบน roster.sarawatdc.site ต่อไป"]
+        AdmPortal -.->|"ตรวจสอบการเชื่อมต่อ"| Ping{"🔍 สถานะโดเมนหลัก www"}
+        Roster -.->|"ตรวจสอบการเชื่อมต่อ"| Ping
+        Ping -->|"ออนไลน์ (ตรวจพบ DNS)"| RedirectAdmin["🔁 HTTP 307 Redirect ไปยัง www.sarawatdc.site/admin"]
+        Ping -->|"ออนไลน์ (ตรวจพบ DNS)"| RedirectRoster["🔁 HTTP 307 Redirect ไปยัง www.sarawatdc.site/si-roster"]
+        Ping -->|"ออฟไลน์ (ยังไม่เปิด DNS)"| Standalone["✅ ให้บริการบนซับโดเมนต่อไป (admin & roster)"]
     end
 ```
 
@@ -47,7 +49,7 @@ flowchart TD
 | โดเมน / ซับโดเมน | สถานะระเบียน DNS | วัตถุประสงค์การใช้งาน | ปลายทางระบบ (Target) |
 | :--- | :---: | :--- | :--- |
 | `admission.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 🎒 ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 | `admission.html` |
-| `admin.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 🎛️ ระบบบริหารจัดการข้อมูลและควบคุมเว็บไซต์หลัก | `admin.html` |
+| `admin.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 🎛️ ระบบบริหารจัดการข้อมูลและควบคุมเว็บไซต์หลัก (โอนย้ายสู่เว็บหลักอัตโนมัติ) | `admin.html` |
 | `roster.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 📋 ระบบลงเวลาและมอบหมายงานเวร (โอนย้ายสู่เว็บหลักอัตโนมัติ) | `SI-ROSTER/index.html` |
 | `www.sarawatdc.site` | 🔴 **สแตนด์บาย (Standby)** | 🏛️ เว็บไซต์สารสนเทศหลัก (ไม่พบ DNS ในปัจจุบัน) | `index.html` |
 | `sarawat-home.vercel.app` | 🧪 **ทดสอบภายใน (Internal)** | 💻 สภาพแวดล้อมทดสอบการทำงานข้ามระบบสำหรับผู้พัฒนา | ทุกระบบในโปรเจกต์ |
@@ -72,14 +74,15 @@ flowchart TD
 
 ### 3.2 🎛️ ระบบบริหารจัดการเว็บไซต์สำหรับผู้ดูแล (Main Administration System)
 * **ซับโดเมนให้บริการ:** `https://admin.sarawatdc.site`
+* **เส้นทางทางการเมื่อเปิดเว็บหลัก:** `https://www.sarawatdc.site/admin`
 * **โมดูลควบคุม:** `admin.html` ผ่าน Edge Handler `api/admin.js`
 * **กลุ่มเป้าหมาย:** ประธานสารวัตรนักเรียน, รองประธาน, ผู้ดูแลระบบสารสนเทศ (ต้องมีสิทธิ์ยืนยันตัวตน 🔐)
 
 | รูปแบบ URL (URL Pattern) | ผลลัพธ์และพฤติกรรมการทำงานของระบบ |
 | :--- | :--- |
-| `https://admin.sarawatdc.site/` | Edge Router ส่งคำสั่ง HTTP 307 Redirect สู่ `/admin` และสคริปต์ปรับ URL แสดงผลเป็น `/` สะอาดตา |
-| `https://admin.sarawatdc.site/admin` | โหลดหน้าระบบควบคุมหลัก การจัดการข่าวสาร และการตั้งค่าสวิตช์รับสมัคร |
-| `https://www.sarawatdc.site/admin` | รองรับการเข้าถึงผ่านโดเมนหลักควบคู่กันเมื่อเปิดให้บริการเว็บไซต์หลักในอนาคต |
+| `https://admin.sarawatdc.site/` | โหลดระบบแอดมินกลาง (สลับการทำงานสู่ `www.sarawatdc.site/admin` ทันทีเมื่อเปิดใช้งาน DNS เว็บหลัก 🔄) |
+| `https://admin.sarawatdc.site/admin` | โหลดระบบแอดมินกลาง (โอนย้ายสู่เว็บหลักอัตโนมัติเมื่อเปิด DNS) |
+| `https://www.sarawatdc.site/admin` | รองรับการเข้าถึงผ่านโดเมนหลักควบคู่กันเมื่อเปิดให้บริการเว็บไซต์หลักในอนาคต 🔐 |
 
 ---
 
@@ -141,14 +144,14 @@ flowchart TD
 
 ## 5. 🔄 กลไกการตรวจจับและเปลี่ยนเส้นทางอัตโนมัติ (Automated Live Transition & Fallback Mechanism)
 
-ในกรณีที่มีผู้ใช้งานบันทึกที่อยู่เว็บไซต์ **`https://roster.sarawatdc.site`** ไว้ เมื่อถึงกำหนดการเปิดตัวเว็บไซต์หลักและมีการเชื่อมต่อระเบียน DNS ของ `sarawatdc.site` และ `www.sarawatdc.site` เรียบร้อยแล้ว:
+ในกรณีที่มีผู้ใช้งานบันทึกที่อยู่เว็บไซต์ **`https://roster.sarawatdc.site`** หรือ **`https://admin.sarawatdc.site`** ไว้ เมื่อถึงกำหนดการเปิดตัวเว็บไซต์หลักและมีการเชื่อมต่อระเบียน DNS ของ `sarawatdc.site` และ `www.sarawatdc.site` เรียบร้อยแล้ว:
 
-ระบบจะทำการส่งต่อผู้ใช้งานไปยัง **`https://www.sarawatdc.site/si-roster`** โดยอัตโนมัติ ด้วยกลไกตรวจสอบ 2 ระดับอย่างชาญฉลาด:
+ระบบจะทำการส่งต่อผู้ใช้งานไปยัง **`https://www.sarawatdc.site/si-roster`** และ **`https://www.sarawatdc.site/admin`** โดยอัตโนมัติ ด้วยกลไกตรวจสอบ 2 ระดับอย่างชาญฉลาด:
 
 1. 📡 **การตรวจสอบระดับเซิร์ฟเวอร์ (Server-Side DNS Resolution):**  
-   ฟังก์ชัน `api/si-roster.js` บน Vercel จะทำการตรวจสอบระเบียน DNS ของ `www.sarawatdc.site` ผ่านคำสั่ง `dns.lookup()` หากตรวจพบว่าโดเมนหลักเริ่มชี้มายังไอพีของระบบแล้ว จะทำการส่งรหัสตอบกลับ HTTP 307 Temporary Redirect พาผู้ใช้ไปยัง `www.sarawatdc.site/si-roster` พร้อมพ่วงพารามิเตอร์ทั้งหมดทันที
+   ฟังก์ชัน `api/si-roster.js` และ `api/admin.js` บน Vercel จะทำการตรวจสอบระเบียน DNS ของ `www.sarawatdc.site` ผ่านคำสั่ง `dns.lookup()` หากตรวจพบว่าโดเมนหลักเริ่มชี้มายังไอพีของระบบแล้ว จะทำการส่งรหัสตอบกลับ HTTP 307 Temporary Redirect พาผู้ใช้ไปยัง URL ทางการบน `www.sarawatdc.site` พร้อมพ่วงพารามิเตอร์ทั้งหมดทันที
 2. 🖼️ **การตรวจสอบระดับเบราว์เซอร์ (Client-Side Image Ping Fallback):**  
-   ในส่วน `<head>` ของระบบ SI-ROSTER มีกระบวนการตรวจสอบสถานะการตอบสนองของไฟล์โลโก้บน `https://www.sarawatdc.site/assets/icons/sarawat-logo.png` หากดาวน์โหลดสำเร็จ แสดงว่าเว็บหลักพร้อมให้บริการแล้ว เบราว์เซอร์จะสั่งการ `window.location.replace()` เพื่อเปลี่ยนเส้นทางทันทีอย่างรวดเร็ว
+   ในส่วน `<head>` ของระบบ SI-ROSTER และ Admin Portal มีกระบวนการตรวจสอบสถานะการตอบสนองของไฟล์โลโก้บน `https://www.sarawatdc.site/assets/icons/sarawat-logo.png` หากดาวน์โหลดสำเร็จ แสดงว่าเว็บหลักพร้อมให้บริการแล้ว เบราว์เซอร์จะสั่งการ `window.location.replace()` เพื่อเปลี่ยนเส้นทางทันทีอย่างรวดเร็ว
 
 ---
 
@@ -160,8 +163,8 @@ flowchart TD
 | `admission.sarawatdc.site/recruit` | `admission.html` | ปรับเส้นทางภายในเพื่อแสดงผลระบบรับสมัคร 🎒 |
 | `admission.sarawatdc.site/si-roster` | `www.sarawatdc.site/si-roster` | HTTP 307 Redirect สู่เว็บหลัก (แสดงข้อผิดพลาด DNS 404) |
 | `admission.sarawatdc.site/admin` | `admin.sarawatdc.site` | HTTP 307 Redirect ข้ามสู่ซับโดเมนแอดมิน 🎛️ |
-| `admin.sarawatdc.site/` | `admin.html` | HTTP 307 Redirect สู่ `/admin` (URL แสดง `/`) 🔐 |
-| `admin.sarawatdc.site/admin` | `admin.html` | แสดงผลระบบแอดมินหลัก |
+| `admin.sarawatdc.site/` | `admin.html` | แสดงผลระบบแอดมินกลาง (โอนย้ายสู่ `www.sarawatdc.site/admin` อัตโนมัติเมื่อเปิด DNS 🔄) |
+| `admin.sarawatdc.site/admin` | `admin.html` | แสดงผลระบบแอดมินกลาง (โอนย้ายสู่ `www.sarawatdc.site/admin` อัตโนมัติเมื่อเปิด DNS 🔄) |
 | `admin.sarawatdc.site/si-roster` | `www.sarawatdc.site/si-roster` | HTTP 307 Redirect สู่เว็บหลัก (แสดงข้อผิดพลาด DNS 404) |
 | `roster.sarawatdc.site/` | `SI-ROSTER/index.html` | แสดงผลระบบลงหน้าที่ (โอนย้ายสู่เว็บหลักอัตโนมัติเมื่อเปิด DNS 🔄) |
 | `roster.sarawatdc.site/admin` | `SI-ROSTER/admin.html` | แสดงผลระบบจัดเวรสำหรับผู้ดูแล SI-ROSTER 📋 |
