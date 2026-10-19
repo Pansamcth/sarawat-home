@@ -83,6 +83,182 @@
       "permanent": false
     },
     {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/admission",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster/$1",
+      "permanent": false
+    },
+    {
+      "source": "/SI-ROSTER",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/SI-ROSTER/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster/$1",
+      "permanent": false
+    },
+    {
+      "source": "/roster",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/roster/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster/$1",
+      "permanent": false
+    },
+    {
+      "source": "/activities",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/activities",
+      "permanent": false
+    },
+    {
+      "source": "/activities/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/activities/$1",
+      "permanent": false
+    },
+    {
+      "source": "/calendar",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/calendar",
+      "permanent": false
+    },
+    {
+      "source": "/calendar/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/calendar/$1",
+      "permanent": false
+    },
+    {
+      "source": "/team",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/team",
+      "permanent": false
+    },
+    {
+      "source": "/team/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/team/$1",
+      "permanent": false
+    },
+    {
+      "source": "/admin",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admin.sarawatdc.site/admin",
+      "permanent": false
+    },
+    {
+      "source": "/admin/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admin.sarawatdc.site/admin/$1",
+      "permanent": false
+    },
+    {
+      "source": "/admin.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admissions?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admin.sarawatdc.site/admin",
+      "permanent": false
+    },
+    {
       "source": "/",
       "has": [
         {
@@ -102,6 +278,116 @@
         }
       ],
       "destination": "/admin",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/si-roster/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster/$1",
+      "permanent": false
+    },
+    {
+      "source": "/SI-ROSTER",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/SI-ROSTER/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster/$1",
+      "permanent": false
+    },
+    {
+      "source": "/roster",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/roster/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://www.sarawatdc.site/si-roster/$1",
+      "permanent": false
+    },
+    {
+      "source": "/admission",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admission.sarawatdc.site",
+      "permanent": false
+    },
+    {
+      "source": "/admission/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admission.sarawatdc.site/$1",
+      "permanent": false
+    },
+    {
+      "source": "/admissions",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admission.sarawatdc.site",
+      "permanent": false
+    },
+    {
+      "source": "/admissions/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "^admin\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "https://admission.sarawatdc.site/$1",
       "permanent": false
     },
     {

@@ -2,6 +2,20 @@
 <html lang="th">
 
 <head>
+  <script>
+    (function() {
+      try {
+        if (window.location.protocol === 'file:') return;
+        var h = window.location.hostname || '';
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isVercel = h.endsWith('.vercel.app');
+        if (!isLocal && !isVercel && /^admissions?\./i.test(h)) {
+          window.location.replace('https://www.sarawatdc.site/si-roster/terms-of-service' + window.location.search + window.location.hash);
+          return;
+        }
+      } catch(e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ข้อตกลงและเงื่อนไขการใช้บริการ (Terms of Service) | SI-ROSTER สารวัตรนักเรียน เดชะปัตตนยานุกูล</title>

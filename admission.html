@@ -2218,7 +2218,7 @@
                 <span>SARAWAT ADMISSION 70</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="/si-roster" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.sarawatdc.site/si-roster" target="_blank" rel="noopener noreferrer"
                 class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
                 <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
                 <i data-lucide="arrow-up-right"></i>
@@ -2237,7 +2237,7 @@
           <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira
               Wattanakitpaisal</a></span>
           <span class="dg-footer-meta-sep">•</span>
-          <a href="admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
+          <a href="https://admin.sarawatdc.site" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -3449,41 +3449,85 @@
         console.warn('Auto correction check error:', e);
       }
 
-      // When hosted on admission.sarawatdc.site subdomain, ensure navigation links point strictly to the main site (not vercel.app)
-      if (/^admissions?\./i.test(window.location.hostname)) {
+      // When hosted on admission.sarawatdc.site subdomain, ensure all navigation & footer links point strictly to the main site or admin
+      (function setupSubdomainLinkRouting() {
         try {
-          const mainSiteUrl = 'https://www.sarawatdc.site';
-          const navBrand = document.querySelector('.dg-brand');
-          if (navBrand) navBrand.href = mainSiteUrl;
+          var h = window.location.hostname || '';
+          var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+          var isVercel = h.endsWith('.vercel.app');
+          var isAdmissionsSubdomain = /^admissions?\./i.test(h);
 
-          const links = document.querySelectorAll('#dgNavLinks a, .dg-act-breadcrumb a, .btn-step-prev, .dg-footer-nav-list a, .dg-nav-actions a');
-          links.forEach(a => {
-            const href = a.getAttribute('href');
-            if (!href || href.startsWith('javascript:')) return;
-            if (href.startsWith('http')) {
-              if (href.includes('vercel.app')) {
-                a.href = href.replace(/https?:\/\/[^/]+\.vercel\.app/i, 'https://www.sarawatdc.site');
+          // If on vercel or local dev, ensure links stay within this deployment for testing
+          if (isVercel || isLocal) {
+            document.querySelectorAll('a[href]').forEach(function(a) {
+              var href = a.getAttribute('href');
+              if (!href) return;
+              if (href.includes('admin.sarawatdc.site')) a.href = '/admin';
+              if (href.includes('sarawatdc.site/si-roster')) a.href = '/si-roster';
+              if (href.includes('sarawatdc.site/warn')) a.href = 'https://www.sarawatdc.site/warn/';
+              if (href.startsWith('https://www.sarawatdc.site/')) {
+                var localPath = href.replace('https://www.sarawatdc.site/', '/');
+                a.href = localPath || '/';
               }
-              return;
-            }
-            if (href.startsWith('#')) return;
-            if (href.startsWith('index.html')) {
-              const target = href.replace(/^index\.html/, '');
-              a.href = mainSiteUrl + (target.startsWith('#') ? '/' + target : target || '/');
-            } else if (href === 'activities.html' || href === '/activities') {
-              a.href = mainSiteUrl + '/activities';
-            } else if (href === 'calendar.html' || href === '/calendar') {
-              a.href = mainSiteUrl + '/calendar';
-            } else if (href === 'team.html' || href === '/team') {
-              a.href = mainSiteUrl + '/team';
-            } else if (href.startsWith('/')) {
-              a.href = mainSiteUrl + href;
-            }
-          });
+            });
+            return;
+          }
+
+          if (isAdmissionsSubdomain) {
+            const mainSiteUrl = 'https://www.sarawatdc.site';
+            const adminSiteUrl = 'https://admin.sarawatdc.site';
+            const navBrand = document.querySelector('.dg-brand');
+            if (navBrand) navBrand.href = mainSiteUrl;
+
+            const links = document.querySelectorAll('a[href]');
+            links.forEach(a => {
+              const href = a.getAttribute('href');
+              if (!href || href.startsWith('javascript:')) return;
+              if (href.startsWith('#')) return;
+
+              // Admin link
+              if (href === 'admin.html' || href === '/admin.html' || href === '/admin' || a.classList.contains('dg-footer-admin-link') || href.includes('admin.sarawatdc.site')) {
+                a.href = adminSiteUrl;
+                return;
+              }
+
+              // SI-ROSTER link
+              if (href.includes('roster')) {
+                a.href = mainSiteUrl + '/si-roster';
+                return;
+              }
+
+              if (href.startsWith('http')) {
+                if (href.includes('vercel.app')) {
+                  a.href = href.replace(/https?:\/\/[^/]+\.vercel\.app/i, mainSiteUrl);
+                }
+                return;
+              }
+
+              // Admission link itself
+              if (href === '/admission' || href === '/admission.html' || href === 'admission.html' || href === '/') {
+                a.href = '/';
+                return;
+              }
+
+              if (href.startsWith('index.html')) {
+                const target = href.replace(/^index\.html/, '');
+                a.href = mainSiteUrl + (target.startsWith('#') ? '/' + target : target || '/');
+              } else if (href === 'activities.html' || href === '/activities' || href === '/activities.html') {
+                a.href = mainSiteUrl + '/activities';
+              } else if (href === 'calendar.html' || href === '/calendar' || href === '/calendar.html') {
+                a.href = mainSiteUrl + '/calendar';
+              } else if (href === 'team.html' || href === '/team' || href === '/team.html') {
+                a.href = mainSiteUrl + '/team';
+              } else if (href.startsWith('/')) {
+                a.href = mainSiteUrl + href;
+              }
+            });
+          }
         } catch (linkErr) {
           console.warn('Subdomain link routing warning:', linkErr);
         }
-      }
+      })();
 
     });
   </script>

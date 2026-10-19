@@ -19,7 +19,16 @@
   <script>
     (function() {
       try {
-        if (window.history && window.history.replaceState && window.location.protocol !== 'file:') {
+        if (window.location.protocol === 'file:') return;
+        var h = window.location.hostname || '';
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isVercel = h.endsWith('.vercel.app');
+        if (!isLocal && !isVercel && /^admissions?\./i.test(h)) {
+          window.location.replace('https://www.sarawatdc.site/si-roster/admin' + window.location.search + window.location.hash);
+          return;
+        }
+
+        if (window.history && window.history.replaceState) {
           var p = window.location.pathname;
           if (p.includes('/SI-ROSTER') || p.includes('/roster') || p.endsWith('/admin.html')) {
             window.history.replaceState(null, '', '/si-roster/admin' + window.location.search + window.location.hash);
