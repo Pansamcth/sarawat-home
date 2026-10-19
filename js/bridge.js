@@ -8,7 +8,7 @@
   window.google.script = window.google.script || {};
 
   function getApiBase() {
-    if (window.SARAWAT_API_BASE && window.SARAWAT_API_BASE.trim()) {
+    if (typeof window.SARAWAT_API_BASE === 'string') {
       return window.SARAWAT_API_BASE.trim().replace(/\/+$/, '');
     }
 
@@ -17,8 +17,12 @@
     const port = window.location.port || '';
     const protocol = window.location.protocol || '';
 
-    // 1. If accessed directly on the Cloudflare Tunnel domain itself
-    if (hostname.endsWith('.trycloudflare.com')) {
+    // 1. If accessed on production domain (sarawatdc.site, vercel.app) or directly on Cloudflare
+    if (
+      hostname.endsWith('sarawatdc.site') ||
+      hostname.endsWith('.vercel.app') ||
+      hostname.endsWith('.trycloudflare.com')
+    ) {
       return '';
     }
 
@@ -39,7 +43,7 @@
       return `${protocol}//${hostname}:5000`;
     }
 
-    // 5. External static hosts (sarawatdc.site, GitHub Pages, Vercel, mobile, file://)
+    // 5. External static hosts (file:// or other external hosts)
     return tunnelUrl;
   }
 

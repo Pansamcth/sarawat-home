@@ -11,7 +11,7 @@
   const HARDCODED_TUNNEL_URL = (window.CLOUDFLARE_TUNNEL_URL || window.HARDCODED_TUNNEL_URL || '').trim().replace(/\/+$/, '');
 
   function getActiveApiBase() {
-    if (window.SARAWAT_API_BASE && window.SARAWAT_API_BASE.trim().length > 0) {
+    if (typeof window.SARAWAT_API_BASE === 'string') {
       return window.SARAWAT_API_BASE.trim().replace(/\/+$/, '');
     }
 
@@ -19,8 +19,12 @@
     const port = window.location.port || '';
     const protocol = window.location.protocol || '';
 
-    // 1. ถ้าเข้าผ่านโดเมน Cloudflare โดยตรง
-    if (hostname.endsWith('.trycloudflare.com')) {
+    // 1. ถ้าเข้าผ่านโดเมนเว็บไซต์จริง (sarawatdc.site หรือ vercel.app) หรือโดเมน Cloudflare
+    if (
+      hostname.endsWith('sarawatdc.site') ||
+      hostname.endsWith('.vercel.app') ||
+      hostname.endsWith('.trycloudflare.com')
+    ) {
       return '';
     }
 
@@ -45,7 +49,7 @@
       return `${protocol}//${hostname}:5000`;
     }
 
-    // 5. ผู้ใช้งานภายนอก (มือถือ, Vercel, sarawatdc.site, file://)
+    // 5. ผู้ใช้งานภายนอก (มือถือ, file:// หรือโฮสต์อื่นๆ)
     return HARDCODED_TUNNEL_URL;
   }
 
@@ -121,7 +125,7 @@
    */
   window.SarawatApi = {
     getBaseUrl: function () {
-      return window.SARAWAT_API_BASE || getActiveApiBase();
+      return typeof window.SARAWAT_API_BASE === 'string' ? window.SARAWAT_API_BASE : getActiveApiBase();
     },
 
     setBaseUrl: function (url) {

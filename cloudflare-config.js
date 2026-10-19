@@ -37,8 +37,16 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
     const port = loc.port || '';
     const protocol = loc.protocol || '';
 
-    // 1. ถ้าเปิดดูผ่านโดเมน Cloudflare Tunnel โดยตรง (ใช้ Relative Path)
-    if (hostname.endsWith('.trycloudflare.com') || hostname === 'api.sarawatdc.site') {
+    // 1. ถ้าเปิดดูผ่านโดเมนเว็บไซต์จริง (sarawatdc.site หรือ vercel.app) หรือโดเมน Cloudflare
+    // ให้ใช้ Relative Path ('') เพื่อให้ผ่าน Vercel Edge Reverse Proxy ทันที
+    // ข้อดี:
+    // - ไม่ต้องรอเวลา DNS Propagation ของโดเมนย่อย api บนเครือข่ายผู้ใช้
+    // - ไม่มีปัญหา CORS หรือบล็อก Third-party Cookies บนเบราว์เซอร์
+    if (
+      hostname.endsWith('sarawatdc.site') ||
+      hostname.endsWith('.vercel.app') ||
+      hostname.endsWith('.trycloudflare.com')
+    ) {
       return '';
     }
 
@@ -63,7 +71,7 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
       return `${protocol}//${hostname}:5000`;
     }
 
-    // 5. ถ้าเปิดจากภายนอก (มือถือ, Vercel, sarawatdc.site, หรือเปิดไฟล์ตรง file://)
+    // 5. ถ้าเปิดตรงจากไฟล์ (file://) หรือโฮสต์ภายนอกอื่นๆ
     return rawTunnel;
   }
 
@@ -71,7 +79,7 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
   root.SARAWAT_API_BASE = activeBase;
   root.HARDCODED_TUNNEL_URL = (root.CLOUDFLARE_TUNNEL_URL || '').trim().replace(/\/+$/, '');
   root.getRosterApiBase = function () {
-    return root.SARAWAT_API_BASE || resolveApiBase();
+    return typeof root.SARAWAT_API_BASE === 'string' ? root.SARAWAT_API_BASE : resolveApiBase();
   };
 })();
 

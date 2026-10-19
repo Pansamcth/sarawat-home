@@ -8,8 +8,12 @@
   window.google.script = window.google.script || {};
 
   function getApiBase() {
-    if (window.SARAWAT_API_BASE) return window.SARAWAT_API_BASE;
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    if (typeof window.SARAWAT_API_BASE === 'string') return window.SARAWAT_API_BASE;
+    const hostname = window.location.hostname || '';
+    if (hostname.endsWith('sarawatdc.site') || hostname.endsWith('.vercel.app') || hostname.endsWith('.trycloudflare.com')) {
+      return '';
+    }
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'http://localhost:5000';
     }
     return '';

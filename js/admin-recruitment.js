@@ -15,9 +15,13 @@
   const apiBridge = window.SarawatApi;
   if (!apiBridge.getBaseUrl) {
     apiBridge.getBaseUrl = function () {
-      if (window.SARAWAT_API_BASE) return window.SARAWAT_API_BASE;
+      if (typeof window.SARAWAT_API_BASE === 'string') return window.SARAWAT_API_BASE;
+      const hostname = window.location.hostname || '';
+      if (hostname.endsWith('sarawatdc.site') || hostname.endsWith('.vercel.app') || hostname.endsWith('.trycloudflare.com')) {
+        return '';
+      }
       if (window.CLOUDFLARE_TUNNEL_URL) return window.CLOUDFLARE_TUNNEL_URL;
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+      if (hostname === 'localhost' || hostname === '127.0.0.1' || window.location.protocol === 'file:') {
         return 'http://localhost:5000';
       }
       return '';
