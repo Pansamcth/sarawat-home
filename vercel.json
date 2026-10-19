@@ -489,6 +489,22 @@
       "destination": "/SI-ROSTER"
     },
     {
+      "source": "/si-roster/terms",
+      "destination": "/SI-ROSTER/terms-of-service"
+    },
+    {
+      "source": "/si-roster/tos",
+      "destination": "/SI-ROSTER/terms-of-service"
+    },
+    {
+      "source": "/si-roster/privacy",
+      "destination": "/SI-ROSTER/privacy-policy"
+    },
+    {
+      "source": "/si-roster/pp",
+      "destination": "/SI-ROSTER/privacy-policy"
+    },
+    {
       "source": "/si-roster/:path*",
       "destination": "/SI-ROSTER/:path*"
     },
