@@ -38,16 +38,13 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
     const protocol = loc.protocol || '';
 
     // 1. ถ้าเปิดดูผ่านโดเมนเว็บไซต์จริง (sarawatdc.site หรือ vercel.app) หรือโดเมน Cloudflare
-    // ให้ใช้ Relative Path ('') เพื่อให้ผ่าน Vercel Edge Reverse Proxy ทันที
-    // ข้อดี:
-    // - ไม่ต้องรอเวลา DNS Propagation ของโดเมนย่อย api บนเครือข่ายผู้ใช้
-    // - ไม่มีปัญหา CORS หรือบล็อก Third-party Cookies บนเบราว์เซอร์
+    // ให้เชื่อมต่อไปยังโดเมน API Backend หลัก (api.sarawatdc.site) โดยตรง
     if (
       hostname.endsWith('sarawatdc.site') ||
       hostname.endsWith('.vercel.app') ||
       hostname.endsWith('.trycloudflare.com')
     ) {
-      return '';
+      return rawTunnel || 'https://api.sarawatdc.site';
     }
 
     // 2. ถ้าเข้าผ่านพอร์ต 5000 ของ Express Backend โดยตรง

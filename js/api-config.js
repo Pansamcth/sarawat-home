@@ -25,7 +25,7 @@
       hostname.endsWith('.vercel.app') ||
       hostname.endsWith('.trycloudflare.com')
     ) {
-      return '';
+      return HARDCODED_TUNNEL_URL || 'https://api.sarawatdc.site';
     }
 
     // 2. ถ้าเข้าผ่านพอร์ต 5000 ของ Node.js
@@ -125,7 +125,10 @@
    */
   window.SarawatApi = {
     getBaseUrl: function () {
-      return typeof window.SARAWAT_API_BASE === 'string' ? window.SARAWAT_API_BASE : getActiveApiBase();
+      if (typeof window.SARAWAT_API_BASE === 'string' && window.SARAWAT_API_BASE.trim() !== '') {
+        return window.SARAWAT_API_BASE.trim().replace(/\/+$/, '');
+      }
+      return getActiveApiBase() || HARDCODED_TUNNEL_URL || 'https://api.sarawatdc.site';
     },
 
     setBaseUrl: function (url) {
@@ -912,8 +915,7 @@
     // 🛡️ RECRUITMENT APIS (ระบบรับสมัครสารวัตรนักเรียน ปีการศึกษา 2570)
     // ==========================================
     getRecruitmentStatus: async function () {
-      const base = this.getBaseUrl();
-      if (!base) return { isOpen: false, error: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' };
+      const base = this.getBaseUrl() || '';
       try {
         const res = await fetch(`${base}/api/recruitment/status`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -925,8 +927,7 @@
     },
 
     getRecruitmentClubs: async function () {
-      const base = this.getBaseUrl();
-      if (!base) return { clubs: [], affiliations: [] };
+      const base = this.getBaseUrl() || '';
       try {
         const res = await fetch(`${base}/api/recruitment/clubs`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -938,8 +939,7 @@
     },
 
     submitRecruitmentApplication: async function (formData) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Backend Offline)');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/apply`, {
         method: 'POST',
         body: formData
@@ -950,8 +950,7 @@
     },
 
     checkApplicantStatus: async function (studentId) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/check-status/${encodeURIComponent(studentId)}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'ไม่พบข้อมูลใบสมัคร');
@@ -959,8 +958,7 @@
     },
 
     unlockApplicantCorrection: async function (studentId, phone = '') {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/unlock-correction`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -972,8 +970,7 @@
     },
 
     getApplicantForCorrection: async function (studentId) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/applicant-correction/${encodeURIComponent(studentId)}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'ไม่สามารถดึงข้อมูลสำหรับแก้ไขได้');
@@ -981,8 +978,7 @@
     },
 
     submitApplicantCorrection: async function (studentId, formData) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/correction/${encodeURIComponent(studentId)}`, {
         method: 'PUT',
         body: formData
@@ -994,8 +990,7 @@
 
     // --- Admin Recruitment Methods ---
     adminGetRecruitmentStats: async function () {
-      const base = this.getBaseUrl();
-      if (!base) return { total: 0, byStatus: {}, byGrade: {} };
+      const base = this.getBaseUrl() || '';
       try {
         const res = await fetch(`${base}/api/recruitment/stats`, { headers: this.getAuthHeaders() });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1007,8 +1002,7 @@
     },
 
     adminGetApplicants: async function (params = {}) {
-      const base = this.getBaseUrl();
-      if (!base) return { success: false, applicants: [], total: 0 };
+      const base = this.getBaseUrl() || '';
       const q = new URLSearchParams();
       if (params.search) q.set('search', params.search);
       if (params.status) q.set('status', params.status);
@@ -1023,8 +1017,7 @@
     },
 
     adminGetApplicantDetail: async function (id) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/applicant/${id}`, { headers: this.getAuthHeaders() });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
@@ -1032,8 +1025,7 @@
     },
 
     adminUpdateApplicantStatus: async function (id, data) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/applicant/${id}/status`, {
         method: 'PUT',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -1045,15 +1037,13 @@
     },
 
     adminGetRecruitmentSettings: async function () {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/settings`, { headers: this.getAuthHeaders() });
       return await res.json();
     },
 
     adminUpdateRecruitmentSettings: async function (settings) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/settings`, {
         method: 'PUT',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -1065,15 +1055,13 @@
     },
 
     adminGetRecruitmentClubs: async function () {
-      const base = this.getBaseUrl();
-      if (!base) return { clubs: [] };
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/admin-clubs`, { headers: this.getAuthHeaders() });
       return await res.json();
     },
 
     adminCreateRecruitmentClub: async function (data) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/admin-clubs`, {
         method: 'POST',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -1083,8 +1071,7 @@
     },
 
     adminUpdateRecruitmentClub: async function (id, data) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/admin-clubs/${id}`, {
         method: 'PUT',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -1094,8 +1081,7 @@
     },
 
     adminDeleteRecruitmentClub: async function (id) {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('Offline');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/admin-clubs/${id}`, {
         method: 'DELETE',
         headers: this.getAuthHeaders()
@@ -1104,8 +1090,7 @@
     },
 
     adminDeleteApplicant: async function (id, admin = 'Admin') {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/applicant/${id}?admin=${encodeURIComponent(admin)}`, {
         method: 'DELETE',
         headers: this.getAuthHeaders()
@@ -1116,8 +1101,7 @@
     },
 
     adminClearAllApplicants: async function (admin = 'Admin') {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/applicants/clear`, {
         method: 'POST',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
@@ -1129,7 +1113,7 @@
     },
 
     getRecruitmentExportUrl: function (format = 'xlsx', status = 'all', grade = 'all') {
-      const base = this.getBaseUrl();
+      const base = this.getBaseUrl() || '';
       const q = new URLSearchParams({ format, status, grade });
       const token = this.getAuthToken();
       if (token) q.set('token', token);
@@ -1137,8 +1121,7 @@
     },
 
     adminGetRecruitmentLogs: async function () {
-      const base = this.getBaseUrl();
-      if (!base) return { logs: [] };
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/logs`, { headers: this.getAuthHeaders() });
       return await res.json();
     }
