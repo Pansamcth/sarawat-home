@@ -83,7 +83,7 @@ module.exports = async function handler(req, res) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3500);
-      const apiRes = await fetch('https://prototype-sampling-fees-buy.trycloudflare.com/api/roster/getAllActivities', {
+      const apiRes = await fetch('https://api.sarawatdc.site/api/roster/getAllActivities', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

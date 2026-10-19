@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3500);
-      const apiRes = await fetch('https://prototype-sampling-fees-buy.trycloudflare.com/api/news', {
+      const apiRes = await fetch('https://api.sarawatdc.site/api/news', {
         signal: controller.signal
       });
       clearTimeout(timeoutId);

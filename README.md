@@ -76,7 +76,7 @@ Development status categorized strictly against verified codebase inspection:
 | **Applicant Excel Export** | Exporting applicant datasets into structured `.xlsx` workbooks filtered by status and grade level | **Verified Active** |
 | **Roster Slot Randomizer** | Automated randomized distribution algorithm for filling vacant duty slots with eligible members | **Code Present (Unconfirmed)** |
 | **Roster PDF Report Generator** | Exporting printable roster assignment sheets formatted with Thai typography via client-side PDF renderers | **Code Present (Unconfirmed)** |
-| **Cloudflare Named Tunnel Migration** | Transition from ephemeral Quick Tunnels (`trycloudflare.com`) to permanent Named Tunnels with dedicated CNAMEs | **Under Development** |
+| **Cloudflare Named Tunnel** | High-availability permanent Cloudflare Zero Trust Tunnel routing `api.sarawatdc.site` to local Node.js backend | **Verified Active** |
 | **Automated LINE Push Notifications** | Push notifications dispatching instant duty alerts and candidate submission receipts via LINE Messaging API | **Planned for Future** |
 | **Fully Managed Cloud Database** | Migrating the standalone SQLite database to a managed high-availability cloud database cluster | **Planned for Future** |
 
@@ -120,7 +120,7 @@ flowchart TD
     end
 
     subgraph TunnelLayer["3. Secure Gateway & Ingress"]
-        CFTunnel["Cloudflare Tunnel Daemon (cloudflared)\n(*.trycloudflare.com / Named Tunnel)"]
+        CFTunnel["Cloudflare Named Tunnel Daemon (cloudflared)\n(api.sarawatdc.site CNAME)"]
     end
 
     subgraph OnPremBackend["4. On-Premises Backend & Database"]
@@ -311,7 +311,7 @@ The Edge router contains rewrite rules that proxy requests matching `/api/:path*
 ```json
 {
   "source": "/api/:path*",
-  "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/api/:path*"
+  "destination": "https://api.sarawatdc.site/api/:path*"
 }
 ```
 
@@ -580,7 +580,7 @@ sequenceDiagram
 ## 21. Security Analysis & Known Technical Limitations
 
 ### Critical Security Recommendations
-1. **Manual Tunnel Endpoint Management:** Ephemeral Quick Tunnels (`*.trycloudflare.com`) assign random hostnames upon each restart, requiring manual configuration updates. **Recommendation:** Migrate to **Named Tunnels (Cloudflare Zero Trust)** bound to a permanent CNAME record (e.g., `api.sarawatdc.site`) to eliminate manual code edits and connection disruptions.
+1. **Permanent Named Tunnel Architecture:** The system has successfully transitioned from ephemeral Quick Tunnels to a production-grade **Cloudflare Zero Trust Named Tunnel (`sarawat`)** bound to `https://api.sarawatdc.site`. This ensures zero configuration drift across server reboots without requiring public IP forwarding.
 2. **Consolidation of Authentication Stores:** The primary administration portal uses `admins` and `admin_sessions`, while legacy SI-ROSTER components retain references to `roster_admins`. **Recommendation:** Unify all administrative authentication under the central token-based session model.
 3. **Student Privacy Protection (PDPA Compliance):** The admissions database stores sensitive personal identifiable information (PII), including National/Student IDs, home addresses, and phone numbers. Access to export endpoints (`/api/recruitment/export`) must remain strictly gated behind authenticated Superadmin/Admin credentials.
 4. **Write-Locking Under Concurrency:** While SQLite's WAL mode delivers fast concurrent reads, concurrent duty reservation spikes during the opening seconds of a high-demand slot may trigger database busy/lock errors. **Recommendation:** Introduce an in-memory queueing mechanism or migrate high-concurrency tables to a dedicated client-server RDBMS when scaling.

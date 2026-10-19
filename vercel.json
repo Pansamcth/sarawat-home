@@ -554,11 +554,11 @@
     },
     {
       "source": "/api/:path*",
-      "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/api/:path*"
+      "destination": "https://api.sarawatdc.site/api/:path*"
     },
     {
       "source": "/uploads/:path*",
-      "destination": "https://prototype-sampling-fees-buy.trycloudflare.com/uploads/:path*"
+      "destination": "https://api.sarawatdc.site/uploads/:path*"
     }
   ]
 }

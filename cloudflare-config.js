@@ -11,7 +11,7 @@
  */
 
 var _global = typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this);
-_global.CLOUDFLARE_TUNNEL_URL = 'https://prototype-sampling-fees-buy.trycloudflare.com';
+_global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
 
 /**
  * =========================================================================
@@ -38,7 +38,7 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://prototype-sampling-fees-buy.trycloudfla
     const protocol = loc.protocol || '';
 
     // 1. ถ้าเปิดดูผ่านโดเมน Cloudflare Tunnel โดยตรง (ใช้ Relative Path)
-    if (hostname.endsWith('.trycloudflare.com')) {
+    if (hostname.endsWith('.trycloudflare.com') || hostname === 'api.sarawatdc.site') {
       return '';
     }
 
