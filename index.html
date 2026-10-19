@@ -221,6 +221,7 @@
   <script src="cloudflare-config.js"></script>
   <script src="js/bridge.js"></script>
   <script src="js/api-config.js?v=2.2.0"></script>
+  <script src="js/skeletons.js"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
@@ -695,8 +696,50 @@
 
       <!-- Upcoming Events Container (Top ~5 items) -->
       <div class="dg-events-list" id="upcomingEventsList" style="margin-top: 36px;">
-        <div style="text-align: center; padding: 40px; color: var(--dg-text-muted);">
-          <div class="loading-spinner"></div> กำลังโหลดกิจกรรมที่กำลังจะมาถึง...
+        <div class="dg-sk-event-item" aria-hidden="true">
+          <div class="dg-sk-event-date-box dg-skeleton-shimmer"></div>
+          <div class="dg-sk-event-content">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 20px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 90px; margin-bottom: 0;"></div>
+            </div>
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 70%; margin-bottom: 8px;"></div>
+            <div style="display: flex; gap: 14px; align-items: center;">
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin-bottom: 0;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 120px; margin-bottom: 0;"></div>
+            </div>
+          </div>
+          <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 28px; height: 28px; border-radius: 50%;"></div>
+        </div>
+        <div class="dg-sk-event-item" aria-hidden="true">
+          <div class="dg-sk-event-date-box dg-skeleton-shimmer"></div>
+          <div class="dg-sk-event-content">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 20px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 90px; margin-bottom: 0;"></div>
+            </div>
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 80%; margin-bottom: 8px;"></div>
+            <div style="display: flex; gap: 14px; align-items: center;">
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin-bottom: 0;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 120px; margin-bottom: 0;"></div>
+            </div>
+          </div>
+          <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 28px; height: 28px; border-radius: 50%;"></div>
+        </div>
+        <div class="dg-sk-event-item" aria-hidden="true">
+          <div class="dg-sk-event-date-box dg-skeleton-shimmer"></div>
+          <div class="dg-sk-event-content">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 20px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 90px; margin-bottom: 0;"></div>
+            </div>
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 65%; margin-bottom: 8px;"></div>
+            <div style="display: flex; gap: 14px; align-items: center;">
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin-bottom: 0;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 120px; margin-bottom: 0;"></div>
+            </div>
+          </div>
+          <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 28px; height: 28px; border-radius: 50%;"></div>
         </div>
       </div>
 

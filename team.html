@@ -72,6 +72,7 @@
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
   <script src="js/api-config.js?v=2.2.0"></script>
+  <script src="js/skeletons.js"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
@@ -150,17 +151,118 @@
 
   <!-- ============ TEAM CONTENT (DYNAMIC) ============ -->
   <div id="teamApp">
-    <div
-      style="text-align: center; padding: 100px 20px; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <svg class="dg-spin" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        style="color: var(--dg-primary); margin-bottom: 20px;">
-        <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-      </svg>
-      <h3 style="font-family: var(--dg-font-sans); font-weight: 700; color: var(--dg-text-primary);">
-        กำลังซิงค์ข้อมูลจากฐานข้อมูลหลัก...</h3>
-      <p style="color: var(--dg-text-secondary); margin-top: 8px;">โปรดรอสักครู่
-        ระบบกำลังดึงข้อมูลทำเนียบคณะทำงานสารวัตรนักเรียน</p>
+    <div class="dg-container" style="padding-top: 40px; padding-bottom: 60px;" aria-hidden="true">
+      <!-- President Card Skeleton -->
+      <div class="dg-sk-team-pres-wrap">
+        <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 120px; height: 120px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);"></div>
+        <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 200px; height: 24px; margin-bottom: 10px;"></div>
+        <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 240px; height: 28px; margin-bottom: 20px;"></div>
+        <div class="dg-skeleton-shimmer dg-sk-line" style="width: 80%; max-width: 480px; margin-bottom: 8px;"></div>
+        <div class="dg-skeleton-shimmer dg-sk-line" style="width: 60%; max-width: 360px;"></div>
+      </div>
+
+      <!-- Section Label: Vice Presidents -->
+      <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 180px; margin-bottom: 0;"></div>
+        <div class="dg-skeleton-shimmer dg-sk-line" style="flex: 1; height: 1px; margin-bottom: 0;"></div>
+      </div>
+
+      <!-- VPs Grid Skeleton (3 Cards) -->
+      <div class="dg-sk-team-vp-grid">
+        <div class="dg-sk-team-vp-card">
+          <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 84px; height: 84px; margin-bottom: 16px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 150px; margin-bottom: 8px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 130px; height: 24px; margin-bottom: 12px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px;"></div>
+        </div>
+        <div class="dg-sk-team-vp-card">
+          <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 84px; height: 84px; margin-bottom: 16px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 150px; margin-bottom: 8px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 130px; height: 24px; margin-bottom: 12px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px;"></div>
+        </div>
+        <div class="dg-sk-team-vp-card">
+          <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 84px; height: 84px; margin-bottom: 16px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 150px; margin-bottom: 8px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 130px; height: 24px; margin-bottom: 12px;"></div>
+          <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px;"></div>
+        </div>
+      </div>
+
+      <!-- Section Label: Committee Members Table -->
+      <div style="margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+        <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 220px; margin-bottom: 0;"></div>
+        <div class="dg-skeleton-shimmer dg-sk-line" style="flex: 1; height: 1px; margin-bottom: 0;"></div>
+      </div>
+
+      <!-- Committee Members Table Skeleton -->
+      <table class="dg-sk-table">
+        <thead>
+          <tr style="background: var(--dg-bg-subtle, #f8f9fa);">
+            <th style="width: 80px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 40px; margin: 0;"></div></th>
+            <th><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 120px; margin: 0;"></div></th>
+            <th style="width: 140px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 70px; margin: 0;"></div></th>
+            <th style="width: 200px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px; margin: 0;"></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 30px; margin: 0;"></div></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 32px; height: 32px;"></div>
+                <div class="dg-skeleton-shimmer dg-sk-line" style="width: 140px; margin: 0;"></div>
+              </div>
+            </td>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div></td>
+            <td><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 110px; height: 22px; margin: 0;"></div></td>
+          </tr>
+          <tr>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 30px; margin: 0;"></div></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 32px; height: 32px;"></div>
+                <div class="dg-skeleton-shimmer dg-sk-line" style="width: 160px; margin: 0;"></div>
+              </div>
+            </td>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 75px; margin: 0;"></div></td>
+            <td><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 120px; height: 22px; margin: 0;"></div></td>
+          </tr>
+          <tr>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 30px; margin: 0;"></div></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 32px; height: 32px;"></div>
+                <div class="dg-skeleton-shimmer dg-sk-line" style="width: 130px; margin: 0;"></div>
+              </div>
+            </td>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div></td>
+            <td><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 95px; height: 22px; margin: 0;"></div></td>
+          </tr>
+          <tr>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 30px; margin: 0;"></div></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 32px; height: 32px;"></div>
+                <div class="dg-skeleton-shimmer dg-sk-line" style="width: 150px; margin: 0;"></div>
+              </div>
+            </td>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 85px; margin: 0;"></div></td>
+            <td><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 115px; height: 22px; margin: 0;"></div></td>
+          </tr>
+          <tr>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 30px; margin: 0;"></div></td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 32px; height: 32px;"></div>
+                <div class="dg-skeleton-shimmer dg-sk-line" style="width: 140px; margin: 0;"></div>
+              </div>
+            </td>
+            <td><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 70px; margin: 0;"></div></td>
+            <td><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 105px; height: 22px; margin: 0;"></div></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

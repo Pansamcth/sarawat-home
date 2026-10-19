@@ -5845,4 +5845,163 @@ img {
 
 .dg-ops-card.theme-rules .dg-ops-icon-box { background: #dbeafe; color: #2563eb; }
 
+/* ==========================================================
+   DIEGO SKELETON LOADING SYSTEM (Shimmer Wave 1:1 Authentic UI)
+   ========================================================== */
+@keyframes dgShimmerWave {
+  0% {
+    background-position: -250% 0;
+  }
+  100% {
+    background-position: 250% 0;
+  }
+}
+
+.dg-skeleton-shimmer {
+  background: linear-gradient(90deg, #f1f3f5 0%, #e5e8ec 35%, #f1f3f5 70%);
+  background-size: 350% 100% !important;
+  animation: dgShimmerWave 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  color: transparent !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  border: none !important;
+}
+
+.dg-sk-line {
+  height: 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.dg-sk-line.lg {
+  height: 18px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.dg-sk-line.sm {
+  height: 10px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+}
+.dg-sk-pill {
+  height: 22px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+.dg-sk-avatar {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dg-sk-rect {
+  border-radius: var(--dg-radius-sm, 10px);
+}
+
+/* 1. Activities / News Card Skeleton (1:1 with .dg-act-card) */
+.dg-sk-card {
+  background: var(--dg-white, #fff);
+  border: 1px solid var(--dg-border, #e5e7eb);
+  border-radius: var(--dg-radius-md, 16px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.dg-sk-card-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+}
+.dg-sk-card-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 72px;
+  height: 24px;
+  border-radius: 9999px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.dg-sk-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.dg-sk-card-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 2. Upcoming Events List Skeleton (1:1 with .dg-event-item) */
+.dg-sk-event-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background: var(--dg-bg-subtle, #f7f8fa);
+  border: 1px solid var(--dg-border, #e5e7eb);
+  border-radius: var(--dg-radius-sm, 12px);
+  margin-bottom: 12px;
+}
+.dg-sk-event-date-box {
+  width: 58px;
+  height: 58px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.dg-sk-event-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 3. Team Skeleton Hierarchy (President + VPs + Members Table) */
+.dg-sk-team-pres-wrap {
+  max-width: 740px;
+  margin: 0 auto 40px;
+  background: var(--dg-white, #fff);
+  border: 1px solid var(--dg-border, #e5e7eb);
+  border-radius: var(--dg-radius-lg, 24px);
+  padding: 36px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.dg-sk-team-vp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.dg-sk-team-vp-card {
+  background: var(--dg-white, #fff);
+  border: 1px solid var(--dg-border, #e5e7eb);
+  border-radius: var(--dg-radius-md, 16px);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.dg-sk-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--dg-border, #e5e7eb);
+  border-radius: var(--dg-radius-sm, 12px);
+  overflow: hidden;
+  background: var(--dg-white, #fff);
+}
+.dg-sk-table th,
+.dg-sk-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--dg-border, #e5e7eb);
+}
+.dg-sk-table tr:last-child td {
+  border-bottom: none;
+}
+
+
 

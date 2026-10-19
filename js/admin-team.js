@@ -15,13 +15,17 @@ async function loadTeamAdmin() {
   const container = document.getElementById('teamAdminContainer');
   if (!container) return;
 
-  container.innerHTML = `
-    <div style="text-align: center; padding: 60px;">
-      <i data-lucide="loader-2" class="dg-spin" style="width: 40px; height: 40px; color: var(--dg-primary);"></i>
-      <p style="margin-top: 16px;">กำลังโหลดข้อมูลคณะกรรมการ...</p>
-    </div>
-  `;
-  if (window.lucide) window.lucide.createIcons();
+  if (window.DgSkeletons) {
+    container.innerHTML = window.DgSkeletons.adminTeamEditorCards(3);
+  } else {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 60px;">
+        <i data-lucide="loader-2" class="dg-spin" style="width: 40px; height: 40px; color: var(--dg-primary);"></i>
+        <p style="margin-top: 16px;">กำลังโหลดข้อมูลคณะกรรมการ...</p>
+      </div>
+    `;
+    if (window.lucide) window.lucide.createIcons();
+  }
 
   let loadedOnline = false;
   try {

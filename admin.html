@@ -259,6 +259,7 @@
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="css/diego.css" />
+  <script src="js/skeletons.js"></script>
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/icons/sarawat-logo.png" />
@@ -2724,9 +2725,33 @@
       </div>
     
       <div id="teamAdminContainer">
-        <div style="text-align: center; padding: 60px;">
-          <i data-lucide="loader-2" class="dg-spin" style="width: 40px; height: 40px; color: var(--dg-primary);"></i>
-          <p style="margin-top: 16px;">กำลังโหลดโครงสร้างฝ่ายจาก Google Sheets และฐานข้อมูล...</p>
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px;" aria-hidden="true">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px;">
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 220px; margin: 0;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 90px; height: 32px;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: start;">
+            <div style="text-align: center;">
+              <div class="dg-skeleton-shimmer dg-sk-rect" style="width: 120px; height: 120px; border-radius: 8px; margin-bottom: 12px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0 auto;"></div>
+            </div>
+            <div>
+              <div style="margin-bottom: 16px;">
+                <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px; margin-bottom: 8px;"></div>
+                <div class="dg-skeleton-shimmer dg-sk-line" style="width: 100%; height: 38px; border-radius: 6px;"></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin-bottom: 8px;"></div>
+                  <div class="dg-skeleton-shimmer dg-sk-line" style="width: 100%; height: 38px; border-radius: 6px;"></div>
+                </div>
+                <div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin-bottom: 8px;"></div>
+                  <div class="dg-skeleton-shimmer dg-sk-line" style="width: 100%; height: 38px; border-radius: 6px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2771,7 +2796,66 @@
 
       <!-- News Items Grid -->
       <div class="admin-grid-news" id="adminNewsGrid">
-        <!-- Rendered dynamically by JavaScript -->
+        <div class="admin-news-item-card" style="pointer-events: none;" aria-hidden="true">
+          <div class="dg-skeleton-shimmer dg-sk-rect" style="width: 100%; aspect-ratio: 16/9; border-radius: 8px 8px 0 0;"></div>
+          <div class="admin-news-item-body">
+            <div class="admin-news-meta" style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 18px;"></div>
+            </div>
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 85%; margin-bottom: 8px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 95%; margin-bottom: 6px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 60%; margin-bottom: 14px;"></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 14px;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px;"></div>
+            </div>
+            <div class="admin-card-actions" style="display: flex; gap: 8px; justify-content: flex-end;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 30px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 55px; height: 30px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-news-item-card" style="pointer-events: none;" aria-hidden="true">
+          <div class="dg-skeleton-shimmer dg-sk-rect" style="width: 100%; aspect-ratio: 16/9; border-radius: 8px 8px 0 0;"></div>
+          <div class="admin-news-item-body">
+            <div class="admin-news-meta" style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 18px;"></div>
+            </div>
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 85%; margin-bottom: 8px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 95%; margin-bottom: 6px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 60%; margin-bottom: 14px;"></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 14px;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px;"></div>
+            </div>
+            <div class="admin-card-actions" style="display: flex; gap: 8px; justify-content: flex-end;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 30px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 55px; height: 30px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-news-item-card" style="pointer-events: none;" aria-hidden="true">
+          <div class="dg-skeleton-shimmer dg-sk-rect" style="width: 100%; aspect-ratio: 16/9; border-radius: 8px 8px 0 0;"></div>
+          <div class="admin-news-item-body">
+            <div class="admin-news-meta" style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 18px;"></div>
+            </div>
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 85%; margin-bottom: 8px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 95%; margin-bottom: 6px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 60%; margin-bottom: 14px;"></div>
+            <div style="display: flex; gap: 6px; margin-bottom: 14px;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px;"></div>
+            </div>
+            <div class="admin-card-actions" style="display: flex; gap: 8px; justify-content: flex-end;">
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 30px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 55px; height: 30px;"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2853,7 +2937,33 @@
               </tr>
             </thead>
             <tbody id="adminEventsTableBody">
-              <!-- Rendered dynamically -->
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 80px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 160px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 90px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 100px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 80px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 140px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 85px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 110px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 80px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 180px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 90px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 95px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -2952,7 +3062,34 @@
               </tr>
             </thead>
             <tbody id="feedbacksTableBody">
-              <!-- Rendered by renderAdminFeedbacks() -->
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;">
+                  <div class="dg-skeleton-shimmer dg-sk-line" style="width: 140px; margin-bottom: 6px;"></div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 220px; margin: 0;"></div>
+                </td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 110px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;">
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 90px; margin-bottom: 4px;"></div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 70px; margin: 0;"></div>
+                </td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 65px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;">
+                  <div class="dg-skeleton-shimmer dg-sk-line" style="width: 160px; margin-bottom: 6px;"></div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 200px; margin: 0;"></div>
+                </td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;">
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 85px; margin-bottom: 4px;"></div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 65px; margin: 0;"></div>
+                </td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -3420,10 +3557,60 @@
               </tr>
             </thead>
             <tbody id="adminApplicantsTableBody">
-              <tr>
-                <td colspan="9" style="padding: 40px; text-align: center; color: #94a3b8;">
-                  กำลังโหลดข้อมูลใบสมัคร...
-                </td>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 35px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 90px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 140px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 60px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 45px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 90px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 75px; height: 28px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 35px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 85px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 120px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 60px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 45px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 100px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 75px; height: 28px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 35px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 95px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 130px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 60px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 45px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 80px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 75px; height: 28px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 35px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 80px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 150px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 60px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 45px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 95px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 75px; height: 28px; margin-left: auto;"></div></td>
+              </tr>
+              <tr class="dg-sk-row" aria-hidden="true">
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 35px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 90px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 110px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 60px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 45px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 90px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 22px; margin: 0;"></div></td>
+                <td style="padding: 14px 18px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 75px; height: 28px; margin-left: auto;"></div></td>
               </tr>
             </tbody>
           </table>
@@ -3650,7 +3837,26 @@
               </h4>
             </div>
             <div id="mdlStatusHistoryTimeline">
-              กำลังโหลดประวัติ...
+              <div style="display: flex; gap: 14px; margin-bottom: 16px;" aria-hidden="true">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 14px; height: 14px; margin-top: 4px; flex-shrink: 0;"></div>
+                <div style="flex: 1;">
+                  <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;">
+                    <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 80px; height: 20px;"></div>
+                    <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 110px; margin: 0;"></div>
+                  </div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 70%; margin: 0;"></div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 14px; margin-bottom: 16px;" aria-hidden="true">
+                <div class="dg-skeleton-shimmer dg-sk-avatar" style="width: 14px; height: 14px; margin-top: 4px; flex-shrink: 0;"></div>
+                <div style="flex: 1;">
+                  <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;">
+                    <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 90px; height: 20px;"></div>
+                    <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 120px; margin: 0;"></div>
+                  </div>
+                  <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 50%; margin: 0;"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -3886,7 +4092,27 @@
                     </tr>
                   </thead>
                   <tbody id="tblAdminClubsBody">
-                    <tr><td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">กำลังโหลดข้อมูล...</td></tr>
+                    <tr class="dg-sk-row" aria-hidden="true">
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 22px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 140px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+                    </tr>
+                    <tr class="dg-sk-row" aria-hidden="true">
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 22px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 120px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+                    </tr>
+                    <tr class="dg-sk-row" aria-hidden="true">
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 22px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 160px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px;"><div class="dg-skeleton-shimmer dg-sk-line" style="width: 50px; margin: 0;"></div></td>
+                      <td style="padding: 12px 16px; text-align: right;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 26px; margin-left: auto;"></div></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -3919,7 +4145,27 @@
                     </tr>
                   </thead>
                   <tbody id="tblAdminLogsBody">
-                    <tr><td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">กำลังโหลด Log...</td></tr>
+                    <tr class="dg-sk-row" aria-hidden="true">
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 20px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 70px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 140px; margin: 0;"></div></td>
+                    </tr>
+                    <tr class="dg-sk-row" aria-hidden="true">
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 90px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 70px; height: 20px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 60px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 120px; margin: 0;"></div></td>
+                    </tr>
+                    <tr class="dg-sk-row" aria-hidden="true">
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 100px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 75px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-pill" style="width: 60px; height: 20px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div></td>
+                      <td style="padding: 10px 14px;"><div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 150px; margin: 0;"></div></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -4902,7 +5148,9 @@
       const tbody = document.getElementById('adminsTableBody');
       if (!tbody) return;
 
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 24px; color: #94a3b8;">กำลังโหลดรายชื่อผู้ดูแลระบบ...</td></tr>';
+      tbody.innerHTML = window.DgSkeletons
+        ? window.DgSkeletons.tableRows(5, 4)
+        : '<tr><td colspan="5" style="text-align: center; padding: 24px; color: #94a3b8;">กำลังโหลดรายชื่อผู้ดูแลระบบ...</td></tr>';
 
       let list = [];
       if (window.SarawatApi && window.SarawatApi.getBaseUrl()) {
@@ -6458,7 +6706,9 @@
     async function renderAdminNews() {
       const grid = document.getElementById('adminNewsGrid');
       if (!grid) return;
-      grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); grid-column: 1 / -1;"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</div>';
+      grid.innerHTML = window.DgSkeletons
+        ? window.DgSkeletons.adminNewsCards(4)
+        : '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); grid-column: 1 / -1;"><div class="loading-spinner"></div>กำลังโหลดข้อมูล...</div>';
 
       try {
         let news = await fetchNewsApi();
@@ -6579,7 +6829,9 @@
       const tbody = document.getElementById('adminEventsTableBody');
       if (!tbody) return;
 
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--dg-text-muted);"><div class="loading-spinner"></div> กำลังโหลดข้อมูลจากฐานข้อมูล...</td></tr>';
+      tbody.innerHTML = window.DgSkeletons
+        ? window.DgSkeletons.tableRows(7, 5)
+        : '<tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--dg-text-muted);"><div class="loading-spinner"></div> กำลังโหลดข้อมูลจากฐานข้อมูล...</td></tr>';
 
       try {
         let events = await fetchEventsApi();
@@ -7641,7 +7893,9 @@
       const tbody = document.getElementById('feedbacksTableBody');
       if (!tbody) return;
 
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 32px; color: #94a3b8;">กำลังโหลดข้อมูลข้อความและเรื่องร้องเรียน...</td></tr>';
+      tbody.innerHTML = window.DgSkeletons
+        ? window.DgSkeletons.tableRows(6, 5)
+        : '<tr><td colspan="6" style="text-align: center; padding: 32px; color: #94a3b8;">กำลังโหลดข้อมูลข้อความและเรื่องร้องเรียน...</td></tr>';
 
       try {
         if (window.SarawatApi) {

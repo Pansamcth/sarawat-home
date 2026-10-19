@@ -101,6 +101,7 @@
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="/css/diego.css" />
+  <script src="/js/skeletons.js"></script>
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/assets/icons/sarawat-logo.png" />
@@ -2011,6 +2012,9 @@
           <div class="recruit-field-error" id="errSearchStatus" style="text-align: center;">
             กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก</div>
 
+          <!-- SKELETON LOADING PLACEHOLDER -->
+          <div id="statusSkeletonBox" style="display: none; margin-top: 28px;"></div>
+
           <!-- RESULT CARD (HIDDEN INITIALLY) -->
           <div id="statusResultBox"
             style="display: none; margin-top: 28px; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 24px;">
@@ -3325,6 +3329,7 @@
       const btnSearchStatus = document.getElementById('btnSearchStatus');
       const inpSearchStudentId = document.getElementById('inpSearchStudentId');
       const statusResultBox = document.getElementById('statusResultBox');
+      const statusSkeletonBox = document.getElementById('statusSkeletonBox');
       const errSearchStatus = document.getElementById('errSearchStatus');
 
       btnSearchStatus.addEventListener('click', async () => {
@@ -3333,15 +3338,22 @@
           errSearchStatus.style.display = 'block';
           errSearchStatus.textContent = 'กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก';
           statusResultBox.style.display = 'none';
+          if (statusSkeletonBox) statusSkeletonBox.style.display = 'none';
           return;
         }
         errSearchStatus.style.display = 'none';
+        statusResultBox.style.display = 'none';
+
+        if (statusSkeletonBox && window.DgSkeletons) {
+          statusSkeletonBox.innerHTML = window.DgSkeletons.applicantStatusCard();
+          statusSkeletonBox.style.display = 'block';
+        }
 
         btnSearchStatus.disabled = true;
-        btnSearchStatus.textContent = 'ค้นหา...';
 
         try {
           const res = await window.SarawatAPI.checkApplicantStatus(studentId);
+          if (statusSkeletonBox) statusSkeletonBox.style.display = 'none';
           if (res.success) {
             document.getElementById('stRefCode').textContent = res.applicationCode;
             document.getElementById('stFullName').textContent = res.applicantName;
@@ -3386,12 +3398,13 @@
             statusResultBox.style.display = 'block';
           }
         } catch (err) {
+          if (statusSkeletonBox) statusSkeletonBox.style.display = 'none';
           errSearchStatus.style.display = 'block';
           errSearchStatus.textContent = err.message || 'ไม่พบข้อมูลใบสมัคร';
           statusResultBox.style.display = 'none';
         } finally {
+          if (statusSkeletonBox) statusSkeletonBox.style.display = 'none';
           btnSearchStatus.disabled = false;
-          btnSearchStatus.textContent = 'ค้นหา';
         }
       });
 

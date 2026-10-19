@@ -259,17 +259,21 @@
     const tbody = document.getElementById('adminApplicantsTableBody');
     if (!tbody) return;
 
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="9" style="padding: 30px; text-align: center; color: #94a3b8;">
-          <div style="display: inline-flex; align-items: center; gap: 8px;">
-            <i data-lucide="loader-2" class="spin" style="width: 18px; height: 18px;"></i>
-            <span>กำลังโหลดข้อมูลใบสมัคร...</span>
-          </div>
-        </td>
-      </tr>
-    `;
-    if (window.lucide) lucide.createIcons();
+    if (window.DgSkeletons) {
+      tbody.innerHTML = window.DgSkeletons.tableRows(9, 6);
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="9" style="padding: 30px; text-align: center; color: #94a3b8;">
+            <div style="display: inline-flex; align-items: center; gap: 8px;">
+              <i data-lucide="loader-2" class="spin" style="width: 18px; height: 18px;"></i>
+              <span>กำลังโหลดข้อมูลใบสมัคร...</span>
+            </div>
+          </td>
+        </tr>
+      `;
+      if (window.lucide) lucide.createIcons();
+    }
 
     const search = (document.getElementById('adminApplicantSearch')?.value || '').trim();
     const status = document.getElementById('adminFilterStatus')?.value || 'all';
