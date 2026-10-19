@@ -214,7 +214,6 @@ f:\MP\ (Root Repository)
 │   ├── admin-team.js               # Member directory management script
 │   ├── api-config.js               # Universal API endpoint registry (window.SarawatApi)
 │   ├── bridge.js                   # Proxy adapter translating google.script.run into HTTP POST
-│   ├── cloudflare-config.js        # Active Cloudflare Tunnel endpoint configuration
 │   ├── image-protection.js         # Client-side asset protection against unauthorized saving
 │   ├── main.js                     # Global UI controllers, navigation menu, and modal handlers
 │   ├── roster.js                   # Core client controllers for SI-ROSTER duty operations
