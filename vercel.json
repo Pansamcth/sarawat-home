@@ -509,6 +509,22 @@
       "destination": "/SI-ROSTER/:path*"
     },
     {
+      "source": "/terms",
+      "destination": "/terms-of-service"
+    },
+    {
+      "source": "/tos",
+      "destination": "/terms-of-service"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy-policy"
+    },
+    {
+      "source": "/pp",
+      "destination": "/privacy-policy"
+    },
+    {
       "source": "/activities",
       "has": [
         {
