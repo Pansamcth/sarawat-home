@@ -42,6 +42,15 @@
       padding: 0;
     }
 
+    html,
+    body,
+    button,
+    input,
+    select,
+    textarea {
+      font-family: 'Kanit', sans-serif !important;
+    }
+
     body {
       background-color: #f8fafc;
       background-image:
@@ -49,7 +58,7 @@
         radial-gradient(circle at 90% 10%, rgba(0, 0, 0, 0.02) 0%, transparent 60%);
       background-attachment: fixed;
       color: #0a0a0c;
-      font-family: 'Kanit', sans-serif;
+      font-family: 'Kanit', sans-serif !important;
       line-height: 1.7;
       letter-spacing: 0.1px;
       -webkit-font-smoothing: antialiased;
@@ -83,6 +92,15 @@
       margin-top: 4px;
     }
 
+    /* Breadcrumbs, Section Tag, Subtitle */
+    .dg-act-breadcrumb,
+    .dg-act-breadcrumb a,
+    .dg-act-breadcrumb span,
+    .dg-section-tag,
+    .dg-act-subtitle {
+      font-family: 'Kanit', sans-serif !important;
+    }
+
     /* Navigation Bar: Single Action Button on right */
     .dg-nav-actions a.dg-btn-black {
       display: inline-flex;
@@ -93,8 +111,9 @@
       color: #ffffff;
       border-radius: 9999px;
       text-decoration: none;
+      font-family: 'Kanit', sans-serif !important;
       font-size: 0.88rem;
-      font-weight: 600;
+      font-weight: 500;
       transition: all 0.2s ease;
     }
 
@@ -130,12 +149,17 @@
       gap: 8px;
       padding: 9px 20px;
       border-radius: 9999px;
+      font-family: 'Kanit', sans-serif !important;
       font-size: 0.9rem;
-      font-weight: 700;
+      font-weight: 500;
       color: #52525b;
       background: transparent;
       text-decoration: none;
       transition: all 0.2s ease;
+    }
+
+    .policy-tab-item span {
+      font-family: 'Kanit', sans-serif !important;
     }
 
     .policy-tab-item:hover {
@@ -162,11 +186,17 @@
       background: #ffffff;
       border: 1px solid rgba(0, 0, 0, 0.1);
       border-radius: 9999px;
+      font-family: 'Kanit', sans-serif !important;
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 500;
       color: #3f3f46;
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+
+    .policy-action-btn span {
+      font-family: 'Kanit', sans-serif !important;
+      font-weight: 500 !important;
     }
 
     .policy-action-btn:hover {
