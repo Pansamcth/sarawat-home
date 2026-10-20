@@ -362,57 +362,155 @@
       }
     }
 
-    /* Form Section Cards */
+    /* ========================================================
+       UNIFIED FORM SHEET & CLEAN EDITORIAL SECTIONS
+       (Single cohesive document surface, eliminating nested boxes)
+       ======================================================== */
+    .recruit-form-sheet {
+      background: #ffffff;
+      border: 1px solid var(--dg-border);
+      border-radius: 24px;
+      padding: 44px 48px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 24px -4px rgba(15, 23, 42, 0.04);
+      text-align: left;
+    }
+
+    .recruit-form-section {
+      padding-bottom: 36px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .recruit-form-section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    /* Form Section Cards (Backward compatibility fallback) */
     .recruit-card {
       background: #ffffff;
       border: 1px solid var(--dg-border);
-      border-radius: 20px;
-      padding: 32px 36px;
+      border-radius: 24px;
+      padding: 40px 44px;
       margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 4px 24px -4px rgba(15, 23, 42, 0.04);
       text-align: left;
     }
 
     @media (max-width: 640px) {
+      .recruit-form-sheet,
       .recruit-card {
-        padding: 24px 20px;
-        border-radius: 16px;
+        padding: 24px 18px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+      }
+
+      .recruit-form-section {
+        padding-bottom: 24px;
+        margin-bottom: 24px;
       }
     }
 
     .recruit-card-header {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
       margin-bottom: 22px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f8fafc;
     }
 
+    /* Clean inline section accent icon instead of boxed button shape */
     .recruit-card-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #f8fafc;
-      color: #0f172a;
-      display: flex;
+      width: 26px;
+      height: 26px;
+      background: transparent;
+      color: #2563eb;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #e2e8f0;
+      border: none;
       flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .recruit-card-icon svg {
+      width: 22px;
+      height: 22px;
     }
 
     .recruit-card-title {
-      font-size: 1.15rem;
+      font-size: 1.18rem;
       font-weight: 800;
       color: #0f172a;
       margin: 0;
+      letter-spacing: -0.01em;
     }
 
     .recruit-card-subtitle {
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       color: #64748b;
-      margin: 2px 0 0;
+      margin: 3px 0 0;
+      line-height: 1.45;
+    }
+
+    /* Editorial Guides & Left-Accent Callouts (De-boxed) */
+    .recruit-editorial-guide {
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.82rem;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .recruit-guide-title {
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .recruit-guide-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #475569;
+    }
+
+    .recruit-callout {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.84rem;
+      line-height: 1.55;
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    .recruit-callout.warning {
+      background: #fffbeb;
+      border-left: 3px solid #f59e0b;
+      color: #92400e;
+    }
+
+    .recruit-callout.info {
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      color: #334155;
+    }
+
+    .recruit-callout.neutral {
+      background: #f8fafc;
+      border-left: 3px solid #64748b;
+      color: #475569;
     }
 
     /* Grid Form Layout */
@@ -703,31 +801,36 @@
         padding: 24px 12px 60px !important;
       }
 
+      .recruit-form-sheet,
       .recruit-card {
-        padding: 20px 16px;
-        border-radius: 16px;
+        padding: 22px 16px;
+        border-radius: 18px;
         margin-bottom: 18px;
+      }
+
+      .recruit-form-section {
+        padding-bottom: 24px;
+        margin-bottom: 24px;
       }
 
       .recruit-card-header {
         margin-bottom: 16px;
-        padding-bottom: 12px;
+        padding-bottom: 10px;
         gap: 10px;
       }
 
       .recruit-card-title {
-        font-size: 1.05rem;
+        font-size: 1.08rem;
       }
 
       .recruit-card-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 22px;
+        height: 22px;
       }
 
       .recruit-card-icon svg {
-        width: 16px !important;
-        height: 16px !important;
+        width: 18px !important;
+        height: 18px !important;
       }
 
       .recruit-input,
@@ -821,76 +924,81 @@
       }
     }
 
-    /* Review Dossier (Step 2) */
+    /* Review Dossier (Step 2) - Clean Human Institutional Layout */
     .dossier-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      margin-bottom: 28px;
     }
 
     .dossier-header {
       display: flex;
       gap: 20px;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
     }
 
     .dossier-thumb {
-      width: 72px;
-      height: 92px;
+      width: 76px;
+      height: 98px;
       border-radius: 10px;
       object-fit: cover;
-      background: #e2e8f0;
-      border: 1px solid #cbd5e1;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
       flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     }
 
     .dossier-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px 20px;
+      gap: 18px 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #f1f5f9;
     }
 
     @media (max-width: 640px) {
       .dossier-grid {
         grid-template-columns: 1fr;
+        gap: 14px;
       }
     }
 
     .dossier-item-label {
-      font-size: 0.78rem;
+      font-size: 0.80rem;
       color: #64748b;
       font-weight: 600;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
     .dossier-item-value {
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       color: #0f172a;
       font-weight: 750;
+      line-height: 1.4;
     }
 
-    /* PDPA Consent Box */
+    /* PDPA Consent Box - Clean Integrated Row */
     .pdpa-consent-box {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
       padding: 18px 20px;
       display: flex;
       align-items: flex-start;
       gap: 14px;
-      margin-bottom: 24px;
+      margin: 24px 0 16px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .pdpa-consent-box:hover {
-      border-color: #0f172a;
-      background: #fbfcfe;
+      border-color: #94a3b8;
+      background: #f1f5f9;
     }
 
     .pdpa-checkbox {
@@ -929,45 +1037,46 @@
 
     .ref-code-card {
       background: #f8fafc;
-      border: 1.5px dashed #0f172a;
+      border: 1px solid #e2e8f0;
       border-radius: 16px;
-      padding: 20px;
+      padding: 24px 20px;
       margin: 24px 0;
       text-align: center;
     }
 
     .ref-code-num {
       font-family: var(--dg-font-sans);
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 900;
       color: #0f172a;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      margin: 4px 0;
     }
 
-    /* SCREENSHOT ALERT BANNER (CRITICAL REQUIREMENT) */
+    /* SCREENSHOT ALERT BANNER (CRITICAL REQUIREMENT - Clean Editorial) */
     .screenshot-alert-banner {
-      background: #fef3c7;
-      border: 1.5px solid #f59e0b;
-      border-radius: 14px;
+      background: #fffbeb;
+      border: none;
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 10px 10px 0;
       padding: 16px 20px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 14px;
       margin: 24px 0;
       text-align: left;
     }
 
     .screenshot-alert-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #ffffff;
+      width: 26px;
+      height: 26px;
+      background: transparent;
       color: #d97706;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2);
+      margin-top: 1px;
     }
 
     .screenshot-alert-text {
@@ -1028,13 +1137,14 @@
       border: 1px solid #ffedd5;
     }
 
-    /* Correction Needed Alert Box */
+    /* Correction Needed Alert Box (Editorial Callout) */
     .correction-box {
       background: #fff7ed;
-      border: 1px solid #fdba74;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 18px;
+      border: none;
+      border-left: 4px solid #ea580c;
+      border-radius: 0 10px 10px 0;
+      padding: 18px 20px;
+      margin-top: 20px;
       text-align: left;
     }
 
@@ -1131,15 +1241,15 @@
       color: #ef4444;
     }
 
-    /* Editing Mode Banner (ปลดล็อคให้แก้ไขข้อมูลแม้ระบบปิดรับสมัคร) */
+    /* Editing Mode Banner (Editorial Callout - No Box-in-Box) */
     .editing-mode-banner {
       background: #fff7ed;
-      border: 1.5px solid #fdba74;
-      border-radius: 18px;
-      padding: 18px 22px;
+      border: none;
+      border-left: 4px solid #ea580c;
+      border-radius: 0 14px 14px 0;
+      padding: 20px 24px;
       margin-bottom: 28px;
       text-align: left;
-      box-shadow: 0 4px 20px rgba(234, 88, 12, 0.08);
       animation: fadeIn 0.3s ease;
     }
 
@@ -1160,16 +1270,16 @@
     }
 
     .editing-mode-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #ffedd5;
+      width: 28px;
+      height: 28px;
+      background: transparent;
       color: #ea580c;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      border: 1px solid #fed7aa;
+      border: none;
+      margin-top: 2px;
     }
 
     .editing-mode-text {
@@ -1205,11 +1315,12 @@
     }
 
     .editing-mode-note-card {
-      background: #ffffff;
-      border: 1.5px dashed #fb923c;
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.65);
+      border: none;
+      border-left: 3px solid #ea580c;
+      border-radius: 0 8px 8px 0;
       padding: 10px 14px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     .editing-mode-note-label {
@@ -1455,193 +1566,195 @@
           <!-- ==================== STEP 1: FORM INPUTS ==================== -->
           <div id="stepPane1">
 
-            <!-- CARD 1: PHOTO UPLOAD -->
-            <div class="recruit-card">
-              <div class="recruit-card-header">
-                <div class="recruit-card-icon">
-                  <i data-lucide="camera" style="width: 18px; height: 18px;"></i>
-                </div>
-                <div>
-                  <h3 class="recruit-card-title">1. รูปถ่ายหน้าตรงชุดนักเรียน <span style="color: #ef4444;">*</span></h3>
-                  <p class="recruit-card-subtitle">บังคับเป็นรูปถ่ายหน้าตรงในชุดนักเรียนเดชะปัตตนยานุกูล ทรงผมและเครื่องแต่งกายเรียบร้อยถูกต้องตามระเบียบของโรงเรียน</p>
-                </div>
-              </div>
+            <!-- SINGLE UNIFIED FORM SHEET (NO BLOCK-IN-BLOCK) -->
+            <div class="recruit-form-sheet">
 
-              <div class="photo-upload-container">
-                <div class="photo-preview-wrap" id="photoDropzone">
-                  <img id="photoPreviewImg" alt="รูปถ่ายหน้าตรงชุดนักเรียน" />
-                  <div class="photo-preview-placeholder" id="photoPlaceholder">
-                    <i data-lucide="user" style="width: 32px; height: 32px; color: #94a3b8;"></i>
-                    <span>ยังไม่มีรูปภาพ</span>
+              <!-- SECTION 1: PHOTO UPLOAD -->
+              <div class="recruit-form-section">
+                <div class="recruit-card-header">
+                  <div class="recruit-card-icon">
+                    <i data-lucide="camera"></i>
+                  </div>
+                  <div>
+                    <h3 class="recruit-card-title">1. รูปถ่ายหน้าตรงชุดนักเรียน <span style="color: #ef4444;">*</span></h3>
+                    <p class="recruit-card-subtitle">บังคับเป็นรูปถ่ายหน้าตรงในชุดนักเรียนเดชะปัตตนยานุกูล ทรงผมและเครื่องแต่งกายเรียบร้อยถูกต้องตามระเบียบของโรงเรียน</p>
                   </div>
                 </div>
 
-                <div class="photo-upload-meta">
-                  <input type="file" id="applicantPhoto" accept="image/jpeg,image/png,image/webp"
-                    style="display: none;" />
-                  <button type="button" class="photo-btn-select" id="btnChoosePhoto">
-                    <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
-                    <span id="txtBtnPhoto">เลือกไฟล์รูปถ่าย</span>
-                  </button>
-                  <button type="button" class="photo-btn-select" id="btnRemovePhoto"
-                    style="display: none; color: #ef4444; border-color: #fecaca; margin-left: 8px;">
-                    <i data-lucide="trash-2" style="width: 15px; height: 15px;"></i>
-                    <span>ลบรูป</span>
-                  </button>
-
-                  <!-- School Uniform & Photo Guidelines -->
-                  <div style="margin-top: 12px; padding: 12px 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.82rem; color: #334155; line-height: 1.6;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                      <i data-lucide="shield-check" style="width: 16px; height: 16px; color: #2563eb;"></i>
-                      <span>ข้อกำหนดรูปถ่ายตามระเบียบโรงเรียนเดชะปัตตนยานุกูล:</span>
+                <div class="photo-upload-container">
+                  <div class="photo-preview-wrap" id="photoDropzone">
+                    <img id="photoPreviewImg" alt="รูปถ่ายหน้าตรงชุดนักเรียน" />
+                    <div class="photo-preview-placeholder" id="photoPlaceholder">
+                      <i data-lucide="user" style="width: 32px; height: 32px; color: #94a3b8;"></i>
+                      <span>ยังไม่มีรูปภาพ</span>
                     </div>
-                    <ul style="margin: 0; padding-left: 18px; color: #475569;">
-                      <li><strong>เครื่องแบบ:</strong> สวมชุดนักเรียนโรงเรียนเดชะปัตตนยานุกูลถูกต้องตามระเบียบ (ติดเข็ม/ปักอักษรย่อและชื่อ-สกุลถูกต้องเรียบร้อย)</li>
-                      <li><strong>อิริยาบถ:</strong> ถ่ายหน้าตรง ไม่เอียงคอ ไม่สวมหมวก ไม่ใส่แว่นตาดำ และเปิดใบหน้าให้เห็นชัดเจน</li>
-                      <li><strong>ทรงผม:</strong> ทรงผมเรียบร้อยถูกต้องตามกฎระเบียบของโรงเรียน</li>
-                      <li><strong>พื้นหลัง:</strong> พื้นหลังสีสุภาพ (สีขาว, สีฟ้า หรือสีน้ำเงิน) ไม่มีสิ่งรบกวนสายตา</li>
-                      <li><strong>ขนาดไฟล์:</strong> รองรับไฟล์รูปภาพ JPG, PNG, หรือ WebP ขนาดไม่เกิน 5 MB</li>
-                    </ul>
                   </div>
-                  <div class="recruit-field-error" id="errPhoto">กรุณาแนบรูปถ่ายหน้าตรงในชุดนักเรียนเดชะปัตตนยานุกูลให้ถูกต้องตามระเบียบโรงเรียน</div>
-                </div>
-              </div>
-            </div>
 
-            <!-- CARD 2: PERSONAL INFO -->
-            <div class="recruit-card">
-              <div class="recruit-card-header">
-                <div class="recruit-card-icon">
-                  <i data-lucide="user-check" style="width: 18px; height: 18px;"></i>
-                </div>
-                <div>
-                  <h3 class="recruit-card-title">2. ข้อมูลประจำตัวนักเรียน</h3>
-                  <p class="recruit-card-subtitle">รหัสประจำตัวนักเรียนและระดับชั้นสำหรับปีการศึกษา 2570</p>
-                </div>
-              </div>
+                  <div class="photo-upload-meta">
+                    <input type="file" id="applicantPhoto" accept="image/jpeg,image/png,image/webp"
+                      style="display: none;" />
+                    <button type="button" class="photo-btn-select" id="btnChoosePhoto">
+                      <i data-lucide="upload" style="width: 16px; height: 16px;"></i>
+                      <span id="txtBtnPhoto">เลือกไฟล์รูปถ่าย</span>
+                    </button>
+                    <button type="button" class="photo-btn-select" id="btnRemovePhoto"
+                      style="display: none; color: #ef4444; border-color: #fecaca; margin-left: 8px;">
+                      <i data-lucide="trash-2" style="width: 15px; height: 15px;"></i>
+                      <span>ลบรูป</span>
+                    </button>
 
-              <div class="recruit-grid">
-                <!-- รหัสประจำตัวนักเรียน -->
-                <div class="col-4">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpStudentId">
-                      <span>รหัสประจำตัวนักเรียน <span class="req">*</span></span>
-                    </label>
-                    <input type="tel" class="recruit-input" id="inpStudentId" maxlength="5" placeholder="เช่น 48123" />
-                    <div class="recruit-field-error" id="errStudentId">กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก</div>
-                  </div>
-                </div>
-
-                <!-- คำนำหน้า -->
-                <div class="col-4">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="selPrefix">
-                      <span>คำนำหน้าชื่อ <span class="req">*</span></span>
-                    </label>
-                    <select class="recruit-select" id="selPrefix">
-                      <option value="">-- เลือกคำนำหน้า --</option>
-                      <option value="เด็กชาย">เด็กชาย</option>
-                      <option value="เด็กหญิง">เด็กหญิง</option>
-                      <option value="นาย">นาย</option>
-                      <option value="นางสาว">นางสาว</option>
-                    </select>
-                    <div class="recruit-field-error" id="errPrefix">กรุณาเลือกคำนำหน้าชื่อ</div>
-                  </div>
-                </div>
-
-                <!-- ช่องว่างเพื่อเว้นจังหวะ -->
-                <div class="col-4"></div>
-
-                <!-- ชื่อจริง -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpFirstName">
-                      <span>ชื่อจริง (ภาษาไทย) <span class="req">*</span></span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpFirstName" placeholder="เช่น ภานุวัฒน์" />
-                    <div class="recruit-field-error" id="errFirstName">กรุณากรอกชื่อจริง</div>
-                  </div>
-                </div>
-
-                <!-- นามสกุล -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpLastName">
-                      <span>นามสกุล (ภาษาไทย) <span class="req">*</span></span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpLastName" placeholder="เช่น วงศ์สุวรรณ" />
-                    <div class="recruit-field-error" id="errLastName">กรุณากรอกนามสกุล</div>
-                  </div>
-                </div>
-
-                <!-- ระดับชั้น -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="selGrade">
-                      <span>ระดับชั้น <span class="req">*</span></span>
-                      <span class="opt">(เฉพาะ ม.4 และ ม.5)</span>
-                    </label>
-                    <select class="recruit-select" id="selGrade">
-                      <option value="">-- เลือกระดับชั้น --</option>
-                      <option value="ม.4">มัธยมศึกษาปีที่ 4 (ม.4)</option>
-                      <option value="ม.5">มัธยมศึกษาปีที่ 5 (ม.5)</option>
-                    </select>
-                    <div class="recruit-field-error" id="errGrade">เปิดรับเฉพาะนักเรียนชั้น ม.4 และ ม.5</div>
-                  </div>
-                </div>
-
-                <!-- ห้องเรียน -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpClassroom">
-                      <span>ห้องเรียน <span class="req">*</span></span>
-                      <span class="opt">(เฉพาะเลขห้องเท่านั้น)</span>
-                    </label>
-                    <input type="number" class="recruit-input" id="inpClassroom" min="1" max="15"
-                      placeholder="ระบุห้อง เช่น 2" />
-                    <div class="recruit-field-error" id="errClassroom">กรุณาระบุห้องเรียน</div>
+                    <!-- School Uniform & Photo Guidelines (Clean Editorial Callout) -->
+                    <div class="recruit-editorial-guide">
+                      <div class="recruit-guide-title">
+                        <i data-lucide="shield-check" style="width: 16px; height: 16px; color: #2563eb;"></i>
+                        <span>ข้อกำหนดรูปถ่ายตามระเบียบโรงเรียนเดชะปัตตนยานุกูล:</span>
+                      </div>
+                      <ul class="recruit-guide-list">
+                        <li><strong>เครื่องแบบ:</strong> สวมชุดนักเรียนโรงเรียนเดชะปัตตนยานุกูลถูกต้องตามระเบียบ (ติดเข็ม/ปักอักษรย่อและชื่อ-สกุลถูกต้องเรียบร้อย)</li>
+                        <li><strong>อิริยาบถ:</strong> ถ่ายหน้าตรง ไม่เอียงคอ ไม่สวมหมวก ไม่ใส่แว่นตาดำ และเปิดใบหน้าให้เห็นชัดเจน</li>
+                        <li><strong>ทรงผม:</strong> ทรงผมเรียบร้อยถูกต้องตามกฎระเบียบของโรงเรียน</li>
+                        <li><strong>พื้นหลัง:</strong> พื้นหลังสีสุภาพ (สีขาว, สีฟ้า หรือสีน้ำเงิน) ไม่มีสิ่งรบกวนสายตา</li>
+                        <li><strong>ขนาดไฟล์:</strong> รองรับไฟล์รูปภาพ JPG, PNG, หรือ WebP ขนาดไม่เกิน 5 MB</li>
+                      </ul>
+                    </div>
+                    <div class="recruit-field-error" id="errPhoto">กรุณาแนบรูปถ่ายหน้าตรงในชุดนักเรียนเดชะปัตตนยานุกูลให้ถูกต้องตามระเบียบโรงเรียน</div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- CARD 3: CONTACT & GPAX -->
-            <div class="recruit-card">
-              <div class="recruit-card-header">
-                <div class="recruit-card-icon">
-                  <i data-lucide="phone-call" style="width: 18px; height: 18px;"></i>
-                </div>
-                <div>
-                  <h3 class="recruit-card-title">3. ข้อมูลติดต่อและผลการเรียน</h3>
-                  <p class="recruit-card-subtitle">เบอร์โทรศัพท์ที่ติดต่อได้ และเกรดเฉลี่ยสะสม (GPAX)</p>
-                </div>
-              </div>
-
-              <div class="recruit-grid">
-                <!-- เบอร์โทรศัพท์ -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpPhone">
-                      <span>เบอร์โทรศัพท์ที่ติดต่อได้ <span class="req">*</span></span>
-                    </label>
-                    <input type="tel" class="recruit-input" id="inpPhone" maxlength="10"
-                      placeholder="เช่น 0812345678" />
-                    <div class="recruit-field-error" id="errPhone">กรุณากรอกเบอร์โทรศัพท์ 10 หลักขึ้นต้นด้วย 0</div>
+              <!-- SECTION 2: PERSONAL INFO -->
+              <div class="recruit-form-section">
+                <div class="recruit-card-header">
+                  <div class="recruit-card-icon">
+                    <i data-lucide="user-check"></i>
+                  </div>
+                  <div>
+                    <h3 class="recruit-card-title">2. ข้อมูลประจำตัวนักเรียน</h3>
+                    <p class="recruit-card-subtitle">รหัสประจำตัวนักเรียนและระดับชั้นสำหรับปีการศึกษา 2570</p>
                   </div>
                 </div>
 
-                <!-- GPAX -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpGpax">
-                      <span>เกรดเฉลี่ยสะสม (GPAX) <span class="req">*</span></span>
-                      <span class="opt" id="labelMinGpax">(เกณฑ์ขั้นต่ำ 2.50)</span>
-                    </label>
-                    <input type="number" step="0.01" min="0" max="4.00" class="recruit-input" id="inpGpax"
-                      placeholder="เช่น 3.45" />
-                    <div class="recruit-field-error" id="errGpax">กรุณากรอกเกรดเฉลี่ยสะสมระหว่าง 0.00 ถึง 4.00</div>
-                    <div id="warnGpaxLow" style="display: none; margin-top: 6px; padding: 10px 12px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 10px; font-size: 0.82rem; color: #b45309; line-height: 1.5;">
-                      <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <div class="recruit-grid">
+                  <!-- รหัสประจำตัวนักเรียน -->
+                  <div class="col-4">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpStudentId">
+                        <span>รหัสประจำตัวนักเรียน <span class="req">*</span></span>
+                      </label>
+                      <input type="tel" class="recruit-input" id="inpStudentId" maxlength="5" placeholder="เช่น 48123" />
+                      <div class="recruit-field-error" id="errStudentId">กรุณากรอกรหัสประจำตัวนักเรียน 5 หลัก</div>
+                    </div>
+                  </div>
+
+                  <!-- คำนำหน้า -->
+                  <div class="col-4">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="selPrefix">
+                        <span>คำนำหน้าชื่อ <span class="req">*</span></span>
+                      </label>
+                      <select class="recruit-select" id="selPrefix">
+                        <option value="">-- เลือกคำนำหน้า --</option>
+                        <option value="เด็กชาย">เด็กชาย</option>
+                        <option value="เด็กหญิง">เด็กหญิง</option>
+                        <option value="นาย">นาย</option>
+                        <option value="นางสาว">นางสาว</option>
+                      </select>
+                      <div class="recruit-field-error" id="errPrefix">กรุณาเลือกคำนำหน้าชื่อ</div>
+                    </div>
+                  </div>
+
+                  <!-- ช่องว่างเพื่อเว้นจังหวะ -->
+                  <div class="col-4"></div>
+
+                  <!-- ชื่อจริง -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpFirstName">
+                        <span>ชื่อจริง (ภาษาไทย) <span class="req">*</span></span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpFirstName" placeholder="เช่น ภานุวัฒน์" />
+                      <div class="recruit-field-error" id="errFirstName">กรุณากรอกชื่อจริง</div>
+                    </div>
+                  </div>
+
+                  <!-- นามสกุล -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpLastName">
+                        <span>นามสกุล (ภาษาไทย) <span class="req">*</span></span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpLastName" placeholder="เช่น วงศ์สุวรรณ" />
+                      <div class="recruit-field-error" id="errLastName">กรุณากรอกนามสกุล</div>
+                    </div>
+                  </div>
+
+                  <!-- ระดับชั้น -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="selGrade">
+                        <span>ระดับชั้น <span class="req">*</span></span>
+                        <span class="opt">(เฉพาะ ม.4 และ ม.5)</span>
+                      </label>
+                      <select class="recruit-select" id="selGrade">
+                        <option value="">-- เลือกระดับชั้น --</option>
+                        <option value="ม.4">มัธยมศึกษาปีที่ 4 (ม.4)</option>
+                        <option value="ม.5">มัธยมศึกษาปีที่ 5 (ม.5)</option>
+                      </select>
+                      <div class="recruit-field-error" id="errGrade">เปิดรับเฉพาะนักเรียนชั้น ม.4 และ ม.5</div>
+                    </div>
+                  </div>
+
+                  <!-- ห้องเรียน -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpClassroom">
+                        <span>ห้องเรียน <span class="req">*</span></span>
+                        <span class="opt">(เฉพาะเลขห้องเท่านั้น)</span>
+                      </label>
+                      <input type="number" class="recruit-input" id="inpClassroom" min="1" max="15"
+                        placeholder="ระบุห้อง เช่น 2" />
+                      <div class="recruit-field-error" id="errClassroom">กรุณาระบุห้องเรียน</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECTION 3: CONTACT & GPAX -->
+              <div class="recruit-form-section">
+                <div class="recruit-card-header">
+                  <div class="recruit-card-icon">
+                    <i data-lucide="phone-call"></i>
+                  </div>
+                  <div>
+                    <h3 class="recruit-card-title">3. ข้อมูลติดต่อและผลการเรียน</h3>
+                    <p class="recruit-card-subtitle">เบอร์โทรศัพท์ที่ติดต่อได้ และเกรดเฉลี่ยสะสม (GPAX)</p>
+                  </div>
+                </div>
+
+                <div class="recruit-grid">
+                  <!-- เบอร์โทรศัพท์ -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpPhone">
+                        <span>เบอร์โทรศัพท์ที่ติดต่อได้ <span class="req">*</span></span>
+                      </label>
+                      <input type="tel" class="recruit-input" id="inpPhone" maxlength="10"
+                        placeholder="เช่น 0812345678" />
+                      <div class="recruit-field-error" id="errPhone">กรุณากรอกเบอร์โทรศัพท์ 10 หลักขึ้นต้นด้วย 0</div>
+                    </div>
+                  </div>
+
+                  <!-- GPAX -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpGpax">
+                        <span>เกรดเฉลี่ยสะสม (GPAX) <span class="req">*</span></span>
+                        <span class="opt" id="labelMinGpax">(เกณฑ์ขั้นต่ำ 2.50)</span>
+                      </label>
+                      <input type="number" step="0.01" min="0" max="4.00" class="recruit-input" id="inpGpax"
+                        placeholder="เช่น 3.45" />
+                      <div class="recruit-field-error" id="errGpax">กรุณากรอกเกรดเฉลี่ยสะสมระหว่าง 0.00 ถึง 4.00</div>
+                      <div id="warnGpaxLow" class="recruit-callout warning" style="display: none;">
                         <i data-lucide="alert-triangle" style="width: 16px; height: 16px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
                         <div>
                           <strong>ข้อความแจ้งเตือน:</strong> เกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำ คุณยังสามารถส่งใบสมัครได้ โดยใบสมัครจะอยู่ในขั้นตอนกำลังพิจารณาเป็นกรณีพิเศษ
@@ -1651,188 +1764,189 @@
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- CARD 4: CLUBS -->
-            <div class="recruit-card">
-              <div class="recruit-card-header">
-                <div class="recruit-card-icon">
-                  <i data-lucide="flag" style="width: 18px; height: 18px;"></i>
+              <!-- SECTION 4: CLUBS -->
+              <div class="recruit-form-section">
+                <div class="recruit-card-header">
+                  <div class="recruit-card-icon">
+                    <i data-lucide="flag"></i>
+                  </div>
+                  <div>
+                    <h3 class="recruit-card-title">4. ข้อมูลชุมนุม (อ้างอิงปีการศึกษา 2570)</h3>
+                    <p class="recruit-card-subtitle">เลือกชุมนุมที่ต้องการปฏิบัติหน้าที่สารวัตรนักเรียน</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 class="recruit-card-title">4. ข้อมูลชุมนุม (อ้างอิงปีการศึกษา 2570)</h3>
-                  <p class="recruit-card-subtitle">เลือกชุมนุมที่ต้องการปฏิบัติหน้าที่สารวัตรนักเรียน</p>
+
+                <div class="recruit-callout neutral" style="margin-bottom: 20px;">
+                  <i data-lucide="info" style="width: 16px; height: 16px; color: #475569; flex-shrink: 0; margin-top: 2px;"></i>
+                  <span>เบื้องต้น ขอแนะนำให้ผู้สมัครเลือกชุมนุม “สารวัตรนักเรียนเสมารักษ์” เพียงชุมนุมเดียว
+                    หากประสงค์จะปฏิบัติหน้าที่สารวัตรนักเรียนเป็นหลัก อย่างไรก็ตาม
+                    หากผู้สมัครประสงค์จะเข้าร่วมชุมนุมอื่นควบคู่กัน
+                    สามารถเลือกได้เฉพาะชุมนุมที่สารวัตรนักเรียนอนุญาตตามรายชื่อที่กำหนดไว้ด้านล่างเท่านั้น</span>
                 </div>
-              </div>
 
-              <div
-                style="background: #f1f5f9; border-radius: 10px; padding: 10px 14px; font-size: 0.84rem; color: #475569; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="info" style="width: 16px; height: 16px; color: #2563eb; flex-shrink: 0;"></i>
-                <span>เบื้องต้น ขอแนะนำให้ผู้สมัครเลือกชุมนุม “สารวัตรนักเรียนเสมารักษ์” เพียงชุมนุมเดียว
-                  หากประสงค์จะปฏิบัติหน้าที่สารวัตรนักเรียนเป็นหลัก อย่างไรก็ตาม
-                  หากผู้สมัครประสงค์จะเข้าร่วมชุมนุมอื่นควบคู่กัน
-                  สามารถเลือกได้เฉพาะชุมนุมที่สารวัตรนักเรียนอนุญาตตามรายชื่อที่กำหนดไว้ด้านล่างเท่านั้น</span>
-              </div>
-
-              <div class="recruit-grid">
-                <!-- ชุมนุม -->
-                <div class="col-12">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="selClub">
-                      <span>ชุมนุมที่เลือก <span class="req">*</span></span>
-                    </label>
-                    <select class="recruit-select" id="selClub">
-                      <option value="">-- กำลังโหลดรายชื่อชุมนุม... --</option>
-                    </select>
-                    <div class="recruit-field-error" id="errClub">กรุณาเลือกชุมนุม</div>
+                <div class="recruit-grid">
+                  <!-- ชุมนุม -->
+                  <div class="col-12">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="selClub">
+                        <span>ชุมนุมที่เลือก <span class="req">*</span></span>
+                      </label>
+                      <select class="recruit-select" id="selClub">
+                        <option value="">-- กำลังโหลดรายชื่อชุมนุม... --</option>
+                      </select>
+                      <div class="recruit-field-error" id="errClub">กรุณาเลือกชุมนุม</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- CARD 5: ADDRESS -->
-            <div class="recruit-card">
-              <div class="recruit-card-header">
-                <div class="recruit-card-icon">
-                  <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+              <!-- SECTION 5: ADDRESS -->
+              <div class="recruit-form-section">
+                <div class="recruit-card-header">
+                  <div class="recruit-card-icon">
+                    <i data-lucide="home"></i>
+                  </div>
+                  <div>
+                    <h3 class="recruit-card-title">5. ข้อมูลที่อยู่</h3>
+                    <p class="recruit-card-subtitle">กรอกข้อมูลที่อยู่ปัจจุบันของผู้สมัครตามความเป็นจริง</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 class="recruit-card-title">5. ข้อมูลที่อยู่</h3>
-                  <p class="recruit-card-subtitle">กรอกข้อมูลที่อยู่ปัจจุบันของผู้สมัครตามความเป็นจริง</p>
+
+                <div class="recruit-grid">
+                  <!-- บ้านเลขที่ -->
+                  <div class="col-4">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpHouseNo">
+                        <span>บ้านเลขที่ <span class="req">*</span></span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpHouseNo" placeholder="เช่น 123/45" />
+                      <div class="recruit-field-error" id="errHouseNo">กรุณากรอกบ้านเลขที่</div>
+                    </div>
+                  </div>
+
+                  <!-- หมู่ที่ -->
+                  <div class="col-4">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpVillageNo">
+                        <span>หมู่ที่</span>
+                        <span class="opt">(ถ้ามี)</span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpVillageNo" placeholder="เช่น หมู่ 2" />
+                    </div>
+                  </div>
+
+                  <!-- อาคาร / หมู่บ้าน -->
+                  <div class="col-4">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpBuilding">
+                        <span>อาคาร / หมู่บ้าน</span>
+                        <span class="opt">(ถ้ามี)</span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpBuilding" placeholder="เช่น หมู่บ้านสุขสมบูรณ์" />
+                    </div>
+                  </div>
+
+                  <!-- ซอย -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpSoi">
+                        <span>ซอย</span>
+                        <span class="opt">(ถ้ามี)</span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpSoi" placeholder="เช่น ซอย 5" />
+                    </div>
+                  </div>
+
+                  <!-- ถนน -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpRoad">
+                        <span>ถนน</span>
+                        <span class="opt">(ถ้ามี)</span>
+                      </label>
+                      <input type="text" class="recruit-input" id="inpRoad" placeholder="เช่น ถนนพิพิธ" />
+                    </div>
+                  </div>
+
+                  <!-- จังหวัด -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="selProvince">
+                        <span>จังหวัด <span class="req">*</span></span>
+                      </label>
+                      <select class="recruit-select" id="selProvince">
+                        <option value="">-- เลือกจังหวัด --</option>
+                      </select>
+                      <div class="recruit-field-error" id="errProvince">กรุณาเลือกจังหวัด</div>
+                    </div>
+                  </div>
+
+                  <!-- อำเภอ / เขต -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="selDistrict">
+                        <span>อำเภอ / เขต <span class="req">*</span></span>
+                      </label>
+                      <select class="recruit-select" id="selDistrict" disabled>
+                        <option value="">-- กรุณาเลือกจังหวัดก่อน --</option>
+                      </select>
+                      <div class="recruit-field-error" id="errDistrict">กรุณาเลือกอำเภอ/เขต</div>
+                    </div>
+                  </div>
+
+                  <!-- ตำบล / แขวง -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="selSubdistrict">
+                        <span>ตำบล / แขวง <span class="req">*</span></span>
+                      </label>
+                      <select class="recruit-select" id="selSubdistrict" disabled>
+                        <option value="">-- กรุณาเลือกอำเภอก่อน --</option>
+                      </select>
+                      <div class="recruit-field-error" id="errSubdistrict">กรุณาเลือกตำบล/แขวง</div>
+                    </div>
+                  </div>
+
+                  <!-- รหัสไปรษณีย์ -->
+                  <div class="col-6">
+                    <div class="recruit-form-group">
+                      <label class="recruit-label" for="inpPostalCode">
+                        <span>รหัสไปรษณีย์ <span class="req">*</span></span>
+                        <span class="opt">(ดึงข้อมูลอัตโนมัติ)</span>
+                      </label>
+                      <input type="tel" class="recruit-input" id="inpPostalCode" maxlength="5" placeholder="เช่น 94000" />
+                      <div class="recruit-field-error" id="errPostalCode">รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="recruit-grid">
-                <!-- บ้านเลขที่ -->
-                <div class="col-4">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpHouseNo">
-                      <span>บ้านเลขที่ <span class="req">*</span></span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpHouseNo" placeholder="เช่น 123/45" />
-                    <div class="recruit-field-error" id="errHouseNo">กรุณากรอกบ้านเลขที่</div>
-                  </div>
-                </div>
-
-                <!-- หมู่ที่ -->
-                <div class="col-4">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpVillageNo">
-                      <span>หมู่ที่</span>
-                      <span class="opt">(ถ้ามี)</span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpVillageNo" placeholder="เช่น หมู่ 2" />
-                  </div>
-                </div>
-
-                <!-- อาคาร / หมู่บ้าน -->
-                <div class="col-4">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpBuilding">
-                      <span>อาคาร / หมู่บ้าน</span>
-                      <span class="opt">(ถ้ามี)</span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpBuilding" placeholder="เช่น หมู่บ้านสุขสมบูรณ์" />
-                  </div>
-                </div>
-
-                <!-- ซอย -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpSoi">
-                      <span>ซอย</span>
-                      <span class="opt">(ถ้ามี)</span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpSoi" placeholder="เช่น ซอย 5" />
-                  </div>
-                </div>
-
-                <!-- ถนน -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpRoad">
-                      <span>ถนน</span>
-                      <span class="opt">(ถ้ามี)</span>
-                    </label>
-                    <input type="text" class="recruit-input" id="inpRoad" placeholder="เช่น ถนนพิพิธ" />
-                  </div>
-                </div>
-
-                <!-- จังหวัด -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="selProvince">
-                      <span>จังหวัด <span class="req">*</span></span>
-                    </label>
-                    <select class="recruit-select" id="selProvince">
-                      <option value="">-- เลือกจังหวัด --</option>
-                    </select>
-                    <div class="recruit-field-error" id="errProvince">กรุณาเลือกจังหวัด</div>
-                  </div>
-                </div>
-
-                <!-- อำเภอ / เขต -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="selDistrict">
-                      <span>อำเภอ / เขต <span class="req">*</span></span>
-                    </label>
-                    <select class="recruit-select" id="selDistrict" disabled>
-                      <option value="">-- กรุณาเลือกจังหวัดก่อน --</option>
-                    </select>
-                    <div class="recruit-field-error" id="errDistrict">กรุณาเลือกอำเภอ/เขต</div>
-                  </div>
-                </div>
-
-                <!-- ตำบล / แขวง -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="selSubdistrict">
-                      <span>ตำบล / แขวง <span class="req">*</span></span>
-                    </label>
-                    <select class="recruit-select" id="selSubdistrict" disabled>
-                      <option value="">-- กรุณาเลือกอำเภอก่อน --</option>
-                    </select>
-                    <div class="recruit-field-error" id="errSubdistrict">กรุณาเลือกตำบล/แขวง</div>
-                  </div>
-                </div>
-
-                <!-- รหัสไปรษณีย์ -->
-                <div class="col-6">
-                  <div class="recruit-form-group">
-                    <label class="recruit-label" for="inpPostalCode">
-                      <span>รหัสไปรษณีย์ <span class="req">*</span></span>
-                      <span class="opt">(ดึงข้อมูลอัตโนมัติ)</span>
-                    </label>
-                    <input type="tel" class="recruit-input" id="inpPostalCode" maxlength="5" placeholder="เช่น 94000" />
-                    <div class="recruit-field-error" id="errPostalCode">รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</div>
-                  </div>
-                </div>
+              <!-- ACTION BUTTON STEP 1 -->
+              <div class="recruit-actions-row">
+                <a href="index.html" class="btn-step-prev">
+                  <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                  <span class="btn-text-full">กลับหน้าหลัก</span>
+                  <span class="btn-text-short">หน้าแรก</span>
+                </a>
+                <button type="button" class="btn-step-next" id="btnGoToStep2">
+                  <span class="btn-text-full">ตรวจสอบข้อมูล (ขั้นตอนถัดไป)</span>
+                  <span class="btn-text-short">ตรวจสอบข้อมูล</span>
+                  <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                </button>
               </div>
-            </div>
 
-            <!-- ACTION BUTTON STEP 1 -->
-            <div class="recruit-actions-row">
-              <a href="index.html" class="btn-step-prev">
-                <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-                <span class="btn-text-full">กลับหน้าหลัก</span>
-                <span class="btn-text-short">หน้าแรก</span>
-              </a>
-              <button type="button" class="btn-step-next" id="btnGoToStep2">
-                <span class="btn-text-full">ตรวจสอบข้อมูล (ขั้นตอนถัดไป)</span>
-                <span class="btn-text-short">ตรวจสอบข้อมูล</span>
-                <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
-              </button>
-            </div>
+            </div><!-- end .recruit-form-sheet -->
+
           </div>
 
           <!-- ==================== STEP 2: REVIEW & PDPA ==================== -->
           <div id="stepPane2" style="display: none;">
 
-            <div class="recruit-card">
+            <div class="recruit-form-sheet">
               <div class="recruit-card-header">
                 <div class="recruit-card-icon">
-                  <i data-lucide="clipboard-check" style="width: 18px; height: 18px;"></i>
+                  <i data-lucide="clipboard-check"></i>
                 </div>
                 <div>
                   <h3 class="recruit-card-title">ตรวจสอบข้อมูลก่อนส่งใบสมัคร</h3>
@@ -1840,7 +1954,7 @@
                 </div>
               </div>
 
-              <!-- DOSSIER CARD -->
+              <!-- DOSSIER CARD (CLEAN NATIVE SURFACE - NO BOX-IN-BOX) -->
               <div class="dossier-box">
                 <div class="dossier-header">
                   <img id="reviewPhoto" class="dossier-thumb" alt="รูปถ่ายผู้สมัคร" />
@@ -1872,18 +1986,16 @@
                 </div>
               </div>
 
-              <!-- LOW GPAX NOTICE IN STEP 2 REVIEW -->
-              <div id="boxReviewGpaxNotice" style="display: none; margin-bottom: 20px; padding: 14px 16px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; font-size: 0.88rem; color: #92400e; line-height: 1.6;">
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                  <i data-lucide="alert-circle" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
-                  <div>
-                    <strong style="font-weight: 800; color: #b45309;">แจ้งเตือนเรื่องเกรดเฉลี่ยสะสม (GPAX):</strong><br>
-                    <span id="txtReviewGpaxNotice">เกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำที่กำหนด แต่คุณยังสามารถส่งใบสมัครได้ โดยใบสมัครจะเข้าสู่ขั้นตอนการพิจารณาคุณสมบัติเป็นกรณีพิเศษโดยคณะกรรมการ</span>
-                  </div>
+              <!-- LOW GPAX NOTICE IN STEP 2 REVIEW (EDITORIAL CALLOUT) -->
+              <div id="boxReviewGpaxNotice" class="recruit-callout warning" style="display: none; margin-bottom: 24px;">
+                <i data-lucide="alert-circle" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+                <div>
+                  <strong style="font-weight: 800; color: #b45309;">แจ้งเตือนเรื่องเกรดเฉลี่ยสะสม (GPAX):</strong><br>
+                  <span id="txtReviewGpaxNotice">เกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำที่กำหนด แต่คุณยังสามารถส่งใบสมัครได้ โดยใบสมัครจะเข้าสู่ขั้นตอนการพิจารณาคุณสมบัติเป็นกรณีพิเศษโดยคณะกรรมการ</span>
                 </div>
               </div>
 
-              <!-- PDPA CONSENT SECTION -->
+              <!-- PDPA CONSENT SECTION (CLEAN INTEGRATED ROW) -->
               <div class="pdpa-consent-box" id="boxPdpaConsent">
                 <input type="checkbox" id="chkPdpa" class="pdpa-checkbox" />
                 <label for="chkPdpa" style="font-size: 0.88rem; color: #1e293b; cursor: pointer; line-height: 1.6;">
@@ -1953,14 +2065,12 @@
                 </div>
               </div>
 
-              <!-- LOW GPAX SUCCESS NOTICE -->
-              <div id="successGpaxNotice" style="display: none; margin-top: 18px; padding: 14px 18px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 14px; text-align: left; color: #92400e;">
-                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                  <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
-                  <div style="font-size: 0.88rem; line-height: 1.6;">
-                    <strong style="font-weight: 800; color: #b45309;">หมายเหตุการพิจารณาเป็นกรณีพิเศษ:</strong><br>
-                    เนื่องจากเกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำ คณะกรรมการจะนำใบสมัครของท่านเข้าสู่ขั้นตอนพิจารณาคุณสมบัติเป็นกรณีพิเศษ ท่านสามารถตรวจสอบความคืบหน้าได้ที่แท็บ "ตรวจสอบสถานะ"
-                  </div>
+              <!-- LOW GPAX SUCCESS NOTICE (CLEAN EDITORIAL CALLOUT) -->
+              <div id="successGpaxNotice" class="recruit-callout warning" style="display: none; margin-top: 20px;">
+                <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+                <div style="font-size: 0.88rem; line-height: 1.6;">
+                  <strong style="font-weight: 800; color: #b45309;">หมายเหตุการพิจารณาเป็นกรณีพิเศษ:</strong><br>
+                  เนื่องจากเกรดเฉลี่ยสะสมของคุณต่ำกว่าเกณฑ์ขั้นต่ำ คณะกรรมการจะนำใบสมัครของท่านเข้าสู่ขั้นตอนพิจารณาคุณสมบัติเป็นกรณีพิเศษ ท่านสามารถตรวจสอบความคืบหน้าได้ที่แท็บ "ตรวจสอบสถานะ"
                 </div>
               </div>
 
@@ -2017,15 +2127,15 @@
           <!-- SKELETON LOADING PLACEHOLDER -->
           <div id="statusSkeletonBox" style="display: none; margin-top: 28px;"></div>
 
-          <!-- RESULT CARD (HIDDEN INITIALLY) -->
+          <!-- RESULT SECTION (SEAMLESS HAIRLINE INTEGRATION - NO BOX-IN-BOX) -->
           <div id="statusResultBox"
-            style="display: none; margin-top: 28px; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 24px;">
+            style="display: none; margin-top: 32px; text-align: left; border-top: 1px solid #f1f5f9; padding-top: 28px;">
 
             <div
-              style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #e2e8f0;">
+              style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
               <div>
                 <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;">เลขอ้างอิงใบสมัคร</span>
-                <div style="font-size: 1.15rem; font-weight: 900; color: #0f172a;" id="stRefCode">SP70-XXXX</div>
+                <div style="font-size: 1.25rem; font-weight: 900; color: #0f172a;" id="stRefCode">SP70-XXXX</div>
               </div>
               <div>
                 <span class="status-badge pending" id="stBadge">
@@ -2054,25 +2164,23 @@
               </div>
             </div>
 
-            <!-- LOW GPAX STATUS ALERT -->
-            <div id="stLowGpaxAlert" style="display: none; margin-top: 16px; padding: 14px 16px; background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; color: #92400e;">
-              <div style="display: flex; align-items: flex-start; gap: 10px;">
-                <i data-lucide="alert-triangle" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
-                <div style="font-size: 0.88rem; line-height: 1.6;">
-                  <strong style="font-weight: 800; color: #b45309;">เกรดเฉลี่ยสะสมต่ำกว่าเกณฑ์ที่กำหนด</strong><br>
-                  <span id="stLowGpaxText">เกรดเฉลี่ยสะสมของท่านต่ำกว่าเกณฑ์ขั้นต่ำ ขณะนี้ใบสมัครของท่านอยู่ในขั้นตอนกำลังพิจารณาเป็นกรณีพิเศษโดยคณะกรรมการ</span>
-                </div>
+            <!-- LOW GPAX STATUS ALERT (EDITORIAL CALLOUT) -->
+            <div id="stLowGpaxAlert" class="recruit-callout warning" style="display: none; margin-top: 20px;">
+              <i data-lucide="alert-triangle" style="width: 20px; height: 20px; flex-shrink: 0; color: #d97706; margin-top: 2px;"></i>
+              <div style="font-size: 0.88rem; line-height: 1.6;">
+                <strong style="font-weight: 800; color: #b45309;">เกรดเฉลี่ยสะสมต่ำกว่าเกณฑ์ที่กำหนด</strong><br>
+                <span id="stLowGpaxText">เกรดเฉลี่ยสะสมของท่านต่ำกว่าเกณฑ์ขั้นต่ำ ขณะนี้ใบสมัครของท่านอยู่ในขั้นตอนกำลังพิจารณาเป็นกรณีพิเศษโดยคณะกรรมการ</span>
               </div>
             </div>
 
-            <!-- CORRECTION BOX (IF CORRECTION_NEEDED) -->
+            <!-- CORRECTION BOX (IF CORRECTION_NEEDED - CLEAN EDITORIAL CALLOUT) -->
             <div class="correction-box" id="stCorrectionBox" style="display: none;">
               <div
-                style="display: flex; align-items: center; gap: 8px; font-weight: 800; color: #c2410c; margin-bottom: 6px;">
+                style="display: flex; align-items: center; gap: 8px; font-weight: 800; color: #c2410c; margin-bottom: 8px;">
                 <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
-                <span style="font-size: 1.02rem;">คณะกรรมการขอให้ท่านแก้ไขข้อมูลใบสมัคร</span>
+                <span style="font-size: 1.05rem;">คณะกรรมการขอให้ท่านแก้ไขข้อมูลใบสมัคร</span>
               </div>
-              <div style="font-size: 0.92rem; color: #7c2d12; margin-bottom: 14px; background: rgba(254, 215, 170, 0.4); padding: 12px 14px; border-radius: 8px; border-left: 4px solid #ea580c; line-height: 1.5;" id="stCorrectionNote">
+              <div style="font-size: 0.92rem; color: #7c2d12; margin-bottom: 16px; line-height: 1.55; white-space: pre-line;" id="stCorrectionNote">
                 -
               </div>
 
