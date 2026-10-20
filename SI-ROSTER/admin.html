@@ -8060,7 +8060,7 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (signups) {
-            generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties);
+            renderRosterPdf(signups, title, dateDisplay, customOrderedDuties);
           })
           .withFailureHandler(function (err) {
             showToast('ไม่สามารถดึงข้อมูลได้: ' + err.message, 'error');
@@ -8072,7 +8072,7 @@
           { duty: "ประตู 1", name: "นายสมชาย ใจดี 5/2" },
           { duty: "อาคาร 3", name: "เด็กหญิงเก่ง ดี 4/1" },
         ];
-        generatePdfPrintView(mockSignups, title, dateDisplay, customOrderedDuties);
+        renderRosterPdf(mockSignups, title, dateDisplay, customOrderedDuties);
       }
     }
 
@@ -9083,7 +9083,7 @@
         google.script.run
           .withSuccessHandler(function (signups) {
             const actDutiesNames = act.duties ? act.duties.map(d => d.duty) : [];
-            generatePdfPrintView(signups, act.title, dateDisplay, actDutiesNames);
+            renderRosterPdf(signups, act.title, dateDisplay, actDutiesNames);
           })
           .withFailureHandler(function (err) {
             showToast('ไม่สามารถดึงข้อมูลได้: ' + err.message, 'error');
@@ -9091,7 +9091,7 @@
           .getSignupsForActivity(act.sheetName);
       } else {
         const actDutiesNames = act.duties ? act.duties.map(d => d.duty) : [];
-        generatePdfPrintView(selectedDateInfo.signups || [], act.title, dateDisplay, actDutiesNames);
+        renderRosterPdf(selectedDateInfo.signups || [], act.title, dateDisplay, actDutiesNames);
       }
     }
 
@@ -9285,6 +9285,341 @@
           img.onload = img.onerror = runPrint;
           setTimeout(runPrint, 2000); // fallback
         }
+      } else {
+        runPrint();
+      }
+    }
+
+    function renderRosterPdf(signups, title, dateDisplay, customOrderedDuties) {
+      if (window.exportOptions && window.exportOptions.template === 'modern') {
+        generateModernPdfPrintView(signups, title, dateDisplay, customOrderedDuties, window.exportOptions);
+      } else {
+        generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties);
+      }
+    }
+
+    function generateModernPdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
+      options = options || {};
+      const showStats = options.showStats !== false;
+      const showDualLogo = options.showDualLogo !== false;
+      const useSig = options.sigType === 'digital';
+      const advs = options.selectedAdvisors || [];
+
+      const grouped = {};
+      signups.forEach(s => {
+        if (!grouped[s.duty]) grouped[s.duty] = [];
+        grouped[s.duty].push(s.name);
+      });
+
+      const getClassNum = (name) => {
+        const parts = name.trim().split(' ');
+        const cls = parts[parts.length - 1];
+        if (cls && cls.includes('/')) {
+          const cleanCls = cls.replace(/^ม\./, '');
+          const cParts = cleanCls.split('/');
+          return parseInt(cParts[0]) * 100 + parseInt(cParts[1]);
+        }
+        return 9999;
+      };
+
+      let orderedDuties = [];
+      if (customOrderedDuties && customOrderedDuties.length > 0) {
+        orderedDuties = customOrderedDuties;
+      } else {
+        systemDuties.forEach(d => {
+          if (grouped[d]) orderedDuties.push(d);
+        });
+        for (let d in grouped) {
+          if (!systemDuties.includes(d)) {
+            orderedDuties.push(d);
+          }
+        }
+      }
+
+      for (let d in grouped) {
+        grouped[d].sort((a, b) => getClassNum(a) - getClassNum(b));
+      }
+
+      // Calculate stats
+      const totalSignups = signups.length;
+      let activeDutyCount = 0;
+      orderedDuties.forEach(d => {
+        if (grouped[d] && grouped[d].length > 0) activeDutyCount++;
+      });
+
+      let m4Count = 0, m5Count = 0, m6Count = 0, otherCount = 0;
+      signups.forEach(s => {
+        const parts = (s.name || '').trim().split(' ');
+        const cls = parts[parts.length - 1] || '';
+        if (cls.includes('4/')) m4Count++;
+        else if (cls.includes('5/')) m5Count++;
+        else if (cls.includes('6/')) m6Count++;
+        else otherCount++;
+      });
+
+      // Thai formatted current date
+      const now = new Date();
+      const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      const printTimestamp = `${now.getDate()} ${thaiMonths[now.getMonth()]} ${now.getFullYear() + 543} เวลา ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} น.`;
+
+      Swal.close();
+
+      let html = `
+        <div class="modern-print-wrapper" style="font-family: 'Prompt', 'Sarabun', sans-serif; color: #1e293b; padding: 0; margin: 0; background: #fff;">
+          
+          <!-- Top Decorative Stripe -->
+          <div style="height: 5px; width: 100%; background: linear-gradient(90deg, #0f172a 0%, #1e40af 50%, #38bdf8 100%); border-radius: 3px; margin-bottom: 14px;"></div>
+
+          <!-- Modern Header Table -->
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 12px;">
+            <tr>
+              <td style="width: 75px; vertical-align: middle; text-align: left; padding: 0; border: none;">
+                <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="School Logo" style="width: 68px; height: 68px; object-fit: contain;">
+              </td>
+              <td style="vertical-align: middle; text-align: center; padding: 0 10px; border: none;">
+                <div style="display: inline-block; background: #eff6ff; color: #1d4ed8; padding: 3px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; border: 1px solid #bfdbfe;">
+                  งานสารวัตรนักเรียน • โรงเรียนเดชะปัตตนยานุกูล
+                </div>
+                <div style="font-size: 17px; font-weight: 700; color: #0f172a; line-height: 1.3; margin: 2px 0;">
+                  บัญชีรายชื่อการปฏิบัติหน้าที่สารวัตรนักเรียน
+                </div>
+                <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 6px; flex-wrap: wrap;">
+                  <span style="display: inline-block; background: #0f172a; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                    กิจกรรม: ${title}
+                  </span>
+                  <span style="display: inline-block; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;">
+                    วันที่: ${dateDisplay}
+                  </span>
+                </div>
+              </td>
+              <td style="width: 75px; vertical-align: middle; text-align: right; padding: 0; border: none;">
+                ${showDualLogo ? '<img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="Sarawat Emblem" style="width: 66px; height: 66px; object-fit: contain;">' : '<div style="width: 66px;"></div>'}
+              </td>
+            </tr>
+          </table>
+      `;
+
+      // Stats KPI cards
+      if (showStats) {
+        html += `
+          <!-- Summary Cards -->
+          <table style="width: 100%; border-collapse: separate; border-spacing: 8px 0; margin-bottom: 14px; page-break-inside: avoid; border: none;">
+            <tr>
+              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 8px; text-align: left;">
+                <div style="font-size: 11px; color: #64748b; font-weight: 500;">ผู้ปฏิบัติหน้าที่รวม</div>
+                <div style="font-size: 17px; font-weight: 700; color: #0f172a; margin-top: 2px;">
+                  ${totalSignups} <span style="font-size: 12px; font-weight: 500; color: #64748b;">คน</span>
+                </div>
+              </td>
+              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; border-radius: 8px; text-align: left;">
+                <div style="font-size: 11px; color: #64748b; font-weight: 500;">จุดเวรที่เปิดรับ</div>
+                <div style="font-size: 17px; font-weight: 700; color: #0f172a; margin-top: 2px;">
+                  ${activeDutyCount} <span style="font-size: 12px; font-weight: 500; color: #64748b;">จุด</span>
+                </div>
+              </td>
+              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6; border-radius: 8px; text-align: left;">
+                <div style="font-size: 11px; color: #64748b; font-weight: 500;">สัดส่วน ม.4 / ม.5 / ม.6</div>
+                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 3px;">
+                  <span style="color: #2563eb;">${m4Count}</span> / <span style="color: #0284c7;">${m5Count}</span> / <span style="color: #4f46e5;">${m6Count}</span>
+                </div>
+              </td>
+              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; border-radius: 8px; text-align: left;">
+                <div style="font-size: 11px; color: #64748b; font-weight: 500;">ระบบบันทึกข้อมูล</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: #059669; margin-top: 3px;">
+                  ตรวจเวรทางการ
+                </div>
+              </td>
+            </tr>
+          </table>
+        `;
+      }
+
+      // Duty Cards
+      if (Object.keys(grouped).length === 0) {
+        html += `<div style="text-align: center; padding: 30px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; color: #64748b; font-size: 14px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</div>`;
+      } else {
+        orderedDuties.forEach(d => {
+          if (!grouped[d]) return;
+          const members = grouped[d];
+
+          html += `
+            <div style="margin-bottom: 14px; page-break-inside: avoid; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;">
+              <!-- Duty Header -->
+              <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #ffffff; border: none;">
+                <tr>
+                  <td style="padding: 6px 12px; font-size: 13px; font-weight: 600; text-align: left; border: none; vertical-align: middle;">
+                    <span style="display: inline-block; width: 6px; height: 13px; background: #38bdf8; border-radius: 2px; vertical-align: middle; margin-right: 6px;"></span>
+                    หน้าที่: ${d}
+                  </td>
+                  <td style="padding: 6px 12px; text-align: right; border: none; vertical-align: middle;">
+                    <span style="background: rgba(255,255,255,0.18); color: #f8fafc; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px;">
+                      จำนวน ${members.length} นาย
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Duty Members Table -->
+              <table style="width: 100%; border-collapse: collapse; border: none;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0;">
+                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 6%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">#</th>
+                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 8%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">ตรวจเวร</th>
+                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 44%; text-align: left; border: none; border-bottom: 1px solid #e2e8f0;">ชื่อ - นามสกุล</th>
+                    <th style="padding: 5px 8px; font-size: 11.5px; font-weight: 600; color: #475569; width: 14%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">ระดับชั้น</th>
+                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 28%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">หมายเหตุ / การปฏิบัติงาน</th>
+                  </tr>
+                </thead>
+                <tbody>
+          `;
+
+          members.forEach((fullName, idx) => {
+            const parts = fullName.trim().split(' ');
+            let className = '';
+            let justName = fullName;
+            const lastPart = parts[parts.length - 1];
+            if (lastPart && lastPart.includes('/')) {
+              className = parts.pop();
+              justName = parts.join(' ');
+            }
+
+            const rowBg = idx % 2 === 0 ? '#ffffff' : '#fcfdfe';
+            html += `
+              <tr style="background: ${rowBg}; border-bottom: 1px solid #f1f5f9;">
+                <td style="padding: 5px 6px; font-size: 12px; color: #64748b; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">${idx + 1}</td>
+                <td style="padding: 5px 6px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">
+                  <div style="width: 14px; height: 14px; border: 1.5px solid #94a3b8; border-radius: 3px; display: inline-block; vertical-align: middle; background: #ffffff;"></div>
+                </td>
+                <td style="padding: 5px 10px; font-size: 12.5px; font-weight: 500; color: #0f172a; text-align: left; border: none; border-bottom: 1px solid #f1f5f9;">
+                  ${justName}
+                </td>
+                <td style="padding: 5px 8px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">
+                  <span style="display: inline-block; padding: 2px 7px; background: #e0f2fe; color: #0369a1; border-radius: 4px; font-size: 11px; font-weight: 600; border: 1px solid #bae6fd;">${className || '-'}</span>
+                </td>
+                <td style="padding: 5px 10px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">
+                  <div style="border-bottom: 1px dotted #cbd5e1; height: 14px; width: 85%; margin: 0 auto;"></div>
+                </td>
+              </tr>
+            `;
+          });
+
+          html += `</tbody></table></div>`;
+        });
+      }
+
+      // Advisor Signature Blocks (Modern Executive Card Layout)
+      if (advs.length > 0) {
+        let sigGridHtml = `
+          <table style="width: 100%; margin-top: 20px; page-break-inside: avoid; border: none; border-collapse: separate; border-spacing: 14px 0;">
+            <tr>
+        `;
+
+        advs.forEach((adv, index) => {
+          let sigImgHtml = '';
+          if (useSig && adv.signatureBase64) {
+            sigImgHtml = `<img src="${adv.signatureBase64}" style="max-height: 52px; display: block; margin: 0 auto; filter: contrast(1.1); margin-bottom: -16px; position: relative; z-index: 1;">`;
+          } else {
+            sigImgHtml = `<div style="height: 38px;"></div>`;
+          }
+
+          const sigLine = `<div style="width: 180px; margin: 0 auto; border-bottom: 1.5px solid #0f172a; position: relative; z-index: 2;"></div>`;
+
+          sigGridHtml += `
+            <td style="width: ${advs.length > 1 ? (100 / advs.length) + '%' : '60%'}; vertical-align: top; text-align: center; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; padding: 12px 14px;">
+              <div style="font-size: 11px; font-weight: 600; color: #1e3a8a; letter-spacing: 0.3px; margin-bottom: 6px;">
+                ผู้รับผิดชอบ / ครูที่ปรึกษาปฏิบัติหน้าที่
+              </div>
+              <div style="min-height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 4px;">
+                ${sigImgHtml}
+              </div>
+              ${sigLine}
+              <div style="font-size: 12.5px; font-weight: 600; color: #0f172a; margin-top: 6px;">
+                ( ${adv.name} )
+              </div>
+              <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                ${adv.position}
+              </div>
+              <div style="font-size: 10.5px; color: #94a3b8; margin-top: 6px; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
+                วันที่ ....... / ....... / .............
+              </div>
+            </td>
+          `;
+        });
+
+        sigGridHtml += `</tr></table>`;
+        html += sigGridHtml;
+      }
+
+      // Document Footer
+      html += `
+          <!-- Document Info Footer -->
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 16px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
+            <tr>
+              <td style="text-align: left; border: none; padding: 4px 0;">
+                ระบบบริหารจัดการสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
+              </td>
+              <td style="text-align: right; border: none; padding: 4px 0;">
+                เอกสารทางการ โรงเรียนเดชะปัตตนยานุกูล
+              </td>
+            </tr>
+          </table>
+        </div>
+      `;
+
+      const printWin = window.open('', '_blank');
+      if (!printWin) {
+        Swal.fire('แจ้งเตือน', 'เบราว์เซอร์ของคุณบล็อกการเปิดหน้าต่างใหม่ (Pop-up) กรุณาอนุญาตแล้วลองอีกครั้ง', 'warning');
+        return;
+      }
+
+      printWin.document.open();
+      printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF (Modern) - ' + title + '</title>' +
+        '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
+        '<style>' +
+        '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
+        '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
+        'body { font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; padding: 0; color: #1e293b; margin: 0; background: #ffffff; }' +
+        'table { width: 100%; border-collapse: collapse; }' +
+        '@media print { body { background: #ffffff; } }' +
+        '</style>' +
+        '<' + '/head>' +
+        '<' + 'body>' +
+        html +
+        '<' + '/body>' +
+        '<' + '/html>');
+      printWin.document.close();
+
+      const executePrint = () => {
+        printWin.focus();
+        printWin.print();
+      };
+
+      const runPrint = () => {
+        if (printWin.document.fonts && printWin.document.fonts.ready) {
+          printWin.document.fonts.ready.then(() => setTimeout(executePrint, 350));
+        } else {
+          setTimeout(executePrint, 1000);
+        }
+      };
+
+      // Check images
+      const imgs = printWin.document.querySelectorAll('img');
+      if (imgs.length > 0) {
+        let loadedCount = 0;
+        const checkAllLoaded = () => {
+          loadedCount++;
+          if (loadedCount >= imgs.length) {
+            runPrint();
+          }
+        };
+        imgs.forEach(img => {
+          if (img.complete) {
+            checkAllLoaded();
+          } else {
+            img.onload = img.onerror = checkAllLoaded;
+          }
+        });
+        setTimeout(runPrint, 2500); // safety fallback
       } else {
         runPrint();
       }
@@ -10455,36 +10790,91 @@
 
   <!-- PDF Export Options Modal -->
   <div class="modal-overlay" id="pdfExportModal">
-    <div class="modal-content small">
+    <div class="modal-content" style="max-width: 520px; width: 95%;">
       <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0; font-size:18px;">เลือกครูที่ปรึกษาสำหรับการพิมพ์ PDF</h3>
+        <h3 style="margin:0; font-size:18px; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-print" style="color:var(--primary);"></i> ตัวเลือกการพิมพ์เอกสาร PDF
+        </h3>
         <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:1.2rem; color:var(--text-muted);"
           onclick="closeModal('pdfExportModal')"></i>
       </div>
-      <div class="modal-body">
-        <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom: 15px;">
-          เลือกรายชื่อครูที่ปรึกษาที่จะแสดงลายเซ็นในเอกสาร PDF (หากไม่เลือก จะไม่มีช่องเซ็น)</p>
-        <div id="pdfAdvisorsList"
-          style="max-height: 250px; overflow-y: auto; margin-bottom: 15px; padding: 10px; background: var(--bg); border-radius: 8px;">
-          <!-- Checkboxes will be populated here -->
+      <div class="modal-body" style="padding: 20px;">
+        <!-- Template Selector -->
+        <label style="display:block; margin-bottom:8px; font-weight:600; font-size: 0.95rem;">
+          รูปแบบเอกสาร (PDF Template)
+        </label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+          <!-- Mode 1: แบบราชการ -->
+          <label id="pdfTplCardOfficial" onclick="selectPdfTemplateMode('official')" style="display:flex; flex-direction:column; padding:12px; border:2px solid var(--border-light); border-radius:10px; cursor:pointer; transition:all 0.2s; background:var(--card-bg, #fff);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <span style="font-size:1.2rem; color:var(--text-main);"><i class="fa-solid fa-landmark"></i></span>
+              <input type="radio" name="pdfTemplateMode" value="official" onchange="togglePdfTemplateMode()" style="cursor:pointer; width:16px; height:16px;">
+            </div>
+            <div style="font-weight:600; font-size:0.95rem; margin-bottom:3px; color:var(--text-main);">แบบราชการ (ดั้งเดิม)</div>
+            <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.3;">มาตรฐาน ขาว-ดำ 100% ตามระเบียบเดิม</div>
+          </label>
+          <!-- Mode 2: แบบสวยงาม โมเดิร์น -->
+          <label id="pdfTplCardModern" onclick="selectPdfTemplateMode('modern')" style="display:flex; flex-direction:column; padding:12px; border:2px solid #2563eb; border-radius:10px; cursor:pointer; transition:all 0.2s; background:rgba(37,99,235,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <span style="font-size:1.2rem; color:#2563eb;"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+              <input type="radio" name="pdfTemplateMode" value="modern" checked onchange="togglePdfTemplateMode()" style="cursor:pointer; width:16px; height:16px;">
+            </div>
+            <div style="font-weight:600; font-size:0.95rem; margin-bottom:3px; color:#2563eb;">แบบสวยงาม โมเดิร์น</div>
+            <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.3;">โทน Deep Navy การ์ดตารางแยกเวร สรุปสถิติ</div>
+          </label>
         </div>
-        <div class="form-group" style="margin-bottom: 15px;">
-          <label style="display:block; margin-bottom:8px; font-weight:500; font-size: 0.95rem;">รูปแบบลายเซ็น</label>
-          <div style="display:flex; gap:15px; font-size: 0.9rem;">
-            <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
-              <input type="radio" name="pdfSigType" value="digital" checked
-                style="cursor:pointer; width: 16px; height: 16px;"> พิมพ์ลายเซ็นดิจิตอล
+
+        <!-- Modern Custom Options (Visible when Modern is selected) -->
+        <div id="pdfModernOptionsBox" style="background:var(--bg, #f8fafc); border:1px solid var(--border-light, #e2e8f0); border-radius:8px; padding:12px 14px; margin-bottom:16px;">
+          <div style="font-size:0.85rem; font-weight:600; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i class="fa-solid fa-sliders" style="color:#2563eb;"></i> ตัวเลือกปรับแต่งสำหรับแบบสวยงาม (Custom)
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.88rem;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin:0;">
+              <input type="checkbox" id="pdfOptShowStats" checked style="cursor:pointer; width:16px; height:16px;">
+              <span>แสดงแถบสรุปสถิติจำนวนคนและระดับชั้น (Summary Cards)</span>
             </label>
-            <label style="display:flex; align-items:center; gap:5px; cursor:pointer;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin:0;">
+              <input type="checkbox" id="pdfOptShowDualLogo" checked style="cursor:pointer; width:16px; height:16px;">
+              <span>แสดงตราสัญลักษณ์คู่ (ตราโรงเรียนเดชะฯ + ตราสารวัตรนักเรียน)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Advisors List for Signature -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-weight:600; font-size: 0.92rem;">
+            <span>รายชื่อครูที่ปรึกษาที่จะแสดงลายเซ็น</span>
+            <span style="font-size:0.78rem; font-weight:normal; color:var(--text-muted);">(หากไม่เลือก จะไม่มีช่องเซ็น)</span>
+          </label>
+          <div id="pdfAdvisorsList"
+            style="max-height: 180px; overflow-y: auto; padding: 6px 10px; background: var(--bg); border: 1px solid var(--border-light); border-radius: 8px;">
+            <!-- Checkboxes will be populated here -->
+          </div>
+        </div>
+
+        <!-- Signature Format -->
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label style="display:block; margin-bottom:6px; font-weight:600; font-size: 0.92rem;">รูปแบบลายเซ็น</label>
+          <div style="display:flex; gap:20px; font-size: 0.88rem;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0;">
+              <input type="radio" name="pdfSigType" value="digital" checked
+                style="cursor:pointer; width: 16px; height: 16px;"> พิมพ์ลายเซ็นดิจิทัล
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; margin:0;">
               <input type="radio" name="pdfSigType" value="manual" style="cursor:pointer; width: 16px; height: 16px;">
               เว้นว่างให้เซ็นด้วยมือ
             </label>
           </div>
         </div>
+
         <input type="hidden" id="pdfExportTarget" value="">
         <input type="hidden" id="pdfExportArgs" value="">
-        <button class="btn btn-primary btn-block" onclick="confirmPdfExport()"><i class="fa-solid fa-print"></i>
-          ยืนยันและพิมพ์</button>
+        <div style="display:flex; gap:10px;">
+          <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeModal('pdfExportModal')">ยกเลิก</button>
+          <button type="button" class="btn btn-primary btn-block" style="flex:2; margin:0;" onclick="confirmPdfExport()"><i class="fa-solid fa-print"></i>
+            ยืนยันและพิมพ์ PDF</button>
+        </div>
       </div>
     </div>
   </div>
@@ -10699,9 +11089,67 @@
       openPdfExportModal('dash', [sheetName, title, dateDisplay, dutiesStr]);
     }
 
+    function selectPdfTemplateMode(mode) {
+      const radio = document.querySelector(`input[name="pdfTemplateMode"][value="${mode}"]`);
+      if (radio) {
+        radio.checked = true;
+        togglePdfTemplateMode();
+      }
+    }
+
+    function togglePdfTemplateMode() {
+      const selectedMode = document.querySelector('input[name="pdfTemplateMode"]:checked')?.value || 'modern';
+      const cardOfficial = document.getElementById('pdfTplCardOfficial');
+      const cardModern = document.getElementById('pdfTplCardModern');
+      const modernOptionsBox = document.getElementById('pdfModernOptionsBox');
+
+      if (selectedMode === 'official') {
+        if (cardOfficial) {
+          cardOfficial.style.borderColor = '#2563eb';
+          cardOfficial.style.background = 'rgba(37,99,235,0.06)';
+        }
+        if (cardModern) {
+          cardModern.style.borderColor = 'var(--border-light, #e2e8f0)';
+          cardModern.style.background = 'var(--card-bg, #fff)';
+        }
+        if (modernOptionsBox) modernOptionsBox.style.display = 'none';
+      } else {
+        if (cardOfficial) {
+          cardOfficial.style.borderColor = 'var(--border-light, #e2e8f0)';
+          cardOfficial.style.background = 'var(--card-bg, #fff)';
+        }
+        if (cardModern) {
+          cardModern.style.borderColor = '#2563eb';
+          cardModern.style.background = 'rgba(37,99,235,0.06)';
+        }
+        if (modernOptionsBox) modernOptionsBox.style.display = 'block';
+      }
+    }
+
     function openPdfExportModal(targetFnName, argsArray) {
       document.getElementById('pdfExportTarget').value = targetFnName;
       document.getElementById('pdfExportArgs').value = JSON.stringify(argsArray);
+
+      // Restore saved preferences
+      const savedMode = localStorage.getItem('roster_pdf_template_mode') || 'modern';
+      const modeRadio = document.querySelector(`input[name="pdfTemplateMode"][value="${savedMode}"]`);
+      if (modeRadio) modeRadio.checked = true;
+
+      const savedSigType = localStorage.getItem('roster_pdf_sig_type') || 'digital';
+      const sigRadio = document.querySelector(`input[name="pdfSigType"][value="${savedSigType}"]`);
+      if (sigRadio) sigRadio.checked = true;
+
+      const savedShowStats = localStorage.getItem('roster_pdf_show_stats');
+      if (document.getElementById('pdfOptShowStats') && savedShowStats !== null) {
+        document.getElementById('pdfOptShowStats').checked = (savedShowStats === 'true');
+      }
+
+      const savedShowDualLogo = localStorage.getItem('roster_pdf_show_dual_logo');
+      if (document.getElementById('pdfOptShowDualLogo') && savedShowDualLogo !== null) {
+        document.getElementById('pdfOptShowDualLogo').checked = (savedShowDualLogo === 'true');
+      }
+
+      togglePdfTemplateMode();
 
       // Load advisors if empty
       if (advisorsList.length === 0) {
@@ -10752,6 +11200,20 @@
       window.exportOptions.selectedAdvisors = selectedAdvisors;
       const sigTypeRadio = document.querySelector('input[name="pdfSigType"]:checked');
       window.exportOptions.sigType = sigTypeRadio ? sigTypeRadio.value : 'digital';
+
+      // Template & Custom options
+      const tplRadio = document.querySelector('input[name="pdfTemplateMode"]:checked');
+      window.exportOptions.template = tplRadio ? tplRadio.value : 'modern';
+      window.exportOptions.showStats = document.getElementById('pdfOptShowStats') ? document.getElementById('pdfOptShowStats').checked : true;
+      window.exportOptions.showDualLogo = document.getElementById('pdfOptShowDualLogo') ? document.getElementById('pdfOptShowDualLogo').checked : true;
+
+      // Save preferences to localStorage
+      try {
+        localStorage.setItem('roster_pdf_template_mode', window.exportOptions.template);
+        localStorage.setItem('roster_pdf_sig_type', window.exportOptions.sigType);
+        localStorage.setItem('roster_pdf_show_stats', window.exportOptions.showStats);
+        localStorage.setItem('roster_pdf_show_dual_logo', window.exportOptions.showDualLogo);
+      } catch (e) {}
 
       closeModal('pdfExportModal');
 
