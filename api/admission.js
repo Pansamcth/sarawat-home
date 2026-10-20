@@ -7,7 +7,9 @@ module.exports = async function handler(req, res) {
     if (!fs.existsSync(filePath)) {
       filePath = path.join(process.cwd(), 'admissions.html');
     }
-    const html = fs.readFileSync(filePath, 'utf8');
+    let html = fs.readFileSync(filePath, 'utf8');
+    html = html.replace(/https:\/\/www\.sarawatdc\.site\/assets\/images\/recruit-cover\.jpg/g, 'https://admission.sarawatdc.site/assets/images/recruit-cover.jpg');
+    html = html.replace(/https:\/\/www\.sarawatdc\.site\/assets\/icons\/sarawat-logo\.png/g, 'https://admission.sarawatdc.site/assets/icons/sarawat-logo.png');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     return res.status(200).send(html);

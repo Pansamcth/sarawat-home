@@ -76,6 +76,22 @@
       "has": [
         {
           "type": "host",
+          "value": "^rosters?\\.sarawat(dc)?\\.site$"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/si-roster",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
           "value": "^admissions?\\.sarawat(dc)?\\.site$"
         }
       ],
@@ -256,28 +272,6 @@
         }
       ],
       "destination": "https://admin.sarawatdc.site/admin",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "^rosters?\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/si-roster",
-      "permanent": false
-    },
-    {
-      "source": "/index.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "^rosters?\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/si-roster",
       "permanent": false
     },
     {
@@ -882,6 +876,26 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^rosters?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^rosters?\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/si-roster"
+    },
     {
       "source": "/si-roster",
       "has": [

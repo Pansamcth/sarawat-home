@@ -3,8 +3,8 @@ const path = require('path');
 
 const DEFAULT_TITLE = 'ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)';
 const DEFAULT_DESC = 'SI-ROSTER ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก ช่วยให้การจัดเวร การประสานงาน และการบริหารกำลังพลเป็นระบบ สะดวก และมีประสิทธิภาพยิ่งขึ้น';
-const DEFAULT_IMAGE = 'https://www.sarawatdc.site/assets/images/si-roster-cover.jpg';
-const DEFAULT_CANONICAL = 'https://www.sarawatdc.site/si-roster';
+const DEFAULT_IMAGE = 'https://roster.sarawatdc.site/assets/images/si-roster-cover.jpg';
+const DEFAULT_CANONICAL = 'https://roster.sarawatdc.site';
 
 function stripMarkdown(text) {
   if (!text) return '';
@@ -102,6 +102,13 @@ module.exports = async function handler(req, res) {
     const filePath = path.join(process.cwd(), 'SI-ROSTER', 'index.html');
     let html = fs.readFileSync(filePath, 'utf8');
 
+    // Ensure fallback tags resolve to active roster domain if accessed via roster subdomain
+    if (isRosterSubdomain) {
+      html = html.replace(/https:\/\/www\.sarawatdc\.site\/assets\/images\/si-roster-cover\.jpg/g, 'https://roster.sarawatdc.site/assets/images/si-roster-cover.jpg');
+      html = html.replace(/https:\/\/www\.sarawatdc\.site\/assets\/icons\/sarawat-logo\.png/g, 'https://roster.sarawatdc.site/assets/icons/sarawat-logo.png');
+      html = html.replace(/https:\/\/www\.sarawatdc\.site\/si-roster/g, 'https://roster.sarawatdc.site');
+    }
+
     const targetId = (req.query.id || req.query.activity || req.query.sheet || req.query.event || '').toString().trim();
     if (!targetId) {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -152,8 +159,8 @@ module.exports = async function handler(req, res) {
       const modalTitle = found.title || targetId;
       const fullTitle = `${modalTitle} | ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER)`;
       const modalDesc = stripMarkdown(found.description) || DEFAULT_DESC;
-      const bannerImage = DEFAULT_IMAGE;
-      const canonicalUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(found.sheetName || found.id || targetId)}`;
+      const bannerImage = isRosterSubdomain ? 'https://roster.sarawatdc.site/assets/images/si-roster-cover.jpg' : DEFAULT_IMAGE;
+      const canonicalUrl = isRosterSubdomain ? `https://roster.sarawatdc.site/?id=${encodeURIComponent(found.sheetName || found.id || targetId)}` : `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(found.sheetName || found.id || targetId)}`;
 
       // Replace Title
       html = html.replace(/<title\b[^>]*>.*?<\/title>/i, `<title id="pageTitle">${escapeHtml(fullTitle)}</title>`);
