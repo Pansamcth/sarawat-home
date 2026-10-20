@@ -9315,7 +9315,7 @@
         const parts = name.trim().split(' ');
         const cls = parts[parts.length - 1];
         if (cls && cls.includes('/')) {
-          const cleanCls = cls.replace(/^ม\./, '');
+          const cleanCls = cls.replace(/^ม\\./, '');
           const cParts = cleanCls.split('/');
           return parseInt(cParts[0]) * 100 + parseInt(cParts[1]);
         }
@@ -9365,68 +9365,62 @@
       Swal.close();
 
       let html = `
-        <div class="modern-print-wrapper" style="font-family: 'Prompt', 'Sarabun', sans-serif; color: #1e293b; padding: 0; margin: 0; background: #fff;">
+        <div class="minimal-print-wrapper" style="font-family: 'Prompt', 'Sarabun', sans-serif; color: #0f172a; padding: 0; margin: 0; background: #ffffff;">
           
-          <!-- Top Decorative Stripe -->
-          <div style="height: 5px; width: 100%; background: linear-gradient(90deg, #0f172a 0%, #1e40af 50%, #38bdf8 100%); border-radius: 3px; margin-bottom: 14px;"></div>
-
-          <!-- Modern Header Table -->
-          <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 12px;">
+          <!-- Minimalist Header Table: Logos together on left with subtle divider -->
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
             <tr>
-              <td style="width: 75px; vertical-align: middle; text-align: left; padding: 0; border: none;">
-                <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="School Logo" style="width: 68px; height: 68px; object-fit: contain;">
-              </td>
-              <td style="vertical-align: middle; text-align: center; padding: 0 10px; border: none;">
-                <div style="display: inline-block; background: #eff6ff; color: #1d4ed8; padding: 3px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; border: 1px solid #bfdbfe;">
-                  งานสารวัตรนักเรียน • โรงเรียนเดชะปัตตนยานุกูล
-                </div>
-                <div style="font-size: 17px; font-weight: 700; color: #0f172a; line-height: 1.3; margin: 2px 0;">
-                  บัญชีรายชื่อการปฏิบัติหน้าที่สารวัตรนักเรียน
-                </div>
-                <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 6px; flex-wrap: wrap;">
-                  <span style="display: inline-block; background: #0f172a; color: #ffffff; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">
-                    กิจกรรม: ${title}
-                  </span>
-                  <span style="display: inline-block; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;">
-                    วันที่: ${dateDisplay}
-                  </span>
+              <td style="vertical-align: middle; text-align: left; padding: 0 0 10px 0; border: none; width: ${showDualLogo ? '135px' : '70px'};">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="School Crest" style="height: 52px; width: auto; object-fit: contain;">
+                  ${showDualLogo ? '<img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="Sarawat Emblem" style="height: 48px; width: auto; object-fit: contain;">' : ''}
                 </div>
               </td>
-              <td style="width: 75px; vertical-align: middle; text-align: right; padding: 0; border: none;">
-                ${showDualLogo ? '<img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="Sarawat Emblem" style="width: 66px; height: 66px; object-fit: contain;">' : '<div style="width: 66px;"></div>'}
+              <td style="vertical-align: middle; text-align: left; padding: 0 0 10px 14px; border: none; border-left: 1px solid #cbd5e1;">
+                <div style="font-size: 14.5px; font-weight: 700; color: #0f172a; line-height: 1.25;">งานสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                <div style="font-size: 13px; font-weight: 600; color: #334155; margin-top: 3px;">
+                  บันทึกการปฏิบัติหน้าที่: <span style="color: #0f172a;">${title}</span>
+                </div>
+                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                  วันที่จัดกิจกรรม: <span style="color: #1e293b; font-weight: 500;">${dateDisplay}</span>
+                </div>
+              </td>
+              <td style="vertical-align: middle; text-align: right; padding: 0 0 10px 0; border: none; white-space: nowrap;">
+                <div style="font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.3px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fafafa;">
+                  SI-ROSTER • ทางการ
+                </div>
               </td>
             </tr>
           </table>
       `;
 
-      // Stats KPI cards
+      // Minimalist Summary Metrics Strip
       if (showStats) {
         html += `
-          <!-- Summary Cards -->
-          <table style="width: 100%; border-collapse: separate; border-spacing: 8px 0; margin-bottom: 14px; page-break-inside: avoid; border: none;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px; page-break-inside: avoid; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa;">
             <tr>
-              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 8px; text-align: left;">
-                <div style="font-size: 11px; color: #64748b; font-weight: 500;">ผู้ปฏิบัติหน้าที่รวม</div>
-                <div style="font-size: 17px; font-weight: 700; color: #0f172a; margin-top: 2px;">
-                  ${totalSignups} <span style="font-size: 12px; font-weight: 500; color: #64748b;">คน</span>
+              <td style="padding: 7px 12px; text-align: left; border: none; border-right: 1px solid #e2e8f0; width: 25%;">
+                <div style="font-size: 10.5px; color: #64748b; font-weight: 500;">ผู้ปฏิบัติหน้าที่รวม</div>
+                <div style="font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 1px;">
+                  ${totalSignups} <span style="font-size: 11px; font-weight: normal; color: #64748b;">คน</span>
                 </div>
               </td>
-              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; border-radius: 8px; text-align: left;">
-                <div style="font-size: 11px; color: #64748b; font-weight: 500;">จุดเวรที่เปิดรับ</div>
-                <div style="font-size: 17px; font-weight: 700; color: #0f172a; margin-top: 2px;">
-                  ${activeDutyCount} <span style="font-size: 12px; font-weight: 500; color: #64748b;">จุด</span>
+              <td style="padding: 7px 12px; text-align: left; border: none; border-right: 1px solid #e2e8f0; width: 25%;">
+                <div style="font-size: 10.5px; color: #64748b; font-weight: 500;">จุดเวรที่เปิดรับ</div>
+                <div style="font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 1px;">
+                  ${activeDutyCount} <span style="font-size: 11px; font-weight: normal; color: #64748b;">จุด</span>
                 </div>
               </td>
-              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6; border-radius: 8px; text-align: left;">
-                <div style="font-size: 11px; color: #64748b; font-weight: 500;">สัดส่วน ม.4 / ม.5 / ม.6</div>
-                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 3px;">
-                  <span style="color: #2563eb;">${m4Count}</span> / <span style="color: #0284c7;">${m5Count}</span> / <span style="color: #4f46e5;">${m6Count}</span>
+              <td style="padding: 7px 12px; text-align: left; border: none; border-right: 1px solid #e2e8f0; width: 28%;">
+                <div style="font-size: 10.5px; color: #64748b; font-weight: 500;">สัดส่วน ม.4 / ม.5 / ม.6</div>
+                <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 2px;">
+                  ${m4Count} / ${m5Count} / ${m6Count} <span style="font-size: 11px; font-weight: normal; color: #64748b;">คน</span>
                 </div>
               </td>
-              <td style="width: 25%; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #10b981; border-radius: 8px; text-align: left;">
-                <div style="font-size: 11px; color: #64748b; font-weight: 500;">ระบบบันทึกข้อมูล</div>
-                <div style="font-size: 13.5px; font-weight: 600; color: #059669; margin-top: 3px;">
-                  ตรวจเวรทางการ
+              <td style="padding: 7px 12px; text-align: left; border: none; width: 22%;">
+                <div style="font-size: 10.5px; color: #64748b; font-weight: 500;">ระบบบันทึกข้อมูล</div>
+                <div style="font-size: 12.5px; font-weight: 600; color: #334155; margin-top: 2px;">
+                  ตรวจเวรมาตรฐาน
                 </div>
               </td>
             </tr>
@@ -9434,25 +9428,25 @@
         `;
       }
 
-      // Duty Cards
+      // Minimalist Duty Tables
       if (Object.keys(grouped).length === 0) {
-        html += `<div style="text-align: center; padding: 30px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; color: #64748b; font-size: 14px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</div>`;
+        html += `<div style="text-align: center; padding: 25px; background: #fafafa; border: 1px dashed #cbd5e1; border-radius: 6px; color: #64748b; font-size: 13.5px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</div>`;
       } else {
         orderedDuties.forEach(d => {
           if (!grouped[d]) return;
           const members = grouped[d];
 
           html += `
-            <div style="margin-bottom: 14px; page-break-inside: avoid; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #ffffff;">
-              <!-- Duty Header -->
-              <table style="width: 100%; border-collapse: collapse; background: #0f172a; color: #ffffff; border: none;">
+            <div style="margin-bottom: 14px; page-break-inside: avoid; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #ffffff;">
+              <!-- Duty Header: Minimalist Clean Header -->
+              <table style="width: 100%; border-collapse: collapse; background: #f8fafc; border-bottom: 1.5px solid #0f172a; border: none;">
                 <tr>
-                  <td style="padding: 6px 12px; font-size: 13px; font-weight: 600; text-align: left; border: none; vertical-align: middle;">
-                    <span style="display: inline-block; width: 6px; height: 13px; background: #38bdf8; border-radius: 2px; vertical-align: middle; margin-right: 6px;"></span>
+                  <td style="padding: 6px 12px; font-size: 13px; font-weight: 700; color: #0f172a; text-align: left; border: none; vertical-align: middle;">
+                    <span style="display: inline-block; width: 3px; height: 12px; background: #0f172a; vertical-align: middle; margin-right: 6px; border-radius: 1px;"></span>
                     หน้าที่: ${d}
                   </td>
                   <td style="padding: 6px 12px; text-align: right; border: none; vertical-align: middle;">
-                    <span style="background: rgba(255,255,255,0.18); color: #f8fafc; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px;">
+                    <span style="font-size: 11px; font-weight: 600; color: #475569; background: #e2e8f0; padding: 2px 8px; border-radius: 4px;">
                       จำนวน ${members.length} นาย
                     </span>
                   </td>
@@ -9462,12 +9456,12 @@
               <!-- Duty Members Table -->
               <table style="width: 100%; border-collapse: collapse; border: none;">
                 <thead>
-                  <tr style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0;">
-                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 6%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">#</th>
-                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 8%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">ตรวจเวร</th>
-                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 44%; text-align: left; border: none; border-bottom: 1px solid #e2e8f0;">ชื่อ - นามสกุล</th>
-                    <th style="padding: 5px 8px; font-size: 11.5px; font-weight: 600; color: #475569; width: 14%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">ระดับชั้น</th>
-                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 28%; text-align: center; border: none; border-bottom: 1px solid #e2e8f0;">หมายเหตุ / การปฏิบัติงาน</th>
+                  <tr style="background: #ffffff; border-bottom: 1px solid #cbd5e1;">
+                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 6%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">#</th>
+                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 8%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">ตรวจเวร</th>
+                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 44%; text-align: left; border: none; border-bottom: 1px solid #cbd5e1;">ชื่อ - นามสกุล</th>
+                    <th style="padding: 5px 8px; font-size: 11.5px; font-weight: 600; color: #475569; width: 14%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">ระดับชั้น</th>
+                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 28%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">หมายเหตุ / การปฏิบัติงาน</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -9483,21 +9477,21 @@
               justName = parts.join(' ');
             }
 
-            const rowBg = idx % 2 === 0 ? '#ffffff' : '#fcfdfe';
+            const rowBg = idx % 2 === 0 ? '#ffffff' : '#fafafa';
             html += `
               <tr style="background: ${rowBg}; border-bottom: 1px solid #f1f5f9;">
                 <td style="padding: 5px 6px; font-size: 12px; color: #64748b; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">${idx + 1}</td>
                 <td style="padding: 5px 6px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">
-                  <div style="width: 14px; height: 14px; border: 1.5px solid #94a3b8; border-radius: 3px; display: inline-block; vertical-align: middle; background: #ffffff;"></div>
+                  <div style="width: 13px; height: 13px; border: 1.5px solid #64748b; border-radius: 2px; display: inline-block; vertical-align: middle; background: #ffffff;"></div>
                 </td>
                 <td style="padding: 5px 10px; font-size: 12.5px; font-weight: 500; color: #0f172a; text-align: left; border: none; border-bottom: 1px solid #f1f5f9;">
                   ${justName}
                 </td>
                 <td style="padding: 5px 8px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">
-                  <span style="display: inline-block; padding: 2px 7px; background: #e0f2fe; color: #0369a1; border-radius: 4px; font-size: 11px; font-weight: 600; border: 1px solid #bae6fd;">${className || '-'}</span>
+                  <span style="display: inline-block; padding: 1px 7px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 3px; font-size: 11px; font-weight: 500;">${className || '-'}</span>
                 </td>
                 <td style="padding: 5px 10px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9;">
-                  <div style="border-bottom: 1px dotted #cbd5e1; height: 14px; width: 85%; margin: 0 auto;"></div>
+                  <div style="border-bottom: 1px dotted #cbd5e1; height: 12px; width: 85%; margin: 0 auto;"></div>
                 </td>
               </tr>
             `;
@@ -9507,10 +9501,10 @@
         });
       }
 
-      // Advisor Signature Blocks (Modern Executive Card Layout)
+      // Minimalist Advisor Signature Blocks
       if (advs.length > 0) {
         let sigGridHtml = `
-          <table style="width: 100%; margin-top: 20px; page-break-inside: avoid; border: none; border-collapse: separate; border-spacing: 14px 0;">
+          <table style="width: 100%; margin-top: 20px; page-break-inside: avoid; border: none; border-collapse: separate; border-spacing: 16px 0;">
             <tr>
         `;
 
@@ -9522,11 +9516,11 @@
             sigImgHtml = `<div style="height: 38px;"></div>`;
           }
 
-          const sigLine = `<div style="width: 180px; margin: 0 auto; border-bottom: 1.5px solid #0f172a; position: relative; z-index: 2;"></div>`;
+          const sigLine = `<div style="width: 170px; margin: 0 auto; border-bottom: 1px solid #0f172a; position: relative; z-index: 2;"></div>`;
 
           sigGridHtml += `
-            <td style="width: ${advs.length > 1 ? (100 / advs.length) + '%' : '60%'}; vertical-align: top; text-align: center; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; padding: 12px 14px;">
-              <div style="font-size: 11px; font-weight: 600; color: #1e3a8a; letter-spacing: 0.3px; margin-bottom: 6px;">
+            <td style="width: ${advs.length > 1 ? (100 / advs.length) + '%' : '60%'}; vertical-align: top; text-align: center; border: 1px solid #e2e8f0; border-radius: 6px; background: #ffffff; padding: 12px 14px;">
+              <div style="font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.3px; margin-bottom: 6px;">
                 ผู้รับผิดชอบ / ครูที่ปรึกษาปฏิบัติหน้าที่
               </div>
               <div style="min-height: 48px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 4px;">
@@ -9539,7 +9533,7 @@
               <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
                 ${adv.position}
               </div>
-              <div style="font-size: 10.5px; color: #94a3b8; margin-top: 6px; border-top: 1px dashed #cbd5e1; padding-top: 4px;">
+              <div style="font-size: 10.5px; color: #94a3b8; margin-top: 6px;">
                 วันที่ ....... / ....... / .............
               </div>
             </td>
@@ -9550,16 +9544,15 @@
         html += sigGridHtml;
       }
 
-      // Document Footer
+      // Minimalist Footer
       html += `
-          <!-- Document Info Footer -->
-          <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 16px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 14px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
             <tr>
               <td style="text-align: left; border: none; padding: 4px 0;">
-                ระบบบริหารจัดการสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
+                ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
               </td>
               <td style="text-align: right; border: none; padding: 4px 0;">
-                เอกสารทางการ โรงเรียนเดชะปัตตนยานุกูล
+                โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี
               </td>
             </tr>
           </table>
@@ -9573,12 +9566,12 @@
       }
 
       printWin.document.open();
-      printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF (Modern) - ' + title + '</title>' +
+      printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF (Minimal) - ' + title + '</title>' +
         '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
         '<style>' +
         '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
         '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
-        'body { font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; padding: 0; color: #1e293b; margin: 0; background: #ffffff; }' +
+        'body { font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; padding: 0; color: #0f172a; margin: 0; background: #ffffff; }' +
         'table { width: 100%; border-collapse: collapse; }' +
         '@media print { body { background: #ffffff; } }' +
         '</style>' +
@@ -10819,8 +10812,8 @@
               <span style="font-size:1.2rem; color:#2563eb;"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
               <input type="radio" name="pdfTemplateMode" value="modern" checked onchange="togglePdfTemplateMode()" style="cursor:pointer; width:16px; height:16px;">
             </div>
-            <div style="font-weight:600; font-size:0.95rem; margin-bottom:3px; color:#2563eb;">แบบสวยงาม โมเดิร์น</div>
-            <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.3;">โทน Deep Navy การ์ดตารางแยกเวร สรุปสถิติ</div>
+            <div style="font-weight:600; font-size:0.95rem; margin-bottom:3px; color:#2563eb;">แบบสวยงาม (มินิมอล)</div>
+            <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.3;">ดีไซน์มินิมอลคลีน โลโก้คู่ติดกัน ตารางโปร่งสบายตา</div>
           </label>
         </div>
 
@@ -10836,7 +10829,7 @@
             </label>
             <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin:0;">
               <input type="checkbox" id="pdfOptShowDualLogo" checked style="cursor:pointer; width:16px; height:16px;">
-              <span>แสดงตราสัญลักษณ์คู่ (ตราโรงเรียนเดชะฯ + ตราสารวัตรนักเรียน)</span>
+              <span>แสดงตราสัญลักษณ์คู่ติดกัน (ตราโรงเรียนเดชะฯ + ตราสารวัตรนักเรียน)</span>
             </label>
           </div>
         </div>
