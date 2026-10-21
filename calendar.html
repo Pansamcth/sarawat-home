@@ -1613,7 +1613,7 @@
           '</div>' +
           '<div class="dg-event-details">' +
             '<div class="dg-event-header-row">' +
-              '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>' +
+              '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>' + (evt.isFeatured ? '<span style="font-size: 0.74rem; font-weight: 750; padding: 2px 8px; border-radius: var(--dg-radius-pill); background: #fef3c7; color: #b45309; border: 1px solid #fde68a; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="star" style="width: 11px; height: 11px; fill: currentColor;"></i>กิจกรรมเด่น</span>' : '') +
               '<span style="font-size: 0.74rem; padding: 2px 8px; border-radius: var(--dg-radius-pill); ' + status.style + '">' +
                 escapeHtml(status.label) +
               '</span>' +

@@ -363,7 +363,14 @@
 
       if (base) {
         try {
-          const res = await fetch(`${base}/api/events`);
+          const params = new URLSearchParams();
+          if (options.category && options.category !== 'all') params.append('category', options.category);
+          if (options.upcoming) params.append('upcoming', 'true');
+          if (options.q && options.q.trim()) params.append('q', options.q.trim());
+          if (options.limit && Number(options.limit) > 0) params.append('limit', options.limit);
+          const qs = params.toString() ? `?${params.toString()}` : '';
+
+          const res = await fetch(`${base}/api/events${qs}`);
           if (res.ok) {
             rawEvents = await res.json();
             if (Array.isArray(rawEvents)) {
@@ -483,7 +490,8 @@
         audience: item.audience || item.target || '',
         desc: item.desc || item.note || '',
         dateStart: item.dateStart || item.date_start || '',
-        dateEnd: item.dateEnd || item.date_end || ''
+        dateEnd: item.dateEnd || item.date_end || '',
+        isFeatured: Boolean(item.isFeatured || item.is_featured)
       };
 
       const res = await fetch(`${base}/api/events`, {
