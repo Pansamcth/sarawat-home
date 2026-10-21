@@ -51,8 +51,6 @@ if errorlevel 1 git commit -m "Update latest website" 2>nul
 echo [3/3] Pushing to GitHub branches...
 git branch -M main
 git push -u origin main --force
-git push origin main:master --force
-git push origin main:Pansamcth-patch-1 --force
 
 if not errorlevel 1 (
     echo.
