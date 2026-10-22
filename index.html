@@ -1404,7 +1404,11 @@
           <article class="dg-news-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
             <div class="dg-news-cover-wrap">
               <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
-              <span class="dg-news-tag">${escapeHtml(item.tag || 'กิจกรรม')}</span>
+              <div style="position: absolute; top: 12px; left: 12px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 24px); z-index: 2;">
+                ${(Array.isArray(item.tags) && item.tags.length > 0 && window.renderTagBadgesHtml)
+                  ? window.renderTagBadgesHtml(item.tags)
+                  : `<span class="dg-news-tag" style="position: relative; top: auto; left: auto;">${escapeHtml(item.tag || 'กิจกรรม')}</span>`}
+              </div>
             </div>
             <div class="dg-news-content">
               <h3 class="dg-news-card-title">${escapeHtml(item.title)}</h3>
@@ -1421,7 +1425,7 @@
               ` : ''}
 
               <div class="dg-news-card-meta-bar">
-                <span class="dg-news-counter-tag">${index === 0 ? '🔥 กิจกรรมล่าสุด (LATEST)' : `ACTIVITY #${index + 1}`}</span>
+                <span class="dg-news-counter-tag">${(item.dateStart || item.date) ? (window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'short') : (item.date || item.dateStart)) : (index === 0 ? '🔥 กิจกรรมล่าสุด' : `ACTIVITY #${index + 1}`)}</span>
                 <span class="dg-news-read-more-btn">
                   <span>ดูรายละเอียด</span>
                   <i data-lucide="arrow-up-right"></i>
@@ -1485,12 +1489,14 @@
 
       container.innerHTML = `
         <div class="dg-news-modal-header">
-          <div class="dg-news-modal-meta-top">
-            <span class="dg-news-modal-badge">${escapeHtml(item.tag || 'กิจกรรม')}</span>
-            ${item.date ? `
+          <div class="dg-news-modal-meta-top" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+            ${(Array.isArray(item.tags) && item.tags.length > 0 && window.renderTagBadgesHtml)
+              ? window.renderTagBadgesHtml(item.tags)
+              : `<span class="dg-news-modal-badge">${escapeHtml(item.tag || 'กิจกรรม')}</span>`}
+            ${(item.dateStart || item.date) ? `
               <span class="dg-news-modal-date">
                 <i data-lucide="calendar"></i>
-                <span>${escapeHtml(item.date)}</span>
+                <span>${escapeHtml(window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'full') : (item.date || item.dateStart))}</span>
               </span>
             ` : ''}
           </div>
@@ -1649,9 +1655,21 @@
         container.innerHTML = events.map(evt => {
           const catClass = `cat-${evt.category || 'general'}`;
           const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป');
-          const dayDisplay = evt.day || '-';
-          const monthDisplay = evt.month || '';
-          const weekdayDisplay = evt.weekday || '';
+          let dayDisplay = evt.day;
+          let monthDisplay = evt.month;
+          let weekdayDisplay = evt.weekday;
+          if (evt.dateStart && window.formatThaiDate) {
+            dayDisplay = window.formatThaiDate(evt.dateStart, 'day');
+            monthDisplay = window.formatThaiDate(evt.dateStart, 'monthShort');
+            weekdayDisplay = window.formatThaiDate(evt.dateStart, 'weekday');
+          }
+          dayDisplay = dayDisplay || '-';
+          monthDisplay = monthDisplay || '';
+          weekdayDisplay = weekdayDisplay || '';
+
+          const tagsHtml = (Array.isArray(evt.tags) && evt.tags.length > 0 && window.renderTagBadgesHtml)
+            ? window.renderTagBadgesHtml(evt.tags)
+            : `<span class="dg-event-category-badge ${catClass}">${escapeHtml(catLabel)}</span>`;
 
           return `
             <div class="dg-event-card">
@@ -1661,8 +1679,8 @@
                 ${weekdayDisplay ? `<span class="weekday-str">${escapeHtml(weekdayDisplay)}</span>` : ''}
               </div>
               <div class="dg-event-details">
-                <div class="dg-event-header-row">
-                  <span class="dg-event-category-badge ${catClass}">${escapeHtml(catLabel)}</span>
+                <div class="dg-event-header-row" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                  ${tagsHtml}
                   <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
                     <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
                     <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>

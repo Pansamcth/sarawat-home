@@ -2668,6 +2668,13 @@
             <span>ตารางกิจกรรมโรงเรียน</span>
           </div>
         </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-tags">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="tags"></i>
+            <span>จัดการแท็กและสไตล์</span>
+          </div>
+          <span class="admin-badge" id="tagsCounterBadge" style="background: #475569; display: inline-flex; font-size: 0.68rem; padding: 1px 7px;">0</span>
+        </button>
         <button type="button" class="admin-tab-btn" data-tab="tab-team">
           <div class="admin-tab-btn-content">
             <i data-lucide="users"></i>
@@ -3015,6 +3022,61 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB: TAGS & TAXONOMY MANAGEMENT
+         ========================================== -->
+    <div class="admin-pane" id="tab-tags" style="display: none;">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="tags" style="width: 13px; height: 13px;"></i> TAGS & TAXONOMY • ระบบแท็กและสไตล์</span>
+            <span class="admin-file-badge"><i data-lucide="database" style="width: 13px; height: 13px;"></i> ตาราง: tags & item_tags</span>
+          </div>
+          <h2>จัดการแท็กและสไตล์แสดงผล (Tag Management)</h2>
+          <p>สร้าง แก้ไข และกำหนดสี ไอคอน Lucide และรูปแบบ Badge ของแท็กสำหรับติดในกิจกรรมและข่าวสาร</p>
+        </div>
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-outline" onclick="loadAdminTags()" style="padding: 10px 16px; font-size: 0.85rem;">
+            <i data-lucide="refresh-cw"></i>
+            <span>รีเฟรชแท็ก</span>
+          </button>
+          <button type="button" class="dg-btn-black" onclick="openCreateTagModal()" style="padding: 10px 18px; font-size: 0.85rem;">
+            <i data-lucide="plus"></i>
+            <span>สร้างแท็กใหม่</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Category Filter Pills for Admin Tags -->
+      <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+        <span style="font-size: 0.82rem; font-weight: 700; color: #64748b; margin-right: 4px;">กรองตามประเภท:</span>
+        <button type="button" class="quick-pill-btn active" id="tagFilterAll" onclick="filterAdminTagsByType('all')">ทั้งหมด</button>
+        <button type="button" class="quick-pill-btn" id="tagFilterNews" onclick="filterAdminTagsByType('news')">ข่าวสาร (news)</button>
+        <button type="button" class="quick-pill-btn" id="tagFilterEvents" onclick="filterAdminTagsByType('events')">กิจกรรม (events)</button>
+        <button type="button" class="quick-pill-btn" id="tagFilterShared" onclick="filterAdminTagsByType('shared')">ใช้ร่วมกัน (all)</button>
+      </div>
+
+      <!-- Tags Table -->
+      <div class="admin-table-wrap" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 14px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04); overflow: hidden;">
+        <table class="admin-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0;">
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155;">ตัวอย่าง Badge จริง</th>
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155;">ชื่อแท็ก (Name)</th>
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155;">Slug (รหัสอ้างอิง)</th>
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155;">ประเภทที่ใช้</th>
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155;">สไตล์ & สี</th>
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155;">ไอคอน</th>
+              <th style="padding: 14px 18px; font-weight: 800; color: #334155; text-align: right;">การจัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="adminTagsTableBody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -4226,6 +4288,134 @@
   </main>
 
   <!-- ==========================================
+       MODAL 0: TAG CREATE / EDIT
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminTagModal" style="display: none; z-index: 9600;">
+    <div class="dg-modal-box" style="max-width: 620px; width: 95%;">
+      <div class="dg-modal-header">
+        <div class="dg-modal-header-info">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #475569 0%, #0f172a 100%); color: #fff;">
+            <i data-lucide="tag" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div>
+            <h3 id="adminTagModalTitle" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">สร้างแท็กใหม่</h3>
+            <p style="font-size: 0.82rem; color: #64748b; margin: 2px 0 0;">กำหนดสี สไตล์ และไอคอนของแท็ก</p>
+          </div>
+        </div>
+        <button class="dg-modal-close" type="button" onclick="closeModal('adminTagModal')" title="ปิดหน้าต่าง">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <form id="adminTagForm" onsubmit="handleSaveTag(event)" class="dg-modal-form" style="padding: 24px; background: #fff;">
+        <input type="hidden" id="adminTagId" />
+
+        <!-- Live Preview Box -->
+        <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 16px; margin-bottom: 20px; text-align: center;">
+          <div style="font-size: 0.76rem; font-weight: 750; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
+            👁️ ตัวอย่างการแสดงผลจริง (Live Preview)
+          </div>
+          <div id="adminTagLivePreview" style="display: flex; justify-content: center; align-items: center; min-height: 40px;">
+            <span class="sarawat-tag-badge" style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 750; padding: 2.5px 9px; border-radius: 9999px; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;">
+              <i data-lucide="tag" style="width: 12px; height: 12px;"></i>
+              <span>ชื่อแท็กตัวอย่าง</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="dg-form-row" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="dg-form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; color: #1e293b;">ชื่อแท็ก (Name) *</label>
+            <input type="text" id="adminTagName" required placeholder="เช่น ความปลอดภัย" oninput="updateTagLivePreview()" />
+          </div>
+          <div class="dg-form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; color: #1e293b;">Slug (รหัสภาษาอังกฤษ)</label>
+            <input type="text" id="adminTagSlug" placeholder="เช่น safety (เว้นว่างได้)" />
+          </div>
+        </div>
+
+        <div class="dg-form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <div class="dg-form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; color: #1e293b;">ประเภทที่ใช้ (Target Type)</label>
+            <select id="adminTagTargetType" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+              <option value="all">ใช้ร่วมกัน (ทั้งข่าวสารและกิจกรรม)</option>
+              <option value="news">เฉพาะข่าวสาร (news)</option>
+              <option value="events">เฉพาะกิจกรรมปฏิทิน (events)</option>
+            </select>
+          </div>
+          <div class="dg-form-group" style="margin-bottom: 0;">
+            <label style="font-weight: 700; color: #1e293b;">รูปทรง Badge (Style)</label>
+            <select id="adminTagBadgeStyle" onchange="updateTagLivePreview()" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+              <option value="pill">Pill (วงรีมนกลม)</option>
+              <option value="rounded">Rounded (มุมมน 6px)</option>
+              <option value="outline">Outline (สี่เหลี่ยมขอบ)</option>
+              <option value="glow">Glow (มีแสงสะท้อนเรืองรอง)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Color Pickers Row -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <span style="font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 10px; display: block;">🎨 กำหนดพาเลทสี (Color Palette)</span>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีตัวอักษร</label>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="color" id="adminTagColorPicker" value="#0f172a" onchange="document.getElementById('adminTagColor').value=this.value; updateTagLivePreview();" style="width: 36px; height: 36px; border: none; border-radius: 6px; cursor: pointer; padding: 0;" />
+                <input type="text" id="adminTagColor" value="#0f172a" oninput="document.getElementById('adminTagColorPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 6px 8px; width: 100%;" />
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีพื้นหลัง (BG)</label>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="color" id="adminTagBgPicker" value="#f1f5f9" onchange="document.getElementById('adminTagBg').value=this.value; updateTagLivePreview();" style="width: 36px; height: 36px; border: none; border-radius: 6px; cursor: pointer; padding: 0;" />
+                <input type="text" id="adminTagBg" value="#f1f5f9" oninput="document.getElementById('adminTagBgPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 6px 8px; width: 100%;" />
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีเส้นขอบ (Border)</label>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="color" id="adminTagBorderPicker" value="#cbd5e1" onchange="document.getElementById('adminTagBorder').value=this.value; updateTagLivePreview();" style="width: 36px; height: 36px; border: none; border-radius: 6px; cursor: pointer; padding: 0;" />
+                <input type="text" id="adminTagBorder" value="#cbd5e1" oninput="document.getElementById('adminTagBorderPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 6px 8px; width: 100%;" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Preset Color Palettes -->
+          <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+            <span style="font-size: 0.72rem; color: #64748b;">ชุดสีด่วน:</span>
+            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#1e3a8a', '#dbeafe', '#93c5fd', 'shield-check')">🔵 น้ำเงิน</button>
+            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#14532d', '#dcfce7', '#86efac', 'school')">🟢 เขียว</button>
+            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#7c2d12', '#ffedd5', '#fdba74', 'heart-handshake')">🟠 ส้ม</button>
+            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#831843', '#fce7f3', '#f472b6', 'award')">🔴 แดง</button>
+            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#581c87', '#f3e8ff', '#d8b4fe', 'sparkles')">🟣 ม่วง</button>
+            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#0f172a', '#f1f5f9', '#cbd5e1', 'tag')">⚪ เทา</button>
+          </div>
+        </div>
+
+        <!-- Icon Selector -->
+        <div class="dg-form-group">
+          <label style="font-weight: 700; color: #1e293b;">ไอคอน Lucide</label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="text" id="adminTagIcon" value="tag" placeholder="เช่น shield-check, school, award, heart-handshake, calendar" oninput="updateTagLivePreview()" style="flex: 1;" />
+            <div id="adminTagIconPreview" style="width: 42px; height: 42px; border: 1.5px solid #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #f8fafc; flex-shrink: 0;">
+              <i data-lucide="tag" style="width: 20px; height: 20px;"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="dg-modal-actions" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="dg-btn-outline" onclick="closeModal('adminTagModal')">ยกเลิก</button>
+          <button type="submit" class="dg-btn-black" id="adminTagSubmitBtn">
+            <i data-lucide="check"></i>
+            <span>บันทึกแท็ก</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
        MODAL 1: NEWS ADD / EDIT
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminNewsModal" style="display: none;">
@@ -4302,18 +4492,13 @@
 
         <div class="dg-form-group">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="margin: 0;">หมวดหมู่ / แท็กกิจกรรม</label>
-            <span style="font-size: 0.72rem; color: var(--dg-text-muted);">คลิกเลือกด่วน:</span>
+            <label style="margin: 0; font-weight: 750;"><i data-lucide="tags" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px;"></i> แท็กกิจกรรม (เลือกได้หลายแท็ก)</label>
+            <span style="font-size: 0.72rem; color: var(--dg-text-muted);">คลิกเพื่อเปิด/ปิดแท็กที่ต้องการ</span>
           </div>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
-            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('พิธีการสำคัญ')">พิธีการสำคัญ</button>
-            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('จิตอาสา')">จิตอาสา</button>
-            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('ความปลอดภัย')">ความปลอดภัย</button>
-            <button type="button" class="quick-pill-btn"
-              onclick="setQuickNewsTag('กิจกรรมโรงเรียน')">กิจกรรมโรงเรียน</button>
-            <button type="button" class="quick-pill-btn" onclick="setQuickNewsTag('อบรมพัฒนา')">อบรมพัฒนา</button>
+          <div id="adminNewsTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; min-height: 38px; align-items: center; padding: 8px 12px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px;">
+            <!-- Rendered dynamically -->
           </div>
-          <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา" />
+          <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา (ซิงค์อัตโนมัติ)" />
         </div>
 
         <div class="dg-form-group">
@@ -4528,6 +4713,15 @@
             <div class="dg-form-group">
               <label style="font-weight: 700; color: #1e293b;">ชื่อหมวดหมู่ (กำหนดเอง)</label>
               <input type="text" id="adminEventCatLabel" placeholder="เช่น กิจการนักเรียน (เว้นว่างได้)" style="padding: 12px 16px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" />
+            </div>
+          </div>
+          <div class="dg-form-group" style="margin-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="margin: 0; font-weight: 750; color: #1e293b;"><i data-lucide="tags" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px;"></i> แท็กกิจกรรม (เลือกได้หลายแท็ก)</label>
+              <span style="font-size: 0.72rem; color: #64748b;">คลิกเพื่อเปิด/ปิดแท็กที่ต้องการ</span>
+            </div>
+            <div id="adminEventTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 38px; align-items: center; padding: 8px 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+              <!-- Rendered dynamically -->
             </div>
           </div>
         </div>
@@ -6353,6 +6547,407 @@
       });
     }
 
+
+    // ==========================================================
+    // 🏷️ TAG & TAXONOMY MANAGEMENT LOGIC
+    // ==========================================================
+    let cachedAdminTags = [];
+    let currentTagFilter = 'all';
+    let selectedNewsTagIds = new Set();
+    let selectedEventTagIds = new Set();
+
+    async function loadAdminTags() {
+      const tbody = document.getElementById('adminTagsTableBody');
+      const counterBadge = document.getElementById('tagsCounterBadge');
+      if (tbody) {
+        tbody.innerHTML = `
+          <tr class="dg-sk-row">
+            <td colspan="7" style="text-align: center; padding: 30px; color: #64748b;">
+              <i data-lucide="loader-2" class="spin" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;"></i>
+              กำลังโหลดข้อมูลแท็ก...
+            </td>
+          </tr>
+        `;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      try {
+        let tags = [];
+        if (window.SarawatApi && typeof window.SarawatApi.getTags === 'function') {
+          tags = await window.SarawatApi.getTags('all');
+        }
+        cachedAdminTags = Array.isArray(tags) ? tags : [];
+        if (counterBadge) {
+          counterBadge.textContent = cachedAdminTags.length;
+          counterBadge.style.display = cachedAdminTags.length > 0 ? 'inline-flex' : 'none';
+        }
+        renderAdminTags(currentTagFilter);
+      } catch (err) {
+        console.error('loadAdminTags error:', err);
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 30px; color: #ef4444;">
+                เกิดข้อผิดพลาดในการโหลดแท็ก: ${escapeHtml(err.message)}
+              </td>
+            </tr>
+          `;
+        }
+      }
+    }
+
+    function filterAdminTagsByType(type) {
+      currentTagFilter = type;
+      ['tagFilterAll', 'tagFilterNews', 'tagFilterEvents', 'tagFilterShared'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      const activeBtn = document.getElementById(
+        type === 'news' ? 'tagFilterNews' : (type === 'events' ? 'tagFilterEvents' : (type === 'shared' ? 'tagFilterShared' : 'tagFilterAll'))
+      );
+      if (activeBtn) activeBtn.classList.add('active');
+      renderAdminTags(type);
+    }
+
+    function renderAdminTags(filterType = 'all') {
+      const tbody = document.getElementById('adminTagsTableBody');
+      if (!tbody) return;
+
+      let list = cachedAdminTags || [];
+      if (filterType === 'news') {
+        list = list.filter(t => t.target_type === 'news');
+      } else if (filterType === 'events') {
+        list = list.filter(t => t.target_type === 'events');
+      } else if (filterType === 'shared') {
+        list = list.filter(t => t.target_type === 'all');
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
+              <i data-lucide="tag" style="width: 32px; height: 32px; color: #cbd5e1; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;"></i>
+              ยังไม่มีแท็กในหมวดหมู่นี้ คลิก <strong>"+ สร้างแท็กใหม่"</strong> เพื่อเริ่มต้นสร้างแท็กแรก
+            </td>
+          </tr>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = list.map(tag => {
+        const targetLabel = tag.target_type === 'news' ? '📰 ข่าวสาร' : (tag.target_type === 'events' ? '📅 กิจกรรม' : '🌐 ใช้ร่วมกัน');
+        const targetColor = tag.target_type === 'news' ? '#0284c7' : (tag.target_type === 'events' ? '#16a34a' : '#64748b');
+        const badgeHtml = window.renderTagBadgesHtml ? window.renderTagBadgesHtml(tag) : `<span style="background:${tag.bg_color};color:${tag.color};">${escapeHtml(tag.name)}</span>`;
+
+        return `
+          <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
+            <td style="padding: 14px 18px; vertical-align: middle;">
+              ${badgeHtml}
+            </td>
+            <td style="padding: 14px 18px; font-weight: 750; color: #0f172a; vertical-align: middle;">
+              ${escapeHtml(tag.name)}
+            </td>
+            <td style="padding: 14px 18px; font-family: monospace; font-size: 0.84rem; color: #64748b; vertical-align: middle;">
+              ${escapeHtml(tag.slug || '-')}
+            </td>
+            <td style="padding: 14px 18px; vertical-align: middle;">
+              <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; color: ${targetColor}; background: #f8fafc; border: 1px solid #e2e8f0; padding: 3px 8px; border-radius: 6px;">
+                ${targetLabel}
+              </span>
+            </td>
+            <td style="padding: 14px 18px; vertical-align: middle;">
+              <div style="display: flex; gap: 4px; align-items: center;">
+                <span title="ตัวอักษร: ${escapeHtml(tag.color)}" style="width: 14px; height: 14px; border-radius: 3px; background: ${tag.color}; display: inline-block; border: 1px solid #cbd5e1;"></span>
+                <span title="พื้นหลัง: ${escapeHtml(tag.bg_color)}" style="width: 14px; height: 14px; border-radius: 3px; background: ${tag.bg_color}; display: inline-block; border: 1px solid #cbd5e1;"></span>
+                <span title="ขอบ: ${escapeHtml(tag.border_color)}" style="width: 14px; height: 14px; border-radius: 3px; background: ${tag.border_color}; display: inline-block; border: 1px solid #cbd5e1;"></span>
+                <span style="font-size: 0.74rem; color: #64748b; margin-left: 4px; text-transform: uppercase;">${escapeHtml(tag.badge_style || 'pill')}</span>
+              </div>
+            </td>
+            <td style="padding: 14px 18px; vertical-align: middle;">
+              <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.8rem; color: #475569;">
+                <i data-lucide="${escapeHtml(tag.icon || 'tag')}" style="width: 15px; height: 15px;"></i>
+                <span>${escapeHtml(tag.icon || 'tag')}</span>
+              </div>
+            </td>
+            <td style="padding: 14px 18px; text-align: right; vertical-align: middle; white-space: nowrap;">
+              <button type="button" class="dg-btn-sm-outline" onclick="openEditTagModal(${tag.id})" title="แก้ไขแท็ก" style="padding: 5px 10px; margin-right: 6px; font-size: 0.78rem;">
+                <i data-lucide="edit-3" style="width: 13px; height: 13px;"></i>
+                <span>แก้ไข</span>
+              </button>
+              <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteTag(${tag.id}, '${escapeHtml(tag.name)}')" title="ลบแท็ก" style="padding: 5px 10px; font-size: 0.78rem; background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer;">
+                <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                <span>ลบ</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function updateTagLivePreview() {
+      const name = document.getElementById('adminTagName')?.value.trim() || 'ชื่อแท็กตัวอย่าง';
+      const color = document.getElementById('adminTagColor')?.value || '#0f172a';
+      const bg = document.getElementById('adminTagBg')?.value || '#f1f5f9';
+      const border = document.getElementById('adminTagBorder')?.value || '#cbd5e1';
+      const icon = document.getElementById('adminTagIcon')?.value?.trim() || 'tag';
+      const style = document.getElementById('adminTagBadgeStyle')?.value || 'pill';
+
+      const previewContainer = document.getElementById('adminTagLivePreview');
+      const iconPreview = document.getElementById('adminTagIconPreview');
+
+      const mockTag = { name, color, bg_color: bg, border_color: border, icon, badge_style: style };
+      if (previewContainer) {
+        previewContainer.innerHTML = window.renderTagBadgesHtml ? window.renderTagBadgesHtml(mockTag) : `<span style="background:${bg};color:${color};">${name}</span>`;
+      }
+      if (iconPreview) {
+        iconPreview.innerHTML = `<i data-lucide="${icon}" style="width: 20px; height: 20px; color: ${color};"></i>`;
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function applyTagColorPreset(color, bg, border, icon) {
+      document.getElementById('adminTagColor').value = color;
+      document.getElementById('adminTagColorPicker').value = color;
+      document.getElementById('adminTagBg').value = bg;
+      document.getElementById('adminTagBgPicker').value = bg;
+      document.getElementById('adminTagBorder').value = border;
+      document.getElementById('adminTagBorderPicker').value = border;
+      if (icon) document.getElementById('adminTagIcon').value = icon;
+      updateTagLivePreview();
+    }
+
+    function openCreateTagModal() {
+      document.getElementById('adminTagId').value = '';
+      document.getElementById('adminTagName').value = '';
+      document.getElementById('adminTagSlug').value = '';
+      document.getElementById('adminTagTargetType').value = 'all';
+      document.getElementById('adminTagBadgeStyle').value = 'pill';
+      applyTagColorPreset('#0f172a', '#f1f5f9', '#cbd5e1', 'tag');
+      document.getElementById('adminTagModalTitle').textContent = 'สร้างแท็กใหม่';
+      openModal('adminTagModal');
+      updateTagLivePreview();
+    }
+
+    function openEditTagModal(id) {
+      const tag = cachedAdminTags.find(t => Number(t.id) === Number(id));
+      if (!tag) {
+        showToast('ไม่พบข้อมูลแท็กนี้', 'error');
+        return;
+      }
+      document.getElementById('adminTagId').value = tag.id;
+      document.getElementById('adminTagName').value = tag.name || '';
+      document.getElementById('adminTagSlug').value = tag.slug || '';
+      document.getElementById('adminTagTargetType').value = tag.target_type || 'all';
+      document.getElementById('adminTagBadgeStyle').value = tag.badge_style || 'pill';
+      applyTagColorPreset(tag.color || '#0f172a', tag.bg_color || '#f1f5f9', tag.border_color || '#cbd5e1', tag.icon || 'tag');
+      document.getElementById('adminTagModalTitle').textContent = `แก้ไขแท็ก: ${tag.name}`;
+      openModal('adminTagModal');
+      updateTagLivePreview();
+    }
+
+    async function handleSaveTag(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('adminTagSubmitBtn');
+      const origHtml = submitBtn ? submitBtn.innerHTML : '<span>บันทึกแท็ก</span>';
+      try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span>กำลังบันทึก...</span>';
+        }
+
+        const id = document.getElementById('adminTagId').value;
+        const name = document.getElementById('adminTagName').value.trim();
+        const slug = document.getElementById('adminTagSlug').value.trim();
+        const target_type = document.getElementById('adminTagTargetType').value;
+        const badge_style = document.getElementById('adminTagBadgeStyle').value;
+        const color = document.getElementById('adminTagColor').value.trim();
+        const bg_color = document.getElementById('adminTagBg').value.trim();
+        const border_color = document.getElementById('adminTagBorder').value.trim();
+        const icon = document.getElementById('adminTagIcon').value.trim() || 'tag';
+
+        if (!name) throw new Error('กรุณากรอกชื่อแท็ก');
+
+        const payload = {
+          name,
+          slug: slug || undefined,
+          target_type,
+          badge_style,
+          color,
+          bg_color,
+          border_color,
+          icon
+        };
+        if (id) payload.id = Number(id);
+
+        if (!window.SarawatApi || !window.SarawatApi.saveTag) {
+          throw new Error('ไม่พบโมดูล API สำหรับบันทึกแท็ก');
+        }
+
+        const res = await window.SarawatApi.saveTag(payload);
+        closeModal('adminTagModal');
+        showToast(id ? 'แก้ไขแท็กเรียบร้อยแล้ว' : 'สร้างแท็กใหม่สำเร็จ', 'success');
+        await loadAdminTags();
+      } catch (err) {
+        console.error('handleSaveTag error:', err);
+        showToast(err.message || 'บันทึกแท็กไม่สำเร็จ', 'error');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origHtml;
+        }
+      }
+    }
+
+    async function handleDeleteTag(id, name) {
+      const confirm = await Swal.fire({
+        title: 'ยืนยันการลบแท็ก?',
+        html: `คุณแน่ใจหรือไม่ว่าต้องการลบแท็ก <strong>"${escapeHtml(name)}"</strong>?<br><span style="font-size:0.85rem; color:#64748b;">แท็กนี้จะถูกนำออกจากกิจกรรมและข่าวสารที่เคยติดไว้</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบแท็กนี้',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirm.isConfirmed) return;
+
+      try {
+        if (!window.SarawatApi || !window.SarawatApi.deleteTag) {
+          throw new Error('ไม่พบโมดูล API สำหรับลบแท็ก');
+        }
+        await window.SarawatApi.deleteTag(id);
+        showToast(`ลบแท็ก "${name}" สำเร็จ`, 'success');
+        await loadAdminTags();
+      } catch (err) {
+        console.error('handleDeleteTag error:', err);
+        showToast(err.message || 'เกิดข้อผิดพลาดในการลบแท็ก', 'error');
+      }
+    }
+
+    // ==========================================================
+    // 🏷️ MULTI-TAG SELECTOR ENGINE FOR NEWS & EVENTS
+    // ==========================================================
+    function renderNewsTagsSelector(activeTags = []) {
+      const container = document.getElementById('adminNewsTagsSelectorContainer');
+      if (!container) return;
+
+      selectedNewsTagIds = new Set();
+      if (Array.isArray(activeTags)) {
+        activeTags.forEach(t => {
+          if (typeof t === 'object' && t.id) selectedNewsTagIds.add(Number(t.id));
+          else if (typeof t === 'number') selectedNewsTagIds.add(t);
+        });
+      }
+
+      // If activeTags was empty, but adminNewsTag input has comma separated string, try to match by name
+      const legacyTagStr = document.getElementById('adminNewsTag')?.value || '';
+      if (selectedNewsTagIds.size === 0 && legacyTagStr) {
+        const names = legacyTagStr.split(',').map(s => s.trim().toLowerCase());
+        cachedAdminTags.forEach(t => {
+          if (names.includes(t.name.toLowerCase()) || names.includes((t.slug || '').toLowerCase())) {
+            selectedNewsTagIds.add(Number(t.id));
+          }
+        });
+      }
+
+      const relevant = (cachedAdminTags || []).filter(t => t.target_type === 'news' || t.target_type === 'all');
+      if (relevant.length === 0) {
+        container.innerHTML = '<span style="font-size:0.78rem; color:#64748b;">(ยังไม่มีรายการแท็กข่าวสาร คลิกแถบ "จัดการแท็กและสไตล์" เพื่อสร้าง)</span>';
+        return;
+      }
+
+      container.innerHTML = relevant.map(tag => {
+        const isSelected = selectedNewsTagIds.has(Number(tag.id));
+        const activeBorder = isSelected ? `2.5px solid ${tag.color || '#0f172a'}` : `1px dashed #cbd5e1`;
+        const activeOpacity = isSelected ? '1' : '0.6';
+        const activeScale = isSelected ? 'scale(1.05)' : 'scale(1)';
+        const checkIcon = isSelected ? '<i data-lucide="check" style="width:11px;height:11px;margin-right:2px;stroke-width:3;"></i>' : '';
+
+        return `
+          <button type="button" class="tag-selector-chip" onclick="toggleNewsTagSelection(${tag.id})" style="border: ${activeBorder}; opacity: ${activeOpacity}; transform: ${activeScale}; transition: all 0.15s ease; cursor: pointer; background: transparent; padding: 0; border-radius: 9999px;">
+            ${window.renderTagBadgesHtml ? window.renderTagBadgesHtml(tag) : tag.name}
+          </button>
+        `;
+      }).join(' ');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleNewsTagSelection(tagId) {
+      const idNum = Number(tagId);
+      if (selectedNewsTagIds.has(idNum)) {
+        selectedNewsTagIds.delete(idNum);
+      } else {
+        selectedNewsTagIds.add(idNum);
+      }
+      syncNewsTagInput();
+      renderNewsTagsSelector(Array.from(selectedNewsTagIds));
+    }
+
+    function syncNewsTagInput() {
+      const selectedTags = cachedAdminTags.filter(t => selectedNewsTagIds.has(Number(t.id)));
+      const tagInput = document.getElementById('adminNewsTag');
+      if (tagInput) {
+        tagInput.value = selectedTags.map(t => t.name).join(', ');
+      }
+    }
+
+    function getSelectedNewsTags() {
+      return Array.from(selectedNewsTagIds);
+    }
+
+    function renderEventTagsSelector(activeTags = []) {
+      const container = document.getElementById('adminEventTagsSelectorContainer');
+      if (!container) return;
+
+      selectedEventTagIds = new Set();
+      if (Array.isArray(activeTags)) {
+        activeTags.forEach(t => {
+          if (typeof t === 'object' && t.id) selectedEventTagIds.add(Number(t.id));
+          else if (typeof t === 'number') selectedEventTagIds.add(t);
+        });
+      }
+
+      const relevant = (cachedAdminTags || []).filter(t => t.target_type === 'events' || t.target_type === 'all');
+      if (relevant.length === 0) {
+        container.innerHTML = '<span style="font-size:0.78rem; color:#64748b;">(ยังไม่มีรายการแท็กกิจกรรม คลิกแถบ "จัดการแท็กและสไตล์" เพื่อสร้าง)</span>';
+        return;
+      }
+
+      container.innerHTML = relevant.map(tag => {
+        const isSelected = selectedEventTagIds.has(Number(tag.id));
+        const activeBorder = isSelected ? `2.5px solid ${tag.color || '#0f172a'}` : `1px dashed #cbd5e1`;
+        const activeOpacity = isSelected ? '1' : '0.6';
+        const activeScale = isSelected ? 'scale(1.05)' : 'scale(1)';
+
+        return `
+          <button type="button" class="tag-selector-chip" onclick="toggleEventTagSelection(${tag.id})" style="border: ${activeBorder}; opacity: ${activeOpacity}; transform: ${activeScale}; transition: all 0.15s ease; cursor: pointer; background: transparent; padding: 0; border-radius: 9999px;">
+            ${window.renderTagBadgesHtml ? window.renderTagBadgesHtml(tag) : tag.name}
+          </button>
+        `;
+      }).join(' ');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleEventTagSelection(tagId) {
+      const idNum = Number(tagId);
+      if (selectedEventTagIds.has(idNum)) {
+        selectedEventTagIds.delete(idNum);
+      } else {
+        selectedEventTagIds.add(idNum);
+      }
+      renderEventTagsSelector(Array.from(selectedEventTagIds));
+    }
+
+    function getSelectedEventTags() {
+      return Array.from(selectedEventTagIds);
+    }
+
     async function handleSaveNews(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('adminNewsSubmitBtn');
@@ -6426,7 +7021,7 @@
           img = currentNewsImageState.url;
         }
 
-        const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, fbReelsUrl: fbReels, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso, dateStart: dateIso, dateEnd: endDateIso };
+        const payload = { title, date, tag, desc, detail, image: img, fbUrl: fb, fbReelsUrl: fbReels, igUrl: ig, reelsUrl: reels, photoUrl: photo, dateIso, endDateIso, dateStart: dateIso, dateEnd: endDateIso, tags: getSelectedNewsTags() };
         if (id) payload.id = id;
 
         let savedToBackend = false;
@@ -6561,6 +7156,7 @@
       const submitBtn = document.getElementById('adminNewsSubmitBtn');
       if (submitBtn) submitBtn.innerHTML = '<i data-lucide="plus"></i> <span>เพิ่มข่าวสาร</span>';
       
+      renderNewsTagsSelector([]);
       openModal('adminNewsModal');
       if (window.lucide) lucide.createIcons();
     }
@@ -6650,6 +7246,7 @@
       const submitBtn = document.getElementById('adminNewsSubmitBtn');
       if (submitBtn) submitBtn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกการแก้ไข</span>';
       
+      renderNewsTagsSelector(item.tags || []);
       openModal('adminNewsModal');
       if (window.lucide) lucide.createIcons();
     }
@@ -6816,9 +7413,13 @@
         <div class="admin-news-item-card">
           <img src="${imgSrc || 'assets/images/activities-cover.jpg'}" class="admin-news-thumb" alt="News Image" onerror="this.src='assets/images/activities-cover.jpg';">
           <div class="admin-news-item-body">
-            <div class="admin-news-meta">
-              <span>${escapeHtml(item.date || '')}</span>
-              <span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>
+            <div class="admin-news-meta" style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+              <span>${escapeHtml(window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'short') : (item.date || ''))}</span>
+              <div style="display: inline-flex; gap: 4px; flex-wrap: wrap;">
+                ${(Array.isArray(item.tags) && item.tags.length > 0 && window.renderTagBadgesHtml)
+                  ? window.renderTagBadgesHtml(item.tags)
+                  : `<span style="background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 99px; font-size: 0.7rem;">${escapeHtml(item.tag || '')}</span>`}
+              </div>
             </div>
             <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
             <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
@@ -6973,7 +7574,12 @@
             </td>
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border);">
               <div style="font-weight: 750; color: #0f172a; font-size: 0.98rem; margin-bottom: 4px;">${escapeHtml(evt.title || '')}</div>
-              <span class="dg-event-category-badge ${catClass}" style="font-size: 0.72rem; padding: 2px 8px;">${escapeHtml(catLabel)}</span>${evt.isFeatured ? '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 750; margin-left: 6px; display: inline-flex; align-items: center; gap: 3px;"><i data-lucide="star" style="width: 10px; height: 10px; fill: currentColor;"></i>เด่น</span>' : ''}
+              <div style="display: flex; gap: 4px; flex-wrap: wrap; align-items: center;">
+                ${(Array.isArray(evt.tags) && evt.tags.length > 0 && window.renderTagBadgesHtml)
+                  ? window.renderTagBadgesHtml(evt.tags)
+                  : `<span class="dg-event-category-badge ${catClass}" style="font-size: 0.72rem; padding: 2px 8px;">${escapeHtml(catLabel)}</span>`}
+                ${evt.isFeatured ? '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 750; margin-left: 2px; display: inline-flex; align-items: center; gap: 3px;"><i data-lucide="star" style="width: 10px; height: 10px; fill: currentColor;"></i>เด่น</span>' : ''}
+              </div>
             </td>
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #334155; font-size: 0.88rem;">
               <span style="display: inline-flex; align-items: center; gap: 4px;">
@@ -7083,7 +7689,8 @@
           target: audience,
           desc,
           dateStart: dateIso,
-          dateEnd: endDateIso
+          dateEnd: endDateIso,
+          tags: getSelectedEventTags()
         };
         if (id) payload.id = id;
 
@@ -7209,6 +7816,7 @@
         `;
       }
 
+      renderEventTagsSelector([]);
       openModal('adminEventModal');
       if (window.lucide) lucide.createIcons();
     }
@@ -7222,6 +7830,7 @@
       const events = await fetchEventsApi();
       const evt = events.find(e => String(e.id) === String(id));
       if (!evt) return;
+      renderEventTagsSelector(evt.tags || []);
 
       document.getElementById('adminEventTitle').value = evt.title || '';
 
@@ -8202,6 +8811,7 @@
     }
 
     function initDashboard() {
+      loadAdminTags();
       renderAdminNews();
       renderAdminEvents();
       renderAdminFeedbacks();
@@ -8231,7 +8841,9 @@
             const pane = document.getElementById(paneId);
             if (pane) pane.style.display = 'block';
 
-            if (paneId === 'tab-news') {
+            if (paneId === 'tab-tags') {
+              loadAdminTags();
+            } else if (paneId === 'tab-news') {
               renderAdminNews();
             } else if (paneId === 'tab-calendar') {
               renderAdminEvents();

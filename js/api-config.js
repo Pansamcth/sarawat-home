@@ -273,6 +273,144 @@
       if (!res.ok) throw new Error(`บันทึกการตั้งค่าไม่สำเร็จ (HTTP ${res.status})`);
       return await res.json();
     },
+    // ==========================================
+    // 🏷️ TAGS & TAXONOMY APIS
+    // ==========================================
+    getTags: async function (type = 'all') {
+      const base = this.getBaseUrl();
+      if (!base) return [];
+      try {
+        const qs = type && type !== 'all' ? `?type=${encodeURIComponent(type)}` : '';
+        const res = await fetch(`${base}/api/tags${qs}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const tags = await res.json();
+        if (Array.isArray(tags)) {
+          try {
+            localStorage.setItem('dg_sarawat_tags_' + type, JSON.stringify(tags));
+          } catch (e) {}
+          return tags;
+        }
+        return [];
+      } catch (err) {
+        console.warn('[SarawatApi] Fetch tags failed, using fallback:', err.message);
+        try {
+          const stored = localStorage.getItem('dg_sarawat_tags_' + type) || localStorage.getItem('dg_sarawat_tags_all');
+          if (stored) return JSON.parse(stored);
+        } catch (e) {}
+        return [];
+      }
+    },
+
+    saveTag: async function (tag) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/tags`, {
+        method: 'POST',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(tag)
+      });
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `เกิดข้อผิดพลาดในการบันทึกแท็ก (HTTP ${res.status})`);
+      }
+      return await res.json();
+    },
+
+    deleteTag: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/tags/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) throw new Error(`เกิดข้อผิดพลาดในการลบแท็ก (HTTP ${res.status})`);
+      return await res.json();
+    },
+
+    // ==========================================
+    // 📅 ISO DATE TO THAI LOCALIZATION UTILITIES
+    // ==========================================
+    formatThaiDate: function (isoDateStr, format = 'full') {
+      if (!isoDateStr || typeof isoDateStr !== 'string') return '';
+      const clean = isoDateStr.trim().split('T')[0];
+      const match = clean.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (!match) return isoDateStr;
+
+      const year = parseInt(match[1], 10);
+      const monthIdx = parseInt(match[2], 10) - 1;
+      const day = parseInt(match[3], 10);
+
+      const thaiMonthsFull = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+      const thaiMonthsShort = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      const thaiWeekdays = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+
+      const dt = new Date(Date.UTC(year, monthIdx, day));
+      const weekday = thaiWeekdays[dt.getUTCDay()];
+      const thaiYear = year + 543;
+      const thaiYearShort = String(thaiYear).slice(-2);
+
+      if (format === 'day') return String(day);
+      if (format === 'monthShort') return `${thaiMonthsShort[monthIdx]} ${thaiYearShort}`;
+      if (format === 'monthFull') return `${thaiMonthsFull[monthIdx]} ${thaiYear}`;
+      if (format === 'weekday') return weekday;
+      if (format === 'short') return `${day} ${thaiMonthsShort[monthIdx]} ${thaiYearShort}`;
+      if (format === 'yearShort') return `${day} ${thaiMonthsShort[monthIdx]} ${thaiYearShort}`;
+      if (format === 'yearFull') return `${day} ${thaiMonthsShort[monthIdx]} ${thaiYear}`;
+
+      return `${day} ${thaiMonthsFull[monthIdx]} พ.ศ. ${thaiYear}`;
+    },
+
+    formatDateRange: function (startIso, endIso) {
+      if (!startIso) return '';
+      if (!endIso || endIso === startIso) {
+        return this.formatThaiDate(startIso, 'short');
+      }
+      const s = startIso.split('T')[0].split('-');
+      const e = endIso.split('T')[0].split('-');
+      if (s.length === 3 && e.length === 3) {
+        const thaiMonthsShort = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+        const sDay = parseInt(s[2], 10);
+        const eDay = parseInt(e[2], 10);
+        const sMo = thaiMonthsShort[parseInt(s[1], 10) - 1];
+        const eMo = thaiMonthsShort[parseInt(e[1], 10) - 1];
+        const sYr = String(parseInt(s[0], 10) + 543).slice(-2);
+        const eYr = String(parseInt(e[0], 10) + 543).slice(-2);
+
+        if (s[0] === e[0] && s[1] === e[1]) {
+          return `${sDay} - ${eDay} ${sMo} ${sYr}`;
+        }
+        return `${sDay} ${sMo} - ${eDay} ${eMo} ${eYr}`;
+      }
+      return `${this.formatThaiDate(startIso, 'short')} - ${this.formatThaiDate(endIso, 'short')}`;
+    },
+
+    // ==========================================
+    // 🏷️ RENDER STYLED TAG BADGES
+    // ==========================================
+    renderTagBadgesHtml: function (tags, customClass = '') {
+      if (!tags) return '';
+      const tagList = Array.isArray(tags) ? tags : [tags];
+      if (tagList.length === 0) return '';
+
+      return tagList.map(t => {
+        if (!t) return '';
+        const name = typeof t === 'object' ? (t.name || t.slug || '') : String(t);
+        const color = (typeof t === 'object' && t.color) ? t.color : '#0f172a';
+        const bg = (typeof t === 'object' && t.bg_color) ? t.bg_color : '#f1f5f9';
+        const border = (typeof t === 'object' && t.border_color) ? t.border_color : '#cbd5e1';
+        const icon = (typeof t === 'object' && t.icon) ? t.icon : 'tag';
+        const style = (typeof t === 'object' && t.badge_style) ? t.badge_style : 'pill';
+
+        const radius = style === 'rounded' ? '6px' : (style === 'outline' ? '4px' : '9999px');
+        const shadow = style === 'glow' ? `0 0 10px ${border}` : 'none';
+
+        return `<span class="sarawat-tag-badge ${customClass}" style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 750; padding: 2.5px 9px; border-radius: ${radius}; background: ${bg}; color: ${color}; border: 1px solid ${border}; box-shadow: ${shadow}; white-space: nowrap;">` +
+          `<i data-lucide="${icon}" style="width: 12px; height: 12px; stroke-width: 2.2;"></i>` +
+          `<span>${name}</span>` +
+        `</span>`;
+      }).join(' ');
+    },
+
 
 
     // ตรวจสอบสถานะการทำงานของระบบฐานข้อมูล
@@ -1137,4 +1275,7 @@
 
   // Dual exports: support both window.SarawatApi and window.SarawatAPI
   window.SarawatAPI = window.SarawatApi;
+  window.formatThaiDate = window.SarawatApi.formatThaiDate.bind(window.SarawatApi);
+  window.formatDateRange = window.SarawatApi.formatDateRange.bind(window.SarawatApi);
+  window.renderTagBadgesHtml = window.SarawatApi.renderTagBadgesHtml.bind(window.SarawatApi);
 })();

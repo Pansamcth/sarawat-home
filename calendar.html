@@ -1600,10 +1600,22 @@
           evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป'
         );
 
-        const dayDisplay = evt.day || '-';
-        const monthDisplay = evt.month || '';
-        const weekdayDisplay = evt.weekday || '';
+        const dateStartIso = evt.dateStart || evt.dateIso || '';
+        const dateEndIso = evt.dateEnd || evt.endDateIso || '';
+        const dayDisplay = dateStartIso ? window.formatThaiDate(dateStartIso, 'day') : (evt.day || '-');
+        const monthDisplay = dateStartIso ? window.formatThaiDate(dateStartIso, 'monthShort') : (evt.month || '');
+        const weekdayDisplay = dateStartIso ? window.formatThaiDate(dateStartIso, 'weekday') : (evt.weekday || '');
         const status = getEventStatus(evt);
+
+        let tagsHtml = '';
+        if (evt.tags && evt.tags.length > 0) {
+          tagsHtml = window.renderTagBadgesHtml(evt.tags);
+        } else {
+          tagsHtml = '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>';
+        }
+        if (evt.isFeatured && (!evt.tags || !evt.tags.some(t => t.slug === 'featured'))) {
+          tagsHtml += ' <span style="font-size: 0.74rem; font-weight: 750; padding: 2px 8px; border-radius: var(--dg-radius-pill); background: #fef3c7; color: #b45309; border: 1px solid #fde68a; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="star" style="width: 11px; height: 11px; fill: currentColor;"></i>กิจกรรมเด่น</span>';
+        }
 
         return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
           '<div class="dg-event-date-box">' +
@@ -1613,7 +1625,7 @@
           '</div>' +
           '<div class="dg-event-details">' +
             '<div class="dg-event-header-row">' +
-              '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>' + (evt.isFeatured ? '<span style="font-size: 0.74rem; font-weight: 750; padding: 2px 8px; border-radius: var(--dg-radius-pill); background: #fef3c7; color: #b45309; border: 1px solid #fde68a; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="star" style="width: 11px; height: 11px; fill: currentColor;"></i>กิจกรรมเด่น</span>' : '') +
+              tagsHtml +
               '<span style="font-size: 0.74rem; padding: 2px 8px; border-radius: var(--dg-radius-pill); ' + status.style + '">' +
                 escapeHtml(status.label) +
               '</span>' +
@@ -1686,19 +1698,27 @@
       );
       const status = getEventStatus(evt);
 
-      // Compute friendly date text
-      let dateText = evt.fullDateText;
+      // Compute friendly date text from ISO
+      let dateText = (evt.dateStart ? window.formatDateRange(evt.dateStart, evt.dateEnd) : '') || evt.fullDateText;
       if (!dateText) {
         const info = calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
         dateText = info ? info.fullDateText : (evt.day || '') + ' ' + (evt.month || '');
       }
 
+      let modalTagsHtml = '';
+      if (evt.tags && evt.tags.length > 0) {
+        modalTagsHtml = window.renderTagBadgesHtml(evt.tags);
+      } else {
+        modalTagsHtml = '<span class="dg-event-category-badge ' + catClass + '" style="background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.25);">' + escapeHtml(catLabel) + '</span>';
+      }
+      if (evt.isFeatured && (!evt.tags || !evt.tags.some(t => t.slug === 'featured'))) {
+        modalTagsHtml += ' <span style="font-size: 0.74rem; font-weight: 750; padding: 2px 10px; border-radius: var(--dg-radius-pill); background: #fef3c7; color: #b45309; border: 1px solid #fde68a; display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="star" style="width: 11px; height: 11px; fill: currentColor;"></i>กิจกรรมเด่น</span>';
+      }
+
       container.innerHTML = '' +
         '<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 30px 24px; color: #ffffff;">' +
           '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">' +
-            '<span class="dg-event-category-badge ' + catClass + '" style="background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.25);">' +
-              escapeHtml(catLabel) +
-            '</span>' +
+            modalTagsHtml +
             '<span style="font-size: 0.74rem; padding: 2px 10px; border-radius: var(--dg-radius-pill); font-weight: 750; ' + status.style + '">' +
               escapeHtml(status.label) +
             '</span>' +
