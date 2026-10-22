@@ -1383,14 +1383,29 @@
 
     function getFilteredEvents() {
       return calendarEventsCache.filter(evt => {
-        const matchesCategory = selectedCategory === 'all' || evt.category === selectedCategory;
+        const matchesCategory = selectedCategory === 'all' ||
+          evt.category === selectedCategory ||
+          evt.categoryLabel === selectedCategory ||
+          String(evt.tagId || evt.tag_id) === String(selectedCategory) ||
+          (selectedCategory === 'featured' && evt.isFeatured) ||
+          (Array.isArray(evt.tags) && evt.tags.some(t =>
+            t.slug === selectedCategory ||
+            t.name === selectedCategory ||
+            String(t.id) === String(selectedCategory)
+          ));
+
         const q = searchQuery.toLowerCase();
+        const tagNames = Array.isArray(evt.tags) ? evt.tags.map(t => t.name).join(' ') : '';
+        const tagSlugs = Array.isArray(evt.tags) ? evt.tags.map(t => t.slug).join(' ') : '';
         const matchesSearch = !q ||
           (evt.title && evt.title.toLowerCase().includes(q)) ||
           (evt.desc && evt.desc.toLowerCase().includes(q)) ||
           (evt.location && evt.location.toLowerCase().includes(q)) ||
           (evt.audience && evt.audience.toLowerCase().includes(q)) ||
           (evt.categoryLabel && evt.categoryLabel.toLowerCase().includes(q)) ||
+          (evt.category && evt.category.toLowerCase().includes(q)) ||
+          (tagNames && tagNames.toLowerCase().includes(q)) ||
+          (tagSlugs && tagSlugs.toLowerCase().includes(q)) ||
           (evt.time && evt.time.toLowerCase().includes(q));
 
         return matchesCategory && matchesSearch;
@@ -1653,17 +1668,100 @@
       if (window.lucide) window.lucide.createIcons();
     }
 
-    function filterCalendarCategory(cat) {
-      selectedCategory = cat;
-      document.querySelectorAll('#calendarCategoryPills .dg-act-pill-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-category') === cat);
+    function renderCalendarPills(tags) {
+      const container = document.getElementById('calendarCategoryPills');
+      if (!container || !Array.isArray(tags) || tags.length === 0) return;
+      let pillsHtml = `
+        <button type="button" class="dg-act-pill-btn ${selectedCategory === 'all' ? 'active' : ''}" data-category="all" onclick="filterCalendarCategory('all')">
+          <span>ทั้งหมด</span>
+        </button>
+      `;
+      tags.forEach(t => {
+        const catKey = t.slug || t.name;
+        const isActive = (selectedCategory === t.slug || selectedCategory === t.name || String(selectedCategory) === String(t.id));
+        pillsHtml += `
+          <button type="button" class="dg-act-pill-btn ${isActive ? 'active' : ''}" 
+            data-category="${escapeHtml(catKey)}" 
+            data-name="${escapeHtml(t.name)}" 
+            data-slug="${escapeHtml(t.slug || '')}" 
+            data-id="${t.id}" 
+            onclick="filterCalendarCategory('${escapeHtml(catKey)}')">
+            ${t.icon ? `<i data-lucide="${escapeHtml(t.icon)}" style="width: 13px; height: 13px; margin-right: 4px;"></i>` : ''}
+            <span>${escapeHtml(t.name)}</span>
+          </button>
+        `;
       });
-      renderCalendarEvents();
+      container.innerHTML = pillsHtml;
+      if (window.lucide) window.lucide.createIcons();
     }
 
-    function handleCalendarSearch(query) {
+    async function loadDynamicCalendarTags() {
+      // 1. Instant Cache-First render from localStorage to eliminate layout shift
+      try {
+        const cached = localStorage.getItem('dg_sarawat_tags_events');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) renderCalendarPills(parsed);
+        }
+      } catch (e) {}
+
+      // 2. Fetch fresh tags from Backend Database API
+      if (!window.SarawatApi || !window.SarawatApi.getTags) return;
+      try {
+        const tags = await window.SarawatApi.getTags('events');
+        if (Array.isArray(tags) && tags.length > 0) {
+          try { localStorage.setItem('dg_sarawat_tags_events', JSON.stringify(tags)); } catch (e) {}
+          renderCalendarPills(tags);
+        }
+      } catch (e) {
+        console.warn('Failed to load dynamic calendar tags:', e);
+      }
+    }
+
+    function filterCalendarCategory(cat, updateUrl = true) {
+      selectedCategory = cat;
+      document.querySelectorAll('#calendarCategoryPills .dg-act-pill-btn').forEach(btn => {
+        const bCat = btn.getAttribute('data-category');
+        const bName = btn.getAttribute('data-name');
+        const bSlug = btn.getAttribute('data-slug');
+        const bId = btn.getAttribute('data-id');
+        const isMatch = (cat === 'all' && bCat === 'all') ||
+          (cat !== 'all' && (bCat === cat || bName === cat || bSlug === cat || bId === String(cat)));
+        btn.classList.toggle('active', Boolean(isMatch));
+      });
+      renderCalendarEvents();
+      if (updateUrl) {
+        try {
+          const u = new URL(window.location.href);
+          if (cat && cat !== 'all') {
+            u.searchParams.set('category', cat);
+          } else {
+            u.searchParams.delete('category');
+            u.searchParams.delete('cat');
+            u.searchParams.delete('tag');
+          }
+          window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+        } catch (e) {
+          console.error('Failed to update calendar category URL param:', e);
+        }
+      }
+    }
+
+    function handleCalendarSearch(query, updateUrl = true) {
       searchQuery = (query || '').trim();
       renderCalendarEvents();
+      if (updateUrl) {
+        try {
+          const u = new URL(window.location.href);
+          if (searchQuery) {
+            u.searchParams.set('q', searchQuery);
+          } else {
+            u.searchParams.delete('q');
+            u.searchParams.delete('search');
+          }
+          window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+        } catch (e) {}
+      }
     }
 
     function resetCalendarFilters() {
@@ -1676,14 +1774,86 @@
         btn.classList.toggle('active', btn.getAttribute('data-category') === 'all');
       });
 
+      try {
+        const u = new URL(window.location.href);
+        u.searchParams.delete('category');
+        u.searchParams.delete('cat');
+        u.searchParams.delete('tag');
+        u.searchParams.delete('q');
+        u.searchParams.delete('search');
+        u.searchParams.delete('id');
+        u.searchParams.delete('event');
+        window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+      } catch (e) {}
+
       renderCalendarEvents();
     }
+
+    function handleCalendarQueryParams() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get('category') || params.get('cat') || params.get('tag');
+        const qParam = params.get('q') || params.get('search');
+        const idParam = params.get('id') || params.get('event');
+
+        if (catParam) {
+          filterCalendarCategory(catParam, false);
+        }
+        if (qParam) {
+          const input = document.getElementById('calendarSearchInput');
+          if (input) input.value = qParam;
+          handleCalendarSearch(qParam, false);
+        }
+        if (idParam) {
+          openEventDetailModal(idParam, false);
+        }
+      } catch (err) {
+        console.warn('Error handling calendar query params:', err);
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const catParam = params.get('category') || params.get('cat') || params.get('tag') || 'all';
+        const qParam = params.get('q') || params.get('search') || '';
+        const idParam = params.get('id') || params.get('event');
+
+        const modal = document.getElementById('eventDetailModal');
+        if (!idParam && modal && modal.classList.contains('active')) {
+          closeModal('eventDetailModal', true);
+        } else if (idParam) {
+          openEventDetailModal(idParam, false);
+        }
+
+        const input = document.getElementById('calendarSearchInput');
+        if (input && input.value !== qParam) input.value = qParam;
+        searchQuery = qParam.trim();
+        selectedCategory = catParam;
+        document.querySelectorAll('#calendarCategoryPills .dg-act-pill-btn').forEach(btn => {
+          const bCat = btn.getAttribute('data-category');
+          const bName = btn.getAttribute('data-name');
+          const bSlug = btn.getAttribute('data-slug');
+          const bId = btn.getAttribute('data-id');
+          const isMatch = (catParam === 'all' && bCat === 'all') ||
+            (catParam !== 'all' && (bCat === catParam || bName === catParam || bSlug === catParam || bId === String(catParam)));
+          btn.classList.toggle('active', Boolean(isMatch));
+        });
+        renderCalendarEvents();
+      } catch (e) {
+        console.warn('Error in calendar popstate:', e);
+      }
+    });
 
     // ==========================================================
     // EVENT DETAIL POP-UP MODAL
     // ==========================================================
-    function openEventDetailModal(id) {
-      const evt = calendarEventsCache.find(e => String(e.id) === String(id) || String(e.legacyId || '') === String(id));
+    function openEventDetailModal(id, updateUrl = true) {
+      const evt = calendarEventsCache.find(e =>
+        String(e.id) === String(id) ||
+        String(e.legacyId || '') === String(id) ||
+        String(e.id) === 'evt-' + String(id)
+      );
       if (!evt) return;
 
       const container = document.getElementById('eventDetailModalContent');
@@ -1790,6 +1960,14 @@
 
       if (window.lucide) window.lucide.createIcons();
       openModal('eventDetailModal');
+
+      if (updateUrl) {
+        try {
+          const u = new URL(window.location.href);
+          u.searchParams.set('id', evt.id);
+          window.history.pushState({ modal: 'eventDetailModal', id: evt.id }, '', u.toString());
+        } catch (e) {}
+      }
     }
 
     // ==========================================================
@@ -1803,12 +1981,23 @@
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal(modalId) {
+    function closeModal(modalId, fromPopState = false) {
       const modal = document.getElementById(modalId);
       if (!modal) return;
       modal.classList.remove('active');
       modal.style.display = 'none';
       document.body.style.overflow = '';
+
+      if (modalId === 'eventDetailModal' && !fromPopState) {
+        try {
+          const u = new URL(window.location.href);
+          if (u.searchParams.has('id') || u.searchParams.has('event')) {
+            u.searchParams.delete('id');
+            u.searchParams.delete('event');
+            window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+          }
+        } catch (e) {}
+      }
     }
 
     // Close on Escape key
@@ -1831,7 +2020,10 @@
 
     // Initialize on DOM load
     document.addEventListener('DOMContentLoaded', () => {
-      loadCalendarEvents();
+      loadDynamicCalendarTags();
+      loadCalendarEvents().then(() => {
+        handleCalendarQueryParams();
+      });
 
       // Mobile menu toggle
       const toggle = document.getElementById('dgNavToggle');

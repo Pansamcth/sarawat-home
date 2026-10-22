@@ -684,7 +684,13 @@
     function filterByCategory(cat, updateUrl = true) {
       selectedCategory = cat;
       document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-category') === cat);
+        const bCat = btn.getAttribute('data-category');
+        const bName = btn.getAttribute('data-name');
+        const bSlug = btn.getAttribute('data-slug');
+        const bId = btn.getAttribute('data-id');
+        const isMatch = (cat === 'all' && bCat === 'all') ||
+          (cat !== 'all' && (bCat === cat || bName === cat || bSlug === cat || bId === String(cat)));
+        btn.classList.toggle('active', Boolean(isMatch));
       });
       renderActivities();
       if (updateUrl) {
@@ -695,6 +701,7 @@
           } else {
             u.searchParams.delete('category');
             u.searchParams.delete('cat');
+            u.searchParams.delete('tag');
           }
           window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
         } catch (e) {
@@ -737,8 +744,13 @@
       // Filter items
       const filtered = allItems.filter(item => {
         const matchesCategory = selectedCategory === 'all' || 
-          (item.tag && item.tag.includes(selectedCategory)) ||
-          (Array.isArray(item.tags) && item.tags.some(t => (t.name === selectedCategory || t.slug === selectedCategory)));
+          (item.tag && (item.tag === selectedCategory || item.tag.includes(selectedCategory))) ||
+          (String(item.tagId || item.tag_id) === String(selectedCategory)) ||
+          (Array.isArray(item.tags) && item.tags.some(t => (
+            t.name === selectedCategory ||
+            t.slug === selectedCategory ||
+            String(t.id) === String(selectedCategory)
+          )));
         const tagNames = Array.isArray(item.tags) ? item.tags.map(t => t.name).join(' ') : (item.tag || '');
         const dateFormatted = item.dateStart ? (window.formatThaiDate ? window.formatThaiDate(item.dateStart, 'full') : item.dateStart) : (item.date || '');
         const matchesSearch = !searchQuery ||
@@ -1177,7 +1189,7 @@
     function handleActivitiesQueryParams() {
       try {
         const params = new URLSearchParams(window.location.search);
-        const catParam = params.get('category') || params.get('cat');
+        const catParam = params.get('category') || params.get('cat') || params.get('tag');
         const qParam = params.get('q') || params.get('search');
         const idParam = params.get('id') || params.get('activity') || params.get('post');
 
@@ -1261,14 +1273,20 @@
           }
         }
 
-        const catParam = params.get('category') || params.get('cat') || 'all';
+        const catParam = params.get('category') || params.get('cat') || params.get('tag') || 'all';
         const qParam = params.get('q') || params.get('search') || '';
         const input = document.getElementById('actSearchInput');
         if (input && input.value !== qParam) input.value = qParam;
         searchQuery = qParam.trim().toLowerCase();
         selectedCategory = catParam;
         document.querySelectorAll('#actCategoryPills .dg-act-pill-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.getAttribute('data-category') === catParam);
+          const bCat = btn.getAttribute('data-category');
+          const bName = btn.getAttribute('data-name');
+          const bSlug = btn.getAttribute('data-slug');
+          const bId = btn.getAttribute('data-id');
+          const isMatch = (catParam === 'all' && bCat === 'all') ||
+            (catParam !== 'all' && (bCat === catParam || bName === catParam || bSlug === catParam || bId === String(catParam)));
+          btn.classList.toggle('active', Boolean(isMatch));
         });
         renderActivities();
       } catch (err) {
@@ -1294,28 +1312,51 @@
       }
     }, { passive: true });
 
+    function renderNewsPills(tags) {
+      const container = document.getElementById('actCategoryPills');
+      if (!container || !Array.isArray(tags) || tags.length === 0) return;
+      let pillsHtml = `
+        <button type="button" class="dg-act-pill-btn ${selectedCategory === 'all' ? 'active' : ''}" data-category="all" onclick="filterByCategory('all')">
+          <span>ทั้งหมด</span>
+        </button>
+      `;
+      tags.forEach(t => {
+        const catKey = t.slug || t.name;
+        const isActive = (selectedCategory === t.name || selectedCategory === t.slug || String(selectedCategory) === String(t.id));
+        pillsHtml += `
+          <button type="button" class="dg-act-pill-btn ${isActive ? 'active' : ''}" 
+            data-category="${escapeHtml(catKey)}" 
+            data-name="${escapeHtml(t.name)}" 
+            data-slug="${escapeHtml(t.slug || '')}" 
+            data-id="${t.id}" 
+            onclick="filterByCategory('${escapeHtml(catKey)}')">
+            ${t.icon ? `<i data-lucide="${escapeHtml(t.icon)}" style="width: 13px; height: 13px; margin-right: 4px;"></i>` : ''}
+            <span>${escapeHtml(t.name)}</span>
+          </button>
+        `;
+      });
+      container.innerHTML = pillsHtml;
+      if (window.lucide) lucide.createIcons();
+    }
+
     async function loadDynamicNewsTags() {
+      // 1. Instant Cache-First render from localStorage to eliminate layout shift
+      try {
+        const cached = localStorage.getItem('dg_sarawat_tags_news');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) renderNewsPills(parsed);
+        }
+      } catch (e) {}
+
+      // 2. Fetch fresh tags from Backend Database API
       if (!window.SarawatApi || !window.SarawatApi.getTags) return;
       try {
         const tags = await window.SarawatApi.getTags('news');
-        const container = document.getElementById('actCategoryPills');
-        if (!container || !Array.isArray(tags) || tags.length === 0) return;
-        let pillsHtml = `
-          <button type="button" class="dg-act-pill-btn ${selectedCategory === 'all' ? 'active' : ''}" data-category="all" onclick="filterByCategory('all')">
-            <span>ทั้งหมด</span>
-          </button>
-        `;
-        tags.forEach(t => {
-          const isActive = selectedCategory === t.name;
-          pillsHtml += `
-            <button type="button" class="dg-act-pill-btn ${isActive ? 'active' : ''}" data-category="${escapeHtml(t.name)}" onclick="filterByCategory('${escapeHtml(t.name)}')">
-              ${t.icon ? `<i data-lucide="${t.icon}" style="width: 13px; height: 13px; margin-right: 4px;"></i>` : ''}
-              <span>${escapeHtml(t.name)}</span>
-            </button>
-          `;
-        });
-        container.innerHTML = pillsHtml;
-        if (window.lucide) lucide.createIcons();
+        if (Array.isArray(tags) && tags.length > 0) {
+          try { localStorage.setItem('dg_sarawat_tags_news', JSON.stringify(tags)); } catch (e) {}
+          renderNewsPills(tags);
+        }
       } catch (e) {
         console.warn('Failed to load dynamic news tags:', e);
       }
