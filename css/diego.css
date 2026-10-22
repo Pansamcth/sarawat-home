@@ -756,7 +756,8 @@ svg:not([data-lucide]),
 .dg-news-cover-wrap {
   position: relative;
   width: 100%;
-  height: 220px;
+  aspect-ratio: 4 / 3;
+  height: auto;
   background: var(--dg-bg-subtle);
   overflow: hidden;
 }
@@ -764,6 +765,7 @@ svg:not([data-lucide]),
 .dg-news-img {
   width: 100%;
   height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   transition: transform 0.4s ease;
   display: block;
@@ -3102,8 +3104,8 @@ svg:not([data-lucide]),
 
 .dg-news-modal-cover {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 320px;
+  aspect-ratio: 4 / 3;
+  max-height: 480px;
   border-radius: 14px;
   overflow: hidden;
   background: var(--dg-bg-card);
@@ -3672,7 +3674,8 @@ svg:not([data-lucide]),
 .dg-act-card-cover {
   position: relative;
   width: 100%;
-  height: 200px;
+  aspect-ratio: 4 / 3;
+  height: auto;
   background: #e2e8f0;
   overflow: hidden;
 }
@@ -3680,6 +3683,7 @@ svg:not([data-lucide]),
 .dg-act-card-cover img {
   width: 100%;
   height: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   transition: transform 0.35s ease;
   display: block;
@@ -5246,7 +5250,8 @@ svg:not([data-lucide]),
     scroll-snap-align: start;
   }
   .dg-news-cover-wrap {
-    height: 180px;
+    height: auto;
+    aspect-ratio: 4 / 3;
   }
   .dg-news-content {
     padding: 16px 16px 14px;
@@ -5569,7 +5574,8 @@ svg:not([data-lucide]),
     border-radius: 10px;
   }
   .dg-act-card-cover {
-    height: 120px;
+    height: auto;
+    aspect-ratio: 4 / 3;
   }
   .dg-act-tag {
     top: 6px;
@@ -5652,7 +5658,8 @@ svg:not([data-lucide]),
     gap: 8px;
   }
   .dg-act-card-cover {
-    height: 100px;
+    height: auto;
+    aspect-ratio: 4 / 3;
   }
   .dg-act-card-body {
     padding: 8px 6px 6px;
@@ -6006,7 +6013,7 @@ img {
 }
 .dg-sk-card-cover {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   position: relative;
 }
 .dg-sk-card-tag {
@@ -6104,4 +6111,35 @@ img {
 }
 
 
+
+
+
+  /* ==========================================================
+     GLOBAL 4:3 ASPECT RATIO ENFORCEMENT FOR NEWS & ACTIVITIES
+     บังคับอัตราส่วนภาพข่าวสารและกิจกรรมทุกหน้าเป็น 4:3
+     ========================================================== */
+  .dg-news-cover-wrap,
+  .dg-act-card-cover,
+  .dg-news-modal-cover,
+  .dg-sk-card-cover,
+  .admin-news-thumb,
+  .admin-preview-img-container {
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: hidden !important;
+  }
+
+  .dg-news-cover-wrap img,
+  .dg-news-img,
+  .dg-act-card-cover img,
+  .dg-news-modal-cover img,
+  .admin-news-thumb,
+  .admin-preview-img-container img {
+    aspect-ratio: 4 / 3 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
 
