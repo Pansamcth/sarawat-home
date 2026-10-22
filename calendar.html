@@ -1668,9 +1668,6 @@
           tagsHtml = '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>';
         }
 
-        const rangePillHtml = (dateInfo && dateInfo.isRange && dateInfo.rangePillText)
-          ? '<span class="dg-event-range-pill"><i data-lucide="calendar" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(dateInfo.rangePillText) + '</span></span>'
-          : '';
 
         const dateBoxInner = dateInfo ? dateInfo.boxHtml : (
           '<span class="day-num">' + escapeHtml(evt.day || '-') + '</span>' +
@@ -1685,7 +1682,6 @@
           '<div class="dg-event-details">' +
             '<div class="dg-event-header-row">' +
               tagsHtml +
-              rangePillHtml +
               '<span style="font-size: 0.74rem; padding: 2px 8px; border-radius: var(--dg-radius-pill); ' + status.style + '">' +
                 escapeHtml(status.label) +
               '</span>' +

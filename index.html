@@ -1659,7 +1659,6 @@
           const dateEndIso = evt.dateEnd || evt.endDateIso || '';
           const hasRange = Boolean(dateEndIso && dateEndIso !== dateStartIso && dateStartIso);
           let dateBoxHtml = '';
-          let rangePillHtml = '';
 
           if (hasRange) {
             const [sY, sM, sD] = dateStartIso.split('-').map(Number);
@@ -1674,10 +1673,8 @@
 
             if (sY === eY && sM === eM) {
               dateBoxHtml = '<span class="day-num" style="font-size: 1.25rem; letter-spacing: -0.02em;">' + sD + '–' + eD + '</span><span class="month-str">' + sMo + ' ' + sYr + '</span><span class="weekday-str" style="color: #0284c7; font-weight: 700;">(' + diffDays + ' วัน)</span>';
-              rangePillHtml = '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; color: #0369a1; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 99px; padding: 2px 8px;"><i data-lucide="calendar" style="width: 12px; height: 12px;"></i><span>' + sD + ' – ' + eD + ' ' + sMo + ' ' + sYr + ' (' + diffDays + ' วัน)</span></span>';
             } else {
               dateBoxHtml = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 100%;"><span class="day-num" style="font-size: 1.05rem; line-height: 1.1; font-weight: 900;">' + sD + ' ' + sMo + '</span><span style="font-size: 0.62rem; font-weight: 700; color: var(--dg-text-muted); line-height: 1;">– ถึง –</span><span class="day-num" style="font-size: 1.05rem; line-height: 1.1; font-weight: 900;">' + eD + ' ' + eMo + '</span><span class="month-str" style="font-size: 0.65rem; margin-top: 1px; color: #0284c7; font-weight: 700;">' + sYr + ' (' + diffDays + ' วัน)</span></div>';
-              rangePillHtml = '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; color: #0369a1; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 99px; padding: 2px 8px;"><i data-lucide="calendar" style="width: 12px; height: 12px;"></i><span>' + sD + ' ' + sMo + ' – ' + eD + ' ' + eMo + ' ' + sYr + ' (' + diffDays + ' วัน)</span></span>';
             }
           } else {
             let dayDisplay = evt.day;
