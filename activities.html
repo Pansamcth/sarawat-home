@@ -1320,7 +1320,7 @@
           <span>ทั้งหมด</span>
         </button>
       `;
-      tags.forEach(t => {
+      tags.filter(t => t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10).forEach(t => {
         const catKey = t.slug || t.name;
         const isActive = (selectedCategory === t.name || selectedCategory === t.slug || String(selectedCategory) === String(t.id));
         pillsHtml += `
@@ -1330,13 +1330,11 @@
             data-slug="${escapeHtml(t.slug || '')}" 
             data-id="${t.id}" 
             onclick="filterByCategory('${escapeHtml(catKey)}')">
-            ${t.icon ? `<i data-lucide="${escapeHtml(t.icon)}" style="width: 13px; height: 13px; margin-right: 4px;"></i>` : ''}
             <span>${escapeHtml(t.name)}</span>
           </button>
         `;
       });
       container.innerHTML = pillsHtml;
-      if (window.lucide) lucide.createIcons();
     }
 
     async function loadDynamicNewsTags() {
@@ -1354,8 +1352,9 @@
       try {
         const tags = await window.SarawatApi.getTags('news');
         if (Array.isArray(tags) && tags.length > 0) {
-          try { localStorage.setItem('dg_sarawat_tags_news', JSON.stringify(tags)); } catch (e) {}
-          renderNewsPills(tags);
+          const cleanTags = tags.filter(t => t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
+          try { localStorage.setItem('dg_sarawat_tags_news', JSON.stringify(cleanTags)); } catch (e) {}
+          renderNewsPills(cleanTags);
         }
       } catch (e) {
         console.warn('Failed to load dynamic news tags:', e);
