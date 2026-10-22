@@ -240,7 +240,7 @@
       for (let i = 0; i < count; i++) {
         html += `
           <div class="admin-news-item-card" style="pointer-events: none;" aria-hidden="true">
-            <div class="dg-skeleton-shimmer dg-sk-rect" style="width: 100%; aspect-ratio: 4/3; border-radius: 8px 8px 0 0;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-rect" style="width: 100%; aspect-ratio: 3/2; border-radius: 8px 8px 0 0;"></div>
             <div class="admin-news-item-body">
               <div class="admin-news-meta" style="display: flex; gap: 8px; margin-bottom: 10px;">
                 <div class="dg-skeleton-shimmer dg-sk-line sm" style="width: 80px; margin: 0;"></div>
