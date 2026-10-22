@@ -2599,36 +2599,44 @@
             ? window.renderTagBadgesHtml(evt.tags)
             : `<span class="dg-event-category-badge ${catClass}">${escapeHtml(catLabel)}</span>`;
 
+          const timeHtml = evt.time ? `
+            <span class="dg-event-meta-time">
+              <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+              <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
+            </span>
+          ` : '';
+
+          const locHtml = evt.location ? `
+            <span class="dg-event-meta-loc">
+              <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i>
+              <span>${escapeHtml(evt.location)}</span>
+            </span>
+          ` : '';
+
+          const audienceHtml = evt.audience ? `
+            <span class="dg-event-meta-audience">
+              <i data-lucide="users" style="width: 12px; height: 12px;"></i>
+              <span>${escapeHtml(evt.audience)}</span>
+            </span>
+          ` : '';
+
           return `
             <div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal('${evt.id}')">
               <div class="dg-event-date-box${hasRange ? ' is-range' : ''}">
                 ${dateBoxHtml}
               </div>
               <div class="dg-event-details">
-                <div class="dg-event-header-row" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                <div class="dg-event-header-row">
                   ${tagsHtml}
-                  <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
-                    <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
-                    <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
-                  </span>
-                  ${evt.location ? `
-                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
-                      <i data-lucide="map-pin" style="width: 13px; height: 13px;"></i>
-                      <span>${escapeHtml(evt.location)}</span>
-                    </span>
-                  ` : ''}
-                  ${evt.audience ? `
-                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--dg-text-secondary);">
-                      <i data-lucide="users" style="width: 13px; height: 13px;"></i>
-                      <span>${escapeHtml(evt.audience)}</span>
-                    </span>
-                  ` : ''}
+                  ${timeHtml}
+                  ${locHtml}
+                  ${audienceHtml}
                 </div>
-                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--dg-black); margin: 4px 0 2px; letter-spacing: -0.01em;">
+                <h3 class="dg-event-title">
                   ${escapeHtml(evt.title || '')}
                 </h3>
                 ${evt.desc ? `
-                  <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                  <p class="dg-event-desc">
                     ${escapeHtml(evt.desc)}
                   </p>
                 ` : ''}
