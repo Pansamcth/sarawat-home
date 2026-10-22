@@ -1683,7 +1683,7 @@
     // EVENT DETAIL POP-UP MODAL
     // ==========================================================
     function openEventDetailModal(id) {
-      const evt = calendarEventsCache.find(e => String(e.id) === String(id));
+      const evt = calendarEventsCache.find(e => String(e.id) === String(id) || String(e.legacyId || '') === String(id));
       if (!evt) return;
 
       const container = document.getElementById('eventDetailModalContent');

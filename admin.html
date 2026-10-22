@@ -7168,7 +7168,7 @@
       document.getElementById('adminNewsId').value = id;
       
       const news = await fetchNewsApi();
-      const item = news.find(n => n.id === id);
+      const item = news.find(n => String(n.id) === String(id) || String(n.legacyId || '') === String(id));
       if (!item) return;
 
       const titleInput = document.getElementById('adminNewsTitle');
@@ -7828,7 +7828,7 @@
       if (submitBtn) submitBtn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกการเปลี่ยนแปลง</span>';
 
       const events = await fetchEventsApi();
-      const evt = events.find(e => String(e.id) === String(id));
+      const evt = events.find(e => String(e.id) === String(id) || String(e.legacyId || '') === String(id));
       if (!evt) return;
       renderEventTagsSelector(evt.tags || []);
 

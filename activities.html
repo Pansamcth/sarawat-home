@@ -100,6 +100,7 @@
             var cleanId = String(targetId).trim().toLowerCase();
             found = items.find(function (it) {
               return String(it.id).toLowerCase() === cleanId ||
+                String(it.legacyId || '').toLowerCase() === cleanId ||
                 String(it.id).toLowerCase() === 'news-' + cleanId ||
                 (it.title && it.title.trim().toLowerCase() === cleanId) ||
                 (it.title && it.title.toLowerCase().indexOf(cleanId) !== -1);
@@ -885,6 +886,7 @@
       const cleanId = String(id).trim().toLowerCase();
       const item = items.find(it =>
         String(it.id).toLowerCase() === cleanId ||
+        String(it.legacyId || '').toLowerCase() === cleanId ||
         String(it.id).toLowerCase() === 'news-' + cleanId ||
         (it.title && it.title.trim().toLowerCase() === cleanId) ||
         (it.title && it.title.toLowerCase().includes(cleanId))

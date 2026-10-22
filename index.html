@@ -1474,7 +1474,7 @@
 
     function openNewsDetailModal(id) {
       const items = getNewsData();
-      const item = items.find(it => String(it.id) === String(id));
+      const item = items.find(it => String(it.id) === String(id) || String(it.legacyId || '') === String(id));
       if (!item) return;
 
       const container = document.getElementById('newsModalContent');
