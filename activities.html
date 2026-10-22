@@ -803,7 +803,7 @@
               ${(item.dateStart || item.date) ? `
                 <div class="dg-act-card-date">
                   <i data-lucide="calendar"></i>
-                  <span>${escapeHtml(window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'short') : (item.date || item.dateStart))}</span>
+                  <span>${escapeHtml((item.dateStart && item.dateEnd && item.dateEnd !== item.dateStart && window.formatDateRange) ? window.formatDateRange(item.dateStart, item.dateEnd, 'short') : (window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'short') : (item.date || item.dateStart)))}</span>
                 </div>
               ` : ''}
               <h3 class="dg-act-card-title">${escapeHtml(item.title)}</h3>
@@ -926,7 +926,7 @@
             ${(item.dateStart || item.date) ? `
               <span class="dg-news-modal-date">
                 <i data-lucide="calendar"></i>
-                <span>${escapeHtml(window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'full') : (item.date || item.dateStart))}</span>
+                <span>${escapeHtml((item.dateStart && item.dateEnd && item.dateEnd !== item.dateStart && window.formatDateRange) ? window.formatDateRange(item.dateStart, item.dateEnd, 'full', true) : (window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'full') : (item.date || item.dateStart)))}</span>
               </span>
             ` : ''}
           </div>

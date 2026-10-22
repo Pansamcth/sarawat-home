@@ -360,28 +360,57 @@
       return `${day} ${thaiMonthsFull[monthIdx]} พ.ศ. ${thaiYear}`;
     },
 
-    formatDateRange: function (startIso, endIso) {
+    formatDateRange: function (startIso, endIso, format = 'short', withDuration = false) {
       if (!startIso) return '';
       if (!endIso || endIso === startIso) {
-        return this.formatThaiDate(startIso, 'short');
+        return this.formatThaiDate(startIso, format === 'full' ? 'full' : 'short');
       }
       const s = startIso.split('T')[0].split('-');
       const e = endIso.split('T')[0].split('-');
       if (s.length === 3 && e.length === 3) {
+        const thaiMonthsFull = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
         const thaiMonthsShort = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-        const sDay = parseInt(s[2], 10);
-        const eDay = parseInt(e[2], 10);
-        const sMo = thaiMonthsShort[parseInt(s[1], 10) - 1];
-        const eMo = thaiMonthsShort[parseInt(e[1], 10) - 1];
-        const sYr = String(parseInt(s[0], 10) + 543).slice(-2);
-        const eYr = String(parseInt(e[0], 10) + 543).slice(-2);
+        const sY = parseInt(s[0], 10);
+        const eY = parseInt(e[0], 10);
+        const sM = parseInt(s[1], 10);
+        const eM = parseInt(e[1], 10);
+        const sD = parseInt(s[2], 10);
+        const eD = parseInt(e[2], 10);
 
-        if (s[0] === e[0] && s[1] === e[1]) {
-          return `${sDay} - ${eDay} ${sMo} ${sYr}`;
+        let durationText = '';
+        if (withDuration) {
+          const sDate = new Date(Date.UTC(sY, sM - 1, sD));
+          const eDate = new Date(Date.UTC(eY, eM - 1, eD));
+          const diffDays = Math.round((eDate.getTime() - sDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+          if (diffDays > 1) durationText = ` (${diffDays} วัน)`;
         }
-        return `${sDay} ${sMo} - ${eDay} ${eMo} ${eYr}`;
+
+        if (format === 'full') {
+          const sMoF = thaiMonthsFull[sM - 1];
+          const eMoF = thaiMonthsFull[eM - 1];
+          const sYrF = sY + 543;
+          const eYrF = eY + 543;
+          if (sY === eY && sM === eM) {
+            return `${sD} – ${eD} ${sMoF} พ.ศ. ${sYrF}${durationText}`;
+          } else if (sY === eY) {
+            return `${sD} ${sMoF} – ${eD} ${eMoF} พ.ศ. ${sYrF}${durationText}`;
+          }
+          return `${sD} ${sMoF} พ.ศ. ${sYrF} – ${eD} ${eMoF} พ.ศ. ${eYrF}${durationText}`;
+        }
+
+        const sMo = thaiMonthsShort[sM - 1];
+        const eMo = thaiMonthsShort[eM - 1];
+        const sYr = String(sY + 543).slice(-2);
+        const eYr = String(eY + 543).slice(-2);
+
+        if (sY === eY && sM === eM) {
+          return `${sD} – ${eD} ${sMo} ${sYr}${durationText}`;
+        } else if (sY === eY) {
+          return `${sD} ${sMo} – ${eD} ${eMo} ${sYr}${durationText}`;
+        }
+        return `${sD} ${sMo} ${sYr} – ${eD} ${eMo} ${eYr}${durationText}`;
       }
-      return `${this.formatThaiDate(startIso, 'short')} - ${this.formatThaiDate(endIso, 'short')}`;
+      return `${this.formatThaiDate(startIso, 'short')} – ${this.formatThaiDate(endIso, 'short')}`;
     },
 
     // ==========================================

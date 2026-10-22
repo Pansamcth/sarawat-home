@@ -1425,7 +1425,7 @@
               ` : ''}
 
               <div class="dg-news-card-meta-bar">
-                <span class="dg-news-counter-tag">${(item.dateStart || item.date) ? (window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'short') : (item.date || item.dateStart)) : (index === 0 ? '🔥 กิจกรรมล่าสุด' : `ACTIVITY #${index + 1}`)}</span>
+                <span class="dg-news-counter-tag">${(item.dateStart || item.date) ? ((item.dateStart && item.dateEnd && item.dateEnd !== item.dateStart && window.formatDateRange) ? window.formatDateRange(item.dateStart, item.dateEnd, 'short') : (window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'short') : (item.date || item.dateStart))) : (index === 0 ? '🔥 กิจกรรมล่าสุด' : `ACTIVITY #${index + 1}`)}</span>
                 <span class="dg-news-read-more-btn">
                   <span>ดูรายละเอียด</span>
                   <i data-lucide="arrow-up-right"></i>
@@ -1496,7 +1496,7 @@
             ${(item.dateStart || item.date) ? `
               <span class="dg-news-modal-date">
                 <i data-lucide="calendar"></i>
-                <span>${escapeHtml(window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'full') : (item.date || item.dateStart))}</span>
+                <span>${escapeHtml((item.dateStart && item.dateEnd && item.dateEnd !== item.dateStart && window.formatDateRange) ? window.formatDateRange(item.dateStart, item.dateEnd, 'full', true) : (window.formatThaiDate ? window.formatThaiDate(item.dateStart || item.date, 'full') : (item.date || item.dateStart)))}</span>
               </span>
             ` : ''}
           </div>
@@ -1655,17 +1655,41 @@
         container.innerHTML = events.map(evt => {
           const catClass = `cat-${evt.category || 'general'}`;
           const catLabel = evt.categoryLabel || (evt.category === 'affairs' ? 'งานกิจการนักเรียน' : evt.category === 'academic' ? 'งานวิชาการ' : evt.category === 'prefect' ? 'ภารกิจสารวัตร' : evt.category === 'holiday' ? 'วันหยุด' : 'กิจกรรมทั่วไป');
-          let dayDisplay = evt.day;
-          let monthDisplay = evt.month;
-          let weekdayDisplay = evt.weekday;
-          if (evt.dateStart && window.formatThaiDate) {
-            dayDisplay = window.formatThaiDate(evt.dateStart, 'day');
-            monthDisplay = window.formatThaiDate(evt.dateStart, 'monthShort');
-            weekdayDisplay = window.formatThaiDate(evt.dateStart, 'weekday');
+          const dateStartIso = evt.dateStart || evt.dateIso || '';
+          const dateEndIso = evt.dateEnd || evt.endDateIso || '';
+          const hasRange = Boolean(dateEndIso && dateEndIso !== dateStartIso && dateStartIso);
+          let dateBoxHtml = '';
+          let rangePillHtml = '';
+
+          if (hasRange) {
+            const [sY, sM, sD] = dateStartIso.split('-').map(Number);
+            const [eY, eM, eD] = dateEndIso.split('-').map(Number);
+            const sDate = new Date(Date.UTC(sY, sM - 1, sD));
+            const eDate = new Date(Date.UTC(eY, eM - 1, eD));
+            const diffDays = Math.round((eDate.getTime() - sDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+            const THAI_MONTHS_SHORT = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+            const sMo = THAI_MONTHS_SHORT[sM - 1] || '';
+            const eMo = THAI_MONTHS_SHORT[eM - 1] || '';
+            const sYr = String(sY + 543).slice(-2);
+
+            if (sY === eY && sM === eM) {
+              dateBoxHtml = '<span class="day-num" style="font-size: 1.25rem; letter-spacing: -0.02em;">' + sD + '–' + eD + '</span><span class="month-str">' + sMo + ' ' + sYr + '</span><span class="weekday-str" style="color: #0284c7; font-weight: 700;">(' + diffDays + ' วัน)</span>';
+              rangePillHtml = '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; color: #0369a1; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 99px; padding: 2px 8px;"><i data-lucide="calendar" style="width: 12px; height: 12px;"></i><span>' + sD + ' – ' + eD + ' ' + sMo + ' ' + sYr + ' (' + diffDays + ' วัน)</span></span>';
+            } else {
+              dateBoxHtml = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 100%;"><span class="day-num" style="font-size: 1.05rem; line-height: 1.1; font-weight: 900;">' + sD + ' ' + sMo + '</span><span style="font-size: 0.62rem; font-weight: 700; color: var(--dg-text-muted); line-height: 1;">– ถึง –</span><span class="day-num" style="font-size: 1.05rem; line-height: 1.1; font-weight: 900;">' + eD + ' ' + eMo + '</span><span class="month-str" style="font-size: 0.65rem; margin-top: 1px; color: #0284c7; font-weight: 700;">' + sYr + ' (' + diffDays + ' วัน)</span></div>';
+              rangePillHtml = '<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; color: #0369a1; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 99px; padding: 2px 8px;"><i data-lucide="calendar" style="width: 12px; height: 12px;"></i><span>' + sD + ' ' + sMo + ' – ' + eD + ' ' + eMo + ' ' + sYr + ' (' + diffDays + ' วัน)</span></span>';
+            }
+          } else {
+            let dayDisplay = evt.day;
+            let monthDisplay = evt.month;
+            let weekdayDisplay = evt.weekday;
+            if (evt.dateStart && window.formatThaiDate) {
+              dayDisplay = window.formatThaiDate(evt.dateStart, 'day');
+              monthDisplay = window.formatThaiDate(evt.dateStart, 'monthShort');
+              weekdayDisplay = window.formatThaiDate(evt.dateStart, 'weekday');
+            }
+            dateBoxHtml = '<span class="day-num">' + escapeHtml(dayDisplay || '-') + '</span><span class="month-str">' + escapeHtml(monthDisplay || '') + '</span>' + (weekdayDisplay ? '<span class="weekday-str">' + escapeHtml(weekdayDisplay) + '</span>' : '');
           }
-          dayDisplay = dayDisplay || '-';
-          monthDisplay = monthDisplay || '';
-          weekdayDisplay = weekdayDisplay || '';
 
           const tagsHtml = (Array.isArray(evt.tags) && evt.tags.length > 0 && window.renderTagBadgesHtml)
             ? window.renderTagBadgesHtml(evt.tags)

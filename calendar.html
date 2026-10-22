@@ -1125,80 +1125,114 @@
 
     function calculateEventDateInfo(startIso, endIso) {
       if (!startIso) return null;
-      const [sY, sM, sD] = startIso.split('-').map(Number);
-      const startDate = new Date(sY, sM - 1, sD);
+      const cleanStart = String(startIso).trim().split('T')[0];
+      const cleanEnd = endIso ? String(endIso).trim().split('T')[0] : '';
+      const sParts = cleanStart.split('-').map(Number);
+      if (sParts.length !== 3 || isNaN(sParts[0])) return null;
+
+      const [sY, sM, sD] = sParts;
+      const startDate = new Date(Date.UTC(sY, sM - 1, sD));
       const sThaiYear = sY + 543;
       const sThaiYearShort = String(sThaiYear).slice(-2);
       const sMonthShort = THAI_MONTHS_SHORT[sM - 1] || '';
       const sMonthFull = THAI_MONTHS_FULL[sM - 1] || '';
       const sDayStr = String(sD);
-      const sWeekdayFull = THAI_DAYS[startDate.getDay()] || '';
-      const sWeekdayShort = THAI_DAYS_SHORT[startDate.getDay()] || '';
+      const sWeekdayFull = THAI_DAYS[startDate.getUTCDay()] || '';
+      const sWeekdayShort = THAI_DAYS_SHORT[startDate.getUTCDay()] || '';
 
-      let hasEndDate = Boolean(endIso && endIso.trim() && endIso !== startIso);
+      let hasEndDate = Boolean(cleanEnd && cleanEnd !== cleanStart);
       let eY, eM, eD, endDate, eThaiYear, eThaiYearShort, eMonthShort, eMonthFull, eWeekdayShort, diffDays = 1;
 
       if (hasEndDate) {
-        const parts = endIso.split('-').map(Number);
-        eY = parts[0];
-        eM = parts[1];
-        eD = parts[2];
-        endDate = new Date(eY, eM - 1, eD);
-
-        if (endDate.getTime() < startDate.getTime()) {
-          hasEndDate = false;
+        const eParts = cleanEnd.split('-').map(Number);
+        if (eParts.length === 3 && !isNaN(eParts[0])) {
+          eY = eParts[0];
+          eM = eParts[1];
+          eD = eParts[2];
+          endDate = new Date(Date.UTC(eY, eM - 1, eD));
+          if (endDate.getTime() < startDate.getTime()) {
+            hasEndDate = false;
+          } else {
+            eThaiYear = eY + 543;
+            eThaiYearShort = String(eThaiYear).slice(-2);
+            eMonthShort = THAI_MONTHS_SHORT[eM - 1] || '';
+            eMonthFull = THAI_MONTHS_FULL[eM - 1] || '';
+            eWeekdayShort = THAI_DAYS_SHORT[endDate.getUTCDay()] || '';
+            const diffTime = endDate.getTime() - startDate.getTime();
+            diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            if (diffDays <= 1) hasEndDate = false;
+          }
         } else {
-          eThaiYear = eY + 543;
-          eThaiYearShort = String(eThaiYear).slice(-2);
-          eMonthShort = THAI_MONTHS_SHORT[eM - 1] || '';
-          eMonthFull = THAI_MONTHS_FULL[eM - 1] || '';
-          eWeekdayShort = THAI_DAYS_SHORT[endDate.getDay()] || '';
-          const diffTime = endDate.getTime() - startDate.getTime();
-          diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
-          if (diffDays <= 1) hasEndDate = false;
+          hasEndDate = false;
         }
       }
 
       if (!hasEndDate) {
         return {
           isRange: false,
+          isCrossMonth: false,
+          isCrossYear: false,
+          durationDays: 1,
           day: sDayStr,
           month: sMonthShort + ' ' + sThaiYearShort,
           weekday: sWeekdayFull,
-          fullDateText: sD + ' ' + sMonthFull + ' ' + sThaiYear + ' (วัน' + sWeekdayFull + ')',
-          dateIso: startIso,
+          boxHtml: '<span class="day-num">' + sDayStr + '</span><span class="month-str">' + sMonthShort + ' ' + sThaiYearShort + '</span><span class="weekday-str">' + sWeekdayFull + '</span>',
+          rangePillText: null,
+          fullDateText: sD + ' ' + sMonthFull + ' พ.ศ. ' + sThaiYear + ' (วัน' + sWeekdayFull + ')',
+          barBadge: sD + ' ' + sMonthShort,
+          dateIso: cleanStart,
           endDateIso: ''
         };
       }
 
-      let dayStr = '';
-      let monthStr = '';
-      let weekdayStr = sWeekdayShort + '-' + eWeekdayShort;
-      let fullDateText = '';
+      const isCrossMonth = (sM !== eM || sY !== eY);
+      const isCrossYear = (sY !== eY);
 
-      if (sY === eY && sM === eM) {
-        dayStr = sD + '-' + eD;
-        monthStr = sMonthShort + ' ' + sThaiYearShort;
-        fullDateText = sD + ' - ' + eD + ' ' + sMonthFull + ' ' + sThaiYear + ' (' + diffDays + ' วัน)';
-      } else if (sY === eY) {
-        dayStr = sD + ' ' + sMonthShort + ' - ' + eD + ' ' + eMonthShort;
-        monthStr = sThaiYearShort;
-        fullDateText = sD + ' ' + sMonthFull + ' ถึง ' + eD + ' ' + eMonthFull + ' ' + sThaiYear + ' (' + diffDays + ' วัน)';
+      let boxHtml = '';
+      let rangePillText = '';
+      let fullDateText = '';
+      let barBadge = '';
+
+      if (!isCrossMonth) {
+        boxHtml = '<span class="day-num" style="font-size: 1.28rem; letter-spacing: -0.02em;">' + sD + '–' + eD + '</span>' +
+                  '<span class="month-str">' + sMonthShort + ' ' + sThaiYearShort + '</span>' +
+                  '<span class="weekday-str" style="color: #0284c7; font-weight: 700;">(' + diffDays + ' วัน)</span>';
+        rangePillText = sD + ' – ' + eD + ' ' + sMonthShort + ' ' + sThaiYearShort + ' (' + diffDays + ' วัน)';
+        fullDateText = sD + ' – ' + eD + ' ' + sMonthFull + ' พ.ศ. ' + sThaiYear + ' (' + diffDays + ' วัน, ' + sWeekdayShort + '–' + eWeekdayShort + ')';
+        barBadge = sD + '–' + eD + ' ' + sMonthShort;
+      } else if (!isCrossYear) {
+        boxHtml = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 100%;">' +
+                    '<span class="day-num" style="font-size: 1.08rem; line-height: 1.1; font-weight: 900;">' + sD + ' ' + sMonthShort + '</span>' +
+                    '<span style="font-size: 0.62rem; font-weight: 700; color: var(--dg-text-muted); line-height: 1;">– ถึง –</span>' +
+                    '<span class="day-num" style="font-size: 1.08rem; line-height: 1.1; font-weight: 900;">' + eD + ' ' + eMonthShort + '</span>' +
+                    '<span class="month-str" style="font-size: 0.65rem; margin-top: 1px; color: #0284c7; font-weight: 700;">' + sThaiYearShort + ' (' + diffDays + ' วัน)</span>' +
+                  '</div>';
+        rangePillText = sD + ' ' + sMonthShort + ' – ' + eD + ' ' + eMonthShort + ' ' + sThaiYearShort + ' (' + diffDays + ' วัน)';
+        fullDateText = sD + ' ' + sMonthFull + ' – ' + eD + ' ' + eMonthFull + ' พ.ศ. ' + sThaiYear + ' (' + diffDays + ' วัน)';
+        barBadge = sD + ' ' + sMonthShort + '–' + eD + ' ' + eMonthShort;
       } else {
-        dayStr = sD + ' ' + sMonthShort + ' - ' + eD + ' ' + eMonthShort;
-        monthStr = sThaiYearShort + '-' + eThaiYearShort;
-        fullDateText = sD + ' ' + sMonthFull + ' ' + sThaiYear + ' ถึง ' + eD + ' ' + eMonthFull + ' ' + eThaiYear + ' (' + diffDays + ' วัน)';
+        boxHtml = '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; width: 100%;">' +
+                    '<span class="day-num" style="font-size: 1.05rem; line-height: 1.1; font-weight: 900;">' + sD + ' ' + sMonthShort + '</span>' +
+                    '<span style="font-size: 0.62rem; font-weight: 700; color: var(--dg-text-muted); line-height: 1;">– ถึง –</span>' +
+                    '<span class="day-num" style="font-size: 1.05rem; line-height: 1.1; font-weight: 900;">' + eD + ' ' + eMonthShort + '</span>' +
+                    '<span class="month-str" style="font-size: 0.62rem; margin-top: 1px; color: #0284c7; font-weight: 700;">' + sThaiYearShort + '–' + eThaiYearShort + ' (' + diffDays + ' วัน)</span>' +
+                  '</div>';
+        rangePillText = sD + ' ' + sMonthShort + ' ' + sThaiYearShort + ' – ' + eD + ' ' + eMonthShort + ' ' + eThaiYearShort + ' (' + diffDays + ' วัน)';
+        fullDateText = sD + ' ' + sMonthFull + ' พ.ศ. ' + sThaiYear + ' – ' + eD + ' ' + eMonthFull + ' พ.ศ. ' + eThaiYear + ' (' + diffDays + ' วัน)';
+        barBadge = sD + ' ' + sMonthShort + '–' + eD + ' ' + eMonthShort;
       }
 
       return {
         isRange: true,
-        day: dayStr,
-        month: monthStr,
-        weekday: weekdayStr,
-        fullDateText: fullDateText,
+        isCrossMonth,
+        isCrossYear,
         durationDays: diffDays,
-        dateIso: startIso,
-        endDateIso: endIso
+        boxHtml,
+        rangePillText,
+        fullDateText,
+        barBadge,
+        dateIso: cleanStart,
+        endDateIso: cleanEnd
       };
     }
 
@@ -1257,14 +1291,13 @@
 
         // Normalize events date fields
         calendarEventsCache = (events || []).map(evt => {
-          if (!evt.day || !evt.month) {
-            const info = calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
-            if (info) {
-              evt.day = info.day;
-              evt.month = info.month;
-              evt.weekday = info.weekday;
-              evt.fullDateText = info.fullDateText;
-            }
+          const info = calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
+          if (info) {
+            evt.dateInfo = info;
+            evt.fullDateText = info.fullDateText;
+            if (!evt.day || info.isRange) evt.day = info.day;
+            if (!evt.month || info.isRange) evt.month = info.month;
+            if (!evt.weekday || info.isRange) evt.weekday = info.weekday;
           }
           return evt;
         });
@@ -1507,6 +1540,7 @@
               category: evt.category || 'general',
               time: evt.time || '',
               dayText: evt.day || '',
+              dateInfo: evt.dateInfo || calculateEventDateInfo(s, e),
               startCol,
               endCol,
               span,
@@ -1564,7 +1598,15 @@
             // Multi-Day Continuous Bar (Google Calendar Style)
             const arrowPrev = item.continuesPrev ? '<span class="dg-cal-bar-arrow">‹</span>' : '';
             const arrowNext = item.continuesNext ? '<span class="dg-cal-bar-arrow">›</span>' : '';
-            const badgeText = item.dayText ? '<span class="dg-cal-bar-badge">' + escapeHtml(item.dayText) + '</span>' : '';
+            let badgeLabel = '';
+            if (item.dateInfo && item.dateInfo.barBadge) {
+              badgeLabel = item.dateInfo.barBadge;
+              if (item.continuesPrev) badgeLabel = '→ ' + (badgeLabel.includes('–') ? badgeLabel.split('–').pop() : badgeLabel);
+              else if (item.continuesNext) badgeLabel = (badgeLabel.includes('–') ? badgeLabel.split('–')[0] : badgeLabel) + ' →';
+            } else if (item.dayText) {
+              badgeLabel = item.dayText;
+            }
+            const badgeText = badgeLabel ? '<span class="dg-cal-bar-badge" title="' + escapeHtml(item.dateInfo?.rangePillText || item.title) + '">' + escapeHtml(badgeLabel) + '</span>' : '';
             contentInner = arrowPrev + badgeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>' + arrowNext;
           } else {
             // Single-Day Event Pill
@@ -1616,9 +1658,7 @@
 
         const dateStartIso = evt.dateStart || evt.dateIso || '';
         const dateEndIso = evt.dateEnd || evt.endDateIso || '';
-        const dayDisplay = dateStartIso ? window.formatThaiDate(dateStartIso, 'day') : (evt.day || '-');
-        const monthDisplay = dateStartIso ? window.formatThaiDate(dateStartIso, 'monthShort') : (evt.month || '');
-        const weekdayDisplay = dateStartIso ? window.formatThaiDate(dateStartIso, 'weekday') : (evt.weekday || '');
+        const dateInfo = evt.dateInfo || calculateEventDateInfo(dateStartIso, dateEndIso);
         const status = getEventStatus(evt);
 
         let tagsHtml = '';
@@ -1628,15 +1668,24 @@
           tagsHtml = '<span class="dg-event-category-badge ' + catClass + '">' + escapeHtml(catLabel) + '</span>';
         }
 
+        const rangePillHtml = (dateInfo && dateInfo.isRange && dateInfo.rangePillText)
+          ? '<span class="dg-event-range-pill"><i data-lucide="calendar" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(dateInfo.rangePillText) + '</span></span>'
+          : '';
+
+        const dateBoxInner = dateInfo ? dateInfo.boxHtml : (
+          '<span class="day-num">' + escapeHtml(evt.day || '-') + '</span>' +
+          '<span class="month-str">' + escapeHtml(evt.month || '') + '</span>' +
+          (evt.weekday ? '<span class="weekday-str">' + escapeHtml(evt.weekday) + '</span>' : '')
+        );
+
         return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
-          '<div class="dg-event-date-box">' +
-            '<span class="day-num">' + escapeHtml(dayDisplay) + '</span>' +
-            '<span class="month-str">' + escapeHtml(monthDisplay) + '</span>' +
-            (weekdayDisplay ? '<span class="weekday-str">' + escapeHtml(weekdayDisplay) + '</span>' : '') +
+          '<div class="dg-event-date-box' + (dateInfo && dateInfo.isRange ? ' is-range' : '') + '">' +
+            dateBoxInner +
           '</div>' +
           '<div class="dg-event-details">' +
             '<div class="dg-event-header-row">' +
               tagsHtml +
+              rangePillHtml +
               '<span style="font-size: 0.74rem; padding: 2px 8px; border-radius: var(--dg-radius-pill); ' + status.style + '">' +
                 escapeHtml(status.label) +
               '</span>' +
@@ -1864,11 +1913,8 @@
       const status = getEventStatus(evt);
 
       // Compute friendly date text from ISO
-      let dateText = (evt.dateStart ? window.formatDateRange(evt.dateStart, evt.dateEnd) : '') || evt.fullDateText;
-      if (!dateText) {
-        const info = calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
-        dateText = info ? info.fullDateText : (evt.day || '') + ' ' + (evt.month || '');
-      }
+      const dateInfo = evt.dateInfo || calculateEventDateInfo(evt.dateStart || evt.dateIso, evt.dateEnd || evt.endDateIso);
+      let dateText = dateInfo ? dateInfo.fullDateText : ((evt.dateStart ? window.formatDateRange(evt.dateStart, evt.dateEnd, 'full', true) : '') || evt.fullDateText || (evt.day || '') + ' ' + (evt.month || ''));
 
       let modalTagsHtml = '';
       if (evt.tags && evt.tags.length > 0) {
