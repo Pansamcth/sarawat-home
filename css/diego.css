@@ -5087,6 +5087,7 @@ svg:not([data-lucide]),
     font-weight: 650 !important;
     color: var(--dg-text-secondary) !important;
   }
+  .dg-event-meta-loc-row { display: flex; align-items: center; margin-top: 1px; }
   .dg-event-meta-loc {
     display: inline-flex !important;
     align-items: center !important;
@@ -5113,7 +5114,8 @@ svg:not([data-lucide]),
     align-items: center !important;
     justify-content: center !important;
   }
-  .dg-event-action-col .dg-btn-sm-outline {
+  .dg-event-action-col .dg-btn-sm-outline,
+  .dg-event-action-col .dg-event-action-btn {
     width: 32px !important;
     height: 32px !important;
     min-width: 32px !important;
@@ -5127,11 +5129,14 @@ svg:not([data-lucide]),
     color: #475569 !important;
     box-shadow: none !important;
   }
-  .dg-event-action-col .dg-btn-sm-outline span {
+  .dg-event-action-col .dg-btn-sm-outline span,
+  .dg-event-action-col .dg-event-action-btn span {
     display: none !important;
   }
   .dg-event-action-col .dg-btn-sm-outline svg,
-  .dg-event-action-col .dg-btn-sm-outline i {
+  .dg-event-action-col .dg-btn-sm-outline i,
+  .dg-event-action-col .dg-event-action-btn svg,
+  .dg-event-action-col .dg-event-action-btn i {
     width: 14px !important;
     height: 14px !important;
     margin: 0 !important;
