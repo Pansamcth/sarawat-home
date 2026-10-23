@@ -5850,8 +5850,8 @@ svg:not([data-lucide]),
 .dg-uptime-vision-layout {
   display: grid;
   grid-template-columns: 1fr auto 1.15fr;
-  gap: 36px;
-  align-items: stretch;
+  gap: 48px;
+  align-items: center;
   padding: 60px 0;
   border-bottom: 1px solid var(--dg-border);
 }
@@ -5859,26 +5859,24 @@ svg:not([data-lucide]),
 .dg-mission-vision-stacked {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: center;
+  gap: 40px;
 }
 
 .dg-mv-item {
-  background: var(--dg-bg-card);
-  border: 1px solid var(--dg-border);
-  border-radius: 16px;
-  padding: 24px 28px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
-  transition: var(--dg-transition);
+  box-shadow: none;
 }
 
 .dg-mv-item:hover {
-  background: var(--dg-bg-card-hover);
-  border-color: rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
+  background: transparent;
+  transform: none;
 }
 
 .dg-mv-label {
@@ -5892,9 +5890,9 @@ svg:not([data-lucide]),
 }
 
 .dg-mv-desc {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--dg-text-secondary);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--dg-text-primary);
   margin: 0;
 }
 
@@ -5903,9 +5901,8 @@ svg:not([data-lucide]),
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
-  border-left: 1px solid var(--dg-border);
-  border-right: 1px solid var(--dg-border);
+  padding: 0 10px;
+  border: none;
 }
 
 .dg-uptime-layout-inner {
@@ -5917,30 +5914,29 @@ svg:not([data-lucide]),
 .dg-uptime-grid-vertical {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .dg-uptime-grid-vertical .dg-uptime-unit {
-  width: 68px;
-  height: 68px;
+  width: 60px;
+  height: auto;
   border: none;
-  border-radius: 8px;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--dg-bg-card);
-  padding: 0;
-  transition: var(--dg-transition);
+  background: transparent;
+  padding: 4px 0;
 }
 
 .dg-uptime-grid-vertical .dg-uptime-unit:hover {
-  background: var(--dg-bg-card-hover);
+  background: transparent;
 }
 
 .dg-uptime-grid-vertical .dg-uptime-val {
   font-family: var(--dg-font-sans);
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 700;
   line-height: 1;
   color: var(--dg-text-primary);
@@ -5949,7 +5945,7 @@ svg:not([data-lucide]),
 }
 
 .dg-uptime-grid-vertical .dg-uptime-name {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--dg-text-secondary);
 }
@@ -5958,10 +5954,9 @@ svg:not([data-lucide]),
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--dg-text-muted);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.05em;
   white-space: nowrap;
 }
 
@@ -5975,10 +5970,11 @@ svg:not([data-lucide]),
   width: 100%;
   height: 100%;
   min-height: 380px;
-  border-radius: 16px;
+  border-radius: 0 !important;
   overflow: hidden;
-  background: var(--dg-bg-card);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+  background: transparent;
+  box-shadow: none;
+  border: none !important;
   position: relative;
   margin: 0 !important;
 }
@@ -5989,6 +5985,7 @@ svg:not([data-lucide]),
   object-fit: cover;
   object-position: center;
   display: block;
+  border-radius: 0 !important;
 }
 
 @media (max-width: 991px) {
@@ -5998,11 +5995,8 @@ svg:not([data-lucide]),
     padding: 40px 0;
   }
   .dg-uptime-card-vertical {
-    border-left: none;
-    border-right: none;
-    padding: 20px 0;
-    border-top: 1px solid var(--dg-border);
-    border-bottom: 1px solid var(--dg-border);
+    border: none;
+    padding: 10px 0;
   }
   .dg-uptime-layout-inner {
     flex-direction: column;
@@ -6013,11 +6007,11 @@ svg:not([data-lucide]),
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 16px;
   }
   .dg-uptime-grid-vertical .dg-uptime-unit {
-    width: 60px;
-    height: 60px;
+    width: auto;
+    min-width: 50px;
   }
   .dg-uptime-grid-vertical .dg-uptime-val {
     font-size: 1.45rem;
@@ -6036,7 +6030,11 @@ svg:not([data-lucide]),
   .dg-uptime-photo-wrap {
     min-height: auto;
     aspect-ratio: 3 / 2;
-    border-radius: 16px;
+    border-radius: 0 !important;
+    box-shadow: none;
+  }
+  .dg-uptime-photo-wrap img {
+    border-radius: 0 !important;
   }
 }
 
