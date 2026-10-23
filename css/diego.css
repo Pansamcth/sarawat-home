@@ -4612,11 +4612,15 @@ svg:not([data-lucide]),
 
   .dg-heading-motto,
   .dg-heading-sub {
-    font-size: clamp(1.35rem, 5.5vw, 1.8rem);
+    font-size: clamp(0.85rem, 4.25vw, 1.35rem);
     font-weight: 600;
     color: #000000;
-    margin-top: 8px;
+    margin-top: 6px;
     line-height: 1.25;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+    display: block;
+    max-width: 100%;
   }
 
   /* Sub-Grid (Paragraph 1 & Paragraph 2) */
