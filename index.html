@@ -672,6 +672,33 @@
       .dg-event-details {
         min-width: 0 !important;
       }
+      .dg-event-header-row {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+      }
+      .dg-event-desc {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        font-size: 0.88rem !important;
+        color: var(--dg-text-secondary) !important;
+        margin: 4px 0 0 0 !important;
+        line-height: 1.5 !important;
+      }
+      .dg-event-meta-time,
+      .dg-event-meta-loc,
+      .dg-event-meta-audience {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        font-size: 0.82rem !important;
+        color: var(--dg-text-secondary) !important;
+        white-space: normal !important;
+        max-width: none !important;
+      }
       .dg-event-action-col {
         display: flex !important;
         flex-direction: row !important;
@@ -687,6 +714,12 @@
         align-items: center !important;
         gap: 6px !important;
         padding: 8px 16px !important;
+        width: auto !important;
+        height: auto !important;
+        border-radius: var(--dg-radius-pill) !important;
+      }
+      .dg-btn-sm-outline span {
+        display: inline !important;
       }
     }
 
@@ -833,20 +866,20 @@
         flex-shrink: 0 !important;
         color: #94a3b8 !important;
       }
-      .dg-event-desc,
-      .dg-event-meta-audience,
-      .dg-event-prefect-note {
+      #upcomingEventsList .dg-event-desc,
+      #upcomingEventsList .dg-event-meta-audience,
+      #upcomingEventsList .dg-event-prefect-note {
         display: none !important;
       }
-      .dg-event-action-col {
+      #upcomingEventsList .dg-event-action-col {
         flex-shrink: 0 !important;
         margin-left: auto !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
       }
-      .dg-event-action-col .dg-btn-sm-outline,
-      .dg-event-action-col .dg-event-action-btn {
+      #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline,
+      #upcomingEventsList .dg-event-action-col .dg-event-action-btn {
         width: 32px !important;
         height: 32px !important;
         min-width: 32px !important;
@@ -860,14 +893,14 @@
         justify-content: center !important;
         box-shadow: none !important;
       }
-      .dg-event-action-col .dg-btn-sm-outline span,
-      .dg-event-action-col .dg-event-action-btn span {
+      #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline span,
+      #upcomingEventsList .dg-event-action-col .dg-event-action-btn span {
         display: none !important;
       }
-      .dg-event-action-col .dg-btn-sm-outline svg,
-      .dg-event-action-col .dg-btn-sm-outline i,
-      .dg-event-action-col .dg-event-action-btn svg,
-      .dg-event-action-col .dg-event-action-btn i {
+      #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline svg,
+      #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline i,
+      #upcomingEventsList .dg-event-action-col .dg-event-action-btn svg,
+      #upcomingEventsList .dg-event-action-col .dg-event-action-btn i {
         width: 15px !important;
         height: 15px !important;
         margin: 0 !important;
@@ -2940,12 +2973,23 @@
           ` : '';
 
           const locHtml = evt.location ? `
-            <div class="dg-event-meta-loc-row">
-              <span class="dg-event-meta-loc">
-                <i data-lucide="map-pin"></i>
-                <span>${escapeHtml(evt.location)}</span>
-              </span>
-            </div>
+            <span class="dg-event-meta-loc">
+              <i data-lucide="map-pin"></i>
+              <span>${escapeHtml(evt.location)}</span>
+            </span>
+          ` : '';
+
+          const audienceHtml = evt.audience ? `
+            <span class="dg-event-meta-audience">
+              <i data-lucide="users"></i>
+              <span>${escapeHtml(evt.audience)}</span>
+            </span>
+          ` : '';
+
+          const descHtml = evt.desc ? `
+            <p class="dg-event-desc">
+              ${escapeHtml(evt.desc)}
+            </p>
           ` : '';
 
           return `
@@ -2957,14 +3001,16 @@
                 <div class="dg-event-header-row">
                   ${tagsHtml}
                   ${timeHtml}
+                  ${locHtml}
+                  ${audienceHtml}
                 </div>
                 <h3 class="dg-event-title">${escapeHtml(evt.title || '')}</h3>
-                ${locHtml}
+                ${descHtml}
               </div>
               <div class="dg-event-action-col">
                 <button type="button" class="dg-btn-sm-outline dg-event-action-btn" onclick="event.stopPropagation(); openEventDetailModal('${evt.id}')" title="คลิกเพื่อดูรายละเอียด" aria-label="คลิกเพื่อดูรายละเอียด">
                   <span>รายละเอียด</span>
-                  <i data-lucide="chevron-right"></i>
+                  <i data-lucide="arrow-up-right"></i>
                 </button>
               </div>
             </div>

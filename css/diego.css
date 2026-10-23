@@ -5093,33 +5093,35 @@ svg:not([data-lucide]),
   }
   .dg-event-meta-loc-row { display: flex; align-items: center; margin-top: 1px; }
   .dg-event-meta-loc {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 3px !important;
-    font-size: 0.72rem !important;
-    color: var(--dg-text-secondary) !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.72rem;
+    color: var(--dg-text-secondary);
+  }
+  #upcomingEventsList .dg-event-meta-loc {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     max-width: 140px !important;
   }
-  /* Remove non-essential clutter on mobile list view (Audience & long desc) */
-  .dg-event-meta-audience {
+  /* Remove non-essential clutter on home upcoming events preview for mobile */
+  #upcomingEventsList .dg-event-meta-audience {
     display: none !important;
   }
-  .dg-event-desc,
-  .dg-event-prefect-note {
+  #upcomingEventsList .dg-event-desc,
+  #upcomingEventsList .dg-event-prefect-note {
     display: none !important;
   }
-  .dg-event-action-col {
+  #upcomingEventsList .dg-event-action-col {
     flex-shrink: 0 !important;
     margin-left: auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
-  .dg-event-action-col .dg-btn-sm-outline,
-  .dg-event-action-col .dg-event-action-btn {
+  #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline,
+  #upcomingEventsList .dg-event-action-col .dg-event-action-btn {
     width: 32px !important;
     height: 32px !important;
     min-width: 32px !important;
@@ -5133,14 +5135,14 @@ svg:not([data-lucide]),
     color: #475569 !important;
     box-shadow: none !important;
   }
-  .dg-event-action-col .dg-btn-sm-outline span,
-  .dg-event-action-col .dg-event-action-btn span {
+  #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline span,
+  #upcomingEventsList .dg-event-action-col .dg-event-action-btn span {
     display: none !important;
   }
-  .dg-event-action-col .dg-btn-sm-outline svg,
-  .dg-event-action-col .dg-btn-sm-outline i,
-  .dg-event-action-col .dg-event-action-btn svg,
-  .dg-event-action-col .dg-event-action-btn i {
+  #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline svg,
+  #upcomingEventsList .dg-event-action-col .dg-btn-sm-outline i,
+  #upcomingEventsList .dg-event-action-col .dg-event-action-btn svg,
+  #upcomingEventsList .dg-event-action-col .dg-event-action-btn i {
     width: 14px !important;
     height: 14px !important;
     margin: 0 !important;

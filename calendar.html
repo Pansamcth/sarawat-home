@@ -552,6 +552,33 @@
       .dg-event-details {
         min-width: 0 !important;
       }
+      .dg-event-header-row {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+      }
+      .dg-event-desc {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        font-size: 0.88rem !important;
+        color: var(--dg-text-secondary) !important;
+        margin: 4px 0 0 0 !important;
+        line-height: 1.5 !important;
+      }
+      .dg-event-meta-audience,
+      .dg-event-meta-loc,
+      .dg-event-meta-time {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        font-size: 0.80rem !important;
+        color: var(--dg-text-secondary) !important;
+        white-space: normal !important;
+        max-width: none !important;
+      }
       .dg-event-action-col {
         display: flex !important;
         flex-direction: row !important;
@@ -567,28 +594,34 @@
         align-items: center !important;
         gap: 6px !important;
         padding: 8px 16px !important;
+        border-radius: var(--dg-radius-pill) !important;
+        width: auto !important;
+        height: auto !important;
+      }
+      .dg-btn-sm-outline span {
+        display: inline !important;
       }
     }
 
-    /* ============ MOBILE LEDGER EVENT CARD (CLEAN & ORDERED) ============ */
+    /* ============ LIST VIEW EVENT CARD (MOBILE - FULL DETAILS) ============ */
     @media (max-width: 768px) {
       .dg-events-list {
         display: flex !important;
         flex-direction: column !important;
-        gap: 10px !important;
+        gap: 12px !important;
       }
       .dg-event-card {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 12px !important;
-        padding: 12px 14px !important;
+        display: grid !important;
+        grid-template-columns: 76px 1fr !important;
+        gap: 12px 14px !important;
+        padding: 14px 16px !important;
         border-radius: 14px !important;
         background: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
+        border: 1px solid var(--dg-border) !important;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
         transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease !important;
         cursor: pointer !important;
+        align-items: start !important;
         -webkit-tap-highlight-color: transparent;
       }
       .dg-event-card:active {
@@ -597,10 +630,10 @@
         border-color: #cbd5e1 !important;
       }
       .dg-event-date-box {
-        width: 68px !important;
-        min-width: 68px !important;
-        max-width: 68px !important;
-        align-self: stretch !important;
+        grid-column: 1 !important;
+        width: 100% !important;
+        min-width: 76px !important;
+        max-width: 76px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -609,7 +642,6 @@
         border-radius: 10px !important;
         background: #f8fafc !important;
         border: 1px solid #e2e8f0 !important;
-        flex-shrink: 0 !important;
         box-sizing: border-box !important;
         text-align: center !important;
       }
@@ -638,12 +670,11 @@
         color: #94a3b8 !important;
       }
       .dg-event-details {
-        flex: 1 1 auto !important;
+        grid-column: 2 !important;
         min-width: 0 !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 3px !important;
-        justify-content: center !important;
+        gap: 5px !important;
       }
       .dg-event-header-row {
         display: flex !important;
@@ -651,7 +682,7 @@
         align-items: center !important;
         gap: 6px !important;
         flex-wrap: wrap !important;
-        margin-bottom: 1px !important;
+        margin-bottom: 2px !important;
       }
       .dg-event-category-badge,
       .dg-event-tag-badge,
@@ -662,27 +693,35 @@
         line-height: 1.2 !important;
         border-radius: 999px !important;
       }
-      .dg-event-meta-time {
+      .dg-event-meta-time,
+      .dg-event-meta-loc,
+      .dg-event-meta-audience {
         display: inline-flex !important;
         align-items: center !important;
-        gap: 3px !important;
+        gap: 4px !important;
         font-size: 0.72rem !important;
-        font-weight: 650 !important;
         color: #64748b !important;
         line-height: 1.2 !important;
+        white-space: normal !important;
+        max-width: none !important;
       }
       .dg-event-meta-time svg,
-      .dg-event-meta-time i {
+      .dg-event-meta-time i,
+      .dg-event-meta-loc svg,
+      .dg-event-meta-loc i,
+      .dg-event-meta-audience svg,
+      .dg-event-meta-audience i {
         width: 12px !important;
         height: 12px !important;
         flex-shrink: 0 !important;
+        color: #94a3b8 !important;
       }
       .dg-event-title {
-        font-size: 0.94rem !important;
-        font-weight: 750 !important;
+        font-size: 0.98rem !important;
+        font-weight: 800 !important;
         color: #0f172a !important;
         line-height: 1.35 !important;
-        margin: 1px 0 !important;
+        margin: 2px 0 !important;
         display: -webkit-box !important;
         -webkit-line-clamp: 2 !important;
         -webkit-box-orient: vertical !important;
@@ -690,68 +729,65 @@
         letter-spacing: -0.01em !important;
         word-break: break-word !important;
       }
-      .dg-event-meta-loc-row {
-        display: flex !important;
-        align-items: center !important;
-        margin-top: 1px !important;
-      }
-      .dg-event-meta-loc {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 4px !important;
-        font-size: 0.72rem !important;
-        color: #64748b !important;
-        white-space: nowrap !important;
+      .dg-event-desc {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
         overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: 220px !important;
-      }
-      .dg-event-meta-loc svg,
-      .dg-event-meta-loc i {
-        width: 11px !important;
-        height: 11px !important;
-        flex-shrink: 0 !important;
-        color: #94a3b8 !important;
-      }
-      .dg-event-desc,
-      .dg-event-meta-audience,
-      .dg-event-prefect-note {
-        display: none !important;
+        font-size: 0.84rem !important;
+        color: #475569 !important;
+        line-height: 1.5 !important;
+        margin: 2px 0 0 0 !important;
       }
       .dg-event-action-col {
-        flex-shrink: 0 !important;
-        margin-left: auto !important;
+        grid-column: 1 / -1 !important;
         display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        justify-content: flex-end !important;
+        margin-top: 4px !important;
+        padding-top: 10px !important;
+        border-top: 1px dashed #f1f5f9 !important;
       }
       .dg-event-action-col .dg-btn-sm-outline,
       .dg-event-action-col .dg-event-action-btn {
-        width: 32px !important;
-        height: 32px !important;
-        min-width: 32px !important;
-        padding: 0 !important;
-        border-radius: 50% !important;
-        background: #f8fafc !important;
-        border: 1px solid #e2e8f0 !important;
-        color: #64748b !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        padding: 6px 14px !important;
+        border-radius: var(--dg-radius-pill) !important;
         display: inline-flex !important;
         align-items: center !important;
-        justify-content: center !important;
+        gap: 5px !important;
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: var(--dg-black) !important;
+        font-size: 0.80rem !important;
+        font-weight: 700 !important;
         box-shadow: none !important;
       }
       .dg-event-action-col .dg-btn-sm-outline span,
       .dg-event-action-col .dg-event-action-btn span {
-        display: none !important;
+        display: inline !important;
       }
       .dg-event-action-col .dg-btn-sm-outline svg,
       .dg-event-action-col .dg-btn-sm-outline i,
       .dg-event-action-col .dg-event-action-btn svg,
       .dg-event-action-col .dg-event-action-btn i {
-        width: 15px !important;
-        height: 15px !important;
+        width: 13px !important;
+        height: 13px !important;
         margin: 0 !important;
-        color: #64748b !important;
+      }
+    }
+
+    @media (min-width: 641px) and (max-width: 768px) {
+      .dg-event-card {
+        grid-template-columns: 84px 1fr auto !important;
+        align-items: center !important;
+      }
+      .dg-event-action-col {
+        grid-column: auto !important;
+        border-top: none !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
       }
     }
 
@@ -1871,8 +1907,10 @@
         );
 
         const statusHtml = '<span class="dg-event-status-pill" style="font-size: 0.70rem; padding: 2px 7px; border-radius: var(--dg-radius-pill); ' + status.style + '">' + escapeHtml(status.label) + '</span>';
-        const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
-        const locHtml = evt.location ? '<div class="dg-event-meta-loc-row"><span class="dg-event-meta-loc"><i data-lucide="map-pin"></i><span>' + escapeHtml(evt.location) + '</span></span></div>' : '';
+        const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
+        const locHtml = evt.location ? '<span class="dg-event-meta-loc"><i data-lucide="map-pin" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '';
+        const audienceHtml = evt.audience ? '<span class="dg-event-meta-audience"><i data-lucide="users" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '';
+        const descHtml = evt.desc ? '<p class="dg-event-desc">' + escapeHtml(evt.desc) + '</p>' : '';
 
         return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
           '<div class="dg-event-date-box' + (dateInfo && dateInfo.isRange ? ' is-range' : '') + '">' +
@@ -1883,16 +1921,18 @@
               tagsHtml +
               statusHtml +
               timeHtml +
+              locHtml +
+              audienceHtml +
             '</div>' +
             '<h3 class="dg-event-title">' +
               escapeHtml(evt.title || '') +
             '</h3>' +
-            locHtml +
+            descHtml +
           '</div>' +
           '<div class="dg-event-action-col">' +
             '<button type="button" class="dg-btn-sm-outline dg-event-action-btn" onclick="event.stopPropagation(); openEventDetailModal(\'' + evt.id + '\')" title="ดูรายละเอียดกิจกรรม" aria-label="ดูรายละเอียดกิจกรรม">' +
               '<span>รายละเอียด</span>' +
-              '<i data-lucide="chevron-right"></i>' +
+              '<i data-lucide="arrow-up-right"></i>' +
             '</button>' +
           '</div>' +
         '</div>';
