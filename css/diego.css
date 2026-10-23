@@ -6017,9 +6017,9 @@ img {
   }
   .dg-hero-text-container {
     height: auto !important;
-    padding-top: clamp(180px, 30vh, 290px) !important;
+    padding-top: clamp(140px, 23vh, 220px) !important;
     margin-top: 0 !important;
-    margin-bottom: 5vh !important;
+    margin-bottom: 6vh !important;
   }
   .dg-hero-buttons {
     margin-top: 10px !important;
