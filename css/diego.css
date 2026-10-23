@@ -460,11 +460,13 @@ svg:not([data-lucide]),
 
 /* Hero Single Photo (Full uncropped photo, exact 3:2 ratio) */
 .dg-hero-image-wrap,
-.dg-hero-straddle-wrap {
+.dg-hero-straddle-wrap,
+#heroImageWrap {
   width: 100%;
   border-radius: var(--dg-radius-lg);
   overflow: hidden;
   background: var(--dg-bg-card);
+  margin-top: 24px;
   margin-bottom: 50px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.06);
   position: relative;
@@ -6047,9 +6049,11 @@ img {
     padding-bottom: 24px !important;
     height: auto !important;
   }
-  .dg-hero-image-wrap {
+  .dg-hero-image-wrap,
+  #heroImageWrap {
     height: auto !important;
     margin: 0 !important;
+    margin-top: 28px !important;
     aspect-ratio: 3 / 2 !important;
     border-radius: 16px !important;
   }
