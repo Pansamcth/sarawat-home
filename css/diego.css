@@ -6029,7 +6029,14 @@ svg:not([data-lucide]),
     text-align: center;
   }
   .dg-uptime-photo-col {
-    display: none;
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .dg-uptime-photo-wrap {
+    min-height: auto;
+    aspect-ratio: 3 / 2;
+    border-radius: 16px;
   }
 }
 
