@@ -421,7 +421,7 @@ svg:not([data-lucide]),
 .dg-hero-block-2 {
   font-size: 0.92rem;
   line-height: 1.6;
-  color: var(--dg-text-muted);
+  color: var(--dg-text-secondary);
   font-weight: 450;
 }
 
@@ -4640,7 +4640,7 @@ svg:not([data-lucide]),
     font-family: var(--dg-font-thai);
     font-size: 0.92rem;
     line-height: 1.6;
-    color: var(--dg-text-muted);
+    color: var(--dg-text-secondary);
     font-weight: 450;
     background: transparent;
     border: none;
