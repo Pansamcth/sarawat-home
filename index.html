@@ -3216,6 +3216,33 @@
       updateDutyUptime();
       setInterval(updateDutyUptime, 1000);
 
+      // --- Synchronize Photo Height & Y-Axis Alignment with Uptime Clock ---
+      const dutyClockEl = document.getElementById('dutyUptimeCard');
+      const uptimePhotoWrap = document.getElementById('uptimePhotoWrap');
+
+      function syncPhotoWithDutyClock() {
+        if (!dutyClockEl || !uptimePhotoWrap) return;
+        if (window.innerWidth >= 992) {
+          const h = dutyClockEl.offsetHeight;
+          if (h > 0) {
+            uptimePhotoWrap.style.height = h + 'px';
+            uptimePhotoWrap.style.maxHeight = h + 'px';
+            uptimePhotoWrap.style.minHeight = h + 'px';
+          }
+        } else {
+          uptimePhotoWrap.style.height = '';
+          uptimePhotoWrap.style.maxHeight = '';
+          uptimePhotoWrap.style.minHeight = '';
+        }
+      }
+
+      syncPhotoWithDutyClock();
+      window.addEventListener('resize', syncPhotoWithDutyClock, { passive: true });
+      window.addEventListener('load', syncPhotoWithDutyClock, { passive: true });
+      if (window.ResizeObserver && dutyClockEl) {
+        new ResizeObserver(syncPhotoWithDutyClock).observe(dutyClockEl);
+      }
+
       // --- Scrollspy for Navbar & Side Dot Matrix ---
       const spySections = [
         { id: 'hero', navLink: document.querySelector('.dg-nav-links a[href="#hero"]'), dot: document.querySelector('.dg-side-dot[data-section="hero"]') },
