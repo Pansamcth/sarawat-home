@@ -6063,7 +6063,6 @@ img {
   user-select: none !important;
   -webkit-user-drag: none !important;
 }
-\n\n/* User Requested Overrides */\n.dg-hero-image-wrap, .dg-hero-image-wrap img, #heroCinematicImg { border-radius: 0 !important; transform: none !important; }\n\n/* Complete No Effects Override */\n.dg-hero-image-wrap, .dg-hero-image-wrap img, #heroCinematicImg { border-radius: 0 !important; transform: none !important; transition: none !important; box-shadow: none !important; filter: none !important; animation: none !important; background: transparent !important; }\n
 /* Custom Fixes */
 .dg-what-align-center { align-items: center !important;
     gap: 0px !important; }
