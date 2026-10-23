@@ -1984,6 +1984,31 @@ svg:not([data-lucide]),
   gap: 14px;
 }
 
+/* Event Item Card - Header Row Meta Icons */
+.dg-event-meta-time,
+.dg-event-meta-loc,
+.dg-event-meta-audience {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: var(--dg-text-secondary);
+}
+
+.dg-event-meta-time svg,
+.dg-event-meta-time i,
+.dg-event-meta-loc svg,
+.dg-event-meta-loc i,
+.dg-event-meta-audience svg,
+.dg-event-meta-audience i {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  max-width: 14px !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+}
+
 /* Event Item Card */
 .dg-event-card {
   background: #ffffff;

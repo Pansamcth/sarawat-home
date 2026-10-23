@@ -675,8 +675,9 @@
       .dg-event-header-row {
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
+        gap: 12px 16px !important;
         flex-wrap: wrap !important;
+        margin-bottom: 2px !important;
       }
       .dg-event-desc {
         display: -webkit-box !important;
@@ -693,11 +694,33 @@
       .dg-event-meta-audience {
         display: inline-flex !important;
         align-items: center !important;
-        gap: 4px !important;
+        gap: 5px !important;
         font-size: 0.82rem !important;
-        color: var(--dg-text-secondary) !important;
+        color: #64748b !important;
         white-space: normal !important;
         max-width: none !important;
+      }
+      .dg-event-meta-time svg,
+      .dg-event-meta-time i,
+      .dg-event-meta-loc svg,
+      .dg-event-meta-loc i,
+      .dg-event-meta-audience svg,
+      .dg-event-meta-audience i {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        max-width: 14px !important;
+        flex-shrink: 0 !important;
+        color: #94a3b8 !important;
+        vertical-align: middle !important;
+      }
+      .dg-btn-sm-outline svg,
+      .dg-btn-sm-outline i {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        max-width: 14px !important;
+        flex-shrink: 0 !important;
       }
       .dg-event-action-col {
         display: flex !important;
@@ -2967,21 +2990,21 @@
 
           const timeHtml = evt.time ? `
             <span class="dg-event-meta-time">
-              <i data-lucide="clock"></i>
+              <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
               <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
             </span>
           ` : '';
 
           const locHtml = evt.location ? `
             <span class="dg-event-meta-loc">
-              <i data-lucide="map-pin"></i>
+              <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
               <span>${escapeHtml(evt.location)}</span>
             </span>
           ` : '';
 
           const audienceHtml = evt.audience ? `
             <span class="dg-event-meta-audience">
-              <i data-lucide="users"></i>
+              <i data-lucide="users" style="width: 14px; height: 14px;"></i>
               <span>${escapeHtml(evt.audience)}</span>
             </span>
           ` : '';
@@ -3010,7 +3033,7 @@
               <div class="dg-event-action-col">
                 <button type="button" class="dg-btn-sm-outline dg-event-action-btn" onclick="event.stopPropagation(); openEventDetailModal('${evt.id}')" title="คลิกเพื่อดูรายละเอียด" aria-label="คลิกเพื่อดูรายละเอียด">
                   <span>รายละเอียด</span>
-                  <i data-lucide="arrow-up-right"></i>
+                  <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                 </button>
               </div>
             </div>

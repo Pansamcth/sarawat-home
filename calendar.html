@@ -555,7 +555,7 @@
       .dg-event-header-row {
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 12px 16px !important;
         flex-wrap: wrap !important;
       }
       .dg-event-desc {
@@ -573,11 +573,33 @@
       .dg-event-meta-time {
         display: inline-flex !important;
         align-items: center !important;
-        gap: 4px !important;
+        gap: 5px !important;
         font-size: 0.80rem !important;
-        color: var(--dg-text-secondary) !important;
+        color: #64748b !important;
         white-space: normal !important;
         max-width: none !important;
+      }
+      .dg-event-meta-audience svg,
+      .dg-event-meta-audience i,
+      .dg-event-meta-loc svg,
+      .dg-event-meta-loc i,
+      .dg-event-meta-time svg,
+      .dg-event-meta-time i {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        max-width: 14px !important;
+        flex-shrink: 0 !important;
+        color: #94a3b8 !important;
+        vertical-align: middle !important;
+      }
+      .dg-btn-sm-outline svg,
+      .dg-btn-sm-outline i {
+        width: 14px !important;
+        height: 14px !important;
+        min-width: 14px !important;
+        max-width: 14px !important;
+        flex-shrink: 0 !important;
       }
       .dg-event-action-col {
         display: flex !important;
@@ -1907,9 +1929,9 @@
         );
 
         const statusHtml = '<span class="dg-event-status-pill" style="font-size: 0.70rem; padding: 2px 7px; border-radius: var(--dg-radius-pill); ' + status.style + '">' + escapeHtml(status.label) + '</span>';
-        const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
-        const locHtml = evt.location ? '<span class="dg-event-meta-loc"><i data-lucide="map-pin" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '';
-        const audienceHtml = evt.audience ? '<span class="dg-event-meta-audience"><i data-lucide="users" style="width: 12px; height: 12px;"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '';
+        const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
+        const locHtml = evt.location ? '<span class="dg-event-meta-loc"><i data-lucide="map-pin" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '';
+        const audienceHtml = evt.audience ? '<span class="dg-event-meta-audience"><i data-lucide="users" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '';
         const descHtml = evt.desc ? '<p class="dg-event-desc">' + escapeHtml(evt.desc) + '</p>' : '';
 
         return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
@@ -1932,7 +1954,7 @@
           '<div class="dg-event-action-col">' +
             '<button type="button" class="dg-btn-sm-outline dg-event-action-btn" onclick="event.stopPropagation(); openEventDetailModal(\'' + evt.id + '\')" title="ดูรายละเอียดกิจกรรม" aria-label="ดูรายละเอียดกิจกรรม">' +
               '<span>รายละเอียด</span>' +
-              '<i data-lucide="arrow-up-right"></i>' +
+              '<i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>' +
             '</button>' +
           '</div>' +
         '</div>';
