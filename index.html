@@ -1202,7 +1202,7 @@
               <!-- Seconds -->
               <div class="dg-uptime-unit is-seconds">
                 <div class="dg-uptime-val" id="uptimeSeconds">00</div>
-                <div class="dg-uptime-name">วินาที</div>
+                <div class="dg-uptime-name">วินาที <span class="dg-uptime-pulse-dot" title="กำลังบันทึกเวลาปฏิบัติหน้าที่แบบเรียลไทม์"></span></div>
               </div>
             </div>
             <!-- Start Label Text placed to the right of the blocks -->
@@ -3111,12 +3111,44 @@
         });
       }
 
-      // --- Live Operational Uptime Counter (Dynamic from localStorage or default) ---
+      // --- Live Operational Uptime Counter (Dynamic with Smooth Count-Up & Tick Animation) ---
       const elMonths = document.getElementById('uptimeMonths');
       const elDays = document.getElementById('uptimeDays');
       const elHours = document.getElementById('uptimeHours');
       const elMinutes = document.getElementById('uptimeMinutes');
       const elSeconds = document.getElementById('uptimeSeconds');
+
+      let uptimeHasCountedUp = false;
+
+      function updateDigit(el, val) {
+        if (!el) return;
+        const str = String(val).padStart(2, '0');
+        if (el.textContent !== str) {
+          el.textContent = str;
+          el.classList.remove('dg-ticking');
+          void el.offsetWidth;
+          el.classList.add('dg-ticking');
+        }
+      }
+
+      function animateCountUp(el, target, duration = 1200) {
+        if (!el) return;
+        const startTime = performance.now();
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          const current = Math.floor(target * ease);
+          el.textContent = String(current).padStart(2, '0');
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = String(target).padStart(2, '0');
+            el.classList.add('dg-ticking');
+          }
+        }
+        requestAnimationFrame(step);
+      }
 
       function updateDutyUptime() {
         const storedStart = localStorage.getItem('dg_sarawat_uptime_start');
@@ -3160,12 +3192,25 @@
           yDiff--;
         }
         const totalMonths = Math.max(0, (yDiff * 12) + mDiff);
+        const finalDays = Math.max(0, dDiff);
+        const finalHours = Math.max(0, hDiff);
+        const finalMinutes = Math.max(0, minDiff);
+        const finalSeconds = Math.max(0, sDiff);
 
-        if (elMonths) elMonths.textContent = String(totalMonths).padStart(2, '0');
-        if (elDays) elDays.textContent = String(Math.max(0, dDiff)).padStart(2, '0');
-        if (elHours) elHours.textContent = String(Math.max(0, hDiff)).padStart(2, '0');
-        if (elMinutes) elMinutes.textContent = String(Math.max(0, minDiff)).padStart(2, '0');
-        if (elSeconds) elSeconds.textContent = String(Math.max(0, sDiff)).padStart(2, '0');
+        if (!uptimeHasCountedUp) {
+          uptimeHasCountedUp = true;
+          animateCountUp(elMonths, totalMonths, 1100);
+          animateCountUp(elDays, finalDays, 1200);
+          animateCountUp(elHours, finalHours, 1300);
+          animateCountUp(elMinutes, finalMinutes, 1400);
+          animateCountUp(elSeconds, finalSeconds, 1500);
+        } else {
+          updateDigit(elMonths, totalMonths);
+          updateDigit(elDays, finalDays);
+          updateDigit(elHours, finalHours);
+          updateDigit(elMinutes, finalMinutes);
+          updateDigit(elSeconds, finalSeconds);
+        }
       }
 
       updateDutyUptime();
