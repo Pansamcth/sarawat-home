@@ -346,11 +346,18 @@ svg:not([data-lucide]),
 }
 
 .dg-hero-sub-grid {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 60px;
-  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px 60px;
   margin-bottom: 50px;
+}
+.dg-hero-sub-left {
+  max-width: 620px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--dg-text-primary);
 }
 
 .dg-hero-sub-left {
@@ -1982,6 +1989,58 @@ svg:not([data-lucide]),
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+/* ============ HERO HEADLINE WITH SCRIPT & MATERIAL TEXTURE ============ */
+.dg-heading-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.dg-heading-script-en {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: clamp(3.0rem, 6.5vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+  transform-origin: left bottom;
+}
+
+.dg-heading-th-title {
+  font-family: var(--dg-font-sans);
+  font-size: clamp(2.5rem, 5.4vw, 4.8rem);
+  font-weight: 850;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  display: inline-block;
+}
+
+.dg-heading-material {
+  color: #0f172a;
+  background-image: url('../assets/images/hero-text-material.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dg-heading-sub {
+  font-family: var(--dg-font-thai);
+  font-size: clamp(1.15rem, 2.4vw, 1.85rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  color: #475569;
+  display: block;
+  margin-top: 4px;
 }
 
 /* Event Item Card - Header Row Meta Icons */
@@ -4521,6 +4580,32 @@ svg:not([data-lucide]),
     color: var(--dg-text-primary);
     display: block;
     margin: 0;
+  }
+
+  .dg-heading-main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .dg-heading-script-en {
+    font-size: clamp(2.1rem, 9.2vw, 2.9rem);
+    line-height: 1.05;
+  }
+
+  .dg-heading-th-title {
+    font-size: clamp(1.85rem, 8.0vw, 2.45rem);
+    line-height: 1.1;
+  }
+
+  .dg-heading-sub {
+    font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+    color: #64748b;
+    margin-top: 6px;
+    line-height: 1.35;
   }
 
   /* Sub-Grid (Paragraph 1 & Paragraph 2) */
