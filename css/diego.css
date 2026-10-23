@@ -312,7 +312,7 @@ svg:not([data-lucide]),
    HERO SECTION (Diego Typography + Subtext + Cinematic Image)
    ========================================================== */
 .dg-hero-section {
-  padding-top: 140px;
+  padding-top: clamp(200px, 26vh, 320px);
   padding-bottom: 0;
 }
 
@@ -6004,7 +6004,7 @@ img {
   }
 }
 
-@media (max-width: 767px) { .dg-hero-text-container { padding-top: 8vh !important; } }
+/* Mobile hero text spacing handled below */
 /* --- Mobile Hero UI Mockup Match (Layout Only) --- */
 @media (max-width: 768px) {
   .dg-hero-mobile-viewport {
@@ -6016,9 +6016,10 @@ img {
     justify-content: flex-start !important;
   }
   .dg-hero-text-container {
-    padding-top: 15vh !important;
+    height: auto !important;
+    padding-top: clamp(180px, 30vh, 290px) !important;
     margin-top: 0 !important;
-    margin-bottom: 10vh !important;
+    margin-bottom: 5vh !important;
   }
   .dg-hero-buttons {
     margin-top: 10px !important;
