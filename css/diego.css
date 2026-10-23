@@ -5846,52 +5846,106 @@ svg:not([data-lucide]),
     min-width: 245px;
   }
 }
-/* ============ NEW VERTICAL UPTIME & STACKED MISSION/VISION ============ */
+/* ============ 3-COLUMN UPTIME, MISSION/VISION & PHOTO LAYOUT ============ */
 .dg-uptime-vision-layout {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 80px;
-  align-items: center;
+  grid-template-columns: 1fr auto 1.15fr;
+  gap: 36px;
+  align-items: stretch;
   padding: 60px 0;
   border-bottom: 1px solid var(--dg-border);
 }
 
+.dg-mission-vision-stacked {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dg-mv-item {
+  background: var(--dg-bg-card);
+  border: 1px solid var(--dg-border);
+  border-radius: 16px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  transition: var(--dg-transition);
+}
+
+.dg-mv-item:hover {
+  background: var(--dg-bg-card-hover);
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.dg-mv-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dg-text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.dg-mv-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--dg-text-secondary);
+  margin: 0;
+}
+
 .dg-uptime-card-vertical {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border-left: 1px solid var(--dg-border);
+  border-right: 1px solid var(--dg-border);
 }
 
 .dg-uptime-layout-inner {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .dg-uptime-grid-vertical {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .dg-uptime-grid-vertical .dg-uptime-unit {
-  width: 70px;
-  height: 70px;
+  width: 68px;
+  height: 68px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: transparent;
+  background: var(--dg-bg-card);
   padding: 0;
+  transition: var(--dg-transition);
+}
+
+.dg-uptime-grid-vertical .dg-uptime-unit:hover {
+  background: var(--dg-bg-card-hover);
 }
 
 .dg-uptime-grid-vertical .dg-uptime-val {
   font-family: var(--dg-font-sans);
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   font-weight: 700;
   line-height: 1;
   color: var(--dg-text-primary);
   margin-bottom: 2px;
+  font-variant-numeric: tabular-nums;
 }
 
 .dg-uptime-grid-vertical .dg-uptime-name {
@@ -5903,38 +5957,62 @@ svg:not([data-lucide]),
 .dg-uptime-start-label-vertical {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-size: 0.85rem;
-  font-weight: 400;
-  color: var(--dg-text-secondary);
-  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--dg-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
-.dg-mission-vision-stacked {
+.dg-uptime-photo-col {
   display: flex;
-  flex-direction: column;
-  gap: 50px;
+  align-items: stretch;
+  width: 100%;
 }
 
-.dg-mv-item {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.dg-uptime-photo-wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--dg-bg-card);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+  position: relative;
+  margin: 0 !important;
 }
 
-@media (max-width: 767px) {
+.dg-uptime-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 991px) {
   .dg-uptime-vision-layout {
     grid-template-columns: 1fr;
-    gap: 50px;
+    gap: 36px;
     padding: 40px 0;
+  }
+  .dg-uptime-card-vertical {
+    border-left: none;
+    border-right: none;
+    padding: 20px 0;
+    border-top: 1px solid var(--dg-border);
+    border-bottom: 1px solid var(--dg-border);
   }
   .dg-uptime-layout-inner {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    gap: 14px;
   }
   .dg-uptime-grid-vertical {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 10px;
   }
   .dg-uptime-grid-vertical .dg-uptime-unit {
@@ -5942,12 +6020,16 @@ svg:not([data-lucide]),
     height: 60px;
   }
   .dg-uptime-grid-vertical .dg-uptime-val {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
   }
   .dg-uptime-start-label-vertical {
     writing-mode: horizontal-tb;
     transform: none;
-    margin-top: 10px;
+    margin-top: 4px;
+    text-align: center;
+  }
+  .dg-uptime-photo-col {
+    display: none;
   }
 }
 

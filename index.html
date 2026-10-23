@@ -1072,7 +1072,7 @@
       </div><!-- /.dg-hero-text-container -->
 
       <!-- Bottom Photo: Straddles bottom edge of screen 1 with scroll cue above on the right -->
-      <div class="dg-container dg-hero-image-container">
+      <div class="dg-container dg-hero-image-container dg-mobile-only">
         <!-- Scroll Indicator: Positioned directly above photo on the right -->
         <div class="dg-hero-scroll-wrapper dg-mobile-only" data-reveal="fade" data-delay="150">
           <a href="#dutyUptimeCard" class="dg-hero-scroll-cue" id="heroScrollCue" aria-label="เลื่อนเพื่อสำรวจเนื้อหา">
@@ -1083,9 +1083,9 @@
           </a>
         </div>
 
-        <div class="dg-hero-image-wrap" id="heroImageWrap">
+        <div class="dg-hero-image-wrap" id="heroImageWrapMobile">
           <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล"
-            id="heroCinematicImg" />
+            id="heroCinematicImgMobile" />
         </div>
       </div>
     </div><!-- /.dg-hero-mobile-viewport -->
@@ -1158,7 +1158,24 @@
       <!-- ============ LIVE OPERATIONAL UPTIME & VISION (Vertical Grid Layout) ============ -->
       <div class="dg-uptime-vision-layout">
 
-        <!-- Left: Vertical Uptime Counter -->
+        <!-- 1. Left: Stacked Mission & Vision (เกี่ยวกับเรา / วิสัยทัศน์) --> 
+        <div class="dg-mission-vision-stacked" id="about">
+          <span id="vision" style="position: relative; top: -120px; display: block; visibility: hidden;"></span>
+          <div class="dg-mv-item">
+            <span class="dg-mv-label">OUR MISSION • พันธกิจหลักของสารวัตร</span>
+            <p class="dg-mv-desc">
+              ดูแลความเป็นระเบียบเรียบร้อย ส่งเสริมความปลอดภัย และอำนวยความสะดวกภายในโรงเรียน ด้วยความรับผิดชอบและการทำงานเป็นทีม
+            </p>
+          </div>
+          <div class="dg-mv-item">
+            <span class="dg-mv-label">OUR VISION • วิสัยทัศน์ของสารวัตรนักเรียน</span>
+            <p class="dg-mv-desc">
+              พัฒนาสร้างทีมสารวัตรนักเรียนให้เป็นทีมที่มีประสิทธิภาพ ทำงานอย่างเป็นระบบ นักเรียนไว้วางใจ และครูเชื่อมั่นในการปฏิบัติหน้าที่ในทุกๆกิจกรรม
+            </p>
+          </div>
+        </div>
+
+        <!-- 2. Middle: Vertical Live Operational Uptime Counter -->
         <div class="dg-uptime-card-vertical" id="dutyUptimeCard">
           <div class="dg-uptime-layout-inner">
             <div class="dg-uptime-grid-vertical">
@@ -1189,26 +1206,17 @@
               </div>
             </div>
             <!-- Start Label Text placed to the right of the blocks -->
-            <div class="dg-uptime-start-label-vertical" id="dutyStartLabel">เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569
+            <div class="dg-uptime-start-label-vertical" id="dutyStartLabel">
+              LIVE OPERATIONAL UPTIME • เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569
             </div>
           </div>
-
         </div>
 
-        <!-- Right: Stacked Mission & Vision (เกี่ยวกับเรา / วิสัยทัศน์) --> 
-        <div class="dg-mission-vision-stacked" id="about">
-          <span id="vision" style="position: relative; top: -120px; display: block; visibility: hidden;"></span>
-          <div class="dg-mv-item">
-            <span class="dg-mv-label">OUR MISSION • พันธกิจหลักของสารวัตร</span>
-            <p class="dg-mv-desc">
-              ดูแลความเป็นระเบียบเรียบร้อย ส่งเสริมความปลอดภัย และอำนวยความสะดวกภายในโรงเรียน ด้วยความรับผิดชอบและการทำงานเป็นทีม
-            </p>
-          </div>
-          <div class="dg-mv-item">
-            <span class="dg-mv-label">OUR VISION • วิสัยทัศน์ของสารวัตรนักเรียน</span>
-            <p class="dg-mv-desc">
-              พัฒนาสร้างทีมสารวัตรนักเรียนให้เป็นทีมที่มีประสิทธิภาพ ทำงานอย่างเป็นระบบ นักเรียนไว้วางใจ และครูเชื่อมั่นในการปฏิบัติหน้าที่ในทุกๆกิจกรรม
-            </p>
+        <!-- 3. Right: Photo -->
+        <div class="dg-uptime-photo-col">
+          <div class="dg-hero-image-wrap dg-uptime-photo-wrap" id="heroImageWrap">
+            <img src="assets/images/hero-main.jpg" alt="คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล"
+              id="heroCinematicImg" />
           </div>
         </div>
 
