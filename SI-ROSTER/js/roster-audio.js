@@ -118,10 +118,6 @@
         this.playTap();
       }
 
-      if (typeof showToast === 'function') {
-        showToast(this.isEnabled ? 'เปิดเสียงระบบเรียบร้อย' : 'ปิดเสียงระบบเรียบร้อย');
-      }
-
       return this.isEnabled;
     },
 
