@@ -1381,9 +1381,12 @@
       <div class="dg-chief-grid">
         <!-- Left: Chief Portrait Card -->
         <div class="dg-chief-portrait-card" data-reveal="left">
-          <div class="dg-chief-photo-wrap">
-            <img src="assets/images/president.jpg" alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
-              id="chiefPortraitImg" style="object-position: center 20%;" onerror="this.onerror=null; this.src='assets/images/president.jpg';" />
+          <div class="dg-chief-photo-wrap" id="chiefPhotoWrap">
+            <div id="chiefPlaceholder" style="width: 100%; height: 100%; min-height: 280px; background: var(--dg-bg-subtle, #f8fafc); display: flex; align-items: center; justify-content: center;">
+              <i data-lucide="user" style="width: 64px; height: 64px; color: #cbd5e1;"></i>
+            </div>
+            <img src="" alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
+              id="chiefPortraitImg" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: none;" onerror="handleChiefImageError()" />
           </div>
           <div class="dg-chief-portrait-meta">
             <h3 class="dg-chief-name">นายอะห์นัฟ สหสันติวรกุล</h3>
@@ -3245,8 +3248,9 @@
 
       // --- President Image Dynamic Sync (Linked to Admin & Executive Board) ---
       function resolvePresidentImageUrl(url) {
-        if (!url || typeof url !== 'string' || url.trim() === '') return 'assets/images/president.jpg';
+        if (!url || typeof url !== 'string' || url.trim() === '') return '';
         const clean = url.trim();
+        if (clean === 'assets/images/president.jpg') return '';
         if (window.resolveImageUrl) {
           const resolved = window.resolveImageUrl(clean);
           if (resolved) return resolved;
@@ -3258,10 +3262,40 @@
         return clean;
       }
 
-      function syncPresidentImage(membersList) {
+      function showChiefPlaceholder() {
         const chiefImg = document.getElementById('chiefPortraitImg');
-        if (!chiefImg) return;
+        const chiefPlaceholder = document.getElementById('chiefPlaceholder');
+        if (chiefImg) {
+          chiefImg.style.display = 'none';
+          chiefImg.src = '';
+        }
+        if (chiefPlaceholder) {
+          chiefPlaceholder.style.display = 'flex';
+          if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+          }
+        }
+      }
 
+      function showChiefImage(url) {
+        const chiefImg = document.getElementById('chiefPortraitImg');
+        const chiefPlaceholder = document.getElementById('chiefPlaceholder');
+        if (!chiefImg || !url) {
+          showChiefPlaceholder();
+          return;
+        }
+        chiefImg.src = url;
+        chiefImg.style.display = 'block';
+        if (chiefPlaceholder) {
+          chiefPlaceholder.style.display = 'none';
+        }
+      }
+
+      window.handleChiefImageError = function() {
+        showChiefPlaceholder();
+      };
+
+      function syncPresidentImage(membersList) {
         let list = membersList;
         if (!list) {
           try {
@@ -3274,11 +3308,13 @@
           const pres = list.find(m => m && (m.role === 'ประธาน' || (m.role && m.role.includes('ประธาน') && !m.role.includes('รอง'))));
           if (pres && pres.imageUrl && pres.imageUrl.trim() !== '') {
             const targetSrc = resolvePresidentImageUrl(pres.imageUrl);
-            if (targetSrc && chiefImg.getAttribute('src') !== targetSrc) {
-              chiefImg.src = targetSrc;
+            if (targetSrc) {
+              showChiefImage(targetSrc);
+              return;
             }
           }
         }
+        showChiefPlaceholder();
       }
 
       // Initial instant sync from localStorage (zero delay)

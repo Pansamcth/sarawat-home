@@ -64,7 +64,7 @@ async function loadTeamAdmin() {
     }
   }
 
-  // Ensure president has default data seeded if missing
+  // Ensure president has default data seeded if missing (empty image by default)
   let p = allMembers.find(m => m.role === 'ประธาน');
   if (!p) {
     p = {
@@ -72,11 +72,11 @@ async function loadTeamAdmin() {
       name: 'นายอะห์นัฟ สหสันติวรกุล',
       role: 'ประธาน',
       department: 'ชั้นมัธยมศึกษาปีที่ 5/1',
-      imageUrl: 'assets/images/president.jpg'
+      imageUrl: ''
     };
     allMembers.unshift(p);
-  } else if (!p.imageUrl) {
-    p.imageUrl = 'assets/images/president.jpg';
+  } else if (p.imageUrl === 'assets/images/president.jpg') {
+    p.imageUrl = '';
   }
 
   renderTeamAdminUI();

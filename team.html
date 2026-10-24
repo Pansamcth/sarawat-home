@@ -347,7 +347,7 @@
 
           if (teamMembers.length === 0) {
             teamMembers = [
-              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'ชั้นมัธยมศึกษาปีที่ 5/1', imageUrl: 'assets/images/president.jpg' }
+              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'ชั้นมัธยมศึกษาปีที่ 5/1', imageUrl: '' }
             ];
           }
 
@@ -389,7 +389,7 @@
       };
 
       const renderCard = (name, role, imageUrl) => {
-        const finalImgUrl = resolveImg(imageUrl);
+        const finalImgUrl = (imageUrl && imageUrl !== 'assets/images/president.jpg') ? resolveImg(imageUrl) : '';
         const imgHtml = finalImgUrl ?
           `<img src="${finalImgUrl}" alt="${name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%;" onerror="this.onerror=null; this.src='assets/images/default-activity.png';" />` :
           `<div style="width: 100%; height: 100%; background: var(--dg-bg-subtle); display: flex; align-items: center; justify-content: center;"><i data-lucide="user" style="width: 56px; height: 56px; color: #cbd5e1;"></i></div>`;
