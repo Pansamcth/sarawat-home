@@ -240,13 +240,28 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    }
+
+    :focus:not(:focus-visible) {
+      outline: none !important;
     }
 
     button,
     input,
     select,
-    textarea {
+    textarea,
+    a,
+    [role="button"],
+    .activity-card,
+    .view-btn,
+    .dg-act-pill-btn,
+    .custom-swal-btn,
+    .duty-select-option {
       font-family: 'Kanit', sans-serif;
+      -webkit-tap-highlight-color: transparent !important;
+      outline: none;
     }
 
     body {
@@ -660,21 +675,56 @@
 
     .view-toggle {
       order: 3;
-      display: flex;
-      background: rgba(15, 23, 42, 0.05);
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      background: #f1f5f9;
       padding: 4px;
-      border-radius: 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-light);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent !important;
+      isolation: isolate;
+    }
+
+    .view-toggle-indicator {
+      position: absolute;
+      top: 4px;
+      left: 0;
+      height: calc(100% - 8px);
+      width: 0;
+      background: #ffffff;
+      border-radius: 9999px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.25), width 0.28s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.2s ease;
+      will-change: transform, width;
     }
 
     .view-btn {
-      background: transparent;
+      position: relative;
+      z-index: 2;
+      background: transparent !important;
       border: none;
       padding: 8px 16px;
-      border-radius: 8px;
+      border-radius: 9999px;
       cursor: pointer;
       color: var(--text-muted);
-      transition: var(--transition);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      transition: color 0.22s ease, transform 0.15s ease;
+      box-shadow: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .view-btn:active {
+      transform: scale(0.92);
     }
 
     .view-btn:hover {
@@ -682,9 +732,23 @@
     }
 
     .view-btn.active {
-      background: #ffffff;
-      color: var(--primary);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      color: var(--primary) !important;
+      font-weight: 700;
+    }
+
+    @keyframes viewFadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .view-transition-in {
+      animation: viewFadeSlideIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     .group-divider {
@@ -835,10 +899,17 @@
         padding: 3px;
         border-radius: 9999px;
         border: 1px solid var(--border-light);
-        gap: 2px;
+        gap: 0;
         flex: 0 0 auto;
         height: 40px;
         box-sizing: border-box;
+        position: relative;
+        isolation: isolate;
+      }
+
+      .view-toggle-indicator {
+        top: 3px;
+        height: calc(100% - 6px);
       }
 
       #btnViewGrid {
@@ -847,12 +918,12 @@
 
       .view-btn {
         padding: 0;
-        width: 34px;
+        width: 36px;
         height: 34px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.88rem;
+        font-size: 0.92rem;
         border-radius: 9999px;
       }
 
@@ -4212,13 +4283,14 @@
             <span>เช็คหน้าที่ของฉัน</span>
           </button>
 
-          <div class="view-toggle">
-            <button class="view-btn" id="btnViewGrid" onclick="changeFeedView('grid')" title="มุมมองการ์ด (Grid)"><i
+          <div class="view-toggle" id="feedViewToggle" role="tablist">
+            <div class="view-toggle-indicator" id="viewToggleIndicator" aria-hidden="true"></div>
+            <button class="view-btn" id="btnViewGrid" onclick="changeFeedView('grid')" title="มุมมองการ์ด (Grid)" role="tab" aria-selected="false"><i
                 class="fa-solid fa-border-all"></i></button>
-            <button class="view-btn active" id="btnViewList" onclick="changeFeedView('list')" title="มุมมองรายการ (List)"><i
+            <button class="view-btn active" id="btnViewList" onclick="changeFeedView('list')" title="มุมมองรายการ (List)" role="tab" aria-selected="true"><i
                 class="fa-solid fa-bars"></i></button>
             <button class="view-btn" id="btnViewCalendar" onclick="changeFeedView('calendar')"
-              title="มุมมองปฏิทิน (Calendar)"><i class="fa-regular fa-calendar-days"></i></button>
+              title="มุมมองปฏิทิน (Calendar)" role="tab" aria-selected="false"><i class="fa-regular fa-calendar-days"></i></button>
           </div>
         </div>
       </div>
@@ -4778,7 +4850,18 @@
     // --- Init (Student Portal) ---
     window.onload = function () {
       loadInitialData();
+      setTimeout(function () {
+        if (typeof updateViewToggleIndicator === 'function') {
+          updateViewToggleIndicator(currentFeedView);
+        }
+      }, 50);
     };
+
+    window.addEventListener('resize', function () {
+      if (typeof updateViewToggleIndicator === 'function') {
+        updateViewToggleIndicator(currentFeedView);
+      }
+    }, { passive: true });
 
     // Close autocomplete dropdowns when clicking outside
     document.addEventListener('pointerdown', function (e) {
@@ -6094,18 +6177,47 @@
       }
     }
 
+    function updateViewToggleIndicator(view) {
+      const container = document.getElementById('feedViewToggle') || document.querySelector('.view-toggle');
+      const indicator = document.getElementById('viewToggleIndicator');
+      if (!container || !indicator) return;
+
+      let btnId = 'btnViewList';
+      if (view === 'grid') btnId = 'btnViewGrid';
+      else if (view === 'calendar') btnId = 'btnViewCalendar';
+
+      const targetBtn = document.getElementById(btnId);
+      if (!targetBtn || targetBtn.offsetParent === null) {
+        const active = container.querySelector('.view-btn.active');
+        if (active && active.offsetParent !== null) {
+          indicator.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+          indicator.style.width = active.offsetWidth + 'px';
+          indicator.style.opacity = '1';
+        }
+        return;
+      }
+
+      indicator.style.transform = 'translateX(' + targetBtn.offsetLeft + 'px)';
+      indicator.style.width = targetBtn.offsetWidth + 'px';
+      indicator.style.opacity = '1';
+    }
+
     function changeFeedView(view) {
       currentFeedView = view;
-      document.getElementById('btnViewGrid').classList.remove('active');
-      document.getElementById('btnViewList').classList.remove('active');
-      document.getElementById('btnViewCalendar').classList.remove('active');
+      const btnGrid = document.getElementById('btnViewGrid');
+      const btnList = document.getElementById('btnViewList');
+      const btnCal = document.getElementById('btnViewCalendar');
+
+      if (btnGrid) { btnGrid.classList.remove('active'); btnGrid.setAttribute('aria-selected', 'false'); }
+      if (btnList) { btnList.classList.remove('active'); btnList.setAttribute('aria-selected', 'false'); }
+      if (btnCal) { btnCal.classList.remove('active'); btnCal.setAttribute('aria-selected', 'false'); }
 
       const feedContent = document.getElementById('feedContent');
       const calendarContent = document.getElementById('calendarContent');
       const skeletonContainer = document.getElementById('skeletonContainer');
 
       if (view === 'grid') {
-        document.getElementById('btnViewGrid').classList.add('active');
+        if (btnGrid) { btnGrid.classList.add('active'); btnGrid.setAttribute('aria-selected', 'true'); }
         feedContent.className = '';
         feedContent.style.display = 'grid';
         if (skeletonContainer) {
@@ -6114,8 +6226,11 @@
         }
         calendarContent.style.display = 'none';
         buildFeed(currentActivities);
+        feedContent.classList.remove('view-transition-in');
+        void feedContent.offsetWidth;
+        feedContent.classList.add('view-transition-in');
       } else if (view === 'list') {
-        document.getElementById('btnViewList').classList.add('active');
+        if (btnList) { btnList.classList.add('active'); btnList.setAttribute('aria-selected', 'true'); }
         feedContent.className = 'list-view';
         feedContent.style.display = 'flex';
         if (skeletonContainer) {
@@ -6124,12 +6239,20 @@
         }
         calendarContent.style.display = 'none';
         buildFeed(currentActivities);
+        feedContent.classList.remove('view-transition-in');
+        void feedContent.offsetWidth;
+        feedContent.classList.add('view-transition-in');
       } else if (view === 'calendar') {
-        document.getElementById('btnViewCalendar').classList.add('active');
+        if (btnCal) { btnCal.classList.add('active'); btnCal.setAttribute('aria-selected', 'true'); }
         feedContent.style.display = 'none';
         calendarContent.style.display = 'block';
         buildCalendar();
+        calendarContent.classList.remove('view-transition-in');
+        void calendarContent.offsetWidth;
+        calendarContent.classList.add('view-transition-in');
       }
+
+      updateViewToggleIndicator(view);
     }
 
     function changeMonth(offset) {

@@ -116,7 +116,18 @@
         loginSuccess(authCookie.user, authCookie.name, authCookie.role, true);
       }
       loadInitialData();
+      setTimeout(function () {
+        if (typeof updateViewToggleIndicator === 'function') {
+          updateViewToggleIndicator(currentFeedView);
+        }
+      }, 50);
     };
+
+    window.addEventListener('resize', function () {
+      if (typeof updateViewToggleIndicator === 'function') {
+        updateViewToggleIndicator(currentFeedView);
+      }
+    }, { passive: true });
 
     // Close autocomplete dropdowns when clicking outside
     document.addEventListener('pointerdown', function (e) {
@@ -908,18 +919,47 @@
       }
     }
 
+    function updateViewToggleIndicator(view) {
+      const container = document.getElementById('feedViewToggle') || document.querySelector('.view-toggle');
+      const indicator = document.getElementById('viewToggleIndicator');
+      if (!container || !indicator) return;
+
+      let btnId = 'btnViewList';
+      if (view === 'grid') btnId = 'btnViewGrid';
+      else if (view === 'calendar') btnId = 'btnViewCalendar';
+
+      const targetBtn = document.getElementById(btnId);
+      if (!targetBtn || targetBtn.offsetParent === null) {
+        const active = container.querySelector('.view-btn.active');
+        if (active && active.offsetParent !== null) {
+          indicator.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+          indicator.style.width = active.offsetWidth + 'px';
+          indicator.style.opacity = '1';
+        }
+        return;
+      }
+
+      indicator.style.transform = 'translateX(' + targetBtn.offsetLeft + 'px)';
+      indicator.style.width = targetBtn.offsetWidth + 'px';
+      indicator.style.opacity = '1';
+    }
+
     function changeFeedView(view) {
       currentFeedView = view;
-      document.getElementById('btnViewGrid').classList.remove('active');
-      document.getElementById('btnViewList').classList.remove('active');
-      document.getElementById('btnViewCalendar').classList.remove('active');
+      const btnGrid = document.getElementById('btnViewGrid');
+      const btnList = document.getElementById('btnViewList');
+      const btnCal = document.getElementById('btnViewCalendar');
+
+      if (btnGrid) { btnGrid.classList.remove('active'); btnGrid.setAttribute('aria-selected', 'false'); }
+      if (btnList) { btnList.classList.remove('active'); btnList.setAttribute('aria-selected', 'false'); }
+      if (btnCal) { btnCal.classList.remove('active'); btnCal.setAttribute('aria-selected', 'false'); }
 
       const feedContent = document.getElementById('feedContent');
       const calendarContent = document.getElementById('calendarContent');
       const skeletonContainer = document.getElementById('skeletonContainer');
 
       if (view === 'grid') {
-        document.getElementById('btnViewGrid').classList.add('active');
+        if (btnGrid) { btnGrid.classList.add('active'); btnGrid.setAttribute('aria-selected', 'true'); }
         feedContent.className = '';
         feedContent.style.display = 'grid';
         if (skeletonContainer) {
@@ -928,8 +968,11 @@
         }
         calendarContent.style.display = 'none';
         buildFeed(currentActivities);
+        feedContent.classList.remove('view-transition-in');
+        void feedContent.offsetWidth;
+        feedContent.classList.add('view-transition-in');
       } else if (view === 'list') {
-        document.getElementById('btnViewList').classList.add('active');
+        if (btnList) { btnList.classList.add('active'); btnList.setAttribute('aria-selected', 'true'); }
         feedContent.className = 'list-view';
         feedContent.style.display = 'flex';
         if (skeletonContainer) {
@@ -938,12 +981,20 @@
         }
         calendarContent.style.display = 'none';
         buildFeed(currentActivities);
+        feedContent.classList.remove('view-transition-in');
+        void feedContent.offsetWidth;
+        feedContent.classList.add('view-transition-in');
       } else if (view === 'calendar') {
-        document.getElementById('btnViewCalendar').classList.add('active');
+        if (btnCal) { btnCal.classList.add('active'); btnCal.setAttribute('aria-selected', 'true'); }
         feedContent.style.display = 'none';
         calendarContent.style.display = 'block';
         buildCalendar();
+        calendarContent.classList.remove('view-transition-in');
+        void calendarContent.offsetWidth;
+        calendarContent.classList.add('view-transition-in');
       }
+
+      updateViewToggleIndicator(view);
     }
 
     function changeMonth(offset) {

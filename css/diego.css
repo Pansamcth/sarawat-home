@@ -42,6 +42,18 @@
 /* Base & Reset */
 *, *::before, *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+}
+
+:focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+button, a, input, select, textarea, [role="button"], .activity-card, .view-btn, .dg-act-pill-btn, .custom-swal-btn, .duty-select-option {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  outline: none;
 }
 
 html {
