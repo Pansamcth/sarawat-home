@@ -1108,6 +1108,9 @@
     }
 
     function openModalWithSheetName(sheetName) {
+      if (window.RosterAudio && typeof window.RosterAudio.isRecentDrag === 'function' && window.RosterAudio.isRecentDrag()) {
+        return;
+      }
       const act = currentActivities.find(a => a.sheetName === sheetName);
       if (act) {
         openModal(act);
@@ -1332,7 +1335,10 @@
           card.style.animationDelay = `${index * 0.08}s`;
         }
 
-        card.onclick = () => openModal(act);
+        card.onclick = () => {
+          if (window.RosterAudio && typeof window.RosterAudio.isRecentDrag === 'function' && window.RosterAudio.isRecentDrag()) return;
+          openModal(act);
+        };
 
         let dateDisplay = formatThaiDateRange(act.date, act.endDateStr);
 
@@ -1469,6 +1475,9 @@
 
     // --- Detail Modal ---
     function openModal(activity) {
+      if (window.RosterAudio && typeof window.RosterAudio.isRecentDrag === 'function' && window.RosterAudio.isRecentDrag()) {
+        return;
+      }
       if (countdownIntervals['modalTimerValue']) {
         clearInterval(countdownIntervals['modalTimerValue']);
       }

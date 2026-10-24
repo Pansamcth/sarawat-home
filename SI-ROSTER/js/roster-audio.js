@@ -825,17 +825,135 @@
           confirmButtonColor: '#0f172a'
         });
       }
+    },
+
+    /**
+     * Checks if a drag, swipe or scroll gesture just occurred
+     * Used by cards and modals to prevent accidental activation during scrolling
+     */
+    isRecentDrag: function () {
+      return (typeof window !== 'undefined' && window.__lastTouchScrollTime && (Date.now() - window.__lastTouchScrollTime < 220)) || false;
     }
   };
 
   /**
    * =========================================================================
-   * 🔘 GLOBAL INTERACTIVE ELEMENT SOUND DELEGATOR
+   * 🔘 SMART INTERACTIVE ELEMENT SOUND & HAPTIC DELEGATOR
+   * Prevents accidental clicks/vibrations when scrolling or dragging on mobile!
    * =========================================================================
    */
   if (typeof document !== 'undefined') {
+    var touchState = {
+      startX: 0,
+      startY: 0,
+      startTime: 0,
+      isDragging: false,
+      pointerId: null,
+      activeTarget: null
+    };
+
+    var lastTapTime = 0;
+    var lastScrollTime = 0;
+
+    // Track scroll events on window/containers to immediately mark drag active
+    window.addEventListener('scroll', function () {
+      touchState.isDragging = true;
+      lastScrollTime = Date.now();
+      window.__lastTouchScrollTime = lastScrollTime;
+    }, { passive: true, capture: true });
+
+    // Track touch/pointer start
     document.addEventListener('pointerdown', function (e) {
       try {
+        if (e.isPrimary === false) return;
+        var target = e.target;
+        if (!target) return;
+
+        var interactive = target.closest(
+          'button, .btn, .dg-act-pill-btn, .view-btn, .activity-card, a.dg-btn-black, .tab-item, .swal2-confirm, .swal2-cancel, .custom-swal-btn, [role="button"], .dash-act-filter-btn, .duty-select-option, .modal-close, .modal-close-corner'
+        );
+
+        touchState.startX = e.clientX;
+        touchState.startY = e.clientY;
+        touchState.startTime = Date.now();
+        touchState.isDragging = false;
+        touchState.pointerId = e.pointerId;
+        touchState.activeTarget = interactive;
+      } catch (err) {
+        // Silent
+      }
+    }, { passive: true, capture: true });
+
+    // Track movement - if finger moves > 8px, it is a scroll/swipe/drag, NOT a tap!
+    document.addEventListener('pointermove', function (e) {
+      if (!touchState.activeTarget) return;
+      if (touchState.pointerId !== null && e.pointerId !== touchState.pointerId) return;
+
+      var dx = Math.abs(e.clientX - touchState.startX);
+      var dy = Math.abs(e.clientY - touchState.startY);
+      if (dx > 8 || dy > 8) {
+        touchState.isDragging = true;
+        lastScrollTime = Date.now();
+        window.__lastTouchScrollTime = lastScrollTime;
+      }
+    }, { passive: true, capture: true });
+
+    // Handle touch/pointer cancellation (system gesture, app switch, browser scroll takeover)
+    document.addEventListener('pointercancel', function () {
+      touchState.isDragging = true;
+      touchState.activeTarget = null;
+      touchState.pointerId = null;
+      lastScrollTime = Date.now();
+      window.__lastTouchScrollTime = lastScrollTime;
+    }, { passive: true, capture: true });
+
+    // On pointer release, verify it was a genuine stationary tap
+    document.addEventListener('pointerup', function () {
+      try {
+        var interactive = touchState.activeTarget;
+        var wasDragging = touchState.isDragging;
+        var elapsed = Date.now() - touchState.startTime;
+
+        // Reset tracking state
+        touchState.activeTarget = null;
+        touchState.pointerId = null;
+
+        if (wasDragging) {
+          // User was scrolling or dragging across the card -> NO SOUND, NO HAPTIC!
+          return;
+        }
+
+        // Tap duration must be reasonable (< 600ms) and within stationary threshold
+        if (interactive && elapsed < 600) {
+          // Skip sound toggles themselves (they handle audio on toggle)
+          if (interactive.id === 'btnSoundToggle' || interactive.id === 'btnSoundTest' || interactive.id === 'adminSoundMasterToggle') {
+            return;
+          }
+          if (interactive.disabled || interactive.classList.contains('disabled') || interactive.getAttribute('aria-disabled') === 'true') {
+            return;
+          }
+
+          // Debounce to prevent double tap if click event follows
+          var now = Date.now();
+          if (now - lastTapTime < 180) {
+            return;
+          }
+          lastTapTime = now;
+
+          RosterAudio.playTap();
+        }
+      } catch (err) {
+        // Silent
+      }
+    }, { passive: true, capture: true });
+
+    // Fallback click listener for keyboard accessibility (Space / Enter) or programmatic clicks
+    document.addEventListener('click', function (e) {
+      try {
+        var now = Date.now();
+        if (now - lastTapTime < 200) return;
+        if (touchState.isDragging || (now - lastScrollTime < 200)) return;
+
         var target = e.target;
         if (!target) return;
 
@@ -844,13 +962,13 @@
         );
 
         if (interactive) {
-          // If clicking the sound toggle itself, skip tap sound so toggleMute handles it
           if (interactive.id === 'btnSoundToggle' || interactive.id === 'btnSoundTest' || interactive.id === 'adminSoundMasterToggle') {
             return;
           }
           if (interactive.disabled || interactive.classList.contains('disabled') || interactive.getAttribute('aria-disabled') === 'true') {
             return;
           }
+          lastTapTime = now;
           RosterAudio.playTap();
         }
       } catch (err) {
