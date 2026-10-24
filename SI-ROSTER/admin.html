@@ -4406,7 +4406,7 @@
         <div id="tab-audio" class="dash-tab">
           <div class="data-panel">
             <div class="data-panel-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-              <h2><i class="fa-solid fa-volume-high" style="color: var(--primary);"></i> ระบบเสียงและการทดสอบ (Sound System)</h2>
+              <h2><i class="fa-solid fa-volume-high" style="color: var(--primary);"></i> ระบบเสียงไฮบริดและการทดสอบ (Hybrid Sound System)</h2>
               <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <button type="button" class="btn btn-outline" onclick="window.RosterAudio && window.RosterAudio.testSoundModal()">
                   <i class="fa-solid fa-window-restore"></i> เปิดหน้าต่างทดสอบแบบป๊อปอัป
@@ -4418,11 +4418,28 @@
             </div>
 
             <div style="padding: 20px 24px;">
-              <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 0.92rem; line-height: 1.6;">
-                ระบบเสียงของ SI-ROSTER ทำงานด้วย <strong>Web Audio API Harmonic Synthesizer</strong> สังเคราะห์ความถี่เสียงฮาร์มอนิกความละเอียดสูงระดับสตูดิโอแบบเรียลไทม์ (Zero-latency / Zero-bandwidth) สามารถทดสอบฟังเสียงในแต่ละจังหวะของระบบได้ที่แผงควบคุมด้านล่างนี้
-              </p>
+              <!-- Hybrid Architecture Banner & Engine Switcher -->
+              <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-weight: 700; color: #0f172a; font-size: 1.02rem;"><i class="fa-solid fa-shield-heart" style="color: #10b981;"></i> สถาปัตยกรรมระบบเสียง 2 ชั้น (Dual-Engine Fallback)</span>
+                    <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">MP3 Backup Ready</span>
+                  </div>
+                  <p style="color: #64748b; font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                    ระบบจะใช้ <strong>Web Audio Synthesizer</strong> เป็นหลัก และมี <strong>ไฟล์เสียง MP3 ในระบบเว็บสำรอง</strong> ในกรณีที่เบราว์เซอร์หรือมือถือบล็อค API หรือเกิดข้อผิดพลาด
+                  </p>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <label for="adminAudioEngineSelect" style="font-size: 0.85rem; font-weight: 600; color: #475569; white-space: nowrap;">โหมดระบบเสียง:</label>
+                  <select id="adminAudioEngineSelect" class="form-control" style="padding: 6px 12px; border-radius: 8px; font-size: 0.88rem; border: 1px solid #cbd5e1; background: #fff;" onchange="adminSetAudioEngine(this.value)">
+                    <option value="hybrid">ไฮบริด (Auto: Web Audio + สำรอง MP3)</option>
+                    <option value="mp3">บังคับใช้ไฟล์ MP3 สำรองเสมอ (MP3 Only)</option>
+                    <option value="synth">สังเคราะห์ Web Audio API เท่านั้น</option>
+                  </select>
+                </div>
+              </div>
 
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px;">
                 
                 <!-- Card 1: Button Tap -->
                 <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
@@ -4432,12 +4449,17 @@
                       <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #eff6ff; color: #2563eb; font-weight: 600;">Global Tap</span>
                     </div>
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
-                      เสียงตอบรับสัมผัสสไตล์ iOS Haptic Tap ที่ทำงานอัตโนมัติเมื่อผู้ใช้แตะปุ่มกด การ์ด หรือเมนูต่างๆ
+                      เสียงตอบรับสัมผัสสไตล์ iOS Haptic Tap ทำงานอัตโนมัติเมื่อผู้ใช้แตะปุ่มหรือการ์ด
                     </p>
                   </div>
-                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playTap()">
-                    <i class="fa-solid fa-play" style="color: #3b82f6;"></i> ทดสอบเสียงสัมผัสปุ่ม
-                  </button>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center; gap: 6px; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.playTap()">
+                      <i class="fa-solid fa-play" style="color: #3b82f6;"></i> ทดสอบเสียง
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('tap')">
+                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Card 2: Duty Signup Success -->
@@ -4448,12 +4470,17 @@
                       <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #ecfdf5; color: #059669; font-weight: 600;">Velvety Chime</span>
                     </div>
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
-                      เสียงกระดิ่งแก้ว Marimba คอร์ดเมเจอร์นุ่มนวลเป็นพิเศษ พร้อม Low-pass filter เมื่อนักเรียนลงหน้าที่สำเร็จ
+                      เสียงกระดิ่งแก้ว Marimba คอร์ดเมเจอร์นุ่มนวลเป็นพิเศษ พร้อม Low-pass filter เมื่อลงหน้าที่สำเร็จ
                     </p>
                   </div>
-                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playSuccess()">
-                    <i class="fa-solid fa-play" style="color: #10b981;"></i> ทดสอบเสียงลงชื่อสำเร็จ
-                  </button>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center; gap: 6px; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.playSuccess()">
+                      <i class="fa-solid fa-play" style="color: #10b981;"></i> ทดสอบเสียง
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('success')">
+                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Card 3: New Activity -->
@@ -4464,12 +4491,17 @@
                       <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #ecfeff; color: #0891b2; font-weight: 600;">Realtime Feed</span>
                     </div>
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
-                      เสียงแจ้งเตือนคู่เสียงใส (A5 -> E6) แจ้งเตือนเมื่อระบบ Real-time (SSE/Fast Polling) ตรวจพบว่ามีกิจกรรมใหม่
+                      เสียงแจ้งเตือนคู่เสียงใส (A5 -> E6) แจ้งเตือนเมื่อระบบตรวจพบว่ามีกิจกรรมใหม่
                     </p>
                   </div>
-                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playNewActivity()">
-                    <i class="fa-solid fa-play" style="color: #06b6d4;"></i> ทดสอบเสียงกิจกรรมใหม่
-                  </button>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center; gap: 6px; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.playNewActivity()">
+                      <i class="fa-solid fa-play" style="color: #06b6d4;"></i> ทดสอบเสียง
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('newActivity')">
+                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Card 4: Error / Warning -->
@@ -4480,12 +4512,17 @@
                       <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #fef2f2; color: #dc2626; font-weight: 600;">Soft Warning</span>
                     </div>
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
-                      เสียงเตือนโทนต่ำนุ่มนวล (Eb4 -> C4) สุภาพ ไม่กระโชกโฮกฮาก เมื่อเกิดข้อผิดพลาด เช่น ลงชื่อซ้ำหรือใส่ข้อมูลไม่ครบ
+                      เสียงเตือนโทนต่ำนุ่มนวล (Eb4 -> C4) สุภาพ ไม่กระโชกโฮกฮาก เมื่อเกิดข้อผิดพลาด
                     </p>
                   </div>
-                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playError()">
-                    <i class="fa-solid fa-play" style="color: #ef4444;"></i> ทดสอบเสียงแจ้งเตือน
-                  </button>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center; gap: 6px; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.playError()">
+                      <i class="fa-solid fa-play" style="color: #ef4444;"></i> ทดสอบเสียง
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('error')">
+                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                    </button>
+                  </div>
                 </div>
 
                 <!-- Card 5: Admin Action -->
@@ -4496,12 +4533,17 @@
                       <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #f5f3ff; color: #7c3aed; font-weight: 600;">Admin Action</span>
                     </div>
                     <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
-                      เสียงคอร์ด 3 โน้ตยืนยันความสำเร็จ (F5 -> A5 -> C6) เมื่อแอดมินสร้างหรือแก้ไขกิจกรรมและบันทึกข้อมูลในหลังบ้าน
+                      เสียงคอร์ด 3 โน้ตยืนยันความสำเร็จ (F5 -> A5 -> C6) เมื่อแอดมินสร้างหรือแก้ไขกิจกรรมหลังบ้าน
                     </p>
                   </div>
-                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playAdmin()">
-                    <i class="fa-solid fa-play" style="color: #8b5cf6;"></i> ทดสอบเสียงแอดมิน
-                  </button>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center; gap: 6px; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.playAdmin()">
+                      <i class="fa-solid fa-play" style="color: #8b5cf6;"></i> ทดสอบเสียง
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('admin')">
+                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                    </button>
+                  </div>
                 </div>
 
               </div>
@@ -7197,10 +7239,24 @@
         .getActivityLogs();
     }
 
-        function adminToggleSoundMaster() {
+            function adminToggleSoundMaster() {
       if (window.RosterAudio) {
         const isNowOn = window.RosterAudio.toggleMute();
         updateAdminSoundButtonUI(isNowOn);
+      }
+    }
+
+    function adminSetAudioEngine(engineMode) {
+      if (window.RosterAudio) {
+        window.RosterAudio.setEngine(engineMode);
+        updateAdminEngineUI();
+      }
+    }
+
+    function updateAdminEngineUI() {
+      const select = document.getElementById('adminAudioEngineSelect');
+      if (select && window.RosterAudio) {
+        select.value = window.RosterAudio.engine || 'hybrid';
       }
     }
 
