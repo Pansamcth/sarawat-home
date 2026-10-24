@@ -21,6 +21,130 @@
   var lastPlayTimes = {};
 
   // Check saved sound preference (Default is TRUE / เปิดเสียงเป็นค่าเริ่มต้น)
+  var isHapticEnabled = true;
+  try {
+    var savedHaptic = localStorage.getItem('roster_haptic_enabled');
+    if (savedHaptic === 'false') {
+      isHapticEnabled = false;
+    } else {
+      isHapticEnabled = true;
+    }
+  } catch (e) {
+    isHapticEnabled = true;
+  }
+
+  // Device & Platform Detection for Haptic Motors
+  var isIOS = (typeof navigator !== 'undefined') &&
+    (/iPad|iPhone|iPod/.test(navigator.userAgent || '') ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+
+  // Ensure hidden iOS switch element for WebKit Taptic Engine trigger
+  function ensureIOSHapticElements() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById('roster-haptic-host')) return;
+    try {
+      var host = document.createElement('div');
+      host.id = 'roster-haptic-host';
+      host.setAttribute('aria-hidden', 'true');
+      host.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0.0001;pointer-events:none;width:1px;height:1px;overflow:hidden;z-index:-999;';
+      host.innerHTML = '<input id="roster-haptic-switch" type="checkbox" switch style="pointer-events:auto;" /><label id="roster-haptic-label" for="roster-haptic-switch" style="pointer-events:auto;"></label>';
+      if (document.body) {
+        document.body.appendChild(host);
+      } else {
+        document.addEventListener('DOMContentLoaded', function () {
+          if (document.body && !document.getElementById('roster-haptic-host')) {
+            document.body.appendChild(host);
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+  function triggerIOSTick() {
+    try {
+      ensureIOSHapticElements();
+      var lbl = document.getElementById('roster-haptic-label');
+      if (lbl) {
+        lbl.click();
+      } else {
+        var sw = document.getElementById('roster-haptic-switch');
+        if (sw) {
+          sw.checked = !sw.checked;
+          sw.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+    } catch (e) {}
+  }
+
+  /**
+   * Modern High-Performance Haptic Feedback Trigger
+   * - Android: Linear Resonant Actuator (LRA) short-pulse vibration (8-15ms)
+   * - iOS Safari: WebKit Native Switch Taptic Engine invocation
+   */
+  function triggerHaptic(type) {
+    if (!isSoundEnabled || !isHapticEnabled) return;
+
+    // 1. Android Modern Linear Motor (X/Z-axis LRA)
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try {
+        switch (type) {
+          case 'tap':
+            // 10ms ultra-short pulse = Sharp, modern tactile "กึ้ก" (No buzzing)
+            navigator.vibrate(10);
+            break;
+          case 'success':
+            // Double-pulse (กึ้ก... กึ้ก)
+            navigator.vibrate([12, 60, 20]);
+            break;
+          case 'error':
+          case 'warning':
+            // Triple-pulse warning (กึ้ก-กึ้ก-กึ้ก)
+            navigator.vibrate([15, 50, 15, 50, 25]);
+            break;
+          case 'newActivity':
+            // Gentle multi-tap
+            navigator.vibrate([12, 70, 12, 70, 20]);
+            break;
+          case 'admin':
+            // Decisive double-tap
+            navigator.vibrate([14, 45, 14]);
+            break;
+          default:
+            navigator.vibrate(10);
+        }
+      } catch (err) {}
+    }
+
+    // 2. iOS Safari Taptic Engine (Switch Haptic)
+    if (isIOS) {
+      switch (type) {
+        case 'tap':
+          triggerIOSTick();
+          break;
+        case 'success':
+          triggerIOSTick();
+          setTimeout(triggerIOSTick, 70);
+          break;
+        case 'error':
+        case 'warning':
+          triggerIOSTick();
+          setTimeout(triggerIOSTick, 60);
+          setTimeout(triggerIOSTick, 130);
+          break;
+        case 'newActivity':
+          triggerIOSTick();
+          setTimeout(triggerIOSTick, 80);
+          setTimeout(triggerIOSTick, 160);
+          break;
+        case 'admin':
+          triggerIOSTick();
+          setTimeout(triggerIOSTick, 65);
+          break;
+        default:
+          triggerIOSTick();
+      }
+    }
+  }
   var isSoundEnabled = true;
   try {
     var saved = localStorage.getItem('roster_sound_enabled');
@@ -274,9 +398,12 @@
       unlockAudio();
       this.isEnabled = !this.isEnabled;
       isSoundEnabled = this.isEnabled;
+      this.isHapticEnabled = this.isEnabled;
+      isHapticEnabled = this.isEnabled;
 
       try {
         localStorage.setItem('roster_sound_enabled', this.isEnabled ? 'true' : 'false');
+        localStorage.setItem('roster_haptic_enabled', this.isEnabled ? 'true' : 'false');
       } catch (e) {}
 
       this.updateToggleUI();
@@ -286,6 +413,40 @@
       }
 
       return this.isEnabled;
+    },
+
+    /**
+     * Current haptic feedback enabled state (true = ON, false = OFF)
+     */
+    isHapticEnabled: isHapticEnabled,
+
+    /**
+     * Direct haptic trigger method ('tap' | 'success' | 'error' | 'newActivity' | 'admin')
+     */
+    haptic: function (type) {
+      triggerHaptic(type || 'tap');
+    },
+
+    /**
+     * Set haptic enabled state independently
+     */
+    setHaptic: function (enabled) {
+      isHapticEnabled = !!enabled;
+      this.isHapticEnabled = isHapticEnabled;
+      try {
+        localStorage.setItem('roster_haptic_enabled', isHapticEnabled ? 'true' : 'false');
+      } catch (e) {}
+      if (isHapticEnabled) {
+        triggerHaptic('tap');
+      }
+      return isHapticEnabled;
+    },
+
+    /**
+     * Toggle haptic enabled state independently
+     */
+    toggleHaptic: function () {
+      return this.setHaptic(!this.isHapticEnabled);
     },
 
     /**
@@ -339,6 +500,7 @@
     playTap: function () {
       if (!this.isEnabled) return;
       if (shouldThrottle('tap', 45)) return;
+      triggerHaptic('tap');
 
       var self = this;
       if (this.engine === 'mp3') {
@@ -384,6 +546,7 @@
     playSuccess: function () {
       if (!this.isEnabled) return;
       if (shouldThrottle('success', 500)) return;
+      triggerHaptic('success');
 
       var self = this;
       if (this.engine === 'mp3') {
@@ -442,6 +605,7 @@
     playNewActivity: function () {
       if (!this.isEnabled) return;
       if (shouldThrottle('newActivity', 400)) return;
+      triggerHaptic('newActivity');
 
       var self = this;
       if (this.engine === 'mp3') {
@@ -498,7 +662,7 @@
     playError: function () {
       if (!this.isEnabled) return;
       if (shouldThrottle('error', 200)) return;
-
+      triggerHaptic('error');
       var self = this;
       if (this.engine === 'mp3') {
         playAudioFile('error', 0.95);
@@ -570,6 +734,7 @@
     playAdmin: function () {
       if (!this.isEnabled) return;
       if (shouldThrottle('admin', 300)) return;
+      triggerHaptic('admin');
 
       var self = this;
       if (this.engine === 'mp3') {
@@ -634,20 +799,23 @@
     testSoundModal: function () {
       if (typeof Swal !== 'undefined') {
         Swal.fire({
-          title: 'ทดสอบระบบเสียง SI-ROSTER (Hybrid)',
+          title: 'ทดสอบระบบเสียงและสั่นสัมผัส SI-ROSTER',
           html: [
             '<div style="text-align: left; display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">',
-            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playTap()">🔘 1. สัมผัสปุ่ม (Soft Tap)</button>',
-            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playSuccess()">✨ 2. ลงหน้าที่สำเร็จ (Velvety Chime)</button>',
-            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playNewActivity()">🔔 3. กิจกรรมใหม่ (New Activity)</button>',
-            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playError()">⚠️ 4. ข้อผิดพลาด (Soft Warning)</button>',
-            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playAdmin()">🛡️ 5. แอดมินบันทึกข้อมูล (Admin Action)</button>',
+            '  <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 10px 14px; font-size: 0.83rem; color: #0369a1; line-height: 1.4;">',
+            '    <i class="fa-solid fa-mobile-screen" style="margin-right: 6px;"></i><strong>Dual-Engine Haptic:</strong> มอเตอร์รุ่นใหม่จะสั่นพัลส์สั้น "กึ้ก" (Taptic Feel) คู่กับเสียงทุกปุ่มทันที',
+            '  </div>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playTap()">🔘 1. สัมผัสปุ่ม (Soft Tap + สั่นกึ้ก 1 ครั้ง)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playSuccess()">✨ 2. ลงหน้าที่สำเร็จ (Velvety Chime + สั่น 2 จังหวะ)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playNewActivity()">🔔 3. กิจกรรมใหม่ (New Activity + สั่นแจ้งเตือน)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playError()">⚠️ 4. ข้อผิดพลาด (Soft Warning + สั่นเตือน 3 จังหวะ)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playAdmin()">🛡️ 5. แอดมินบันทึกข้อมูล (Admin Action + สั่นคู่)</button>',
             '  <div style="border-top: 1px solid #e2e8f0; margin-top: 8px; padding-top: 10px; text-align: center;">',
-            '    <small style="color: #64748b;">ทดสอบเล่นไฟล์ MP3 สำรองโดยตรง:</small>',
+            '    <small style="color: #64748b;">ทดสอบสัมผัสเฉพาะระบบสั่น (Haptic Only):</small>',
             '    <div style="display: flex; gap: 6px; justify-content: center; margin-top: 6px; flex-wrap: wrap;">',
-            '      <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;" onclick="window.RosterAudio.playAudioFile(\'tap\')">MP3 Tap</button>',
-            '      <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;" onclick="window.RosterAudio.playAudioFile(\'success\')">MP3 Success</button>',
-            '      <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 8px;" onclick="window.RosterAudio.playAudioFile(\'newActivity\')">MP3 Alert</button>',
+            '      <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; color: #0284c7; border-color: #bae6fd;" onclick="window.RosterAudio.haptic(\'tap\')">📳 สั่น 1 กึ้ก (10ms)</button>',
+            '      <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; color: #10b981; border-color: #a7f3d0;" onclick="window.RosterAudio.haptic(\'success\')">📳 สั่นสำเร็จ (2 กึ้ก)</button>',
+            '      <button type="button" class="btn btn-outline" style="font-size: 0.75rem; padding: 4px 10px; color: #ef4444; border-color: #fecaca;" onclick="window.RosterAudio.haptic(\'error\')">📳 สั่นเตือน (3 กึ้ก)</button>',
             '    </div>',
             '  </div>',
             '</div>'

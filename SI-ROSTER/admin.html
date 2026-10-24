@@ -3825,7 +3825,7 @@
         <div class="sidebar-section-label" style="margin-top: 10px;">ตั้งค่าและทดสอบ</div>
         <div class="sidebar-item" id="adminMenuAudio" onclick="switchDashTab('audio')">
           <i class="fa-solid fa-volume-high"></i>
-          <span>ระบบเสียงแจ้งเตือน</span>
+          <span>ระบบเสียง & สั่นสัมผัส</span>
         </div>
       </div>
 
@@ -4412,20 +4412,23 @@
         <div id="tab-audio" class="dash-tab">
           <div class="data-panel">
             <div class="data-panel-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-              <h2><i class="fa-solid fa-volume-high" style="color: var(--primary);"></i> ระบบเสียงไฮบริดและการทดสอบ (Hybrid Sound System)</h2>
+              <h2><i class="fa-solid fa-volume-high" style="color: var(--primary);"></i> ระบบเสียงและระบบสั่นสัมผัส (Sound & Haptic System)</h2>
               <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <button type="button" class="btn btn-outline" onclick="window.RosterAudio && window.RosterAudio.testSoundModal()">
-                  <i class="fa-solid fa-window-restore"></i> เปิดหน้าต่างทดสอบแบบป๊อปอัป
+                  <i class="fa-solid fa-window-restore"></i> เปิดหน้าต่างทดสอบ
                 </button>
                 <button type="button" class="btn btn-primary" id="adminSoundMasterToggle" onclick="adminToggleSoundMaster()">
                   <i class="fa-solid fa-volume-high" id="adminSoundMasterIcon"></i> <span id="adminSoundMasterText">เปิดเสียงอยู่</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="adminHapticMasterToggle" onclick="adminToggleHapticMaster()" style="background: #0284c7; border-color: #0284c7;">
+                  <i class="fa-solid fa-mobile-screen" id="adminHapticMasterIcon"></i> <span id="adminHapticMasterText">เปิดระบบสั่นอยู่</span>
                 </button>
               </div>
             </div>
 
             <div style="padding: 20px 24px;">
               <!-- Hybrid Architecture Banner & Engine Switcher -->
-              <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                 <div>
                   <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                     <span style="font-weight: 700; color: #0f172a; font-size: 1.02rem;"><i class="fa-solid fa-shield-heart" style="color: #10b981;"></i> สถาปัตยกรรมระบบเสียง 2 ชั้น (Dual-Engine Fallback)</span>
@@ -4442,6 +4445,30 @@
                     <option value="mp3">บังคับใช้ไฟล์ MP3 สำรองเสมอ (MP3 Only)</option>
                     <option value="synth">สังเคราะห์ Web Audio API เท่านั้น</option>
                   </select>
+                </div>
+              </div>
+
+              <!-- Haptic Feedback Modern Motor Architecture Banner -->
+              <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 1px solid #bae6fd; border-radius: 14px; padding: 18px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div style="max-width: 820px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-weight: 700; color: #0369a1; font-size: 1.02rem;"><i class="fa-solid fa-mobile-screen-button" style="color: #0284c7;"></i> ระบบสั่นสัมผัสมอเตอร์รุ่นใหม่ (Modern Taptic Haptic Engine)</span>
+                    <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; padding: 2px 8px; border-radius: 9999px; font-weight: 600;">iPhone & Android LRA Ready</span>
+                  </div>
+                  <p style="color: #0c4a6e; font-size: 0.88rem; margin: 0; line-height: 1.5;">
+                    ไม่ใช่การสั่นค้างยาวแบบโทรศัพท์รุ่นเก่า! ระบบใช้ <strong>พัลส์สั้นพิเศษ (8-15ms)</strong> สำหรับมอเตอร์ Linear Resonant Actuator (LRA) บน Android และใช้เทคนิค <strong>WebKit Native Switch Haptic</strong> ดึง Taptic Engine ของ iPhone โดยตรง ให้สัมผัส 'กึ้ก' คมชัด นุ่มนวล เกรดพรีเมียม
+                  </p>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-outline" style="background: #ffffff; border-color: #7dd3fc; color: #0284c7; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.haptic('tap')">
+                    <i class="fa-solid fa-hand-pointer"></i> ลองแตะ (1 กึ้ก)
+                  </button>
+                  <button type="button" class="btn btn-outline" style="background: #ffffff; border-color: #7dd3fc; color: #0284c7; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.haptic('success')">
+                    <i class="fa-solid fa-circle-check"></i> สำเร็จ (2 กึ้ก)
+                  </button>
+                  <button type="button" class="btn btn-outline" style="background: #ffffff; border-color: #7dd3fc; color: #0284c7; font-size: 0.85rem;" onclick="window.RosterAudio && window.RosterAudio.haptic('error')">
+                    <i class="fa-solid fa-triangle-exclamation"></i> เตือน (3 กึ้ก)
+                  </button>
                 </div>
               </div>
 
@@ -4463,7 +4490,10 @@
                       <i class="fa-solid fa-play" style="color: #3b82f6;"></i> ทดสอบเสียง
                     </button>
                     <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('tap')">
-                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                      <i class="fa-solid fa-file-audio"></i> ไฟล์ MP3
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #0284c7; border-color: #bae6fd;" onclick="window.RosterAudio && window.RosterAudio.haptic('tap')">
+                      <i class="fa-solid fa-mobile-screen"></i> สั่นกึ้ก (10ms)
                     </button>
                   </div>
                 </div>
@@ -4484,7 +4514,10 @@
                       <i class="fa-solid fa-play" style="color: #10b981;"></i> ทดสอบเสียง
                     </button>
                     <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('success')">
-                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                      <i class="fa-solid fa-file-audio"></i> ไฟล์ MP3
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #10b981; border-color: #a7f3d0;" onclick="window.RosterAudio && window.RosterAudio.haptic('success')">
+                      <i class="fa-solid fa-mobile-screen"></i> สั่นสำเร็จ (2 กึ้ก)
                     </button>
                   </div>
                 </div>
@@ -4505,7 +4538,10 @@
                       <i class="fa-solid fa-play" style="color: #06b6d4;"></i> ทดสอบเสียง
                     </button>
                     <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('newActivity')">
-                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                      <i class="fa-solid fa-file-audio"></i> ไฟล์ MP3
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #06b6d4; border-color: #a5f3fc;" onclick="window.RosterAudio && window.RosterAudio.haptic('newActivity')">
+                      <i class="fa-solid fa-mobile-screen"></i> สั่นเตือน (3 กึ้ก)
                     </button>
                   </div>
                 </div>
@@ -4526,7 +4562,10 @@
                       <i class="fa-solid fa-play" style="color: #ef4444;"></i> ทดสอบเสียง
                     </button>
                     <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('error')">
-                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                      <i class="fa-solid fa-file-audio"></i> ไฟล์ MP3
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #ef4444; border-color: #fecaca;" onclick="window.RosterAudio && window.RosterAudio.haptic('error')">
+                      <i class="fa-solid fa-mobile-screen"></i> สั่นเตือนซ้ำ (3 กึ้ก)
                     </button>
                   </div>
                 </div>
@@ -4547,7 +4586,10 @@
                       <i class="fa-solid fa-play" style="color: #8b5cf6;"></i> ทดสอบเสียง
                     </button>
                     <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #64748b;" onclick="window.RosterAudio && window.RosterAudio.playAudioFile('admin')">
-                      <i class="fa-solid fa-file-audio"></i> เล่นไฟล์ MP3
+                      <i class="fa-solid fa-file-audio"></i> ไฟล์ MP3
+                    </button>
+                    <button type="button" class="btn btn-outline" style="justify-content: center; gap: 6px; font-size: 0.80rem; color: #8b5cf6; border-color: #ddd6fe;" onclick="window.RosterAudio && window.RosterAudio.haptic('admin')">
+                      <i class="fa-solid fa-mobile-screen"></i> สั่นแอดมิน (2 กึ้ก)
                     </button>
                   </div>
                 </div>
@@ -7305,6 +7347,37 @@
       if (window.RosterAudio) {
         const isNowOn = window.RosterAudio.toggleMute();
         updateAdminSoundButtonUI(isNowOn);
+        updateAdminHapticButtonUI(window.RosterAudio.isHapticEnabled);
+      }
+    }
+
+    function adminToggleHapticMaster() {
+      if (window.RosterAudio) {
+        const isNowOn = window.RosterAudio.toggleHaptic();
+        updateAdminHapticButtonUI(isNowOn);
+      }
+    }
+
+    function updateAdminHapticButtonUI(isNowOn) {
+      const btn = document.getElementById('adminHapticMasterToggle');
+      const icon = document.getElementById('adminHapticMasterIcon');
+      const text = document.getElementById('adminHapticMasterText');
+      if (!btn || !icon || !text) return;
+      const on = typeof isNowOn === 'boolean' ? isNowOn : (window.RosterAudio ? window.RosterAudio.isHapticEnabled : true);
+      if (on) {
+        btn.className = 'btn btn-primary';
+        btn.style.background = '#0284c7';
+        btn.style.borderColor = '#0284c7';
+        btn.style.color = '#ffffff';
+        icon.className = 'fa-solid fa-mobile-screen';
+        text.textContent = 'เปิดระบบสั่นอยู่';
+      } else {
+        btn.className = 'btn btn-outline';
+        btn.style.background = 'transparent';
+        btn.style.borderColor = '#94a3b8';
+        btn.style.color = '#64748b';
+        icon.className = 'fa-solid fa-mobile-screen-button';
+        text.textContent = 'ปิดระบบสั่นอยู่';
       }
     }
 
@@ -7348,7 +7421,7 @@
         'admins': 'จัดการแอดมิน',
         'logs': 'ประวัติการแก้ไขกิจกรรม',
         'realtime': 'รายงานสรุป (แบบสด)',
-        'audio': 'ระบบเสียงแจ้งเตือนและการทดสอบ'
+        'audio': 'ระบบเสียงและระบบสั่นสัมผัส (Sound & Haptic)'
       };
       const titleEl = document.getElementById('dashTitle');
       if (titleEl && titles[tabId]) titleEl.textContent = titles[tabId];
@@ -7377,7 +7450,7 @@
       if (tabId === 'admins') loadDashAdmins();
       if (tabId === 'logs') loadAdminLogsTab();
       if (tabId === 'realtime') initDashRealtime();
-      if (tabId === 'audio') updateAdminSoundButtonUI();
+      if (tabId === 'audio') { updateAdminSoundButtonUI(); updateAdminHapticButtonUI(); }
       if (tabId !== 'realtime' && typeof stopDashRealtimeSync === 'function') stopDashRealtimeSync();
     }
 
