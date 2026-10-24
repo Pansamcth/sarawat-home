@@ -1661,12 +1661,18 @@
           centralFormHtml = `
               <div class="signup-form" style="display:flex; flex-direction:column; gap:10px; margin-bottom: 25px; padding: 20px; background: rgba(59, 130, 246, 0.05); border-radius: 8px;">
                   <div style="font-weight:700; color:var(--primary); margin-bottom: 5px;">${formTitleText}</div>
-                  <select id="centralDutySelect" class="input-control">
+                  <select id="centralDutySelect" class="input-control" onchange="clearCentralDutyError()">
                       ${optionsHtml}
                   </select>
+                  <div id="centralDutyError" class="field-error-msg">
+                      <i class="fa-solid fa-circle-exclamation"></i> <span>กรุณาเลือกหน้าที่ที่ต้องการลงชื่อ</span>
+                  </div>
                   <div style="position: relative;">
-                      <input type="text" id="centralNameInput" class="input-control" placeholder="ค้นหาชื่อ-นามสกุลของคุณ" autocomplete="off" oninput="filterCentralStudents()" onfocus="filterCentralStudents()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitCentralSignup(); }" onblur="setTimeout(() => { let d = document.getElementById('centralAutocomplete'); if(d) d.style.display='none'; }, 350)">
+                      <input type="text" id="centralNameInput" class="input-control" placeholder="ค้นหาชื่อ-นามสกุลของคุณ" autocomplete="off" oninput="filterCentralStudents(); clearCentralNameError();" onfocus="filterCentralStudents()" onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitCentralSignup(); }" onblur="setTimeout(() => { let d = document.getElementById('centralAutocomplete'); if(d) d.style.display='none'; }, 350)">
                       <div id="centralAutocomplete" class="autocomplete-dropdown" style="display:none; width:100%;"></div>
+                  </div>
+                  <div id="centralNameError" class="field-error-msg">
+                      <i class="fa-solid fa-circle-exclamation"></i> <span id="centralNameErrorText">กรุณาพิมพ์หรือเลือกชื่อของคุณ</span>
                   </div>
                   <button class="btn btn-primary btn-block" id="btnCentralSubmit" onclick="submitCentralSignup()">
                       <i class="fa-solid fa-pen-to-square"></i> ${isAdmin ? 'เพิ่มรายชื่อ (Admin)' : 'ลงชื่อปฏิบัติหน้าที่'}
@@ -1857,6 +1863,7 @@
     }
 
     function selectCentralStudent(fullName) {
+      clearCentralNameError();
       const inputEl = document.getElementById('centralNameInput');
       const dropdown = document.getElementById('centralAutocomplete');
       if (inputEl) {
@@ -2008,19 +2015,69 @@
       });
     }
 
-    function submitCentralSignup() {
-      const duty = document.getElementById('centralDutySelect').value;
+    function clearCentralDutyError() {
+      const selectEl = document.getElementById('centralDutySelect');
+      const errEl = document.getElementById('centralDutyError');
+      if (selectEl) selectEl.classList.remove('input-error');
+      if (errEl) errEl.classList.remove('visible');
+    }
+
+    function clearCentralNameError() {
       const inputEl = document.getElementById('centralNameInput');
-      let name = inputEl.value.trim();
+      const errEl = document.getElementById('centralNameError');
+      if (inputEl) inputEl.classList.remove('input-error');
+      if (errEl) errEl.classList.remove('visible');
+    }
+
+    function showCentralDutyError(msg) {
+      const selectEl = document.getElementById('centralDutySelect');
+      const errEl = document.getElementById('centralDutyError');
+      if (selectEl) {
+        selectEl.classList.add('input-error');
+        selectEl.focus();
+      }
+      if (errEl) {
+        if (msg) {
+          const t = errEl.querySelector('span');
+          if (t) t.textContent = msg;
+        }
+        errEl.classList.add('visible');
+      }
+      if (window.RosterAudio) window.RosterAudio.playError();
+    }
+
+    function showCentralNameError(msg) {
+      const inputEl = document.getElementById('centralNameInput');
+      const errEl = document.getElementById('centralNameError');
+      if (inputEl) {
+        inputEl.classList.add('input-error');
+        inputEl.focus();
+      }
+      if (errEl) {
+        if (msg) {
+          const t = errEl.querySelector('span') || document.getElementById('centralNameErrorText');
+          if (t) t.textContent = msg;
+        }
+        errEl.classList.add('visible');
+      }
+      if (window.RosterAudio) window.RosterAudio.playError();
+    }
+
+    function submitCentralSignup() {
+      const duty = document.getElementById('centralDutySelect') ? document.getElementById('centralDutySelect').value : '';
+      const inputEl = document.getElementById('centralNameInput');
+      let name = inputEl ? inputEl.value.trim() : '';
       const btnEl = document.getElementById('btnCentralSubmit');
 
+      clearCentralDutyError();
+      clearCentralNameError();
+
       if (!duty) {
-        showToast('กรุณาเลือกหน้าที่ที่ต้องการลงชื่อ', 'error');
+        showCentralDutyError('กรุณาเลือกหน้าที่ที่ต้องการลงชื่อ');
         return;
       }
       if (!name) {
-        showToast('กรุณาพิมพ์หรือเลือกชื่อของคุณ', 'error');
-        inputEl.focus();
+        showCentralNameError('กรุณาพิมพ์หรือเลือกชื่อของคุณ');
         return;
       }
 
@@ -2038,8 +2095,7 @@
         }
       }
       if (!studentObj) {
-        showToast('ไม่อนุญาตให้พิมพ์ชื่อเอง กรุณาเลือกรายชื่อที่มีในระบบเท่านั้น', 'error');
-        inputEl.focus();
+        showCentralNameError('ไม่อนุญาตให้พิมพ์ชื่อเอง กรุณาเลือกรายชื่อที่มีในระบบเท่านั้น');
         return;
       }
 
