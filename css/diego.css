@@ -8129,8 +8129,8 @@ body,
 
 .dg-chief-vision-text {
   font-family: 'maaja', 'Prompt', var(--dg-font-sans), sans-serif;
-  font-size: clamp(1.42rem, 1.85vw, 1.75rem);
-  line-height: 1.95;
+  font-size: clamp(2.05rem, 2.6vw, 2.5rem);
+  line-height: 1.82;
   font-weight: 400;
   color: var(--dg-text-primary);
   letter-spacing: 0;
@@ -8287,8 +8287,8 @@ body,
   }
   .dg-chief-vision-text {
     font-family: 'maaja', 'Prompt', var(--dg-font-sans), sans-serif;
-    font-size: clamp(1.32rem, 4.8vw, 1.55rem);
-    line-height: 1.92;
+    font-size: clamp(1.55rem, 5.8vw, 1.88rem);
+    line-height: 1.82;
     letter-spacing: 0;
     color: var(--dg-text-primary);
     word-break: normal;
@@ -8330,8 +8330,8 @@ body,
     font-size: 1.72rem;
   }
   .dg-chief-vision-text {
-    font-size: 1.25rem;
-    line-height: 1.85;
+    font-size: clamp(1.4rem, 5.2vw, 1.62rem);
+    line-height: 1.8;
   }
   .dg-chief-editorial-section .dg-chief-actions .dg-btn-black {
     padding: 11px 22px !important;
