@@ -1936,6 +1936,78 @@
       dropdown.style.display = 'block';
     }
 
+        // --- Centralized Modal Alert Popups (Full screen blocking with blurred backdrop) ---
+    function showDuplicateSignupPopup(studentName, dutyName, isMulti) {
+      if (window.RosterAudio) window.RosterAudio.playError();
+      const duplicateHtml = `
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.18);">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 38px; color: #EF4444;"></i>
+          </div>
+          <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">มีรายชื่อในกิจกรรมนี้แล้ว</h2>
+          <div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 14px; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; text-align: left;">
+            <div style="margin-bottom: 6px;"><strong>นักเรียน:</strong> <span style="color: #0F172A; font-weight: 600;">${studentName}</span></div>
+            <div style="margin-bottom: 6px;"><strong>หน้าที่เดิม:</strong> <span style="color: #EF4444; font-weight: 600;">${dutyName}</span></div>
+            <div style="font-size: 0.86rem; color: #64748B; border-top: 1px dashed #CBD5E1; padding-top: 6px; margin-top: 6px;">
+              ${isMulti ? 'คุณได้ลงชื่อในหน้าที่นี้ของกิจกรรมไปเรียบร้อยแล้ว ไม่สามารถลงชื่อหน้าที่เดิมซ้ำได้' : 'กิจกรรมนี้กำหนดให้ลงชื่อได้ 1 หน้าที่/คน และมีชื่อของคุณลงทะเบียนไว้แล้ว'}
+            </div>
+          </div>
+          <p style="color: #64748B; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+            หากต้องการเปลี่ยนแปลงหน้าที่ กรุณาติดต่อสารวัตรนักเรียนหรือผู้ดูแลระบบ
+          </p>
+        </div>
+      `;
+
+      Swal.fire({
+        html: duplicateHtml,
+        showConfirmButton: true,
+        confirmButtonColor: '#0F172A',
+        confirmButtonText: '<i class="fa-solid fa-check" style="margin-right: 6px;"></i> รับทราบ',
+        customClass: {
+          popup: 'custom-swal-popup custom-swal-duplicate-popup',
+          confirmButton: 'custom-swal-btn'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false
+      });
+    }
+
+    function showSignupErrorPopup(errorMessage) {
+      if (window.RosterAudio) window.RosterAudio.playError();
+      const errorText = errorMessage || 'เกิดข้อผิดพลาดในการลงชื่อ กรุณาลองใหม่อีกครั้ง';
+      const isDuplicate = errorText.includes('ซ้ำ') || errorText.includes('มีรายชื่อ') || errorText.includes('already');
+
+      const errorHtml = `
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.18);">
+            <i class="fa-solid ${isDuplicate ? 'fa-triangle-exclamation' : 'fa-circle-xmark'}" style="font-size: 38px; color: #EF4444;"></i>
+          </div>
+          <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">
+            ${isDuplicate ? 'มีรายชื่อในกิจกรรมนี้แล้ว' : 'บันทึกการลงชื่อไม่สำเร็จ'}
+          </h2>
+          <div style="color: #475569; font-size: 0.95rem; line-height: 1.5; margin-bottom: 14px; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; text-align: center;">
+            <span style="color: #DC2626; font-weight: 600;">${errorText}</span>
+          </div>
+          <p style="color: #64748B; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+            กรุณาตรวจสอบข้อมูลหรือติดต่อผู้ดูแลระบบหากยังพบปัญหา
+          </p>
+        </div>
+      `;
+
+      Swal.fire({
+        html: errorHtml,
+        showConfirmButton: true,
+        confirmButtonColor: '#0F172A',
+        confirmButtonText: '<i class="fa-solid fa-check" style="margin-right: 6px;"></i> รับทราบ',
+        customClass: {
+          popup: 'custom-swal-popup custom-swal-error-popup',
+          confirmButton: 'custom-swal-btn'
+        },
+        buttonsStyling: true,
+        allowOutsideClick: false
+      });
+    }
+
     function submitCentralSignup() {
       const duty = document.getElementById('centralDutySelect').value;
       const inputEl = document.getElementById('centralNameInput');
@@ -1983,13 +2055,13 @@
         if (isMulti) {
           const alreadySignedUp = selectedDateInfo.signups.find(s => s.name === name && s.duty === duty);
           if (alreadySignedUp) {
-            showToast(`คุณได้ลงชื่อในหน้าที่ "${alreadySignedUp.duty}" ของกิจกรรมนี้ไปแล้ว`, 'error');
+            showDuplicateSignupPopup(sendName, alreadySignedUp.duty, true);
             return;
           }
         } else {
           const alreadySignedUp = selectedDateInfo.signups.find(s => s.name === name);
           if (alreadySignedUp) {
-            showToast(`คุณได้ลงชื่อในหน้าที่ "${alreadySignedUp.duty}" ของกิจกรรมนี้ไปแล้ว (ไม่อนุญาตให้ลงซ้ำ)`, 'error');
+            showDuplicateSignupPopup(sendName, alreadySignedUp.duty, false);
             return;
           }
         }
@@ -2082,25 +2154,7 @@
           };
 
           const handleFailure = function (error) {
-            if (window.RosterAudio) window.RosterAudio.playError();
-            Swal.fire({
-              html: `
-                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                  <div style="font-size: 64px; color: #F43F5E; margin-bottom: 10px; line-height: 1;">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                  </div>
-                  <h2 style="color: #0F172A; font-weight: 700; font-size: 1.5rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">บันทึกไม่สำเร็จ</h2>
-                  <div style="color: #64748B; font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px;">
-                    ${error.message || error}
-                  </div>
-                </div>
-              `,
-              showConfirmButton: true,
-              confirmButtonColor: '#0F172A',
-              confirmButtonText: 'ตกลง',
-              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' },
-              buttonsStyling: true
-            });
+            showSignupErrorPopup(error.message || error);
             btnEl.disabled = false;
             btnEl.innerHTML = isAdmin ? '<i class="fa-solid fa-pen-to-square"></i> เพิ่มรายชื่อ (Admin)' : '<i class="fa-solid fa-pen-to-square"></i> ลงชื่อปฏิบัติหน้าที่';
           };
