@@ -138,11 +138,10 @@
   // Resolve file paths across various URL configurations
   function getCandidatePaths(filename) {
     return [
-      '/sounds/' + filename,
-      '/SI-ROSTER/sounds/' + filename,
-      'sounds/' + filename,
-      '../sounds/' + filename,
-      '/assets/sounds/' + filename
+      '/assets/sounds/' + filename,
+      'assets/sounds/' + filename,
+      '../assets/sounds/' + filename,
+      '/sounds/' + filename
     ];
   }
 

@@ -877,6 +877,34 @@
   ],
   "rewrites": [
     {
+      "source": "/sounds/:path*",
+      "destination": "/assets/sounds/:path*"
+    },
+    {
+      "source": "/SI-ROSTER/sounds/:path*",
+      "destination": "/assets/sounds/:path*"
+    },
+    {
+      "source": "/si-roster/sounds/:path*",
+      "destination": "/assets/sounds/:path*"
+    },
+    {
+      "source": "/js/roster-audio.js",
+      "destination": "/SI-ROSTER/js/roster-audio.js"
+    },
+    {
+      "source": "/js/line-browser-guard.js",
+      "destination": "/SI-ROSTER/js/line-browser-guard.js"
+    },
+    {
+      "source": "/SI-ROSTER/favicon.ico",
+      "destination": "/favicon.ico"
+    },
+    {
+      "source": "/si-roster/favicon.ico",
+      "destination": "/favicon.ico"
+    },
+    {
       "source": "/index.html",
       "has": [
         {
