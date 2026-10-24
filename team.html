@@ -3,6 +3,21 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Theme Init (Zero-Flicker Dark Mode) -->
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('dg_theme');
+        if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.style.colorScheme = 'dark';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.documentElement.style.colorScheme = 'light';
+        }
+      } catch(e) {}
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ทำเนียบคณะทำงาน | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
   <meta name="description"
@@ -675,6 +690,18 @@
           <span>© 2569 Truant Patrol Decha. All rights reserved.</span>
         </div>
         <div class="dg-footer-bottom-meta">
+          <!-- Theme Switcher Segmented Control -->
+          <div class="dg-theme-switch-group" role="group" aria-label="สลับธีมสี">
+            <button type="button" class="dg-theme-switch-btn" data-theme-set="light" aria-label="โหมดสว่าง">
+              <i data-lucide="sun"></i>
+              <span>สว่าง</span>
+            </button>
+            <button type="button" class="dg-theme-switch-btn" data-theme-set="dark" aria-label="โหมดมืด">
+              <i data-lucide="moon"></i>
+              <span>มืด</span>
+            </button>
+          </div>
+          <span class="dg-footer-meta-sep">•</span>
           <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira
               Wattanakitpaisal</a></span>
           <span class="dg-footer-meta-sep">•</span>
@@ -1201,6 +1228,8 @@
 
   <!-- Image Protection & Anti-Copy System -->
   <script src="js/image-protection.js"></script>
+  <!-- Theme Manager System -->
+  <script src="js/theme-manager.js"></script>
 </body>
 
 </html>
