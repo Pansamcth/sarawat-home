@@ -7968,6 +7968,20 @@ body,
 
 
 /* ==========================================================
+   FONT FACE: maaja (หมาจ๋า by Dogplease / คุณณัฐวีร์ ลิมปนิลชาติ)
+   Licensed under Creative Commons (CC BY 3.0 TH)
+   Source: f0nt.com/release/maaja/
+   ========================================================== */
+@font-face {
+  font-family: 'maaja';
+  src: url('../assets/fonts/maaja.otf') format('opentype'),
+       url('../assets/fonts/maaja.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================
    EDITORIAL MINIMALIST CHIEF SECTION (Inspired by Reference)
    Typography: Trirong (Hero matching), 3-Column Architecture
    ========================================================== */
@@ -8114,15 +8128,36 @@ body,
 }
 
 .dg-chief-vision-text {
-  font-family: var(--dg-font-sans);
-  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
-  line-height: 1.85;
-  font-weight: 500;
-  color: var(--dg-text-secondary);
+  font-family: 'maaja', 'Prompt', var(--dg-font-sans), sans-serif;
+  font-size: clamp(1.42rem, 1.85vw, 1.75rem);
+  line-height: 1.95;
+  font-weight: 400;
+  color: var(--dg-text-primary);
   letter-spacing: 0;
   margin: 0;
   word-break: normal;
   text-wrap: pretty;
+}
+
+.dg-chief-vision-credit {
+  margin-top: 10px;
+}
+
+.dg-chief-font-credit {
+  display: inline-block;
+  font-family: var(--dg-font-sans);
+  font-size: 0.72rem;
+  color: var(--dg-text-muted);
+  opacity: 0.65;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  user-select: none;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.dg-chief-font-credit:hover {
+  opacity: 1;
+  color: var(--dg-text-secondary);
 }
 
 /* Action Button Aligned Right */
@@ -8251,12 +8286,19 @@ body,
     padding-top: 0;
   }
   .dg-chief-vision-text {
-    font-size: 1.04rem;
-    line-height: 1.85;
+    font-family: 'maaja', 'Prompt', var(--dg-font-sans), sans-serif;
+    font-size: clamp(1.32rem, 4.8vw, 1.55rem);
+    line-height: 1.92;
     letter-spacing: 0;
-    color: var(--dg-text-secondary);
+    color: var(--dg-text-primary);
     word-break: normal;
     text-wrap: pretty;
+  }
+  .dg-chief-vision-credit {
+    margin-top: 8px;
+  }
+  .dg-chief-font-credit {
+    font-size: 0.7rem;
   }
   .dg-chief-editorial-section .dg-chief-actions {
     display: flex !important;
@@ -8288,8 +8330,8 @@ body,
     font-size: 1.72rem;
   }
   .dg-chief-vision-text {
-    font-size: 0.98rem;
-    line-height: 1.8;
+    font-size: 1.25rem;
+    line-height: 1.85;
   }
   .dg-chief-editorial-section .dg-chief-actions .dg-btn-black {
     padding: 11px 22px !important;
