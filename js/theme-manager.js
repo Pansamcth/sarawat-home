@@ -28,10 +28,10 @@
 
   function getActiveTheme() {
     var stored = getStoredTheme();
-    if (stored === 'dark' || stored === 'light') {
-      return stored;
+    if (stored === 'dark') {
+      return 'dark';
     }
-    return getSystemPreference();
+    return 'light'; // Default: Light theme only
   }
 
   function applyTheme(theme, save) {
@@ -89,17 +89,7 @@
       }
     });
 
-    // Listen to OS system color scheme changes (only if user hasn't explicitly set preference)
-    try {
-      if (window.matchMedia) {
-        var mql = window.matchMedia('(prefers-color-scheme: dark)');
-        mql.addEventListener('change', function (e) {
-          if (!getStoredTheme()) {
-            applyTheme(e.matches ? 'dark' : 'light', false);
-          }
-        });
-      }
-    } catch (e) {}
+    // Default is strictly Light only unless explicitly toggled by user
 
     // Cross-tab synchronization
     window.addEventListener('storage', function (e) {
