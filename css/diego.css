@@ -8232,3 +8232,13 @@ body,
   background: var(--dg-text-primary) !important;
   color: var(--dg-bg) !important;
 }
+
+.dg-chief-header-spaced {
+  margin-bottom: 74px;
+}
+
+@media (max-width: 900px) {
+  .dg-chief-header-spaced {
+    margin-bottom: 48px;
+  }
+}
