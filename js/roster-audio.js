@@ -396,6 +396,29 @@
      */
     unlock: function () {
       unlockAudio();
+    },
+
+    /**
+     * Pop-up Sound Test Modal
+     */
+    testSoundModal: function () {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: 'ทดสอบระบบเสียง SI-ROSTER',
+          html: [
+            '<div style="text-align: left; display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playTap()">🔘 1. สัมผัสปุ่ม (Soft Tap)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playSuccess()">✨ 2. ลงหน้าที่สำเร็จ (Velvety Chime)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playNewActivity()">🔔 3. กิจกรรมใหม่ (New Activity)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playError()">⚠️ 4. ข้อผิดพลาด (Soft Warning)</button>',
+            '  <button type="button" class="btn btn-outline" style="width:100%; justify-content:center; padding: 10px 16px; border-radius: 10px;" onclick="window.RosterAudio.playAdmin()">🛡️ 5. แอดมินบันทึกข้อมูล (Admin Action)</button>',
+            '</div>'
+          ].join(''),
+          showConfirmButton: true,
+          confirmButtonText: 'ปิดหน้าต่าง',
+          confirmButtonColor: '#0f172a'
+        });
+      }
     }
   };
 

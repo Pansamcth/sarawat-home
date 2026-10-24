@@ -3815,6 +3815,12 @@
           <i class="fa-solid fa-clock-rotate-left"></i>
           <span>ประวัติการแก้ไขกิจกรรม</span>
         </div>
+
+        <div class="sidebar-section-label" style="margin-top: 10px;">ตั้งค่าและทดสอบ</div>
+        <div class="sidebar-item" id="adminMenuAudio" onclick="switchDashTab('audio')">
+          <i class="fa-solid fa-volume-high"></i>
+          <span>ระบบเสียงแจ้งเตือน</span>
+        </div>
       </div>
 
       <div class="sidebar-footer">
@@ -4393,6 +4399,112 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+        <!-- Audio System & Sound Test Tab -->
+        <div id="tab-audio" class="dash-tab">
+          <div class="data-panel">
+            <div class="data-panel-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <h2><i class="fa-solid fa-volume-high" style="color: var(--primary);"></i> ระบบเสียงและการทดสอบ (Sound System)</h2>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline" onclick="window.RosterAudio && window.RosterAudio.testSoundModal()">
+                  <i class="fa-solid fa-window-restore"></i> เปิดหน้าต่างทดสอบแบบป๊อปอัป
+                </button>
+                <button type="button" class="btn btn-primary" id="adminSoundMasterToggle" onclick="adminToggleSoundMaster()">
+                  <i class="fa-solid fa-volume-high" id="adminSoundMasterIcon"></i> <span id="adminSoundMasterText">เปิดเสียงอยู่</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="padding: 20px 24px;">
+              <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 0.92rem; line-height: 1.6;">
+                ระบบเสียงของ SI-ROSTER ทำงานด้วย <strong>Web Audio API Harmonic Synthesizer</strong> สังเคราะห์ความถี่เสียงฮาร์มอนิกความละเอียดสูงระดับสตูดิโอแบบเรียลไทม์ (Zero-latency / Zero-bandwidth) สามารถทดสอบฟังเสียงในแต่ละจังหวะของระบบได้ที่แผงควบคุมด้านล่างนี้
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                
+                <!-- Card 1: Button Tap -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                      <span style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><i class="fa-solid fa-hand-pointer" style="color: #3b82f6; margin-right: 8px;"></i> 1. สัมผัสปุ่ม (Soft Tap)</span>
+                      <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #eff6ff; color: #2563eb; font-weight: 600;">Global Tap</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
+                      เสียงตอบรับสัมผัสสไตล์ iOS Haptic Tap ที่ทำงานอัตโนมัติเมื่อผู้ใช้แตะปุ่มกด การ์ด หรือเมนูต่างๆ
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playTap()">
+                    <i class="fa-solid fa-play" style="color: #3b82f6;"></i> ทดสอบเสียงสัมผัสปุ่ม
+                  </button>
+                </div>
+
+                <!-- Card 2: Duty Signup Success -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                      <span style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i> 2. ลงหน้าที่สำเร็จ (Success)</span>
+                      <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #ecfdf5; color: #059669; font-weight: 600;">Velvety Chime</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
+                      เสียงกระดิ่งแก้ว Marimba คอร์ดเมเจอร์นุ่มนวลเป็นพิเศษ พร้อม Low-pass filter เมื่อนักเรียนลงหน้าที่สำเร็จ
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playSuccess()">
+                    <i class="fa-solid fa-play" style="color: #10b981;"></i> ทดสอบเสียงลงชื่อสำเร็จ
+                  </button>
+                </div>
+
+                <!-- Card 3: New Activity -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                      <span style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><i class="fa-solid fa-bell" style="color: #06b6d4; margin-right: 8px;"></i> 3. กิจกรรมใหม่ (New Activity)</span>
+                      <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #ecfeff; color: #0891b2; font-weight: 600;">Realtime Feed</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
+                      เสียงแจ้งเตือนคู่เสียงใส (A5 -> E6) แจ้งเตือนเมื่อระบบ Real-time (SSE/Fast Polling) ตรวจพบว่ามีกิจกรรมใหม่
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playNewActivity()">
+                    <i class="fa-solid fa-play" style="color: #06b6d4;"></i> ทดสอบเสียงกิจกรรมใหม่
+                  </button>
+                </div>
+
+                <!-- Card 4: Error / Warning -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                      <span style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><i class="fa-solid fa-circle-exclamation" style="color: #ef4444; margin-right: 8px;"></i> 4. ข้อผิดพลาด (Warning)</span>
+                      <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #fef2f2; color: #dc2626; font-weight: 600;">Soft Warning</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
+                      เสียงเตือนโทนต่ำนุ่มนวล (Eb4 -> C4) สุภาพ ไม่กระโชกโฮกฮาก เมื่อเกิดข้อผิดพลาด เช่น ลงชื่อซ้ำหรือใส่ข้อมูลไม่ครบ
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playError()">
+                    <i class="fa-solid fa-play" style="color: #ef4444;"></i> ทดสอบเสียงแจ้งเตือน
+                  </button>
+                </div>
+
+                <!-- Card 5: Admin Action -->
+                <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
+                  <div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                      <span style="font-weight: 700; color: var(--text-main); font-size: 1rem;"><i class="fa-solid fa-shield-halved" style="color: #8b5cf6; margin-right: 8px;"></i> 5. แอดมินบันทึกข้อมูล (Admin)</span>
+                      <span style="font-size: 0.72rem; padding: 3px 8px; border-radius: 9999px; background: #f5f3ff; color: #7c3aed; font-weight: 600;">Admin Action</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim); margin: 0; line-height: 1.5;">
+                      เสียงคอร์ด 3 โน้ตยืนยันความสำเร็จ (F5 -> A5 -> C6) เมื่อแอดมินสร้างหรือแก้ไขกิจกรรมและบันทึกข้อมูลในหลังบ้าน
+                    </p>
+                  </div>
+                  <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center; gap: 8px;" onclick="window.RosterAudio && window.RosterAudio.playAdmin()">
+                    <i class="fa-solid fa-play" style="color: #8b5cf6;"></i> ทดสอบเสียงแอดมิน
+                  </button>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -7085,6 +7197,30 @@
         .getActivityLogs();
     }
 
+        function adminToggleSoundMaster() {
+      if (window.RosterAudio) {
+        const isNowOn = window.RosterAudio.toggleMute();
+        updateAdminSoundButtonUI(isNowOn);
+      }
+    }
+
+    function updateAdminSoundButtonUI(isNowOn) {
+      const btn = document.getElementById('adminSoundMasterToggle');
+      const icon = document.getElementById('adminSoundMasterIcon');
+      const text = document.getElementById('adminSoundMasterText');
+      if (!btn || !icon || !text) return;
+      const on = typeof isNowOn === 'boolean' ? isNowOn : (window.RosterAudio ? window.RosterAudio.isEnabled : true);
+      if (on) {
+        btn.className = 'btn btn-primary';
+        icon.className = 'fa-solid fa-volume-high';
+        text.textContent = 'เปิดเสียงอยู่';
+      } else {
+        btn.className = 'btn btn-outline';
+        icon.className = 'fa-solid fa-volume-xmark';
+        text.textContent = 'ปิดเสียงอยู่';
+      }
+    }
+
     function switchDashTab(tabId) {
       const titles = {
         'activities': 'จัดการกิจกรรม',
@@ -7093,7 +7229,8 @@
         'duties': 'จัดการหน้าที่รับผิดชอบ',
         'admins': 'จัดการแอดมิน',
         'logs': 'ประวัติการแก้ไขกิจกรรม',
-        'realtime': 'รายงานสรุป (แบบสด)'
+        'realtime': 'รายงานสรุป (แบบสด)',
+        'audio': 'ระบบเสียงแจ้งเตือนและการทดสอบ'
       };
       const titleEl = document.getElementById('dashTitle');
       if (titleEl && titles[tabId]) titleEl.textContent = titles[tabId];
@@ -7122,6 +7259,7 @@
       if (tabId === 'admins') loadDashAdmins();
       if (tabId === 'logs') loadAdminLogsTab();
       if (tabId === 'realtime') initDashRealtime();
+      if (tabId === 'audio') updateAdminSoundButtonUI();
       if (tabId !== 'realtime' && typeof stopDashRealtimeSync === 'function') stopDashRealtimeSync();
     }
 
