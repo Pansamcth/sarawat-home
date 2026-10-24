@@ -64,6 +64,21 @@ async function loadTeamAdmin() {
     }
   }
 
+  // Ensure president has default data seeded if missing
+  let p = allMembers.find(m => m.role === 'ประธาน');
+  if (!p) {
+    p = {
+      id: 'pres_main',
+      name: 'นายอะห์นัฟ สหสันติวรกุล',
+      role: 'ประธาน',
+      department: 'ชั้นมัธยมศึกษาปีที่ 5/1',
+      imageUrl: 'assets/images/president.jpg'
+    };
+    allMembers.unshift(p);
+  } else if (!p.imageUrl) {
+    p.imageUrl = 'assets/images/president.jpg';
+  }
+
   renderTeamAdminUI();
 }
 window.loadTeamAdmin = loadTeamAdmin;

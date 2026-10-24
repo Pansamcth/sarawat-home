@@ -1383,7 +1383,7 @@
         <div class="dg-chief-portrait-card" data-reveal="left">
           <div class="dg-chief-photo-wrap">
             <img src="assets/images/president.jpg" alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
-              id="chiefPortraitImg" style="object-position: center 20%;" />
+              id="chiefPortraitImg" style="object-position: center 20%;" onerror="this.onerror=null; this.src='assets/images/president.jpg';" />
           </div>
           <div class="dg-chief-portrait-meta">
             <h3 class="dg-chief-name">นายอะห์นัฟ สหสันติวรกุล</h3>
@@ -3242,6 +3242,75 @@
       if (window.ResizeObserver && dutyClockEl) {
         new ResizeObserver(syncPhotoWithDutyClock).observe(dutyClockEl);
       }
+
+      // --- President Image Dynamic Sync (Linked to Admin & Executive Board) ---
+      function resolvePresidentImageUrl(url) {
+        if (!url || typeof url !== 'string' || url.trim() === '') return 'assets/images/president.jpg';
+        const clean = url.trim();
+        if (window.resolveImageUrl) {
+          const resolved = window.resolveImageUrl(clean);
+          if (resolved) return resolved;
+        }
+        if (clean.startsWith('/')) {
+          const base = (window.SarawatApi && window.SarawatApi.getBaseUrl) ? window.SarawatApi.getBaseUrl() : '';
+          return base + clean;
+        }
+        return clean;
+      }
+
+      function syncPresidentImage(membersList) {
+        const chiefImg = document.getElementById('chiefPortraitImg');
+        if (!chiefImg) return;
+
+        let list = membersList;
+        if (!list) {
+          try {
+            const raw = localStorage.getItem('dg_sarawat_team_members');
+            if (raw) list = JSON.parse(raw);
+          } catch (e) {}
+        }
+
+        if (Array.isArray(list) && list.length > 0) {
+          const pres = list.find(m => m && (m.role === 'ประธาน' || (m.role && m.role.includes('ประธาน') && !m.role.includes('รอง'))));
+          if (pres && pres.imageUrl && pres.imageUrl.trim() !== '') {
+            const targetSrc = resolvePresidentImageUrl(pres.imageUrl);
+            if (targetSrc && chiefImg.getAttribute('src') !== targetSrc) {
+              chiefImg.src = targetSrc;
+            }
+          }
+        }
+      }
+
+      // Initial instant sync from localStorage (zero delay)
+      syncPresidentImage();
+
+      // Live update across browser tabs when admin saves team settings
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'dg_sarawat_team_members') {
+          syncPresidentImage();
+        }
+      });
+
+      // Background sync from Backend Settings API (same source as team.html)
+      try {
+        const teamApiBase = (window.SarawatApi && window.SarawatApi.getBaseUrl) ? window.SarawatApi.getBaseUrl() : '';
+        fetch(teamApiBase + '/api/settings')
+          .then(res => res.json())
+          .then(stData => {
+            if (stData && stData.team_members_db) {
+              try {
+                const parsed = typeof stData.team_members_db === 'string'
+                  ? JSON.parse(stData.team_members_db)
+                  : stData.team_members_db;
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                  try { localStorage.setItem('dg_sarawat_team_members', JSON.stringify(parsed)); } catch (e) {}
+                  syncPresidentImage(parsed);
+                }
+              } catch (e) {}
+            }
+          })
+          .catch(() => {});
+      } catch (e) {}
 
       // --- Scrollspy for Navbar & Side Dot Matrix ---
       const spySections = [

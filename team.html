@@ -338,13 +338,45 @@
           renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers);
         })
         .catch(err => {
-          console.error("Error fetching team data:", err);
-          document.getElementById('teamApp').innerHTML = `
-            <div style="text-align: center; padding: 100px 20px;">
-              <h3 style="color: #ef4444;">เกิดข้อผิดพลาดในการโหลดข้อมูล</h3>
-              <p>ไม่สามารถดึงข้อมูลจากฐานข้อมูลได้ โปรดลองใหม่อีกครั้ง</p>
-            </div>
-          `;
+          console.warn("Backend team API unavailable, using local backup:", err);
+          let teamMembers = [];
+          try {
+            const raw = localStorage.getItem('dg_sarawat_team_members');
+            if (raw) teamMembers = JSON.parse(raw);
+          } catch (e) {}
+
+          if (teamMembers.length === 0) {
+            teamMembers = [
+              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'ชั้นมัธยมศึกษาปีที่ 5/1', imageUrl: 'assets/images/president.jpg' }
+            ];
+          }
+
+          let presidents = [];
+          let vps = [];
+          let secs = [];
+          let headsByDept = {};
+          let membersByDept = {};
+          let totalMembers = teamMembers.length;
+
+          teamMembers.forEach(m => {
+            if (m.role === 'ประธาน') {
+              presidents.push(m);
+            } else if (m.role === 'รองประธาน') {
+              vps.push(m);
+            } else if (m.role === 'เลขานุการ') {
+              secs.push(m);
+            } else if (m.role === 'หัวหน้าฝ่าย') {
+              const dept = m.department || 'ไม่ระบุสังกัด';
+              if (!headsByDept[dept]) headsByDept[dept] = [];
+              headsByDept[dept].push(m);
+            } else {
+              const dept = m.department || 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
+              if (!membersByDept[dept]) membersByDept[dept] = [];
+              membersByDept[dept].push(m);
+            }
+          });
+
+          renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers);
         });
     });
 
