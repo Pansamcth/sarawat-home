@@ -779,7 +779,7 @@
         white-space: nowrap;
       }
 
-      #btnRefreshData, #btnSoundTest {
+      #btnRefreshData, #btnSoundToggle, #btnSoundTest {
         flex: 0 0 40px !important;
         width: 40px !important;
         height: 40px !important;
@@ -797,12 +797,14 @@
 
       #btnRefreshData span,
       #btnRefreshData .btn-refresh-text,
+      #btnSoundToggle span,
+      #btnSoundToggle .btn-refresh-text,
       #btnSoundTest span,
       #btnSoundTest .btn-refresh-text {
         display: none !important;
       }
 
-      #btnRefreshData i, #btnSoundTest i {
+      #btnRefreshData i, #btnSoundToggle i, #btnSoundTest i {
         margin: 0 !important;
         line-height: 1 !important;
         font-size: 0.92rem !important;
@@ -4146,11 +4148,11 @@
             <span class="btn-refresh-text">รีเฟรชข้อมูล</span>
           </button>
 
-          <button type="button" class="dg-act-pill-btn" id="btnSoundTest"
-            onclick="window.RosterAudio && window.RosterAudio.testSoundModal()"
-            title="ทดสอบเสียงแจ้งเตือนระบบ">
+          <button type="button" class="dg-act-pill-btn" id="btnSoundToggle"
+            onclick="window.RosterAudio && window.RosterAudio.toggleMute()"
+            title="เสียงระบบ: เปิด (แตะเพื่อปิดเสียง)">
             <i class="fa-solid fa-volume-high" style="font-size: 0.88rem; color: #3b82f6;"></i>
-            <span class="btn-refresh-text">เสียง</span>
+            <span class="btn-refresh-text">เปิดเสียง</span>
           </button>
 
           <button type="button" class="dg-act-pill-btn dg-act-pill-btn-status" onclick="openStatusSearchModal()"
