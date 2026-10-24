@@ -494,59 +494,75 @@
     },
 
     /**
-     * 4. แจ้งเตือนข้อผิดพลาด เช่น ลงชื่อซ้ำ หรือระบบแจ้งเตือน Error (Soft Warning)
+     * 4. แจ้งเตือนข้อผิดพลาด เช่น ลงชื่อซ้ำ หรือระบบแจ้งเตือน Error (Crisp Audible Warning)
      */
     playError: function () {
       if (!this.isEnabled) return;
-      if (shouldThrottle('error', 400)) return;
+      if (shouldThrottle('error', 200)) return;
 
       var self = this;
       if (this.engine === 'mp3') {
-        playAudioFile('error', 0.80);
+        playAudioFile('error', 0.95);
         return;
       }
 
+      var played = false;
       withReadyContext(function (c) {
         try {
           var now = c.currentTime;
           var filter = c.createBiquadFilter();
           filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(1200, now);
+          filter.frequency.setValueAtTime(3200, now);
 
           var masterGain = c.createGain();
-          masterGain.gain.setValueAtTime(0.50, now);
+          masterGain.gain.setValueAtTime(0.85, now);
           filter.connect(masterGain);
           masterGain.connect(c.destination);
 
           var notes = [
-            { freq: 311.13, delay: 0.00, dur: 0.40, gain: 0.32 }, // Eb4
-            { freq: 261.63, delay: 0.12, dur: 0.60, gain: 0.34 }  // C4
+            { freq: 659.25, delay: 0.00, dur: 0.40, gain: 0.55 }, // E5
+            { freq: 440.00, delay: 0.12, dur: 0.65, gain: 0.60 }  // A4
           ];
 
           notes.forEach(function (note) {
             var osc = c.createOscillator();
+            var osc2 = c.createOscillator();
             var gain = c.createGain();
             var startTime = now + note.delay;
 
             osc.type = 'sine';
             osc.frequency.setValueAtTime(note.freq, startTime);
 
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(note.freq * 2, startTime);
+
             gain.gain.setValueAtTime(0.0001, startTime);
-            gain.gain.linearRampToValueAtTime(note.gain, startTime + 0.025);
+            gain.gain.linearRampToValueAtTime(note.gain, startTime + 0.015);
             gain.gain.exponentialRampToValueAtTime(0.0001, startTime + note.dur);
 
             osc.connect(gain);
+            osc2.connect(gain);
             gain.connect(filter);
 
             osc.start(startTime);
+            osc2.start(startTime);
             osc.stop(startTime + note.dur + 0.05);
+            osc2.stop(startTime + note.dur + 0.05);
           });
+          played = true;
         } catch (e) {
-          playAudioFile('error', 0.80);
+          playAudioFile('error', 0.95);
         }
       }, function () {
-        playAudioFile('error', 0.80);
+        playAudioFile('error', 0.95);
       });
+
+      // Reliable fallback: if AudioContext was suspended or delayed on mobile, play HTML5 MP3
+      setTimeout(function () {
+        if (!played && self.engine !== 'synth') {
+          playAudioFile('error', 0.95);
+        }
+      }, 50);
     },
 
     /**

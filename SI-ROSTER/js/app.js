@@ -2070,15 +2070,17 @@
       Swal.fire({
         html: `
           <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <div style="font-size: 64px; color: #3B82F6; margin-bottom: 10px; line-height: 1;">
-              <i class="fa-solid fa-circle-question"></i>
+            <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #DBEAFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(59, 130, 246, 0.22);">
+              <i class="fa-solid fa-clipboard-check" style="font-size: 36px; color: #3B82F6;"></i>
             </div>
-            <h2 style="color: #0F172A; font-weight: 700; font-size: 1.5rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการลงชื่อ</h2>
-            <div style="color: #64748B; font-size: 0.95rem; line-height: 1.4; margin-bottom: 15px; width: 100%;">
-              <div style="margin-bottom: 2px; white-space: nowrap;">ระบบกำลังจะบันทึกการลงชื่อของ</div>
-              <div style="font-size: 1.25rem; font-weight: 700; color: #1E293B; margin: 2px 0 6px 0; line-height: 1.2;">${sendName}</div>
-              <div style="margin-bottom: 4px;">ในหน้าที่ <strong style="color: var(--waiting);">${duty}</strong></div>
-              <div style="font-size: 0.85rem; opacity: 0.9;">กรุณาตรวจสอบความถูกต้องก่อนยืนยัน</div>
+            <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการลงชื่อ</h2>
+            <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
+              <div style="margin-bottom: 4px; font-size: 0.85rem; color: #64748B;">ระบบกำลังจะบันทึกการลงชื่อของ</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; line-height: 1.2;">${sendName}</div>
+              <div style="font-size: 0.95rem; color: #334155;">ในหน้าที่ <strong style="color: #2563EB; font-weight: 700;">${duty}</strong></div>
+              <div style="font-size: 0.82rem; color: #94A3B8; border-top: 1px dashed #CBD5E1; padding-top: 6px; margin-top: 6px;">
+                กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนกดยืนยัน
+              </div>
             </div>
           </div>
         `,
@@ -2105,11 +2107,11 @@
           Swal.fire({
             html: `
               <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div style="font-size: 64px; color: #EAB308; margin-bottom: 10px; line-height: 1;">
-                  <i class="fa-solid fa-circle-exclamation fa-beat"></i>
+                <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
                 </div>
-                <h2 style="color: #0F172A; font-weight: 700; font-size: 1.5rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
-                <div style="color: #64748B; font-size: 0.95rem; line-height: 1.4; margin-bottom: 5px;">
+                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
+                <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 6px;">
                   ระบบกำลังคีย์ข้อมูลของคุณ<br>กรุณารอสักครู่...
                 </div>
               </div>
@@ -2127,15 +2129,15 @@
             Swal.fire({
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                  <div style="font-size: 64px; color: #10B981; margin-bottom: 10px; line-height: 1;">
-                    <i class="fa-solid fa-circle-check"></i>
+                  <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
+                    <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
                   </div>
-                  <h2 style="color: #0F172A; font-weight: 700; font-size: 1.5rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">บันทึกข้อมูลเรียบร้อยแล้ว</h2>
-                  <div style="color: #64748B; font-size: 0.9rem; line-height: 1.5; text-align: left; background: #F1F5F9; padding: 12px 16px; border-radius: 10px; width: 100%; box-sizing: border-box; margin-bottom: 8px;">
-                    <div style="margin-bottom: 4px;"><strong>ชื่อ:</strong> <span style="color: #1E293B; font-weight: 500;">${sendName}</span></div>
-                    <div style="margin-bottom: 4px;"><strong>กิจกรรม:</strong> <span style="color: #1E293B; font-weight: 500;">${selectedDateInfo.activity.title}</span></div>
-                    <div style="margin-bottom: 4px;"><strong>หน้าที่:</strong> <span style="color: #1E293B; font-weight: 500;">${duty}</span></div>
-                    <div><strong>เวลาลงชื่อ:</strong> <span style="color: #10B981; font-weight: 600;">${currentTime} น.</span></div>
+                  <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">บันทึกข้อมูลเรียบร้อยแล้ว</h2>
+                  <div style="color: #64748B; font-size: 0.9rem; line-height: 1.6; text-align: left; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; margin-bottom: 10px;">
+                    <div style="margin-bottom: 4px;"><strong>ชื่อ:</strong> <span style="color: #1E293B; font-weight: 600;">${sendName}</span></div>
+                    <div style="margin-bottom: 4px;"><strong>กิจกรรม:</strong> <span style="color: #1E293B; font-weight: 600;">${selectedDateInfo.activity.title}</span></div>
+                    <div style="margin-bottom: 4px;"><strong>หน้าที่:</strong> <span style="color: #10B981; font-weight: 700;">${duty}</span></div>
+                    <div><strong>เวลาลงชื่อ:</strong> <span style="color: #10B981; font-weight: 700;">${currentTime} น.</span></div>
                   </div>
                   <div style="color: #EF4444; font-size: 0.85rem; margin-top: 5px; font-weight: 500;">
                     <i class="fa-solid fa-camera" style="margin-right: 5px;"></i> หมายเหตุ: กรุณาแคปหน้าจอนี้ไว้เพื่อเป็นหลักฐาน
