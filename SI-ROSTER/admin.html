@@ -60,6 +60,7 @@
   <!-- Cloudflare Tunnel Central Config & API Bridge -->
   <script src="../cloudflare-config.js"></script>
   <script src="js/bridge.js"></script>
+  <script src="js/roster-audio.js" onerror="this.onerror=null;this.src='/SI-ROSTER/js/roster-audio.js';"></script>
   <script src="js/line-browser-guard.js"></script>
 
   <meta charset="UTF-8">
@@ -6694,6 +6695,7 @@
           const sheetName = selectedDateInfo.activity.sheetName;
 
           const handleSuccess = function (res) {
+            if (window.RosterAudio) window.RosterAudio.playSuccess();
             const currentTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             Swal.fire({
               html: `
@@ -6725,6 +6727,7 @@
           };
 
           const handleFailure = function (error) {
+            if (window.RosterAudio) window.RosterAudio.playError();
             Swal.fire({
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
@@ -6831,6 +6834,7 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (res) {
+            if (window.RosterAudio) window.RosterAudio.playSuccess();
             showToast(res.message || 'ย้ายหน้าที่สำเร็จ!');
             closeModal('moveDutyModal');
             loadSignups(sheetName, selectedDateInfo.activity.duties);
@@ -7994,6 +7998,7 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (res) {
+            if (window.RosterAudio) window.RosterAudio.playAdmin();
             showToast('บันทึกกิจกรรมสำเร็จ!');
             btn.disabled = false;
             if (selectedDashActivityStr) {
@@ -8008,6 +8013,7 @@
             closeModal('dashActivityEditorModal');
           })
           .withFailureHandler(function (error) {
+            if (window.RosterAudio) window.RosterAudio.playError();
             showToast('บันทึกไม่สำเร็จ: ' + error.message, 'error');
             btn.disabled = false;
             btn.innerHTML = selectedDashActivityStr ? '<i class="fa-solid fa-floppy-disk"></i> บันทึกการเปลี่ยนแปลง' : '<i class="fa-solid fa-floppy-disk"></i> สร้างกิจกรรมใหม่';
@@ -10137,6 +10143,7 @@
 
         google.script.run
           .withSuccessHandler(function (res) {
+            if (window.RosterAudio) window.RosterAudio.playAdmin();
             showToast('บันทึกกิจกรรมและเตรียม Sheet สำเร็จ!');
             closeModal('activityModal');
             btn.disabled = false;
@@ -10148,6 +10155,7 @@
             }
           })
           .withFailureHandler(function (error) {
+            if (window.RosterAudio) window.RosterAudio.playError();
             showToast('บันทึกไม่สำเร็จ: ' + error.message, 'error');
             btn.disabled = false;
             btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกกิจกรรม';
@@ -10258,6 +10266,7 @@
 
     // --- Utils ---
     function showToast(message, type = 'success') {
+      if (window.RosterAudio && type === 'error') { window.RosterAudio.playError(); }
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast ${type === 'error' ? 'error' : ''}`;

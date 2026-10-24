@@ -2050,6 +2050,7 @@
           const sheetName = selectedDateInfo.activity.sheetName;
 
           const handleSuccess = function (res) {
+            if (window.RosterAudio) window.RosterAudio.playSuccess();
             const currentTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             Swal.fire({
               html: `
@@ -2081,6 +2082,7 @@
           };
 
           const handleFailure = function (error) {
+            if (window.RosterAudio) window.RosterAudio.playError();
             Swal.fire({
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
@@ -4057,6 +4059,7 @@
 
     // --- Utils ---
     function showToast(message, type = 'success') {
+      if (window.RosterAudio && type === 'error') { window.RosterAudio.playError(); }
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `toast ${type === 'error' ? 'error' : ''}`;
