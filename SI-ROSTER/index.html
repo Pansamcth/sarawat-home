@@ -2814,30 +2814,13 @@
         #detailModal .modal-header::before {
           display: none !important;
         }
-        .modal-overlay {
-          background: rgba(15, 23, 42, 0.78) !important;
-          -webkit-backdrop-filter: none !important;
-          backdrop-filter: none !important; /* Zero GPU blur lag on mobile */
-        }
         #detailModal .modal-content,
         #statusSearchModal .modal-content {
           height: 86vh;
           height: 86dvh;
           max-height: 86vh;
           max-height: 86dvh;
-          box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25) !important;
-          transform: translate3d(0, 105%, 0) !important;
-          -webkit-transform: translate3d(0, 105%, 0) !important;
-          transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
-          -webkit-transition: -webkit-transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
-          will-change: transform !important;
-          -webkit-backface-visibility: hidden !important;
-          backface-visibility: hidden !important;
-        }
-        #detailModal.modal-overlay.active .modal-content,
-        #statusSearchModal.modal-overlay.active .modal-content {
-          transform: translate3d(0, 0, 0) !important;
-          -webkit-transform: translate3d(0, 0, 0) !important;
+          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
         #detailModal .modal-content.is-expanded,
         #statusSearchModal .modal-content.is-expanded {
@@ -7285,15 +7268,15 @@
         dragTarget = null;
         if (handle) handle.classList.remove('is-dragging');
 
-        content.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
+        content.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
 
-        if (deltaY > 90 || velocity > 0.4) {
+        if (deltaY > 100 || velocity > 0.45) {
           if (isExpanded && deltaY < 180 && velocity < 0.75) {
             isExpanded = false;
             content.classList.remove('is-expanded');
-            content.style.transform = 'translate3d(0, 0, 0)';
+            content.style.transform = 'translateY(0)';
           } else {
-            content.style.transform = 'translate3d(0, 105%, 0)';
+            content.style.transform = 'translateY(100%)';
             setTimeout(() => {
               isExpanded = false;
               content.classList.remove('is-expanded');
@@ -7302,15 +7285,14 @@
               if (typeof onCloseCallback === 'function') {
                 onCloseCallback();
               }
-            }, 360);
+            }, 260);
           }
-        } else if (deltaY < -40 || velocity < -0.35) {
+        } else if (deltaY < -50 || velocity < -0.45) {
           isExpanded = true;
-          content.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), height 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
           content.classList.add('is-expanded');
-          content.style.transform = 'translate3d(0, 0, 0)';
+          content.style.transform = 'translateY(0)';
         } else {
-          content.style.transform = 'translate3d(0, 0, 0)';
+          content.style.transform = 'translateY(0)';
         }
       }
 
@@ -7405,11 +7387,7 @@
 
       document.getElementById('adminEditBtnContainer').style.display = isAdmin ? 'block' : 'none';
       lockBodyScroll();
-      const detailM = document.getElementById('detailModal');
-      if (detailM) {
-        void detailM.offsetHeight; // Force reflow for silky smooth slide-up
-        requestAnimationFrame(() => detailM.classList.add('active'));
-      }
+      document.getElementById('detailModal').classList.add('active');
       loadSignups(activity.sheetName, activity.duties);
 
       // Sync Address Bar with Query Param (?id=...)
@@ -7438,12 +7416,8 @@
         el.classList.remove('active');
         const box = el.querySelector('.modal-content');
         if (box) {
-          setTimeout(() => {
-            if (!el.classList.contains('active')) {
-              box.classList.remove('is-expanded');
-              box.style.transform = '';
-            }
-          }, 440);
+          box.classList.remove('is-expanded');
+          box.style.transform = '';
         }
       }
       unlockBodyScroll();

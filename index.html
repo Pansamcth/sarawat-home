@@ -2005,7 +2005,7 @@
   </div>
 
   <!-- 3. News & Activity Detail Modal (ป๊อปอัปแสดงรายละเอียดข่าวสารและกิจกรรม) -->
-  <div class="dg-modal-backdrop" id="newsDetailModal" style="display: none;">
+  <div class="dg-modal-backdrop" id="newsDetailModal">
     <div class="dg-modal-box dg-news-modal-box">
       <button class="dg-modal-close-btn" onclick="closeModal('newsDetailModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x"></i>
@@ -2018,7 +2018,7 @@
   </div>
 
   <!-- 4. School Event Detail Modal (ป๊อปอัปแสดงรายละเอียดกิจกรรมของโรงเรียน) -->
-  <div class="dg-modal-backdrop" id="eventDetailModal" style="display: none;" onclick="if(event.target === this) closeModal('eventDetailModal')">
+  <div class="dg-modal-backdrop" id="eventDetailModal" onclick="if(event.target === this) closeModal('eventDetailModal')">
     <div class="dg-modal-box" style="max-width: 620px; border-radius: 20px; padding: 0; overflow: hidden; background: #ffffff; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative;">
       <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง" style="position: absolute; top: 18px; right: 20px; z-index: 10; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
         <i data-lucide="x" style="width: 18px; height: 18px;"></i>
@@ -2032,7 +2032,7 @@
 
 
   <!-- 5. Recruitment Closed Modal (แจ้งเตือนระบบรับสมัครยังไม่เปิด) -->
-  <div class="dg-modal-backdrop" id="recruitClosedModal" style="display: none;" onclick="if(event.target === this) closeModal('recruitClosedModal')">
+  <div class="dg-modal-backdrop" id="recruitClosedModal" onclick="if(event.target === this) closeModal('recruitClosedModal')">
     <div class="dg-modal-box dg-recruit-closed-modal-box" style="max-width: 460px; text-align: center; border-radius: 24px; padding: 32px 28px; position: relative; font-family: 'Kanit', sans-serif !important;">
       <button class="dg-modal-close-btn" onclick="closeModal('recruitClosedModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x"></i>
@@ -2124,9 +2124,9 @@
         handle.addEventListener('click', (e) => {
           e.stopPropagation();
           isExpanded = !isExpanded;
-          box.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), height 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
+          box.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
           box.classList.toggle('is-expanded', isExpanded);
-          box.style.transform = 'translate3d(0, 0, 0)';
+          box.style.transform = 'translateY(0)';
         });
       }
 
@@ -2171,12 +2171,10 @@
         if (isDragging) {
           if (e.cancelable) e.preventDefault();
           if (deltaY > 0) {
-            // Dragging DOWN with hardware-accelerated 3D transform
-            box.style.transform = 'translate3d(0, ' + deltaY + 'px, 0)';
+            box.style.transform = 'translateY(' + deltaY + 'px)';
           } else {
-            // Dragging UP - smooth elastic tracking towards full height
-            const dampedY = isExpanded ? (deltaY * 0.2) : (deltaY * 0.7);
-            box.style.transform = 'translate3d(0, ' + dampedY + 'px, 0)';
+            const dampedY = isExpanded ? (deltaY * 0.15) : (deltaY * 0.35);
+            box.style.transform = 'translateY(' + dampedY + 'px)';
           }
         }
       }
@@ -2197,18 +2195,16 @@
         dragTarget = null;
         if (handle) handle.classList.remove('is-dragging');
 
-        // Snappy zero-lag curve for bottom sheet snapping
-        box.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
+        // SI-ROSTER Exact Transition
+        box.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
 
-        if (deltaY > 90 || velocity > 0.4) {
+        if (deltaY > 100 || velocity > 0.45) {
           if (isExpanded && deltaY < 180 && velocity < 0.75) {
-            // Collapse back from full height to normal
             isExpanded = false;
             box.classList.remove('is-expanded');
-            box.style.transform = 'translate3d(0, 0, 0)';
+            box.style.transform = 'translateY(0)';
           } else {
-            // Slide all the way down and dismiss
-            box.style.transform = 'translate3d(0, 105%, 0)';
+            box.style.transform = 'translateY(100%)';
             setTimeout(() => {
               isExpanded = false;
               box.classList.remove('is-expanded');
@@ -2217,17 +2213,14 @@
               if (typeof onCloseCallback === 'function') {
                 onCloseCallback();
               }
-            }, 360);
+            }, 260);
           }
-        } else if (deltaY < -40 || velocity < -0.35) {
-          // Dragged up or flicked up: Expand smoothly to full screen height (96vh)
+        } else if (deltaY < -50 || velocity < -0.45) {
           isExpanded = true;
-          box.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), height 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
           box.classList.add('is-expanded');
-          box.style.transform = 'translate3d(0, 0, 0)';
+          box.style.transform = 'translateY(0)';
         } else {
-          // Snap back to current state
-          box.style.transform = 'translate3d(0, 0, 0)';
+          box.style.transform = 'translateY(0)';
         }
       }
 
@@ -2249,20 +2242,10 @@
     function openModal(id, updateUrl = true) {
       const modal = document.getElementById(id);
       if (modal) {
-        modal.style.display = 'flex';
-        // Double rAF ensures silky 60/120fps GPU transition start without blocking thread
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            modal.classList.add('active');
-          });
-        });
+        modal.classList.add('active');
         lockBodyScroll();
         if (id === 'feedbackModal') resetFeedbackWizard();
         if (id === 'complaintModal') resetComplaintWizard();
-        // Only render icons inside this modal if unrendered icons exist, never scan full page
-        if (window.lucide && modal.querySelector('i[data-lucide]:not([data-rendered])')) {
-          try { lucide.createIcons({ root: modal }); } catch (e) {}
-        }
 
         // Sync query parameter for direct link sharing & copy
         if (updateUrl && window.history && window.history.replaceState) {
@@ -2279,18 +2262,11 @@
       const modal = document.getElementById(id);
       if (modal) {
         modal.classList.remove('active');
-        setTimeout(() => {
-          if (!modal.classList.contains('active')) {
-            modal.style.display = 'none';
-            if (id === 'feedbackModal') resetFeedbackWizard();
-            if (id === 'complaintModal') resetComplaintWizard();
-            const box = modal.querySelector('.dg-modal-box, .dg-wizard-modal-box, .dg-news-modal-box');
-            if (box) {
-              box.classList.remove('is-expanded');
-              box.style.transform = '';
-            }
-          }
-        }, 360); // 360ms matches 0.36s transition seamlessly
+        const box = modal.querySelector('.dg-modal-box, .dg-wizard-modal-box, .dg-news-modal-box');
+        if (box) {
+          box.classList.remove('is-expanded');
+          box.style.transform = '';
+        }
         unlockBodyScroll();
 
         // Clean up direct link query params / hash from URL

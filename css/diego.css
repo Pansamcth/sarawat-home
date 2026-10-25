@@ -4260,49 +4260,34 @@ svg:not([data-lucide]),
    ========================================================== */
 @media (max-width: 768px) {
   .dg-modal-backdrop {
-    align-items: flex-end !important;
     padding: 0 !important;
-    background: rgba(15, 23, 42, 0.78) !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important; /* Disabling heavy full-screen blur on mobile eliminates GPU raster lag 100% */
+    align-items: flex-end !important;
   }
 
   .dg-modal-box,
   .dg-wizard-modal-box,
   .dg-news-modal-box {
-    width: 100% !important;
     max-width: 100% !important;
-    margin: 0 !important;
-    border-radius: 26px 26px 0 0 !important;
+    width: 100% !important;
+    max-height: 92vh !important;
+    border-radius: 24px 24px 0 0 !important;
     border-left: none !important;
     border-right: none !important;
     border-bottom: none !important;
-    height: 85vh !important;
-    height: 85dvh !important;
-    max-height: 85vh !important;
-    max-height: 85dvh !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease !important;
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
     -webkit-overflow-scrolling: touch !important;
-    padding: 16px 20px 28px !important;
-    padding-bottom: max(28px, env(safe-area-inset-bottom, 20px)) !important;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25) !important;
-    opacity: 1 !important;
-    transform: translate3d(0, 105%, 0) !important;
-    -webkit-transform: translate3d(0, 105%, 0) !important;
-    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    -webkit-transition: -webkit-transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    will-change: transform !important;
-    -webkit-backface-visibility: hidden !important;
-    backface-visibility: hidden !important;
+    margin: 0 !important;
     box-sizing: border-box !important;
   }
 
   .dg-modal-backdrop.active .dg-modal-box,
   .dg-modal-backdrop.active .dg-wizard-modal-box,
   .dg-modal-backdrop.active .dg-news-modal-box {
-    transform: translate3d(0, 0, 0) !important;
-    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translateY(0) !important;
   }
 
   /* Expanded height with smooth spring animation when dragged/swiped up on mobile */
