@@ -1588,29 +1588,95 @@ svg:not([data-lucide]),
   pointer-events: none;
 }
 
-/* Cinematic Dark Fade Overlay */
+/* ==========================================================
+   DISTINCT THEMED GRADIENT FADE FROM BOTTOM PER SYSTEM CARD
+   (สีไล่จากด้านล่างแยกสีตามระบบ เพื่อความคมชัด แยกออกได้ชัดเจน 100%)
+   ========================================================== */
 .dg-ops-bg-overlay {
   position: absolute;
   inset: 0;
   z-index: 3;
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.15) 0%,
-    rgba(15, 23, 42, 0.3) 35%,
-    rgba(15, 23, 42, 0.78) 70%,
-    rgba(15, 23, 42, 0.94) 100%
-  );
   pointer-events: none;
-  transition: background 0.4s ease;
+  transition: background 0.4s ease, opacity 0.4s ease;
 }
 
-.dg-ops-card:hover .dg-ops-bg-overlay {
+/* 1. Card Feedback: สิ่งที่อยากให้สารวัตรทำ & Feedback (สีน้ำเงินแบล็กแซฟไฟร์ / Deep Ocean Sapphire Blue) */
+.dg-ops-card.theme-feedback .dg-ops-bg-overlay {
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.1) 0%,
-    rgba(15, 23, 42, 0.25) 35%,
-    rgba(15, 23, 42, 0.82) 70%,
-    rgba(15, 23, 42, 0.96) 100%
+    rgba(10, 25, 47, 0.10) 0%,
+    rgba(15, 33, 75, 0.36) 30%,
+    rgba(22, 60, 142, 0.84) 66%,
+    rgba(7, 18, 44, 0.98) 100%
+  );
+}
+.dg-ops-card.theme-feedback:hover .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 25, 47, 0.05) 0%,
+    rgba(29, 78, 216, 0.36) 30%,
+    rgba(26, 72, 170, 0.90) 66%,
+    rgba(5, 14, 38, 0.99) 100%
+  );
+}
+
+/* 2. Card Complaint: รายงานการทำงาน / ร้องเรียน (สีแดงทับทิม-ส้มอำพันเข้ม / Deep Velvet Crimson & Burnt Amber) */
+.dg-ops-card.theme-complaint .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(26, 10, 8, 0.10) 0%,
+    rgba(82, 24, 14, 0.38) 30%,
+    rgba(180, 48, 16, 0.84) 66%,
+    rgba(38, 9, 7, 0.98) 100%
+  );
+}
+.dg-ops-card.theme-complaint:hover .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(26, 10, 8, 0.05) 0%,
+    rgba(217, 72, 15, 0.38) 30%,
+    rgba(190, 52, 18, 0.90) 66%,
+    rgba(30, 8, 6, 0.99) 100%
+  );
+}
+
+/* 3. Card Roster: ระบบลงหน้าที่ SI-ROSTER (สีเขียวมรกต-ฟอเรสต์เจด / Deep Forest Jade & Emerald) */
+.dg-ops-card.theme-roster .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(4, 24, 18, 0.10) 0%,
+    rgba(6, 56, 40, 0.38) 30%,
+    rgba(5, 110, 78, 0.84) 66%,
+    rgba(2, 34, 24, 0.98) 100%
+  );
+}
+.dg-ops-card.theme-roster:hover .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(4, 24, 18, 0.05) 0%,
+    rgba(5, 150, 105, 0.38) 30%,
+    rgba(4, 125, 90, 0.90) 66%,
+    rgba(1, 28, 20, 0.99) 100%
+  );
+}
+
+/* 4. Card Recruit: รับสมัครสารวัตร SARAWAT ADMISSION 70 (สีม่วงครามรอยัลอินดิโก / Deep Royal Indigo & Midnight Violet) */
+.dg-ops-card.theme-recruit .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 12, 38, 0.10) 0%,
+    rgba(50, 28, 96, 0.38) 30%,
+    rgba(88, 76, 236, 0.82) 66%,
+    rgba(22, 13, 46, 0.98) 100%
+  );
+}
+.dg-ops-card.theme-recruit:hover .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 12, 38, 0.05) 0%,
+    rgba(99, 102, 241, 0.38) 30%,
+    rgba(99, 88, 245, 0.90) 66%,
+    rgba(16, 10, 38, 0.99) 100%
   );
 }
 
@@ -1789,12 +1855,13 @@ svg:not([data-lucide]),
 
 .dg-ops-desc {
   font-size: 0.86rem;
-  color: #cbd5e1;
+  color: #ffffff !important;
+  opacity: 0.95;
   line-height: 1.55;
   margin: 0 0 20px;
   font-weight: 400;
   min-height: 52px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 
 /* ==========================================================
@@ -1892,18 +1959,37 @@ svg:not([data-lucide]),
   transform: translateX(1px);
 }
 
-/* Card Subtle Border on Hover */
+/* Card Distinct Theme Borders & Hover Accents */
+.dg-ops-card.theme-feedback {
+  border-color: rgba(59, 130, 246, 0.28);
+}
 .dg-ops-card.theme-feedback:hover {
-  border-color: rgba(96, 165, 250, 0.6);
+  border-color: rgba(96, 165, 250, 0.7);
+  box-shadow: 0 24px 50px -10px rgba(37, 99, 235, 0.35), 0 0 0 1px rgba(96, 165, 250, 0.35);
+}
+
+.dg-ops-card.theme-complaint {
+  border-color: rgba(249, 115, 22, 0.28);
 }
 .dg-ops-card.theme-complaint:hover {
-  border-color: rgba(251, 146, 60, 0.6);
+  border-color: rgba(251, 146, 60, 0.7);
+  box-shadow: 0 24px 50px -10px rgba(234, 88, 12, 0.35), 0 0 0 1px rgba(251, 146, 60, 0.35);
+}
+
+.dg-ops-card.theme-roster {
+  border-color: rgba(16, 185, 129, 0.28);
 }
 .dg-ops-card.theme-roster:hover {
-  border-color: rgba(52, 211, 153, 0.6);
+  border-color: rgba(52, 211, 153, 0.7);
+  box-shadow: 0 24px 50px -10px rgba(5, 150, 105, 0.35), 0 0 0 1px rgba(52, 211, 153, 0.35);
+}
+
+.dg-ops-card.theme-recruit {
+  border-color: rgba(129, 140, 248, 0.28);
 }
 .dg-ops-card.theme-recruit:hover {
-  border-color: rgba(129, 140, 248, 0.6);
+  border-color: rgba(165, 180, 252, 0.7);
+  box-shadow: 0 24px 50px -10px rgba(79, 70, 229, 0.35), 0 0 0 1px rgba(165, 180, 252, 0.35);
 }
 
 /* ==========================================================
@@ -7214,7 +7300,8 @@ body,
 }
 
 [data-theme="dark"] .dg-ops-desc {
-  color: var(--dg-text-secondary) !important;
+  color: #ffffff !important;
+  opacity: 0.95;
 }
 
 [data-theme="dark"] .dg-ops-icon-box {
