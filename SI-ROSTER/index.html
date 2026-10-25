@@ -7394,7 +7394,11 @@
 
       document.getElementById('adminEditBtnContainer').style.display = isAdmin ? 'block' : 'none';
       lockBodyScroll();
-      document.getElementById('detailModal').classList.add('active');
+      const detailM = document.getElementById('detailModal');
+      if (detailM) {
+        void detailM.offsetHeight; // Force reflow for silky smooth slide-up
+        requestAnimationFrame(() => detailM.classList.add('active'));
+      }
       loadSignups(activity.sheetName, activity.duties);
 
       // Sync Address Bar with Query Param (?id=...)
@@ -7423,8 +7427,12 @@
         el.classList.remove('active');
         const box = el.querySelector('.modal-content');
         if (box) {
-          box.classList.remove('is-expanded');
-          box.style.transform = '';
+          setTimeout(() => {
+            if (!el.classList.contains('active')) {
+              box.classList.remove('is-expanded');
+              box.style.transform = '';
+            }
+          }, 440);
         }
       }
       unlockBodyScroll();

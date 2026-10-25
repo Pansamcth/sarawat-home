@@ -3588,9 +3588,15 @@ svg:not([data-lucide]),
   padding: 40px 36px;
   color: var(--dg-text-primary);
   position: relative;
-  transform: translateY(20px) scale(0.97);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.36s cubic-bezier(0.16, 1, 0.3, 1), transform 0.36s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.dg-modal-backdrop.active .dg-modal-box {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
 }
 
 .dg-modal-backdrop.active .dg-modal-box {
@@ -4264,22 +4270,24 @@ svg:not([data-lucide]),
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    border-radius: 24px 24px 0 0 !important;
+    border-radius: 26px 26px 0 0 !important;
     border-left: none !important;
     border-right: none !important;
     border-bottom: none !important;
-    height: 84vh !important;
-    height: 84dvh !important;
-    max-height: 84vh !important;
-    max-height: 84dvh !important;
+    height: 85vh !important;
+    height: 85dvh !important;
+    max-height: 85vh !important;
+    max-height: 85dvh !important;
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
     -webkit-overflow-scrolling: touch !important;
     padding: 16px 20px 28px !important;
     padding-bottom: max(28px, env(safe-area-inset-bottom, 20px)) !important;
-    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25) !important;
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease !important;
+    box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.35) !important;
+    opacity: 1 !important;
+    transform: translateY(105%) !important;
+    transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1), height 0.42s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    will-change: transform, height;
     box-sizing: border-box !important;
   }
 
@@ -5477,27 +5485,85 @@ svg:not([data-lucide]),
 /* 5. Scroll Reveal System (Enhanced High-Performance Motion & Stagger) */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(35px);
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
-              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
-              filter 0.75s ease;
+  transform: translateY(45px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
 
 [data-reveal].is-revealed {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: none;
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
 }
 
-[data-reveal="scale"] {
+/* Operations Cards Specific Reveal Motion */
+.dg-ops-card[data-reveal="scale"] {
   opacity: 0;
-  transform: scale(0.94) translateY(30px);
+  transform: translateY(50px) scale(0.92);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease,
+              border-color 0.3s ease !important;
+  will-change: opacity, transform;
 }
 
-[data-reveal="scale"].is-revealed {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+.dg-ops-card[data-reveal="scale"].is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.dg-ops-card[data-reveal="scale"].is-revealed:hover {
+  transform: translateY(-8px) scale(1) !important;
+  box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Chief Section Specific Reveal Motion */
+.dg-chief-col-left[data-reveal="fade-right"] {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
+}
+.dg-chief-col-left[data-reveal="fade-right"].is-revealed {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+.dg-chief-col-center[data-reveal="fade-up"] {
+  opacity: 0;
+  transform: translateY(55px) scale(0.92);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
+}
+.dg-chief-col-center[data-reveal="fade-up"].is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.dg-chief-col-right[data-reveal="fade-left"] {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
+}
+.dg-chief-col-right[data-reveal="fade-left"].is-revealed {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+.dg-section-header[data-reveal="fade-up"] {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
+}
+.dg-section-header[data-reveal="fade-up"].is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 [data-reveal="fade-up"] {
@@ -5506,8 +5572,8 @@ svg:not([data-lucide]),
 }
 
 [data-reveal="fade-up"].is-revealed {
-  opacity: 1;
-  transform: translateY(0);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
 }
 
 [data-reveal="fade-right"],
@@ -5518,8 +5584,8 @@ svg:not([data-lucide]),
 
 [data-reveal="fade-right"].is-revealed,
 [data-reveal="left"].is-revealed {
-  opacity: 1;
-  transform: translateX(0);
+  opacity: 1 !important;
+  transform: translateX(0) !important;
 }
 
 [data-reveal="fade-left"],
@@ -5530,8 +5596,8 @@ svg:not([data-lucide]),
 
 [data-reveal="fade-left"].is-revealed,
 [data-reveal="right"].is-revealed {
-  opacity: 1;
-  transform: translateX(0);
+  opacity: 1 !important;
+  transform: translateX(0) !important;
 }
 
 /* 6. Active Scrollspy link in header */
@@ -7664,9 +7730,6 @@ body,
 .dg-act-card,
 .dg-event-item,
 .dg-event-card,
-.dg-ops-card,
-.dg-chief-portrait-card,
-.dg-modal-box,
 .dg-theme-switch-group {
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
