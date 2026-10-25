@@ -1698,16 +1698,29 @@ svg:not([data-lucide]),
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Card Typography on Seamless Dark Fade */
+/* Card Typography on Seamless Dark Fade (ใหญ่เต็มขอบ ปรับขนาดตามหน้าจออัตโนมัติ - Kanit SemiBold 600) */
 .dg-ops-title {
-  font-family: var(--dg-font-sans);
-  font-size: 1.18rem;
-  font-weight: 850;
-  color: #ffffff;
-  margin: 0 0 8px;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  width: 100%;
+  display: block;
+  font-family: 'Kanit', sans-serif !important;
+  font-weight: 600 !important; /* Kanit SemiBold */
+  font-size: clamp(1.35rem, 2.1vw, 1.72rem);
+  color: #ffffff !important;
+  margin: 0 0 10px;
+  line-height: 1.28;
+  letter-spacing: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+  word-break: break-word;
+}
+
+/* Featured Wide Card: Large Hero Headline (ใหญ่เต็มขอบและปรับขนาดตามหน้าจอ - Kanit SemiBold 600) */
+.dg-ops-card.is-featured-wide .dg-ops-title {
+  font-family: 'Kanit', sans-serif !important;
+  font-weight: 600 !important; /* Kanit SemiBold */
+  font-size: clamp(1.75rem, 3.2vw, 2.45rem);
+  line-height: 1.2;
+  letter-spacing: 0;
+  margin-bottom: 12px;
 }
 
 .dg-ops-desc {
@@ -1842,6 +1855,13 @@ svg:not([data-lucide]),
 
 .dg-card-shake {
   animation: dgCardShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+}
+
+/* Disable link callout & selection on recruitment card */
+#cardOpsRecruit {
+  -webkit-touch-callout: none !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 /* Closed state for Ops Card */
@@ -2018,7 +2038,12 @@ svg:not([data-lucide]),
     min-height: 380px;
   }
   .dg-ops-title {
-    font-size: 1.12rem;
+    font-size: clamp(1.3rem, 5.4vw, 1.62rem);
+    line-height: 1.26;
+  }
+  .dg-ops-card.is-featured-wide .dg-ops-title {
+    font-size: clamp(1.48rem, 6.2vw, 1.95rem);
+    line-height: 1.2;
   }
   .dg-ops-desc {
     min-height: auto;

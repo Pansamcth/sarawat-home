@@ -1176,7 +1176,7 @@
                   <i data-lucide="sparkles"></i>
                 </div>
               </div>
-              <h3 class="dg-ops-title" style="font-size: 1.25rem;">สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+              <h3 class="dg-ops-title">สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
               <p class="dg-ops-desc">
                 ร่วมส่งต่อไอเดีย ข้อเสนอแนะ หรือสิ่งที่อยากให้นักเรียนสารวัตรช่วยดูแล ทั้งด้านความปลอดภัย จุดตรวจ และกิจกรรมสร้างสรรค์ เพื่อโรงเรียนของเรา
               </p>
@@ -1241,7 +1241,7 @@
         </a>
 
         <!-- Card 4: Recruitment (ADMISSION 70) -->
-        <a href="/admission" id="cardOpsRecruit" class="dg-ops-card theme-recruit is-closed"
+        <div id="cardOpsRecruit" role="button" tabindex="0" class="dg-ops-card theme-recruit is-closed"
           data-reveal="scale" data-delay="320">
           <div class="dg-ops-bg-wrap">
             <img src="assets/images/ops-recruit.jpg" alt="SARAWAT ADMISSION 70" class="dg-ops-bg-img" loading="lazy" />
@@ -1307,7 +1307,7 @@
               <span class="dg-ops-btn-arrow" id="opsRecruitBtnArrow"><i data-lucide="lock"></i></span>
             </div>
           </div>
-        </a>
+        </div>
 
       </div>
     </div>
@@ -3517,7 +3517,7 @@
         }
       }
 
-      // ป้องกันการคลิกเข้าสู่หน้าสมัครเมื่อระบบปิดอยู่ พร้อมแสดงการ์ดสั่นเตือนและเปิด Modal แจ้งเตือน
+      // จัดการการคลิก/สัมผัสการ์ดรับสมัคร (ไม่ใช้แท็ก anchor เพื่อป้องกันการขึ้น URL/พรีวิวลิงก์บนมือถือและคลิกขวา)
       const recruitCardEl = document.getElementById('cardOpsRecruit');
       if (recruitCardEl) {
         recruitCardEl.addEventListener('click', function (e) {
@@ -3529,7 +3529,23 @@
             if (typeof openModal === 'function') {
               openModal('recruitClosedModal');
             }
+          } else {
+            // เมื่อระบบเปิดรับสมัคร นำทางไปยังหน้ารับสมัคร
+            window.location.href = '/admission';
           }
+        });
+
+        // รองรับการกดปุ่ม Enter หรือ Space Bar สำหรับ Accessibility
+        recruitCardEl.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            recruitCardEl.click();
+          }
+        });
+
+        // ปิดกั้นการเปิด Context Menu เมื่อกดค้างในจอสัมผัสหรือคลิกขวา
+        recruitCardEl.addEventListener('contextmenu', function (e) {
+          e.preventDefault();
         });
       }
 
