@@ -4268,8 +4268,10 @@ svg:not([data-lucide]),
     border-left: none !important;
     border-right: none !important;
     border-bottom: none !important;
-    max-height: 86vh !important;
-    max-height: 86dvh !important;
+    height: 84vh !important;
+    height: 84dvh !important;
+    max-height: 84vh !important;
+    max-height: 84dvh !important;
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
     -webkit-overflow-scrolling: touch !important;
@@ -4277,7 +4279,7 @@ svg:not([data-lucide]),
     padding-bottom: max(28px, env(safe-area-inset-bottom, 20px)) !important;
     box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25) !important;
     transform: translateY(100%);
-    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease !important;
     box-sizing: border-box !important;
   }
 
@@ -4287,14 +4289,14 @@ svg:not([data-lucide]),
     transform: translateY(0) !important;
   }
 
-  /* Expanded height when dragged up on mobile */
+  /* Expanded height with smooth spring animation when dragged/swiped up on mobile */
   .dg-modal-box.is-expanded,
   .dg-wizard-modal-box.is-expanded,
   .dg-news-modal-box.is-expanded {
-    max-height: 96vh !important;
-    max-height: 96dvh !important;
     height: 96vh !important;
     height: 96dvh !important;
+    max-height: 96vh !important;
+    max-height: 96dvh !important;
   }
 
   .dg-modal-drag-handle {
@@ -5472,51 +5474,64 @@ svg:not([data-lucide]),
   transform: translateY(-2px);
 }
 
-/* 5. Scroll Reveal System (Enhanced with Motion & Blur) */
+/* 5. Scroll Reveal System (Enhanced High-Performance Motion & Stagger) */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(45px) scale(0.97);
-  filter: blur(8px);
-  transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              filter 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: opacity, transform, filter;
+  transform: translateY(35px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.75s ease;
+  will-change: opacity, transform;
 }
 
 [data-reveal].is-revealed {
   opacity: 1;
   transform: translateY(0) scale(1);
-  filter: blur(0);
+  filter: none;
 }
 
 [data-reveal="scale"] {
-  transform: scale(0.92) translateY(25px);
-  filter: blur(10px);
+  opacity: 0;
+  transform: scale(0.94) translateY(30px);
 }
 
 [data-reveal="scale"].is-revealed {
+  opacity: 1;
   transform: scale(1) translateY(0);
-  filter: blur(0);
 }
 
+[data-reveal="fade-up"] {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+[data-reveal="fade-up"].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-reveal="fade-right"],
 [data-reveal="left"] {
-  transform: translateX(-45px) scale(0.98);
-  filter: blur(8px);
+  opacity: 0;
+  transform: translateX(-40px);
 }
 
+[data-reveal="fade-right"].is-revealed,
 [data-reveal="left"].is-revealed {
-  transform: translateX(0) scale(1);
-  filter: blur(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 
+[data-reveal="fade-left"],
 [data-reveal="right"] {
-  transform: translateX(45px) scale(0.98);
-  filter: blur(8px);
+  opacity: 0;
+  transform: translateX(40px);
 }
 
+[data-reveal="fade-left"].is-revealed,
 [data-reveal="right"].is-revealed {
-  transform: translateX(0) scale(1);
-  filter: blur(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* 6. Active Scrollspy link in header */

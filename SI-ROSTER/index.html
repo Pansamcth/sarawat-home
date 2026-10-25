@@ -2814,6 +2814,14 @@
         #detailModal .modal-header::before {
           display: none !important;
         }
+        #detailModal .modal-content,
+        #statusSearchModal .modal-content {
+          height: 86vh;
+          height: 86dvh;
+          max-height: 86vh;
+          max-height: 86dvh;
+          transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1) !important;
+        }
         #detailModal .modal-content.is-expanded,
         #statusSearchModal .modal-content.is-expanded {
           height: 96vh !important;
@@ -7138,21 +7146,15 @@
       }
     }
 
-    // --- Universal Body Scroll Lock (SI-ROSTER ป้องกันการเลื่อนจอเว็บหลักบนมือถือ) ---
+    // --- Universal Body Scroll Lock (SI-ROSTER ป้องกันการเลื่อนจอเว็บหลัก ไม่เด้งไปด้านบน 100%) ---
     window.__rosterModalLockCount = window.__rosterModalLockCount || 0;
-    window.__rosterSavedScrollY = window.__rosterSavedScrollY || 0;
 
     function lockBodyScroll() {
       window.__rosterModalLockCount++;
       if (window.__rosterModalLockCount === 1) {
-        window.__rosterSavedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-        document.body.style.position = 'fixed';
-        document.body.style.top = '-' + window.__rosterSavedScrollY + 'px';
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+        // ล็อกการเลื่อนโดยไม่แตะ position fixed เพื่อรักษาระดับการเลื่อนเดิมไว้ 100% ไม่เด้งไปด้านบน
         document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
       }
     }
 
@@ -7161,26 +7163,21 @@
         window.__rosterModalLockCount--;
       }
       if (window.__rosterModalLockCount === 0) {
-        const savedY = window.__rosterSavedScrollY || 0;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
-        window.scrollTo(0, savedY);
+        document.body.style.overflow = '';
       }
     }
 
-    // Touchmove prevention on modal overlay backdrop
+    // Touchmove prevention on modal overlay backdrop to stop background rubber-banding
     document.addEventListener('touchmove', function(e) {
-      if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
-        e.preventDefault();
+      if (document.querySelector('.modal-overlay.active')) {
+        if (!e.target.closest('.modal-content')) {
+          e.preventDefault();
+        }
       }
     }, { passive: false });
 
-    // --- Interactive Mobile Bottom Sheet Drag Controller for SI-ROSTER ---
+    // --- Interactive Mobile Bottom Sheet Drag Controller for SI-ROSTER (Smooth Apple Spring Animation) ---
     function initRosterBottomSheetDrag(modalOverlayId, modalContentSelector, handleSelector, onCloseCallback) {
       const overlay = document.getElementById(modalOverlayId);
       if (!overlay) return;
@@ -7194,6 +7191,17 @@
       let isDragging = false;
       let isExpanded = false;
       let dragTarget = null;
+
+      // Tap handle to smoothly toggle expand / collapse
+      if (handle) {
+        handle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isExpanded = !isExpanded;
+          content.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+          content.classList.toggle('is-expanded', isExpanded);
+          content.style.transform = 'translateY(0)';
+        });
+      }
 
       function onTouchStart(e) {
         if (window.innerWidth > 768) return;
@@ -7227,7 +7235,7 @@
         if (dragTarget === 'body' && deltaY < 0 && !isExpanded) return;
         if (dragTarget === 'body' && content.scrollTop > 0) return;
 
-        if (!isDragging && Math.abs(deltaY) > 6) {
+        if (!isDragging && Math.abs(deltaY) > 5) {
           isDragging = true;
           content.style.transition = 'none';
           if (handle) handle.classList.add('is-dragging');
@@ -7236,9 +7244,11 @@
         if (isDragging) {
           if (e.cancelable) e.preventDefault();
           if (deltaY > 0) {
+            // Dragging DOWN
             content.style.transform = 'translateY(' + deltaY + 'px)';
           } else {
-            const dampedY = isExpanded ? (deltaY * 0.15) : (deltaY * 0.35);
+            // Dragging UP - smooth elastic tracking towards full height
+            const dampedY = isExpanded ? (deltaY * 0.2) : (deltaY * 0.7);
             content.style.transform = 'translateY(' + dampedY + 'px)';
           }
         }
@@ -7260,14 +7270,17 @@
         dragTarget = null;
         if (handle) handle.classList.remove('is-dragging');
 
-        content.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+        // Apple Spring Easing for buttery smooth expansion / collapse
+        content.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
 
-        if (deltaY > 100 || velocity > 0.45) {
+        if (deltaY > 90 || velocity > 0.4) {
           if (isExpanded && deltaY < 180 && velocity < 0.75) {
+            // Collapse back from full height to normal
             isExpanded = false;
             content.classList.remove('is-expanded');
             content.style.transform = 'translateY(0)';
           } else {
+            // Slide all the way down and dismiss
             content.style.transform = 'translateY(100%)';
             setTimeout(() => {
               isExpanded = false;
@@ -7277,13 +7290,15 @@
               if (typeof onCloseCallback === 'function') {
                 onCloseCallback();
               }
-            }, 260);
+            }, 280);
           }
-        } else if (deltaY < -50 || velocity < -0.45) {
+        } else if (deltaY < -40 || velocity < -0.35) {
+          // Dragged up or flicked up: Expand smoothly to full screen height (96vh)
           isExpanded = true;
           content.classList.add('is-expanded');
           content.style.transform = 'translateY(0)';
         } else {
+          // Snap back to current state
           content.style.transform = 'translateY(0)';
         }
       }

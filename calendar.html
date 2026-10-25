@@ -2293,21 +2293,14 @@
     // ==========================================================
     // MODAL HELPERS & BASE LISTENERS
     // ==========================================================
-    // --- Universal Body Scroll Lock (ป้องกันการเลื่อนจอเว็บหลักบนมือถือ 100%) ---
+    // --- Universal Body Scroll Lock (ป้องกันการเลื่อนจอเว็บหลัก ไม่เด้งไปด้านบน 100%) ---
     window.__dgModalLockCount = window.__dgModalLockCount || 0;
-    window.__dgSavedScrollY = window.__dgSavedScrollY || 0;
 
     function lockBodyScroll() {
       window.__dgModalLockCount++;
       if (window.__dgModalLockCount === 1) {
-        window.__dgSavedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-        document.body.style.position = 'fixed';
-        document.body.style.top = '-' + window.__dgSavedScrollY + 'px';
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
       }
     }
 
@@ -2316,21 +2309,16 @@
         window.__dgModalLockCount--;
       }
       if (window.__dgModalLockCount === 0) {
-        const savedY = window.__dgSavedScrollY || 0;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
-        window.scrollTo(0, savedY);
+        document.body.style.overflow = '';
       }
     }
 
     document.addEventListener('touchmove', function(e) {
-      if (e.target && e.target.classList && (e.target.classList.contains('dg-modal-backdrop') || e.target.classList.contains('pdpa-modal-backdrop'))) {
-        e.preventDefault();
+      if (document.querySelector('.dg-modal-backdrop.active, .pdpa-modal-backdrop.active')) {
+        if (!e.target.closest('.dg-modal-box, .pdpa-modal-box')) {
+          e.preventDefault();
+        }
       }
     }, { passive: false });
 

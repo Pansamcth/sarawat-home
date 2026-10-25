@@ -1147,7 +1147,7 @@
   <!-- ============ INTEGRATED OPERATIONS SECTION (3 Essential Digital Services) ============ -->
   <section class="dg-ops-section" id="operations">
     <div class="dg-container">
-      <div class="dg-section-header">
+      <div class="dg-section-header" data-reveal="fade-up">
         <span class="dg-section-tag">ONLINE SERVICES • รวมระบบปฏิบัติการ</span>
         <h2 class="dg-section-title">
           Digital Operations. Integrated<br>
@@ -1213,7 +1213,7 @@
               สะท้อนปัญหา แจ้งเรื่องร้องเรียน หรือรายงานพฤติกรรมการปฏิบัติหน้าที่ ข้อมูลปิดบังตัวตน 100% ส่งตรงถึงครูที่ปรึกษา
             </p>
             <div class="dg-ops-btn-action">
-              <span class="dg-ops-btn-text">ส่งเรื่องรายงาน (นิรนาม 100%)</span>
+              <span class="dg-ops-btn-text">ส่งเรื่องรายงาน (ไม่ระบุตัวตน)</span>
               <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
             </div>
           </div>
@@ -1241,7 +1241,7 @@
               ตรวจสอบตารางเวร จุดตรวจ และบันทึกเวลาปฏิบัติหน้าที่ ประจำภาคเรียนที่ 2/2569 ผ่านระบบออนไลน์
             </p>
             <div class="dg-ops-btn-action">
-              <span class="dg-ops-btn-text">เข้าสู่ระบบเวร (SI-ROSTER)</span>
+              <span class="dg-ops-btn-text">เข้าสู่ระบบลงหน้าที่ (SI-ROSTER)</span>
               <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
             </div>
           </div>
@@ -1326,7 +1326,7 @@
   <section class="dg-chief-editorial-section" id="team">
     <div class="dg-container">
       <!-- Section Header Matching Other Sections -->
-      <div class="dg-section-header dg-chief-header-spaced">
+      <div class="dg-section-header dg-chief-header-spaced" data-reveal="fade-up">
         <span class="dg-section-tag">LEADERSHIP • วิสัยทัศน์ประธาน</span>
         <h2 class="dg-section-title">
           Lead with Empathy.<br>
@@ -1337,7 +1337,7 @@
       <div class="dg-chief-editorial-layout">
         
         <!-- Left Column: Name, Role & Class (Font Trirong matching Hero) -->
-        <div class="dg-chief-col-left" data-reveal="fade-right">
+        <div class="dg-chief-col-left" data-reveal="fade-right" data-delay="100">
           <div class="dg-chief-title-group">
             <h3 class="dg-chief-full-name">นายอะห์นัฟ<br>สหสันติวรกุล</h3>
             <p class="dg-chief-role-text">ประธานคณะกรรมการสารวัตรนักเรียน</p>
@@ -1350,7 +1350,7 @@
         </div>
 
         <!-- Center Column: Portrait Photo with Smooth Rounded Corners -->
-        <div class="dg-chief-col-center" data-reveal="fade-up">
+        <div class="dg-chief-col-center" data-reveal="fade-up" data-delay="180">
           <div class="dg-chief-frame-wrap" id="chiefPhotoWrap">
             <div id="chiefPlaceholder" class="dg-chief-placeholder-box">
               <i data-lucide="user"></i>
@@ -1361,7 +1361,7 @@
         </div>
 
         <!-- Right Column: Vision Statement & Circle Arrow Link -->
-        <div class="dg-chief-col-right" data-reveal="fade-left">
+        <div class="dg-chief-col-right" data-reveal="fade-left" data-delay="260">
           <div class="dg-chief-vision-body">
             <p class="dg-chief-vision-text">
               มุ่งมั่นพัฒนาทีมสารวัตรนักเรียนให้ดีที่สุด รับฟังทุกความคิดเห็น และเป็นผู้นำที่พร้อมลงมือทำ รับผิดชอบต่อหน้าที่ และก้าวไปข้างหน้าพร้อมกับสมาชิกทุกคน
@@ -2073,21 +2073,15 @@
 
   <!-- Scripts -->
   <script>
-    // --- Universal Body Scroll Lock (ป้องกันการเลื่อนจอเว็บหลักบนมือถือ 100%) ---
+    // --- Universal Body Scroll Lock (ป้องกันการเลื่อนจอเว็บหลัก ไม่เด้งไปด้านบน 100%) ---
     window.__dgModalLockCount = window.__dgModalLockCount || 0;
-    window.__dgSavedScrollY = window.__dgSavedScrollY || 0;
 
     function lockBodyScroll() {
       window.__dgModalLockCount++;
       if (window.__dgModalLockCount === 1) {
-        window.__dgSavedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-        document.body.style.position = 'fixed';
-        document.body.style.top = '-' + window.__dgSavedScrollY + 'px';
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+        // ล็อกการเลื่อนโดยไม่แตะ position fixed เพื่อรักษาระดับการเลื่อนเดิมไว้ 100% ไม่เด้งไปด้านบน
         document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
       }
     }
 
@@ -2096,26 +2090,21 @@
         window.__dgModalLockCount--;
       }
       if (window.__dgModalLockCount === 0) {
-        const savedY = window.__dgSavedScrollY || 0;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
         document.documentElement.style.overflow = '';
-        window.scrollTo(0, savedY);
+        document.body.style.overflow = '';
       }
     }
 
-    // Touchmove prevention on modal backdrop to stop iOS rubber-banding
+    // Touchmove prevention on modal backdrop to stop background rubber-banding
     document.addEventListener('touchmove', function(e) {
-      if (e.target && e.target.classList && e.target.classList.contains('dg-modal-backdrop')) {
-        e.preventDefault();
+      if (document.querySelector('.dg-modal-backdrop.active, .modal-overlay.active')) {
+        if (!e.target.closest('.dg-modal-box, .modal-content')) {
+          e.preventDefault();
+        }
       }
     }, { passive: false });
 
-    // --- Interactive Mobile Bottom Sheet Drag Controller (ลากลงปิด, ลากขึ้นขยายเต็มจอ) ---
+    // --- Interactive Mobile Bottom Sheet Drag Controller (Smooth Apple Spring Animation) ---
     function initBottomSheetDrag(backdropId, boxSelector, handleSelector, onCloseCallback) {
       const backdrop = document.getElementById(backdropId);
       if (!backdrop) return;
@@ -2130,13 +2119,23 @@
       let isExpanded = false;
       let dragTarget = null;
 
+      // Tap handle to smoothly toggle expand / collapse
+      if (handle) {
+        handle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isExpanded = !isExpanded;
+          box.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+          box.classList.toggle('is-expanded', isExpanded);
+          box.style.transform = 'translateY(0)';
+        });
+      }
+
       function onTouchStart(e) {
-        if (window.innerWidth > 768) return; // Only active on mobile/tablet bottom sheets
+        if (window.innerWidth > 768) return;
         if (e.touches.length !== 1) return;
         const touch = e.touches[0];
         const target = e.target;
 
-        // Skip interactive elements
         if (target.closest('button') || target.closest('input') || target.closest('textarea') || target.closest('select') || target.closest('a')) {
           return;
         }
@@ -2163,7 +2162,7 @@
         if (dragTarget === 'body' && deltaY < 0 && !isExpanded) return;
         if (dragTarget === 'body' && box.scrollTop > 0) return;
 
-        if (!isDragging && Math.abs(deltaY) > 6) {
+        if (!isDragging && Math.abs(deltaY) > 5) {
           isDragging = true;
           box.style.transition = 'none';
           if (handle) handle.classList.add('is-dragging');
@@ -2172,9 +2171,11 @@
         if (isDragging) {
           if (e.cancelable) e.preventDefault();
           if (deltaY > 0) {
+            // Dragging DOWN
             box.style.transform = 'translateY(' + deltaY + 'px)';
           } else {
-            const dampedY = isExpanded ? (deltaY * 0.15) : (deltaY * 0.35);
+            // Dragging UP - smooth elastic tracking towards full height
+            const dampedY = isExpanded ? (deltaY * 0.2) : (deltaY * 0.7);
             box.style.transform = 'translateY(' + dampedY + 'px)';
           }
         }
@@ -2196,14 +2197,17 @@
         dragTarget = null;
         if (handle) handle.classList.remove('is-dragging');
 
-        box.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+        // Apple Spring Easing for buttery smooth expansion / collapse
+        box.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
 
-        if (deltaY > 100 || velocity > 0.45) {
+        if (deltaY > 90 || velocity > 0.4) {
           if (isExpanded && deltaY < 180 && velocity < 0.75) {
+            // Collapse back from full height to normal
             isExpanded = false;
             box.classList.remove('is-expanded');
             box.style.transform = 'translateY(0)';
           } else {
+            // Slide all the way down and dismiss
             box.style.transform = 'translateY(100%)';
             setTimeout(() => {
               isExpanded = false;
@@ -2213,13 +2217,15 @@
               if (typeof onCloseCallback === 'function') {
                 onCloseCallback();
               }
-            }, 260);
+            }, 280);
           }
-        } else if (deltaY < -50 || velocity < -0.45) {
+        } else if (deltaY < -40 || velocity < -0.35) {
+          // Dragged up or flicked up: Expand smoothly to full screen height (96vh)
           isExpanded = true;
           box.classList.add('is-expanded');
           box.style.transform = 'translateY(0)';
         } else {
+          // Snap back to current state
           box.style.transform = 'translateY(0)';
         }
       }
@@ -3891,22 +3897,22 @@
       window.addEventListener('scroll', updateScrollspy, { passive: true });
       updateScrollspy();
 
-      // --- Scroll Reveal System (IntersectionObserver) ---
+      // --- Scroll Reveal System (IntersectionObserver with Stagger & Motion) ---
       const revealItems = document.querySelectorAll('[data-reveal]');
       if ('IntersectionObserver' in window) {
         const revealObserver = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              const delay = entry.target.getAttribute('data-delay') || 0;
+              const delay = parseInt(entry.target.getAttribute('data-delay') || '0', 10);
               setTimeout(() => {
                 entry.target.classList.add('is-revealed');
-              }, parseInt(delay, 10));
+              }, delay);
               observer.unobserve(entry.target);
             }
           });
         }, {
-          threshold: 0.12,
-          rootMargin: '0px 0px -40px 0px'
+          threshold: 0.08,
+          rootMargin: '0px 0px -25px 0px'
         });
 
         revealItems.forEach(item => revealObserver.observe(item));
