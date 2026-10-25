@@ -528,7 +528,9 @@
     }
 
     #tabBtnAdminUsers[style*="inline-flex"],
-    #tabBtnAdminUsers[style*="flex"] {
+    #tabBtnAdminUsers[style*="flex"],
+    #tabBtnBackup[style*="inline-flex"],
+    #tabBtnBackup[style*="flex"] {
       display: flex !important;
       width: 100% !important;
     }
@@ -2719,11 +2721,12 @@
             <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
           </div>
         </button>
-        <button type="button" class="admin-tab-btn" data-tab="tab-backup">
+        <button type="button" class="admin-tab-btn" id="tabBtnBackup" data-tab="tab-backup" style="display: none;">
           <div class="admin-tab-btn-content">
             <i data-lucide="hard-drive"></i>
             <span>สำรอง & กู้คืนข้อมูล</span>
           </div>
+          <span class="admin-role-badge super" style="font-size: 0.62rem; padding: 1px 6px;">👑 Super</span>
         </button>
         <button type="button" class="admin-tab-btn" id="tabBtnAdminUsers" data-tab="tab-admins" style="display: none;">
           <div class="admin-tab-btn-content">
@@ -3325,6 +3328,7 @@
           <div class="admin-section-badges">
             <span class="admin-section-pill"><i data-lucide="database" style="width: 13px; height: 13px;"></i> DATA MANAGEMENT • สำรองและกู้คืนข้อมูล</span>
             <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> ฐานข้อมูลรวม: ทุกไฟล์ HTML ในระบบ</span>
+            <span class="admin-role-badge super" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
           </div>
           <h2>ระบบสำรองและกู้คืนข้อมูลส่วนกลาง (Backup & Restore)</h2>
           <p>ส่งออกไฟล์ฐานข้อมูล JSON สำรอง สำรองข้อมูลฉุกเฉิน และกู้คืนข้อมูลข่าวสารและกิจกรรมกลับสู่ระบบ</p>
@@ -3358,36 +3362,59 @@
           </p>
 
           <!-- Backup Archives Table -->
-          <div style="overflow-x: auto; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff;">
-            <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
-              <thead>
-                <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left;">
-                  <th style="padding: 10px 14px;">ชื่อไฟล์สำรอง (.ZIP)</th>
-                  <th style="padding: 10px 14px;">ขนาด</th>
-                  <th style="padding: 10px 14px;">วันที่สร้าง</th>
-                  <th style="padding: 10px 14px;">ผู้ดำเนินการ</th>
-                  <th style="padding: 10px 14px;">IP Address</th>
-                  <th style="padding: 10px 14px;">ประเภท</th>
-                  <th style="padding: 10px 14px; text-align: right;">ดาวน์โหลด</th>
-                </tr>
-              </thead>
-              <tbody id="serverBackupsTableBody">
-                <tr>
-                  <td colspan="7" style="text-align: center; padding: 20px; color: #94a3b8;">
-                    กำลังโหลดรายการสำรองข้อมูล...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; margin-bottom: 20px; overflow: hidden;">
+            <div style="overflow-x: auto;">
+              <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left;">
+                    <th style="padding: 10px 14px;">ชื่อไฟล์สำรอง (.ZIP)</th>
+                    <th style="padding: 10px 14px;">ขนาด</th>
+                    <th style="padding: 10px 14px;">วันที่สร้าง</th>
+                    <th style="padding: 10px 14px;">ผู้ดำเนินการ</th>
+                    <th style="padding: 10px 14px;">IP Address</th>
+                    <th style="padding: 10px 14px;">ประเภท</th>
+                    <th style="padding: 10px 14px; text-align: right;">ดาวน์โหลด</th>
+                  </tr>
+                </thead>
+                <tbody id="serverBackupsTableBody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; padding: 20px; color: #94a3b8;">
+                      กำลังโหลดรายการสำรองข้อมูล...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination Bar for Backups (10 items per page) -->
+            <div id="serverBackupsPaginationBar" style="padding: 12px 18px; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.84rem; color: #64748b;">
+              <div id="serverBackupPaginationMeta">แสดง 0 รายการ</div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="btn-step-prev" id="btnPrevPageBackup" style="padding: 6px 14px; font-size: 0.8rem; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;" onclick="changeBackupPage(currentBackupPage - 1)" disabled>
+                  <i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i> หน้าก่อนหน้า
+                </button>
+                <div id="serverBackupPageButtons" style="display: flex; gap: 4px;"></div>
+                <button type="button" class="btn-step-prev" id="btnNextPageBackup" style="padding: 6px 14px; font-size: 0.8rem; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;" onclick="changeBackupPage(currentBackupPage + 1)" disabled>
+                  หน้าถัดไป <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <!-- Recent Backup Audit Logs with IP -->
+          <!-- Recent Backup Audit Logs with IP (Paginated / 10 items) -->
           <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;">
-            <div style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
               <span><i data-lucide="shield-check" style="width: 14px; height: 14px; vertical-align: middle;"></i> ประวัติการสั่งสำรองข้อมูลล่าสุด (Audit Trail with IP)</span>
-              <span id="serverBackupCountBadge" style="font-size: 0.75rem; color: #64748b; font-weight: 600;"></span>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="serverBackupCountBadge" style="font-size: 0.75rem; color: #64748b; font-weight: 600;"></span>
+                <div id="serverAuditLogPagination" style="display: none; align-items: center; gap: 4px; font-size: 0.76rem;">
+                  <button type="button" class="btn-step-prev" id="btnPrevAuditLog" style="padding: 2px 8px; height: 26px; font-size: 0.74rem;" onclick="changeAuditLogPage(currentAuditLogPage - 1)" disabled>&laquo;</button>
+                  <span id="auditLogPageIndicator" style="color: #475569; font-weight: 700;">1/1</span>
+                  <button type="button" class="btn-step-prev" id="btnNextAuditLog" style="padding: 2px 8px; height: 26px; font-size: 0.74rem;" onclick="changeAuditLogPage(currentAuditLogPage + 1)" disabled>&raquo;</button>
+                </div>
+              </div>
             </div>
-            <div id="serverBackupAuditContainer" style="max-height: 180px; overflow-y: auto; font-family: monospace; font-size: 0.78rem; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; line-height: 1.6;">
+            <div id="serverBackupAuditContainer" style="max-height: 220px; overflow-y: auto; font-family: monospace; font-size: 0.78rem; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; line-height: 1.6;">
               กำลังโหลดประวัติ...
             </div>
           </div>
@@ -5480,16 +5507,22 @@
         }
       }
 
-      // Dedicated Tab Button for Super Admin
+      // Dedicated Tab Buttons for Super Admin
       const tabBtnAdmins = document.getElementById('tabBtnAdminUsers');
       if (tabBtnAdmins) {
         tabBtnAdmins.style.display = isSuper ? 'inline-flex' : 'none';
       }
 
-      // If regular admin is on tab-admins, switch to tab-news
+      const tabBtnBackup = document.getElementById('tabBtnBackup');
+      if (tabBtnBackup) {
+        tabBtnBackup.style.display = isSuper ? 'inline-flex' : 'none';
+      }
+
+      // If regular admin is on tab-admins or tab-backup, switch to tab-news
       if (!isSuper) {
         const adminsPane = document.getElementById('tab-admins');
-        if (adminsPane && adminsPane.classList.contains('active')) {
+        const backupPane = document.getElementById('tab-backup');
+        if ((adminsPane && adminsPane.classList.contains('active')) || (backupPane && backupPane.classList.contains('active'))) {
           const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
           if (newsTabBtn) newsTabBtn.click();
         }
@@ -8300,8 +8333,170 @@
     window.saveFeatured = saveFeatured;
 
     // ==========================================================
-    // 💾 SERVER BACKUP & LOGS MANAGEMENT WITH IP AUDIT
+    // 💾 SERVER BACKUP & LOGS MANAGEMENT WITH IP AUDIT & PAGINATION
     // ==========================================================
+    let allBackupFiles = [];
+    let currentBackupPage = 1;
+    const BACKUPS_PER_PAGE = 10;
+
+    let allAuditLogs = [];
+    let currentAuditLogPage = 1;
+    const AUDIT_LOGS_PER_PAGE = 10;
+
+    function renderBackupFilesPage(page = 1) {
+      const tbody = document.getElementById('serverBackupsTableBody');
+      const meta = document.getElementById('serverBackupPaginationMeta');
+      const btnPrev = document.getElementById('btnPrevPageBackup');
+      const btnNext = document.getElementById('btnNextPageBackup');
+      const btnContainer = document.getElementById('serverBackupPageButtons');
+      if (!tbody) return;
+
+      const totalItems = allBackupFiles.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / BACKUPS_PER_PAGE));
+      currentBackupPage = Math.min(Math.max(1, page), totalPages);
+
+      if (totalItems === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">ยังไม่มีไฟล์สำรองข้อมูลในระบบ (กดปุ่ม "สั่งสำรองข้อมูลทันที" ด้านบน)</td></tr>';
+        if (meta) meta.textContent = 'แสดง 0 รายการ';
+        if (btnPrev) btnPrev.disabled = true;
+        if (btnNext) btnNext.disabled = true;
+        if (btnContainer) btnContainer.innerHTML = '';
+        return;
+      }
+
+      const start = (currentBackupPage - 1) * BACKUPS_PER_PAGE;
+      const end = Math.min(start + BACKUPS_PER_PAGE, totalItems);
+      const pageItems = allBackupFiles.slice(start, end);
+
+      tbody.innerHTML = pageItems.map(b => {
+        const dlUrl = window.SarawatApi.getBackupDownloadUrl(b.filename);
+        const isManual = b.triggerType && b.triggerType.includes('MANUAL');
+        const typeBadge = isManual
+          ? `<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;">${escapeHtml(b.triggerType)}</span>`
+          : `<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:600;">${escapeHtml(b.triggerType || 'AUTO')}</span>`;
+
+        return `
+          <tr style="border-bottom: 1px solid #f1f5f9;">
+            <td style="padding: 10px 14px; font-weight: 600; color: #0f172a; font-family: monospace;">
+              <i data-lucide="file-archive" style="width:14px; height:14px; vertical-align:middle; color:#3b82f6;"></i>
+              ${escapeHtml(b.filename)}
+            </td>
+            <td style="padding: 10px 14px; color: #334155;">${b.sizeMb} MB</td>
+            <td style="padding: 10px 14px; color: #64748b;">${escapeHtml(b.localTime || b.createdAt)}</td>
+            <td style="padding: 10px 14px; color: #0f172a; font-weight: 600;">${escapeHtml(b.operator || 'SYSTEM')}</td>
+            <td style="padding: 10px 14px; font-family: monospace; color: #2563eb; font-weight: 600;">
+              <span style="background:#eff6ff; padding:2px 6px; border-radius:4px; border:1px solid #bfdbfe;">${escapeHtml(b.ipAddress || '127.0.0.1')}</span>
+            </td>
+            <td style="padding: 10px 14px;">${typeBadge}</td>
+            <td style="padding: 10px 14px; text-align: right;">
+              <a href="${dlUrl}" class="dg-btn-outline" style="padding: 4px 10px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none;" target="_blank">
+                <i data-lucide="download" style="width:12px; height:12px;"></i> ดาวน์โหลด
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (meta) {
+        meta.textContent = `แสดงรายการที่ ${start + 1} - ${end} จากทั้งหมด ${totalItems} ไฟล์ (หน้า ${currentBackupPage}/${totalPages})`;
+      }
+
+      if (btnPrev) btnPrev.disabled = currentBackupPage <= 1;
+      if (btnNext) btnNext.disabled = currentBackupPage >= totalPages;
+
+      // Render Page Numbers
+      if (btnContainer) {
+        if (totalPages <= 1) {
+          btnContainer.innerHTML = '';
+        } else {
+          let pagesHtml = '';
+          const maxVisiblePages = 5;
+          let startPage = Math.max(1, currentBackupPage - 2);
+          let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+          if (endPage - startPage < maxVisiblePages - 1) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+          }
+
+          if (startPage > 1) {
+            pagesHtml += `<button type="button" class="btn-step-prev" style="padding: 4px 10px; min-width: 32px; height: 32px; font-size: 0.8rem;" onclick="changeBackupPage(1)">1</button>`;
+            if (startPage > 2) pagesHtml += `<span style="padding: 0 4px; color: #94a3b8; align-self: center;">...</span>`;
+          }
+
+          for (let p = startPage; p <= endPage; p++) {
+            const isActive = p === currentBackupPage;
+            const style = isActive
+              ? 'padding: 4px 10px; min-width: 32px; height: 32px; font-size: 0.8rem; background: #2563eb; color: #ffffff; border-color: #2563eb; font-weight: 700;'
+              : 'padding: 4px 10px; min-width: 32px; height: 32px; font-size: 0.8rem; background: #ffffff; color: #334155;';
+            pagesHtml += `<button type="button" class="btn-step-prev" style="${style}" onclick="changeBackupPage(${p})">${p}</button>`;
+          }
+
+          if (endPage < totalPages) {
+            if (endPage < totalPages - 1) pagesHtml += `<span style="padding: 0 4px; color: #94a3b8; align-self: center;">...</span>`;
+            pagesHtml += `<button type="button" class="btn-step-prev" style="padding: 4px 10px; min-width: 32px; height: 32px; font-size: 0.8rem;" onclick="changeBackupPage(${totalPages})">${totalPages}</button>`;
+          }
+
+          btnContainer.innerHTML = pagesHtml;
+        }
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    function changeBackupPage(page) {
+      const totalPages = Math.max(1, Math.ceil(allBackupFiles.length / BACKUPS_PER_PAGE));
+      if (page < 1 || page > totalPages) return;
+      renderBackupFilesPage(page);
+    }
+
+    function renderAuditLogsPage(page = 1) {
+      const auditBox = document.getElementById('serverBackupAuditContainer');
+      const pageIndicator = document.getElementById('auditLogPageIndicator');
+      const btnPrev = document.getElementById('btnPrevAuditLog');
+      const btnNext = document.getElementById('btnNextAuditLog');
+      const pgnBox = document.getElementById('serverAuditLogPagination');
+      if (!auditBox) return;
+
+      const totalItems = allAuditLogs.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / AUDIT_LOGS_PER_PAGE));
+      currentAuditLogPage = Math.min(Math.max(1, page), totalPages);
+
+      if (totalItems === 0) {
+        auditBox.innerHTML = '<span style="color:#94a3b8;">ยังไม่มีประวัติการบันทึก IP</span>';
+        if (pgnBox) pgnBox.style.display = 'none';
+        return;
+      }
+
+      if (pgnBox) pgnBox.style.display = totalPages > 1 ? 'inline-flex' : 'none';
+      if (pageIndicator) pageIndicator.textContent = `${currentAuditLogPage}/${totalPages}`;
+      if (btnPrev) btnPrev.disabled = currentAuditLogPage <= 1;
+      if (btnNext) btnNext.disabled = currentAuditLogPage >= totalPages;
+
+      const start = (currentAuditLogPage - 1) * AUDIT_LOGS_PER_PAGE;
+      const end = Math.min(start + AUDIT_LOGS_PER_PAGE, totalItems);
+      const pageItems = allAuditLogs.slice(start, end);
+
+      auditBox.innerHTML = pageItems.map(l => {
+        const statusColor = l.status === 'SUCCESS' ? '#16a34a' : '#dc2626';
+        return `<div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 3px;">
+          <span style="color:#64748b;">[${escapeHtml(l.created_at)}]</span>
+          <span style="color:${statusColor}; font-weight:700;">[${escapeHtml(l.status)}]</span>
+          <span style="font-weight:700; color:#1e293b;">${escapeHtml(l.trigger_type)}</span> by
+          <span style="color:#0f172a; font-weight:600;">${escapeHtml(l.admin_username || 'SYSTEM')}</span>
+          &bull; IP: <strong style="color:#2563eb;">${escapeHtml(l.ip_address || 'unknown')}</strong>
+          &bull; File: <code>${escapeHtml(l.filename)}</code> (${l.size_mb || 0} MB, ${l.duration_ms || 0}ms)
+        </div>`;
+      }).join('');
+    }
+
+    function changeAuditLogPage(page) {
+      const totalPages = Math.max(1, Math.ceil(allAuditLogs.length / AUDIT_LOGS_PER_PAGE));
+      if (page < 1 || page > totalPages) return;
+      renderAuditLogsPage(page);
+    }
+
     async function loadServerBackupsList() {
       const tbody = document.getElementById('serverBackupsTableBody');
       const auditBox = document.getElementById('serverBackupAuditContainer');
@@ -8320,65 +8515,13 @@
           return;
         }
 
-        const backups = res.data.backups || [];
-        const logs = res.data.backupLogs || [];
+        allBackupFiles = res.data.backups || [];
+        allAuditLogs = res.data.backupLogs || [];
 
-        if (countBadge) countBadge.textContent = `${backups.length} ไฟล์สำรอง • ${logs.length} บันทึกประวัติ`;
+        if (countBadge) countBadge.textContent = `${allBackupFiles.length} ไฟล์สำรอง • ${allAuditLogs.length} บันทึกประวัติ`;
 
-        if (backups.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">ยังไม่มีไฟล์สำรองข้อมูลในระบบ (กดปุ่ม "สั่งสำรองข้อมูลทันที" ด้านบน)</td></tr>';
-        } else {
-          tbody.innerHTML = backups.map(b => {
-            const dlUrl = window.SarawatApi.getBackupDownloadUrl(b.filename);
-            const isManual = b.triggerType && b.triggerType.includes('MANUAL');
-            const typeBadge = isManual
-              ? `<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;">${escapeHtml(b.triggerType)}</span>`
-              : `<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:600;">${escapeHtml(b.triggerType || 'AUTO')}</span>`;
-
-            return `
-              <tr style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 10px 14px; font-weight: 600; color: #0f172a; font-family: monospace;">
-                  <i data-lucide="file-archive" style="width:14px; height:14px; vertical-align:middle; color:#3b82f6;"></i>
-                  ${escapeHtml(b.filename)}
-                </td>
-                <td style="padding: 10px 14px; color: #334155;">${b.sizeMb} MB</td>
-                <td style="padding: 10px 14px; color: #64748b;">${escapeHtml(b.localTime || b.createdAt)}</td>
-                <td style="padding: 10px 14px; color: #0f172a; font-weight: 600;">${escapeHtml(b.operator || 'SYSTEM')}</td>
-                <td style="padding: 10px 14px; font-family: monospace; color: #2563eb; font-weight: 600;">
-                  <span style="background:#eff6ff; padding:2px 6px; border-radius:4px; border:1px solid #bfdbfe;">${escapeHtml(b.ipAddress || '127.0.0.1')}</span>
-                </td>
-                <td style="padding: 10px 14px;">${typeBadge}</td>
-                <td style="padding: 10px 14px; text-align: right;">
-                  <a href="${dlUrl}" class="dg-btn-outline" style="padding: 4px 10px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none;" target="_blank">
-                    <i data-lucide="download" style="width:12px; height:12px;"></i> ดาวน์โหลด
-                  </a>
-                </td>
-              </tr>
-            `;
-          }).join('');
-        }
-
-        if (auditBox) {
-          if (logs.length === 0) {
-            auditBox.innerHTML = '<span style="color:#94a3b8;">ยังไม่มีประวัติการบันทึก IP</span>';
-          } else {
-            auditBox.innerHTML = logs.map(l => {
-              const statusColor = l.status === 'SUCCESS' ? '#16a34a' : '#dc2626';
-              return `<div style="margin-bottom: 4px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 3px;">
-                <span style="color:#64748b;">[${escapeHtml(l.created_at)}]</span>
-                <span style="color:${statusColor}; font-weight:700;">[${escapeHtml(l.status)}]</span>
-                <span style="font-weight:700; color:#1e293b;">${escapeHtml(l.trigger_type)}</span> by
-                <span style="color:#0f172a; font-weight:600;">${escapeHtml(l.admin_username || 'SYSTEM')}</span>
-                &bull; IP: <strong style="color:#2563eb;">${escapeHtml(l.ip_address || 'unknown')}</strong>
-                &bull; File: <code>${escapeHtml(l.filename)}</code> (${l.size_mb || 0} MB, ${l.duration_ms || 0}ms)
-              </div>`;
-            }).join('');
-          }
-        }
-
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-          window.lucide.createIcons();
-        }
+        renderBackupFilesPage(1);
+        renderAuditLogsPage(1);
       } catch (err) {
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:16px; color:#ef4444;">โหลดข้อมูลไม่สำเร็จ: ${err.message}</td></tr>`;
       }
@@ -8414,6 +8557,8 @@
     }
     window.loadServerBackupsList = loadServerBackupsList;
     window.handleServerBackupNow = handleServerBackupNow;
+    window.changeBackupPage = changeBackupPage;
+    window.changeAuditLogPage = changeAuditLogPage;
 
     // ==========================================================
     // BACKUP & RESTORE (JSON EXPORT / IMPORT)
@@ -9102,6 +9247,12 @@
             } else if (paneId === 'tab-settings') {
               initSettings();
             } else if (paneId === 'tab-backup') {
+              if (currentAdminUser.role !== 'Super Admin') {
+                showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงระบบสำรองข้อมูลได้', 'warning');
+                const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
+                if (newsTabBtn) newsTabBtn.click();
+                return;
+              }
               loadServerBackupsList();
             }
           }
