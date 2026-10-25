@@ -1482,145 +1482,349 @@ svg:not([data-lucide]),
 
 .dg-ops-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 24px;
 }
 
+/* ==========================================================
+   NEO-KINETIC LIQUID GLASS CARDS & ACTION BUTTONS
+   ========================================================== */
 .dg-ops-card {
-  background: var(--dg-white);
-  border: 1px solid var(--dg-border);
-  border-radius: var(--dg-radius-md);
-  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background-color: #0f172a;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-decoration: none;
-  color: inherit;
-  transition: var(--dg-transition);
+  min-height: 450px;
+  padding: 16px;
+  text-decoration: none !important;
+  color: inherit !important;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  position: relative;
-  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .dg-ops-card:hover {
-  transform: translateY(-8px) scale(1.01);
-  border-color: var(--dg-black);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  z-index: 2;
+  transform: translateY(-8px);
+  box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(15, 23, 42, 0.05);
 }
 
-.dg-ops-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--dg-radius-sm);
+/* Background Photo Wrap with Smooth Kinetic Zoom */
+.dg-ops-bg-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dg-ops-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.001);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  filter: saturate(1.08) brightness(0.96);
+}
+
+.dg-ops-card:hover .dg-ops-bg-img {
+  transform: scale(1.06);
+  filter: saturate(1.15) brightness(0.92);
+}
+
+.dg-ops-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.5) 0%,
+    rgba(15, 23, 42, 0.25) 35%,
+    rgba(15, 23, 42, 0.7) 100%
+  );
+  transition: background 0.4s ease;
+}
+
+.dg-ops-card:hover .dg-ops-bg-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.4) 0%,
+    rgba(15, 23, 42, 0.2) 35%,
+    rgba(15, 23, 42, 0.75) 100%
+  );
+}
+
+/* Top Meta Header: System Tag & Status Chip */
+.dg-ops-top-meta {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 6px;
+}
+
+.dg-ops-num-tag {
+  font-family: var(--dg-font-sans);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dg-ops-status-chip {
+  font-size: 0.72rem;
+  font-weight: 750;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dg-ops-status-chip.is-live {
+  background: rgba(6, 78, 59, 0.85);
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #a7f3d0;
+}
+
+.dg-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+.dg-pulse-dot.live {
+  background: #4ade80;
+  box-shadow: 0 0 10px #4ade80;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+/* ==========================================================
+   LIQUID FROSTED GLASS LOWER PANEL (อ่านข้อความคมชัด)
+   ========================================================== */
+.dg-ops-liquid-panel {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  padding: 20px 18px 18px;
+  box-shadow: 0 14px 34px -8px rgba(15, 23, 42, 0.14),
+              inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dg-ops-card:hover .dg-ops-liquid-panel {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.2),
+              inset 0 1px 2px rgba(255, 255, 255, 1);
+}
+
+/* Icon Box inside Liquid Panel */
+.dg-ops-icon-pill {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 1.15rem;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dg-ops-card:hover .dg-ops-icon-pill {
+  transform: scale(1.08);
+}
+
+.dg-ops-card.theme-feedback .dg-ops-icon-pill {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.dg-ops-card.theme-complaint .dg-ops-icon-pill {
+  background: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #fed7aa;
+}
+
+.dg-ops-card.theme-roster .dg-ops-icon-pill {
+  background: #f0fdf4;
+  color: #059669;
+  border: 1px solid #bbf7d0;
+}
+
+.dg-ops-card.theme-recruit .dg-ops-icon-pill {
+  background: #f5f3ff;
+  color: #6366f1;
+  border: 1px solid #ddd6fe;
+}
+
+/* Card Title & Description Typography */
+.dg-ops-title {
+  font-family: var(--dg-font-sans);
+  font-size: 1.15rem;
+  font-weight: 850;
+  color: #0f172a;
+  margin: 0 0 6px;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.dg-ops-desc {
+  font-size: 0.84rem;
+  color: #334155;
+  line-height: 1.55;
+  margin: 0 0 16px;
+  font-weight: 450;
+}
+
+/* ==========================================================
+   NEO-KINETIC FLOATING ACTION PILL BUTTON
+   ========================================================== */
+.dg-ops-btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 8px 12px 8px 16px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.dg-ops-btn-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dg-ops-card.theme-emergency .dg-ops-icon-box {
-  background: #fee2e2;
-  color: #dc2626;
+.dg-ops-btn-icon i,
+.dg-ops-btn-icon svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dg-ops-card.theme-complaint .dg-ops-icon-box {
-  background: #fef3c7;
-  color: #d97706;
+/* Hover States per Theme */
+.dg-ops-card.theme-feedback:hover .dg-ops-btn-action {
+  background: #2563eb;
+  border-color: #3b82f6;
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
 }
 
-.dg-ops-card.theme-roster .dg-ops-icon-box {
-  background: #d1fae5;
-  color: #059669;
+.dg-ops-card.theme-complaint:hover .dg-ops-btn-action {
+  background: #ea580c;
+  border-color: #f97316;
+  box-shadow: 0 8px 22px rgba(234, 88, 12, 0.35);
 }
 
-.dg-ops-card h3 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin: 0 0 10px;
-  color: var(--dg-text-primary);
+.dg-ops-card.theme-roster:hover .dg-ops-btn-action {
+  background: #059669;
+  border-color: #10b981;
+  box-shadow: 0 8px 22px rgba(5, 150, 105, 0.35);
 }
 
-.dg-ops-card p {
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: var(--dg-text-secondary);
-  margin: 0 0 24px;
+.dg-ops-card.theme-recruit:hover .dg-ops-btn-action {
+  background: #4f46e5;
+  border-color: #6366f1;
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35);
 }
 
-.dg-ops-card-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--dg-text-primary);
-  border-top: 1px solid var(--dg-border);
-  padding-top: 18px;
-  width: 100%;
-  transition: gap 0.2s ease;
+.dg-ops-card:hover .dg-ops-btn-icon {
+  background: #ffffff;
+  color: #0f172a;
+  transform: translateX(2px);
 }
 
-.dg-ops-card:hover .dg-ops-card-action {
-  gap: 12px;
+.dg-ops-card:hover .dg-ops-btn-icon svg,
+.dg-ops-card:hover .dg-ops-btn-icon i {
+  transform: translate(1px, -1px) rotate(-45deg);
 }
 
-/* SI-ROSTER High-Impact Badge */
-.dg-ops-card.theme-roster {
-  border-color: #a7f3d0;
-  background: linear-gradient(to bottom, #ffffff, #f0fdf4);
-}
-
-.dg-ops-card.theme-roster:hover {
-  border-color: #059669;
-}
-
-/* Feedback & Wishlist Theme Card */
-.dg-ops-card.theme-feedback {
-  border-color: #bfdbfe;
-  background: linear-gradient(to bottom, #ffffff, #f0f7ff);
-}
-
-.dg-ops-card.theme-feedback .dg-ops-icon-box {
-  background: #dbeafe;
-  color: #2563eb;
-}
-
+/* Card Borders Accent on Hover */
 .dg-ops-card.theme-feedback:hover {
-  border-color: #2563eb;
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.4);
 }
-
-/* Complaints & Reports Theme Card */
-.dg-ops-card.theme-complaint {
-  border-color: #fed7aa;
-  background: linear-gradient(to bottom, #ffffff, #fffbeb);
-}
-
 .dg-ops-card.theme-complaint:hover {
-  border-color: #ea580c;
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(234, 88, 12, 0.1);
+  border-color: rgba(234, 88, 12, 0.4);
 }
-
-/* Recruitment Theme Card */
-.dg-ops-card.theme-recruit {
-  border-color: #c7d2fe;
-  background: linear-gradient(to bottom, #ffffff, #f5f3ff);
+.dg-ops-card.theme-roster:hover {
+  border-color: rgba(5, 150, 105, 0.4);
 }
-
-.dg-ops-card.theme-recruit .dg-ops-icon-box {
-  background: #ede9fe;
-  color: #6366f1;
-}
-
 .dg-ops-card.theme-recruit:hover {
-  border-color: #4f46e5;
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .dg-ops-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .dg-ops-card {
+    min-height: 420px;
+    padding: 14px;
+  }
+  .dg-ops-liquid-panel {
+    padding: 18px 16px 16px;
+  }
+  .dg-ops-title {
+    font-size: 1.1rem;
+  }
 }
 
 /* ==========================================================
