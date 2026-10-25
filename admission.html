@@ -3083,15 +3083,58 @@
         }
       });
 
+    // --- Universal Body Scroll Lock (ป้องกันการเลื่อนจอเว็บหลักบนมือถือ 100%) ---
+    window.__dgModalLockCount = window.__dgModalLockCount || 0;
+    window.__dgSavedScrollY = window.__dgSavedScrollY || 0;
+
+    function lockBodyScroll() {
+      window.__dgModalLockCount++;
+      if (window.__dgModalLockCount === 1) {
+        window.__dgSavedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + window.__dgSavedScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }
+    }
+
+    function unlockBodyScroll() {
+      if (window.__dgModalLockCount > 0) {
+        window.__dgModalLockCount--;
+      }
+      if (window.__dgModalLockCount === 0) {
+        const savedY = window.__dgSavedScrollY || 0;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        window.scrollTo(0, savedY);
+      }
+    }
+
+    document.addEventListener('touchmove', function(e) {
+      if (e.target && e.target.classList && (e.target.classList.contains('dg-modal-backdrop') || e.target.classList.contains('pdpa-modal-backdrop'))) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
       // ==========================================
       // PDPA MODAL CONTROLS
       // ==========================================
       function openPdpaModal() {
         txtPdpaModalBody.textContent = systemSettings.pdpaContent || 'ข้อความประกาศคุ้มครองข้อมูลส่วนบุคคล (PDPA) สำหรับการรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 โรงเรียนเดชะปัตตนยานุกูล';
+        lockBodyScroll();
         pdpaModal.style.display = 'flex';
       }
       function closePdpaModal() {
         pdpaModal.style.display = 'none';
+        unlockBodyScroll();
       }
 
       if (linkReadPdpa) linkReadPdpa.addEventListener('click', openPdpaModal);

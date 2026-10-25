@@ -86,10 +86,7 @@ svg:not([data-lucide]),
 .dg-chief-photo-wrap img,
 .dg-news-modal-cover img {
   -webkit-user-drag: none !important;
-  -khtml-user-drag: none !important;
-  -moz-user-drag: none !important;
-  -o-user-drag: none !important;
-  user-drag: none !important;
+  user-select: none !important;
   -webkit-touch-callout: none !important; /* Disables iOS Safari long press Save Image */
   -webkit-user-select: none !important;
   -moz-user-select: none !important;
@@ -3250,7 +3247,7 @@ svg:not([data-lucide]),
   width: 15px;
   height: 15px;
   flex-shrink: 0;
-  stroke-width: 2.2;
+  stroke-width: 2.2px ;
   transition: transform 0.2s ease;
 }
 
@@ -3800,7 +3797,7 @@ svg:not([data-lucide]),
 .dg-modal-badge i {
   width: 14px !important;
   height: 14px !important;
-  stroke-width: 2.2 !important;
+  stroke-width: 2.2px !important;
 }
 
 .dg-wizard-modal-box .dg-modal-title,
@@ -4253,37 +4250,82 @@ svg:not([data-lucide]),
 }
 
 /* ==========================================================
-   MOBILE BOTTOM SHEET RESPONSIVE BEHAVIOR (แบบ SI-ROSTER)
+   MOBILE BOTTOM SHEET RESPONSIVE BEHAVIOR (EDGE-TO-EDGE FULL-BLEED)
    ========================================================== */
 @media (max-width: 640px) {
-  #feedbackModal.dg-modal-backdrop,
-  #complaintModal.dg-modal-backdrop {
+  .dg-modal-backdrop {
     align-items: flex-end !important;
     padding: 0 !important;
   }
 
-  #feedbackModal .dg-wizard-modal-box,
-  #complaintModal .dg-wizard-modal-box {
+  .dg-modal-box,
+  .dg-wizard-modal-box,
+  .dg-news-modal-box {
     width: 100% !important;
     max-width: 100% !important;
+    margin: 0 !important;
     border-radius: 24px 24px 0 0 !important;
+    border-left: none !important;
+    border-right: none !important;
     border-bottom: none !important;
-    max-height: 90vh !important;
-    max-height: 90dvh !important;
+    max-height: 86vh !important;
+    max-height: 86dvh !important;
     overflow-y: auto !important;
-    padding: 14px 20px 28px !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 16px 20px 28px !important;
+    padding-bottom: max(28px, env(safe-area-inset-bottom, 20px)) !important;
     box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25) !important;
-    transform: translateY(100%) !important;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
+    box-sizing: border-box !important;
   }
 
-  #feedbackModal.active .dg-wizard-modal-box,
-  #complaintModal.active .dg-wizard-modal-box {
+  .dg-modal-backdrop.active .dg-modal-box,
+  .dg-modal-backdrop.active .dg-wizard-modal-box,
+  .dg-modal-backdrop.active .dg-news-modal-box {
     transform: translateY(0) !important;
+  }
+
+  /* Expanded height when dragged up on mobile */
+  .dg-modal-box.is-expanded,
+  .dg-wizard-modal-box.is-expanded,
+  .dg-news-modal-box.is-expanded {
+    max-height: 96vh !important;
+    max-height: 96dvh !important;
+    height: 96vh !important;
+    height: 96dvh !important;
   }
 
   .dg-modal-drag-handle {
     display: block !important;
+    width: 46px !important;
+    height: 5px !important;
+    background: #cbd5e1 !important;
+    border-radius: 999px !important;
+    margin: 2px auto 14px !important;
+    touch-action: none !important;
+    cursor: grab !important;
+    position: relative !important;
+    transition: background-color 0.2s ease, width 0.2s ease !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+
+  .dg-modal-drag-handle::before {
+    content: '' !important;
+    position: absolute !important;
+    top: -14px !important;
+    bottom: -14px !important;
+    left: -24px !important;
+    right: -24px !important;
+  }
+
+  .dg-modal-drag-handle:active,
+  .dg-modal-drag-handle.is-dragging {
+    cursor: grabbing !important;
+    background: #94a3b8 !important;
+    width: 56px !important;
   }
 
   .dg-wizard-stepper {
@@ -5398,13 +5440,13 @@ svg:not([data-lucide]),
 .dg-progress-ring-bg {
   fill: none;
   stroke: rgba(0, 0, 0, 0.06);
-  stroke-width: 3;
+  stroke-width: 3px ;
 }
 
 .dg-progress-ring-bar {
   fill: none;
   stroke: var(--dg-black);
-  stroke-width: 3;
+  stroke-width: 3px ;
   stroke-linecap: round;
   stroke-dasharray: 125.66;
   stroke-dashoffset: 125.66;
@@ -5945,7 +5987,7 @@ svg:not([data-lucide]),
   .dg-scroll-cue-text svg {
     width: 10px;
     height: 10px;
-    stroke-width: 2.5;
+    stroke-width: 2.5px ;
   }
 
   /* Bottom Photo: Placed at bottom of viewport, cut horizontally */
@@ -6762,16 +6804,27 @@ svg:not([data-lucide]),
     border-radius: 6px;
   }
 
-  /* --- Modals --- */
+  /* --- Modals Mobile Full-Bleed (เต็มขอบจอ 100% ไร้รอยต่อ) --- */
+  .dg-modal-backdrop {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
   .dg-modal-box {
-    margin: 12px;
-    padding: 22px 18px;
-    border-radius: 16px;
-    width: calc(100% - 24px);
-    max-height: 90vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 22px 18px 28px !important;
+    padding-bottom: max(28px, env(safe-area-inset-bottom, 20px)) !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 86vh !important;
+    max-height: 86dvh !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    box-sizing: border-box !important;
   }
   .dg-modal-close-btn {
     top: 16px;
@@ -8592,7 +8645,7 @@ body,
 .dg-theme-switch-btn svg {
   width: 13px;
   height: 13px;
-  stroke-width: 2.2;
+  stroke-width: 2.2px ;
 }
 
 .dg-theme-switch-btn:hover {

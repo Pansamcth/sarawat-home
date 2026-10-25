@@ -2777,6 +2777,52 @@
         margin: -4px auto 12px;
       }
 
+      /* Dedicated Interactive Touch Drag Handle */
+      .roster-modal-drag-handle {
+        display: none;
+        width: 44px;
+        height: 5px;
+        background: #cbd5e1;
+        border-radius: 999px;
+        margin: 12px auto 6px;
+        touch-action: none;
+        cursor: grab;
+        position: relative;
+        transition: background-color 0.2s ease, width 0.2s ease;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .roster-modal-drag-handle::before {
+        content: '';
+        position: absolute;
+        top: -12px;
+        bottom: -12px;
+        left: -20px;
+        right: -20px;
+      }
+      .roster-modal-drag-handle:active,
+      .roster-modal-drag-handle.is-dragging {
+        cursor: grabbing;
+        background: #94a3b8;
+        width: 54px;
+      }
+
+      @media (max-width: 640px) {
+        .roster-modal-drag-handle {
+          display: block;
+        }
+        #detailModal .modal-header::before {
+          display: none !important;
+        }
+        #detailModal .modal-content.is-expanded,
+        #statusSearchModal .modal-content.is-expanded {
+          height: 96vh !important;
+          height: 96dvh !important;
+          max-height: 96vh !important;
+          max-height: 96dvh !important;
+        }
+      }
+
       #detailModal .modal-body {
         padding: 14px 18px 28px;
         overscroll-behavior: contain;
@@ -4407,6 +4453,7 @@
   <!-- Status Search Modal -->
   <div class="modal-overlay" id="statusSearchModal" onclick="if(event.target === this) closeModal('statusSearchModal')">
     <div class="modal-content">
+      <div class="roster-modal-drag-handle" aria-hidden="true"></div>
       <div class="modal-header">
         <div class="close-modal" onclick="closeModal('statusSearchModal')"><i class="fa-solid fa-xmark"></i></div>
         <h2 class="modal-title"><i class="fa-solid fa-user-check"
@@ -4462,6 +4509,7 @@
   <!-- Detail Modal -->
   <div class="modal-overlay" id="detailModal" onclick="if(event.target === this) closeModal('detailModal')">
     <div class="modal-content">
+      <div class="roster-modal-drag-handle" aria-hidden="true"></div>
       <div class="modal-header">
         <div class="close-modal" onclick="closeModal('detailModal')"><i class="fa-solid fa-xmark"></i></div>
         <div class="modal-header-meta">
@@ -5007,6 +5055,7 @@
       const adminBtn = document.getElementById('btnAdminViewAllStatus');
       if (adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
 
+      lockBodyScroll();
       document.getElementById('statusSearchModal').classList.add('active');
     }
 
@@ -7089,6 +7138,181 @@
       }
     }
 
+    // --- Universal Body Scroll Lock (SI-ROSTER ป้องกันการเลื่อนจอเว็บหลักบนมือถือ) ---
+    window.__rosterModalLockCount = window.__rosterModalLockCount || 0;
+    window.__rosterSavedScrollY = window.__rosterSavedScrollY || 0;
+
+    function lockBodyScroll() {
+      window.__rosterModalLockCount++;
+      if (window.__rosterModalLockCount === 1) {
+        window.__rosterSavedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + window.__rosterSavedScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }
+    }
+
+    function unlockBodyScroll() {
+      if (window.__rosterModalLockCount > 0) {
+        window.__rosterModalLockCount--;
+      }
+      if (window.__rosterModalLockCount === 0) {
+        const savedY = window.__rosterSavedScrollY || 0;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        window.scrollTo(0, savedY);
+      }
+    }
+
+    // Touchmove prevention on modal overlay backdrop
+    document.addEventListener('touchmove', function(e) {
+      if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // --- Interactive Mobile Bottom Sheet Drag Controller for SI-ROSTER ---
+    function initRosterBottomSheetDrag(modalOverlayId, modalContentSelector, handleSelector, onCloseCallback) {
+      const overlay = document.getElementById(modalOverlayId);
+      if (!overlay) return;
+      const content = overlay.querySelector(modalContentSelector);
+      if (!content) return;
+      const handle = content.querySelector(handleSelector);
+
+      let startY = 0;
+      let currentY = 0;
+      let startTime = 0;
+      let isDragging = false;
+      let isExpanded = false;
+      let dragTarget = null;
+
+      function onTouchStart(e) {
+        if (window.innerWidth > 768) return;
+        if (e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        const target = e.target;
+
+        if (target.closest('button') || target.closest('input') || target.closest('textarea') || target.closest('select') || target.closest('a') || target.closest('.close-modal')) {
+          return;
+        }
+
+        const isHandle = handle && (handle === target || handle.contains(target));
+        const isHeader = target.closest('.modal-header');
+        const isTopScroll = content.scrollTop <= 0;
+
+        if (isHandle || isHeader || isTopScroll) {
+          startY = touch.clientY;
+          currentY = startY;
+          startTime = Date.now();
+          isDragging = false;
+          dragTarget = isHandle ? 'handle' : (isHeader ? 'header' : 'body');
+        }
+      }
+
+      function onTouchMove(e) {
+        if (startY === 0) return;
+        const touch = e.touches[0];
+        currentY = touch.clientY;
+        const deltaY = currentY - startY;
+
+        if (dragTarget === 'body' && deltaY < 0 && !isExpanded) return;
+        if (dragTarget === 'body' && content.scrollTop > 0) return;
+
+        if (!isDragging && Math.abs(deltaY) > 6) {
+          isDragging = true;
+          content.style.transition = 'none';
+          if (handle) handle.classList.add('is-dragging');
+        }
+
+        if (isDragging) {
+          if (e.cancelable) e.preventDefault();
+          if (deltaY > 0) {
+            content.style.transform = 'translateY(' + deltaY + 'px)';
+          } else {
+            const dampedY = isExpanded ? (deltaY * 0.15) : (deltaY * 0.35);
+            content.style.transform = 'translateY(' + dampedY + 'px)';
+          }
+        }
+      }
+
+      function onTouchEnd(e) {
+        if (!isDragging) {
+          startY = 0;
+          dragTarget = null;
+          return;
+        }
+
+        const deltaY = currentY - startY;
+        const elapsedTime = Math.max(Date.now() - startTime, 1);
+        const velocity = deltaY / elapsedTime;
+
+        isDragging = false;
+        startY = 0;
+        dragTarget = null;
+        if (handle) handle.classList.remove('is-dragging');
+
+        content.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+
+        if (deltaY > 100 || velocity > 0.45) {
+          if (isExpanded && deltaY < 180 && velocity < 0.75) {
+            isExpanded = false;
+            content.classList.remove('is-expanded');
+            content.style.transform = 'translateY(0)';
+          } else {
+            content.style.transform = 'translateY(100%)';
+            setTimeout(() => {
+              isExpanded = false;
+              content.classList.remove('is-expanded');
+              content.style.transform = '';
+              content.style.transition = '';
+              if (typeof onCloseCallback === 'function') {
+                onCloseCallback();
+              }
+            }, 260);
+          }
+        } else if (deltaY < -50 || velocity < -0.45) {
+          isExpanded = true;
+          content.classList.add('is-expanded');
+          content.style.transform = 'translateY(0)';
+        } else {
+          content.style.transform = 'translateY(0)';
+        }
+      }
+
+      content.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+      window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          isExpanded = false;
+          content.classList.remove('is-expanded');
+          content.style.transform = '';
+        }
+      });
+    }
+
+    // Initialize bottom sheet drag handlers for SI-ROSTER on mobile
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initRosterBottomSheetDrag('detailModal', '.modal-content', '.roster-modal-drag-handle', () => closeModal('detailModal'));
+        initRosterBottomSheetDrag('statusSearchModal', '.modal-content', '.roster-modal-drag-handle', () => closeModal('statusSearchModal'));
+      });
+    } else {
+      initRosterBottomSheetDrag('detailModal', '.modal-content', '.roster-modal-drag-handle', () => closeModal('detailModal'));
+      initRosterBottomSheetDrag('statusSearchModal', '.modal-content', '.roster-modal-drag-handle', () => closeModal('statusSearchModal'));
+    }
+
     // --- Detail Modal ---
     function openModal(activity, updateHistory = true) {
       if (window.RosterAudio && typeof window.RosterAudio.isRecentDrag === 'function' && window.RosterAudio.isRecentDrag()) {
@@ -7154,6 +7378,7 @@
       }
 
       document.getElementById('adminEditBtnContainer').style.display = isAdmin ? 'block' : 'none';
+      lockBodyScroll();
       document.getElementById('detailModal').classList.add('active');
       loadSignups(activity.sheetName, activity.duties);
 
@@ -7179,7 +7404,15 @@
 
     function closeModal(modalId, fromPopState = false) {
       const el = document.getElementById(modalId);
-      if (el) el.classList.remove('active');
+      if (el) {
+        el.classList.remove('active');
+        const box = el.querySelector('.modal-content');
+        if (box) {
+          box.classList.remove('is-expanded');
+          box.style.transform = '';
+        }
+      }
+      unlockBodyScroll();
       if (modalId === 'detailModal') {
         if (typeof stopUserRealtimeSync === 'function') stopUserRealtimeSync();
         // Revert SEO Meta Tags to default

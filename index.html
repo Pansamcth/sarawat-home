@@ -672,7 +672,8 @@
       flex-shrink: 0;
     }
 
-    .dg-event-date-box.is-range {
+    @media (max-width: 768px) {
+      .dg-event-date-box.is-range {
         background: var(--dg-bg-card-hover) !important;
         border-color: var(--dg-border) !important;
         padding: 6px 2px !important;
@@ -1724,10 +1725,10 @@
         <div class="dg-modal-meta-row">
           <span class="dg-modal-badge theme-feedback">
             <i data-lucide="message-square-heart"></i>
-            <span>ข้อเสนอแนะ & Feedback</span>
+            <span>ข้อเสนอแนะ &amp; Feedback</span>
           </span>
         </div>
-        <h3 class="dg-modal-title">สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+        <h3 class="dg-modal-title">สิ่งที่อยากให้สารวัตรทำ &amp; Feedback</h3>
         <p class="dg-modal-desc-sub">ส่งความคิดเห็น เสนอแนะกิจกรรม หรือสิ่งที่อยากให้สารวัตรช่วยดูแล</p>
       </div>
 
@@ -2072,13 +2073,178 @@
 
   <!-- Scripts -->
   <script>
+    // --- Universal Body Scroll Lock (ป้องกันการเลื่อนจอเว็บหลักบนมือถือ 100%) ---
+    window.__dgModalLockCount = window.__dgModalLockCount || 0;
+    window.__dgSavedScrollY = window.__dgSavedScrollY || 0;
+
+    function lockBodyScroll() {
+      window.__dgModalLockCount++;
+      if (window.__dgModalLockCount === 1) {
+        window.__dgSavedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + window.__dgSavedScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }
+    }
+
+    function unlockBodyScroll() {
+      if (window.__dgModalLockCount > 0) {
+        window.__dgModalLockCount--;
+      }
+      if (window.__dgModalLockCount === 0) {
+        const savedY = window.__dgSavedScrollY || 0;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        window.scrollTo(0, savedY);
+      }
+    }
+
+    // Touchmove prevention on modal backdrop to stop iOS rubber-banding
+    document.addEventListener('touchmove', function(e) {
+      if (e.target && e.target.classList && e.target.classList.contains('dg-modal-backdrop')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // --- Interactive Mobile Bottom Sheet Drag Controller (ลากลงปิด, ลากขึ้นขยายเต็มจอ) ---
+    function initBottomSheetDrag(backdropId, boxSelector, handleSelector, onCloseCallback) {
+      const backdrop = document.getElementById(backdropId);
+      if (!backdrop) return;
+      const box = backdrop.querySelector(boxSelector);
+      if (!box) return;
+      const handle = box.querySelector(handleSelector);
+
+      let startY = 0;
+      let currentY = 0;
+      let startTime = 0;
+      let isDragging = false;
+      let isExpanded = false;
+      let dragTarget = null;
+
+      function onTouchStart(e) {
+        if (window.innerWidth > 768) return; // Only active on mobile/tablet bottom sheets
+        if (e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        const target = e.target;
+
+        // Skip interactive elements
+        if (target.closest('button') || target.closest('input') || target.closest('textarea') || target.closest('select') || target.closest('a')) {
+          return;
+        }
+
+        const isHandle = handle && (handle === target || handle.contains(target));
+        const isHeader = target.closest('.dg-modal-header') || target.closest('.modal-header');
+        const isTopScroll = box.scrollTop <= 0;
+
+        if (isHandle || isHeader || isTopScroll) {
+          startY = touch.clientY;
+          currentY = startY;
+          startTime = Date.now();
+          isDragging = false;
+          dragTarget = isHandle ? 'handle' : (isHeader ? 'header' : 'body');
+        }
+      }
+
+      function onTouchMove(e) {
+        if (startY === 0) return;
+        const touch = e.touches[0];
+        currentY = touch.clientY;
+        const deltaY = currentY - startY;
+
+        if (dragTarget === 'body' && deltaY < 0 && !isExpanded) return;
+        if (dragTarget === 'body' && box.scrollTop > 0) return;
+
+        if (!isDragging && Math.abs(deltaY) > 6) {
+          isDragging = true;
+          box.style.transition = 'none';
+          if (handle) handle.classList.add('is-dragging');
+        }
+
+        if (isDragging) {
+          if (e.cancelable) e.preventDefault();
+          if (deltaY > 0) {
+            box.style.transform = 'translateY(' + deltaY + 'px)';
+          } else {
+            const dampedY = isExpanded ? (deltaY * 0.15) : (deltaY * 0.35);
+            box.style.transform = 'translateY(' + dampedY + 'px)';
+          }
+        }
+      }
+
+      function onTouchEnd(e) {
+        if (!isDragging) {
+          startY = 0;
+          dragTarget = null;
+          return;
+        }
+
+        const deltaY = currentY - startY;
+        const elapsedTime = Math.max(Date.now() - startTime, 1);
+        const velocity = deltaY / elapsedTime;
+
+        isDragging = false;
+        startY = 0;
+        dragTarget = null;
+        if (handle) handle.classList.remove('is-dragging');
+
+        box.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+
+        if (deltaY > 100 || velocity > 0.45) {
+          if (isExpanded && deltaY < 180 && velocity < 0.75) {
+            isExpanded = false;
+            box.classList.remove('is-expanded');
+            box.style.transform = 'translateY(0)';
+          } else {
+            box.style.transform = 'translateY(100%)';
+            setTimeout(() => {
+              isExpanded = false;
+              box.classList.remove('is-expanded');
+              box.style.transform = '';
+              box.style.transition = '';
+              if (typeof onCloseCallback === 'function') {
+                onCloseCallback();
+              }
+            }, 260);
+          }
+        } else if (deltaY < -50 || velocity < -0.45) {
+          isExpanded = true;
+          box.classList.add('is-expanded');
+          box.style.transform = 'translateY(0)';
+        } else {
+          box.style.transform = 'translateY(0)';
+        }
+      }
+
+      box.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+      window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+
+      backdrop.addEventListener('click', function(e) {
+        if (e.target === backdrop) {
+          isExpanded = false;
+          box.classList.remove('is-expanded');
+          box.style.transform = '';
+        }
+      });
+    }
+
     // --- Modal Handler Functions & Direct URL Router (?feedback, ?complaint) ---
     function openModal(id, updateUrl = true) {
       const modal = document.getElementById(id);
       if (modal) {
         modal.style.display = 'flex';
         modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        lockBodyScroll();
         if (id === 'feedbackModal') resetFeedbackWizard();
         if (id === 'complaintModal') resetComplaintWizard();
         if (window.lucide) lucide.createIcons();
@@ -2103,9 +2269,14 @@
             modal.style.display = 'none';
             if (id === 'feedbackModal') resetFeedbackWizard();
             if (id === 'complaintModal') resetComplaintWizard();
+            const box = modal.querySelector('.dg-modal-box');
+            if (box) {
+              box.classList.remove('is-expanded');
+              box.style.transform = '';
+            }
           }
         }, 280);
-        document.body.style.overflow = '';
+        unlockBodyScroll();
 
         // Clean up direct link query params / hash from URL
         if (window.history && window.history.replaceState) {
@@ -2116,6 +2287,19 @@
           }
         }
       }
+    }
+
+    // Initialize bottom sheet drag handlers on mobile
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initBottomSheetDrag('feedbackModal', '.dg-wizard-modal-box', '.dg-modal-drag-handle', () => closeModal('feedbackModal'));
+        initBottomSheetDrag('complaintModal', '.dg-wizard-modal-box', '.dg-modal-drag-handle', () => closeModal('complaintModal'));
+        initBottomSheetDrag('newsDetailModal', '.dg-news-modal-box', '.dg-modal-drag-handle', () => closeModal('newsDetailModal'));
+      });
+    } else {
+      initBottomSheetDrag('feedbackModal', '.dg-wizard-modal-box', '.dg-modal-drag-handle', () => closeModal('feedbackModal'));
+      initBottomSheetDrag('complaintModal', '.dg-wizard-modal-box', '.dg-modal-drag-handle', () => closeModal('complaintModal'));
+      initBottomSheetDrag('newsDetailModal', '.dg-news-modal-box', '.dg-modal-drag-handle', () => closeModal('newsDetailModal'));
     }
 
     // Direct link router: automatically opens modal if URL contains ?feedback, ?complaint, #feedback, etc.
