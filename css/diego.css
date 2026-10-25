@@ -1698,6 +1698,70 @@ svg:not([data-lucide]),
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* ==========================================================
+   LARGE WATERMARK BACKGROUND ICONS (ไอคอนสีขาว ขยายใหญ่วางล่างมุมขวา)
+   ลำดับเลเยอร์: ภาพพื้นหลัง > icon > ตัวหนังสือและปุ่ม
+   ========================================================== */
+.dg-ops-watermark-icon {
+  position: absolute;
+  right: -25px;
+  bottom: -45px;
+  width: 200px;
+  height: 200px;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  opacity: 0.13;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  transform: rotate(-8deg) scale(1);
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5));
+}
+
+.dg-ops-card:hover .dg-ops-watermark-icon {
+  opacity: 0.22;
+  transform: rotate(-4deg) scale(1.06) translate(-4px, -4px);
+}
+
+.dg-ops-watermark-icon svg,
+.dg-ops-watermark-icon i {
+  width: 100% !important;
+  height: 100% !important;
+  stroke-width: 1.2px;
+  display: block;
+}
+
+/* Featured Wide Card: Extra Large Watermark Icon (ดันลงล่างมุมขวา สีขาว) */
+.dg-ops-card.is-featured-wide .dg-ops-watermark-icon {
+  width: 270px;
+  height: 270px;
+  right: 20px;
+  bottom: -55px;
+  opacity: 0.12;
+}
+
+.dg-ops-card.is-featured-wide:hover .dg-ops-watermark-icon {
+  opacity: 0.20;
+  transform: rotate(-4deg) scale(1.05) translate(-6px, -4px);
+}
+
+@media (max-width: 640px) {
+  .dg-ops-watermark-icon {
+    width: 165px;
+    height: 165px;
+    right: -20px;
+    bottom: -35px;
+  }
+  .dg-ops-card.is-featured-wide .dg-ops-watermark-icon {
+    width: 200px;
+    height: 200px;
+    right: -10px;
+    bottom: -40px;
+  }
+}
+
 /* Card Typography on Seamless Dark Fade (ใหญ่เต็มขอบ ปรับขนาดตามหน้าจออัตโนมัติ - Kanit SemiBold 600) */
 .dg-ops-title {
   width: 100%;
