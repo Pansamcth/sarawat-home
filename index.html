@@ -1160,39 +1160,34 @@
 
       <div class="dg-ops-grid">
 
-        <!-- Card 1: Feedback & Wishlist (สิ่งที่อยากให้สารวัตรทำ) -->
-        <div onclick="openModal('feedbackModal')" role="button" tabindex="0" class="dg-ops-card theme-feedback"
+        <!-- Card 1: Wide Featured Bento (สิ่งที่อยากให้สารวัตรทำ & Feedback) -->
+        <div onclick="openModal('feedbackModal')" role="button" tabindex="0" class="dg-ops-card theme-feedback is-featured-wide"
           data-reveal="scale" data-delay="80">
           <div class="dg-ops-bg-wrap">
             <img src="assets/images/what-we-do-2.jpg" alt="สิ่งที่อยากให้สารวัตรทำ & Feedback" class="dg-ops-bg-img" loading="lazy" />
             <div class="dg-ops-bg-overlay"></div>
           </div>
 
-          <div class="dg-ops-top-meta">
-            <span class="dg-ops-num-tag">01 / VOICE</span>
-            <span class="dg-ops-status-chip">
-              <span class="dg-pulse-dot"></span> พร้อมรับเรื่อง 24 ชม.
-            </span>
-          </div>
-
-          <div class="dg-ops-liquid-panel">
-            <div class="dg-ops-icon-pill">
-              <i data-lucide="message-square-heart"></i>
-            </div>
-            <h3 class="dg-ops-title">สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
-            <p class="dg-ops-desc">
-              เสนอแนะสิ่งที่อยากให้สารวัตรช่วยดูแล แนะนำจุดตรวจ ความปลอดภัย กิจกรรมสร้างสรรค์ หรือสิ่งที่นักเรียนอยากเห็น
-            </p>
-            <div class="dg-ops-btn-action">
-              <span>ส่งข้อเสนอแนะ / ความต้องการ</span>
-              <div class="dg-ops-btn-icon">
-                <i data-lucide="arrow-right"></i>
+          <div class="dg-ops-frosted-panel">
+            <div class="dg-ops-featured-content">
+              <div class="dg-ops-header-row">
+                <div class="dg-ops-icon-wrap">
+                  <i data-lucide="sparkles"></i>
+                </div>
               </div>
+              <h3 class="dg-ops-title" style="font-size: 1.25rem;">สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+              <p class="dg-ops-desc">
+                ร่วมส่งต่อไอเดีย ข้อเสนอแนะ หรือสิ่งที่อยากให้นักเรียนสารวัตรช่วยดูแล ทั้งด้านความปลอดภัย จุดตรวจ และกิจกรรมสร้างสรรค์ เพื่อโรงเรียนของเรา
+              </p>
+            </div>
+            <div class="dg-ops-btn-action">
+              <span class="dg-ops-btn-text">ส่งข้อเสนอแนะ / ความต้องการ</span>
+              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
             </div>
           </div>
         </div>
 
-        <!-- Card 2: Report & Anonymous Complaints (รายงานการทำงาน / ร้องเรียน - ป๊อปอัปตรงนี้) -->
+        <!-- Card 2: Report & Anonymous Complaints (รายงานการทำงาน / ร้องเรียน) -->
         <div onclick="openModal('complaintModal')" role="button" tabindex="0" class="dg-ops-card theme-complaint"
           data-reveal="scale" data-delay="160">
           <div class="dg-ops-bg-wrap">
@@ -1200,26 +1195,19 @@
             <div class="dg-ops-bg-overlay"></div>
           </div>
 
-          <div class="dg-ops-top-meta">
-            <span class="dg-ops-num-tag">02 / REPORT</span>
-            <span class="dg-ops-status-chip">
-              <i data-lucide="shield-check" style="width: 13px; height: 13px;"></i> นิรนาม 100%
-            </span>
-          </div>
-
-          <div class="dg-ops-liquid-panel">
-            <div class="dg-ops-icon-pill">
-              <i data-lucide="scale"></i>
+          <div class="dg-ops-frosted-panel">
+            <div class="dg-ops-header-row">
+              <div class="dg-ops-icon-wrap">
+                <i data-lucide="shield-check"></i>
+              </div>
             </div>
             <h3 class="dg-ops-title">รายงานการทำงาน / ร้องเรียน</h3>
             <p class="dg-ops-desc">
-              สะท้อนปัญหา แจ้งเรื่องร้องเรียน หรือรายงานพฤติกรรมการปฏิบัติหน้าที่ ข้อมูลจะถูกปิดบังตัวตน 100% ส่งตรงถึงครูที่ปรึกษา
+              สะท้อนปัญหา แจ้งเรื่องร้องเรียน หรือรายงานพฤติกรรมการปฏิบัติหน้าที่ ข้อมูลปิดบังตัวตน 100% ส่งตรงถึงครูที่ปรึกษา
             </p>
             <div class="dg-ops-btn-action">
-              <span>ส่งเรื่องรายงาน / ร้องเรียน</span>
-              <div class="dg-ops-btn-icon">
-                <i data-lucide="arrow-right"></i>
-              </div>
+              <span class="dg-ops-btn-text">ส่งเรื่องรายงาน (นิรนาม 100%)</span>
+              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
             </div>
           </div>
         </div>
@@ -1232,26 +1220,19 @@
             <div class="dg-ops-bg-overlay"></div>
           </div>
 
-          <div class="dg-ops-top-meta">
-            <span class="dg-ops-num-tag">03 / ROSTER</span>
-            <span class="dg-ops-status-chip is-live">
-              <span class="dg-pulse-dot live"></span> LIVE SHIFT
-            </span>
-          </div>
-
-          <div class="dg-ops-liquid-panel">
-            <div class="dg-ops-icon-pill">
-              <i data-lucide="calendar-check"></i>
+          <div class="dg-ops-frosted-panel">
+            <div class="dg-ops-header-row">
+              <div class="dg-ops-icon-wrap">
+                <i data-lucide="clipboard-check"></i>
+              </div>
             </div>
             <h3 class="dg-ops-title">ระบบลงหน้าที่ (SI-ROSTER)</h3>
             <p class="dg-ops-desc">
               ตรวจสอบตารางเวร จุดตรวจ และบันทึกเวลาปฏิบัติหน้าที่ ประจำภาคเรียนที่ 2/2569 ผ่านระบบออนไลน์
             </p>
             <div class="dg-ops-btn-action">
-              <span>เข้าสู่ระบบเวร (SI-ROSTER)</span>
-              <div class="dg-ops-btn-icon">
-                <i data-lucide="arrow-up-right"></i>
-              </div>
+              <span class="dg-ops-btn-text">เข้าสู่ระบบเวร (SI-ROSTER)</span>
+              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-up-right"></i></span>
             </div>
           </div>
         </a>
@@ -1264,26 +1245,20 @@
             <div class="dg-ops-bg-overlay"></div>
           </div>
 
-          <div class="dg-ops-top-meta">
-            <span class="dg-ops-num-tag">04 / RECRUIT</span>
-            <span id="opsRecruitStatusBadge" class="dg-ops-status-chip">
-              🛠️ กำลังปรับปรุงพัฒนา
-            </span>
-          </div>
-
-          <div class="dg-ops-liquid-panel">
-            <div class="dg-ops-icon-pill">
-              <i data-lucide="user-plus"></i>
+          <div class="dg-ops-frosted-panel">
+            <div class="dg-ops-header-row">
+              <div class="dg-ops-icon-wrap">
+                <i data-lucide="award"></i>
+              </div>
+              <span id="opsRecruitStatusBadge" class="dg-ops-recruit-status">🛠️ กำลังปรับปรุงพัฒนา</span>
             </div>
             <h3 class="dg-ops-title">SARAWAT ADMISSION 70</h3>
             <p class="dg-ops-desc">
-              ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 สำหรับนักเรียนที่มีความประพฤติดี มีระเบียบวินัย
+              ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 สำหรับนักเรียนที่มีวินัย
             </p>
             <div class="dg-ops-btn-action">
-              <span>เข้าสู่ระบบรับสมัคร</span>
-              <div class="dg-ops-btn-icon">
-                <i data-lucide="arrow-right"></i>
-              </div>
+              <span class="dg-ops-btn-text">เข้าสู่ระบบรับสมัครสารวัตร</span>
+              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
             </div>
           </div>
         </a>

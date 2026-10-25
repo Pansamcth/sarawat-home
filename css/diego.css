@@ -1482,43 +1482,75 @@ svg:not([data-lucide]),
 
 .dg-ops-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   max-width: 1200px;
   margin: 0 auto;
   gap: 24px;
 }
 
 /* ==========================================================
-   NEO-KINETIC LIQUID GLASS CARDS & ACTION BUTTONS
+   MINIMALIST CLEAN FROSTED CARDS & UNIFORM ACTION BUTTONS
    ========================================================== */
 .dg-ops-card {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
+  border-radius: 22px;
   background-color: #0f172a;
   border: 1px solid rgba(226, 232, 240, 0.85);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 450px;
+  justify-content: flex-end;
+  min-height: 440px;
   padding: 16px;
   text-decoration: none !important;
   color: inherit !important;
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease;
   user-select: none;
   -webkit-user-select: none;
 }
 
 .dg-ops-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 42px -8px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.06);
 }
 
-/* Background Photo Wrap with Smooth Kinetic Zoom */
+/* Featured Wide Card: ระบบข้อเสนอแนะ & สิ่งที่อยากให้ทำ (Hero Bento) */
+.dg-ops-card.is-featured-wide {
+  grid-column: 1 / -1;
+  min-height: 380px;
+}
+
+.dg-ops-card.is-featured-wide .dg-ops-frosted-panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 24px 28px;
+}
+
+.dg-ops-card.is-featured-wide .dg-ops-featured-content {
+  flex: 1;
+}
+
+.dg-ops-card.is-featured-wide .dg-ops-desc {
+  min-height: auto;
+  margin-bottom: 0;
+}
+
+.dg-ops-card.is-featured-wide .dg-ops-btn-action {
+  width: auto;
+  min-width: 270px;
+  max-width: 330px;
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+/* Background Photo with Subtle Natural Zoom */
 .dg-ops-bg-wrap {
   position: absolute;
   inset: 0;
@@ -1533,13 +1565,12 @@ svg:not([data-lucide]),
   object-fit: cover;
   object-position: center;
   transform: scale(1.001);
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-  filter: saturate(1.08) brightness(0.96);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: saturate(1.05) brightness(0.96);
 }
 
 .dg-ops-card:hover .dg-ops-bg-img {
-  transform: scale(1.06);
-  filter: saturate(1.15) brightness(0.92);
+  transform: scale(1.05);
 }
 
 .dg-ops-bg-overlay {
@@ -1547,162 +1578,101 @@ svg:not([data-lucide]),
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.5) 0%,
-    rgba(15, 23, 42, 0.25) 35%,
-    rgba(15, 23, 42, 0.7) 100%
+    rgba(15, 23, 42, 0.25) 0%,
+    rgba(15, 23, 42, 0.15) 30%,
+    rgba(15, 23, 42, 0.6) 100%
   );
-  transition: background 0.4s ease;
-}
-
-.dg-ops-card:hover .dg-ops-bg-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.4) 0%,
-    rgba(15, 23, 42, 0.2) 35%,
-    rgba(15, 23, 42, 0.75) 100%
-  );
-}
-
-/* Top Meta Header: System Tag & Status Chip */
-.dg-ops-top-meta {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  padding: 4px 6px;
-}
-
-.dg-ops-num-tag {
-  font-family: var(--dg-font-sans);
-  font-size: 0.72rem;
-  font-weight: 850;
-  letter-spacing: 0.08em;
-  color: #ffffff;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.dg-ops-status-chip {
-  font-size: 0.72rem;
-  font-weight: 750;
-  color: #ffffff;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.dg-ops-status-chip.is-live {
-  background: rgba(6, 78, 59, 0.85);
-  border-color: rgba(52, 211, 153, 0.4);
-  color: #a7f3d0;
-}
-
-.dg-pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22c55e;
-  display: inline-block;
-  box-shadow: 0 0 8px #22c55e;
-  animation: pulseDot 2s infinite ease-in-out;
-}
-
-.dg-pulse-dot.live {
-  background: #4ade80;
-  box-shadow: 0 0 10px #4ade80;
-}
-
-@keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.6; }
 }
 
 /* ==========================================================
-   LIQUID FROSTED GLASS LOWER PANEL (อ่านข้อความคมชัด)
+   CLEAN FROSTED BACKDROP (เบลอเรียบง่าย อ่านชัดเจน ไม่หนาเตอะ)
    ========================================================== */
-.dg-ops-liquid-panel {
+.dg-ops-frosted-panel {
   position: relative;
-  z-index: 3;
+  z-index: 2;
   width: 100%;
-  margin-top: auto;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   border-radius: 18px;
   padding: 20px 18px 18px;
-  box-shadow: 0 14px 34px -8px rgba(15, 23, 42, 0.14),
-              inset 0 1px 1px rgba(255, 255, 255, 0.9);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.1),
+              0 1px 2px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
-.dg-ops-card:hover .dg-ops-liquid-panel {
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.2),
-              inset 0 1px 2px rgba(255, 255, 255, 1);
+.dg-ops-card:hover .dg-ops-frosted-panel {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 14px 30px -6px rgba(15, 23, 42, 0.14);
 }
 
-/* Icon Box inside Liquid Panel */
-.dg-ops-icon-pill {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+.dg-ops-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.dg-ops-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
-  font-size: 1.15rem;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 1.1rem;
+  transition: transform 0.25s ease;
 }
 
-.dg-ops-card:hover .dg-ops-icon-pill {
-  transform: scale(1.08);
+.dg-ops-card:hover .dg-ops-icon-wrap {
+  transform: scale(1.06);
 }
 
-.dg-ops-card.theme-feedback .dg-ops-icon-pill {
+.dg-ops-card.theme-feedback .dg-ops-icon-wrap {
   background: #eff6ff;
   color: #2563eb;
   border: 1px solid #bfdbfe;
 }
 
-.dg-ops-card.theme-complaint .dg-ops-icon-pill {
+.dg-ops-card.theme-complaint .dg-ops-icon-wrap {
   background: #fff7ed;
   color: #ea580c;
   border: 1px solid #fed7aa;
 }
 
-.dg-ops-card.theme-roster .dg-ops-icon-pill {
+.dg-ops-card.theme-roster .dg-ops-icon-wrap {
   background: #f0fdf4;
   color: #059669;
   border: 1px solid #bbf7d0;
 }
 
-.dg-ops-card.theme-recruit .dg-ops-icon-pill {
+.dg-ops-card.theme-recruit .dg-ops-icon-wrap {
   background: #f5f3ff;
   color: #6366f1;
   border: 1px solid #ddd6fe;
 }
 
-/* Card Title & Description Typography */
+.dg-ops-recruit-status {
+  font-size: 0.72rem;
+  font-weight: 750;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Card Typography */
 .dg-ops-title {
   font-family: var(--dg-font-sans);
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   font-weight: 850;
   color: #0f172a;
   margin: 0 0 6px;
@@ -1711,119 +1681,159 @@ svg:not([data-lucide]),
 }
 
 .dg-ops-desc {
-  font-size: 0.84rem;
-  color: #334155;
+  font-size: 0.83rem;
+  color: #475569;
   line-height: 1.55;
   margin: 0 0 16px;
   font-weight: 450;
+  min-height: 52px;
 }
 
 /* ==========================================================
-   NEO-KINETIC FLOATING ACTION PILL BUTTON
+   UNIFORM ACTION BUTTONS (ขนาดเท่ากันทุกปุ่ม 100%)
    ========================================================== */
 .dg-ops-btn-action {
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  max-height: 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  padding: 0 12px 0 18px;
+  box-sizing: border-box;
+  border-radius: 12px;
   background: #0f172a;
   color: #ffffff;
-  padding: 8px 12px 8px 16px;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 750;
-  letter-spacing: 0.01em;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #0f172a;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
+  cursor: pointer;
 }
 
-.dg-ops-btn-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+.dg-ops-btn-text {
+  font-size: 0.83rem;
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+
+.dg-ops-btn-arrow {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.16);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.dg-ops-btn-icon i,
-.dg-ops-btn-icon svg {
-  width: 15px;
-  height: 15px;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.dg-ops-btn-arrow svg,
+.dg-ops-btn-arrow i {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hover States per Theme */
+/* Uniform Hover Behavior */
 .dg-ops-card.theme-feedback:hover .dg-ops-btn-action {
   background: #2563eb;
-  border-color: #3b82f6;
-  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+  border-color: #2563eb;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
 }
 
 .dg-ops-card.theme-complaint:hover .dg-ops-btn-action {
   background: #ea580c;
-  border-color: #f97316;
-  box-shadow: 0 8px 22px rgba(234, 88, 12, 0.35);
+  border-color: #ea580c;
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.3);
 }
 
 .dg-ops-card.theme-roster:hover .dg-ops-btn-action {
   background: #059669;
-  border-color: #10b981;
-  box-shadow: 0 8px 22px rgba(5, 150, 105, 0.35);
+  border-color: #059669;
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.3);
 }
 
 .dg-ops-card.theme-recruit:hover .dg-ops-btn-action {
   background: #4f46e5;
-  border-color: #6366f1;
-  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35);
+  border-color: #4f46e5;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.3);
 }
 
-.dg-ops-card:hover .dg-ops-btn-icon {
+.dg-ops-card:hover .dg-ops-btn-arrow {
   background: #ffffff;
   color: #0f172a;
   transform: translateX(2px);
 }
 
-.dg-ops-card:hover .dg-ops-btn-icon svg,
-.dg-ops-card:hover .dg-ops-btn-icon i {
-  transform: translate(1px, -1px) rotate(-45deg);
+.dg-ops-card:hover .dg-ops-btn-arrow svg,
+.dg-ops-card:hover .dg-ops-btn-arrow i {
+  transform: translateX(1px);
 }
 
-/* Card Borders Accent on Hover */
+/* Card Subtle Border on Hover */
 .dg-ops-card.theme-feedback:hover {
-  border-color: rgba(37, 99, 235, 0.4);
+  border-color: rgba(37, 99, 235, 0.45);
 }
 .dg-ops-card.theme-complaint:hover {
-  border-color: rgba(234, 88, 12, 0.4);
+  border-color: rgba(234, 88, 12, 0.45);
 }
 .dg-ops-card.theme-roster:hover {
-  border-color: rgba(5, 150, 105, 0.4);
+  border-color: rgba(5, 150, 105, 0.45);
 }
 .dg-ops-card.theme-recruit:hover {
-  border-color: rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.45);
 }
 
-/* Mobile Responsiveness */
+/* Responsive Grid */
+@media (max-width: 992px) {
+  .dg-ops-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .dg-ops-card.is-featured-wide {
+    grid-column: 1 / -1;
+  }
+  .dg-ops-card.is-featured-wide .dg-ops-frosted-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dg-ops-card.is-featured-wide .dg-ops-btn-action {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 14px;
+  }
+}
+
 @media (max-width: 640px) {
   .dg-ops-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 18px;
   }
   .dg-ops-card {
     min-height: 420px;
-    padding: 14px;
+    padding: 12px;
   }
-  .dg-ops-liquid-panel {
-    padding: 18px 16px 16px;
+  .dg-ops-card.is-featured-wide {
+    min-height: 380px;
+  }
+  .dg-ops-frosted-panel {
+    padding: 16px 14px 14px;
   }
   .dg-ops-title {
-    font-size: 1.1rem;
+    font-size: 1.08rem;
+  }
+  .dg-ops-desc {
+    min-height: auto;
+    margin-bottom: 14px;
   }
 }
 
