@@ -1164,7 +1164,7 @@
         <div onclick="openModal('feedbackModal')" role="button" tabindex="0" class="dg-ops-card theme-feedback is-featured-wide"
           data-reveal="scale" data-delay="80">
           <div class="dg-ops-bg-wrap">
-            <img src="assets/images/what-we-do-2.jpg" alt="สิ่งที่อยากให้สารวัตรทำ & Feedback" class="dg-ops-bg-img" loading="lazy" />
+            <img src="assets/images/feedback-cover.jpg" alt="สิ่งที่อยากให้สารวัตรทำ & Feedback" class="dg-ops-bg-img" loading="lazy" />
             <div class="dg-ops-bg-blur"></div>
             <div class="dg-ops-bg-overlay"></div>
           </div>
@@ -1192,7 +1192,7 @@
         <div onclick="openModal('complaintModal')" role="button" tabindex="0" class="dg-ops-card theme-complaint"
           data-reveal="scale" data-delay="160">
           <div class="dg-ops-bg-wrap">
-            <img src="assets/images/what-we-do-1.jpg" alt="รายงานการทำงาน / ร้องเรียน" class="dg-ops-bg-img" loading="lazy" />
+            <img src="assets/images/complaint-cover.jpg" alt="รายงานการทำงาน / ร้องเรียน" class="dg-ops-bg-img" loading="lazy" />
             <div class="dg-ops-bg-blur"></div>
             <div class="dg-ops-bg-overlay"></div>
           </div>
@@ -1215,7 +1215,7 @@
         </div>
 
         <!-- Card 3: SI-ROSTER (The Green Duty System) -->
-        <a href="/si-roster" target="_blank" rel="noopener noreferrer" class="dg-ops-card theme-roster"
+        <a href="/si-roster" class="dg-ops-card theme-roster"
           data-reveal="scale" data-delay="240">
           <div class="dg-ops-bg-wrap">
             <img src="assets/images/si-roster-cover.jpg" alt="ระบบลงหน้าที่ SI-ROSTER" class="dg-ops-bg-img" loading="lazy" />
@@ -1235,13 +1235,13 @@
             </p>
             <div class="dg-ops-btn-action">
               <span class="dg-ops-btn-text">เข้าสู่ระบบเวร (SI-ROSTER)</span>
-              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-up-right"></i></span>
+              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
             </div>
           </div>
         </a>
 
         <!-- Card 4: Recruitment (ADMISSION 70) -->
-        <a href="/admission" class="dg-ops-card theme-recruit"
+        <a href="/admission" id="cardOpsRecruit" class="dg-ops-card theme-recruit is-closed"
           data-reveal="scale" data-delay="320">
           <div class="dg-ops-bg-wrap">
             <img src="assets/images/recruit-cover.jpg" alt="SARAWAT ADMISSION 70" class="dg-ops-bg-img" loading="lazy" />
@@ -1249,20 +1249,62 @@
             <div class="dg-ops-bg-overlay"></div>
           </div>
 
+          <!-- Police Caution Tape Barrier Overlay (แถบกั้นตำรวจสลับสีเหลือง-ดำเมื่อปิดรับสมัคร) -->
+          <div id="opsRecruitCautionTape" class="dg-ops-caution-barrier" aria-hidden="true">
+            <div class="dg-police-tape tape-top">
+              <div class="dg-tape-text-track">
+                <span>POLICE LINE DO NOT CROSS</span>
+                <span class="sep">•</span>
+                <span>ระบบยังไม่เปิดรับสมัคร</span>
+                <span class="sep">•</span>
+                <span>SARAWAT PATROL 70</span>
+                <span class="sep">•</span>
+                <span>RESTRICTED AREA</span>
+                <span class="sep">•</span>
+                <span>POLICE LINE DO NOT CROSS</span>
+                <span class="sep">•</span>
+                <span>ระบบยังไม่เปิดรับสมัคร</span>
+                <span class="sep">•</span>
+                <span>SARAWAT PATROL 70</span>
+                <span class="sep">•</span>
+                <span>RESTRICTED AREA</span>
+              </div>
+            </div>
+
+            <div class="dg-police-tape tape-bottom">
+              <div class="dg-tape-text-track">
+                <span>CAUTION • ห้ามผ่าน</span>
+                <span class="sep">•</span>
+                <span>ปิดรับสมัครชั่วคราว</span>
+                <span class="sep">•</span>
+                <span>DO NOT ENTER</span>
+                <span class="sep">•</span>
+                <span>พื้นที่ควบคุม</span>
+                <span class="sep">•</span>
+                <span>CAUTION • ห้ามผ่าน</span>
+                <span class="sep">•</span>
+                <span>ปิดรับสมัครชั่วคราว</span>
+                <span class="sep">•</span>
+                <span>DO NOT ENTER</span>
+                <span class="sep">•</span>
+                <span>พื้นที่ควบคุม</span>
+              </div>
+            </div>
+          </div>
+
           <div class="dg-ops-content-panel">
             <div class="dg-ops-header-row">
               <div class="dg-ops-icon-wrap">
                 <i data-lucide="award"></i>
               </div>
-              <span id="opsRecruitStatusBadge" class="dg-ops-recruit-status">🛠️ กำลังปรับปรุงพัฒนา</span>
             </div>
             <h3 class="dg-ops-title">SARAWAT ADMISSION 70</h3>
             <p class="dg-ops-desc">
               ระบบรับสมัครสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล ประจำปีการศึกษา 2570 สำหรับนักเรียนที่มีวินัย
             </p>
-            <div class="dg-ops-btn-action">
-              <span class="dg-ops-btn-text">เข้าสู่ระบบรับสมัครสารวัตร</span>
-              <span class="dg-ops-btn-arrow"><i data-lucide="arrow-right"></i></span>
+            <div class="dg-ops-btn-action" id="opsRecruitBtnAction">
+              <span class="dg-ops-btn-text" id="opsRecruitBtnText">ห้ามเข้า (ยังไม่เปิดรับสมัคร)</span>
+              <span class="dg-ops-btn-arrow" id="opsRecruitBtnArrow"><i data-lucide="lock"></i></span>
             </div>
           </div>
         </a>
@@ -1797,6 +1839,35 @@
     </div>
   </div>
 
+
+  <!-- 5. Recruitment Closed Modal (แจ้งเตือนระบบรับสมัครยังไม่เปิด) -->
+  <div class="dg-modal-backdrop" id="recruitClosedModal" style="display: none;" onclick="if(event.target === this) closeModal('recruitClosedModal')">
+    <div class="dg-modal-box dg-recruit-closed-modal-box" style="max-width: 460px; text-align: center; border-radius: 24px; padding: 32px 28px; position: relative; font-family: 'Kanit', sans-serif !important;">
+      <button class="dg-modal-close-btn" onclick="closeModal('recruitClosedModal')" aria-label="ปิดหน้าต่าง">
+        <i data-lucide="x"></i>
+      </button>
+
+      <!-- Caution Stripes Top Accent -->
+      <div style="height: 10px; width: 100%; border-radius: 999px; margin-bottom: 24px; background: repeating-linear-gradient(-45deg, #0b0f19, #0b0f19 12px, #facc15 12px, #facc15 24px); box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);"></div>
+
+      <div style="width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 50%; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 2px solid #fde68a; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);">
+        <i data-lucide="lock" style="width: 32px; height: 32px;"></i>
+      </div>
+
+      <h3 style="font-family: 'Kanit', sans-serif !important; font-size: 1.42rem; font-weight: 700; color: #0f172a; margin: 0 0 10px; letter-spacing: 0;">
+        ระบบยังไม่เปิดรับสมัคร
+      </h3>
+
+      <p style="font-family: 'Kanit', sans-serif !important; font-size: 0.95rem; font-weight: 350; color: #64748b; line-height: 1.65; margin: 0 0 24px;">
+        ขณะนี้ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 ยังไม่เปิดให้บริการ หรืออยู่ในระหว่างการปิดปรับปรุงระบบ<br/>
+        โปรดติดตามประกาศกำหนดการรับสมัครอย่างเป็นทางการจากทางงานสารวัตรนักเรียน
+      </p>
+
+      <button type="button" class="dg-btn-black" onclick="closeModal('recruitClosedModal')" style="cursor: pointer; width: 100%; height: 46px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif !important; font-weight: 500; font-size: 1rem; background: #0f172a; color: #ffffff; border: none; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);">
+        <span style="font-family: 'Kanit', sans-serif !important; font-weight: 500;">รับทราบและเข้าใจแล้ว</span>
+      </button>
+    </div>
+  </div>
 
   <!-- ============ CIRCULAR SCROLL PROGRESS BACK-TO-TOP ============ -->
   <button class="dg-scroll-top-btn" id="backToTop" aria-label="เลื่อนขึ้นด้านบน">
@@ -3410,6 +3481,69 @@
       renderNewsCards();
       renderUpcomingEvents();
 
+      // ==========================================================
+      // 🛡️ RECRUITMENT STATUS & POLICE CAUTION TAPE BARRIER LOGIC
+      // ==========================================================
+      function syncRecruitmentCard(st) {
+        const card = document.getElementById('cardOpsRecruit');
+        const tape = document.getElementById('opsRecruitCautionTape');
+        const btnText = document.getElementById('opsRecruitBtnText');
+        const btnArrow = document.getElementById('opsRecruitBtnArrow');
+
+        const isOpen = Boolean(st && st.isOpen && !st.isMaintenance);
+
+        if (isOpen) {
+          // SYSTEM OPEN: ปลดแถบกั้นตำรวจออก อนุญาตให้เข้าสู่ระบบได้ตามปกติ
+          if (card) {
+            card.classList.remove('is-closed');
+            card.removeAttribute('aria-disabled');
+          }
+          if (tape) tape.style.display = 'none';
+          if (btnText) btnText.textContent = 'เข้าสู่ระบบรับสมัครสารวัตร';
+          if (btnArrow) btnArrow.innerHTML = '<i data-lucide="arrow-right"></i>';
+        } else {
+          // SYSTEM CLOSED / MAINTENANCE: แปะแถบกั้นตำรวจสลับสีเหลือง-ดำ ล็อกปุ่ม
+          if (card) {
+            card.classList.add('is-closed');
+            card.setAttribute('aria-disabled', 'true');
+          }
+          if (tape) tape.style.display = 'flex';
+          if (btnText) btnText.textContent = 'ห้ามเข้า (ยังไม่เปิดรับสมัคร)';
+          if (btnArrow) btnArrow.innerHTML = '<i data-lucide="lock"></i>';
+        }
+
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      }
+
+      // ป้องกันการคลิกเข้าสู่หน้าสมัครเมื่อระบบปิดอยู่ พร้อมแสดงการ์ดสั่นเตือนและเปิด Modal แจ้งเตือน
+      const recruitCardEl = document.getElementById('cardOpsRecruit');
+      if (recruitCardEl) {
+        recruitCardEl.addEventListener('click', function (e) {
+          if (recruitCardEl.classList.contains('is-closed')) {
+            e.preventDefault();
+            recruitCardEl.classList.remove('dg-card-shake');
+            void recruitCardEl.offsetWidth; // trigger reflow
+            recruitCardEl.classList.add('dg-card-shake');
+            if (typeof openModal === 'function') {
+              openModal('recruitClosedModal');
+            }
+          }
+        });
+      }
+
+      // ตรวจสอบสถานะการรับสมัครจาก Backend
+      if (window.SarawatApi && window.SarawatApi.getRecruitmentStatus) {
+        window.SarawatApi.getRecruitmentStatus().then(st => {
+          syncRecruitmentCard(st);
+        }).catch(() => {
+          syncRecruitmentCard({ isOpen: false });
+        });
+      } else {
+        syncRecruitmentCard({ isOpen: false });
+      }
+
       // Background Sync from MySQL Backend API if server is connected
       if (window.SarawatApi) {
         window.SarawatApi.getNews().then(items => {
@@ -3421,31 +3555,6 @@
 
         // Refresh upcoming events
         renderUpcomingEvents();
-
-        // Sync recruitment status for Operations Card Badge
-        if (window.SarawatApi.getRecruitmentStatus) {
-          window.SarawatApi.getRecruitmentStatus().then(st => {
-            const badge = document.getElementById('opsRecruitStatusBadge');
-            if (badge) {
-              if (st && st.isMaintenance) {
-                badge.style.background = '#fef3c7';
-                badge.style.color = '#92400e';
-                badge.style.borderColor = '#fde68a';
-                badge.textContent = '🛠️ กำลังปรับปรุงพัฒนา';
-              } else if (st && st.isOpen) {
-                badge.style.background = '#dcfce7';
-                badge.style.color = '#15803d';
-                badge.style.borderColor = '#bbf7d0';
-                badge.textContent = '🟢 กำลังเปิดรับสมัคร';
-              } else {
-                badge.style.background = '#fee2e2';
-                badge.style.color = '#991b1b';
-                badge.style.borderColor = '#fecaca';
-                badge.textContent = '🔒 ปิดรับสมัคร';
-              }
-            }
-          }).catch(() => {});
-        }
       }
 
       const newsTrackWrap = document.getElementById('newsTrackWrap');

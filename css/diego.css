@@ -1829,6 +1829,161 @@ svg:not([data-lucide]),
   border-color: rgba(129, 140, 248, 0.6);
 }
 
+/* ==========================================================
+   POLICE CAUTION TAPE & HAZARD BARRIER (ระบบรับสมัครปิด)
+   ========================================================== */
+
+/* Shaking tactile effect when clicking a locked card */
+@keyframes dgCardShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.dg-card-shake {
+  animation: dgCardShake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+}
+
+/* Closed state for Ops Card */
+.dg-ops-card.is-closed {
+  cursor: not-allowed !important;
+  border-color: rgba(250, 204, 21, 0.45) !important;
+}
+
+.dg-ops-card.is-closed:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 0 1.5px rgba(250, 204, 21, 0.5) !important;
+}
+
+.dg-ops-card.is-closed .dg-ops-bg-img {
+  filter: grayscale(0.5) brightness(0.65) contrast(1.1) !important;
+  transform: scale(1) !important;
+}
+
+/* Police Barrier Tape Container */
+.dg-ops-caution-barrier {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.35s ease;
+}
+
+/* Realistic Police Caution Tape Strip */
+.dg-police-tape {
+  position: absolute;
+  width: 140%;
+  left: -20%;
+  height: 38px;
+  background: #facc15;
+  color: #0b0f19;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
+  opacity: 0.96;
+}
+
+/* Top & Bottom Hazard Edge Stripes on the Tape */
+.dg-police-tape::before,
+.dg-police-tape::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #0b0f19,
+    #0b0f19 8px,
+    #facc15 8px,
+    #facc15 16px
+  );
+  z-index: 2;
+}
+
+.dg-police-tape::before {
+  top: 0;
+}
+
+.dg-police-tape::after {
+  bottom: 0;
+}
+
+/* Angled Slants for Authentic Crossing Police Lines */
+.dg-police-tape.tape-top {
+  top: 26%;
+  transform: rotate(-7deg);
+}
+
+.dg-police-tape.tape-bottom {
+  top: 58%;
+  transform: rotate(6deg);
+}
+
+/* Repeating Police Hazard Text Track */
+.dg-tape-text-track {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  white-space: nowrap;
+  font-family: var(--dg-font-sans), 'Impact', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0b0f19;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  padding: 0 8px;
+  animation: dgTapeScroll 25s linear infinite;
+}
+
+@keyframes dgTapeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.dg-tape-text-track span.sep {
+  opacity: 0.65;
+  font-size: 0.65rem;
+}
+
+/* Recruitment Closed Modal Typography: Full Kanit Font */
+#recruitClosedModal,
+#recruitClosedModal .dg-modal-box,
+#recruitClosedModal h3,
+#recruitClosedModal p,
+#recruitClosedModal button,
+#recruitClosedModal span {
+  font-family: 'Kanit', sans-serif !important;
+}
+
+/* Action Button Styling when Card is Closed (Standard button look with lock icon) */
+.dg-ops-card.is-closed .dg-ops-btn-action {
+  cursor: not-allowed;
+}
+
+.dg-ops-card.is-closed:hover .dg-ops-btn-action {
+  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.dg-ops-card.is-closed:hover .dg-ops-btn-action .dg-ops-btn-text {
+  color: #0f172a;
+}
+
+.dg-ops-card.is-closed:hover .dg-ops-btn-arrow {
+  background: #0f172a;
+  color: #ffffff;
+  transform: none;
+}
+
 /* Responsive Grid */
 @media (max-width: 992px) {
   .dg-ops-grid {
