@@ -2814,13 +2814,30 @@
         #detailModal .modal-header::before {
           display: none !important;
         }
+        .modal-overlay {
+          background: rgba(15, 23, 42, 0.78) !important;
+          -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important; /* Zero GPU blur lag on mobile */
+        }
         #detailModal .modal-content,
         #statusSearchModal .modal-content {
           height: 86vh;
           height: 86dvh;
           max-height: 86vh;
           max-height: 86dvh;
-          transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1) !important;
+          box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25) !important;
+          transform: translate3d(0, 105%, 0) !important;
+          -webkit-transform: translate3d(0, 105%, 0) !important;
+          transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
+          -webkit-transition: -webkit-transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
+          will-change: transform !important;
+          -webkit-backface-visibility: hidden !important;
+          backface-visibility: hidden !important;
+        }
+        #detailModal.modal-overlay.active .modal-content,
+        #statusSearchModal.modal-overlay.active .modal-content {
+          transform: translate3d(0, 0, 0) !important;
+          -webkit-transform: translate3d(0, 0, 0) !important;
         }
         #detailModal .modal-content.is-expanded,
         #statusSearchModal .modal-content.is-expanded {
@@ -7244,12 +7261,10 @@
         if (isDragging) {
           if (e.cancelable) e.preventDefault();
           if (deltaY > 0) {
-            // Dragging DOWN
-            content.style.transform = 'translateY(' + deltaY + 'px)';
+            content.style.transform = 'translate3d(0, ' + deltaY + 'px, 0)';
           } else {
-            // Dragging UP - smooth elastic tracking towards full height
             const dampedY = isExpanded ? (deltaY * 0.2) : (deltaY * 0.7);
-            content.style.transform = 'translateY(' + dampedY + 'px)';
+            content.style.transform = 'translate3d(0, ' + dampedY + 'px, 0)';
           }
         }
       }
@@ -7270,18 +7285,15 @@
         dragTarget = null;
         if (handle) handle.classList.remove('is-dragging');
 
-        // Apple Spring Easing for buttery smooth expansion / collapse
-        content.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+        content.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
 
         if (deltaY > 90 || velocity > 0.4) {
           if (isExpanded && deltaY < 180 && velocity < 0.75) {
-            // Collapse back from full height to normal
             isExpanded = false;
             content.classList.remove('is-expanded');
-            content.style.transform = 'translateY(0)';
+            content.style.transform = 'translate3d(0, 0, 0)';
           } else {
-            // Slide all the way down and dismiss
-            content.style.transform = 'translateY(100%)';
+            content.style.transform = 'translate3d(0, 105%, 0)';
             setTimeout(() => {
               isExpanded = false;
               content.classList.remove('is-expanded');
@@ -7290,16 +7302,15 @@
               if (typeof onCloseCallback === 'function') {
                 onCloseCallback();
               }
-            }, 280);
+            }, 360);
           }
         } else if (deltaY < -40 || velocity < -0.35) {
-          // Dragged up or flicked up: Expand smoothly to full screen height (96vh)
           isExpanded = true;
+          content.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), height 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
           content.classList.add('is-expanded');
-          content.style.transform = 'translateY(0)';
+          content.style.transform = 'translate3d(0, 0, 0)';
         } else {
-          // Snap back to current state
-          content.style.transform = 'translateY(0)';
+          content.style.transform = 'translate3d(0, 0, 0)';
         }
       }
 

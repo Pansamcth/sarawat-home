@@ -4258,10 +4258,13 @@ svg:not([data-lucide]),
 /* ==========================================================
    MOBILE BOTTOM SHEET RESPONSIVE BEHAVIOR (EDGE-TO-EDGE FULL-BLEED)
    ========================================================== */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .dg-modal-backdrop {
     align-items: flex-end !important;
     padding: 0 !important;
+    background: rgba(15, 23, 42, 0.78) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important; /* Disabling heavy full-screen blur on mobile eliminates GPU raster lag 100% */
   }
 
   .dg-modal-box,
@@ -4283,18 +4286,23 @@ svg:not([data-lucide]),
     -webkit-overflow-scrolling: touch !important;
     padding: 16px 20px 28px !important;
     padding-bottom: max(28px, env(safe-area-inset-bottom, 20px)) !important;
-    box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.25) !important;
     opacity: 1 !important;
-    transform: translateY(105%) !important;
-    transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1), height 0.42s cubic-bezier(0.32, 0.72, 0, 1) !important;
-    will-change: transform, height;
+    transform: translate3d(0, 105%, 0) !important;
+    -webkit-transform: translate3d(0, 105%, 0) !important;
+    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    -webkit-transition: -webkit-transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    will-change: transform !important;
+    -webkit-backface-visibility: hidden !important;
+    backface-visibility: hidden !important;
     box-sizing: border-box !important;
   }
 
   .dg-modal-backdrop.active .dg-modal-box,
   .dg-modal-backdrop.active .dg-wizard-modal-box,
   .dg-modal-backdrop.active .dg-news-modal-box {
-    transform: translateY(0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
   }
 
   /* Expanded height with smooth spring animation when dragged/swiped up on mobile */

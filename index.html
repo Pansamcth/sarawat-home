@@ -2124,9 +2124,9 @@
         handle.addEventListener('click', (e) => {
           e.stopPropagation();
           isExpanded = !isExpanded;
-          box.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+          box.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), height 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
           box.classList.toggle('is-expanded', isExpanded);
-          box.style.transform = 'translateY(0)';
+          box.style.transform = 'translate3d(0, 0, 0)';
         });
       }
 
@@ -2171,12 +2171,12 @@
         if (isDragging) {
           if (e.cancelable) e.preventDefault();
           if (deltaY > 0) {
-            // Dragging DOWN
-            box.style.transform = 'translateY(' + deltaY + 'px)';
+            // Dragging DOWN with hardware-accelerated 3D transform
+            box.style.transform = 'translate3d(0, ' + deltaY + 'px, 0)';
           } else {
             // Dragging UP - smooth elastic tracking towards full height
             const dampedY = isExpanded ? (deltaY * 0.2) : (deltaY * 0.7);
-            box.style.transform = 'translateY(' + dampedY + 'px)';
+            box.style.transform = 'translate3d(0, ' + dampedY + 'px, 0)';
           }
         }
       }
@@ -2197,18 +2197,18 @@
         dragTarget = null;
         if (handle) handle.classList.remove('is-dragging');
 
-        // Apple Spring Easing for buttery smooth expansion / collapse
-        box.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), height 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+        // Snappy zero-lag curve for bottom sheet snapping
+        box.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
 
         if (deltaY > 90 || velocity > 0.4) {
           if (isExpanded && deltaY < 180 && velocity < 0.75) {
             // Collapse back from full height to normal
             isExpanded = false;
             box.classList.remove('is-expanded');
-            box.style.transform = 'translateY(0)';
+            box.style.transform = 'translate3d(0, 0, 0)';
           } else {
             // Slide all the way down and dismiss
-            box.style.transform = 'translateY(100%)';
+            box.style.transform = 'translate3d(0, 105%, 0)';
             setTimeout(() => {
               isExpanded = false;
               box.classList.remove('is-expanded');
@@ -2217,16 +2217,17 @@
               if (typeof onCloseCallback === 'function') {
                 onCloseCallback();
               }
-            }, 280);
+            }, 360);
           }
         } else if (deltaY < -40 || velocity < -0.35) {
           // Dragged up or flicked up: Expand smoothly to full screen height (96vh)
           isExpanded = true;
+          box.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), height 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
           box.classList.add('is-expanded');
-          box.style.transform = 'translateY(0)';
+          box.style.transform = 'translate3d(0, 0, 0)';
         } else {
           // Snap back to current state
-          box.style.transform = 'translateY(0)';
+          box.style.transform = 'translate3d(0, 0, 0)';
         }
       }
 
@@ -2249,15 +2250,19 @@
       const modal = document.getElementById(id);
       if (modal) {
         modal.style.display = 'flex';
-        // Force synchronous layout reflow so the browser registers initial translateY(105%) / scale(0.95)
-        void modal.offsetHeight;
+        // Double rAF ensures silky 60/120fps GPU transition start without blocking thread
         requestAnimationFrame(() => {
-          modal.classList.add('active');
+          requestAnimationFrame(() => {
+            modal.classList.add('active');
+          });
         });
         lockBodyScroll();
         if (id === 'feedbackModal') resetFeedbackWizard();
         if (id === 'complaintModal') resetComplaintWizard();
-        if (window.lucide) lucide.createIcons();
+        // Only render icons inside this modal if unrendered icons exist, never scan full page
+        if (window.lucide && modal.querySelector('i[data-lucide]:not([data-rendered])')) {
+          try { lucide.createIcons({ root: modal }); } catch (e) {}
+        }
 
         // Sync query parameter for direct link sharing & copy
         if (updateUrl && window.history && window.history.replaceState) {
@@ -2285,7 +2290,7 @@
               box.style.transform = '';
             }
           }
-        }, 440); // 440ms allows the 0.42s spring animation to complete smoothly without chopping off
+        }, 360); // 360ms matches 0.36s transition seamlessly
         unlockBodyScroll();
 
         // Clean up direct link query params / hash from URL
