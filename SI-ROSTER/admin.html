@@ -64,7 +64,10 @@
   <script src="js/line-browser-guard.js"></script>
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f8fafc" id="rosterThemeColor">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>แผงควบคุมระบบ (Admin Panel) | SI-ROSTER - สารวัตรนักเรียน</title>
   <meta name="robots" content="noindex, nofollow" />
   <!-- Favicon & App Icons -->
@@ -1049,29 +1052,46 @@
 
     
     /* ===== EXACT UI LOGIN MATCH ===== */
+    #adminPortalApp {
+      display: none;
+    }
+
     html.is-admin #adminLoginView {
       display: none !important;
     }
+
+    html.is-admin #adminPortalApp {
+      display: block !important;
+    }
+
     html.is-admin #adminDashboard {
       display: flex !important;
     }
 
     .admin-login-wrapper {
       position: fixed;
+      inset: 0;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #f1f5f9;
+      height: 100dvh;
+      background: #f8fafc;
       background: radial-gradient(circle at 50% 30%, #f8fafc 0%, #edf2f7 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 100;
+      z-index: 99999;
       padding: 24px;
+      padding-top: max(24px, env(safe-area-inset-top));
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
+      padding-left: max(24px, env(safe-area-inset-left));
+      padding-right: max(24px, env(safe-area-inset-right));
       box-sizing: border-box;
       font-family: 'Kanit', sans-serif;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
 
     .custom-login-card {
@@ -2162,12 +2182,33 @@
     }
 
     /* ===== STANDALONE ADMIN SYSTEM SETTINGS ===== */
-    body.admin-body {
+    html {
+      background-color: #f8fafc;
+    }
+
+    html:not(.is-admin),
+    html:not(.is-admin) body.admin-body {
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100% !important;
+      overscroll-behavior: none !important;
+      -webkit-overflow-scrolling: auto !important;
+      touch-action: pan-y;
+      background: #f8fafc !important;
+    }
+
+    html.is-admin,
+    html.is-admin body.admin-body {
       padding: 0 !important;
       margin: 0 !important;
       overflow: hidden;
       display: block !important;
-      background: #0f172a;
+      background: #0f172a !important;
       min-height: 100vh;
       height: 100vh;
     }
@@ -3686,6 +3727,9 @@
     </div>
   </div>
 
+  <!-- ============ AUTH-ISOLATED ROSTER ADMIN PORTAL ============ -->
+  <div id="adminPortalApp" style="display: none;">
+
   <!-- Datalist for autocomplete student names -->
   <datalist id="studentList"></datalist>
 
@@ -4668,6 +4712,8 @@
       </div>
     </div>
   </div>
+  </div><!-- /#adminPortalApp -->
+
   <script>
     let currentDate = new Date();
     let currentActivities = [];
@@ -4712,13 +4758,17 @@
       return display;
     }
 
-        // Instant sync auth check on script parse
+    // Instant sync auth check on script parse
     (function checkImmediateAuth() {
       const auth = getLoginCookie();
       if (auth) {
         isAdmin = true;
         adminInfo = auth;
         document.documentElement.classList.add('is-admin');
+        const themeColor = document.getElementById('rosterThemeColor');
+        if (themeColor) themeColor.setAttribute('content', '#0f172a');
+        const portal = document.getElementById('adminPortalApp');
+        if (portal) portal.style.display = 'block';
       }
     })();
 
@@ -4727,10 +4777,10 @@
       const authCookie = getLoginCookie();
       if (authCookie) {
         loginSuccess(authCookie.user, authCookie.name, authCookie.role, true);
+        loadInitialData();
       } else {
         openAdminMenu();
       }
-      loadInitialData();
     };
 
     function updateDbStatus(isOnline, label) {
@@ -7269,15 +7319,19 @@
     }
 
     // --- Admin System ---
-        function openAdminMenu() {
+    function openAdminMenu() {
       if (isAdmin) {
         openDashboard();
       } else {
         document.documentElement.classList.remove('is-admin');
+        const portal = document.getElementById('adminPortalApp');
+        if (portal) portal.style.display = 'none';
         const loginView = document.getElementById('adminLoginView');
         if (loginView) loginView.style.display = 'flex';
         const dash = document.getElementById('adminDashboard');
         if (dash) dash.classList.remove('active');
+        const themeColor = document.getElementById('rosterThemeColor');
+        if (themeColor) themeColor.setAttribute('content', '#f8fafc');
         const userEl = document.getElementById('loginUser');
         if (userEl) { userEl.value = ''; userEl.focus(); }
         const passEl = document.getElementById('loginPass');
@@ -7419,7 +7473,7 @@
       }
     }
 
-        function loginSuccess(user, name, role, fromCookie = false) {
+    function loginSuccess(user, name, role, fromCookie = false) {
       isAdmin = true;
       adminInfo = { user: user, name: name, role: role || 'Superadmin' };
 
@@ -7431,6 +7485,10 @@
       document.documentElement.classList.add('is-admin');
       const loginView = document.getElementById('adminLoginView');
       if (loginView) loginView.style.display = 'none';
+      const portal = document.getElementById('adminPortalApp');
+      if (portal) portal.style.display = 'block';
+      const themeColor = document.getElementById('rosterThemeColor');
+      if (themeColor) themeColor.setAttribute('content', '#0f172a');
       openDashboard();
     }
 
@@ -7440,8 +7498,12 @@
       adminInfo = null;
 
       document.documentElement.classList.remove('is-admin');
+      const portal = document.getElementById('adminPortalApp');
+      if (portal) portal.style.display = 'none';
       const dash = document.getElementById('adminDashboard');
       if (dash) dash.classList.remove('active');
+      const themeColor = document.getElementById('rosterThemeColor');
+      if (themeColor) themeColor.setAttribute('content', '#f8fafc');
 
       const loginView = document.getElementById('adminLoginView');
       if (loginView) loginView.style.display = 'flex';
@@ -7457,8 +7519,12 @@
       document.documentElement.classList.add('is-admin');
       const loginView = document.getElementById('adminLoginView');
       if (loginView) loginView.style.display = 'none';
+      const portal = document.getElementById('adminPortalApp');
+      if (portal) portal.style.display = 'block';
       const dash = document.getElementById('adminDashboard');
       if (dash) dash.classList.add('active');
+      const themeColor = document.getElementById('rosterThemeColor');
+      if (themeColor) themeColor.setAttribute('content', '#0f172a');
 
       const nameEl = document.getElementById('dashAdminName');
       if (nameEl && adminInfo) nameEl.innerText = adminInfo.name;
