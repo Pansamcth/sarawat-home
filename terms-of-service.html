@@ -532,8 +532,7 @@
       <a href="/" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
         <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='assets/icons/school-logo.png';" alt="โรงเรียนเดชะปัตตนยานุกูล"
           style="width: 36px; height: 36px; object-fit: contain;" />
-        <span
-          style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
+        <span class="dg-brand-divider" aria-hidden="true"></span>
         <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='assets/icons/sarawat-logo.png';" alt="สารวัตรนักเรียน"
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span class="dg-brand-text">SARAWAT</span>
@@ -821,20 +820,21 @@
   </main>
 
   <!-- ============ FOOTER (Exact Diego Portal Layout) ============ -->
+    <!-- ============ PRE-FOOTER CTA & FOOTER (FLOATING ELEVATED CARD) ============ -->
   <footer class="dg-footer dg-footer-wrap" id="contact">
-    <div class="dg-footer-floating-card">
-      <!-- Giant Watermark Typography Inside the Card -->
+    <div class="dg-footer-floating-card" data-reveal="fade">
+      <!-- Giant Watermark Typography Inside the Card (Fading Bottom to Top) -->
       <div class="dg-footer-card-watermark" aria-hidden="true">
         <span>SARAWAT DECHA</span>
       </div>
 
-      <!-- Pre-Footer CTA -->
+      <!-- Pre-Footer CTA (Exact Diego Layout) -->
       <div class="dg-pre-footer-grid">
         <div>
           <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
             <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='assets/icons/school-logo.png';" alt="โรงเรียนเดชะปัตตนยานุกูล"
               style="height: 52px; width: auto; object-fit: contain;" />
-            <span style="display: inline-block; width: 1px; height: 36px; background: var(--dg-border, #e5e7eb);"></span>
+            <span class="dg-footer-logo-divider" aria-hidden="true"></span>
             <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='assets/icons/sarawat-logo.png';" alt="สารวัตรนักเรียน"
               style="height: 50px; width: auto; object-fit: contain;" />
           </div>
@@ -843,11 +843,11 @@
             in your mind!
           </h2>
           <a href="https://web.facebook.com/sarawatdechaa" target="_blank" rel="noopener noreferrer" class="dg-arrow-link">
-            <span>ส่งข้อความหาเราทาง Facebook</span>
+            <span>ส่งข้อความหาเราผ่าน Facebook</span>
             <i data-lucide="arrow-right"></i>
           </a>
 
-          <!-- Social Icons -->
+          <!-- ช่องทางติดต่อแบบไอคอน เพื่อเพิ่มพื้นที่ว่าง -->
           <div class="dg-footer-social-icons">
             <a href="https://web.facebook.com/sarawatdechaa" target="_blank" rel="noopener noreferrer"
               class="dg-social-icon-btn" title="Facebook Page สารวัตรนักเรียน" aria-label="Facebook">
@@ -875,35 +875,46 @@
           </div>
         </div>
 
-        <!-- 2-Column Footer Links -->
+        <!-- 2-Column Footer Links (Spacious) -->
         <div class="dg-footer-columns">
           <div class="dg-footer-col">
             <h5>ส่วนสำคัญ</h5>
             <div class="dg-footer-nav-list">
-              <a href="/">หน้าหลัก</a>
-              <a href="/#about">เกี่ยวกับเรา (วิสัยทัศน์)</a>
-              <a href="/activities.html">คลังกิจกรรมทั้งหมด</a>
-              <a href="/team.html">ทำเนียบคณะทำงาน</a>
-              <a href="/terms-of-service" style="color: var(--dg-black, #0a0a0c); font-weight: 600;">ข้อตกลงการใช้บริการ (TOS)</a>
-              <a href="/privacy-policy">นโยบายความเป็นส่วนตัว (PP)</a>
+              <a href="index.html#hero">หน้าหลัก</a>
+              <a href="index.html#about">เกี่ยวกับเรา (วิสัยทัศน์ & พันธกิจ)</a>
+              <a href="index.html#news">ข่าวสารกิจกรรมล่าสุด</a>
+              <a href="activities.html">คลังกิจกรรมทั้งหมด</a>
+              <a href="index.html#operations">รวมระบบออนไลน์</a>
+              <a href="index.html#team">วิสัยทัศน์ประธาน</a>
+              <a href="calendar.html">ตารางกิจกรรมโรงเรียน</a>
+              <a href="team.html">หน้าคณะทำงาน</a>
+              <a href="terms-of-service.html">ข้อตกลงการใช้บริการ (TOS)</a>
+              <a href="privacy-policy.html">นโยบายความเป็นส่วนตัว (PP)</a>
+              <a href="#contact">ติดต่อเรา</a>
             </div>
           </div>
 
           <div class="dg-footer-col">
             <h5>บริการออนไลน์</h5>
             <div class="dg-footer-service-list">
-              <a href="/admission" class="dg-footer-arrow-link" title="ระบบรับสมัครสารวัตรนักเรียน">
-                <span>ระบบรับสมัคร (Admissions)</span>
+              <a href="index.html?feedback" onclick="if(window.openModal && document.getElementById('feedbackModal')){openModal('feedbackModal'); return false;}"
+                class="dg-footer-arrow-link" title="สิ่งที่อยากให้สารวัตรทำ">
+                <span>สิ่งที่อยากให้สารวัตรทำ</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="index.html?complaint" onclick="if(window.openModal && document.getElementById('complaintModal')){openModal('complaintModal'); return false;}"
+                class="dg-footer-arrow-link" title="รายงานการทำงาน / ร้องเรียน">
+                <span>รายงานการทำงาน / ร้องเรียน</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="/admission" onclick="handleAdmissionFooterClick(event)"
+                class="dg-footer-arrow-link" title="SARAWAT ADMISSION 70 (ระบบปิดปรับปรุง)">
+                <span>SARAWAT ADMISSION 70</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
               <a href="/si-roster" target="_blank" rel="noopener noreferrer"
-                class="dg-footer-arrow-link" title="ระบบลงหน้าที่สารวัตร (SI-ROSTER)">
+                class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
                 <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
-                <i data-lucide="arrow-up-right"></i>
-              </a>
-              <a href="/si-roster/terms-of-service" target="_blank" rel="noopener noreferrer"
-                class="dg-footer-arrow-link" title="ข้อตกลงเฉพาะระบบ SI-ROSTER">
-                <span>ข้อตกลงเฉพาะระบบ SI-ROSTER</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
             </div>
@@ -929,9 +940,10 @@
             </button>
           </div>
           <span class="dg-footer-meta-sep">•</span>
-          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira Wattanakitpaisal</a></span>
+          <span>Powered By <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira
+              Wattanakitpaisal</a></span>
           <span class="dg-footer-meta-sep">•</span>
-          <a href="/admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
+          <a href="admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -943,6 +955,36 @@
       </div>
     </div>
   </footer>
+
+  <!-- 5. Recruitment Closed Modal (แจ้งเตือนระบบรับสมัครยังไม่เปิด) -->
+  <div class="dg-modal-backdrop" id="recruitClosedModal" onclick="if(event.target === this) { if(window.closeModal){closeModal('recruitClosedModal')}else if(window.closeRecruitClosedModal){closeRecruitClosedModal()} }">
+    <div class="dg-modal-box dg-recruit-closed-modal-box">
+      <!-- Close Button -->
+      <button class="dg-modal-close-btn" onclick="if(window.closeModal){closeModal('recruitClosedModal')}else if(window.closeRecruitClosedModal){closeRecruitClosedModal()}" aria-label="ปิดหน้าต่าง">
+        <i data-lucide="x"></i>
+      </button>
+
+      <!-- Caution Stripes Top Accent -->
+      <div style="height: 10px; width: 100%; border-radius: 999px; margin-bottom: 24px; background: repeating-linear-gradient(-45deg, #0b0f19, #0b0f19 12px, #facc15 12px, #facc15 24px); box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);"></div>
+
+      <div style="width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 50%; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; border: 2px solid #fde68a; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);">
+        <i data-lucide="lock" style="width: 32px; height: 32px;"></i>
+      </div>
+
+      <h3 class="dg-recruit-closed-title">
+        ระบบยังไม่เปิดรับสมัคร
+      </h3>
+
+      <p class="dg-recruit-closed-desc">
+        ขณะนี้ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 ยังไม่เปิดให้บริการ หรืออยู่ในระหว่างการปิดปรับปรุงระบบ<br/>
+        โปรดติดตามประกาศกำหนดการรับสมัครอย่างเป็นทางการจากทางงานสารวัตรนักเรียน
+      </p>
+
+      <button type="button" class="dg-btn-black" onclick="if(window.closeModal){closeModal('recruitClosedModal')}else if(window.closeRecruitClosedModal){closeRecruitClosedModal()}" style="cursor: pointer; width: 100%; height: 46px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif !important; font-weight: 500; font-size: 1rem; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);">
+        <span style="font-family: 'Kanit', sans-serif !important; font-weight: 500;">รับทราบและปิดหน้าต่าง</span>
+      </button>
+    </div>
+  </div>
 
   <!-- Toast Element -->
   <div class="policy-toast" id="policyToast">

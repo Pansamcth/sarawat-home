@@ -890,8 +890,7 @@
       <a href="#hero" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
         <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
           style="width: 36px; height: 36px; object-fit: contain;" />
-        <span
-          style="display: inline-block; width: 1px; height: 24px; background: rgba(0,0,0,0.12); margin: 0 1px;"></span>
+        <span class="dg-brand-divider" aria-hidden="true"></span>
         <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
           style="width: 36px; height: 36px; object-fit: contain;" />
         <span class="dg-brand-text">SARAWAT</span>
@@ -1585,10 +1584,10 @@
       <div class="dg-pre-footer-grid">
         <div>
           <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
-            <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+            <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='assets/icons/school-logo.png';" alt="โรงเรียนเดชะปัตตนยานุกูล"
               style="height: 52px; width: auto; object-fit: contain;" />
-            <span style="display: inline-block; width: 1px; height: 36px; background: var(--dg-border);"></span>
-            <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+            <span class="dg-footer-logo-divider" aria-hidden="true"></span>
+            <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='assets/icons/sarawat-logo.png';" alt="สารวัตรนักเรียน"
               style="height: 50px; width: auto; object-fit: contain;" />
           </div>
           <h2 class="dg-pre-footer-title">
@@ -1633,16 +1632,16 @@
           <div class="dg-footer-col">
             <h5>ส่วนสำคัญ</h5>
             <div class="dg-footer-nav-list">
-              <a href="#hero">หน้าหลัก</a>
-              <a href="#about">เกี่ยวกับเรา (วิสัยทัศน์ & พันธกิจ)</a>
-              <a href="#news">ข่าวสารกิจกรรมล่าสุด</a>
+              <a href="index.html#hero">หน้าหลัก</a>
+              <a href="index.html#about">เกี่ยวกับเรา (วิสัยทัศน์ & พันธกิจ)</a>
+              <a href="index.html#news">ข่าวสารกิจกรรมล่าสุด</a>
               <a href="activities.html">คลังกิจกรรมทั้งหมด</a>
-              <a href="#operations">รวมระบบออนไลน์</a>
-              <a href="#team">วิสัยทัศน์ประธาน</a>
-              <a href="#calendar">ตารางกิจกรรมโรงเรียน</a>
+              <a href="index.html#operations">รวมระบบออนไลน์</a>
+              <a href="index.html#team">วิสัยทัศน์ประธาน</a>
+              <a href="calendar.html">ตารางกิจกรรมโรงเรียน</a>
               <a href="team.html">หน้าคณะทำงาน</a>
-              <a href="/terms-of-service">ข้อตกลงการใช้บริการ (TOS)</a>
-              <a href="/privacy-policy">นโยบายความเป็นส่วนตัว (PP)</a>
+              <a href="terms-of-service.html">ข้อตกลงการใช้บริการ (TOS)</a>
+              <a href="privacy-policy.html">นโยบายความเป็นส่วนตัว (PP)</a>
               <a href="#contact">ติดต่อเรา</a>
             </div>
           </div>
@@ -1650,17 +1649,18 @@
           <div class="dg-footer-col">
             <h5>บริการออนไลน์</h5>
             <div class="dg-footer-service-list">
-              <a href="?feedback" onclick="openModal('feedbackModal'); return false;"
+              <a href="index.html?feedback" onclick="if(window.openModal && document.getElementById('feedbackModal')){openModal('feedbackModal'); return false;}"
                 class="dg-footer-arrow-link" title="สิ่งที่อยากให้สารวัตรทำ">
                 <span>สิ่งที่อยากให้สารวัตรทำ</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="?complaint" onclick="openModal('complaintModal'); return false;"
+              <a href="index.html?complaint" onclick="if(window.openModal && document.getElementById('complaintModal')){openModal('complaintModal'); return false;}"
                 class="dg-footer-arrow-link" title="รายงานการทำงาน / ร้องเรียน">
                 <span>รายงานการทำงาน / ร้องเรียน</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="/admission" class="dg-footer-arrow-link" title="SARAWAT ADMISSION 70">
+              <a href="/admission" onclick="handleAdmissionFooterClick(event)"
+                class="dg-footer-arrow-link" title="SARAWAT ADMISSION 70 (ระบบปิดปรับปรุง)">
                 <span>SARAWAT ADMISSION 70</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
@@ -2032,9 +2032,10 @@
 
 
   <!-- 5. Recruitment Closed Modal (แจ้งเตือนระบบรับสมัครยังไม่เปิด) -->
-  <div class="dg-modal-backdrop" id="recruitClosedModal" onclick="if(event.target === this) closeModal('recruitClosedModal')">
-    <div class="dg-modal-box dg-recruit-closed-modal-box" style="max-width: 460px; text-align: center; border-radius: 24px; padding: 32px 28px; position: relative; font-family: 'Kanit', sans-serif !important;">
-      <button class="dg-modal-close-btn" onclick="closeModal('recruitClosedModal')" aria-label="ปิดหน้าต่าง">
+  <div class="dg-modal-backdrop" id="recruitClosedModal" onclick="if(event.target === this) { if(window.closeModal){closeModal('recruitClosedModal')}else if(window.closeRecruitClosedModal){closeRecruitClosedModal()} }">
+    <div class="dg-modal-box dg-recruit-closed-modal-box">
+      <!-- Close Button -->
+      <button class="dg-modal-close-btn" onclick="if(window.closeModal){closeModal('recruitClosedModal')}else if(window.closeRecruitClosedModal){closeRecruitClosedModal()}" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x"></i>
       </button>
 
@@ -2045,17 +2046,17 @@
         <i data-lucide="lock" style="width: 32px; height: 32px;"></i>
       </div>
 
-      <h3 style="font-family: 'Kanit', sans-serif !important; font-size: 1.42rem; font-weight: 700; color: #0f172a; margin: 0 0 10px; letter-spacing: 0;">
+      <h3 class="dg-recruit-closed-title">
         ระบบยังไม่เปิดรับสมัคร
       </h3>
 
-      <p style="font-family: 'Kanit', sans-serif !important; font-size: 0.95rem; font-weight: 350; color: #64748b; line-height: 1.65; margin: 0 0 24px;">
+      <p class="dg-recruit-closed-desc">
         ขณะนี้ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 ยังไม่เปิดให้บริการ หรืออยู่ในระหว่างการปิดปรับปรุงระบบ<br/>
         โปรดติดตามประกาศกำหนดการรับสมัครอย่างเป็นทางการจากทางงานสารวัตรนักเรียน
       </p>
 
-      <button type="button" class="dg-btn-black" onclick="closeModal('recruitClosedModal')" style="cursor: pointer; width: 100%; height: 46px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif !important; font-weight: 500; font-size: 1rem; background: #0f172a; color: #ffffff; border: none; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);">
-        <span style="font-family: 'Kanit', sans-serif !important; font-weight: 500;">รับทราบและเข้าใจแล้ว</span>
+      <button type="button" class="dg-btn-black" onclick="if(window.closeModal){closeModal('recruitClosedModal')}else if(window.closeRecruitClosedModal){closeRecruitClosedModal()}" style="cursor: pointer; width: 100%; height: 46px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-family: 'Kanit', sans-serif !important; font-weight: 500; font-size: 1rem; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);">
+        <span style="font-family: 'Kanit', sans-serif !important; font-weight: 500;">รับทราบและปิดหน้าต่าง</span>
       </button>
     </div>
   </div>

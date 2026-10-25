@@ -101,6 +101,68 @@
   }
 
   // Public API
+  
+  // Global Modal Helpers & Admission Footer Click Handler (Shows recruitClosedModal if closed/maintenance)
+  if (typeof window.openModal !== 'function') {
+    window.openModal = function (id) {
+      var modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          try { window.lucide.createIcons(); } catch (err) {}
+        }
+      }
+    };
+  }
+
+  if (typeof window.closeModal !== 'function') {
+    window.closeModal = function (id) {
+      var modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    };
+  }
+
+  window.handleAdmissionFooterClick = function (e) {
+    var card = document.getElementById('cardOpsRecruit');
+    // If card exists and is open, navigate to /admission
+    if (card && !card.classList.contains('is-closed')) {
+      window.location.href = '/admission';
+      return;
+    }
+    // If closed or default on all pages:
+    if (e) e.preventDefault();
+    var modal = document.getElementById('recruitClosedModal');
+    if (modal) {
+      if (typeof window.openModal === 'function') {
+        window.openModal('recruitClosedModal');
+      } else {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        try { window.lucide.createIcons(); } catch (err) {}
+      }
+    } else {
+      window.location.href = '/admission';
+    }
+  };
+
+  window.closeRecruitClosedModal = function () {
+    var modal = document.getElementById('recruitClosedModal');
+    if (modal) {
+      if (typeof window.closeModal === 'function') {
+        window.closeModal('recruitClosedModal');
+      } else {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+  };
+
   window.DgTheme = {
     get: getActiveTheme,
     set: function (theme) { applyTheme(theme, true); },
