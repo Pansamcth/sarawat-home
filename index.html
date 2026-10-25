@@ -1649,12 +1649,12 @@
           <div class="dg-footer-col">
             <h5>บริการออนไลน์</h5>
             <div class="dg-footer-service-list">
-              <a href="javascript:void(0)" onclick="openModal('feedbackModal')"
+              <a href="?feedback" onclick="openModal('feedbackModal'); return false;"
                 class="dg-footer-arrow-link" title="สิ่งที่อยากให้สารวัตรทำ">
                 <span>สิ่งที่อยากให้สารวัตรทำ</span>
                 <i data-lucide="arrow-up-right"></i>
               </a>
-              <a href="https://www.sarawatdc.site/warn/" onclick="if(window.openModal){openModal('complaintModal'); return false;}" target="_blank" rel="noopener noreferrer"
+              <a href="?complaint" onclick="openModal('complaintModal'); return false;"
                 class="dg-footer-arrow-link" title="รายงานการทำงาน / ร้องเรียน">
                 <span>รายงานการทำงาน / ร้องเรียน</span>
                 <i data-lucide="arrow-up-right"></i>
@@ -1708,116 +1708,298 @@
   </footer>
 
   <!-- ============ MODALS FOR ONLINE OPERATIONS ============ -->
-  <!-- 1. Feedback & Request Modal (ป๊อปอัปสิ่งที่อยากให้สารวัตรทำ) -->
-  <div class="dg-modal-backdrop" id="feedbackModal">
-    <div class="dg-modal-box">
-      <button class="dg-modal-close-btn" onclick="closeModal('feedbackModal')" aria-label="Close modal">
+  <!-- 1. Feedback & Request Modal (ป๊อปอัปสิ่งที่อยากให้สารวัตรทำ - Modern Clean White Step Wizard) -->
+  <div class="dg-modal-backdrop" id="feedbackModal" onclick="if(event.target === this) closeModal('feedbackModal')">
+    <div class="dg-modal-box dg-wizard-modal-box">
+      <!-- Drag Handle for Mobile Bottom Sheet -->
+      <div class="dg-modal-drag-handle" aria-hidden="true"></div>
+
+      <!-- Close Button -->
+      <button class="dg-modal-close-btn" onclick="closeModal('feedbackModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x"></i>
       </button>
+
+      <!-- Modal Header (Strict Left-Aligned) -->
       <div class="dg-modal-header">
-        <div class="dg-modal-header-icon" style="background: #dbeafe; color: #2563eb;">
-          <i data-lucide="message-square-heart"></i>
+        <div class="dg-modal-meta-row">
+          <span class="dg-modal-badge theme-feedback">
+            <i data-lucide="message-square-heart"></i>
+            <span>ข้อเสนอแนะ & Feedback</span>
+          </span>
         </div>
-        <div class="dg-modal-header-text">
-          <h3>สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
-          <p>ส่งความคิดเห็น เสนอแนะกิจกรรม หรือสิ่งที่อยากให้สารวัตรช่วยดูแล</p>
+        <h3 class="dg-modal-title">สิ่งที่อยากให้สารวัตรทำ & Feedback</h3>
+        <p class="dg-modal-desc-sub">ส่งความคิดเห็น เสนอแนะกิจกรรม หรือสิ่งที่อยากให้สารวัตรช่วยดูแล</p>
+      </div>
+
+      <!-- Stepper Indicator -->
+      <div class="dg-wizard-stepper">
+        <div class="dg-stepper-step active" id="fbStepInd1">
+          <span class="dg-stepper-num">1</span>
+          <span class="dg-stepper-label">ข้อมูลเรื่อง</span>
+        </div>
+        <div class="dg-stepper-line" id="fbStepLine"></div>
+        <div class="dg-stepper-step" id="fbStepInd2">
+          <span class="dg-stepper-num">2</span>
+          <span class="dg-stepper-label">รายละเอียด & ผู้ส่ง</span>
         </div>
       </div>
+
+      <!-- Form Container -->
       <form id="feedbackForm" onsubmit="submitFeedbackForm(event)">
         <!-- Anti-Spam Bot Protection Honeypot -->
         <input type="text" name="website_hp" id="fb_hp" style="display:none !important;" tabindex="-1" autocomplete="off" />
-        <div class="dg-form-group">
-          <label>หมวดหมู่เรื่อง</label>
-          <select id="fbCategory" required
-            style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #ffffff;">
-            <option value="สิ่งที่อยากให้สารวัตรช่วยทำ">🎯 สิ่งที่อยากให้สารวัตรช่วยทำ / จัดกิจกรรม</option>
-            <option value="ความปลอดภัย/จุดตรวจ">🛡️ เสนอแนะจุดตรวจ / ความปลอดภัย</option>
-            <option value="ข้อเสนอแนะปรับปรุงการทำงาน">⚡ ข้อเสนอแนะปรับปรุงการทำงาน</option>
-            <option value="คำชื่นชมและให้กำลังใจ">💖 คำชื่นชมและให้กำลังใจ</option>
-            <option value="อื่นๆ">📌 อื่นๆ</option>
-          </select>
+
+        <!-- Step 1 View: ข้อมูลเรื่องเบื้องต้น -->
+        <div class="dg-wizard-step" id="fbStep1View">
+          <div class="dg-form-group">
+            <label class="dg-form-label">
+              <span class="dg-field-step-badge">1</span>
+              <span>หมวดหมู่เรื่อง <span class="dg-required-mark">*</span></span>
+            </label>
+            <div class="dg-select-wrapper">
+              <select id="fbCategory" class="dg-form-select" required>
+                <option value="สิ่งที่อยากให้สารวัตรช่วยทำ">🎯 สิ่งที่อยากให้สารวัตรช่วยทำ / จัดกิจกรรม</option>
+                <option value="ความปลอดภัย/จุดตรวจ">🛡️ เสนอแนะจุดตรวจ / ความปลอดภัย</option>
+                <option value="ข้อเสนอแนะปรับปรุงการทำงาน">⚡ ข้อเสนอแนะปรับปรุงการทำงาน</option>
+                <option value="คำชื่นชมและให้กำลังใจ">💖 คำชื่นชมและให้กำลังใจ</option>
+                <option value="อื่นๆ">📌 อื่นๆ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="fbTitle">
+              <span class="dg-field-step-badge">2</span>
+              <span>หัวข้อเรื่อง <span class="dg-required-mark">*</span></span>
+            </label>
+            <input type="text" id="fbTitle" class="dg-form-input"
+              placeholder="เช่น อยากให้มีสารวัตรช่วยดูแลช่วงข้ามถนน, เสนอจัดกิจกรรมสัปดาห์สอบ" required />
+            <div class="dg-field-hint">ระบุประเด็นสั้นๆ ให้เข้าใจง่ายและตรงจุด</div>
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="fbLocation">
+              <span class="dg-field-step-badge">3</span>
+              <span>จุดหรือบริเวณที่เกี่ยวข้อง <span class="dg-optional-tag">(ไม่บังคับ)</span></span>
+            </label>
+            <input type="text" id="fbLocation" class="dg-form-input" placeholder="เช่น บริเวณโรงอาหาร, ประตู 1, อาคาร 3" />
+          </div>
+
+          <div class="dg-wizard-actions">
+            <div></div>
+            <button type="button" class="dg-btn-wizard dg-btn-next theme-feedback" onclick="goFeedbackStep(2)">
+              <span>ถัดไป</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
         </div>
-        <div class="dg-form-group">
-          <label>หัวข้อเรื่อง</label>
-          <input type="text" id="fbTitle"
-            placeholder="เช่น อยากให้มีสารวัตรช่วยดูแลช่วงข้ามถนน, เสนอจัดกิจกรรมสัปดาห์สอบ" required />
+
+        <!-- Step 2 View: รายละเอียดและข้อมูลผู้ส่ง -->
+        <div class="dg-wizard-step" id="fbStep2View" style="display: none;">
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="fbDetail">
+              <span class="dg-field-step-badge">4</span>
+              <span>รายละเอียดข้อเสนอแนะ <span class="dg-required-mark">*</span></span>
+            </label>
+            <textarea id="fbDetail" class="dg-form-textarea" rows="4"
+              placeholder="บอกสิ่งที่คุณอยากให้ทำ หรือข้อเสนอแนะอย่างละเอียด..." required></textarea>
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="fbSender">
+              <span class="dg-field-step-badge">5</span>
+              <span>ชื่อผู้ส่ง หรือระดับชั้น <span class="dg-optional-tag">(ระบุหรือไม่ระบุก็ได้)</span></span>
+            </label>
+            <input type="text" id="fbSender" class="dg-form-input" placeholder="เช่น ตัวแทน ม.4/1 หรือเว้นว่างเพื่อส่งแบบไม่ระบุชื่อ" />
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="fbContact">
+              <span class="dg-field-step-badge">6</span>
+              <span>ช่องทางติดต่อกลับ <span class="dg-optional-tag">(ไม่บังคับ)</span></span>
+            </label>
+            <input type="text" id="fbContact" class="dg-form-input" placeholder="LINE ID หรือ เบอร์โทร หากต้องการให้สารวัตรติดต่อกลับ" />
+          </div>
+
+          <div class="dg-wizard-actions">
+            <button type="button" class="dg-btn-wizard dg-btn-back" onclick="goFeedbackStep(1)">
+              <i data-lucide="arrow-left"></i>
+              <span>ย้อนกลับ</span>
+            </button>
+            <button type="submit" id="fbSubmitBtn" class="dg-btn-wizard dg-btn-submit theme-feedback">
+              <i data-lucide="send"></i>
+              <span>ส่งข้อเสนอแนะถึงสารวัตร</span>
+            </button>
+          </div>
         </div>
-        <div class="dg-form-group">
-          <label>จุดหรือบริเวณที่เกี่ยวข้อง (ถ้ามี)</label>
-          <input type="text" id="fbLocation" placeholder="เช่น บริเวณโรงอาหาร, ประตู 1, อาคาร 3" />
-        </div>
-        <div class="dg-form-group">
-          <label>รายละเอียดข้อเสนอแนะ</label>
-          <textarea id="fbDetail" rows="4" placeholder="บอกสิ่งที่คุณอยากให้ทำ หรือข้อเสนอแนะอย่างละเอียด..."
-            required></textarea>
-        </div>
-        <div class="dg-form-group">
-          <label>ชื่อผู้ส่ง หรือระดับชั้น (ระบุหรือไม่ระบุก็ได้)</label>
-          <input type="text" id="fbSender" placeholder="เช่น ตัวแทน ม.4/1 หรือเว้นว่างเพื่อส่งแบบไม่ระบุชื่อ" />
-        </div>
-        <div class="dg-form-group">
-          <label>ช่องทางติดต่อกลับ (LINE ID / เบอร์โทร ถ้าต้องการให้สารวัตรติดต่อกลับ)</label>
-          <input type="text" id="fbContact" placeholder="ไม่บังคับ กรอกเฉพาะกรณีต้องการให้ติดต่อกลับ" />
-        </div>
-        <button type="submit" id="fbSubmitBtn" class="dg-modal-submit-btn" style="background: #2563eb; color: #ffffff;">
-          <i data-lucide="send"></i>
-          <span>ส่งข้อเสนอแนะถึงสารวัตร</span>
-        </button>
       </form>
+
+      <!-- Success State Container (In-Modal Success) -->
+      <div class="dg-wizard-success" id="fbSuccessView" style="display: none;">
+        <div class="dg-success-icon-wrap theme-feedback">
+          <i data-lucide="check-circle-2"></i>
+        </div>
+        <h4 class="dg-success-title">ส่งข้อเสนอแนะเรียบร้อยแล้ว!</h4>
+        <p class="dg-success-desc">
+          ระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลเรียบร้อยแล้ว ขอบคุณสำหรับเสียงสะท้อนเพื่อร่วมพัฒนาโรงเรียนเดชะปัตตนยานุกูลของเรา
+        </p>
+        <div class="dg-success-actions">
+          <button type="button" class="dg-btn-success-close" onclick="closeModal('feedbackModal')">
+            <span>ปิดหน้าต่าง</span>
+          </button>
+          <button type="button" class="dg-btn-success-more" onclick="resetFeedbackWizard()">
+            <span>ส่งเรื่องอื่นเพิ่มเติม</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 2. Complaint & Work Report Modal (ป๊อปอัปรายงานการทำงานและข้อร้องเรียนนิรนาม) -->
-  <div class="dg-modal-backdrop" id="complaintModal">
-    <div class="dg-modal-box">
-      <button class="dg-modal-close-btn" onclick="closeModal('complaintModal')" aria-label="Close modal">
+  <!-- 2. Complaint & Work Report Modal (ป๊อปอัปรายงานการทำงานและข้อร้องเรียนนิรนาม - Modern Clean White Step Wizard) -->
+  <div class="dg-modal-backdrop" id="complaintModal" onclick="if(event.target === this) closeModal('complaintModal')">
+    <div class="dg-modal-box dg-wizard-modal-box">
+      <!-- Drag Handle for Mobile Bottom Sheet -->
+      <div class="dg-modal-drag-handle" aria-hidden="true"></div>
+
+      <!-- Close Button -->
+      <button class="dg-modal-close-btn" onclick="closeModal('complaintModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x"></i>
       </button>
+
+      <!-- Modal Header (Strict Left-Aligned) -->
       <div class="dg-modal-header">
-        <div class="dg-modal-header-icon" style="background: #fee2e2; color: #dc2626;">
-          <i data-lucide="scale"></i>
+        <div class="dg-modal-meta-row">
+          <span class="dg-modal-badge theme-complaint">
+            <i data-lucide="shield-alert"></i>
+            <span>รายงานการทำงาน / ร้องเรียน</span>
+          </span>
         </div>
-        <div class="dg-modal-header-text">
-          <h3>รายงานการทำงาน / ร้องเรียนการปฏิบัติหน้าที่</h3>
-          <p>ข้อมูลทั้งหมดจะถูกปกปิดตัวตน 100% และส่งตรงถึงครูที่ปรึกษา</p>
+        <h3 class="dg-modal-title">รายงานการทำงาน / ร้องเรียน</h3>
+        <p class="dg-modal-desc-sub">ระบบนิรนาม 100% ข้อมูลส่งตรงถึงอาจารย์ที่ปรึกษาเพื่อความโปร่งใส</p>
+      </div>
+
+      <!-- Privacy Shield Banner -->
+      <div class="dg-privacy-banner">
+        <i data-lucide="lock"></i>
+        <div class="dg-privacy-text">
+          <strong>ระบบนิรนาม 100% (End-to-End Anonymous)</strong>
+          <span>ข้อมูลจะไม่ระบุตัวตนและส่งตรงถึงครูที่ปรึกษาเท่านั้น ปลอดภัย มั่นใจได้</span>
         </div>
       </div>
+
+      <!-- Stepper Indicator -->
+      <div class="dg-wizard-stepper theme-complaint">
+        <div class="dg-stepper-step active" id="cpStepInd1">
+          <span class="dg-stepper-num">1</span>
+          <span class="dg-stepper-label">ข้อมูลเหตุการณ์</span>
+        </div>
+        <div class="dg-stepper-line" id="cpStepLine"></div>
+        <div class="dg-stepper-step" id="cpStepInd2">
+          <span class="dg-stepper-num">2</span>
+          <span class="dg-stepper-label">รายละเอียดนิรนาม</span>
+        </div>
+      </div>
+
+      <!-- Form Container -->
       <form id="complaintForm" onsubmit="submitComplaintForm(event)">
         <!-- Anti-Spam Bot Protection Honeypot -->
         <input type="text" name="website_hp" id="cp_hp" style="display:none !important;" tabindex="-1" autocomplete="off" />
-        <div class="dg-form-group">
-          <label>หมวดหมู่การรายงาน</label>
-          <select id="cpCategory" required
-            style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: 0.95rem; background: #ffffff;">
-            <option value="การใช้วาจาและมารยาท">🗣️ การใช้วาจาและมารยาทการปฏิบัติหน้าที่</option>
-            <option value="การละเลยหน้าที่หรือจุดเวร">📍 การละเลยการปฏิบัติหน้าที่ / จุดตรวจ</option>
-            <option value="รายงานจุดอันตรายหรือพฤติกรรมเสี่ยง">⚠️ รายงานจุดเสี่ยงความปลอดภัยในโรงเรียน</option>
-            <option value="อื่นๆ">📌 อื่นๆ</option>
-          </select>
+
+        <!-- Step 1 View: ข้อมูลเหตุการณ์เบื้องต้น -->
+        <div class="dg-wizard-step" id="cpStep1View">
+          <div class="dg-form-group">
+            <label class="dg-form-label">
+              <span class="dg-field-step-badge theme-complaint">1</span>
+              <span>หมวดหมู่การรายงาน <span class="dg-required-mark">*</span></span>
+            </label>
+            <div class="dg-select-wrapper">
+              <select id="cpCategory" class="dg-form-select" required>
+                <option value="การใช้วาจาและมารยาท">🗣️ การใช้วาจาและมารยาทการปฏิบัติหน้าที่</option>
+                <option value="การละเลยหน้าที่หรือจุดเวร">📍 การละเลยการปฏิบัติหน้าที่ / จุดตรวจ</option>
+                <option value="รายงานจุดอันตรายหรือพฤติกรรมเสี่ยง">⚠️ รายงานจุดเสี่ยงความปลอดภัยในโรงเรียน</option>
+                <option value="อื่นๆ">📌 อื่นๆ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="cpTitle">
+              <span class="dg-field-step-badge theme-complaint">2</span>
+              <span>หัวข้อเรื่อง <span class="dg-required-mark">*</span></span>
+            </label>
+            <input type="text" id="cpTitle" class="dg-form-input"
+              placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบไม่เป็นธรรม" required />
+            <div class="dg-field-hint">ระบุหัวข้อปัญหาอย่างกระชับ</div>
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="cpLocation">
+              <span class="dg-field-step-badge theme-complaint">3</span>
+              <span>วันที่และจุดเกิดเหตุ <span class="dg-required-mark">*</span></span>
+            </label>
+            <input type="text" id="cpLocation" class="dg-form-input"
+              placeholder="เช่น วันจันทร์ที่ผ่านมา ช่วงเช้า บริเวณหน้าประตู 1" required />
+          </div>
+
+          <div class="dg-wizard-actions">
+            <div></div>
+            <button type="button" class="dg-btn-wizard dg-btn-next theme-complaint" onclick="goComplaintStep(2)">
+              <span>ถัดไป</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
         </div>
-        <div class="dg-form-group">
-          <label>หัวข้อเรื่อง</label>
-          <input type="text" id="cpTitle" placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบไม่เป็นธรรม"
-            required />
+
+        <!-- Step 2 View: รายละเอียดและสารวัตรที่เกี่ยวข้อง -->
+        <div class="dg-wizard-step" id="cpStep2View" style="display: none;">
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="cpTarget">
+              <span class="dg-field-step-badge theme-complaint">4</span>
+              <span>สารวัตรหรือเจ้าหน้าที่ที่เกี่ยวข้อง <span class="dg-optional-tag">(ถ้าทราบ / ไม่บังคับ)</span></span>
+            </label>
+            <input type="text" id="cpTarget" class="dg-form-input" placeholder="ระบุชื่อหรือลักษณะสารวัตรที่เกี่ยวข้อง (เว้นว่างได้)" />
+          </div>
+
+          <div class="dg-form-group">
+            <label class="dg-form-label" for="cpDetail">
+              <span class="dg-field-step-badge theme-complaint">5</span>
+              <span>รายละเอียดเหตุการณ์ <span class="dg-required-mark">*</span></span>
+            </label>
+            <textarea id="cpDetail" class="dg-form-textarea" rows="4"
+              placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใสและเป็นธรรม..." required></textarea>
+          </div>
+
+          <div class="dg-wizard-actions">
+            <button type="button" class="dg-btn-wizard dg-btn-back" onclick="goComplaintStep(1)">
+              <i data-lucide="arrow-left"></i>
+              <span>ย้อนกลับ</span>
+            </button>
+            <button type="submit" id="cpSubmitBtn" class="dg-btn-wizard dg-btn-submit theme-complaint">
+              <i data-lucide="shield-check"></i>
+              <span>ส่งรายงานนิรนาม 100%</span>
+            </button>
+          </div>
         </div>
-        <div class="dg-form-group">
-          <label>วันที่และจุดปฏิบัติงาน / สถานที่เกิดเหตุ</label>
-          <input type="text" id="cpLocation" placeholder="เช่น วันจันทร์ที่ผ่านมา บริเวณหน้าประตู 1" required />
-        </div>
-        <div class="dg-form-group">
-          <label>เจ้าหน้าที่หรือสารวัตรที่เกี่ยวข้อง (ถ้าทราบ / ไม่ทราบให้เว้นว่างได้)</label>
-          <input type="text" id="cpTarget" placeholder="ระบุชื่อหรือลักษณะสารวัตรที่เกี่ยวข้อง (ไม่บังคับ)" />
-        </div>
-        <div class="dg-form-group">
-          <label>รายละเอียดเหตุการณ์</label>
-          <textarea id="cpDetail" rows="4"
-            placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใสและเป็นธรรม..." required></textarea>
-        </div>
-        <button type="submit" id="cpSubmitBtn" class="dg-modal-submit-btn" style="background: #dc2626; color: #ffffff;">
-          <i data-lucide="shield-check"></i>
-          <span>ส่งรายงาน / เรื่องร้องเรียน (นิรนาม)</span>
-        </button>
       </form>
+
+      <!-- Success State Container (In-Modal Success) -->
+      <div class="dg-wizard-success" id="cpSuccessView" style="display: none;">
+        <div class="dg-success-icon-wrap theme-complaint">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <h4 class="dg-success-title">ส่งรายงานนิรนามสำเร็จแล้ว!</h4>
+        <p class="dg-success-desc">
+          ข้อมูลได้รับการบันทึกและส่งตรงถึงครูที่ปรึกษาเรียบร้อยแล้ว โดยไม่ระบุตัวตนของคุณ 100% ขอบคุณที่ร่วมสร้างความโปร่งใสให้แก่สารวัตรนักเรียน
+        </p>
+        <div class="dg-success-actions">
+          <button type="button" class="dg-btn-success-close" onclick="closeModal('complaintModal')">
+            <span>ปิดหน้าต่าง</span>
+          </button>
+          <button type="button" class="dg-btn-success-more" onclick="resetComplaintWizard()">
+            <span>ส่งเรื่องอื่นเพิ่มเติม</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1890,13 +2072,25 @@
 
   <!-- Scripts -->
   <script>
-    // --- Modal Handler Functions ---
-    function openModal(id) {
+    // --- Modal Handler Functions & Direct URL Router (?feedback, ?complaint) ---
+    function openModal(id, updateUrl = true) {
       const modal = document.getElementById(id);
       if (modal) {
         modal.style.display = 'flex';
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        if (id === 'feedbackModal') resetFeedbackWizard();
+        if (id === 'complaintModal') resetComplaintWizard();
+        if (window.lucide) lucide.createIcons();
+
+        // Sync query parameter for direct link sharing & copy
+        if (updateUrl && window.history && window.history.replaceState) {
+          if (id === 'feedbackModal') {
+            window.history.replaceState({ modal: 'feedbackModal' }, '', window.location.pathname + '?feedback');
+          } else if (id === 'complaintModal') {
+            window.history.replaceState({ modal: 'complaintModal' }, '', window.location.pathname + '?complaint');
+          }
+        }
       }
     }
 
@@ -1904,9 +2098,161 @@
       const modal = document.getElementById(id);
       if (modal) {
         modal.classList.remove('active');
-        modal.style.display = 'none';
+        setTimeout(() => {
+          if (!modal.classList.contains('active')) {
+            modal.style.display = 'none';
+            if (id === 'feedbackModal') resetFeedbackWizard();
+            if (id === 'complaintModal') resetComplaintWizard();
+          }
+        }, 280);
         document.body.style.overflow = '';
+
+        // Clean up direct link query params / hash from URL
+        if (window.history && window.history.replaceState) {
+          const search = window.location.search.toLowerCase();
+          const hash = window.location.hash.toLowerCase();
+          if (search.includes('feedback') || search.includes('complaint') || hash === '#feedback' || hash === '#complaint') {
+            window.history.replaceState({}, '', window.location.pathname);
+          }
+        }
       }
+    }
+
+    // Direct link router: automatically opens modal if URL contains ?feedback, ?complaint, #feedback, etc.
+    function handleDirectModalUrl() {
+      const search = window.location.search.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+
+      const isFeedback = search.includes('feedback') ||
+                         params.get('popup') === 'feedback' ||
+                         params.get('modal') === 'feedback' ||
+                         hash === '#feedback';
+
+      const isComplaint = search.includes('complaint') ||
+                          search.includes('report') ||
+                          params.get('popup') === 'complaint' ||
+                          params.get('modal') === 'complaint' ||
+                          hash === '#complaint';
+
+      if (isFeedback) {
+        setTimeout(() => openModal('feedbackModal', false), 80);
+      } else if (isComplaint) {
+        setTimeout(() => openModal('complaintModal', false), 80);
+      }
+    }
+
+    // Initialize direct links listener on DOM ready and history navigation
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', handleDirectModalUrl);
+    } else {
+      handleDirectModalUrl();
+    }
+    window.addEventListener('hashchange', handleDirectModalUrl);
+    window.addEventListener('popstate', () => {
+      const search = window.location.search.toLowerCase();
+      const hash = window.location.hash.toLowerCase();
+      if (!search.includes('feedback') && hash !== '#feedback') {
+        const fb = document.getElementById('feedbackModal');
+        if (fb && fb.classList.contains('active')) closeModal('feedbackModal');
+      }
+      if (!search.includes('complaint') && hash !== '#complaint') {
+        const cp = document.getElementById('complaintModal');
+        if (cp && cp.classList.contains('active')) closeModal('complaintModal');
+      }
+    });
+
+    // --- Feedback Step Wizard Navigation ---
+    function goFeedbackStep(step) {
+      const step1 = document.getElementById('fbStep1View');
+      const step2 = document.getElementById('fbStep2View');
+      const ind1 = document.getElementById('fbStepInd1');
+      const ind2 = document.getElementById('fbStepInd2');
+      const line = document.getElementById('fbStepLine');
+
+      if (step === 2) {
+        const title = document.getElementById('fbTitle');
+        if (!title || !title.value.trim()) {
+          if (title) {
+            title.focus();
+            title.classList.add('dg-input-error');
+            setTimeout(() => title.classList.remove('dg-input-error'), 1200);
+          }
+          return;
+        }
+        if (step1) step1.style.display = 'none';
+        if (step2) step2.style.display = 'block';
+        if (ind1) { ind1.classList.remove('active'); ind1.classList.add('completed'); }
+        if (ind2) ind2.classList.add('active');
+        if (line) line.classList.add('active');
+      } else {
+        if (step2) step2.style.display = 'none';
+        if (step1) step1.style.display = 'block';
+        if (ind2) ind2.classList.remove('active');
+        if (ind1) { ind1.classList.add('active'); ind1.classList.remove('completed'); }
+        if (line) line.classList.remove('active');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function resetFeedbackWizard() {
+      document.getElementById('feedbackForm')?.reset();
+      const form = document.getElementById('feedbackForm');
+      if (form) form.style.display = 'block';
+      const success = document.getElementById('fbSuccessView');
+      if (success) success.style.display = 'none';
+      goFeedbackStep(1);
+    }
+
+    // --- Complaint Step Wizard Navigation ---
+    function goComplaintStep(step) {
+      const step1 = document.getElementById('cpStep1View');
+      const step2 = document.getElementById('cpStep2View');
+      const ind1 = document.getElementById('cpStepInd1');
+      const ind2 = document.getElementById('cpStepInd2');
+      const line = document.getElementById('cpStepLine');
+
+      if (step === 2) {
+        const title = document.getElementById('cpTitle');
+        const loc = document.getElementById('cpLocation');
+        if (!title || !title.value.trim()) {
+          if (title) {
+            title.focus();
+            title.classList.add('dg-input-error');
+            setTimeout(() => title.classList.remove('dg-input-error'), 1200);
+          }
+          return;
+        }
+        if (!loc || !loc.value.trim()) {
+          if (loc) {
+            loc.focus();
+            loc.classList.add('dg-input-error');
+            setTimeout(() => loc.classList.remove('dg-input-error'), 1200);
+          }
+          return;
+        }
+        if (step1) step1.style.display = 'none';
+        if (step2) step2.style.display = 'block';
+        if (ind1) { ind1.classList.remove('active'); ind1.classList.add('completed'); }
+        if (ind2) ind2.classList.add('active');
+        if (line) line.classList.add('active');
+      } else {
+        if (step2) step2.style.display = 'none';
+        if (step1) step1.style.display = 'block';
+        if (ind2) ind2.classList.remove('active');
+        if (ind1) { ind1.classList.add('active'); ind1.classList.remove('completed'); }
+        if (line) line.classList.remove('active');
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function resetComplaintWizard() {
+      document.getElementById('complaintForm')?.reset();
+      const form = document.getElementById('complaintForm');
+      if (form) form.style.display = 'block';
+      const success = document.getElementById('cpSuccessView');
+      if (success) success.style.display = 'none';
+      goComplaintStep(1);
     }
 
     async function submitFeedbackForm(e) {
@@ -1915,7 +2261,7 @@
       const origHtml = btn ? btn.innerHTML : '';
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">⏳ กำลังบันทึกข้อมูลลงระบบ...</span>';
+        btn.innerHTML = '<span style="display:inline-flex;align-items:center;gap:8px;">⏳ กำลังบันทึกข้อมูล...</span>';
       }
 
       const payload = {
@@ -1933,9 +2279,12 @@
         if (window.SarawatApi) {
           await window.SarawatApi.submitFeedback(payload);
         }
-        alert('✨ ส่งข้อเสนอแนะถึงคณะสารวัตรนักเรียนเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลเรียบร้อยแล้ว ขอบคุณสำหรับเสียงสะท้อนเพื่อพัฒนาโรงเรียน');
-        document.getElementById('feedbackForm')?.reset();
-        closeModal('feedbackModal');
+        // In-modal animated success state (no native browser alert)
+        const form = document.getElementById('feedbackForm');
+        if (form) form.style.display = 'none';
+        const success = document.getElementById('fbSuccessView');
+        if (success) success.style.display = 'block';
+        if (window.lucide) lucide.createIcons();
       } catch (err) {
         alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
       } finally {
@@ -1971,9 +2320,12 @@
         if (window.SarawatApi) {
           await window.SarawatApi.submitFeedback(payload);
         }
-        alert('🛡️ ส่งข้อมูลถึงครูที่ปรึกษาสารวัตรนักเรียนเรียบร้อยแล้ว!\nระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูลโดยปกปิดตัวตนของคุณ 100% ขอบคุณที่ร่วมสร้างความโปร่งใส');
-        document.getElementById('complaintForm')?.reset();
-        closeModal('complaintModal');
+        // In-modal animated success state (no native browser alert)
+        const form = document.getElementById('complaintForm');
+        if (form) form.style.display = 'none';
+        const success = document.getElementById('cpSuccessView');
+        if (success) success.style.display = 'block';
+        if (window.lucide) lucide.createIcons();
       } catch (err) {
         alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
       } finally {

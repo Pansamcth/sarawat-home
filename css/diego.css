@@ -3717,6 +3717,593 @@ svg:not([data-lucide]),
 }
 
 /* ==========================================================
+   MODERN CLEAN WHITE STEP WIZARD & BOTTOM SHEET MODALS
+   (Feedback & Complaint Modals - ฟอนต์ Kanit 100%, สเต็ป 1-2, Bottom Sheet มือถือแบบ SI-ROSTER)
+   ========================================================== */
+
+/* Kanit font enforcement for wizard modals */
+.dg-wizard-modal-box,
+.dg-wizard-modal-box * {
+  font-family: 'Kanit', sans-serif !important;
+}
+
+.dg-wizard-modal-box {
+  background: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.95) !important;
+  border-radius: 24px !important;
+  width: 100% !important;
+  max-width: 580px !important;
+  padding: 30px 32px 34px !important;
+  box-shadow: 0 25px 65px -12px rgba(15, 23, 42, 0.22) !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  color: #0f172a !important;
+  text-align: left !important;
+}
+
+/* Drag Handle for Mobile Bottom Sheet */
+.dg-modal-drag-handle {
+  display: none;
+  width: 44px;
+  height: 4.5px;
+  background: #cbd5e1;
+  border-radius: 999px;
+  margin: 0 auto 16px;
+}
+
+/* Modal Header Refinements - Strict Flush-Left Layout (หัวข้อชิดซ้าย 100%) */
+.dg-wizard-modal-box .dg-modal-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  gap: 6px !important;
+  margin-bottom: 20px !important;
+  padding: 0 40px 0 0 !important;
+  border-bottom: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.dg-modal-meta-row {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 2px !important;
+  text-align: left !important;
+}
+
+.dg-modal-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 5px 12px !important;
+  border-radius: 999px !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  text-align: left !important;
+}
+
+.dg-modal-badge.theme-feedback {
+  background: rgba(37, 99, 235, 0.08) !important;
+  color: #2563eb !important;
+  border: 1px solid rgba(37, 99, 235, 0.22) !important;
+}
+
+.dg-modal-badge.theme-complaint {
+  background: rgba(220, 38, 38, 0.08) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(220, 38, 38, 0.22) !important;
+}
+
+.dg-modal-badge svg,
+.dg-modal-badge i {
+  width: 14px !important;
+  height: 14px !important;
+  stroke-width: 2.2 !important;
+}
+
+.dg-wizard-modal-box .dg-modal-title,
+.dg-wizard-modal-box .dg-modal-header h3,
+.dg-wizard-modal-box .dg-modal-header-text h3 {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 1.38rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.25 !important;
+  width: 100% !important;
+}
+
+.dg-wizard-modal-box .dg-modal-desc-sub,
+.dg-wizard-modal-box .dg-modal-header p,
+.dg-wizard-modal-box .dg-modal-header-text p {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 0.88rem !important;
+  color: #64748b !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  line-height: 1.45 !important;
+  width: 100% !important;
+}
+
+/* Privacy Shield Banner (หน้าร้องเรียน) */
+.dg-privacy-banner {
+  background: rgba(254, 242, 242, 0.95);
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #991b1b;
+}
+
+.dg-privacy-banner svg,
+.dg-privacy-banner i {
+  width: 20px;
+  height: 20px;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.dg-privacy-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dg-privacy-text strong {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #991b1b;
+}
+
+.dg-privacy-text span {
+  font-size: 0.78rem;
+  color: #b91c1c;
+  line-height: 1.35;
+}
+
+/* ==========================================================
+   STEP WIZARD STEPPER (ตัวชี้วัดขั้นตอนแบบ SI-ROSTER)
+   ========================================================== */
+.dg-wizard-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 24px;
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #f1f5f9;
+}
+
+.dg-stepper-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  cursor: default;
+}
+
+.dg-stepper-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: #e2e8f0;
+  color: #64748b;
+  transition: all 0.25s ease;
+}
+
+.dg-stepper-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #64748b;
+  transition: color 0.25s ease;
+}
+
+/* Stepper Active State - Feedback (Blue) */
+.dg-stepper-step.active .dg-stepper-num {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.dg-stepper-step.active .dg-stepper-label {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.dg-stepper-step.completed .dg-stepper-num {
+  background: #10b981;
+  color: #ffffff;
+}
+
+/* Stepper Active State - Complaint (Red) */
+.dg-wizard-stepper.theme-complaint .dg-stepper-step.active .dg-stepper-num {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+.dg-wizard-stepper.theme-complaint .dg-stepper-step.completed .dg-stepper-num {
+  background: #10b981;
+  color: #ffffff;
+}
+
+/* Stepper Line Connector */
+.dg-stepper-line {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 14px;
+  position: relative;
+  border-radius: 999px;
+  transition: background 0.3s ease;
+}
+
+.dg-stepper-line.active {
+  background: #10b981;
+}
+
+/* ==========================================================
+   FORM INPUTS & LABELS (ดีไซน์สไตล์ SI-ROSTER)
+   ========================================================== */
+.dg-form-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin-bottom: 8px !important;
+}
+
+.dg-field-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 750;
+  flex-shrink: 0;
+}
+
+.dg-field-step-badge.theme-complaint {
+  background: #dc2626;
+}
+
+.dg-required-mark {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.dg-optional-tag {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.dg-field-hint {
+  font-size: 0.76rem;
+  color: #94a3b8;
+  margin-top: 5px;
+}
+
+.dg-form-input,
+.dg-form-select,
+.dg-form-textarea {
+  width: 100% !important;
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  color: #0f172a !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.dg-form-input {
+  min-height: 48px !important;
+  height: 48px !important;
+}
+
+.dg-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dg-form-select {
+  min-height: 48px !important;
+  height: 48px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  padding-right: 40px !important;
+}
+
+.dg-form-textarea {
+  resize: vertical;
+  min-height: 110px !important;
+}
+
+/* Input Focus States */
+#feedbackModal .dg-form-input:focus,
+#feedbackModal .dg-form-select:focus,
+#feedbackModal .dg-form-textarea:focus {
+  background: #ffffff !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.12) !important;
+}
+
+#complaintModal .dg-form-input:focus,
+#complaintModal .dg-form-select:focus,
+#complaintModal .dg-form-textarea:focus {
+  background: #ffffff !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3.5px rgba(220, 38, 38, 0.12) !important;
+}
+
+/* Input Error Shake */
+.dg-input-error {
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
+  animation: dgInputShake 0.4s ease-in-out;
+}
+
+@keyframes dgInputShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ==========================================================
+   WIZARD BUTTONS & ACTIONS
+   ========================================================== */
+.dg-wizard-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
+  padding-top: 14px !important;
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+.dg-btn-wizard {
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.dg-btn-back {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.dg-btn-back:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.dg-btn-next.theme-feedback,
+.dg-btn-submit.theme-feedback {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  margin-left: auto;
+}
+
+.dg-btn-next.theme-feedback:hover,
+.dg-btn-submit.theme-feedback:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.45);
+}
+
+.dg-btn-next.theme-complaint,
+.dg-btn-submit.theme-complaint {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
+  margin-left: auto;
+}
+
+.dg-btn-next.theme-complaint:hover,
+.dg-btn-submit.theme-complaint:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.45);
+}
+
+/* ==========================================================
+   IN-MODAL SUCCESS STATE
+   ========================================================== */
+.dg-wizard-success {
+  text-align: center;
+  padding: 24px 16px 16px;
+  animation: dgFadeInUp 0.35s ease;
+}
+
+@keyframes dgFadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dg-success-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dg-success-icon-wrap.theme-feedback {
+  background: #dbeafe;
+  color: #2563eb;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+}
+
+.dg-success-icon-wrap.theme-complaint {
+  background: #fee2e2;
+  color: #dc2626;
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.2);
+}
+
+.dg-success-icon-wrap svg,
+.dg-success-icon-wrap i {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.dg-success-title {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 1.45rem !important;
+  font-weight: 750 !important;
+  color: #0f172a !important;
+  margin: 0 0 10px !important;
+}
+
+.dg-success-desc {
+  font-family: 'Kanit', sans-serif !important;
+  font-size: 0.92rem !important;
+  color: #64748b !important;
+  line-height: 1.6 !important;
+  max-width: 440px;
+  margin: 0 auto 26px !important;
+}
+
+.dg-success-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dg-btn-success-close {
+  height: 44px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dg-btn-success-close:hover {
+  background: #1e293b;
+  transform: translateY(-2px);
+}
+
+.dg-btn-success-more {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dg-btn-success-more:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* ==========================================================
+   MOBILE BOTTOM SHEET RESPONSIVE BEHAVIOR (แบบ SI-ROSTER)
+   ========================================================== */
+@media (max-width: 640px) {
+  #feedbackModal.dg-modal-backdrop,
+  #complaintModal.dg-modal-backdrop {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  #feedbackModal .dg-wizard-modal-box,
+  #complaintModal .dg-wizard-modal-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-bottom: none !important;
+    max-height: 90vh !important;
+    max-height: 90dvh !important;
+    overflow-y: auto !important;
+    padding: 14px 20px 28px !important;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
+  }
+
+  #feedbackModal.active .dg-wizard-modal-box,
+  #complaintModal.active .dg-wizard-modal-box {
+    transform: translateY(0) !important;
+  }
+
+  .dg-modal-drag-handle {
+    display: block !important;
+  }
+
+  .dg-wizard-stepper {
+    padding: 10px 14px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .dg-stepper-label {
+    font-size: 0.8rem !important;
+  }
+
+  .dg-stepper-num {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+
+/* ==========================================================
    NEWS & ACTIVITY DETAIL MODAL (ป๊อปอัปแสดงรายละเอียดกิจกรรม)
    ========================================================== */
 .dg-news-card {
