@@ -4457,6 +4457,7 @@
                   <tr>
                     <th>เวลา (Time)</th>
                     <th>ชื่อแอดมิน (Admin)</th>
+                    <th>IP Address</th>
                     <th>ประเภท (Action)</th>
                     <th>กิจกรรม (Activity)</th>
                     <th>รายละเอียด (Details)</th>
@@ -4464,7 +4465,7 @@
                 </thead>
                 <tbody id="adminLogsTableBody">
                   <tr>
-                    <td colspan="5" style="text-align:center; padding:20px;">กำลังโหลดข้อมูล...</td>
+                    <td colspan="6" style="text-align:center; padding:20px;">กำลังโหลดข้อมูล...</td>
                   </tr>
                 </tbody>
               </table>
@@ -7508,13 +7509,13 @@
 
     let currentLogsData = [];
     function loadAdminLogsTab() {
-      document.getElementById('adminLogsTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">กำลังโหลดข้อมูล... <i class="fa-solid fa-spinner fa-spin"></i></td></tr>';
+      document.getElementById('adminLogsTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">กำลังโหลดข้อมูล... <i class="fa-solid fa-spinner fa-spin"></i></td></tr>';
       google.script.run
         .withSuccessHandler(function (logs) {
           currentLogsData = logs || [];
           let html = '';
           if (!logs || logs.length === 0) {
-            html = '<tr><td colspan="5" style="text-align:center; padding:20px;">ไม่มีประวัติการแก้ไข</td></tr>';
+            html = '<tr><td colspan="6" style="text-align:center; padding:20px;">ไม่มีประวัติการแก้ไข</td></tr>';
           } else {
             logs.forEach(log => {
               let badgeColor = '#64748b';
@@ -7528,10 +7529,15 @@
                 detailsHtml += `<br><button onclick="showLogDiff(${log.id})" style="margin-top: 5px; padding: 4px 10px; font-size: 0.8rem; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-code-compare"></i> ดูรายละเอียด</button>`;
               }
 
+              const ipBadge = log.ip_address 
+                ? `<span style="background: #eff6ff; color: #2563eb; padding: 2px 6px; border-radius: 4px; border: 1px solid #bfdbfe; font-family: monospace; font-size: 0.82rem;">${log.ip_address}</span>`
+                : `<span style="color: #94a3b8; font-size: 0.82rem;">-</span>`;
+
               html += `
                 <tr style="transition: background-color 0.2s;">
                   <td style="white-space: nowrap;">${timeStr}</td>
                   <td style="font-weight: bold;">${log.admin_name}</td>
+                  <td>${ipBadge}</td>
                   <td><span style="background-color: ${badgeColor}; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">${log.action_type}</span></td>
                   <td>${log.activity_name}</td>
                   <td style="color: #475569; line-height: 1.4;">${detailsHtml}</td>
@@ -7541,7 +7547,7 @@
           document.getElementById('adminLogsTableBody').innerHTML = html;
         })
         .withFailureHandler(function (error) {
-          document.getElementById('adminLogsTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">เกิดข้อผิดพลาด: ${error.message}</td></tr>`;
+          document.getElementById('adminLogsTableBody').innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:red;">เกิดข้อผิดพลาด: ${error.message}</td></tr>`;
         })
         .getActivityLogs();
     }

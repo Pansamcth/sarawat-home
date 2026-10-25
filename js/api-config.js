@@ -1303,6 +1303,38 @@
       const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/logs`, { headers: this.getAuthHeaders() });
       return await res.json();
+    },
+
+    // 💾 Backup & Security Audit Logs APIs
+    listBackups: async function () {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/backup/list`, { headers: this.getAuthHeaders() });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    },
+
+    backupNow: async function () {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/backup/now`, {
+        method: 'POST',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'สำรองข้อมูลล้มเหลว');
+      return data;
+    },
+
+    getBackupDownloadUrl: function (filename) {
+      const base = this.getBaseUrl() || '';
+      const token = this.getAuthToken();
+      return `${base}/api/backup/download/${encodeURIComponent(filename)}?token=${encodeURIComponent(token)}`;
+    },
+
+    getSecurityLogs: async function (limit = 100) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/backup/logs?limit=${limit}`, { headers: this.getAuthHeaders() });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
     }
   };
 
