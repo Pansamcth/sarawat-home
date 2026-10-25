@@ -205,6 +205,10 @@
           if (!res.ok || !data.success) {
             const err = new Error(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
             err.isAuthError = true;
+            err.status = res.status;
+            err.retryAfterSeconds = data ? (data.retryAfterSeconds || 0) : 0;
+            err.lockedOut = data ? !!data.lockedOut : false;
+            err.remainingAttempts = data && typeof data.remainingAttempts === 'number' ? data.remainingAttempts : undefined;
             throw err;
           }
           return data;
@@ -5241,9 +5245,56 @@
       if (window.lucide) lucide.createIcons();
     }
 
+    let adminLoginLockoutTimer = null;
+
+    function startAdminLockoutCountdown(seconds) {
+      if (adminLoginLockoutTimer) clearInterval(adminLoginLockoutTimer);
+      const loginBtn = document.getElementById('adminLoginBtn');
+      const errEl = document.getElementById('loginErrorMsg');
+      const errText = document.getElementById('loginErrorText');
+      const uInput = document.getElementById('loginUsernameInput');
+      const pInput = document.getElementById('loginPasswordInput');
+
+      let rem = seconds;
+      if (loginBtn) loginBtn.disabled = true;
+      if (pInput) pInput.value = '';
+
+      const updateUI = () => {
+        const m = Math.floor(rem / 60);
+        const s = rem % 60;
+        const timeStr = m > 0 ? `${m} นาที ${s} วินาที` : `${s} วินาที`;
+        const msg = `ระงับการเข้าสู่ระบบชั่วคราว: กรุณารออีก ${timeStr} แล้วลองใหม่อีกครั้ง`;
+        if (errText) errText.textContent = msg;
+        if (errEl) errEl.style.display = 'flex';
+        if (loginBtn) {
+          loginBtn.disabled = true;
+          loginBtn.innerHTML = `<span>ระงับชั่วคราว (${timeStr})</span>`;
+        }
+      };
+
+      updateUI();
+      adminLoginLockoutTimer = setInterval(() => {
+        rem -= 1;
+        if (rem <= 0) {
+          clearInterval(adminLoginLockoutTimer);
+          adminLoginLockoutTimer = null;
+          if (errEl) errEl.style.display = 'none';
+          if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span><i data-lucide="arrow-right"></i>';
+            if (window.lucide) lucide.createIcons();
+          }
+        } else {
+          updateUI();
+        }
+      }, 1000);
+    }
+
     // Regular Login (Strict Username + Password, No default PIN leaks)
     async function handleUserLogin(e) {
       e.preventDefault();
+      if (adminLoginLockoutTimer) return;
+
       const loginBtn = document.getElementById('adminLoginBtn');
       const errEl = document.getElementById('loginErrorMsg');
       const errText = document.getElementById('loginErrorText');
@@ -5263,6 +5314,7 @@
 
       let authenticatedUser = null;
       let lastErrorMessage = '';
+      let isRateLocked = false;
 
       // 1. Try Backend authentication
       if (window.SarawatApi && typeof window.SarawatApi.login === 'function' && window.SarawatApi.getBaseUrl()) {
@@ -5277,11 +5329,16 @@
         } catch (apiErr) {
           console.warn('Backend login attempt:', apiErr.message);
           lastErrorMessage = apiErr.message;
+          if (apiErr.lockedOut || apiErr.retryAfterSeconds > 0 || (apiErr.message && apiErr.message.includes('ระงับการเข้าสู่ระบบ'))) {
+            isRateLocked = true;
+            startAdminLockoutCountdown(apiErr.retryAfterSeconds || 900);
+            return;
+          }
         }
       }
 
-      // 2. Local Storage fallback authentication
-      if (!authenticatedUser) {
+      // 2. Local Storage fallback authentication (only if NOT locked out by security rule)
+      if (!authenticatedUser && !isRateLocked) {
         const localAdmins = getLocalAdmins();
         const found = localAdmins.find(a => a.username.toLowerCase() === u.toLowerCase() && a.password === p);
         if (found) {
@@ -5293,6 +5350,7 @@
       }
 
       if (authenticatedUser) {
+        if (adminLoginLockoutTimer) clearInterval(adminLoginLockoutTimer);
         currentAdminUser = authenticatedUser;
         sessionStorage.setItem('sarawat_admin_auth', 'true');
         sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
@@ -5317,7 +5375,7 @@
         }
       }
 
-      if (loginBtn) {
+      if (loginBtn && !adminLoginLockoutTimer) {
         loginBtn.disabled = false;
         loginBtn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span><i data-lucide="arrow-right"></i>';
         if (window.lucide) lucide.createIcons();

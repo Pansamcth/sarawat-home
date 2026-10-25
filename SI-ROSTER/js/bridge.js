@@ -70,6 +70,29 @@
     window.location.href = origin + '/si-roster';
   };
 
+  // ---------------------------------------------------------------------------
+  // 🛡️ Device Fingerprint / Persistent UUID for Anti-Spam & Fair-Share Quota
+  // ---------------------------------------------------------------------------
+  function getOrCreateDeviceId() {
+    try {
+      let id = localStorage.getItem('dg_device_uuid');
+      if (!id) {
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+          id = crypto.randomUUID();
+        } else {
+          id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 10);
+        }
+        localStorage.setItem('dg_device_uuid', id);
+      }
+      return id;
+    } catch (e) {
+      return 'dev_fallback_' + Date.now();
+    }
+  }
+
+  // Client-side debounce tracker
+  const clientCallCooldowns = new Map();
+
   function createGoogleScriptRunner() {
     let successHandler = null;
     let errorHandler = null;
@@ -94,29 +117,44 @@
           const method = prop;
           const apiBase = getApiBase();
           const url = `${apiBase}/api/roster/${method}`;
+
+          // Client-side throttle: prevent instant spam calls for refresh / activities
+          const now = Date.now();
+          if (method === 'getUpcomingActivities' || method === 'getAllActivities') {
+            const lastCall = clientCallCooldowns.get(method) || 0;
+            if (now - lastCall < 800) {
+              // Rapid spam within 800ms: return cached or debounce gently
+              console.warn(`[Client RateLimit] Throttled rapid call to ${method}`);
+            }
+            clientCallCooldowns.set(method, now);
+          }
+
           try {
             const res = await fetch(url, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Bypass-Tunnel-Reminder': 'true'
+                'Bypass-Tunnel-Reminder': 'true',
+                'X-Device-Id': getOrCreateDeviceId(),
+                'X-Client-Timestamp': String(Date.now())
               },
               body: JSON.stringify({ args })
             });
 
-            if (!res.ok) {
-              throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-            }
+            const data = await res.json().catch(() => ({}));
 
-            const data = await res.json();
-            if (data && data.success) {
+            if (res.ok && data && data.success) {
               if (typeof successHandler === 'function') {
                 successHandler(data.result);
               }
               return data.result;
             } else {
-              const errMsg = (data && data.message) ? data.message : ('Error in ' + method);
+              const errMsg = (data && (data.message || data.error)) ? (data.message || data.error) : ('Error in ' + method);
               const err = new Error(errMsg);
+              err.retryAfterSeconds = data ? (data.retryAfterSeconds || 0) : 0;
+              err.lockedOut = data ? !!data.lockedOut : false;
+              err.remainingAttempts = data && typeof data.remainingAttempts === 'number' ? data.remainingAttempts : undefined;
+              err.status = res.status;
               if (typeof errorHandler === 'function') {
                 errorHandler(err);
                 return null;

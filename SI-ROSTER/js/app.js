@@ -2132,6 +2132,16 @@
       clearCentralDutyError();
       clearCentralNameError();
 
+      // 🛡️ Anti-Rapid Submit & Double-Click Guard (5-second client debounce)
+      const lastSignupTime = Number(sessionStorage.getItem('dg_last_signup_ts') || 0);
+      const nowTs = Date.now();
+      if (nowTs - lastSignupTime < 5000) {
+        const remainingSec = Math.ceil((5000 - (nowTs - lastSignupTime)) / 1000);
+        showCentralNameError(`กรุณารออีก ${remainingSec} วินาทีก่อนทำรายการลงชื่ออีกครั้ง (ป้องกันการส่งข้อมูลซ้ำ)`);
+        if (window.RosterAudio) window.RosterAudio.playError();
+        return;
+      }
+
       if (!duty) {
         showCentralDutyError('กรุณาเลือกหน้าที่ที่ต้องการลงชื่อ');
         return;
@@ -2216,6 +2226,7 @@
 
       }).then((result) => {
         if (result.isConfirmed) {
+          sessionStorage.setItem('dg_last_signup_ts', String(Date.now()));
           btnEl.disabled = true;
           btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
 

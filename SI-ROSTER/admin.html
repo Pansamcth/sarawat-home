@@ -7328,7 +7328,47 @@
       }
     }
 
+    let rosterLoginLockoutTimer = null;
+
+    function startRosterLockoutCountdown(seconds, btn) {
+      const errEl = document.getElementById('loginErrorMsg');
+      if (rosterLoginLockoutTimer) clearInterval(rosterLoginLockoutTimer);
+
+      let rem = seconds;
+      if (btn) btn.disabled = true;
+
+      const updateText = () => {
+        const m = Math.floor(rem / 60);
+        const s = rem % 60;
+        const timeStr = m > 0 ? `${m} นาที ${s} วินาที` : `${s} วินาที`;
+        if (errEl) {
+          errEl.style.display = 'block';
+          errEl.innerHTML = `<i class="fa-solid fa-clock"></i> <strong>ระงับการเข้าสู่ระบบชั่วคราว:</strong><br>กรุณารออีก <span style="font-weight:700; color:#b91c1c;">${timeStr}</span> แล้วลองใหม่อีกครั้ง`;
+        }
+        if (btn) {
+          btn.innerHTML = `<i class="fa-solid fa-lock"></i> ระงับชั่วคราว (${timeStr})`;
+        }
+      };
+
+      updateText();
+      rosterLoginLockoutTimer = setInterval(() => {
+        rem -= 1;
+        if (rem <= 0) {
+          clearInterval(rosterLoginLockoutTimer);
+          rosterLoginLockoutTimer = null;
+          if (errEl) errEl.style.display = 'none';
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>';
+          }
+        } else {
+          updateText();
+        }
+      }, 1000);
+    }
+
     function submitLogin() {
+      if (rosterLoginLockoutTimer) return;
       const user = document.getElementById('loginUser').value;
       const pass = document.getElementById('loginPass').value;
       const btn = document.getElementById('btnLoginSubmit');
@@ -7351,14 +7391,26 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (res) {
+            if (rosterLoginLockoutTimer) clearInterval(rosterLoginLockoutTimer);
             loginSuccess(res.user, res.name, res.role);
             btn.disabled = false;
             btn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>';
           })
           .withFailureHandler(function (error) {
-            showToast(error.message, 'error');
-            btn.disabled = false;
-            btn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>';
+            const errEl = document.getElementById('loginErrorMsg');
+            const retrySec = error.retryAfterSeconds || 0;
+            if (error.lockedOut || retrySec > 0 || (error.message && error.message.includes('ระงับการเข้าสู่ระบบ'))) {
+              startRosterLockoutCountdown(retrySec || 900, btn);
+              showToast('ระบบระงับการเข้าสู่ระบบชั่วคราว', 'error');
+            } else {
+              if (errEl) {
+                errEl.style.display = 'block';
+                errEl.textContent = error.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+              }
+              showToast(error.message, 'error');
+              btn.disabled = false;
+              btn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>';
+            }
           })
           .verifyAdmin(user, pass, ip);
       } else {

@@ -811,6 +811,10 @@
         if (!res.ok || !data.success) {
           const err = new Error(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
           err.isAuthError = true;
+          err.status = res.status;
+          err.retryAfterSeconds = data ? (data.retryAfterSeconds || 0) : 0;
+          err.lockedOut = data ? !!data.lockedOut : false;
+          err.remainingAttempts = data && typeof data.remainingAttempts === 'number' ? data.remainingAttempts : undefined;
           throw err;
         }
         if (data.token) {
