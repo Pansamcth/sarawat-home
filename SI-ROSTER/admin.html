@@ -6313,10 +6313,10 @@ body.dark-mode .signup-success-banner,
 
     function renderActivityFeed() {
       const feed = document.getElementById('feedContent');
-      feed.innerHTML = '';
+      if (feed) feed.innerHTML = '';
 
       const feedLoading = document.getElementById('feedLoading');
-      if (feedLoading.innerHTML.indexOf('skeletonContainer') === -1) {
+      if (feedLoading && feedLoading.innerHTML.indexOf('skeletonContainer') === -1) {
         // Re-inject skeleton if it was overwritten by error message
         feedLoading.innerHTML = `
           <div id="skeletonContainer" class="${currentFeedView === 'list' ? 'list-view' : ''}" style="${currentFeedView === 'list' ? 'display: flex; flex-direction: column;' : 'display: grid;'}">
@@ -10816,7 +10816,8 @@ body.dark-mode .signup-success-banner,
 
     function deleteActivityDash(dateStr) {
       showCustomConfirm('ยืนยันลบกิจกรรมในวันที่: ' + dateStr + ' ?\n(ข้อมูลใน Sheet รายวันจะไม่ถูกลบ แต่รายการกิจกรรมจะหายไป)', function () {
-        document.getElementById('activitiesTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center">กำลังลบ...</td></tr>';
+        const actBody = document.getElementById('activitiesTableBody');
+        if (actBody) actBody.innerHTML = '<tr><td colspan="4" style="text-align:center">กำลังลบ...</td></tr>';
         if (typeof google !== 'undefined' && google.script) {
           google.script.run.withSuccessHandler(res => {
             showToast('ลบกิจกรรมเรียบร้อย');
@@ -11405,8 +11406,10 @@ body.dark-mode .signup-success-banner,
         const sheetName = selectedDateInfo.activity.sheetName;
 
         if (typeof google !== 'undefined' && google.script) {
-          document.getElementById('modalLoading').style.display = 'flex';
-          document.getElementById('dutiesContainer').innerHTML = '';
+          const mLoad = document.getElementById('modalLoading');
+          if (mLoad) mLoad.style.display = 'flex';
+          const dCont = document.getElementById('dutiesContainer');
+          if (dCont) dCont.innerHTML = '';
 
           google.script.run
             .withSuccessHandler(function (res) {
@@ -11434,8 +11437,10 @@ body.dark-mode .signup-success-banner,
         const sheetName = selectedDateInfo.activity.sheetName;
 
         if (typeof google !== 'undefined' && google.script) {
-          document.getElementById('modalLoading').style.display = 'flex';
-          document.getElementById('dutiesContainer').innerHTML = '';
+          const mLoad = document.getElementById('modalLoading');
+          if (mLoad) mLoad.style.display = 'flex';
+          const dCont = document.getElementById('dutiesContainer');
+          if (dCont) dCont.innerHTML = '';
 
           google.script.run
             .withSuccessHandler(function (res) {

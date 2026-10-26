@@ -5654,33 +5654,45 @@ body.dark-mode .signup-success-banner,
   <script>
     let dashEditor, actEditor;
     document.addEventListener("DOMContentLoaded", function () {
-      dashEditor = new toastui.Editor({
-        el: document.querySelector('#editor-dashActDesc'),
-        height: '300px',
-        initialEditType: 'wysiwyg',
-        previewStyle: 'vertical',
-        hideModeSwitch: true, // Optional: hide the markdown switch
-        toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'link']
-        ]
-      });
+      try {
+        if (typeof toastui !== 'undefined' && toastui.Editor) {
+          const elDash = document.querySelector('#editor-dashActDesc');
+          if (elDash) {
+            dashEditor = new toastui.Editor({
+              el: elDash,
+              height: '300px',
+              initialEditType: 'wysiwyg',
+              previewStyle: 'vertical',
+              hideModeSwitch: true,
+              toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'link']
+              ]
+            });
+          }
 
-      actEditor = new toastui.Editor({
-        el: document.querySelector('#editor-actDesc'),
-        height: '300px',
-        initialEditType: 'wysiwyg',
-        previewStyle: 'vertical',
-        hideModeSwitch: true,
-        toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'link']
-        ]
-      });
+          const elAct = document.querySelector('#editor-actDesc');
+          if (elAct) {
+            actEditor = new toastui.Editor({
+              el: elAct,
+              height: '300px',
+              initialEditType: 'wysiwyg',
+              previewStyle: 'vertical',
+              hideModeSwitch: true,
+              toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['hr', 'quote'],
+                ['ul', 'ol', 'task', 'indent', 'outdent'],
+                ['table', 'link']
+              ]
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('ToastUI Editor init skipped:', e);
+      }
       var ua = navigator.userAgent;
       var vendor = navigator.vendor || '';
 
@@ -6482,6 +6494,7 @@ body.dark-mode .signup-success-banner,
     // --- Dashboard: Duties ---
     function renderDashDuties() {
       const tbody = document.getElementById('dutiesTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
       systemDuties.forEach((d, index) => {
         const tr = document.createElement('tr');
@@ -6533,6 +6546,7 @@ body.dark-mode .signup-success-banner,
     function addDutyFromDash() {
       const input = document.getElementById('newDutyName');
       const btn = document.getElementById('btnAddDuty');
+      if (!input || !btn) return;
       const val = input.value.trim();
       if (!val) return;
       btn.innerHTML = '...'; btn.disabled = true;
@@ -7620,10 +7634,10 @@ body.dark-mode .signup-success-banner,
 
     function renderActivityFeed() {
       const feed = document.getElementById('feedContent');
-      feed.innerHTML = '';
+      if (feed) feed.innerHTML = '';
 
       const feedLoading = document.getElementById('feedLoading');
-      if (feedLoading.innerHTML.indexOf('skeletonContainer') === -1) {
+      if (feedLoading && feedLoading.innerHTML.indexOf('skeletonContainer') === -1) {
         // Re-inject skeleton if it was overwritten by error message
         feedLoading.innerHTML = `
           <div id="skeletonContainer" class="${currentFeedView === 'list' ? 'list-view' : ''}" style="${currentFeedView === 'list' ? 'display: flex; flex-direction: column;' : 'display: grid;'}">

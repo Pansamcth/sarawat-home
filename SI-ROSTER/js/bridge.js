@@ -90,8 +90,10 @@
     }
   }
 
-  // Client-side debounce tracker
+  // Client-side debounce & inflight request coalesce tracker
   const clientCallCooldowns = new Map();
+  const clientInflightCalls = new Map();
+  const clientCallCache = new Map();
 
   function createGoogleScriptRunner() {
     let successHandler = null;
@@ -118,18 +120,39 @@
           const apiBase = getApiBase();
           const url = `${apiBase}/api/roster/${method}`;
 
-          // Client-side throttle: prevent instant spam calls for refresh / activities
+          // Client-side coalesce & short caching: prevent redundant rapid calls
           const now = Date.now();
           if (method === 'getUpcomingActivities' || method === 'getAllActivities') {
-            const lastCall = clientCallCooldowns.get(method) || 0;
-            if (now - lastCall < 800) {
-              // Rapid spam within 800ms: return cached or debounce gently
-              console.warn(`[Client RateLimit] Throttled rapid call to ${method}`);
+            // 1. Re-use pending inflight promise if already executing
+            if (clientInflightCalls.has(method)) {
+              try {
+                const sharedResult = await clientInflightCalls.get(method);
+                if (typeof successHandler === 'function') {
+                  successHandler(sharedResult);
+                }
+                return sharedResult;
+              } catch (err) {
+                if (typeof errorHandler === 'function') {
+                  errorHandler(err);
+                  return null;
+                }
+                throw err;
+              }
             }
+
+            // 2. Return recent cached result within 800ms
+            const cached = clientCallCache.get(method);
+            if (cached && (now - cached.time < 800)) {
+              if (typeof successHandler === 'function') {
+                successHandler(cached.data);
+              }
+              return cached.data;
+            }
+
             clientCallCooldowns.set(method, now);
           }
 
-          try {
+          const performFetch = async () => {
             const res = await fetch(url, {
               method: 'POST',
               headers: {
@@ -144,8 +167,8 @@
             const data = await res.json().catch(() => ({}));
 
             if (res.ok && data && data.success) {
-              if (typeof successHandler === 'function') {
-                successHandler(data.result);
+              if (method === 'getUpcomingActivities' || method === 'getAllActivities') {
+                clientCallCache.set(method, { time: Date.now(), data: data.result });
               }
               return data.result;
             } else {
@@ -155,14 +178,32 @@
               err.lockedOut = data ? !!data.lockedOut : false;
               err.remainingAttempts = data && typeof data.remainingAttempts === 'number' ? data.remainingAttempts : undefined;
               err.status = res.status;
-              if (typeof errorHandler === 'function') {
-                errorHandler(err);
-                return null;
-              } else {
-                console.error(`[Roster API Error] ${method}:`, err);
-                throw err;
+              throw err;
+            }
+          };
+
+          try {
+            let fetchPromise;
+            if (method === 'getUpcomingActivities' || method === 'getAllActivities') {
+              fetchPromise = performFetch();
+              clientInflightCalls.set(method, fetchPromise);
+            } else {
+              fetchPromise = performFetch();
+            }
+
+            let result;
+            try {
+              result = await fetchPromise;
+            } finally {
+              if (method === 'getUpcomingActivities' || method === 'getAllActivities') {
+                clientInflightCalls.delete(method);
               }
             }
+
+            if (typeof successHandler === 'function') {
+              successHandler(result);
+            }
+            return result;
           } catch (netErr) {
             if (typeof errorHandler === 'function') {
               errorHandler(netErr);
