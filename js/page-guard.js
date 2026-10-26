@@ -64,13 +64,21 @@
   function renderUnderDevelopmentUI() {
     clearPreHide();
 
+    // Ensure Google Fonts (Kanit & Plus Jakarta Sans) if not present
+    if (!document.querySelector('link[href*="family=Kanit"]')) {
+      const fontLink = document.createElement('link');
+      fontLink.rel = 'stylesheet';
+      fontLink.href = 'https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&display=swap';
+      (document.head || document.documentElement).appendChild(fontLink);
+    }
+
     // ซ่อนเนื้อหาเดิมของหน้าเว็บทั้งหมด
     let lockStyle = document.getElementById('page-guard-lock-style');
     if (!lockStyle) {
       lockStyle = document.createElement('style');
       lockStyle.id = 'page-guard-lock-style';
       lockStyle.textContent = `
-        body > *:not(#pageGuardUnderDev) { display: none !important; }
+        body > *:not(#pageGuardUnderDev):not(#adminBypassBanner) { display: none !important; }
         html, body {
           margin: 0 !important;
           padding: 0 !important;
@@ -78,10 +86,17 @@
           background: #f8fafc !important;
           color: #0f172a !important;
           overflow-x: hidden !important;
+          font-family: 'Plus Jakarta Sans', 'Outfit', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }
         body.dark-mode {
           background: #090d16 !important;
           color: #f8fafc !important;
+        }
+        #pageGuardUnderDev, #pageGuardUnderDev * {
+          font-family: 'Plus Jakarta Sans', 'Outfit', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        }
+        #adminBypassBanner, #adminBypassBanner * {
+          font-family: 'Plus Jakarta Sans', 'Outfit', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
         }
         @keyframes dgGuardScaleIn {
           from { opacity: 0; transform: scale(0.96) translateY(10px); }
@@ -104,7 +119,7 @@
     const devContainer = document.createElement('div');
     devContainer.id = 'pageGuardUnderDev';
     devContainer.innerHTML = `
-      <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Prompt', sans-serif;">
+      <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; box-sizing: border-box; font-family: 'Plus Jakarta Sans', 'Outfit', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;">
         <div style="max-width: 500px; width: 100%; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; padding: 44px 32px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,0.06); animation: dgGuardScaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
           
           <!-- Icon -->
@@ -182,7 +197,7 @@
     const banner = document.createElement('div');
     banner.id = 'adminBypassBanner';
     banner.innerHTML = `
-      <div style="position: fixed; top: 18px; right: 18px; z-index: 999999; background: #0f172a; color: #ffffff; padding: 9px 18px; border-radius: 99px; box-shadow: 0 10px 32px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Prompt', sans-serif; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(10px); animation: dgGuardScaleIn 0.3s ease;">
+      <div style="position: fixed; top: 18px; right: 18px; z-index: 999999; background: #0f172a; color: #ffffff; padding: 9px 18px; border-radius: 99px; box-shadow: 0 10px 32px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 10px; font-family: 'Plus Jakarta Sans', 'Outfit', 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.82rem; border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(10px); animation: dgGuardScaleIn 0.3s ease;">
         <span style="display: inline-flex; width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b; flex-shrink: 0;"></span>
         <span style="font-weight: 700; color: #fbbf24; white-space: nowrap;">👑 โหมดผู้ดูแลระบบ</span>
         <span style="color: #cbd5e1; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 10px; font-size: 0.8rem; display: inline-block;">หน้านี้กำลังปิดสำหรับบุคคลทั่วไป (คุณกำลังเข้าชมในฐานะแอดมิน)</span>

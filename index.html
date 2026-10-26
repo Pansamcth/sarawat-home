@@ -2609,6 +2609,35 @@
       const track = document.getElementById('newsCardsTrack');
       if (!track) return;
 
+      function checkIsAdminUser() {
+        try {
+          if (sessionStorage.getItem('sarawat_admin_auth') === 'true') return true;
+          if (localStorage.getItem('dg_sarawat_auth_token') || sessionStorage.getItem('dg_sarawat_auth_token')) return true;
+          if (typeof window.SarawatApi !== 'undefined' && typeof window.SarawatApi.getAuthToken === 'function' && window.SarawatApi.getAuthToken()) return true;
+        } catch(e) {}
+        return false;
+      }
+      const isAdmin = checkIsAdminUser();
+      const isActivitiesOpen = localStorage.getItem('dg_page_status_activities') !== '0';
+
+      if (!isActivitiesOpen && !isAdmin) {
+        track.innerHTML = `
+          <div style="background: var(--dg-bg, #ffffff); border: 1px solid var(--dg-border, #e2e8f0); border-radius: var(--dg-radius-lg, 24px); padding: 48px 24px; text-align: center; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.03); font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
+            <div style="width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 18px; background: linear-gradient(135deg, #fef3c7 0%, #fee2e2 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px rgba(245,158,11,0.18);">
+              <i data-lucide="wrench" style="width: 30px; height: 30px; color: #d97706;"></i>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 99px; background: #fef3c7; color: #b45309; font-size: 0.76rem; font-weight: 700; margin-bottom: 14px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
+              UNDER DEVELOPMENT • อยู่ระหว่างดำเนินการ
+            </div>
+            <h4 style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 1.3rem; font-weight: 800; color: var(--dg-black, #0f172a); margin: 0 0 8px 0;">ระบบกิจกรรมและข่าวสารกำลังพัฒนา</h4>
+            <p style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 0.92rem; color: var(--dg-text-secondary, #64748b); line-height: 1.6; margin: 0 auto; max-width: 500px;">ข้อมูลภาพกิจกรรมและข่าวสารประชาสัมพันธ์อยู่ระหว่างการปรับปรุงและเตรียมความพร้อมด้านเอกสารภายในโรงเรียน จึงยังไม่เปิดให้เข้าชมในขณะนี้</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
       const allItems = getNewsData();
       if (allItems.length === 0) {
         track.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--dg-text-muted); width: 100%;">ยังไม่มีข่าวสารและกิจกรรมในขณะนี้</div>';
@@ -3436,7 +3465,74 @@
       const container = document.getElementById('upcomingEventsList');
       if (!container) return;
 
+      const moreWrap = document.querySelector('.dg-calendar-more-wrap');
+
+      // Helper check admin
+      function checkIsAdminUser() {
+        try {
+          if (sessionStorage.getItem('sarawat_admin_auth') === 'true') return true;
+          if (localStorage.getItem('dg_sarawat_auth_token') || sessionStorage.getItem('dg_sarawat_auth_token')) return true;
+          if (typeof window.SarawatApi !== 'undefined' && typeof window.SarawatApi.getAuthToken === 'function' && window.SarawatApi.getAuthToken()) return true;
+        } catch(e) {}
+        return false;
+      }
+      const isAdmin = checkIsAdminUser();
+
+      // Check current cached status
+      let isCalendarOpen = localStorage.getItem('dg_page_status_calendar') !== '0';
+
+      // Function to render Under Development UI for Calendar
+      function renderCalendarUnderDevUI() {
+        if (moreWrap) moreWrap.style.display = 'none';
+        container.innerHTML = `
+          <div class="dg-calendar-under-dev-card" style="background: var(--dg-bg, #ffffff); border: 1px solid var(--dg-border, #e2e8f0); border-radius: var(--dg-radius-lg, 24px); padding: 50px 24px; text-align: center; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.03); animation: dgGuardScaleIn 0.3s ease; font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
+            <div style="width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 22px; background: linear-gradient(135deg, #fef3c7 0%, #fee2e2 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(245,158,11,0.18);">
+              <i data-lucide="wrench" style="width: 34px; height: 34px; color: #d97706;"></i>
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 99px; background: #fef3c7; color: #b45309; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 14px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
+              UNDER DEVELOPMENT • อยู่ระหว่างดำเนินการ
+            </div>
+            <h3 style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 1.35rem; font-weight: 800; color: var(--dg-black, #0f172a); margin: 0 0 10px 0; letter-spacing: -0.3px;">
+              ระบบปฏิทินปฏิบัติงานและตารางกิจกรรมกำลังพัฒนา
+            </h3>
+            <p style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 0.92rem; color: var(--dg-text-secondary, #64748b); line-height: 1.6; margin: 0 auto 20px; max-width: 500px;">
+              ข้อมูลปฏิทินและตารางกิจกรรมโรงเรียนอยู่ระหว่างการปรับปรุงและเตรียมความพร้อมด้านเอกสารภายใน จึงยังไม่เปิดให้เข้าชมในขณะนี้ ขออภัยในความไม่สะดวก
+            </p>
+            <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--dg-text-muted, #94a3b8); background: var(--dg-bg-card, #f8fafc); padding: 7px 18px; border-radius: 99px; border: 1px solid var(--dg-border, #e2e8f0); font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
+              <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+              <span>โปรดติดตามกำหนดการและประกาศอย่างเป็นทางการเร็ว ๆ นี้</span>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+      }
+
+      // Fast check from cache if closed
+      if (!isCalendarOpen && !isAdmin) {
+        renderCalendarUnderDevUI();
+      }
+
       try {
+        // Fetch live settings if SarawatApi is available
+        if (window.SarawatApi && typeof window.SarawatApi.getSettings === 'function') {
+          try {
+            const settings = await window.SarawatApi.getSettings();
+            if (typeof settings.page_status_calendar !== 'undefined') {
+              isCalendarOpen = String(settings.page_status_calendar).trim() !== '0';
+              localStorage.setItem('dg_page_status_calendar', settings.page_status_calendar);
+            }
+          } catch(e) {}
+        }
+
+        // If calendar is closed and not admin, display under development notice
+        if (!isCalendarOpen && !isAdmin) {
+          renderCalendarUnderDevUI();
+          return;
+        }
+
+        if (moreWrap) moreWrap.style.display = '';
+
         let events = [];
         if (window.SarawatApi) {
           // Pre-fetch all events for the month calendar & modals
@@ -3456,8 +3552,24 @@
           indexUpcomingEventsCache = events || [];
         }
 
+        let adminAlertHtmlEmpty = '';
+        if (!isCalendarOpen && isAdmin) {
+          adminAlertHtmlEmpty = `
+            <div style="width: 100%; margin-bottom: 16px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; color: #92400e; box-shadow: 0 2px 8px rgba(245,158,11,0.08); font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.15rem;">👑</span>
+                <div>
+                  <strong style="color: #b45309;">โหมดผู้ดูแลระบบ:</strong>
+                  <span>ปฏิทินปฏิบัติงานและตารางกิจกรรมกำลังปิดสำหรับบุคคลทั่วไป (คุณกำลังเข้าชมในฐานะแอดมิน)</span>
+                </div>
+              </div>
+              <a href="/admin" style="font-size: 0.8rem; font-weight: 700; color: #1e40af; text-decoration: none; padding: 4px 12px; background: #ffffff; border-radius: 99px; border: 1px solid #fed7aa; white-space: nowrap;">ตั้งค่าระบบ</a>
+            </div>
+          `;
+        }
+
         if (!events || !Array.isArray(events) || events.length === 0) {
-          container.innerHTML = `
+          container.innerHTML = adminAlertHtmlEmpty + `
             <div style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: var(--dg-radius-md); padding: 50px 24px; text-align: center; width: 100%;">
               <div style="width: 52px; height: 52px; border-radius: 50%; background: #f1f5f9; color: #64748b; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                 <i data-lucide="calendar-check" style="width: 26px; height: 26px;"></i>
@@ -3470,7 +3582,23 @@
           return;
         }
 
-        container.innerHTML = events.map(evt => {
+        let adminAlertHtml = '';
+        if (!isCalendarOpen && isAdmin) {
+          adminAlertHtml = `
+            <div style="width: 100%; margin-bottom: 16px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; color: #92400e; box-shadow: 0 2px 8px rgba(245,158,11,0.08); font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.15rem;">👑</span>
+                <div>
+                  <strong style="color: #b45309;">โหมดผู้ดูแลระบบ:</strong>
+                  <span>ปฏิทินปฏิบัติงานและตารางกิจกรรมกำลังปิดสำหรับบุคคลทั่วไป (คุณกำลังเข้าชมในฐานะแอดมิน)</span>
+                </div>
+              </div>
+              <a href="/admin" style="font-size: 0.8rem; font-weight: 700; color: #1e40af; text-decoration: none; padding: 4px 12px; background: #ffffff; border-radius: 99px; border: 1px solid #fed7aa; white-space: nowrap;">ตั้งค่าระบบ</a>
+            </div>
+          `;
+        }
+
+        container.innerHTML = adminAlertHtml + events.map(evt => {
           const catClass = `cat-${evt.category || 'general'}`;
           const catLabel = evt.categoryLabel || (
             evt.category === 'affairs' ? 'งานกิจการนักเรียน' :
@@ -4087,8 +4215,23 @@
       // บังคับใช้ระบบป้องกันการเข้ารับสมัครในหน้าหลักตลอดเวลา
       enforceRecruitmentProtection();
 
-      // Background Sync from MySQL Backend API if server is connected
+      // Background Sync from Backend API if server is connected
       if (window.SarawatApi) {
+        if (typeof window.SarawatApi.getSettings === 'function') {
+          window.SarawatApi.getSettings().then(st => {
+            if (st) {
+              if (typeof st.page_status_calendar !== 'undefined') {
+                localStorage.setItem('dg_page_status_calendar', st.page_status_calendar);
+              }
+              if (typeof st.page_status_activities !== 'undefined') {
+                localStorage.setItem('dg_page_status_activities', st.page_status_activities);
+              }
+              renderNewsCards();
+              renderUpcomingEvents();
+            }
+          }).catch(() => {});
+        }
+
         window.SarawatApi.getNews().then(items => {
           if (items && Array.isArray(items)) {
             try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(items)); } catch (e) { }
