@@ -1837,8 +1837,12 @@
 
     .modal-body {
       padding: 32px 36px;
+      flex: 1 1 auto;
+      min-height: 0;
       overflow-y: auto;
       background: #ffffff;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
     }
 
     .modal-desc {
@@ -2875,6 +2879,12 @@ body.dark-mode .signup-success-banner,
         transform: translateY(0);
       }
 
+      #detailModal .modal-header,
+      #statusSearchModal .modal-header,
+      .roster-modal-drag-handle {
+        flex-shrink: 0 !important;
+      }
+
       #detailModal .modal-header {
         padding: 16px 20px 14px;
         position: relative;
@@ -2944,10 +2954,16 @@ body.dark-mode .signup-success-banner,
         }
       }
 
-      #detailModal .modal-body {
+      #detailModal .modal-body,
+      #statusSearchModal .modal-body {
         padding: 14px 18px 28px;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
       }
 
       .modal-title {
@@ -7325,27 +7341,29 @@ body.dark-mode .signup-success-banner,
           return;
         }
 
+        // CRUCIAL FIX: Never drag from inside .modal-body!
+        // The modal-body is strictly reserved for scrolling inside content!
+        if (target.closest('.modal-body')) {
+          return;
+        }
+
         const isHandle = handle && (handle === target || handle.contains(target));
         const isHeader = target.closest('.modal-header');
-        const isTopScroll = content.scrollTop <= 0;
 
-        if (isHandle || isHeader || isTopScroll) {
+        if (isHandle || isHeader) {
           startY = touch.clientY;
           currentY = startY;
           startTime = Date.now();
           isDragging = false;
-          dragTarget = isHandle ? 'handle' : (isHeader ? 'header' : 'body');
+          dragTarget = isHandle ? 'handle' : 'header';
         }
       }
 
       function onTouchMove(e) {
-        if (startY === 0) return;
+        if (startY === 0 || !dragTarget) return;
         const touch = e.touches[0];
         currentY = touch.clientY;
         const deltaY = currentY - startY;
-
-        if (dragTarget === 'body' && deltaY < 0 && !isExpanded) return;
-        if (dragTarget === 'body' && content.scrollTop > 0) return;
 
         if (!isDragging && Math.abs(deltaY) > 5) {
           isDragging = true;

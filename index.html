@@ -2137,31 +2137,32 @@
         const touch = e.touches[0];
         const target = e.target;
 
-        if (target.closest('button') || target.closest('input') || target.closest('textarea') || target.closest('select') || target.closest('a')) {
+        if (target.closest('button') || target.closest('input') || target.closest('textarea') || target.closest('select') || target.closest('a') || target.closest('.dg-modal-close-btn') || target.closest('.close-modal')) {
+          return;
+        }
+
+        // CRUCIAL: Do not initiate popup drag from inside scrollable body or wizard steps
+        if (target.closest('.dg-wizard-body') || target.closest('.dg-wizard-content') || target.closest('.dg-news-modal-body') || target.closest('.modal-body') || target.closest('.dg-modal-body') || target.closest('.dg-wizard-card-scroll') || target.closest('.dg-wizard-step')) {
           return;
         }
 
         const isHandle = handle && (handle === target || handle.contains(target));
         const isHeader = target.closest('.dg-modal-header') || target.closest('.modal-header');
-        const isTopScroll = box.scrollTop <= 0;
 
-        if (isHandle || isHeader || isTopScroll) {
+        if (isHandle || isHeader) {
           startY = touch.clientY;
           currentY = startY;
           startTime = Date.now();
           isDragging = false;
-          dragTarget = isHandle ? 'handle' : (isHeader ? 'header' : 'body');
+          dragTarget = isHandle ? 'handle' : 'header';
         }
       }
 
       function onTouchMove(e) {
-        if (startY === 0) return;
+        if (startY === 0 || !dragTarget) return;
         const touch = e.touches[0];
         currentY = touch.clientY;
         const deltaY = currentY - startY;
-
-        if (dragTarget === 'body' && deltaY < 0 && !isExpanded) return;
-        if (dragTarget === 'body' && box.scrollTop > 0) return;
 
         if (!isDragging && Math.abs(deltaY) > 5) {
           isDragging = true;

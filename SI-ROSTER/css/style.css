@@ -2790,3 +2790,29 @@ body.dark-mode .signup-success-banner,
   border-color: #34d399 !important;
   color: #ecfdf5 !important;
 }
+
+
+/* Ensure modal-body scrolls smoothly inside flex modal-content */
+.modal-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+#detailModal .modal-body,
+#statusSearchModal .modal-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+#detailModal .modal-header,
+#statusSearchModal .modal-header,
+.roster-modal-drag-handle {
+  flex-shrink: 0 !important;
+}

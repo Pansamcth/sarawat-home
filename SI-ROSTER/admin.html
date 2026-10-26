@@ -1362,8 +1362,12 @@
 
     .modal-body {
       padding: 40px;
+      flex: 1 1 auto;
+      min-height: 0;
       overflow-y: auto;
       background: transparent;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
     }
 
     .modal-desc {
