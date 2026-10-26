@@ -9942,21 +9942,22 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     width: 100%;
   }
   .dg-chief-vision-body {
-    padding: 6px 12px 0;
-    max-width: 480px;
+    padding: 6px 8px 0;
+    max-width: 520px;
     margin: 0 auto;
     text-align: center;
   }
   .dg-chief-vision-text {
     font-family: 'maaja', 'Prompt', var(--dg-font-sans), sans-serif;
-    font-size: clamp(1.28rem, 4.6vw, 1.48rem);
-    line-height: 1.68;
+    font-size: clamp(1.72rem, 5.8vw, 2.15rem);
+    line-height: 1.76;
     letter-spacing: 0;
     color: var(--dg-text-primary);
     word-break: break-word;
     text-wrap: balance;
     text-align: center;
     margin: 0;
+    -webkit-font-smoothing: antialiased;
   }
   .dg-chief-vision-credit {
     margin-top: 8px;
@@ -10007,8 +10008,8 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     font-size: 1.42rem;
   }
   .dg-chief-vision-text {
-    font-size: 1.25rem;
-    line-height: 1.64;
+    font-size: clamp(1.6rem, 6.4vw, 1.88rem);
+    line-height: 1.74;
   }
   .dg-chief-editorial-section .dg-chief-actions .dg-btn-black {
     padding: 11px 20px !important;
