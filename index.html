@@ -239,7 +239,7 @@
     rel="stylesheet" />
 
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
@@ -1350,12 +1350,21 @@
 
         <!-- Center Column: Portrait Photo with Smooth Rounded Corners -->
         <div class="dg-chief-col-center" data-reveal="fade-up" data-delay="180">
+          <script>
+            window.handleChiefImageError = function() {
+              var img = document.getElementById('chiefPortraitImg');
+              if (img) img.style.display = 'none';
+              var pl = document.getElementById('chiefPlaceholder');
+              if (pl) pl.style.display = 'flex';
+            };
+          </script>
           <div class="dg-chief-frame-wrap" id="chiefPhotoWrap">
             <div id="chiefPlaceholder" class="dg-chief-placeholder-box">
               <i data-lucide="user"></i>
             </div>
-            <img src="" alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
-              id="chiefPortraitImg" onerror="handleChiefImageError()" />
+            <img alt="นายอะห์นัฟ สหสันติวรกุล - ประธานคณะกรรมการสารวัตรนักเรียน"
+              id="chiefPortraitImg" style="display: none;"
+              onerror="if(window.handleChiefImageError){window.handleChiefImageError();}else{this.style.display='none';}" />
           </div>
         </div>
 
