@@ -4798,17 +4798,21 @@
         </div>
 
         <!-- ==========================================
-             REBUILT ACTIVITY IMAGE SYSTEM (UPLOAD / URL / FALLBACK)
+             SIMPLIFIED ACTIVITY IMAGE SYSTEM (OPTIONAL)
              ========================================== -->
         <div class="dg-form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="image"
-                style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> ภาพหน้าปกกิจกรรม
-              *</label>
-            <span id="adminImgSourceBadge" class="img-source-badge badge-default">🎨 ภาพเริ่มต้น</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <label style="margin: 0; font-weight: 750; font-size: 0.94rem;">
+              <i data-lucide="image" style="width: 16px; height: 16px; display: inline-block; vertical-align: -2px;"></i>
+              รูปภาพหน้าปกกิจกรรม (ไม่บังคับ)
+            </label>
+            <span id="adminImgSourceBadge" class="img-source-badge" style="display: none;"></span>
           </div>
+          <small style="color: var(--dg-text-muted); font-size: 0.78rem; display: block; margin-bottom: 10px;">
+            💡 หากไม่ใส่รูปภาพ ระบบจะไม่แสดงกรอบภาพใด ๆ ทั้งในการ์ดและหน้าต่างป๊อบอัป (เหลือเฉพาะหัวข้อและเนื้อหา)
+          </small>
 
-          <div class="img-mode-tabs">
+          <div class="img-mode-tabs" style="margin-bottom: 12px;">
             <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')">
               <i data-lucide="upload-cloud"></i>
               <span>อัปโหลดจากเครื่อง (Drop / Paste ⚡)</span>
@@ -4828,8 +4832,7 @@
                 <i data-lucide="image-plus"></i>
               </div>
               <div class="admin-dropzone-title">คลิกเพื่อเลือกไฟล์ หรือลากรูปภาพมาวางที่นี่</div>
-              <div class="admin-dropzone-desc">รองรับ JPG, PNG, WebP (บีบอัดอัตโนมัติ) หรือกด <strong>Ctrl+V</strong>
-                เพื่อวางภาพจาก Clipboard</div>
+              <div class="admin-dropzone-desc">รองรับ JPG, PNG, WebP หรือกด <strong>Ctrl+V</strong> เพื่อวางภาพจาก Clipboard (เว้นว่างไว้ได้หากไม่ต้องการรูป)</div>
             </div>
 
             <!-- Upload & Compression Progress Box -->
@@ -4853,7 +4856,7 @@
           <div id="panelImgUrl" style="display: none;">
             <div style="display: flex; gap: 8px;">
               <input type="url" id="adminNewsImgUrl"
-                placeholder="https://... (เช่น ลิงก์จาก Discord, ImgBB, Google Drive หรือเว็บภายนอก)"
+                placeholder="https://... (วางลิงก์รูปภาพสาธารณะ เช่น Discord, ImgBB, Google Drive)"
                 oninput="handleNewsImgUrlChange(this.value)" style="flex: 1;" />
               <button type="button" class="dg-btn-sm-outline" onclick="handleTestImageUrl()"
                 style="white-space: nowrap; padding: 0 14px; font-weight: 700;">
@@ -4862,21 +4865,20 @@
               </button>
             </div>
             <small style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 5px;">
-              💡 วางลิงก์รูปภาพสาธารณะได้ทุกประเภท ระบบจะทดสอบและแสดงตัวอย่างทันที หากโหลดไม่ได้จะแสดงภาพเริ่มต้นแทน
+              💡 วางลิงก์รูปภาพสาธารณะ ระบบจะแสดงตัวอย่างภาพทันที
             </small>
           </div>
 
           <!-- Hidden storage for final Base64 / image data -->
           <input type="hidden" id="adminNewsImgBase64" />
 
-          <!-- Dynamic Live Image Preview Card -->
-          <div id="adminNewsImgPreviewWrap" class="admin-preview-card">
-            <div class="admin-preview-header">
-              <span style="display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
-                <span>ตัวอย่างการแสดงผล:</span>
-                <span id="adminPreviewStateLabel"
-                  style="font-weight: 600; color: #64748b; font-size: 0.74rem;">(ภาพกิจกรรมเริ่มต้น)</span>
+          <!-- Dynamic Live Image Preview Card (HIDDEN BY DEFAULT - ONLY SHOWN WHEN AN IMAGE IS ATTACHED) -->
+          <div id="adminNewsImgPreviewWrap" class="admin-preview-card" style="display: none; margin-top: 14px;">
+            <div class="admin-preview-header" style="background: #f8fafc; padding: 10px 14px; border-bottom: 1px solid var(--dg-border); border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
+              <span style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #16a34a; font-size: 0.85rem;">
+                <i data-lucide="check-circle" style="width: 15px; height: 15px;"></i>
+                <span>รูปภาพที่แนบ:</span>
+                <span id="adminPreviewStateLabel" style="font-weight: 600; color: #64748b; font-size: 0.74rem;"></span>
               </span>
               <div style="display: flex; gap: 6px;">
                 <button type="button" class="preview-mini-btn"
@@ -4885,24 +4887,20 @@
                   <i data-lucide="refresh-cw"></i> <span>เปลี่ยนรูป</span>
                 </button>
                 <button type="button" class="preview-mini-btn danger" onclick="clearSelectedNewsImage()"
-                  id="btnPreviewClear" title="ใช้ภาพเริ่มต้น">
-                  <i data-lucide="trash-2"></i> <span>ใช้ภาพเริ่มต้น</span>
+                  id="btnPreviewClear" title="ลบรูปออก ไม่ใส่รูป">
+                  <i data-lucide="trash-2"></i> <span>ลบรูปออก (ไม่ใช้รูป)</span>
                 </button>
               </div>
             </div>
 
-            <div class="admin-preview-img-container">
-              <img id="adminNewsImgPreview"
-                src="assets/images/activities-cover.jpg"
-                alt="ตัวอย่างภาพกิจกรรม" onerror="handlePreviewImageError(this)"
-                onload="handlePreviewImageLoaded(this)" />
+            <div class="admin-preview-img-container" style="max-height: 280px; overflow: hidden; background: #0f172a;">
+              <img id="adminNewsImgPreview" src="" alt="ตัวอย่างภาพกิจกรรม" style="width: 100%; height: auto; object-fit: contain; display: block;" onerror="handlePreviewImageError(this)" onload="handlePreviewImageLoaded(this)" />
             </div>
 
-            <!-- Fallback Warning Notification (Hidden by default, shown if image fails to preview) -->
+            <!-- Fallback Warning Notification (Hidden by default) -->
             <div id="adminPreviewFallbackNotice" class="admin-preview-fallback-notice" style="display: none;">
               <i data-lucide="alert-triangle" style="width: 16px; height: 16px; flex-shrink: 0; color: #d97706;"></i>
-              <span id="adminPreviewFallbackText">ไม่สามารถโหลดรูปภาพนี้ได้
-                ระบบได้สลับมาแสดงภาพเริ่มต้นให้อัตโนมัติ</span>
+              <span id="adminPreviewFallbackText">ไม่สามารถโหลดรูปภาพจากลิงก์นี้ได้</span>
             </div>
           </div>
         </div>
@@ -6693,6 +6691,8 @@
         if (panelUrl) panelUrl.style.display = 'none';
 
         if (currentNewsImageState.base64) {
+          const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+          if (previewWrap) previewWrap.style.display = 'block';
           const previewImg = document.getElementById('adminNewsImgPreview');
           if (previewImg) previewImg.src = currentNewsImageState.base64;
           updatePreviewUI('upload-success');
@@ -6705,37 +6705,41 @@
     }
 
     function showDefaultPreview() {
+      const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
       const previewImg = document.getElementById('adminNewsImgPreview');
       const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (previewWrap) previewWrap.style.display = 'none';
       if (previewImg) {
         delete previewImg.dataset.hasFailedFallback;
-        previewImg.src = DEFAULT_ACTIVITY_FALLBACK_URL;
+        previewImg.src = '';
       }
       if (notice) notice.style.display = 'none';
-      updatePreviewUI('default');
+      updatePreviewUI('none');
     }
 
     function updatePreviewUI(type) {
       const badge = document.getElementById('adminImgSourceBadge');
       const stateLbl = document.getElementById('adminPreviewStateLabel');
-      if (!badge || !stateLbl) return;
+      if (!badge) return;
 
-      if (type === 'default') {
-        badge.className = 'img-source-badge badge-default';
-        badge.textContent = '🎨 ภาพเริ่มต้น';
-        stateLbl.textContent = '(ภาพกิจกรรมเริ่มต้น)';
+      if (type === 'none' || type === 'default') {
+        badge.style.display = 'none';
+        if (stateLbl) stateLbl.textContent = '';
       } else if (type === 'upload-success') {
+        badge.style.display = 'inline-flex';
         badge.className = 'img-source-badge badge-success';
-        badge.textContent = '✅ รูปภาพพร้อมใช้';
-        stateLbl.textContent = '(อัปโหลดสำเร็จ)';
+        badge.innerHTML = '✅ แนบรูปภาพแล้ว';
+        if (stateLbl) stateLbl.textContent = '(อัปโหลดสำเร็จ)';
       } else if (type === 'url-success') {
+        badge.style.display = 'inline-flex';
         badge.className = 'img-source-badge badge-success';
-        badge.textContent = '🔗 ลิงก์ออนไลน์';
-        stateLbl.textContent = '(ลิงก์ภายนอก)';
+        badge.innerHTML = '🔗 ลิงก์รูปภาพ';
+        if (stateLbl) stateLbl.textContent = '(ลิงก์ภายนอก)';
       } else if (type === 'error-fallback') {
+        badge.style.display = 'inline-flex';
         badge.className = 'img-source-badge badge-warning';
-        badge.textContent = '⚠️ ใช้ภาพเริ่มต้นแทน';
-        stateLbl.textContent = '(โหลดไม่ได้ - ใช้ภาพเริ่มต้น)';
+        badge.innerHTML = '⚠️ ลิงก์โหลดไม่ได้';
+        if (stateLbl) stateLbl.textContent = '(ลิงก์รูปภาพไม่ถูกต้อง)';
       }
     }
 
@@ -6744,6 +6748,7 @@
       currentNewsImageState.url = trimmed;
       currentNewsImageState.hasError = false;
 
+      const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
       const previewImg = document.getElementById('adminNewsImgPreview');
       const notice = document.getElementById('adminPreviewFallbackNotice');
       if (previewImg) delete previewImg.dataset.hasFailedFallback;
@@ -6753,6 +6758,7 @@
         currentNewsImageState.isCustom = true;
         currentNewsImageState.file = null;
         currentNewsImageState.base64 = '';
+        if (previewWrap) previewWrap.style.display = 'block';
         if (previewImg) previewImg.src = trimmed;
         updatePreviewUI('url-success');
       } else {
@@ -6775,18 +6781,10 @@
 
     function handlePreviewImageError(img) {
       if (!img) return;
-      if (img.src !== DEFAULT_ACTIVITY_FALLBACK_URL && !img.dataset.hasFailedFallback) {
-        img.dataset.hasFailedFallback = 'true';
-        img.src = DEFAULT_ACTIVITY_FALLBACK_URL;
-      } else {
-        img.src = LOCAL_ACTIVITY_FALLBACK_URL;
-        img.onerror = null;
-      }
-
       const notice = document.getElementById('adminPreviewFallbackNotice');
       const noticeText = document.getElementById('adminPreviewFallbackText');
       if (notice) notice.style.display = 'flex';
-      if (noticeText) noticeText.textContent = 'ไม่สามารถแสดงตัวอย่างภาพนี้ได้ (ระบบจะแสดงภาพเริ่มต้นแทนอัตโนมัติ)';
+      if (noticeText) noticeText.textContent = 'ไม่สามารถโหลดรูปภาพจากลิงก์นี้ได้';
 
       currentNewsImageState.hasError = true;
       updatePreviewUI('error-fallback');
@@ -6798,7 +6796,7 @@
       if (currentNewsImageState.hasError) return;
       if (!currentNewsImageState.isCustom) {
         if (notice) notice.style.display = 'none';
-        updatePreviewUI('default');
+        updatePreviewUI('none');
       } else {
         if (notice) notice.style.display = 'none';
         updatePreviewUI(currentNewsImageState.mode === 'url' ? 'url-success' : 'upload-success');
@@ -6827,7 +6825,7 @@
       if (progressWrap) progressWrap.style.display = 'none';
 
       showDefaultPreview();
-      if (!silent) showToast('คืนค่าเป็นภาพเริ่มต้นเรียบร้อยแล้ว');
+      if (!silent) showToast('นำรูปภาพออกแล้ว (โพสต์นี้จะไม่มีรูปภาพ)');
     }
 
     function compressImageFile(file, onProgress) {
@@ -7568,8 +7566,11 @@
       if (typeof handleNewsDatesChange === 'function') handleNewsDatesChange();
       
       clearSelectedNewsImage(true);
-      if (item.image || item.img) {
-         const imgSrc = item.image || item.img;
+      const rawImg = item.image || item.img || '';
+      const hasRealImg = Boolean(rawImg && typeof rawImg === 'string' && rawImg.trim() !== '' && rawImg.trim() !== 'assets/images/default-activity.png');
+
+      if (hasRealImg) {
+         const imgSrc = rawImg.trim();
          const resolvedSrc = window.resolveImageUrl ? window.resolveImageUrl(imgSrc) : imgSrc;
          const base64Input = document.getElementById('adminNewsImgBase64');
          if (base64Input) base64Input.value = imgSrc;
@@ -7581,6 +7582,9 @@
             currentNewsImageState.hasError = false;
          }
          
+         const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+         if (previewWrap) previewWrap.style.display = 'block';
+
          const preview = document.getElementById('adminNewsImgPreview');
          if (preview) {
              delete preview.dataset.hasFailedFallback;
@@ -7594,6 +7598,8 @@
          if (typeof updatePreviewUI === 'function') {
             updatePreviewUI(imgSrc.startsWith('data:') ? 'upload-success' : 'url-success');
          }
+      } else {
+         showDefaultPreview();
       }
       
       const submitBtn = document.getElementById('adminNewsSubmitBtn');
@@ -8996,6 +9002,8 @@
         currentNewsImageState.hasError = false;
 
         if (base64Input) base64Input.value = comp.base64;
+        const previewWrap = document.getElementById('adminNewsImgPreviewWrap');
+        if (previewWrap) previewWrap.style.display = 'block';
         if (previewImg) {
           delete previewImg.dataset.hasFailedFallback;
           previewImg.src = comp.base64;
