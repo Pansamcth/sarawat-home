@@ -4383,21 +4383,31 @@ body.dark-mode .signup-success-banner,
       color: #f8fafc !important;
     }
 
-    /* Controls Bar & Search Box */
+    /* Controls Bar & Search Box (Enhanced Dark Contrast) */
     [data-theme="dark"] .dg-act-search-box,
     body.dark-mode .dg-act-search-box {
-      background: #161e2e !important;
-      border-color: #253046 !important;
+      background: transparent !important;
+      border-color: transparent !important;
     }
 
     [data-theme="dark"] .dg-act-search-box input,
     body.dark-mode .dg-act-search-box input {
+      background: #161e2e !important;
+      border: 1.5px solid #253046 !important;
       color: #f8fafc !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
     }
 
     [data-theme="dark"] .dg-act-search-box input::placeholder,
     body.dark-mode .dg-act-search-box input::placeholder {
-      color: #64748b !important;
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .dg-act-search-icon,
+    [data-theme="dark"] .dg-act-search-box i,
+    body.dark-mode .dg-act-search-icon,
+    body.dark-mode .dg-act-search-box i {
+      color: #94a3b8 !important;
     }
 
     [data-theme="dark"] .dg-act-search-box input:focus,
@@ -4405,6 +4415,59 @@ body.dark-mode .signup-success-banner,
       background: #1e293b !important;
       border-color: #3b82f6 !important;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .dg-act-search-box:focus-within .dg-act-search-icon,
+    [data-theme="dark"] .dg-act-search-box:focus-within i,
+    body.dark-mode .dg-act-search-box:focus-within .dg-act-search-icon,
+    body.dark-mode .dg-act-search-box:focus-within i {
+      color: #38bdf8 !important;
+    }
+
+    /* Status Search & General Search Inputs in Dark Mode */
+    [data-theme="dark"] #statusSearchInput,
+    body.dark-mode #statusSearchInput {
+      background-color: #161e2e !important;
+      border: 1.5px solid #253046 !important;
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] #statusSearchInput::placeholder,
+    body.dark-mode #statusSearchInput::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] #statusSearchInput:focus,
+    body.dark-mode #statusSearchInput:focus {
+      background-color: #1e293b !important;
+      border-color: #3b82f6 !important;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+    }
+
+    [data-theme="dark"] .modal-body i.fa-magnifying-glass,
+    body.dark-mode .modal-body i.fa-magnifying-glass {
+      color: #94a3b8 !important;
+    }
+
+    /* Feedback Column Button in Dark Mode */
+    [data-theme="dark"] .feedback-col-wrapper a,
+    body.dark-mode .feedback-col-wrapper a,
+    [data-theme="dark"] .roster-feedback-link,
+    body.dark-mode .roster-feedback-link {
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+      border: 1px solid rgba(96, 165, 250, 0.3) !important;
+    }
+
+    [data-theme="dark"] .feedback-col-wrapper a:hover,
+    body.dark-mode .feedback-col-wrapper a:hover,
+    [data-theme="dark"] .roster-feedback-link:hover,
+    body.dark-mode .roster-feedback-link:hover {
+      background: linear-gradient(135deg, #2563eb, #60a5fa) !important;
+      box-shadow: 0 6px 18px rgba(59, 130, 246, 0.5) !important;
+      transform: translateY(-2px);
     }
 
     [data-theme="dark"] .dg-act-pill-btn,
@@ -6259,6 +6322,7 @@ body.dark-mode .signup-success-banner,
             <div class="feedback-col-wrapper" style="display: flex; flex-direction: column; gap: 12px;">
               <div style="font-weight: 700; color: #111827; font-size: 0.95rem;" class="footer-col-heading">Feedback</div>
               <a href="https://forms.gle/z8SEbeS7rojTjUYw5" target="_blank" rel="noopener noreferrer"
+                class="roster-feedback-link"
                 style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--primary), #60A5FA); color: white; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(59,130,246,0.3);"
                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)';"
                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)';">

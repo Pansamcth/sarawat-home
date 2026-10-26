@@ -4032,6 +4032,52 @@ body.dark-mode .signup-success-banner,
       transform: translateY(-1px);
     }
 
+    /* Controls Bar & Search Box (Enhanced Dark Contrast) */
+    [data-theme="dark"] .dg-act-search-box,
+    body.dark-mode .dg-act-search-box {
+      background: transparent !important;
+      border-color: transparent !important;
+    }
+
+    [data-theme="dark"] .dg-act-search-box input,
+    [data-theme="dark"] #dashActSearchInput,
+    [data-theme="dark"] #historySearchInput,
+    [data-theme="dark"] #centralNameInput,
+    body.dark-mode .dg-act-search-box input,
+    body.dark-mode #dashActSearchInput,
+    body.dark-mode #historySearchInput,
+    body.dark-mode #centralNameInput {
+      background: #161e2e !important;
+      border: 1.5px solid #253046 !important;
+      color: #f8fafc !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    [data-theme="dark"] .dg-act-search-box input::placeholder,
+    [data-theme="dark"] #dashActSearchInput::placeholder,
+    [data-theme="dark"] #historySearchInput::placeholder,
+    [data-theme="dark"] #centralNameInput::placeholder,
+    body.dark-mode .dg-act-search-box input::placeholder,
+    body.dark-mode #dashActSearchInput::placeholder,
+    body.dark-mode #historySearchInput::placeholder,
+    body.dark-mode #centralNameInput::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .dg-act-search-box input:focus,
+    [data-theme="dark"] #dashActSearchInput:focus,
+    [data-theme="dark"] #historySearchInput:focus,
+    [data-theme="dark"] #centralNameInput:focus,
+    body.dark-mode .dg-act-search-box input:focus,
+    body.dark-mode #dashActSearchInput:focus,
+    body.dark-mode #historySearchInput:focus,
+    body.dark-mode #centralNameInput:focus {
+      background: #1e293b !important;
+      border-color: #3b82f6 !important;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+      color: #ffffff !important;
+    }
+
     /* ========================================================
        AUTOCOMPLETE DROPDOWN DARK MODE (IMAGE 3 FIX)
        ======================================================== */
