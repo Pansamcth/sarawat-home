@@ -39,6 +39,14 @@
     document.documentElement.setAttribute('data-theme', target);
     document.documentElement.style.colorScheme = target;
 
+    if (document.body) {
+      if (target === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+
     if (save) {
       try {
         localStorage.setItem(THEME_KEY, target);
