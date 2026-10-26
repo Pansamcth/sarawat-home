@@ -8873,8 +8873,8 @@ body.dark-mode .signup-success-banner,
               a.title && a.title.trim().toLowerCase() === cleanTarget
             );
           }
-          // 3. Partial match by title
-          if (!found) {
+          // 3. Partial match by title (only if search query has at least 3 chars and is not a pure number)
+          if (!found && cleanTarget.length >= 3 && !/^\d+$/.test(cleanTarget)) {
             found = currentActivities.find(a =>
               a.title && a.title.toLowerCase().includes(cleanTarget)
             );

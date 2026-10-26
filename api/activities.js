@@ -51,20 +51,39 @@ module.exports = async function handler(req, res) {
       if (apiRes.ok) {
         const liveItems = await apiRes.json();
         if (Array.isArray(liveItems) && liveItems.length > 0) {
-          items = [...liveItems, ...items];
+          items = liveItems;
         }
       }
     } catch (e) {
       // Ignore network errors, use fallback items
     }
 
-    const cleanId = targetId.toLowerCase();
-    const found = items.find(it =>
-      String(it.id).toLowerCase() === cleanId ||
-      String(it.id).toLowerCase() === 'news-' + cleanId ||
-      (it.title && it.title.trim().toLowerCase() === cleanId) ||
-      (it.title && it.title.toLowerCase().includes(cleanId))
-    );
+    function findItem(list, tId) {
+      if (!list || !Array.isArray(list) || !tId) return null;
+      const cId = String(tId).trim().toLowerCase();
+      const noPre = cId.replace(/^news[-_]/, '');
+      let f = list.find(it => {
+        if (!it) return false;
+        const itId = String(it.id != null ? it.id : '').trim().toLowerCase();
+        const itLegacy = String(it.legacyId || it.legacy_id || '').trim().toLowerCase();
+        return (
+          itId === cId ||
+          itId === noPre ||
+          itId.replace(/^news[-_]/, '') === noPre ||
+          (itLegacy && (itLegacy === cId || itLegacy === noPre))
+        );
+      });
+      if (f) return f;
+      f = list.find(it => it && it.title && it.title.trim().toLowerCase() === cId);
+      if (f) return f;
+      if (cId.length >= 3 && !/^\d+$/.test(cId)) {
+        f = list.find(it => it && it.title && it.title.toLowerCase().includes(cId));
+        if (f) return f;
+      }
+      return null;
+    }
+
+    const found = findItem(items, targetId);
 
     if (found) {
       let resolvedImage = found.image || found.img || 'https://www.sarawatdc.site/assets/images/activities-cover.jpg';

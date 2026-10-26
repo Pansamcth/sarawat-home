@@ -142,18 +142,23 @@ module.exports = async function handler(req, res) {
 
     const cleanTarget = targetId.toLowerCase();
     const cleanTargetNoPrefix = cleanTarget.replace(/^act_/, '');
-    const found = activities.find(a => {
+    let found = activities.find(a => {
       const aId = (a.id ? String(a.id) : '').trim().toLowerCase();
       const aSheet = (a.sheetName ? String(a.sheetName) : '').trim().toLowerCase();
       const aSheetNoPrefix = aSheet.replace(/^act_/, '');
-      const aTitle = (a.title ? String(a.title) : '').trim().toLowerCase();
 
       return (
         (aId && (aId === cleanTarget || aId.replace(/^act_/, '') === cleanTargetNoPrefix)) ||
-        (aSheet && (aSheet === cleanTarget || aSheetNoPrefix === cleanTargetNoPrefix)) ||
-        (aTitle && (aTitle === cleanTarget || aTitle.includes(cleanTarget)))
+        (aSheet && (aSheet === cleanTarget || aSheetNoPrefix === cleanTargetNoPrefix))
       );
     });
+
+    if (!found) {
+      found = activities.find(a => a.title && a.title.trim().toLowerCase() === cleanTarget);
+    }
+    if (!found && cleanTarget.length >= 3 && !/^\d+$/.test(cleanTarget)) {
+      found = activities.find(a => a.title && a.title.toLowerCase().includes(cleanTarget));
+    }
 
     if (found) {
       const modalTitle = found.title || targetId;

@@ -110,16 +110,45 @@
             ];
           }
 
+          function findNewsItem(newsList, targetId) {
+            if (!newsList || !Array.isArray(newsList) || !targetId) return null;
+            var cleanId = String(targetId).trim().toLowerCase();
+            var noPrefixId = cleanId.replace(/^news[-_]/, '');
+
+            // 1. Exact ID match (supports raw id, no-prefix, and legacyId)
+            var found = newsList.find(function (it) {
+              if (!it) return false;
+              var itId = String(it.id != null ? it.id : '').trim().toLowerCase();
+              var itLegacy = String(it.legacyId || it.legacy_id || '').trim().toLowerCase();
+              return (
+                itId === cleanId ||
+                itId === noPrefixId ||
+                itId.replace(/^news[-_]/, '') === noPrefixId ||
+                (itLegacy && (itLegacy === cleanId || itLegacy === noPrefixId))
+              );
+            });
+            if (found) return found;
+
+            // 2. Exact Title match
+            found = newsList.find(function (it) {
+              return it && it.title && it.title.trim().toLowerCase() === cleanId;
+            });
+            if (found) return found;
+
+            // 3. Partial Title match (only if search query has at least 3 chars and is NOT a pure number)
+            if (cleanId.length >= 3 && !/^\d+$/.test(cleanId)) {
+              found = newsList.find(function (it) {
+                return it && it.title && it.title.toLowerCase().indexOf(cleanId) !== -1;
+              });
+              if (found) return found;
+            }
+
+            return null;
+          }
+
           var found = null;
           if (targetId) {
-            var cleanId = String(targetId).trim().toLowerCase();
-            found = items.find(function (it) {
-              return String(it.id).toLowerCase() === cleanId ||
-                String(it.legacyId || '').toLowerCase() === cleanId ||
-                String(it.id).toLowerCase() === 'news-' + cleanId ||
-                (it.title && it.title.trim().toLowerCase() === cleanId) ||
-                (it.title && it.title.toLowerCase().indexOf(cleanId) !== -1);
-            });
+            found = findNewsItem(items, targetId);
           }
           if (!found && targetCat) {
             found = items.find(function (it) {
@@ -1008,18 +1037,43 @@
     }
 
     // ==========================================================
-    // DETAIL POP-UP MODAL LOGIC
+    // ROBUST NEWS ITEM FINDER & DETAIL POP-UP MODAL LOGIC
     // ==========================================================
+    function findNewsItem(newsList, targetId) {
+      if (!newsList || !Array.isArray(newsList) || !targetId) return null;
+      const cleanId = String(targetId).trim().toLowerCase();
+      const noPrefixId = cleanId.replace(/^news[-_]/, '');
+
+      // 1. Exact ID match (supports raw id, no-prefix, and legacyId)
+      let found = newsList.find(it => {
+        if (!it) return false;
+        const itId = String(it.id != null ? it.id : '').trim().toLowerCase();
+        const itLegacy = String(it.legacyId || it.legacy_id || '').trim().toLowerCase();
+        return (
+          itId === cleanId ||
+          itId === noPrefixId ||
+          itId.replace(/^news[-_]/, '') === noPrefixId ||
+          (itLegacy && (itLegacy === cleanId || itLegacy === noPrefixId))
+        );
+      });
+      if (found) return found;
+
+      // 2. Exact Title match
+      found = newsList.find(it => it && it.title && it.title.trim().toLowerCase() === cleanId);
+      if (found) return found;
+
+      // 3. Partial Title match (only if search query has at least 3 chars and is NOT a pure number)
+      if (cleanId.length >= 3 && !/^\d+$/.test(cleanId)) {
+        found = newsList.find(it => it && it.title && it.title.toLowerCase().includes(cleanId));
+        if (found) return found;
+      }
+
+      return null;
+    }
+
     function openNewsDetailModal(id, updateHistory = true) {
       const items = getNewsData();
-      const cleanId = String(id).trim().toLowerCase();
-      const item = items.find(it =>
-        String(it.id).toLowerCase() === cleanId ||
-        String(it.legacyId || '').toLowerCase() === cleanId ||
-        String(it.id).toLowerCase() === 'news-' + cleanId ||
-        (it.title && it.title.trim().toLowerCase() === cleanId) ||
-        (it.title && it.title.toLowerCase().includes(cleanId))
-      );
+      const item = findNewsItem(items, id);
       if (!item) return;
 
       const container = document.getElementById('newsModalContent');
@@ -1353,13 +1407,7 @@
         }
         if (idParam) {
           const items = getNewsData();
-          const cleanId = String(idParam).trim().toLowerCase();
-          const found = items.find(it =>
-            String(it.id).toLowerCase() === cleanId ||
-            String(it.id).toLowerCase() === 'news-' + cleanId ||
-            (it.title && it.title.trim().toLowerCase() === cleanId) ||
-            (it.title && it.title.toLowerCase().includes(cleanId))
-          );
+          const found = findNewsItem(items, idParam);
           if (found) {
             updateSeoBanner(found);
             openNewsDetailModal(found.id, false);
@@ -1369,12 +1417,7 @@
               if (apiItems && Array.isArray(apiItems) && apiItems.length > 0) {
                 try { localStorage.setItem('dg_sarawat_news_items', JSON.stringify(apiItems)); } catch (e) { }
                 renderActivities();
-                const apiFound = apiItems.find(it =>
-                  String(it.id).toLowerCase() === cleanId ||
-                  String(it.id).toLowerCase() === 'news-' + cleanId ||
-                  (it.title && it.title.trim().toLowerCase() === cleanId) ||
-                  (it.title && it.title.toLowerCase().includes(cleanId))
-                );
+                const apiFound = findNewsItem(apiItems, idParam);
                 if (apiFound) {
                   updateSeoBanner(apiFound);
                   openNewsDetailModal(apiFound.id, false);
@@ -1410,13 +1453,7 @@
           updateSeoBanner(null);
         } else if (idParam) {
           const items = getNewsData();
-          const cleanId = String(idParam).trim().toLowerCase();
-          const found = items.find(it =>
-            String(it.id).toLowerCase() === cleanId ||
-            String(it.id).toLowerCase() === 'news-' + cleanId ||
-            (it.title && it.title.trim().toLowerCase() === cleanId) ||
-            (it.title && it.title.toLowerCase().includes(cleanId))
-          );
+          const found = findNewsItem(items, idParam);
           if (found) {
             openNewsDetailModal(found.id, false);
             updateSeoBanner(found);
