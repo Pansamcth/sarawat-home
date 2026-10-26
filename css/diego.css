@@ -9662,24 +9662,12 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   margin: 0;
 }
 
-.dg-chief-meta-bottom {
+.dg-chief-year-wrap {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
+  justify-content: flex-end;
+  align-items: flex-end;
   padding-top: 24px;
-}
-
-.dg-chief-meta-tag {
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--dg-text-muted);
-  letter-spacing: 0.04em;
-}
-
-.dg-chief-meta-val {
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: var(--dg-text-secondary);
+  width: 100%;
 }
 
 /* --- Center Column (Photo) --- */
@@ -9786,7 +9774,7 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
 .dg-chief-editorial-section .dg-chief-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   margin-top: 24px;
 }
@@ -9935,26 +9923,11 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     margin: 0;
     text-align: center;
   }
-  .dg-chief-meta-bottom {
-    padding-top: 4px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    text-align: center;
-  }
-  .dg-chief-meta-tag {
-    font-size: 0.74rem;
-    font-weight: 600;
-    color: var(--dg-text-muted);
-  }
-  .dg-chief-meta-val {
-    font-size: 0.84rem;
-    color: var(--dg-text-secondary);
-    line-height: 1.5;
-    text-align: center;
+
+  /* Hide Year 2569 on mobile completely as requested */
+  .dg-chief-year-wrap,
+  .dg-chief-year-badge {
+    display: none !important;
   }
 
   /* 3. Vision Quote, Credit & Action Button */
@@ -9996,29 +9969,13 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     letter-spacing: 0.02em;
   }
 
-  /* Actions: Year Badge + Team Button Grouped Harmoniously */
+  /* Actions: Team Button Centered (Year 2569 is hidden on mobile) */
   .dg-chief-editorial-section .dg-chief-actions {
     display: flex !important;
-    flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 12px !important;
     width: 100% !important;
     margin-top: 4px !important;
-  }
-  .dg-chief-year-badge {
-    font-family: var(--dg-font-sans);
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--dg-text-secondary);
-    letter-spacing: 0.04em;
-    padding: 9px 16px;
-    border-radius: 9999px;
-    background: var(--dg-bg-card);
-    border: 1px solid var(--dg-border);
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
   }
   .dg-chief-editorial-section .dg-chief-actions .dg-btn-black {
     width: auto !important;
@@ -10027,8 +9984,8 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     display: inline-flex !important;
     align-items: center !important;
     gap: 8px !important;
-    padding: 12px 22px !important;
-    font-size: 0.88rem !important;
+    padding: 12px 24px !important;
+    font-size: 0.9rem !important;
     font-weight: 600 !important;
     border-radius: 9999px !important;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
@@ -10053,16 +10010,9 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     font-size: 1.25rem;
     line-height: 1.64;
   }
-  .dg-chief-editorial-section .dg-chief-actions {
-    gap: 10px !important;
-  }
-  .dg-chief-year-badge {
-    padding: 8px 14px;
-    font-size: 0.82rem;
-  }
   .dg-chief-editorial-section .dg-chief-actions .dg-btn-black {
-    padding: 10px 18px !important;
-    font-size: 0.84rem !important;
+    padding: 11px 20px !important;
+    font-size: 0.86rem !important;
   }
 }
 
