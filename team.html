@@ -408,20 +408,25 @@
         return url;
       };
 
-      const renderCard = (name, role, imageUrl) => {
+      const renderCard = (name, role, imageUrl, tier = 'president') => {
         const finalImgUrl = (imageUrl && imageUrl !== 'assets/images/president.jpg') ? resolveImg(imageUrl) : '';
+        const iconSize = tier === 'president' ? '64px' : (tier === 'vp' ? '54px' : (tier === 'sec' ? '48px' : '44px'));
         const imgHtml = finalImgUrl ?
           `<img src="${finalImgUrl}" alt="${name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%;" onerror="this.onerror=null; this.src='assets/images/default-activity.png';" />` :
-          `<div style="width: 100%; height: 100%; background: var(--dg-bg-subtle); display: flex; align-items: center; justify-content: center;"><i data-lucide="user" style="width: 56px; height: 56px; color: #cbd5e1;"></i></div>`;
+          `<div style="width: 100%; height: 100%; background: var(--dg-bg-subtle); display: flex; align-items: center; justify-content: center;"><i data-lucide="user" style="width: ${iconSize}; height: ${iconSize}; color: #cbd5e1;"></i></div>`;
+
+        const nameSize = tier === 'president' ? '1.25rem' : (tier === 'vp' ? '1.12rem' : (tier === 'sec' ? '1.05rem' : '0.98rem'));
+        const roleSize = tier === 'president' ? '0.98rem' : (tier === 'vp' ? '0.92rem' : (tier === 'sec' ? '0.86rem' : '0.82rem'));
+        const padding = tier === 'president' ? '24px 20px' : (tier === 'vp' ? '20px 16px' : (tier === 'sec' ? '18px 14px' : '16px 12px'));
 
         return `
           <div class="dg-chief-portrait-card" style="box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: var(--dg-transition);">
-            <div class="dg-chief-photo-wrap" style="aspect-ratio: 1/1; max-height: unset; overflow: hidden;">
+            <div class="dg-chief-photo-wrap" style="aspect-ratio: 4 / 5; max-height: unset; overflow: hidden;">
               ${imgHtml}
             </div>
-            <div class="dg-chief-portrait-meta" style="text-align: center; padding: 24px;">
-              <h3 class="dg-chief-name" style="font-size: 1.15rem; margin-bottom: 6px;">${name}</h3>
-              <p class="dg-chief-role" style="font-size: 0.95rem; font-weight: 600; color: var(--dg-primary);">${role}</p>
+            <div class="dg-chief-portrait-meta" style="text-align: center; padding: ${padding};">
+              <h3 class="dg-chief-name" style="font-size: ${nameSize}; margin-bottom: 6px; word-break: break-word;">${name}</h3>
+              <p class="dg-chief-role" style="font-size: ${roleSize}; font-weight: 600; color: var(--dg-primary); word-break: break-word;">${role}</p>
             </div>
           </div>
         `;
@@ -437,39 +442,39 @@
             </div>
       `;
 
-      // President
+      // President (Tier 1: Largest size)
       html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-bottom: 60px;">`;
       if (presidents.length > 0) {
         presidents.forEach(p => {
-          html += `<div style="width: 100%; max-width: 320px;">` + renderCard(p.name, p.department ? `ประธาน (${p.department})` : 'ประธานคณะกรรมการสารวัตรนักเรียน', p.imageUrl) + `</div>`;
+          html += `<div style="width: 100%; max-width: 340px;">` + renderCard(p.name, p.department ? `ประธาน (${p.department})` : 'ประธานคณะกรรมการสารวัตรนักเรียน', p.imageUrl, 'president') + `</div>`;
         });
       } else {
-        html += `<div style="width: 100%; max-width: 320px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', 'ประธานคณะกรรมการสารวัตรนักเรียน', '') + `</div>`;
+        html += `<div style="width: 100%; max-width: 340px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', 'ประธานคณะกรรมการสารวัตรนักเรียน', '', 'president') + `</div>`;
       }
       html += `</div>`;
 
-      // Vice Presidents
+      // Vice Presidents (Tier 2: Medium-Large size)
       if (vps.length > 0) {
         html += `<h3 style="text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 1.5rem; color: var(--dg-text-primary);">รองประธานคณะกรรมการสารวัตรนักเรียน</h3>`;
         html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 60px;">`;
         vps.forEach((vp, index) => {
           const vpTitle = vp.department ? `รองประธานคนที่ ${index + 1} (${vp.department})` : `รองประธานคณะกรรมการสารวัตรนักเรียน คนที่ ${index + 1}`;
-          html += `<div style="width: 100%; max-width: 280px;">` + renderCard(vp.name, vpTitle, vp.imageUrl) + `</div>`;
+          html += `<div style="width: 100%; max-width: 295px;">` + renderCard(vp.name, vpTitle, vp.imageUrl, 'vp') + `</div>`;
         });
         html += `</div>`;
       }
 
-      // Secretaries
+      // Secretaries (Tier 3: Medium size)
       if (secs.length > 0) {
         html += `<h3 style="text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 1.5rem; color: var(--dg-text-primary);">เลขานุการสารวัตรนักเรียน</h3>`;
-        html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 60px;">`;
+        html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 26px; margin-bottom: 60px;">`;
         secs.forEach(sec => {
-          html += `<div style="width: 100%; max-width: 280px;">` + renderCard(sec.name, 'เลขานุการสารวัตรนักเรียน', sec.imageUrl) + `</div>`;
+          html += `<div style="width: 100%; max-width: 260px;">` + renderCard(sec.name, 'เลขานุการสารวัตรนักเรียน', sec.imageUrl, 'sec') + `</div>`;
         });
         html += `</div>`;
       }
 
-      // Department Heads
+      // Department Heads (Tier 4: Compact size)
       const fixedDepts = ['ฝ่ายเอกสาร', 'ฝ่ายโสตทัศนศิลป์', 'ฝ่ายสารวัตรพยาบาล', 'ฝ่ายการเงิน', 'ฝ่ายกิจกรรม', 'ฝ่ายอุปกรณ์และ IT', 'ฝ่ายวินัย'];
       html += `<h3 style="text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 1.5rem; color: var(--dg-text-primary);">หัวหน้าฝ่ายต่าง ๆ</h3>`;
       html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin-bottom: 40px;">`;
@@ -479,10 +484,10 @@
 
         if (heads && heads.length > 0) {
           heads.forEach(head => {
-            html += `<div style="width: 100%; max-width: 260px; min-width: 240px;">` + renderCard(head.name, displayRole, head.imageUrl) + `</div>`;
+            html += `<div style="width: 100%; max-width: 230px; min-width: 195px;">` + renderCard(head.name, displayRole, head.imageUrl, 'head') + `</div>`;
           });
         } else {
-          html += `<div style="width: 100%; max-width: 260px; min-width: 240px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', displayRole, '') + `</div>`;
+          html += `<div style="width: 100%; max-width: 230px; min-width: 195px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', displayRole, '', 'head') + `</div>`;
         }
       });
       html += `</div>`;

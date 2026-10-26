@@ -2269,7 +2269,7 @@ svg:not([data-lucide]),
 
 .dg-chief-photo-wrap {
   width: 100%;
-  aspect-ratio: 1/1.15;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--dg-bg-card);
 }
@@ -6283,8 +6283,8 @@ svg:not([data-lucide]),
     border-radius: 14px;
   }
   .dg-chief-photo-wrap {
-    aspect-ratio: 16/13;
-    max-height: 320px;
+    aspect-ratio: 4 / 5;
+    max-height: unset;
   }
   .dg-chief-portrait-meta {
     padding: 18px 18px;
@@ -9680,7 +9680,7 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
 .dg-chief-frame-wrap {
   width: 100%;
   max-width: 380px;
-  aspect-ratio: 1 / 1.18;
+  aspect-ratio: 4 / 5;
   border-radius: 32px;
   overflow: hidden;
   background: var(--dg-bg-subtle);
@@ -9868,7 +9868,7 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   .dg-chief-frame-wrap {
     width: 100%;
     max-width: 270px;
-    aspect-ratio: 1 / 1.15;
+    aspect-ratio: 4 / 5;
     border-radius: 28px;
     border: 1px solid var(--dg-border);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
