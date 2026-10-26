@@ -3287,6 +3287,133 @@
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
         <!-- Database settings card removed (configured centrally via cloudflare-config.js) -->
+        <!-- Page Access Control / Feature Flags (Maintenance Mode) -->
+        <div class="admin-card" style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+          <div class="admin-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="admin-section-pill" style="background: #f1f5f9; color: #334155;">
+                  <i data-lucide="shield-alert" style="width: 13px; height: 13px;"></i> PAGE ACCESS CONTROL • ควบคุมการเข้าถึงหน้าเว็บ
+                </span>
+                <span style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #e0f2fe; color: #0369a1;">
+                  บันทึกลงฐานข้อมูล SQLite
+                </span>
+              </div>
+              <h3 style="margin-top: 6px; font-size: 1.15rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="toggle-left"></i> เปิด-ปิดการเข้าถึงหน้าเว็บ (Feature Flags / Maintenance Mode)
+              </h3>
+            </div>
+            <button type="button" class="dg-btn-black" id="btnSavePageAccess" style="padding: 9px 20px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;" onclick="handleSavePageAccessSettings()">
+              <i data-lucide="save" style="width: 16px; height: 16px;"></i> <span>บันทึกการตั้งค่าทั้งหมด</span>
+            </button>
+          </div>
+          <div class="admin-card-body">
+            <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin-bottom: 20px; line-height: 1.6;">
+              สำหรับหน้าหรือฟังก์ชันที่ยังอยู่ระหว่างดำเนินการหรือยังไม่ผ่านเอกสารภายในโรงเรียน สามารถปิดสวิตช์เพื่อแสดงหน้า <strong>"ระบบกำลังพัฒนา"</strong> สำหรับบุคคลทั่วไปได้ โดยผู้ดูแลระบบ (Admin) ที่ล็อกอินอยู่จะยังคงสามารถเข้าดูและตรวจสอบหน้าจริงได้ตามปกติ พร้อมแถบแจ้งเตือนพิเศษ
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+              
+              <!-- 1. Admission Page -->
+              <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="user-plus" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 2px;">
+                      ระบบรับสมัครสารวัตรนักเรียน
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">
+                      <code>/admission</code> • ฟอร์มรับสมัคร และตรวจสอบสถานะ
+                    </div>
+                    <span id="badgePageAdmission" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เปิดใช้งานปกติ
+                    </span>
+                  </div>
+                </div>
+                <label class="modern-switch" style="margin-left: 12px;">
+                  <input type="checkbox" id="switchPageAdmission" onchange="syncPageAccessBadge('Admission', this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <!-- 2. Activities Page -->
+              <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="newspaper" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 2px;">
+                      กิจกรรมและข่าวสาร
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">
+                      <code>/activities</code> • ข่าวสาร กิจกรรม และแกลเลอรี
+                    </div>
+                    <span id="badgePageActivities" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เปิดใช้งานปกติ
+                    </span>
+                  </div>
+                </div>
+                <label class="modern-switch" style="margin-left: 12px;">
+                  <input type="checkbox" id="switchPageActivities" onchange="syncPageAccessBadge('Activities', this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <!-- 3. Calendar Page -->
+              <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #dbeafe; color: #1d4ed8; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="calendar" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 2px;">
+                      ปฏิทินปฏิบัติงาน
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">
+                      <code>/calendar</code> • ปฏิทินเวรและกิจกรรมประจำเดือน
+                    </div>
+                    <span id="badgePageCalendar" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เปิดใช้งานปกติ
+                    </span>
+                  </div>
+                </div>
+                <label class="modern-switch" style="margin-left: 12px;">
+                  <input type="checkbox" id="switchPageCalendar" onchange="syncPageAccessBadge('Calendar', this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <!-- 4. Team Page -->
+              <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #fae8ff; color: #86198f; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="users" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 2px;">
+                      ทำเนียบสารวัตรนักเรียน / กรรมการ
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">
+                      <code>/team</code> • ทำเนียบสารวัตรและโครงสร้างองค์กร
+                    </div>
+                    <span id="badgePageTeam" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เปิดใช้งานปกติ
+                    </span>
+                  </div>
+                </div>
+                <label class="modern-switch" style="margin-left: 12px;">
+                  <input type="checkbox" id="switchPageTeam" onchange="syncPageAccessBadge('Team', this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
 <!-- Duty Start Date Settings (Available to all admins) -->
         <div class="admin-card">
           <div class="admin-card-header">
@@ -8278,6 +8405,79 @@
       const labelInput = document.getElementById('settingsDutyDateLabel');
       if (labelInput) {
         labelInput.value = localStorage.getItem('dg_sarawat_uptime_label') || 'เริ่มปฏิบัติหน้าที่ตั้งแต่ 23 พ.ค. 2569';
+      }
+
+      loadPageAccessSettings();
+    }
+
+    function syncPageAccessBadge(pageKey, isOpen) {
+      const badge = document.getElementById('badgePage' + pageKey);
+      if (!badge) return;
+      if (isOpen) {
+        badge.textContent = '🟢 เปิดใช้งานปกติ';
+        badge.style.background = '#dcfce7';
+        badge.style.color = '#15803d';
+      } else {
+        badge.textContent = '🟡 ปิดปรับปรุง (ระบบกำลังพัฒนา)';
+        badge.style.background = '#fef3c7';
+        badge.style.color = '#b45309';
+      }
+    }
+
+    async function loadPageAccessSettings() {
+      if (!window.SarawatApi || !window.SarawatApi.getSettings) return;
+      try {
+        const settings = await window.SarawatApi.getSettings();
+        const pages = ['Admission', 'Activities', 'Calendar', 'Team'];
+        pages.forEach(p => {
+          const key = 'page_status_' + p.toLowerCase();
+          const isOpen = settings[key] !== '0';
+          const sw = document.getElementById('switchPage' + p);
+          if (sw) sw.checked = isOpen;
+          syncPageAccessBadge(p, isOpen);
+        });
+      } catch (err) {
+        console.warn('Failed to load page access settings:', err);
+      }
+    }
+
+    async function handleSavePageAccessSettings() {
+      const btn = document.getElementById('btnSavePageAccess');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i data-lucide="loader-2" class="spin" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;"></i> <span>กำลังบันทึก...</span>';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+
+      const payload = {
+        page_status_admission: document.getElementById('switchPageAdmission')?.checked ? '1' : '0',
+        page_status_activities: document.getElementById('switchPageActivities')?.checked ? '1' : '0',
+        page_status_calendar: document.getElementById('switchPageCalendar')?.checked ? '1' : '0',
+        page_status_team: document.getElementById('switchPageTeam')?.checked ? '1' : '0'
+      };
+
+      try {
+        if (!window.SarawatApi || !window.SarawatApi.saveSettings) {
+          throw new Error('ระบบ SarawatApi ไม่พร้อมใช้งาน');
+        }
+        await window.SarawatApi.saveSettings(payload);
+
+        // Sync local cache
+        localStorage.setItem('dg_page_status_admission', payload.page_status_admission);
+        localStorage.setItem('dg_page_status_activities', payload.page_status_activities);
+        localStorage.setItem('dg_page_status_calendar', payload.page_status_calendar);
+        localStorage.setItem('dg_page_status_team', payload.page_status_team);
+
+        showToast('🟢 บันทึกการตั้งค่าเปิด-ปิดหน้าเว็บเรียบร้อยแล้ว');
+      } catch (err) {
+        showToast('เกิดข้อผิดพลาดในการบันทึก: ' + (err.message || 'Error'), 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
       }
     }
 
