@@ -10,6 +10,11 @@
   'use strict';
 
   function detectInAppBrowser() {
+    // ยกเว้นอุปกรณ์ iPhone / iPad (iOS) ทั้งหมดตามคำขอ ให้สามารถเข้าใช้งานผ่าน In-App Browser ได้ทันทีโดยไม่ถูกบล็อก
+    if (isIos()) {
+      return { detected: false, app: '', name: '', color: '', badgeText: '' };
+    }
+
     var ua = navigator.userAgent || navigator.vendor || window.opera || '';
 
     // ตรวจจับเบราว์เซอร์ภายในแอปต่างๆ

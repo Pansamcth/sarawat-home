@@ -37,32 +37,7 @@
       var ua = navigator.userAgent;
       var vendor = navigator.vendor || '';
 
-      // Check for in-app browsers first
-      var isInApp = /Line|FBAN|FBAV|Instagram|Twitter|TikTok/i.test(ua);
 
-      var isChrome = /Chrome/.test(ua) && /Google Inc/.test(vendor);
-      var isSafari = /Safari/.test(ua) && /Apple Computer/.test(vendor);
-      var isEdge = /Edg/.test(ua) || /Edge/.test(ua);
-      var isChromeIOS = /CriOS/.test(ua);
-      var isSafariIOS = /iP(ad|hone|od).+Version\/[\d\.]+.*Safari/i.test(ua);
-
-      // Allow Chrome, Safari, and Edge, but explicitly REJECT in-app browsers
-      var isSupported = !isInApp;
-
-      if (!isSupported) {
-        var overlay = document.getElementById('browser-not-supported-overlay');
-        if (overlay) {
-          overlay.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
-
-          var children = document.body.children;
-          for (var i = 0; i < children.length; i++) {
-            if (children[i].id !== 'browser-not-supported-overlay' && children[i].tagName !== 'SCRIPT') {
-              children[i].style.display = 'none';
-            }
-          }
-        }
-      }
     });
 
 // --- Block 2: Main State & Operations ---

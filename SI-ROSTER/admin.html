@@ -3584,81 +3584,7 @@ body.dark-mode .signup-success-banner,
       text-decoration: underline;
     }
 
-    /* Browser Not Supported Overlay */
-    #browser-not-supported-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(circle at 10% 90%, rgba(186, 230, 253, 0.5) 0%, transparent 60%),
-        radial-gradient(circle at 90% 10%, rgba(221, 214, 254, 0.5) 0%, transparent 60%);
-      z-index: 999999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .unsupported-container {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--border-radius);
-      padding: 40px;
-      text-align: center;
-      max-width: 500px;
-      box-shadow: var(--shadow);
-      animation: fadeInUp 0.5s ease;
-    }
-
-    .unsupported-icon {
-      font-size: 4rem;
-      color: var(--warning);
-      margin-bottom: 20px;
-    }
-
-    .unsupported-title {
-      font-size: 1.8rem;
-      color: var(--text-main);
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-
-    .unsupported-desc {
-      color: var(--text-muted);
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    .supported-browsers {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-    }
-
-    .browser-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-main);
-    }
-
-    .browser-item i {
-      font-size: 2.5rem;
-      color: var(--primary);
-    }
-
-    .browser-item span {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .dynamic-duty-row.over {
+.dynamic-duty-row.over {
       border: 2px dashed var(--primary) !important;
       background: rgba(59, 130, 246, 0.1) !important;
     }
@@ -4172,35 +4098,7 @@ body.dark-mode .signup-success-banner,
       } catch (err) {
         console.warn('ToastUI editor init warning:', err);
       }
-      var ua = navigator.userAgent;
-      var vendor = navigator.vendor || '';
 
-      // Check for in-app browsers first
-      var isInApp = /Line|FBAN|FBAV|Instagram|Twitter|TikTok/i.test(ua);
-
-      var isChrome = /Chrome/.test(ua) && /Google Inc/.test(vendor);
-      var isSafari = /Safari/.test(ua) && /Apple Computer/.test(vendor);
-      var isEdge = /Edg/.test(ua) || /Edge/.test(ua);
-      var isChromeIOS = /CriOS/.test(ua);
-      var isSafariIOS = /iP(ad|hone|od).+Version\/[\d\.]+.*Safari/i.test(ua);
-
-      // Allow Chrome, Safari, and Edge, but explicitly REJECT in-app browsers
-      var isSupported = !isInApp;
-
-      if (!isSupported) {
-        var overlay = document.getElementById('browser-not-supported-overlay');
-        if (overlay) {
-          overlay.style.display = 'flex';
-          document.body.style.overflow = 'hidden';
-
-          var children = document.body.children;
-          for (var i = 0; i < children.length; i++) {
-            if (children[i].id !== 'browser-not-supported-overlay' && children[i].tagName !== 'SCRIPT') {
-              children[i].style.display = 'none';
-            }
-          }
-        }
-      }
     });
   </script>
 
@@ -4254,20 +4152,7 @@ body.dark-mode .signup-success-banner,
   </div>
 
 
-  <!-- Browser Not Supported Overlay -->
-  <div id="browser-not-supported-overlay" style="display: none;">
-    <div class="unsupported-container">
-      <i class="fas fa-exclamation-triangle unsupported-icon"></i>
-      <h1 class="unsupported-title">เบราว์เซอร์ไม่รองรับ</h1>
-      <p class="unsupported-desc">ระบบนี้รองรับเฉพาะการใช้งานผ่าน Google Chrome, Safari และ Microsoft Edge เท่านั้น
-        กรุณาเปลี่ยนเบราว์เซอร์เพื่อเข้าใช้งานระบบ</p>
-      <div class="supported-browsers">
-        <div class="browser-item"><i class="fab fa-chrome"></i><span>Chrome</span></div>
-        <div class="browser-item"><i class="fab fa-safari"></i><span>Safari</span></div>
-        <div class="browser-item"><i class="fab fa-edge"></i><span>Edge</span></div>
-      </div>
-    </div>
-  </div>
+</div>
 
   <!-- ============ AUTH-ISOLATED ROSTER ADMIN PORTAL ============ -->
   <div id="adminPortalApp" style="display: none;">
