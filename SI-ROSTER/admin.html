@@ -3711,6 +3711,378 @@ body.dark-mode .signup-success-banner,
       align-items: center;
       gap: 8px;
     }
+
+    /* ========================================================
+       SWEETALERT2 CUSTOM MODERN CARDS & CONFIRMATION STEPS
+       ======================================================== */
+    .swal-icon-circle {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      transition: all 0.25s ease;
+    }
+
+    .swal-icon-circle.swal-icon-blue {
+      background: #EFF6FF;
+      border: 2px solid #DBEAFE;
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.22);
+    }
+
+    .swal-icon-circle.swal-icon-yellow {
+      background: #FEFCE8;
+      border: 2px solid #FEF08A;
+      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);
+    }
+
+    .swal-icon-circle.swal-icon-green {
+      background: #ECFDF5;
+      border: 2px solid #A7F3D0;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+    }
+
+    .swal-icon-circle.swal-icon-red {
+      background: #FEF2F2;
+      border: 2px solid #FECACA;
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.18);
+    }
+
+    .swal-custom-title {
+      color: #0F172A;
+      font-weight: 800;
+      font-size: 1.45rem;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+    }
+
+    .swal-info-card {
+      color: #64748B;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      margin-bottom: 16px;
+      width: 100%;
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      padding: 14px 18px;
+      border-radius: 14px;
+      box-sizing: border-box;
+      text-align: left;
+    }
+
+    .swal-subtext {
+      margin-bottom: 4px;
+      font-size: 0.85rem;
+      color: #64748B;
+    }
+
+    .swal-student-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+
+    .swal-duty-row {
+      font-size: 0.95rem;
+      color: #334155;
+    }
+
+    .swal-duty-name {
+      color: #2563EB;
+      font-weight: 700;
+    }
+
+    .swal-duty-badge {
+      color: #10B981;
+      font-weight: 700;
+    }
+
+    .swal-value-text {
+      color: #1E293B;
+      font-weight: 600;
+    }
+
+    .swal-card-footer-tip {
+      font-size: 0.82rem;
+      color: #94A3B8;
+      border-top: 1px dashed #CBD5E1;
+      padding-top: 6px;
+      margin-top: 6px;
+    }
+
+    .swal-loading-desc {
+      color: #64748B;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .swal-camera-note {
+      color: #EF4444;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .swal-hint-text {
+      color: #64748B;
+      font-size: 0.85rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .swal-cancel-text {
+      color: #64748B;
+    }
+
+    /* ========================================================
+       SWEETALERT2 DARK MODE OVERRIDES
+       ======================================================== */
+    [data-theme="dark"] .swal2-popup.custom-swal-popup,
+    body.dark-mode .swal2-popup.custom-swal-popup {
+      background: #161e2e !important;
+      border: 1px solid #253046 !important;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7) !important;
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .swal-custom-title,
+    body.dark-mode .swal-custom-title,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup h2,
+    body.dark-mode .swal2-popup.custom-swal-popup h2,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-title,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-title {
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .swal-info-card,
+    body.dark-mode .swal-info-card,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background: #F8FAFC"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background:#F8FAFC"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background: #F8FAFC"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background:#F8FAFC"] {
+      background: #1e293b !important;
+      border-color: #253046 !important;
+      color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .swal-subtext,
+    body.dark-mode .swal-subtext,
+    [data-theme="dark"] .swal-loading-desc,
+    body.dark-mode .swal-loading-desc,
+    [data-theme="dark"] .swal-hint-text,
+    body.dark-mode .swal-hint-text,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-html-container,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-html-container {
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .swal-student-name,
+    body.dark-mode .swal-student-name,
+    [data-theme="dark"] .swal-value-text,
+    body.dark-mode .swal-value-text,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color: #0F172A"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color:#0F172A"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color: #0F172A"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color:#0F172A"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color: #1E293B"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color:#1E293B"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color: #1E293B"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color:#1E293B"] {
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .swal-duty-row,
+    body.dark-mode .swal-duty-row,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup strong,
+    body.dark-mode .swal2-popup.custom-swal-popup strong,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color: #334155"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color:#334155"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color: #334155"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color:#334155"] {
+      color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .swal-duty-name,
+    body.dark-mode .swal-duty-name,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color: #2563EB"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color:#2563EB"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color: #2563EB"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color:#2563EB"] {
+      color: #38bdf8 !important;
+    }
+
+    [data-theme="dark"] .swal-duty-badge,
+    body.dark-mode .swal-duty-badge,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color: #10B981"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color:#10B981"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color: #10B981"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color:#10B981"] {
+      color: #34d399 !important;
+    }
+
+    [data-theme="dark"] .swal-card-footer-tip,
+    body.dark-mode .swal-card-footer-tip,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="border-top: 1px dashed"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="border-top: 1px dashed"] {
+      border-top-color: #334155 !important;
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .swal-camera-note,
+    body.dark-mode .swal-camera-note,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color: #EF4444"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup [style*="color:#EF4444"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color: #EF4444"],
+    body.dark-mode .swal2-popup.custom-swal-popup [style*="color:#EF4444"] {
+      color: #f87171 !important;
+    }
+
+    /* Icon circles in dark mode */
+    [data-theme="dark"] .swal-icon-circle.swal-icon-blue,
+    body.dark-mode .swal-icon-circle.swal-icon-blue,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background: #EFF6FF"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background: #EFF6FF"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background:#EFF6FF"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background:#EFF6FF"] {
+      background: rgba(59, 130, 246, 0.18) !important;
+      border-color: rgba(59, 130, 246, 0.35) !important;
+    }
+
+    [data-theme="dark"] .swal-icon-circle.swal-icon-yellow,
+    body.dark-mode .swal-icon-circle.swal-icon-yellow,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background: #FEFCE8"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background: #FEFCE8"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background:#FEFCE8"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background:#FEFCE8"] {
+      background: rgba(234, 179, 8, 0.18) !important;
+      border-color: rgba(234, 179, 8, 0.35) !important;
+    }
+
+    [data-theme="dark"] .swal-icon-circle.swal-icon-green,
+    body.dark-mode .swal-icon-circle.swal-icon-green,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background: #ECFDF5"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background: #ECFDF5"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background:#ECFDF5"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background:#ECFDF5"] {
+      background: rgba(16, 185, 129, 0.18) !important;
+      border-color: rgba(16, 185, 129, 0.35) !important;
+    }
+
+    [data-theme="dark"] .swal-icon-circle.swal-icon-red,
+    body.dark-mode .swal-icon-circle.swal-icon-red,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background: #FEF2F2"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background: #FEF2F2"],
+    [data-theme="dark"] .swal2-popup.custom-swal-popup div[style*="background:#FEF2F2"],
+    body.dark-mode .swal2-popup.custom-swal-popup div[style*="background:#FEF2F2"] {
+      background: rgba(239, 68, 68, 0.18) !important;
+      border-color: rgba(239, 68, 68, 0.35) !important;
+    }
+
+    /* SweetAlert buttons in Dark Mode */
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-confirm,
+    [data-theme="dark"] .custom-swal-btn.swal2-confirm,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-confirm,
+    body.dark-mode .custom-swal-btn.swal2-confirm {
+      background-color: #f8fafc !important;
+      color: #0b0f17 !important;
+      border: 1.5px solid #f8fafc !important;
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15) !important;
+      font-weight: 750 !important;
+    }
+
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-confirm:hover,
+    [data-theme="dark"] .custom-swal-btn.swal2-confirm:hover,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-confirm:hover,
+    body.dark-mode .custom-swal-btn.swal2-confirm:hover {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25) !important;
+      transform: translateY(-1px);
+    }
+
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-cancel,
+    [data-theme="dark"] .custom-swal-btn.swal2-cancel,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-cancel,
+    body.dark-mode .custom-swal-btn.swal2-cancel {
+      background-color: #1e293b !important;
+      border: 1.5px solid #253046 !important;
+      color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .swal-cancel-text,
+    body.dark-mode .swal-cancel-text,
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-cancel span,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-cancel span {
+      color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .swal2-popup.custom-swal-popup .swal2-cancel:hover,
+    [data-theme="dark"] .custom-swal-btn.swal2-cancel:hover,
+    body.dark-mode .swal2-popup.custom-swal-popup .swal2-cancel:hover,
+    body.dark-mode .custom-swal-btn.swal2-cancel:hover {
+      background-color: #253046 !important;
+      color: #f8fafc !important;
+      border-color: #334155 !important;
+      transform: translateY(-1px);
+    }
+
+    /* ========================================================
+       AUTOCOMPLETE DROPDOWN DARK MODE (IMAGE 3 FIX)
+       ======================================================== */
+    [data-theme="dark"] .autocomplete-dropdown,
+    body.dark-mode .autocomplete-dropdown,
+    [data-theme="dark"] #centralAutocomplete,
+    body.dark-mode #centralAutocomplete,
+    [data-theme="dark"] #statusAutocomplete,
+    body.dark-mode #statusAutocomplete {
+      background: #161e2e !important;
+      border: 1.5px solid #253046 !important;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    [data-theme="dark"] .autocomplete-dropdown div,
+    body.dark-mode .autocomplete-dropdown div,
+    [data-theme="dark"] #centralAutocomplete div,
+    body.dark-mode #centralAutocomplete div,
+    [data-theme="dark"] #statusAutocomplete div,
+    body.dark-mode #statusAutocomplete div {
+      color: #f8fafc !important;
+      border-bottom: 1px solid #253046 !important;
+      background: transparent !important;
+    }
+
+    [data-theme="dark"] .autocomplete-dropdown div:hover,
+    body.dark-mode .autocomplete-dropdown div:hover,
+    [data-theme="dark"] #centralAutocomplete div:hover,
+    body.dark-mode #centralAutocomplete div:hover,
+    [data-theme="dark"] #statusAutocomplete div:hover,
+    body.dark-mode #statusAutocomplete div:hover {
+      background: #1e293b !important;
+      color: #38bdf8 !important;
+      padding-left: 22px !important;
+    }
+
+    [data-theme="dark"] .autocomplete-dropdown::-webkit-scrollbar,
+    body.dark-mode .autocomplete-dropdown::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    [data-theme="dark"] .autocomplete-dropdown::-webkit-scrollbar-track,
+    body.dark-mode .autocomplete-dropdown::-webkit-scrollbar-track {
+      background: #161e2e;
+    }
+
+    [data-theme="dark"] .autocomplete-dropdown::-webkit-scrollbar-thumb,
+    body.dark-mode .autocomplete-dropdown::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 999px;
+    }
   </style>
 
   <script>
@@ -7281,12 +7653,12 @@ body.dark-mode .signup-success-banner,
             <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #DBEAFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(59, 130, 246, 0.22);">
               <i class="fa-solid fa-clipboard-check" style="font-size: 36px; color: #3B82F6;"></i>
             </div>
-            <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการลงชื่อ</h2>
-            <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
+            <h2 class="swal-custom-title" style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการลงชื่อ</h2>
+            <div class="swal-info-card" style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
               <div style="margin-bottom: 4px; font-size: 0.85rem; color: #64748B;">ระบบกำลังจะบันทึกการลงชื่อของ</div>
-              <div style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; line-height: 1.2;">${sendName}</div>
-              <div style="font-size: 0.95rem; color: #334155;">ในหน้าที่ <strong style="color: #2563EB; font-weight: 700;">${duty}</strong></div>
-              <div style="font-size: 0.82rem; color: #94A3B8; border-top: 1px dashed #CBD5E1; padding-top: 6px; margin-top: 6px;">
+              <div class="swal-student-name" style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; line-height: 1.2;">${sendName}</div>
+              <div class="swal-duty-row" style="font-size: 0.95rem; color: #334155;">ในหน้าที่ <strong class="swal-duty-name" style="color: #2563EB; font-weight: 700;">${duty}</strong></div>
+              <div class="swal-card-footer-tip" style="font-size: 0.82rem; color: #94A3B8; border-top: 1px dashed #CBD5E1; padding-top: 6px; margin-top: 6px;">
                 กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนกดยืนยัน
               </div>
             </div>
@@ -7318,7 +7690,7 @@ body.dark-mode .signup-success-banner,
                 <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
                   <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
                 </div>
-                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
+                <h2 class="swal-custom-title" style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
                 <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 6px;">
                   ระบบกำลังคีย์ข้อมูลของคุณ<br>กรุณารอสักครู่...
                 </div>
@@ -7340,12 +7712,12 @@ body.dark-mode .signup-success-banner,
                   <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
                     <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
                   </div>
-                  <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">บันทึกข้อมูลเรียบร้อยแล้ว</h2>
-                  <div style="color: #64748B; font-size: 0.9rem; line-height: 1.6; text-align: left; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; margin-bottom: 10px;">
-                    <div style="margin-bottom: 4px;"><strong>ชื่อ:</strong> <span style="color: #1E293B; font-weight: 600;">${sendName}</span></div>
-                    <div style="margin-bottom: 4px;"><strong>กิจกรรม:</strong> <span style="color: #1E293B; font-weight: 600;">${selectedDateInfo.activity.title}</span></div>
-                    <div style="margin-bottom: 4px;"><strong>หน้าที่:</strong> <span style="color: #10B981; font-weight: 700;">${duty}</span></div>
-                    <div><strong>เวลาลงชื่อ:</strong> <span style="color: #10B981; font-weight: 700;">${currentTime} น.</span></div>
+                  <h2 class="swal-custom-title" style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">บันทึกข้อมูลเรียบร้อยแล้ว</h2>
+                  <div class="swal-info-card" style="color: #64748B; font-size: 0.9rem; line-height: 1.6; text-align: left; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; margin-bottom: 10px;">
+                    <div style="margin-bottom: 4px;"><strong>ชื่อ:</strong> <span class="swal-value-text" style="color: #1E293B; font-weight: 600;">${sendName}</span></div>
+                    <div style="margin-bottom: 4px;"><strong>กิจกรรม:</strong> <span class="swal-value-text" style="color: #1E293B; font-weight: 600;">${selectedDateInfo.activity.title}</span></div>
+                    <div style="margin-bottom: 4px;"><strong>หน้าที่:</strong> <span class="swal-duty-badge" style="color: #10B981; font-weight: 700;">${duty}</span></div>
+                    <div><strong>เวลาลงชื่อ:</strong> <span class="swal-duty-badge" style="color: #10B981; font-weight: 700;">${currentTime} น.</span></div>
                   </div>
                   <div style="color: #EF4444; font-size: 0.85rem; margin-top: 5px; font-weight: 500;">
                     <i class="fa-solid fa-camera" style="margin-right: 5px;"></i> หมายเหตุ: กรุณาแคปหน้าจอนี้ไว้เพื่อเป็นหลักฐาน
