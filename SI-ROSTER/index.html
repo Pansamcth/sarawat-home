@@ -7337,26 +7337,18 @@ body.dark-mode .signup-success-banner,
         const touch = e.touches[0];
         const target = e.target;
 
-        if (target.closest('button') || target.closest('input') || target.closest('textarea') || target.closest('select') || target.closest('a') || target.closest('.close-modal')) {
-          return;
-        }
-
-        // CRUCIAL FIX: Never drag from inside .modal-body!
-        // The modal-body is strictly reserved for scrolling inside content!
-        if (target.closest('.modal-body')) {
-          return;
-        }
-
+        // Strictly allow dragging ONLY from the top drag handle bar
         const isHandle = handle && (handle === target || handle.contains(target));
-        const isHeader = target.closest('.modal-header');
-
-        if (isHandle || isHeader) {
-          startY = touch.clientY;
-          currentY = startY;
-          startTime = Date.now();
-          isDragging = false;
-          dragTarget = isHandle ? 'handle' : 'header';
+        if (!isHandle) {
+          // Header, title, form, body and cards are 100% reserved for scrolling content
+          return;
         }
+
+        startY = touch.clientY;
+        currentY = startY;
+        startTime = Date.now();
+        isDragging = false;
+        dragTarget = 'handle';
       }
 
       function onTouchMove(e) {
@@ -7383,7 +7375,7 @@ body.dark-mode .signup-success-banner,
       }
 
       function onTouchEnd(e) {
-        if (!isDragging) {
+        if (!isDragging || dragTarget !== 'handle') {
           startY = 0;
           dragTarget = null;
           return;
