@@ -72,11 +72,15 @@ async function loadTeamAdmin() {
       name: 'นายอะห์นัฟ สหสันติวรกุล',
       role: 'ประธาน',
       department: 'ชั้นมัธยมศึกษาปีที่ 5/1',
-      imageUrl: ''
+      imageUrl: '',
+      homeImageUrl: '',
+      teamImageUrl: ''
     };
     allMembers.unshift(p);
-  } else if (p.imageUrl === 'assets/images/president.jpg') {
-    p.imageUrl = '';
+  } else {
+    if (p.imageUrl === 'assets/images/president.jpg') p.imageUrl = '';
+    if (!p.homeImageUrl) p.homeImageUrl = p.imageUrl || '';
+    if (!p.teamImageUrl) p.teamImageUrl = p.imageUrl || '';
   }
 
   renderTeamAdminUI();
@@ -146,9 +150,9 @@ function renderTeamAdminUI() {
     `;
   }
 
-  // --- President ---
+  // --- President (Dual Customizable Images: Home & Team) ---
   if (presidents.length > 0) {
-    html += buildEditorCard(presidents[0], 'ประธานคณะกรรมการสารวัตรนักเรียน', 'ประธาน', false, true);
+    html += buildPresidentEditorCard(presidents[0]);
   }
 
   // --- Vice Presidents ---
@@ -324,6 +328,152 @@ function renderTeamAdminUI() {
   if (window.lucide) window.lucide.createIcons();
 }
 
+
+function buildPresidentEditorCard(data) {
+  if (!data.id) data.id = 'pres_main';
+  const id = data.id;
+
+  const homeImg = data.homeImageUrl || data.imageUrl || '';
+  const teamImg = data.teamImageUrl || data.imageUrl || '';
+
+  const resolveUrl = (url) => {
+    if (!url) return '';
+    if (window.resolveImageUrl) return window.resolveImageUrl(url);
+    if (url.startsWith('/')) {
+      const base = (window.SarawatApi && window.SarawatApi.getBaseUrl) ? window.SarawatApi.getBaseUrl() : '';
+      return base + url;
+    }
+    return url;
+  };
+
+  const homeResolved = resolveUrl(homeImg);
+  const teamResolved = resolveUrl(teamImg);
+
+  const homeImgContent = homeResolved ? 
+    `<img src="${homeResolved}" id="img_preview_${id}_home" style="width: 100%; height: 100%; object-fit: cover;" />` : 
+    `<i data-lucide="user" id="img_icon_${id}_home" style="color: #cbd5e1; width: 44px; height: 44px;"></i><img id="img_preview_${id}_home" style="display:none; width: 100%; height: 100%; object-fit: cover;" />`;
+
+  const teamImgContent = teamResolved ? 
+    `<img src="${teamResolved}" id="img_preview_${id}_team" style="width: 100%; height: 100%; object-fit: cover;" />` : 
+    `<i data-lucide="user" id="img_icon_${id}_team" style="color: #cbd5e1; width: 44px; height: 44px;"></i><img id="img_preview_${id}_team" style="display:none; width: 100%; height: 100%; object-fit: cover;" />`;
+
+  return `
+    <div class="team-edit-card" style="background: #fff; border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 26px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px;">
+      <div class="team-edit-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--dg-border); padding-bottom: 16px; margin-bottom: 22px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: #0f172a; color: #fff; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
+          </div>
+          <div>
+            <h4 style="margin: 0; font-weight: 700; font-size: 1.15rem; color: #0f172a;">ประธานคณะกรรมการสารวัตรนักเรียน</h4>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">ตำแหน่งสูงสุด • ตั้งค่ารูปภาพแยก 2 หน้าเว็บในที่เดียว (หน้าหลัก & หน้าคณะทำงาน)</div>
+          </div>
+        </div>
+        <span style="font-size: 0.76rem; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 9999px;">
+          อัตราส่วน 4:5
+        </span>
+      </div>
+
+      <!-- General Info: Name, Role, Dept -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <div class="dg-form-group" style="margin-bottom: 0;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อ - นามสกุลประธาน <span style="color: #ef4444;">*</span></label>
+          <input type="text" class="dg-input" id="name_${id}" value="${data.name || ''}" placeholder="ระบุชื่อ-นามสกุล..." onchange="updateMemberData('${id}', 'name')" style="background: #fff;" />
+        </div>
+        <div class="dg-form-group" style="margin-bottom: 0;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">กลุ่มตำแหน่ง</label>
+          <input type="text" class="dg-input" value="ประธานคณะกรรมการสารวัตรนักเรียน" disabled style="background: #e2e8f0; color: #475569; font-weight: 600;" />
+        </div>
+        <div class="dg-form-group" style="margin-bottom: 0;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ระดับชั้น / สังกัด</label>
+          <input type="text" class="dg-input" id="dept_${id}" value="${data.department || ''}" placeholder="เช่น ชั้นมัธยมศึกษาปีที่ 5/1" onchange="updateMemberData('${id}', 'department')" style="background: #fff;" />
+        </div>
+      </div>
+
+      <!-- Dual Photo Customization Box -->
+      <div style="border-top: 1px dashed #cbd5e1; padding-top: 20px;">
+        <div style="margin-bottom: 16px;">
+          <div style="font-weight: 700; font-size: 0.98rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="image" style="width: 18px; height: 18px; color: var(--dg-primary);"></i>
+            <span>กำหนดรูปภาพประธาน (แยกอิสระ 2 หน้า)</span>
+          </div>
+          <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">
+            สามารถอัปโหลดรูปภาพที่เหมาะสมสำหรับแต่ละหน้าได้อย่างอิสระ ทั้งสองรูปจะถูกแสดงผลด้วยอัตราส่วน 4:5 โดยอัตโนมัติ
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          
+          <!-- Box 1: Home Page Photo -->
+          <div style="background: #f8fafc; border: 1.5px solid ${homeImg ? '#93c5fd' : '#e2e8f0'}; border-radius: 14px; padding: 18px; text-align: center; transition: all 0.2s ease;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <span style="font-weight: 700; font-size: 0.88rem; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="home" style="width: 15px; height: 15px;"></i> 1. รูปภาพหน้าหลัก (index.html)
+              </span>
+              <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: #e0f2fe; color: #0369a1; font-weight: 600;">
+                วิสัยทัศน์ประธาน
+              </span>
+            </div>
+            
+            <div style="width: 140px; aspect-ratio: 4 / 5; border-radius: 12px; margin: 0 auto 14px; background: #fff; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+              ${homeImgContent}
+            </div>
+
+            <input type="file" id="file_${id}_home" accept="image/*" style="display: none;" onchange="handleImageSelect('${id}', 'home')" />
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button type="button" class="dg-btn-black" style="padding: 7px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;" onclick="document.getElementById('file_${id}_home').click()">
+                <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
+                <span>${homeImg ? 'เปลี่ยนรูปหน้าหลัก' : 'อัปโหลดรูปหน้าหลัก'}</span>
+              </button>
+              ${homeImg ? `
+                <button type="button" class="dg-btn-white" style="padding: 7px 12px; font-size: 0.84rem; color: #ef4444; border-color: #fecaca; border-radius: 8px;" onclick="removeImage('${id}', 'home')" title="ลบรูปภาพ">
+                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+              ` : ''}
+            </div>
+            <div style="font-size: 0.76rem; color: #64748b; margin-top: 10px;">
+              ใช้แสดงในคอลัมน์รูปภาพส่วน "วิสัยทัศน์ประธาน" บนหน้าแรก
+            </div>
+          </div>
+
+          <!-- Box 2: Team Page Photo -->
+          <div style="background: #f8fafc; border: 1.5px solid ${teamImg ? '#c4b5fd' : '#e2e8f0'}; border-radius: 14px; padding: 18px; text-align: center; transition: all 0.2s ease;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <span style="font-weight: 700; font-size: 0.88rem; color: #5b21b6; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="users" style="width: 15px; height: 15px;"></i> 2. รูปภาพหน้าคณะทำงาน (team.html)
+              </span>
+              <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: #f3e8ff; color: #7e22ce; font-weight: 600;">
+                ทำเนียบคณะบริหาร
+              </span>
+            </div>
+            
+            <div style="width: 140px; aspect-ratio: 4 / 5; border-radius: 12px; margin: 0 auto 14px; background: #fff; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+              ${teamImgContent}
+            </div>
+
+            <input type="file" id="file_${id}_team" accept="image/*" style="display: none;" onchange="handleImageSelect('${id}', 'team')" />
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button type="button" class="dg-btn-black" style="padding: 7px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;" onclick="document.getElementById('file_${id}_team').click()">
+                <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
+                <span>${teamImg ? 'เปลี่ยนรูปคณะทำงาน' : 'อัปโหลดรูปคณะทำงาน'}</span>
+              </button>
+              ${teamImg ? `
+                <button type="button" class="dg-btn-white" style="padding: 7px 12px; font-size: 0.84rem; color: #ef4444; border-color: #fecaca; border-radius: 8px;" onclick="removeImage('${id}', 'team')" title="ลบรูปภาพ">
+                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+              ` : ''}
+            </div>
+            <div style="font-size: 0.76rem; color: #64748b; margin-top: 10px;">
+              ใช้แสดงเป็นการ์ดทำเนียบประธานขนาดใหญ่สุดในหน้าคณะทำงาน
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function buildEditorCard(data, title, expectedRole, canDelete = false, isFixed = false) {
   if(!data.id) data.id = 'new_' + Date.now() + Math.random();
   const id = data.id;
@@ -438,32 +588,50 @@ async function deleteMember(id) {
 }
 window.deleteMember = deleteMember;
 
-async function handleImageSelect(id) {
-  const fileInput = document.getElementById('file_' + id);
-  if (!fileInput.files || fileInput.files.length === 0) return;
+async function handleImageSelect(id, target = 'default') {
+  const inputId = target === 'default' ? 'file_' + id : 'file_' + id + '_' + target;
+  const fileInput = document.getElementById(inputId);
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) return;
   const file = fileInput.files[0];
 
   try {
-    const previewImg = document.getElementById('img_preview_' + id);
-    const icon = document.getElementById('img_icon_' + id);
-    if(icon) icon.style.display = 'none';
-    previewImg.style.display = 'block';
-    previewImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12a9 9 0 1 1-6.219-8.56'/%3E%3C/svg%3E";
-    previewImg.classList.add('dg-spin');
+    const previewId = target === 'default' ? 'img_preview_' + id : 'img_preview_' + id + '_' + target;
+    const iconId = target === 'default' ? 'img_icon_' + id : 'img_icon_' + id + '_' + target;
+    const previewImg = document.getElementById(previewId);
+    const icon = document.getElementById(iconId);
+    if (icon) icon.style.display = 'none';
+    if (previewImg) {
+      previewImg.style.display = 'block';
+      previewImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12a9 9 0 1 1-6.219-8.56'/%3E%3C/svg%3E";
+      previewImg.classList.add('dg-spin');
+    }
 
     const res = await window.SarawatApi.uploadImage(file);
     if (res && res.url) {
       let m = allMembers.find(x => x.id === id);
-      if(!m) {
-        m = { id, name: '', role: 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน', department: '', imageUrl: '' };
+      if (!m) {
+        m = { id, name: '', role: 'ประธาน', department: '', imageUrl: '', homeImageUrl: '', teamImageUrl: '' };
         allMembers.push(m);
       }
-      m.imageUrl = res.url;
+      if (target === 'home') {
+        m.homeImageUrl = res.url;
+        try { localStorage.setItem('dg_sarawat_president_home_image', res.url); } catch (e) {}
+      } else if (target === 'team') {
+        m.teamImageUrl = res.url;
+        m.imageUrl = res.url; // fallback sync
+        try { localStorage.setItem('dg_sarawat_president_team_image', res.url); } catch (e) {}
+      } else {
+        m.imageUrl = res.url;
+        if (!m.homeImageUrl) m.homeImageUrl = res.url;
+        if (!m.teamImageUrl) m.teamImageUrl = res.url;
+      }
+
       try {
         localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
       } catch (e) {}
+
       renderTeamAdminUI();
-      if(window.showToast) window.showToast('อัปโหลดรูปภาพสำเร็จ', 'success');
+      if (window.showToast) window.showToast('อัปโหลดรูปภาพสำเร็จ', 'success');
     }
   } catch (err) {
     if (typeof Swal !== 'undefined') {
@@ -479,17 +647,30 @@ async function handleImageSelect(id) {
     renderTeamAdminUI();
   }
 }
+window.handleImageSelect = handleImageSelect;
 
-function removeImage(id) {
+function removeImage(id, target = 'default') {
   let m = allMembers.find(x => x.id === id);
-  if(m) {
-    m.imageUrl = '';
+  if (m) {
+    if (target === 'home') {
+      m.homeImageUrl = '';
+      try { localStorage.removeItem('dg_sarawat_president_home_image'); } catch (e) {}
+    } else if (target === 'team') {
+      m.teamImageUrl = '';
+      try { localStorage.removeItem('dg_sarawat_president_team_image'); } catch (e) {}
+    } else {
+      m.imageUrl = '';
+      m.homeImageUrl = '';
+      m.teamImageUrl = '';
+    }
     try {
       localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
     } catch (e) {}
     renderTeamAdminUI();
+    if (window.showToast) window.showToast('ลบรูปภาพเรียบร้อยแล้ว', 'info');
   }
 }
+window.removeImage = removeImage;
 
 // Modal Logic
 function openMemberModal(id = null) {
@@ -554,14 +735,25 @@ function saveMemberModal() {
 
 async function saveTeamSettings() {
   const validMembers = allMembers.filter(m => m.name && m.name.trim() !== '');
+  const presMember = validMembers.find(m => m.role === 'ประธาน');
+
   try {
     localStorage.setItem('dg_sarawat_team_members', JSON.stringify(validMembers));
+    if (presMember) {
+      if (presMember.homeImageUrl) localStorage.setItem('dg_sarawat_president_home_image', presMember.homeImageUrl);
+      else localStorage.removeItem('dg_sarawat_president_home_image');
+
+      if (presMember.teamImageUrl) localStorage.setItem('dg_sarawat_president_team_image', presMember.teamImageUrl);
+      else localStorage.removeItem('dg_sarawat_president_team_image');
+    }
   } catch (e) {}
 
   let savedOnline = false;
   try {
     const payload = {
-      team_members_db: JSON.stringify(validMembers)
+      team_members_db: JSON.stringify(validMembers),
+      president_home_image: presMember ? (presMember.homeImageUrl || '') : '',
+      president_team_image: presMember ? (presMember.teamImageUrl || presMember.imageUrl || '') : ''
     };
     
     if (window.SarawatApi && typeof window.SarawatApi.saveSettings === 'function') {

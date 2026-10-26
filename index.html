@@ -3925,23 +3925,41 @@
         showChiefPlaceholder();
       };
 
-      function syncPresidentImage(membersList) {
-        let list = membersList;
-        if (!list) {
+      function syncPresidentImage(membersList, settingsObj) {
+        let homeImg = '';
+
+        if (settingsObj && settingsObj.president_home_image) {
+          homeImg = settingsObj.president_home_image;
+        }
+
+        if (!homeImg) {
+          let list = membersList;
+          if (!list) {
+            try {
+              const raw = localStorage.getItem('dg_sarawat_team_members');
+              if (raw) list = JSON.parse(raw);
+            } catch (e) {}
+          }
+
+          if (Array.isArray(list) && list.length > 0) {
+            const pres = list.find(m => m && (m.role === 'ประธาน' || (m.role && m.role.includes('ประธาน') && !m.role.includes('รอง'))));
+            if (pres) {
+              homeImg = pres.homeImageUrl || pres.imageUrl || '';
+            }
+          }
+        }
+
+        if (!homeImg) {
           try {
-            const raw = localStorage.getItem('dg_sarawat_team_members');
-            if (raw) list = JSON.parse(raw);
+            homeImg = localStorage.getItem('dg_sarawat_president_home_image') || '';
           } catch (e) {}
         }
 
-        if (Array.isArray(list) && list.length > 0) {
-          const pres = list.find(m => m && (m.role === 'ประธาน' || (m.role && m.role.includes('ประธาน') && !m.role.includes('รอง'))));
-          if (pres && pres.imageUrl && pres.imageUrl.trim() !== '') {
-            const targetSrc = resolvePresidentImageUrl(pres.imageUrl);
-            if (targetSrc) {
-              showChiefImage(targetSrc);
-              return;
-            }
+        if (homeImg && homeImg.trim() !== '') {
+          const targetSrc = resolvePresidentImageUrl(homeImg);
+          if (targetSrc) {
+            showChiefImage(targetSrc);
+            return;
           }
         }
         showChiefPlaceholder();
@@ -3952,7 +3970,7 @@
 
       // Live update across browser tabs when admin saves team settings
       window.addEventListener('storage', (e) => {
-        if (e.key === 'dg_sarawat_team_members') {
+        if (e.key === 'dg_sarawat_team_members' || e.key === 'dg_sarawat_president_home_image') {
           syncPresidentImage();
         }
       });
@@ -3963,16 +3981,23 @@
         fetch(teamApiBase + '/api/settings')
           .then(res => res.json())
           .then(stData => {
-            if (stData && stData.team_members_db) {
-              try {
-                const parsed = typeof stData.team_members_db === 'string'
-                  ? JSON.parse(stData.team_members_db)
-                  : stData.team_members_db;
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                  try { localStorage.setItem('dg_sarawat_team_members', JSON.stringify(parsed)); } catch (e) {}
-                  syncPresidentImage(parsed);
-                }
-              } catch (e) {}
+            if (stData) {
+              if (stData.president_home_image) {
+                try { localStorage.setItem('dg_sarawat_president_home_image', stData.president_home_image); } catch (e) {}
+              }
+              if (stData.team_members_db) {
+                try {
+                  const parsed = typeof stData.team_members_db === 'string'
+                    ? JSON.parse(stData.team_members_db)
+                    : stData.team_members_db;
+                  if (Array.isArray(parsed) && parsed.length > 0) {
+                    try { localStorage.setItem('dg_sarawat_team_members', JSON.stringify(parsed)); } catch (e) {}
+                    syncPresidentImage(parsed, stData);
+                    return;
+                  }
+                } catch (e) {}
+              }
+              syncPresidentImage(null, stData);
             }
           })
           .catch(() => {});

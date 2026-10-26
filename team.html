@@ -329,6 +329,12 @@
           if (settingsData && settingsData.team_members_db) {
             try { teamMembers = JSON.parse(settingsData.team_members_db); } catch (e) { }
           }
+          if (Array.isArray(teamMembers) && settingsData && settingsData.president_team_image) {
+            const p = teamMembers.find(m => m.role === 'ประธาน');
+            if (p && !p.teamImageUrl) {
+              p.teamImageUrl = settingsData.president_team_image;
+            }
+          }
 
           let presidents = [];
           let vps = [];
@@ -364,10 +370,17 @@
             const raw = localStorage.getItem('dg_sarawat_team_members');
             if (raw) teamMembers = JSON.parse(raw);
           } catch (e) {}
+          const savedTeamImg = localStorage.getItem('dg_sarawat_president_team_image');
+          if (Array.isArray(teamMembers) && savedTeamImg) {
+            const p = teamMembers.find(m => m.role === 'ประธาน');
+            if (p && !p.teamImageUrl) {
+              p.teamImageUrl = savedTeamImg;
+            }
+          }
 
           if (teamMembers.length === 0) {
             teamMembers = [
-              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'ชั้นมัธยมศึกษาปีที่ 5/1', imageUrl: '' }
+              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'ชั้นมัธยมศึกษาปีที่ 5/1', imageUrl: '', homeImageUrl: '', teamImageUrl: '' }
             ];
           }
 
@@ -446,7 +459,8 @@
       html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-bottom: 60px;">`;
       if (presidents.length > 0) {
         presidents.forEach(p => {
-          html += `<div style="width: 100%; max-width: 340px;">` + renderCard(p.name, p.department ? `ประธาน (${p.department})` : 'ประธานคณะกรรมการสารวัตรนักเรียน', p.imageUrl, 'president') + `</div>`;
+          const presImg = p.teamImageUrl || p.imageUrl || '';
+          html += `<div style="width: 100%; max-width: 340px;">` + renderCard(p.name, p.department ? `ประธาน (${p.department})` : 'ประธานคณะกรรมการสารวัตรนักเรียน', presImg, 'president') + `</div>`;
         });
       } else {
         html += `<div style="width: 100%; max-width: 340px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', 'ประธานคณะกรรมการสารวัตรนักเรียน', '', 'president') + `</div>`;
