@@ -4031,54 +4031,42 @@
       // ==========================================================
       // 🛡️ RECRUITMENT STATUS & POLICE CAUTION TAPE BARRIER LOGIC
       // ==========================================================
-      function syncRecruitmentCard(st) {
+      function enforceRecruitmentProtection() {
         const card = document.getElementById('cardOpsRecruit');
         const tape = document.getElementById('opsRecruitCautionTape');
         const btnText = document.getElementById('opsRecruitBtnText');
         const btnArrow = document.getElementById('opsRecruitBtnArrow');
 
-        const isOpen = Boolean(st && st.isOpen && !st.isMaintenance);
-
-        if (isOpen) {
-          // SYSTEM OPEN: ปลดแถบกั้นตำรวจออก อนุญาตให้เข้าสู่ระบบได้ตามปกติ
-          if (card) {
-            card.classList.remove('is-closed');
-            card.removeAttribute('aria-disabled');
-          }
-          if (tape) tape.style.display = 'none';
-          if (btnText) btnText.textContent = 'เข้าสู่ระบบรับสมัครสารวัตร';
-          if (btnArrow) btnArrow.innerHTML = '<i data-lucide="arrow-right"></i>';
-        } else {
-          // SYSTEM CLOSED / MAINTENANCE: แปะแถบกั้นตำรวจสลับสีเหลือง-ดำ ล็อกปุ่ม
-          if (card) {
-            card.classList.add('is-closed');
-            card.setAttribute('aria-disabled', 'true');
-          }
-          if (tape) tape.style.display = 'flex';
-          if (btnText) btnText.textContent = 'ห้ามเข้า (ยังไม่เปิดรับสมัคร)';
-          if (btnArrow) btnArrow.innerHTML = '<i data-lucide="lock"></i>';
+        // บังคับล็อกระบบป้องกันการเข้ารับสมัครในหน้าหลักเสมอ (ติดแถบกั้นตำรวจสลับสีเหลือง-ดำ + ล็อกปุ่ม)
+        if (card) {
+          card.classList.add('is-closed');
+          card.setAttribute('aria-disabled', 'true');
         }
+        if (tape) tape.style.display = 'flex';
+        if (btnText) btnText.textContent = 'ห้ามเข้า (ยังไม่เปิดรับสมัคร)';
+        if (btnArrow) btnArrow.innerHTML = '<i data-lucide="lock"></i>';
 
         if (window.lucide && typeof window.lucide.createIcons === 'function') {
           window.lucide.createIcons();
         }
       }
 
-      // จัดการการคลิก/สัมผัสการ์ดรับสมัคร (ไม่ใช้แท็ก anchor เพื่อป้องกันการขึ้น URL/พรีวิวลิงก์บนมือถือและคลิกขวา)
+      // ป้องกันการคลิกเข้าสู่หน้าสมัครเมื่ออยู่บนหน้าหลัก พร้อมแสดงการ์ดสั่นเตือนและเปิด Modal แจ้งเตือนเสมอ
       const recruitCardEl = document.getElementById('cardOpsRecruit');
       if (recruitCardEl) {
         recruitCardEl.addEventListener('click', function (e) {
-          if (recruitCardEl.classList.contains('is-closed')) {
-            e.preventDefault();
-            recruitCardEl.classList.remove('dg-card-shake');
-            void recruitCardEl.offsetWidth; // trigger reflow
-            recruitCardEl.classList.add('dg-card-shake');
-            if (typeof openModal === 'function') {
-              openModal('recruitClosedModal');
-            }
+          e.preventDefault();
+          recruitCardEl.classList.remove('dg-card-shake');
+          void recruitCardEl.offsetWidth; // trigger reflow
+          recruitCardEl.classList.add('dg-card-shake');
+          if (typeof openModal === 'function') {
+            openModal('recruitClosedModal');
           } else {
-            // เมื่อระบบเปิดรับสมัคร นำทางไปยังหน้ารับสมัคร
-            window.location.href = '/admission';
+            const modal = document.getElementById('recruitClosedModal');
+            if (modal) {
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden';
+            }
           }
         });
 
@@ -4096,16 +4084,8 @@
         });
       }
 
-      // ตรวจสอบสถานะการรับสมัครจาก Backend
-      if (window.SarawatApi && window.SarawatApi.getRecruitmentStatus) {
-        window.SarawatApi.getRecruitmentStatus().then(st => {
-          syncRecruitmentCard(st);
-        }).catch(() => {
-          syncRecruitmentCard({ isOpen: false });
-        });
-      } else {
-        syncRecruitmentCard({ isOpen: false });
-      }
+      // บังคับใช้ระบบป้องกันการเข้ารับสมัครในหน้าหลักตลอดเวลา
+      enforceRecruitmentProtection();
 
       // Background Sync from MySQL Backend API if server is connected
       if (window.SarawatApi) {
