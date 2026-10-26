@@ -1674,6 +1674,25 @@
       }
     }
 
+    
+    function isStudentHighlighted(s, dutyName) {
+      if (!window.lastRegisteredInfo) return false;
+      if (window.lastRegisteredInfo.duty !== dutyName) return false;
+      if (Date.now() - window.lastRegisteredInfo.timestamp > 300000) return false;
+
+      const targetName = (window.lastRegisteredInfo.name || '').trim().toLowerCase();
+      const signupName = (s.name || '').trim().toLowerCase();
+
+      if (targetName === signupName) return true;
+      if (signupName.startsWith(targetName) || targetName.startsWith(signupName)) return true;
+
+      const cleanTarget = targetName.replace(/^(นาย|นางสาว|ด\.ช\.|ด\.ญ\.)\s*/, '').trim();
+      const cleanSignup = signupName.replace(/^(นาย|นางสาว|ด\.ช\.|ด\.ญ\.)\s*/, '').trim();
+      if (cleanTarget && cleanSignup && (cleanTarget === cleanSignup || cleanSignup.startsWith(cleanTarget))) return true;
+
+      return false;
+    }
+
     function renderDuties(dutiesList, signups) {
       const container = document.getElementById('dutiesContainer');
       document.getElementById('adminEditBtnContainer').style.display = isAdmin ? 'block' : 'none';
@@ -1791,8 +1810,13 @@
 
               let checkboxHtml = isAdmin ? `<input type="checkbox" class="bulk-delete-cb" data-row="${s.row}" data-name="${s.name}" data-duty="${dutyName}" style="margin-right: 10px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--danger);" onchange="toggleBulkDeleteBtn()">` : '';
 
-              signupHtml += `<li>
-                  <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">${checkboxHtml}<i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${timeHtml}</div>
+              const isHighlighted = isStudentHighlighted(s, dutyName);
+              const highlightClass = isHighlighted ? ' just-registered-highlight' : '';
+              const highlightIdAttr = isHighlighted ? ' id="justRegisteredItem"' : '';
+              const highlightBadge = isHighlighted ? '<span class="badge-just-registered"><i class="fa-solid fa-check"></i> เพิ่งลงชื่อสำเร็จ</span>' : '';
+
+              signupHtml += `<li class="${highlightClass}"${highlightIdAttr}>
+                  <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">${checkboxHtml}<i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
                   <div style="display:flex; margin-left: auto; padding-left: 10px;">${moveBtnHtml}${deleteBtnHtml}</div>
                 </li>`;
             });
@@ -1823,6 +1847,12 @@
 
       container.innerHTML = centralFormHtml + `<div id="dutyCardsWrapper">${cardsHtml}</div>`;
       if (typeof startUserRealtimeSync === 'function') startUserRealtimeSync(selectedDateInfo.activity.sheetName, activeDuties);
+      setTimeout(() => {
+        const highlightEl = document.getElementById('justRegisteredItem');
+        if (highlightEl) {
+          highlightEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 250);
     }
 
 
@@ -1889,8 +1919,13 @@
                 const ms = String(date.getMilliseconds()).padStart(3, '0');
                 timeHtml = `<span style="font-size: 0.75rem; color: var(--text-dim); margin-left: 8px; font-weight: 400;">${d}/${month}/${yy} ${h}:${m}:${sec}:${ms}</span>`;
               }
-              signupHtml += `<li>
-                  <div class="signup-name-container" style="flex-wrap: wrap;"><i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${timeHtml}</div>
+              const isHighlighted = isStudentHighlighted(s, dutyName);
+              const highlightClass = isHighlighted ? ' just-registered-highlight' : '';
+              const highlightIdAttr = isHighlighted ? ' id="justRegisteredItem"' : '';
+              const highlightBadge = isHighlighted ? '<span class="badge-just-registered"><i class="fa-solid fa-check"></i> เพิ่งลงชื่อสำเร็จ</span>' : '';
+
+              signupHtml += `<li class="${highlightClass}"${highlightIdAttr}>
+                  <div class="signup-name-container" style="flex-wrap: wrap;"><i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
                   <div style="display:flex; margin-left: auto; padding-left: 10px;">${moveBtnHtml}${deleteBtnHtml}</div>
                 </li>`;
             });
@@ -2277,8 +2312,17 @@
               customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' },
               buttonsStyling: true
             }).then(() => {
+              // Stay inside this activity detail view (do NOT close activityModal)
               loadSignups(sheetName, selectedDateInfo.activity.duties);
-              closeModal('activityModal');
+
+              // Reset form inputs
+              const nameInp = document.getElementById('centralNameInput');
+              if (nameInp) nameInp.value = '';
+              const dutySel = document.getElementById('centralDutySelect');
+              if (dutySel) dutySel.value = '';
+
+              btnEl.disabled = false;
+              btnEl.innerHTML = isAdmin ? '<i class="fa-solid fa-pen-to-square"></i> เพิ่มรายชื่อ (Admin)' : '<i class="fa-solid fa-pen-to-square"></i> ลงชื่อปฏิบัติหน้าที่';
             });
           };
 

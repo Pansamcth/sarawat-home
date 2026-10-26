@@ -2678,4 +2678,115 @@
                 margin-top: 10px;
               }
             }
-          </style>
+          
+/* ========================================================
+   ROSTER - JUST REGISTERED HIGHLIGHT & ANIMATION
+   ======================================================== */
+.signup-list li.just-registered-highlight {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%) !important;
+  border: 1.5px solid #10b981 !important;
+  color: #064e3b !important;
+  position: relative;
+  animation: pulseRosterHighlight 2.4s infinite ease-in-out, highlightFadeIn 0.4s ease-out;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.22) !important;
+  transition: all 0.25s ease;
+}
+
+.signup-list li.just-registered-highlight .signup-name-container {
+  color: #064e3b !important;
+  font-weight: 750 !important;
+}
+
+.signup-list li.just-registered-highlight i.fa-circle-check {
+  color: #059669 !important;
+  transform: scale(1.15);
+}
+
+.badge-just-registered {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #10b981;
+  color: #ffffff !important;
+  margin-left: 8px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+  letter-spacing: 0.2px;
+  vertical-align: middle;
+}
+
+.badge-just-registered i {
+  color: #ffffff !important;
+  margin-right: 0 !important;
+  font-size: 0.72rem !important;
+}
+
+.signup-success-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1.5px solid #10b981;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  color: #065f46;
+  font-size: 0.95rem;
+  font-weight: 600;
+  animation: highlightFadeIn 0.35s ease-out;
+}
+
+@keyframes pulseRosterHighlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes highlightFadeIn {
+  from {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Dark Mode Overrides for Highlight */
+body.dark-mode .signup-list li.just-registered-highlight,
+[data-theme="dark"] .signup-list li.just-registered-highlight {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.14) 100%) !important;
+  border: 1.5px solid #34d399 !important;
+  color: #ecfdf5 !important;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35) !important;
+}
+
+body.dark-mode .signup-list li.just-registered-highlight .signup-name-container,
+[data-theme="dark"] .signup-list li.just-registered-highlight .signup-name-container {
+  color: #f0fdf4 !important;
+}
+
+body.dark-mode .badge-just-registered,
+[data-theme="dark"] .badge-just-registered {
+  background: #059669 !important;
+  color: #f0fdf4 !important;
+  border: 1px solid rgba(167, 243, 208, 0.35);
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.5);
+}
+
+body.dark-mode .signup-success-banner,
+[data-theme="dark"] .signup-success-banner {
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: #34d399 !important;
+  color: #ecfdf5 !important;
+}

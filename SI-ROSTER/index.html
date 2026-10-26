@@ -2006,6 +2006,119 @@
       transition: all 0.2s ease;
     }
 
+    
+/* ========================================================
+   ROSTER - JUST REGISTERED HIGHLIGHT & ANIMATION
+   ======================================================== */
+.signup-list li.just-registered-highlight {
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%) !important;
+  border: 1.5px solid #10b981 !important;
+  color: #064e3b !important;
+  position: relative;
+  animation: pulseRosterHighlight 2.4s infinite ease-in-out, highlightFadeIn 0.4s ease-out;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.22) !important;
+  transition: all 0.25s ease;
+}
+
+.signup-list li.just-registered-highlight .signup-name-container {
+  color: #064e3b !important;
+  font-weight: 750 !important;
+}
+
+.signup-list li.just-registered-highlight i.fa-circle-check {
+  color: #059669 !important;
+  transform: scale(1.15);
+}
+
+.badge-just-registered {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #10b981;
+  color: #ffffff !important;
+  margin-left: 8px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+  letter-spacing: 0.2px;
+  vertical-align: middle;
+}
+
+.badge-just-registered i {
+  color: #ffffff !important;
+  margin-right: 0 !important;
+  font-size: 0.72rem !important;
+}
+
+.signup-success-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1.5px solid #10b981;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  color: #065f46;
+  font-size: 0.95rem;
+  font-weight: 600;
+  animation: highlightFadeIn 0.35s ease-out;
+}
+
+@keyframes pulseRosterHighlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes highlightFadeIn {
+  from {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Dark Mode Overrides for Highlight */
+body.dark-mode .signup-list li.just-registered-highlight,
+[data-theme="dark"] .signup-list li.just-registered-highlight {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.14) 100%) !important;
+  border: 1.5px solid #34d399 !important;
+  color: #ecfdf5 !important;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35) !important;
+}
+
+body.dark-mode .signup-list li.just-registered-highlight .signup-name-container,
+[data-theme="dark"] .signup-list li.just-registered-highlight .signup-name-container {
+  color: #f0fdf4 !important;
+}
+
+body.dark-mode .badge-just-registered,
+[data-theme="dark"] .badge-just-registered {
+  background: #059669 !important;
+  color: #f0fdf4 !important;
+  border: 1px solid rgba(167, 243, 208, 0.35);
+  box-shadow: 0 2px 10px rgba(5, 150, 105, 0.5);
+}
+
+body.dark-mode .signup-success-banner,
+[data-theme="dark"] .signup-success-banner {
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: #34d399 !important;
+  color: #ecfdf5 !important;
+}
+
     .signup-list li:hover {
       background: #f1f5f9;
       border-color: #cbd5e1;
@@ -7410,6 +7523,9 @@
     }
 
     function closeModal(modalId, fromPopState = false) {
+      if (modalId === 'detailModal') {
+        window.lastRegisteredInfo = null;
+      }
       const el = document.getElementById(modalId);
       if (el) {
         el.classList.remove('active');
@@ -7589,12 +7705,36 @@
           .getSignupsForActivity(sheetName);
       } else {
         setTimeout(() => {
-          let mockSignups = [{ duty: 'ประตู 1', name: 'นายสมชาย ใจดี', row: 2 }];
+          let mockSignups = (selectedDateInfo && selectedDateInfo.signups && selectedDateInfo.signups.length > 0)
+            ? selectedDateInfo.signups
+            : [{ duty: 'ประตู 1', name: 'นายสมชาย ใจดี', row: 2 }];
+          if (window.lastRegisteredInfo && !mockSignups.some(s => s.name === window.lastRegisteredInfo.name && s.duty === window.lastRegisteredInfo.duty)) {
+            mockSignups.push({ duty: window.lastRegisteredInfo.duty, name: window.lastRegisteredInfo.name, row: mockSignups.length + 2, timestamp: window.lastRegisteredInfo.timestamp });
+          }
           selectedDateInfo.signups = mockSignups;
           renderDuties(duties, mockSignups);
           document.getElementById('modalLoading').style.display = 'none';
         }, 500);
       }
+    }
+
+    
+    function isStudentHighlighted(s, dutyName) {
+      if (!window.lastRegisteredInfo) return false;
+      if (window.lastRegisteredInfo.duty !== dutyName) return false;
+      if (Date.now() - window.lastRegisteredInfo.timestamp > 300000) return false;
+
+      const targetName = (window.lastRegisteredInfo.name || '').trim().toLowerCase();
+      const signupName = (s.name || '').trim().toLowerCase();
+
+      if (targetName === signupName) return true;
+      if (signupName.startsWith(targetName) || targetName.startsWith(signupName)) return true;
+
+      const cleanTarget = targetName.replace(/^(นาย|นางสาว|ด\.ช\.|ด\.ญ\.)\s*/, '').trim();
+      const cleanSignup = signupName.replace(/^(นาย|นางสาว|ด\.ช\.|ด\.ญ\.)\s*/, '').trim();
+      if (cleanTarget && cleanSignup && (cleanTarget === cleanSignup || cleanSignup.startsWith(cleanTarget))) return true;
+
+      return false;
     }
 
     function renderDuties(dutiesList, signups) {
@@ -7641,8 +7781,24 @@
         if (hasAvailable) {
           const isMulti = selectedDateInfo.activity && selectedDateInfo.activity.allowMultipleDuties !== false;
           const formTitleText = isMulti ? 'แบบฟอร์มลงชื่อ (เลือกลงได้หลายหน้าที่)' : 'แบบฟอร์มลงชื่อ (เลือกลงได้ 1 หน้าที่/คน)';
+          
+          let bannerHtml = '';
+          if (window.lastRegisteredInfo && selectedDateInfo && selectedDateInfo.activity && window.lastRegisteredInfo.sheetName === selectedDateInfo.activity.sheetName) {
+            bannerHtml = `
+              <div class="signup-success-banner">
+                <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.3rem; flex-shrink: 0;"></i>
+                <div style="flex: 1; line-height: 1.4;">
+                  <div>คุณได้ลงชื่อปฏิบัติหน้าที่สำเร็จแล้ว!</div>
+                  <div style="font-size: 0.84rem; font-weight: 450; opacity: 0.9; margin-top: 2px;">
+                    หน้าที่: <strong style="color: #047857;">${window.lastRegisteredInfo.duty}</strong> (${window.lastRegisteredInfo.name})
+                  </div>
+                </div>
+              </div>`;
+          }
+
           centralFormHtml = `
               <div class="signup-form">
+                  ${bannerHtml}
                   <div class="signup-form-title"><i class="fa-solid fa-user-pen"></i> <span>${formTitleText}</span></div>
                   <div class="form-field-group">
                       <label class="form-field-label" for="centralDutySelect">
@@ -7705,7 +7861,19 @@
         let currentViewMode = (selectedDateInfo.activity && selectedDateInfo.activity.viewMode) ? selectedDateInfo.activity.viewMode : 'counts';
         // CHECK VIEW MODE
         if (currentViewMode === 'counts' && !isAdmin) {
-          // Show only counts, no names
+          // If current user just registered in this duty, show their highlighted slot
+          const mySignup = (window.lastRegisteredInfo && window.lastRegisteredInfo.duty === dutyName)
+            ? dutySignups.find(s => isStudentHighlighted(s, dutyName))
+            : null;
+          if (mySignup) {
+            signupHtml = `<ul class="signup-list">
+              <li class="just-registered-highlight" id="justRegisteredItem">
+                <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">
+                  <i class="fa-solid fa-circle-check"></i> <span>${mySignup.name}</span><span class="badge-just-registered"><i class="fa-solid fa-check"></i> เพิ่งลงชื่อสำเร็จ</span>
+                </div>
+              </li>
+            </ul>`;
+          }
         } else {
           if (currentCount > 0) {
             signupHtml = '<ul class="signup-list">';
@@ -7728,8 +7896,13 @@
 
               let checkboxHtml = isAdmin ? `<input type="checkbox" class="bulk-delete-cb" data-row="${s.row}" data-name="${s.name}" data-duty="${dutyName}" style="margin-right: 10px; width: 16px; height: 16px; cursor: pointer; accent-color: #dc2626;" onchange="toggleBulkDeleteBtn()">` : '';
 
-              signupHtml += `<li>
-                  <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">${checkboxHtml}<i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${timeHtml}</div>
+              const isHighlighted = isStudentHighlighted(s, dutyName);
+              const highlightClass = isHighlighted ? ' just-registered-highlight' : '';
+              const highlightIdAttr = isHighlighted ? ' id="justRegisteredItem"' : '';
+              const highlightBadge = isHighlighted ? '<span class="badge-just-registered"><i class="fa-solid fa-check"></i> เพิ่งลงชื่อสำเร็จ</span>' : '';
+
+              signupHtml += `<li class="${highlightClass}"${highlightIdAttr}>
+                  <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">${checkboxHtml}<i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
                   <div style="display:flex; margin-left: auto; padding-left: 10px;">${moveBtnHtml}${deleteBtnHtml}</div>
                 </li>`;
             });
@@ -7760,6 +7933,12 @@
 
       container.innerHTML = centralFormHtml + `<div id="dutyCardsWrapper">${cardsHtml}</div>`;
       if (typeof startUserRealtimeSync === 'function') startUserRealtimeSync(selectedDateInfo.activity.sheetName, activeDuties);
+      setTimeout(() => {
+        const highlightEl = document.getElementById('justRegisteredItem');
+        if (highlightEl) {
+          highlightEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 250);
     }
 
 
@@ -7826,8 +8005,13 @@
                 const ms = String(date.getMilliseconds()).padStart(3, '0');
                 timeHtml = `<span style="font-size: 0.75rem; color: var(--text-dim); margin-left: 8px; font-weight: 400;">${d}/${month}/${yy} ${h}:${m}:${sec}:${ms}</span>`;
               }
-              signupHtml += `<li>
-                  <div class="signup-name-container" style="flex-wrap: wrap;"><i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${timeHtml}</div>
+              const isHighlighted = isStudentHighlighted(s, dutyName);
+              const highlightClass = isHighlighted ? ' just-registered-highlight' : '';
+              const highlightIdAttr = isHighlighted ? ' id="justRegisteredItem"' : '';
+              const highlightBadge = isHighlighted ? '<span class="badge-just-registered"><i class="fa-solid fa-check"></i> เพิ่งลงชื่อสำเร็จ</span>' : '';
+
+              signupHtml += `<li class="${highlightClass}"${highlightIdAttr}>
+                  <div class="signup-name-container" style="flex-wrap: wrap;"><i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
                   <div style="display:flex; margin-left: auto; padding-left: 10px;">${moveBtnHtml}${deleteBtnHtml}</div>
                 </li>`;
             });
@@ -8190,6 +8374,14 @@
           const handleSuccess = function (res) {
             if (window.RosterAudio) window.RosterAudio.playSuccess();
             broadcastLocalRosterChange('roster_signup_change', { sheetName });
+
+            // Set last registered student for immediate highlighting in the activity
+            window.lastRegisteredInfo = {
+              name: sendName,
+              duty: duty,
+              sheetName: sheetName,
+              timestamp: Date.now()
+            };
             const currentTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             Swal.fire({
               html: `
@@ -8215,8 +8407,17 @@
               customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' },
               buttonsStyling: true
             }).then(() => {
+              // Stay inside this activity detail view (do NOT close detailModal)
               loadSignups(sheetName, selectedDateInfo.activity.duties);
-              closeModal('detailModal');
+
+              // Reset form inputs
+              const nameInp = document.getElementById('centralNameInput');
+              if (nameInp) nameInp.value = '';
+              const dutySel = document.getElementById('centralDutySelect');
+              if (dutySel) dutySel.value = '';
+
+              btnEl.disabled = false;
+              btnEl.innerHTML = isAdmin ? '<i class="fa-solid fa-pen-to-square"></i> เพิ่มรายชื่อ (Admin)' : '<i class="fa-solid fa-pen-to-square"></i> ลงชื่อปฏิบัติหน้าที่';
             });
           };
 
