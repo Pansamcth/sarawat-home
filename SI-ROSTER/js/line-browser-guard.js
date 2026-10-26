@@ -10,18 +10,15 @@
   'use strict';
 
   function detectInAppBrowser() {
-    // ยกเว้นอุปกรณ์ iPhone / iPad (iOS) ทั้งหมดตามคำขอ ให้สามารถเข้าใช้งานผ่าน In-App Browser ได้ทันทีโดยไม่ถูกบล็อก
-    if (isIos()) {
-      return { detected: false, app: '', name: '', color: '', badgeText: '' };
-    }
-
     var ua = navigator.userAgent || navigator.vendor || window.opera || '';
 
-    // ตรวจจับเบราว์เซอร์ภายในแอปต่างๆ
-    var isLine = /Line\//i.test(ua) || /LineApp/i.test(ua);
+    // ตรวจจับเบราว์เซอร์ภายในแอปต่างๆ ทั้งบน iOS (iPhone/iPad) และ Android
+    var isLine = /Line\//i.test(ua) || /LineApp/i.test(ua) || /LineClient/i.test(ua);
     var isInstagram = /Instagram/i.test(ua);
     var isMessenger = /Messenger/i.test(ua) || /FB_IAB\/MESSENGER/i.test(ua) || /FBAN\/MessengerLite/i.test(ua) || /FBAN\/Orca/i.test(ua);
     var isFb = /FBAN|FBAV|FB_IAB|FB4A|FBIOS/i.test(ua);
+    var isTwitter = /Twitter/i.test(ua);
+    var isTikTok = /musical_ly|ByteLocale|TikTok/i.test(ua);
 
     // รองรับการทดสอบผ่าน URL Query parameter (สำหรับผู้พัฒนา)
     var search = window.location.search || '';
@@ -298,6 +295,16 @@
   // ประเมินผลและเริ่มทำงานทันที
   var inAppInfo = detectInAppBrowser();
   if (inAppInfo.detected) {
+    // ซ่อนเนื้อหาของหน้าเว็บทันทีตั้งแต่ใน Head เพื่อป้องกันไม่ให้เห็นหรือแตะเนื้อหาภายใน LINE/IG/FB
+    try {
+      var earlyStyle = document.createElement('style');
+      earlyStyle.id = 'siInAppEarlyHideStyle';
+      earlyStyle.textContent = 'body > *:not(#siInAppBrowserBlockerModal) { display: none !important; }';
+      if (document.head) {
+        document.head.appendChild(earlyStyle);
+      }
+    } catch (e) {}
+
     // 1. บน Android พยายามส่งออกภายนอกหากเป็น LINE
     tryAutoEscapeOnAndroid(inAppInfo);
 

@@ -46,8 +46,9 @@
       var host = document.createElement('div');
       host.id = 'roster-haptic-host';
       host.setAttribute('aria-hidden', 'true');
-      host.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0.0001;pointer-events:none;width:1px;height:1px;overflow:hidden;z-index:-999;';
-      host.innerHTML = '<input id="roster-haptic-switch" type="checkbox" switch style="pointer-events:auto;" /><label id="roster-haptic-label" for="roster-haptic-switch" style="pointer-events:auto;"></label>';
+      // In-viewport positioning with pointer-events enabled for WebKit switch haptic evaluation
+      host.style.cssText = 'position:fixed;bottom:0;right:0;width:32px;height:32px;opacity:0.001;pointer-events:none;z-index:-1;overflow:hidden;';
+      host.innerHTML = '<input id="roster-haptic-switch" type="checkbox" switch style="position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;pointer-events:auto;" /><label id="roster-haptic-label" for="roster-haptic-switch" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:auto;cursor:pointer;"></label>';
       if (document.body) {
         document.body.appendChild(host);
       } else {
@@ -60,19 +61,40 @@
     } catch (e) {}
   }
 
+  // Dual iOS Haptic Engine: WebKit Taptic Switch + Acoustic Low-Frequency Sub-Bass Resonance
+  function triggerIOSAcousticHaptic() {
+    if (!ctx || ctx.state !== 'running') return;
+    try {
+      var now = ctx.currentTime;
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      // 50Hz -> 30Hz fast transient pulse physically resonates iPhone speaker housing
+      osc.frequency.setValueAtTime(50, now);
+      osc.frequency.exponentialRampToValueAtTime(30, now + 0.025);
+      gain.gain.setValueAtTime(0.7, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.028);
+    } catch (e) {}
+  }
+
   function triggerIOSTick() {
     try {
       ensureIOSHapticElements();
       var lbl = document.getElementById('roster-haptic-label');
+      var sw = document.getElementById('roster-haptic-switch');
+      if (sw) {
+        sw.checked = !sw.checked;
+      }
       if (lbl) {
         lbl.click();
-      } else {
-        var sw = document.getElementById('roster-haptic-switch');
-        if (sw) {
-          sw.checked = !sw.checked;
-          sw.dispatchEvent(new Event('change', { bubbles: true }));
-        }
+      } else if (sw) {
+        sw.click();
       }
+      triggerIOSAcousticHaptic();
     } catch (e) {}
   }
 
