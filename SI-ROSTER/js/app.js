@@ -1625,18 +1625,18 @@
       const container = document.getElementById('dutiesContainer');
       container.innerHTML = '';
       document.getElementById('btnBulkDelete').style.display = 'none';
-      document.getElementById('modalLoading').style.display = 'flex';
+      const mLoad1 = document.getElementById('modalLoading'); if (mLoad1) mLoad1.style.display = 'flex';
 
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (signups) {
             selectedDateInfo.signups = signups; // Save for frontend validation
             renderDuties(duties, signups);
-            document.getElementById('modalLoading').style.display = 'none';
+            const mLoad2 = document.getElementById('modalLoading'); if (mLoad2) mLoad2.style.display = 'none';
           })
           .withFailureHandler(function (error) {
             showToast('เกิดข้อผิดพลาดในการโหลดรายชื่อ', 'error');
-            document.getElementById('modalLoading').style.display = 'none';
+            const mLoad2 = document.getElementById('modalLoading'); if (mLoad2) mLoad2.style.display = 'none';
           })
           .getSignupsForActivity(sheetName);
       } else {
@@ -1644,7 +1644,7 @@
           let mockSignups = [{ duty: 'ประตู 1', name: 'นายสมชาย ใจดี', row: 2 }];
           selectedDateInfo.signups = mockSignups;
           renderDuties(duties, mockSignups);
-          document.getElementById('modalLoading').style.display = 'none';
+          const mLoad2 = document.getElementById('modalLoading'); if (mLoad2) mLoad2.style.display = 'none';
         }, 500);
       }
     }
@@ -2650,7 +2650,7 @@
 
       if (tabId === 'overview') loadDashStats();
       if (tabId === 'activities') loadDashActivities();
-      if (tabId === 'students') renderDashStudents();
+      if (tabId === 'students') loadDashStudents();
       if (tabId === 'duties') renderDashDuties();
       if (tabId === 'admins') loadDashAdmins();
       if (tabId === 'logs') loadAdminLogsTab();
@@ -3703,20 +3703,54 @@
       document.getElementById('activityModal').classList.add('active');
     }
 
+    function loadDashStudents(force = false) {
+      const tbody = document.getElementById('studentsTableBody');
+      if (studentNamesList && studentNamesList.length > 0 && !force) {
+        renderDashStudents();
+        return;
+      }
+      if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-dim);"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดรายชื่อนักเรียน...</td></tr>';
+      }
+      if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function (students) {
+            if (Array.isArray(students)) {
+              studentNamesList = students;
+              if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+            }
+            renderDashStudents();
+          })
+          .withFailureHandler(function (err) {
+            if (tbody) {
+              tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger);"><i class="fa-solid fa-circle-exclamation"></i> ไม่สามารถโหลดรายชื่อได้: ' + escapeHtml((err && err.message) ? err.message : 'เกิดข้อผิดพลาด') + '</td></tr>';
+            }
+            showToast('เกิดข้อผิดพลาดในการโหลดรายชื่อนักเรียน', 'error');
+          })
+          .getStudents();
+      } else {
+        renderDashStudents();
+      }
+    }
+
     function renderDashStudents() {
       const tbody = document.getElementById('studentsTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
-      if (studentNamesList.length === 0) {
+      if (!studentNamesList || studentNamesList.length === 0) {
         tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--text-dim);">ไม่มีนักเรียนในระบบ</td></tr>';
+        return;
       }
       studentNamesList.forEach(s => {
+        const safeName = (s.name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        const safeGrade = (s.grade || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         tbody.innerHTML += `<tr>
-          <td>${s.name}</td>
-          <td>${s.grade || ''}</td>
+          <td>${escapeHtml(s.name)}</td>
+          <td>${escapeHtml(s.grade || '')}</td>
           <td style="text-align:center; white-space:nowrap;">
             <div style="display: flex; justify-content: center; gap: 5px;">
-              <button class="btn btn-secondary" style="color:var(--warning); border:1px solid rgba(250,204,21,0.3); background:transparent; padding: 5px 10px;" onclick="editStudentDash('${s.name}', '${s.grade || ''}')"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-secondary" style="color:var(--danger); border:1px solid rgba(248,113,113,0.3); background:transparent; padding: 5px 10px;" onclick="deleteStudentDash('${s.name}')"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-secondary" style="color:var(--warning); border:1px solid rgba(250,204,21,0.3); background:transparent; padding: 5px 10px;" onclick="editStudentDash('${safeName}', '${safeGrade}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-secondary" style="color:var(--danger); border:1px solid rgba(248,113,113,0.3); background:transparent; padding: 5px 10px;" onclick="deleteStudentDash('${safeName}', this)"><i class="fa-solid fa-trash"></i></button>
             </div>
           </td>
         </tr>`;
@@ -3728,18 +3762,33 @@
         if (!newName || newName.trim() === '') return;
         if (newName === oldName && newGrade === oldGrade) return;
 
-        document.getElementById('studentsTableBody').innerHTML = '<tr><td colspan="3" style="text-align:center">กำลังแก้ไข...</td></tr>';
+        showToast('กำลังบันทึกข้อมูลนักเรียน...', 'info');
         if (typeof google !== 'undefined' && google.script) {
-          google.script.run.withSuccessHandler(res => {
-            const idx = studentNamesList.findIndex(s => s.name === oldName);
-            if (idx !== -1) {
-              studentNamesList[idx].name = newName.trim();
-              studentNamesList[idx].grade = newGrade.trim();
-            }
-            populateStudentDatalist();
-            renderDashStudents();
-            showToast(res.message);
-          }).editStudent(oldName, oldGrade, newName.trim(), newGrade.trim());
+          google.script.run
+            .withSuccessHandler(res => {
+              const idx = studentNamesList.findIndex(s => s.name === oldName);
+              if (idx !== -1) {
+                studentNamesList[idx].name = newName.trim();
+                studentNamesList[idx].grade = newGrade.trim();
+              }
+              if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+              renderDashStudents();
+              showToast(res && res.message ? res.message : 'แก้ไขข้อมูลนักเรียนสำเร็จ');
+            })
+            .withFailureHandler(err => {
+              renderDashStudents();
+              showToast((err && err.message) ? err.message : 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล', 'error');
+            })
+            .editStudent(oldName, oldGrade, newName.trim(), newGrade.trim());
+        } else {
+          const idx = studentNamesList.findIndex(s => s.name === oldName);
+          if (idx !== -1) {
+            studentNamesList[idx].name = newName.trim();
+            studentNamesList[idx].grade = newGrade.trim();
+          }
+          if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+          renderDashStudents();
+          showToast('แก้ไขข้อมูลนักเรียนสำเร็จ (Mock)');
         }
       });
     }
@@ -3751,50 +3800,85 @@
       const valName = inputName.value.trim();
       const valGrade = inputGrade.value.trim();
       if (!valName) return;
-      btn.innerHTML = '...'; btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> เพิ่ม...'; btn.disabled = true;
       if (typeof google !== 'undefined' && google.script) {
-        google.script.run.withSuccessHandler(res => {
-          studentNamesList.push({ name: valName, grade: valGrade });
-          populateStudentDatalist();
-          inputName.value = '';
-          inputGrade.value = '';
-          btn.innerHTML = '<i class="fa-solid fa-plus"></i> เพิ่ม'; btn.disabled = false;
-          renderDashStudents();
-          showToast(res.message);
-        }).withFailureHandler(err => {
-          btn.innerHTML = '<i class="fa-solid fa-plus"></i> เพิ่ม'; btn.disabled = false;
-          showToast(err.message, 'error');
-        }).addStudent(valName, valGrade);
+        google.script.run
+          .withSuccessHandler(res => {
+            studentNamesList.push({ name: valName, grade: valGrade });
+            if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+            inputName.value = '';
+            inputGrade.value = '';
+            btn.innerHTML = '<i class="fa-solid fa-plus"></i> เพิ่ม'; btn.disabled = false;
+            renderDashStudents();
+            showToast(res && res.message ? res.message : 'เพิ่มนักเรียนสำเร็จ');
+          })
+          .withFailureHandler(err => {
+            btn.innerHTML = '<i class="fa-solid fa-plus"></i> เพิ่ม'; btn.disabled = false;
+            renderDashStudents();
+            showToast((err && err.message) ? err.message : 'เกิดข้อผิดพลาดในการเพิ่มนักเรียน', 'error');
+          })
+          .addStudent(valName, valGrade);
+      } else {
+        studentNamesList.push({ name: valName, grade: valGrade });
+        if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+        inputName.value = '';
+        inputGrade.value = '';
+        btn.innerHTML = '<i class="fa-solid fa-plus"></i> เพิ่ม'; btn.disabled = false;
+        renderDashStudents();
+        showToast('เพิ่มนักเรียนสำเร็จ (Mock)');
       }
     }
 
-    function deleteStudentDash(name) {
+    function deleteStudentDash(name, btnEl) {
       showCustomConfirm('ยืนยันลบนักเรียน: ' + name + ' ?', function () {
-        document.getElementById('studentsTableBody').innerHTML = '<tr><td colspan="3" style="text-align:center">กำลังลบ...</td></tr>';
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        }
+        showToast('กำลังลบข้อมูลนักเรียน: ' + name, 'info');
+
         if (typeof google !== 'undefined' && google.script) {
-          google.script.run.withSuccessHandler(res => {
-            studentNamesList = studentNamesList.filter(s => s.name !== name);
-            populateStudentDatalist();
-            renderDashStudents();
-            showToast(res.message);
-          }).deleteStudent(name);
+          google.script.run
+            .withSuccessHandler(res => {
+              studentNamesList = studentNamesList.filter(s => s.name !== name);
+              if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+              renderDashStudents();
+              showToast(res && res.message ? res.message : 'ลบนักเรียนสำเร็จ');
+            })
+            .withFailureHandler(err => {
+              if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = '<i class="fa-solid fa-trash"></i>';
+              }
+              renderDashStudents();
+              showToast((err && err.message) ? err.message : 'เกิดข้อผิดพลาดในการลบนักเรียน', 'error');
+            })
+            .deleteStudent(name);
+        } else {
+          studentNamesList = studentNamesList.filter(s => s.name !== name);
+          if (typeof populateStudentDatalist === 'function') populateStudentDatalist();
+          renderDashStudents();
+          showToast('ลบนักเรียนสำเร็จ (Mock)');
         }
       });
     }
 
     function renderDashDuties() {
       const tbody = document.getElementById('dutiesTableBody');
+      if (!tbody) return;
       tbody.innerHTML = '';
-      if (systemDuties.length === 0) {
+      if (!systemDuties || systemDuties.length === 0) {
         tbody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:var(--text-dim);">ยังไม่มีหน้าที่ที่รับผิดชอบในระบบ</td></tr>';
+        return;
       }
       systemDuties.forEach(duty => {
+        const safeDuty = (duty || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         tbody.innerHTML += `<tr>
-          <td>${duty}</td>
+          <td>${escapeHtml(duty)}</td>
           <td style="text-align:center; white-space:nowrap;">
             <div style="display: flex; justify-content: center; gap: 5px;">
-              <button class="btn btn-secondary" style="color:var(--warning); border:1px solid rgba(250,204,21,0.3); background:transparent; padding: 5px 10px;" onclick="editDutyDash('${duty}')"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-secondary" style="color:var(--danger); border:1px solid rgba(248,113,113,0.3); background:transparent; padding: 5px 10px;" onclick="deleteDutyDash('${duty}')"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-secondary" style="color:var(--warning); border:1px solid rgba(250,204,21,0.3); background:transparent; padding: 5px 10px;" onclick="editDutyDash('${safeDuty}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-secondary" style="color:var(--danger); border:1px solid rgba(248,113,113,0.3); background:transparent; padding: 5px 10px;" onclick="deleteDutyDash('${safeDuty}', this)"><i class="fa-solid fa-trash"></i></button>
             </div>
           </td>
         </tr>`;
@@ -3804,14 +3888,25 @@
     function editDutyDash(oldName) {
       showCustomPrompt('แก้ไขชื่อสถานที่ (Duty)', 'ชื่อสถานที่:', oldName, function (newName) {
         if (!newName || newName.trim() === '' || newName === oldName) return;
-        document.getElementById('dutiesTableBody').innerHTML = '<tr><td colspan="2" style="text-align:center">กำลังแก้ไข...</td></tr>';
+        showToast('กำลังแก้ไขหน้าที่...', 'info');
         if (typeof google !== 'undefined' && google.script) {
-          google.script.run.withSuccessHandler(res => {
-            const idx = systemDuties.indexOf(oldName);
-            if (idx !== -1) systemDuties[idx] = newName.trim();
-            renderDashDuties();
-            showToast(res.message);
-          }).editDuty(oldName, newName.trim());
+          google.script.run
+            .withSuccessHandler(res => {
+              const idx = systemDuties.indexOf(oldName);
+              if (idx !== -1) systemDuties[idx] = newName.trim();
+              renderDashDuties();
+              showToast(res && res.message ? res.message : 'แก้ไขหน้าที่สำเร็จ');
+            })
+            .withFailureHandler(err => {
+              renderDashDuties();
+              showToast((err && err.message) ? err.message : 'เกิดข้อผิดพลาดในการแก้ไขหน้าที่', 'error');
+            })
+            .editDuty(oldName, newName.trim());
+        } else {
+          const idx = systemDuties.indexOf(oldName);
+          if (idx !== -1) systemDuties[idx] = newName.trim();
+          renderDashDuties();
+          showToast('แก้ไขหน้าที่สำเร็จ (Mock)');
         }
       });
     }
@@ -3821,30 +3916,58 @@
       const btn = document.getElementById('btnAddDuty');
       const val = input.value.trim();
       if (!val) return;
-      btn.innerHTML = '...'; btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> เพิ่ม...'; btn.disabled = true;
       if (typeof google !== 'undefined' && google.script) {
-        google.script.run.withSuccessHandler(res => {
-          systemDuties.push(val);
-          input.value = '';
-          btn.innerHTML = 'เพิ่มหน้าที่ที่รับผิดชอบ'; btn.disabled = false;
-          renderDashDuties();
-          showToast(res.message);
-        }).withFailureHandler(err => {
-          btn.innerHTML = 'เพิ่มหน้าที่ที่รับผิดชอบ'; btn.disabled = false;
-          showToast(err.message, 'error');
-        }).addDuty(val);
+        google.script.run
+          .withSuccessHandler(res => {
+            systemDuties.push(val);
+            input.value = '';
+            btn.innerHTML = 'เพิ่มหน้าที่ที่รับผิดชอบ'; btn.disabled = false;
+            renderDashDuties();
+            showToast(res && res.message ? res.message : 'เพิ่มหน้าที่สำเร็จ');
+          })
+          .withFailureHandler(err => {
+            btn.innerHTML = 'เพิ่มหน้าที่ที่รับผิดชอบ'; btn.disabled = false;
+            renderDashDuties();
+            showToast((err && err.message) ? err.message : 'เกิดข้อผิดพลาดในการเพิ่มหน้าที่', 'error');
+          })
+          .addDuty(val);
+      } else {
+        systemDuties.push(val);
+        input.value = '';
+        btn.innerHTML = 'เพิ่มหน้าที่ที่รับผิดชอบ'; btn.disabled = false;
+        renderDashDuties();
+        showToast('เพิ่มหน้าที่สำเร็จ (Mock)');
       }
     }
 
-    function deleteDutyDash(name) {
+    function deleteDutyDash(name, btnEl) {
       showCustomConfirm('ยืนยันลบหน้าที่ที่รับผิดชอบ: ' + name + ' ?\n(หน้าที่ที่รับผิดชอบเดิมในกิจกรรมเก่าจะยังคงอยู่ แต่จะเลือกใหม่ไม่ได้)', function () {
-        document.getElementById('dutiesTableBody').innerHTML = '<tr><td colspan="2" style="text-align:center">กำลังลบ...</td></tr>';
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        }
+        showToast('กำลังลบหน้าที่: ' + name, 'info');
         if (typeof google !== 'undefined' && google.script) {
-          google.script.run.withSuccessHandler(res => {
-            systemDuties = systemDuties.filter(n => n !== name);
-            renderDashDuties();
-            showToast(res.message);
-          }).deleteDuty(name);
+          google.script.run
+            .withSuccessHandler(res => {
+              systemDuties = systemDuties.filter(n => n !== name);
+              renderDashDuties();
+              showToast(res && res.message ? res.message : 'ลบหน้าที่สำเร็จ');
+            })
+            .withFailureHandler(err => {
+              if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = '<i class="fa-solid fa-trash"></i>';
+              }
+              renderDashDuties();
+              showToast((err && err.message) ? err.message : 'เกิดข้อผิดพลาดในการลบหน้าที่', 'error');
+            })
+            .deleteDuty(name);
+        } else {
+          systemDuties = systemDuties.filter(n => n !== name);
+          renderDashDuties();
+          showToast('ลบหน้าที่สำเร็จ (Mock)');
         }
       });
     }
