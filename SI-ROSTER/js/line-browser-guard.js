@@ -96,7 +96,7 @@
 
       '  <!-- Explanation -->',
       '  <p style="font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; margin: 0 0 22px 0;">',
-      '    ระบบลงหน้าที่สารวัตรนักเรียน (<strong style="color: #ffffff;">SI-ROSTER</strong>) จำเป็นต้องใช้ฟังก์ชันกล้องถ่ายภาพ ระบบระบุพิกัด และการบันทึกข้อมูลแบบปลอดภัย ซึ่ง<strong style="color: #f87171;">เบราว์เซอร์ภายในแอป LINE ไม่รองรับ</strong>การทำงานเหล่านี้',
+      '    ระบบลงหน้าที่สารวัตรนักเรียน (<strong style="color: #ffffff;">SI-ROSTER</strong>) จำเป็นบันทึกข้อมูลแบบปลอดภัย ซึ่ง<strong style="color: #f87171;">เบราว์เซอร์ภายในแอป LINE ไม่รองรับ</strong>การทำงานเหล่านี้',
       '  </p>',
 
       '  <!-- Instruction Box -->',
