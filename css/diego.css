@@ -50,6 +50,10 @@
   outline: none !important;
 }
 
+button, input, select, textarea {
+  font-family: inherit;
+}
+
 button, a, input, select, textarea, [role="button"], .activity-card, .view-btn, .dg-act-pill-btn, .custom-swal-btn, .duty-select-option {
   -webkit-tap-highlight-color: transparent !important;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
@@ -277,6 +281,7 @@ svg:not([data-lucide]),
   color: var(--dg-white);
   padding: 10px 22px;
   border-radius: var(--dg-radius-pill);
+  font-family: var(--dg-font-sans), 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 0.88rem;
   font-weight: 600;
   text-decoration: none;
@@ -7815,10 +7820,21 @@ body,
 }
 
 /* 3. Buttons in Dark Mode */
-[data-theme="dark"] .dg-btn-black {
+[data-theme="dark"] .dg-btn-black,
+[data-theme="dark"] button.dg-btn-black,
+[data-theme="dark"] a.dg-btn-black {
   background: #f4f5f8 !important;
   color: #0b0f17 !important;
   border-color: #f4f5f8 !important;
+  font-family: var(--dg-font-sans), 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+[data-theme="dark"] .dg-btn-black span,
+[data-theme="dark"] button.dg-btn-black span,
+[data-theme="dark"] a.dg-btn-black span {
+  color: #0b0f17 !important;
+  font-family: var(--dg-font-sans), 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 700 !important;
 }
 
 [data-theme="dark"] .dg-btn-black:hover {
@@ -7996,10 +8012,62 @@ body,
 
 /* 6. Tags, Badges & Social Media Buttons */
 [data-theme="dark"] .sarawat-tag-badge,
-[data-theme="dark"] .dg-act-card-tag {
-  background: rgba(37, 99, 235, 0.14) !important;
-  color: #93c5fd !important;
-  border: 1px solid rgba(59, 130, 246, 0.28) !important;
+[data-theme="dark"] .dg-act-card-tag,
+[data-theme="dark"] .dg-news-tag,
+[data-theme="dark"] .dg-act-tag {
+  background: rgba(15, 23, 42, 0.9) !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .sarawat-tag-badge span,
+[data-theme="dark"] .dg-act-card-tag span,
+[data-theme="dark"] .dg-news-tag span,
+[data-theme="dark"] .dg-act-tag span {
+  color: #f8fafc !important;
+  font-weight: 750 !important;
+}
+
+[data-theme="dark"] .sarawat-tag-badge svg,
+[data-theme="dark"] .sarawat-tag-badge i,
+[data-theme="dark"] .dg-act-card-tag svg,
+[data-theme="dark"] .dg-news-tag svg,
+[data-theme="dark"] .dg-act-tag svg {
+  stroke: #60a5fa !important;
+  color: #60a5fa !important;
+  width: 13px !important;
+  height: 13px !important;
+  stroke-width: 2.2 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
+
+[data-theme="dark"] .sarawat-tag-badge svg.lucide-heart,
+[data-theme="dark"] .sarawat-tag-badge i[data-lucide="heart"] {
+  stroke: #fb7185 !important;
+  color: #fb7185 !important;
+}
+
+[data-theme="dark"] .sarawat-tag-badge svg.lucide-award,
+[data-theme="dark"] .sarawat-tag-badge i[data-lucide="award"] {
+  stroke: #fbbf24 !important;
+  color: #fbbf24 !important;
+}
+
+[data-theme="dark"] .sarawat-tag-badge svg.lucide-flag,
+[data-theme="dark"] .sarawat-tag-badge i[data-lucide="flag"] {
+  stroke: #60a5fa !important;
+  color: #60a5fa !important;
+}
+
+[data-theme="dark"] .sarawat-tag-badge svg.lucide-shield,
+[data-theme="dark"] .sarawat-tag-badge i[data-lucide="shield"] {
+  stroke: #34d399 !important;
+  color: #34d399 !important;
 }
 
 [data-theme="dark"] .dg-btn-fb,
@@ -8222,7 +8290,8 @@ body,
 
 [data-theme="dark"] .dg-cal-month-nav {
   background: #161e2e !important;
-  border-bottom: 1px solid var(--dg-border) !important;
+  border: 1px solid var(--dg-border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
 }
 
 [data-theme="dark"] .dg-cal-month-title {
@@ -9338,13 +9407,93 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   background: var(--dg-bg-card) !important;
   border-color: var(--dg-border) !important;
 }
-[data-theme="dark"] #eventDetailModalContent span,
-[data-theme="dark"] #eventDetailModalContent h4,
-[data-theme="dark"] #eventDetailModalContent div {
-  color: var(--dg-text-primary) !important;
+/* Event Detail Modal Status Badges */
+[data-theme="dark"] #eventDetailModalContent .dg-modal-status-badge,
+[data-theme="dark"] #eventDetailModalContent .dg-event-status-pill {
+  font-weight: 750 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-status-badge.status-upcoming,
+[data-theme="dark"] #eventDetailModalContent span[style*="color: #1d4ed8"],
+[data-theme="dark"] #eventDetailModalContent span[style*="color:#1d4ed8"] {
+  background: rgba(30, 58, 138, 0.45) !important;
+  color: #93c5fd !important;
+  border: 1px solid rgba(59, 130, 246, 0.45) !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-status-badge.status-ongoing,
+[data-theme="dark"] #eventDetailModalContent span[style*="color: #047857"],
+[data-theme="dark"] #eventDetailModalContent span[style*="color:#047857"] {
+  background: rgba(6, 78, 59, 0.45) !important;
+  color: #6ee7b7 !important;
+  border: 1px solid rgba(16, 185, 129, 0.45) !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-status-badge.status-ended,
+[data-theme="dark"] #eventDetailModalContent span[style*="color: #64748b"],
+[data-theme="dark"] #eventDetailModalContent span[style*="color:#64748b"] {
+  background: rgba(51, 65, 85, 0.5) !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(100, 116, 139, 0.4) !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-status-badge.status-scheduled,
+[data-theme="dark"] #eventDetailModalContent span[style*="color: #475569"],
+[data-theme="dark"] #eventDetailModalContent span[style*="color:#475569"] {
+  background: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(100, 116, 139, 0.4) !important;
+}
+/* Event Detail Modal Info Cards */
+[data-theme="dark"] #eventDetailModalContent .dg-modal-info-label {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-info-value {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-icon-cal {
+  background: rgba(2, 132, 199, 0.2) !important;
+  color: #38bdf8 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-icon-clock {
+  background: rgba(217, 119, 6, 0.2) !important;
+  color: #fbbf24 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-icon-loc {
+  background: rgba(219, 39, 119, 0.2) !important;
+  color: #f472b6 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-icon-users {
+  background: rgba(22, 163, 74, 0.2) !important;
+  color: #4ade80 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-section-title,
+[data-theme="dark"] #eventDetailModalContent h4 {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-desc-body {
+  color: #cbd5e1 !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-modal-footer-row {
+  background: var(--dg-bg) !important;
+  border-top: 1px solid var(--dg-border) !important;
+}
+/* Event & News Detail Modal Close Button Font & Text Color */
+[data-theme="dark"] #eventDetailModalContent .dg-btn-black,
+[data-theme="dark"] #eventDetailModal .dg-btn-black,
+[data-theme="dark"] #newsDetailModal .dg-btn-black,
+[data-theme="dark"] .dg-news-modal-footer .dg-btn-black {
+  background: #f4f5f8 !important;
+  color: #0b0f17 !important;
+  border-color: #f4f5f8 !important;
+  font-family: var(--dg-font-sans), 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+[data-theme="dark"] #eventDetailModalContent .dg-btn-black span,
+[data-theme="dark"] #eventDetailModal .dg-btn-black span,
+[data-theme="dark"] #newsDetailModal .dg-btn-black span,
+[data-theme="dark"] .dg-news-modal-footer .dg-btn-black span {
+  color: #0b0f17 !important;
+  font-family: var(--dg-font-sans), 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-weight: 700 !important;
 }
 [data-theme="dark"] #eventDetailModalContent svg {
-  color: var(--dg-text-secondary) !important;
+  color: inherit !important;
 }
 
 /* 9. Policy & Terms of Service Sub-cards & Badges (privacy-policy.html & terms-of-service.html) */
