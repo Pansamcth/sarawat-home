@@ -68,14 +68,16 @@
    */
   window.handleActivityImageError = function (img) {
     if (!img) return;
-    const fallback = window.DEFAULT_ACTIVITY_IMAGE || 'assets/images/activities-cover.jpg';
-    if (img.src && !img.src.includes('activities-cover.jpg')) {
-      img.src = fallback;
-    } else if (!img.src.includes('default-activity.png')) {
-      img.src = 'assets/images/default-activity.png';
-    } else {
-      img.onerror = null;
+    const coverWrap = img.closest('.dg-act-card-cover') || img.closest('.dg-news-cover-wrap') || img.closest('.dg-news-modal-cover');
+    if (coverWrap) {
+      coverWrap.style.display = 'none';
+      const card = coverWrap.closest('.dg-act-card') || coverWrap.closest('.dg-news-card');
+      if (card) {
+        card.classList.add('dg-act-card-no-cover', 'dg-news-card-no-cover');
+      }
+      return;
     }
+    img.style.display = 'none';
   };
 
   /**

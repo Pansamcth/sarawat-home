@@ -2707,19 +2707,30 @@
           </a>
         ` : '';
 
+        const hasImage = Boolean(item.image && typeof item.image === 'string' && item.image.trim() !== '' && item.image.trim() !== 'assets/images/default-activity.png');
+
+        const tagsHtml = (Array.isArray(item.tags) && item.tags.length > 0 && window.renderTagBadgesHtml)
+          ? window.renderTagBadgesHtml(item.tags)
+          : `<span class="dg-news-tag" style="position: relative; top: auto; left: auto;">${escapeHtml(item.tag || 'กิจกรรม')}</span>`;
+
         return `
-          <article class="dg-news-card" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
-            <div class="dg-news-cover-wrap">
-              <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
-              <div style="position: absolute; top: 12px; left: 12px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 24px); z-index: 2;">
-                ${(Array.isArray(item.tags) && item.tags.length > 0 && window.renderTagBadgesHtml)
-                  ? window.renderTagBadgesHtml(item.tags)
-                  : `<span class="dg-news-tag" style="position: relative; top: auto; left: auto;">${escapeHtml(item.tag || 'กิจกรรม')}</span>`}
+          <article class="dg-news-card ${hasImage ? '' : 'dg-news-card-no-cover'}" data-id="${item.id}" onclick="openNewsDetailModal('${item.id}')" title="คลิกเพื่อดูรายละเอียดเพิ่มเติม" tabindex="0" role="button" aria-label="คลิกเพื่อดูรายละเอียด ${escapeHtml(item.title)}">
+            ${hasImage ? `
+              <div class="dg-news-cover-wrap">
+                <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" class="dg-news-img" id="newsImg-${item.id}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
+                <div style="position: absolute; top: 12px; left: 12px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 24px); z-index: 2;">
+                  ${tagsHtml}
+                </div>
               </div>
-            </div>
-            <div class="dg-news-content">
+            ` : ''}
+            <div class="dg-news-content" style="${hasImage ? '' : 'padding: 24px 22px 20px; display: flex; flex-direction: column; flex-grow: 1;'}">
+              ${!hasImage ? `
+                <div style="display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px;">
+                  ${tagsHtml}
+                </div>
+              ` : ''}
               <h3 class="dg-news-card-title">${escapeHtml(item.title)}</h3>
-              <p class="dg-news-card-desc">${escapeHtml(item.desc)}</p>
+              <p class="dg-news-card-desc" style="${hasImage ? '' : '-webkit-line-clamp: 5; margin-bottom: 16px; line-height: 1.65;'}">${escapeHtml(item.desc)}</p>
 
               ${hasAnyLinks ? `
                 <div class="dg-news-actions-row">
@@ -2794,8 +2805,10 @@
       const hasPhoto = Boolean(item.photoUrl && item.photoUrl.trim());
       const hasAnyLinks = hasFb || hasFbReels || hasIg || hasReels || hasPhoto;
 
+      const hasImage = Boolean(item.image && typeof item.image === 'string' && item.image.trim() !== '' && item.image.trim() !== 'assets/images/default-activity.png');
+
       container.innerHTML = `
-        <div class="dg-news-modal-header">
+        <div class="dg-news-modal-header" style="${hasImage ? '' : 'padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--dg-border);'}">
           <div class="dg-news-modal-meta-top" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
             ${(Array.isArray(item.tags) && item.tags.length > 0 && window.renderTagBadgesHtml)
               ? window.renderTagBadgesHtml(item.tags)
@@ -2807,12 +2820,14 @@
               </span>
             ` : ''}
           </div>
-          <h2 class="dg-news-modal-title">${escapeHtml(item.title)}</h2>
+          <h2 class="dg-news-modal-title" style="margin-top: 10px;">${escapeHtml(item.title)}</h2>
         </div>
 
-        <div class="dg-news-modal-cover">
-          <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : (item.image || window.DEFAULT_ACTIVITY_IMAGE)}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
-        </div>
+        ${hasImage ? `
+          <div class="dg-news-modal-cover">
+            <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" />
+          </div>
+        ` : ''}
 
         <div class="dg-news-modal-body">
           <div class="dg-news-modal-desc">

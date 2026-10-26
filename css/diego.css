@@ -10221,3 +10221,41 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   background: #ffffff !important;
   color: #000000 !important;
 }
+
+/* ==========================================================
+   CARDS WITHOUT COVER IMAGES (Show Title & Content only)
+   ========================================================== */
+.dg-act-card.dg-act-card-no-cover,
+.dg-news-card.dg-news-card-no-cover {
+  justify-content: space-between;
+}
+.dg-act-card.dg-act-card-no-cover .dg-act-card-body,
+.dg-news-card.dg-news-card-no-cover .dg-news-content {
+  padding: 24px 22px 20px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.dg-act-card.dg-act-card-no-cover .dg-act-card-title,
+.dg-news-card.dg-news-card-no-cover .dg-news-card-title {
+  font-size: 1.2rem;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  font-weight: 750;
+}
+.dg-act-card.dg-act-card-no-cover .dg-act-card-desc,
+.dg-news-card.dg-news-card-no-cover .dg-news-card-desc {
+  -webkit-line-clamp: 5;
+  line-height: 1.68;
+  margin-bottom: 18px;
+  color: var(--dg-text-secondary);
+}
+[data-theme="dark"] .dg-act-card.dg-act-card-no-cover .dg-act-card-title,
+[data-theme="dark"] .dg-news-card.dg-news-card-no-cover .dg-news-card-title {
+  color: #f8fafc !important;
+}
+[data-theme="dark"] .dg-act-card.dg-act-card-no-cover .dg-act-card-desc,
+[data-theme="dark"] .dg-news-card.dg-news-card-no-cover .dg-news-card-desc {
+  color: #94a3b8 !important;
+}
