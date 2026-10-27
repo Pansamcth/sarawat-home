@@ -550,7 +550,7 @@
             html += `
               <div class="dg-dept-member-pill" style="display: flex; align-items: center; padding: 12px 16px; background: var(--dg-bg-subtle); border-radius: 8px; border: 1px solid transparent; transition: all 0.2s;">
                 <div style="flex: 1; overflow: hidden;">
-                  <h4 style="font-size: 0.95rem; font-weight: 600; margin: 0; color: var(--dg-text-primary); word-break: break-word;">${member.name}</h4>
+                  <h4 style="font-size: 0.95rem; font-weight: 600; margin: 0; color: var(--dg-text-primary); word-break: break-word;">${member.order_no ? `<span style="color:#64748b; font-size:0.85rem; margin-right:4px;">#${member.order_no}</span>` : ''}${member.name}</h4>${member.department && member.department !== dept ? `<div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">${member.department}</div>` : ''}
                 </div>
               </div>
             `;

@@ -370,7 +370,7 @@
       const val = inputEl.value.toLowerCase().trim();
       dropdown.innerHTML = '';
 
-      const filtered = studentNamesList.filter(s => (s.name + (s.grade ? ' ' + s.grade : '')).toLowerCase().includes(val));
+      const filtered = studentNamesList.filter(s => (s.name + ' ' + (s.grade || '') + ' ' + (s.order_no || '')).toLowerCase().includes(val));
 
       if (filtered.length === 0) {
         dropdown.style.display = 'none';
@@ -1971,7 +1971,7 @@
       const val = inputEl.value.toLowerCase().trim();
       dropdown.innerHTML = '';
 
-      const filtered = studentNamesList.filter(s => (s.name + (s.grade ? ' ' + s.grade : '')).toLowerCase().includes(val));
+      const filtered = studentNamesList.filter(s => (s.name + ' ' + (s.grade || '') + ' ' + (s.order_no || '')).toLowerCase().includes(val));
 
       if (filtered.length === 0) {
         dropdown.style.display = 'none';
