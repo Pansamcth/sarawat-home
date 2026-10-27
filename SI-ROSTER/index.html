@@ -6211,14 +6211,7 @@ body.dark-mode .signup-success-banner,
             class="fa-solid fa-circle-info"></i> รายละเอียดกิจกรรม</div>
         <div class="modal-desc toastui-editor-contents" id="modalDesc"></div>
 
-        <div id="adminEditBtnContainer" style="display:none; margin-bottom: 15px;">
-          <div class="admin-buttons-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn btn-outline" style="flex:1; border-color: rgba(90,143,90,0.3); color: var(--success);"
-              onclick="exportCurrentActivityPDF()"><i class="fa-solid fa-file-pdf"></i> Export</button>
-            <button class="btn btn-outline" style="flex:1; border-color: rgba(197,165,90,0.3); color: var(--accent);"
-              onclick="randomizeSignupsBtn()"><i class="fa-solid fa-shuffle"></i> สุ่มรายชื่อ</button>
-          </div>
-        </div>
+        <div id="adminEditBtnContainer" style="display:none;"></div>
 
         <div id="modalLoading" style="display: none; flex-direction: column; width: 100%;">
           <!-- Central form skeleton -->
@@ -9580,7 +9573,7 @@ body.dark-mode .signup-success-banner,
         const quotaBadgeClass = isFull ? 'duty-quota full' : 'duty-quota';
         const quotaText = isFull ? 'เต็มแล้ว' : `ว่าง ${quota - currentCount}/${quota}`;
 
-        let singleRandomBtn = isAdmin ? `<button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 9999px; margin-right: 6px;" onclick="randomizeSingleDutyBtn('${dutyName}', this)" ${isFull ? 'disabled' : ''}><i class="fa-solid fa-shuffle"></i> สุ่ม</button>` : '';
+        let singleRandomBtn = '';
 
         cardsHtml += `
           <div class="duty-card">
@@ -9684,7 +9677,7 @@ body.dark-mode .signup-success-banner,
 
         const quotaBadgeClass = isFull ? 'duty-quota full' : 'duty-quota';
         const quotaText = isFull ? 'เต็มแล้ว' : `ว่าง ${quota - currentCount}/${quota}`;
-        let singleRandomBtn = isAdmin ? `<button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 9999px; margin-right: 6px;" onclick="randomizeSingleDutyBtn('${dutyName}', this)" ${isFull ? 'disabled' : ''}><i class="fa-solid fa-shuffle"></i> สุ่ม</button>` : '';
+        let singleRandomBtn = '';
 
         cardsHtml += `
           <div class="duty-card">
