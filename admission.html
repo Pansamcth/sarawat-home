@@ -120,6 +120,8 @@
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="stylesheet" href="/css/diego.css?v=2.4.3" />
   <script src="/js/skeletons.js"></script>
+  <!-- Cloudflare Turnstile CAPTCHA (Managed Mode) -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
   <!-- Favicon & App Icons -->
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261025" />
@@ -2031,6 +2033,14 @@
                 ⚠️ กรุณาทำเครื่องหมายยินยอมรับทราบประกาศนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ก่อนส่งใบสมัคร
               </div>
 
+              <!-- CLOUDFLARE TURNSTILE CAPTCHA (MANAGED MODE) -->
+              <div class="recruit-turnstile-container" id="wrapTurnstile" style="margin: 1.25rem 0 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 65px;">
+                <div id="cfTurnstileWidget"></div>
+                <div class="recruit-field-error" id="errTurnstile" style="display: none; margin-top: 8px; text-align: center; width: 100%;">
+                  ⚠️ กรุณายืนยันการตรวจสอบความปลอดภัย (CAPTCHA) ก่อนส่งใบสมัคร
+                </div>
+              </div>
+
               <!-- ACTIONS STEP 2 -->
               <div class="recruit-actions-row">
                 <button type="button" class="btn-step-prev" id="btnBackToStep1">
@@ -2450,13 +2460,16 @@
         isOpen: true,
         academicYear: '2570',
         minGpax: 2.50,
-        pdpaContent: ''
+        pdpaContent: '',
+        turnstileSiteKey: '0x4AAAAAAFnbMUUAVol_w9cB'
       };
       let availableClubs = [];
       let selectedPhotoFile = null;
       let isEditingMode = false;
       let editingStudentId = null;
       let verifiedUnlockPhone = '';
+      let turnstileWidgetId = null;
+      let turnstileToken = null;
 
       // DOM Elements
       const tabBtnApply = document.getElementById('tabBtnApply');
@@ -2595,6 +2608,8 @@
         stepPane2.style.display = 'none';
         stepPane3.style.display = 'none';
         stepNode1.className = 'recruit-step-node active';
+        const errTurnstile = document.getElementById('errTurnstile');
+        if (errTurnstile) errTurnstile.style.display = 'none';
         stepNode2.className = 'recruit-step-node';
         stepNode3.className = 'recruit-step-node';
 
@@ -2679,6 +2694,8 @@
           stepPane3.style.display = 'none';
           stepPane1.style.display = 'block';
           stepNode1.className = 'recruit-step-node active';
+        const errTurnstile = document.getElementById('errTurnstile');
+        if (errTurnstile) errTurnstile.style.display = 'none';
           stepNode2.className = 'recruit-step-node';
           stepNode3.className = 'recruit-step-node';
 
@@ -2755,7 +2772,8 @@
               isOpen: Boolean(statusRes.isOpen),
               academicYear: statusRes.academicYear || '2570',
               minGpax: Number(statusRes.minGpax) || 2.50,
-              pdpaContent: statusRes.pdpaContent || ''
+              pdpaContent: statusRes.pdpaContent || '',
+              turnstileSiteKey: statusRes.turnstileSiteKey || '0x4AAAAAAFnbMUUAVol_w9cB'
             };
 
             const labelMinGpax = document.getElementById('labelMinGpax');
@@ -3186,6 +3204,56 @@
       }
 
       // ==========================================
+      // CLOUDFLARE TURNSTILE CAPTCHA HELPER
+      function initOrRenderTurnstile() {
+        const container = document.getElementById('cfTurnstileWidget');
+        if (!container) return;
+
+        if (typeof turnstile === 'undefined') {
+          setTimeout(initOrRenderTurnstile, 250);
+          return;
+        }
+
+        const siteKey = (systemSettings && systemSettings.turnstileSiteKey) || '0x4AAAAAAFnbMUUAVol_w9cB';
+
+        if (turnstileWidgetId === null) {
+          try {
+            turnstileWidgetId = turnstile.render('#cfTurnstileWidget', {
+              sitekey: siteKey,
+              theme: 'auto',
+              callback: function (token) {
+                turnstileToken = token;
+                const errTurnstile = document.getElementById('errTurnstile');
+                if (errTurnstile) errTurnstile.style.display = 'none';
+              },
+              'expired-callback': function () {
+                turnstileToken = null;
+                const errTurnstile = document.getElementById('errTurnstile');
+                if (errTurnstile) {
+                  errTurnstile.textContent = '⚠️ รหัสยืนยันความปลอดภัยหมดอายุ กรุณากดยืนยัน CAPTCHA ใหม่อีกครั้ง';
+                  errTurnstile.style.display = 'block';
+                }
+              },
+              'error-callback': function () {
+                turnstileToken = null;
+                const errTurnstile = document.getElementById('errTurnstile');
+                if (errTurnstile) {
+                  errTurnstile.textContent = '⚠️ เกิดข้อผิดพลาดในการตรวจสอบ CAPTCHA กรุณาลองใหม่อีกครั้ง';
+                  errTurnstile.style.display = 'block';
+                }
+              }
+            });
+          } catch (e) {
+            console.warn('Turnstile render warning:', e);
+          }
+        } else {
+          try {
+            turnstile.reset(turnstileWidgetId);
+            turnstileToken = null;
+          } catch (e) {}
+        }
+      }
+
       // STEP 1 -> STEP 2 VALIDATION & REVIEW
       // ==========================================
       btnGoToStep2.addEventListener('click', () => {
@@ -3380,6 +3448,7 @@
         stepPane2.style.display = 'block';
         stepNode1.className = 'recruit-step-node completed';
         stepNode2.className = 'recruit-step-node active';
+        initOrRenderTurnstile();
 
         window.scrollTo({ top: 300, behavior: 'smooth' });
       });
@@ -3390,6 +3459,8 @@
         stepPane1.style.display = 'block';
         stepNode2.className = 'recruit-step-node';
         stepNode1.className = 'recruit-step-node active';
+        const errTurnstile = document.getElementById('errTurnstile');
+        if (errTurnstile) errTurnstile.style.display = 'none';
         window.scrollTo({ top: 300, behavior: 'smooth' });
       });
 
@@ -3406,6 +3477,18 @@
           return;
         }
         errPdpa.style.display = 'none';
+
+        // ตรวจสอบ Cloudflare Turnstile CAPTCHA ก่อนส่ง
+        const errTurnstile = document.getElementById('errTurnstile');
+        if (!turnstileToken) {
+          if (errTurnstile) {
+            errTurnstile.textContent = '⚠️ กรุณายืนยันการตรวจสอบความปลอดภัย (CAPTCHA) ก่อนส่งใบสมัคร';
+            errTurnstile.style.display = 'block';
+            errTurnstile.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+        if (errTurnstile) errTurnstile.style.display = 'none';
 
         // Prepare FormData
         const formData = new FormData();
@@ -3435,6 +3518,8 @@
         formData.append('postal_code', document.getElementById('inpPostalCode').value.trim());
         formData.append('pdpa_consent', 'true');
         formData.append('website_hp', (document.getElementById('recruit_hp')?.value || '').trim());
+        formData.append('cf_turnstile_response', turnstileToken);
+        formData.append('cf-turnstile-response', turnstileToken);
 
         // Loading state
         const btnTxt = document.getElementById('txtBtnSubmit');
@@ -3477,6 +3562,8 @@
             stepPane2.style.display = 'none';
             stepPane3.style.display = 'none';
             stepNode1.className = 'recruit-step-node active';
+        const errTurnstile = document.getElementById('errTurnstile');
+        if (errTurnstile) errTurnstile.style.display = 'none';
             stepNode2.className = 'recruit-step-node';
             stepNode3.className = 'recruit-step-node';
 
@@ -3504,6 +3591,12 @@
               successGpaxNotice.style.display = isLow ? 'block' : 'none';
             }
 
+            // ล้างโทเคน CAPTCHA หลังส่งสำเร็จ
+            turnstileToken = null;
+            if (typeof turnstile !== 'undefined' && turnstileWidgetId !== null) {
+              try { turnstile.reset(turnstileWidgetId); } catch (e) {}
+            }
+
             // Switch to Step 3
             stepPane2.style.display = 'none';
             stepPane3.style.display = 'block';
@@ -3513,6 +3606,12 @@
             window.scrollTo({ top: 250, behavior: 'smooth' });
           }
         } catch (err) {
+          if (typeof turnstile !== 'undefined' && turnstileWidgetId !== null) {
+            try {
+              turnstile.reset(turnstileWidgetId);
+              turnstileToken = null;
+            } catch (e) {}
+          }
           alert('เกิดข้อผิดพลาด: ' + (err.message || 'ไม่สามารถส่งใบสมัครได้'));
         } finally {
           btnTxt.textContent = origTxt;
