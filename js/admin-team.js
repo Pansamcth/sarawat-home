@@ -164,7 +164,7 @@ function buildStudentSelectOptions(selectedName, selectedOrderNo) {
     const cleanCurName = (selectedName || '').replace(/\s+/g, '');
     const isSelected = (selectedOrderNo && String(s.order_no) === String(selectedOrderNo)) || (cleanCurName && cleanSName === cleanCurName);
     const rankLabel = s.rank ? ` • ${s.rank}` : '';
-    html += `<option value="${s.order_no}" ${isSelected ? 'selected' : ''} data-name="${escapeHtml(s.name)}" data-grade="${escapeHtml(s.grade)}" data-rank="${escapeHtml(s.rank || '')}">#${s.order_no} | ${escapeHtml(s.name)} (ม.${escapeHtml(s.grade)})${escapeHtml(rankLabel)}</option>`;
+    html += `<option value="${s.order_no}" ${isSelected ? 'selected' : ''} data-name="${escapeHtml(s.name)}" data-grade="${escapeHtml(s.grade)}" data-rank="${escapeHtml(s.rank || '')}">${escapeHtml(s.name)} (ม.${escapeHtml(s.grade)})${escapeHtml(rankLabel)}</option>`;
   });
   return html;
 }
@@ -568,7 +568,7 @@ function renderTeamAdminUI() {
     const orderDisplay = m.order_no || (studentMatch ? studentMatch.order_no : idx + 1);
     html += `
       <tr>
-        <td style="text-align: center; font-weight: 600; color: #64748b;">#${orderDisplay}</td>
+        <td style="text-align: center; color: #64748b; font-size: 0.88rem;">${idx + 1}</td>
         <td style="font-weight: 600; color: #0f172a;">${escapeHtml(m.name)}</td>
         <td style="color: #475569;">${escapeHtml(m.department || (studentMatch ? 'ม.' + studentMatch.grade : '-'))}</td>
         <td style="text-align: center;">
@@ -592,69 +592,6 @@ function renderTeamAdminUI() {
       </button>
     </div>
 
-    <!-- Modal for Members -->
-    <div class="modal-overlay" id="memberModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 9500; display: none; align-items: center; justify-content: center; padding: 16px;">
-      <div class="dg-modal-box" style="width: 100%; max-width: 480px; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(15,23,42,0.25); background: #fff;">
-        <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-              <i data-lucide="user" style="width: 18px; height: 18px;"></i>
-            </div>
-            <div>
-              <h3 id="modalTitle" style="margin: 0; font-size: 1.12rem; font-weight: 700; color: #0f172a;">สมาชิก</h3>
-              <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">เลือกรายชื่อจากฐานข้อมูลหรือระบุเอง</div>
-            </div>
-          </div>
-          <button type="button" class="dg-modal-close" onclick="document.getElementById('memberModal').style.display='none'" title="ปิดหน้าต่าง" style="background: none; border: none; cursor: pointer; color: #64748b;">
-            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
-          </button>
-        </div>
-
-        <div style="padding: 22px;">
-          <input type="hidden" id="modalMemberId" />
-
-          <!-- Quick Selector from SQLite -->
-          <div class="student-picker-wrap">
-            <div class="student-picker-label">
-              <i data-lucide="search" style="width: 14px; height: 14px;"></i>
-              <span>เลือกจากฐานข้อมูลนักเรียน (${studentDirectory.length} คน)</span>
-            </div>
-            <select class="student-picker-select" id="modalStudentSelect" onchange="onModalStudentSelect(this.value)">
-              ${buildStudentSelectOptions('', '')}
-            </select>
-          </div>
-          
-          <div class="dg-form-group" style="margin-bottom: 14px;">
-            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อ-นามสกุล <span style="color: #ef4444;">*</span></label>
-            <input type="text" class="recruit-input" id="modalName" placeholder="เช่น นายสมชาย ใจดี" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />
-          </div>
-
-          <div class="dg-form-group" style="margin-bottom: 14px;">
-            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">กลุ่มตำแหน่ง</label>
-            <select class="recruit-select" id="modalRole" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
-              <option value="ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน">สมาชิกทั่วไป</option>
-              <option value="หัวหน้าฝ่าย">หัวหน้าฝ่าย (จะแสดงในส่วนการ์ด)</option>
-              <option value="รองประธาน">รองประธาน (จะแสดงในส่วนการ์ด)</option>
-              <option value="เลขานุการ">เลขานุการ (จะแสดงในส่วนการ์ด)</option>
-              <option value="ประธาน">ประธาน</option>
-            </select>
-          </div>
-
-          <div class="dg-form-group" style="margin-bottom: 6px;">
-            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">สังกัดฝ่าย / ระดับชั้น</label>
-            <input type="text" class="recruit-input" id="modalDept" placeholder="เช่น ฝ่ายเอกสาร, ชั้นมัธยมศึกษาปีที่ 4/1" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />
-          </div>
-        </div>
-
-        <div class="dg-modal-actions" style="padding: 14px 22px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" class="btn-step-prev" style="padding: 10px 18px; border-radius: 8px; font-size: 0.88rem; border: 1px solid #cbd5e1; background: #fff;" onclick="document.getElementById('memberModal').style.display='none'">ยกเลิก</button>
-          <button type="button" class="dg-btn-black" style="padding: 10px 24px; border-radius: 8px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;" onclick="saveMemberModal()">
-            <i data-lucide="check" style="width: 15px; height: 15px;"></i>
-            <span>บันทึกข้อมูล</span>
-          </button>
-        </div>
-      </div>
-    </div>
   `;
 
   container.innerHTML = html;
@@ -704,8 +641,7 @@ function buildPresidentEditorCard(data) {
     `<i data-lucide="user" id="img_icon_${id}_team" style="color: #cbd5e1; width: 44px; height: 44px;"></i><img id="img_preview_${id}_team" style="display:none; width: 100%; height: 100%; object-fit: cover;" />`;
 
   const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (data.name || '').replace(/\s+/g, ''));
-  const matchBadge = studentMatch ? 
-    `<span class="student-matched-badge"><i data-lucide="check" style="width:12px; height:12px;"></i> เชื่อมโยง SQLite #ลำดับที่ ${studentMatch.order_no} (ม.${studentMatch.grade})</span>` : '';
+  const matchBadge = '';
 
   return `
     <div class="team-edit-card" style="background: #fff; border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 26px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px;">
@@ -862,8 +798,7 @@ function buildEditorCard(data, title, expectedRole, canDelete = false, isFixed =
     `<button class="dg-btn-white" style="color: #ef4444; border-color: #fecaca; padding: 6px 12px; font-size: 0.85rem;" onclick="deleteMember('${id}')"><i data-lucide="trash-2" style="width: 14px; height: 14px; margin-right: 4px;"></i>ลบ</button>` : '';
 
   const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (data.name || '').replace(/\s+/g, ''));
-  const matchBadge = studentMatch ? 
-    `<span class="student-matched-badge"><i data-lucide="check" style="width:12px; height:12px;"></i> SQLite #ลำดับที่ ${studentMatch.order_no} (ม.${studentMatch.grade})</span>` : '';
+  const matchBadge = '';
 
   // Render department members if this is a Department Head card
   const deptMembersSection = isFixed && deptName ? buildDepartmentMembersSection(deptName) : '';
@@ -962,13 +897,11 @@ function buildDepartmentMembersSection(dept) {
   } else {
     deptMembers.forEach(dm => {
       const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (dm.name || '').replace(/\s+/g, ''));
-      const orderLabel = dm.order_no || (studentMatch ? studentMatch.order_no : '');
-      const orderDisplay = orderLabel ? `#${orderLabel} ` : '';
       const gradeDisplay = studentMatch ? ` (ม.${studentMatch.grade})` : '';
 
       html += `
         <span style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem;">
-          <span style="font-weight: 700; color: #0f172a;">${orderDisplay}${escapeHtml(dm.name)}${gradeDisplay}</span>
+          <span style="font-weight: 700; color: #0f172a;">${escapeHtml(dm.name)}${gradeDisplay}</span>
           <button type="button" style="border: none; background: transparent; color: #ef4444; cursor: pointer; padding: 0 2px;" onclick="deleteMember('${dm.id}')" title="นำออกจากฝ่ายนี้">
             <i data-lucide="x" style="width: 12px; height: 12px;"></i>
           </button>
@@ -984,20 +917,7 @@ function buildDepartmentMembersSection(dept) {
 /**
  * Open Modal to add a student to a specific department
  */
-let targetDeptForAdd = '';
-function openAddDeptMemberModal(dept) {
-  targetDeptForAdd = dept;
-  const modal = document.getElementById('memberModal');
-  const title = document.getElementById('modalTitle');
-  title.textContent = `เพิ่มสมาชิกประจำ${dept}`;
-  document.getElementById('modalMemberId').value = '';
-  document.getElementById('modalName').value = '';
-  document.getElementById('modalRole').value = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
-  document.getElementById('modalDept').value = dept;
-  document.getElementById('modalDept').readOnly = true;
-  modal.style.display = 'flex';
-}
-window.openAddDeptMemberModal = openAddDeptMemberModal;
+
 
 function updateMemberData(id, field) {
   let inputEl = document.getElementById(field === 'department' ? 'dept_' + id : field + '_' + id);
@@ -1154,27 +1074,91 @@ window.removeImage = removeImage;
 // Modal Logic
 function openMemberModal(id = null) {
   const modal = document.getElementById('memberModal');
+  if (!modal) {
+    console.warn('memberModal not found in DOM');
+    return;
+  }
   const title = document.getElementById('modalTitle');
-  document.getElementById('modalDept').readOnly = false;
+  const deptInput = document.getElementById('modalDept');
+  if (deptInput) deptInput.readOnly = false;
+
+  let currentName = '';
+  let currentOrderNo = null;
+
   if (id) {
-    const m = allMembers.find(x => x.id === id);
+    const m = allMembers.find(x => String(x.id) === String(id));
     if (m) {
-      title.textContent = 'แก้ไขข้อมูลสมาชิก';
+      if (title) title.textContent = 'แก้ไขข้อมูลสมาชิก';
       document.getElementById('modalMemberId').value = m.id;
       document.getElementById('modalName').value = m.name || '';
       document.getElementById('modalRole').value = m.role || 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
-      document.getElementById('modalDept').value = m.department || '';
+      if (deptInput) deptInput.value = m.department || '';
+      currentName = m.name || '';
+      currentOrderNo = m.order_no || null;
     }
   } else {
-    title.textContent = 'เพิ่มสมาชิกใหม่';
+    if (title) title.textContent = 'เพิ่มสมาชิกใหม่';
     document.getElementById('modalMemberId').value = '';
     document.getElementById('modalName').value = '';
     document.getElementById('modalRole').value = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
-    document.getElementById('modalDept').value = '';
+    if (deptInput) deptInput.value = 'สมาชิกทั่วไป';
   }
+
+  const sel = document.getElementById('modalStudentSelect');
+  if (sel) sel.innerHTML = buildStudentSelectOptions(currentName, currentOrderNo);
+
+  modal.classList.add('active');
   modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.visibility = 'visible';
+  modal.style.pointerEvents = 'auto';
+  modal.style.zIndex = '9650';
+  document.body.style.overflow = 'hidden';
+  if (window.lucide) window.lucide.createIcons();
 }
 window.openMemberModal = openMemberModal;
+
+function openAddDeptMemberModal(dept) {
+  targetDeptForAdd = dept;
+  const modal = document.getElementById('memberModal');
+  if (!modal) return;
+
+  const title = document.getElementById('modalTitle');
+  if (title) title.textContent = `เพิ่มสมาชิกเข้า${dept}`;
+  document.getElementById('modalMemberId').value = '';
+  document.getElementById('modalName').value = '';
+  document.getElementById('modalRole').value = 'สมาชิก' + dept;
+  const deptInput = document.getElementById('modalDept');
+  if (deptInput) {
+    deptInput.value = dept;
+    deptInput.readOnly = true;
+  }
+  const sel = document.getElementById('modalStudentSelect');
+  if (sel) sel.innerHTML = buildStudentSelectOptions('', null);
+
+  modal.classList.add('active');
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  modal.style.visibility = 'visible';
+  modal.style.pointerEvents = 'auto';
+  modal.style.zIndex = '9650';
+  document.body.style.overflow = 'hidden';
+  if (window.lucide) window.lucide.createIcons();
+}
+window.openAddDeptMemberModal = openAddDeptMemberModal;
+
+function closeMemberModal() {
+  const modal = document.getElementById('memberModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.style.opacity = '';
+    modal.style.visibility = '';
+    modal.style.pointerEvents = '';
+    document.body.style.overflow = '';
+  }
+}
+window.closeMemberModal = closeMemberModal;
 
 function saveMemberModal() {
   const id = document.getElementById('modalMemberId').value || 'm_' + Date.now();
@@ -1200,7 +1184,7 @@ function saveMemberModal() {
   const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === name.replace(/\s+/g, ''));
   const orderNo = studentMatch ? studentMatch.order_no : null;
 
-  const existingIdx = allMembers.findIndex(x => x.id === id);
+  const existingIdx = allMembers.findIndex(x => String(x.id) === String(id));
   if (existingIdx >= 0) {
     allMembers[existingIdx].name = name;
     allMembers[existingIdx].role = role;
@@ -1211,13 +1195,15 @@ function saveMemberModal() {
     }
   } else {
     allMembers.push({
-      id,
-      order_no: orderNo,
+      id: id,
       student_id: orderNo,
-      name,
-      role,
+      order_no: orderNo,
+      name: name,
+      role: role,
       department: dept,
-      imageUrl: ''
+      imageUrl: '',
+      homeImageUrl: '',
+      teamImageUrl: ''
     });
   }
 
@@ -1225,7 +1211,7 @@ function saveMemberModal() {
     localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
   } catch (e) {}
 
-  document.getElementById('memberModal').style.display = 'none';
+  closeMemberModal();
   renderTeamAdminUI();
   if (window.showToast) window.showToast('บันทึกข้อมูลสมาชิกแล้ว', 'success');
 }

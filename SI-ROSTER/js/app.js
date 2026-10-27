@@ -3745,7 +3745,7 @@
         const safeName = (s.name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         const safeGrade = (s.grade || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         tbody.innerHTML += `<tr>
-          <td>${s.order_no ? '<span style="font-size:0.8rem; color:var(--text-dim); margin-right:6px;">#' + s.order_no + '</span>' : ''}${escapeHtml(s.name)}</td>
+          <td>${escapeHtml(s.name)}</td>
           <td>${escapeHtml(s.grade || '')}</td>
           <td style="text-align:center; white-space:nowrap;">
             <div style="display: flex; justify-content: center; gap: 5px;">
