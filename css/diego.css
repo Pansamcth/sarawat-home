@@ -3139,7 +3139,7 @@ svg:not([data-lucide]),
 }
 
 .dg-accordion-item.active .dg-accordion-body {
-  max-height: 260px;
+  max-height: 600px;
   opacity: 1;
 }
 
@@ -3147,8 +3147,29 @@ svg:not([data-lucide]),
   font-size: 0.96rem;
   line-height: 1.7;
   color: var(--dg-text-secondary);
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   padding-right: 20px;
+}
+
+.dg-faq-badge-only {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  margin: 0 4px;
+  vertical-align: middle;
+  letter-spacing: 0.01em;
+}
+
+[data-theme="dark"] .dg-faq-badge-only {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.4);
 }
 
 /* ==========================================================
