@@ -67,6 +67,29 @@
 
   <!-- Lucide Icons -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    // Safeguard: Automatically map brand icons not present in Lucide to FontAwesome
+    (function () {
+      if (typeof window.lucide !== 'undefined' && typeof window.lucide.createIcons === 'function') {
+        const _origCreateIcons = window.lucide.createIcons;
+        window.lucide.createIcons = function (options) {
+          try {
+            document.querySelectorAll('[data-lucide="facebook"]').forEach(el => {
+              el.removeAttribute('data-lucide');
+              el.className = 'fa-brands fa-facebook';
+              el.style.fontSize = '12px';
+            });
+            document.querySelectorAll('[data-lucide="instagram"]').forEach(el => {
+              el.removeAttribute('data-lucide');
+              el.className = 'fa-brands fa-instagram';
+              el.style.fontSize = '12px';
+            });
+          } catch (e) {}
+          return _origCreateIcons.call(this, options);
+        };
+      }
+    })();
+  </script>
 
   <!-- FontAwesome 6 & SweetAlert2 (Matching SI-ROSTER Admin System) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -7783,9 +7806,9 @@
             <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
             <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
             <div class="admin-news-links-indicator">
-              ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i data-lucide="facebook" style="width:12px;height:12px;"></i> Facebook Posts</span>` : ''}
+              ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i class="fa-brands fa-facebook" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Facebook Posts</span>` : ''}
               ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" style="width:12px;height:12px;"></i> Facebook Reels</span>` : ''}
-              ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i data-lucide="instagram" style="width:12px;height:12px;"></i> Instagram Posts</span>` : ''}
+              ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i class="fa-brands fa-instagram" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Instagram Posts</span>` : ''}
               ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Instagram Reels</span>` : ''}
               ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> Google Photos</span>` : ''}
             </div>
