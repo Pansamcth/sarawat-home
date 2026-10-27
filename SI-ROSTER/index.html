@@ -7887,11 +7887,7 @@ body.dark-mode .signup-success-banner,
           });
         });
 
-      if (isAdmin) {
-        runner.getAllActivities();
-      } else {
-        runner.getUpcomingActivities();
-      }
+      runner.getUpcomingActivities();
     }
 
     function startFeedRealtimeSync() {
@@ -7984,11 +7980,7 @@ body.dark-mode .signup-success-banner,
             resetRefreshButton();
           });
 
-        if (isAdmin) {
-          runner.getAllActivities();
-        } else {
-          runner.getUpcomingActivities();
-        }
+        runner.getUpcomingActivities();
       } else {
         // Mock data
         currentActivities = [
