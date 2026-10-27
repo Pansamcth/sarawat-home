@@ -341,7 +341,7 @@
           let secs = [];
           let headsByDept = {};
           let membersByDept = {};
-          let totalMembers = teamMembers.length;
+          let totalMembers = new Set(teamMembers.map(m => m.order_no || m.name)).size;
 
           teamMembers.forEach(m => {
             if (m.role === 'ประธาน') {

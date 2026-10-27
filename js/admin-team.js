@@ -6,6 +6,20 @@ let allMembers = [];
 let studentDirectory = [];
 let teamMemberSearchTerm = '';
 
+function deduplicateAllMembers() {
+  const seen = new Set();
+  const deduped = [];
+  allMembers.forEach(m => {
+    const key = m.order_no ? 'ord_' + m.order_no : ('name_' + (m.name || '').trim().replace(/\s+/g, ''));
+    if (!seen.has(key)) {
+      seen.add(key);
+      deduped.push(m);
+    }
+  });
+  allMembers = deduped;
+}
+
+
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
@@ -178,30 +192,70 @@ function selectStudentForPosition(id, orderNoStr) {
   const student = studentDirectory.find(s => s.order_no === orderNo);
   if (!student) return;
 
-  let m = allMembers.find(x => x.id === id);
-  if (!m) {
-    m = { id, name: '', role: '', department: '', imageUrl: '' };
-    allMembers.push(m);
-  }
+  let targetSlot = allMembers.find(x => x.id === id);
+  if (!targetSlot) return;
 
-  m.name = student.name;
-  m.order_no = student.order_no;
-  m.student_id = student.order_no;
+  const existingMember = allMembers.find(x => x.order_no === orderNo && x.id !== id);
 
-  // Set appropriate department/grade description
-  if (m.role === 'ประธาน') {
-    m.department = 'ชั้นมัธยมศึกษาปีที่ ' + student.grade;
-  } else if (m.role === 'รองประธาน') {
-    m.department = 'รองประธาน (ม.' + student.grade + ')';
-  } else if (m.role === 'เลขานุการ') {
-    m.department = 'ฝ่ายเลขานุการ (ม.' + student.grade + ')';
-  } else if (m.role === 'หัวหน้าฝ่าย') {
-    // Keep fixed department name
+  if (targetSlot.role === 'หัวหน้าฝ่าย') {
+    const dept = targetSlot.department;
+    const oldHeadOrderNo = targetSlot.order_no;
+    const oldHeadName = targetSlot.name;
+
+    // Promote the selected student to Head
+    targetSlot.name = student.name;
+    targetSlot.order_no = student.order_no;
+    targetSlot.student_id = student.order_no;
+
+    if (existingMember) {
+      if (oldHeadOrderNo && oldHeadOrderNo !== student.order_no) {
+        existingMember.name = oldHeadName;
+        existingMember.order_no = oldHeadOrderNo;
+        existingMember.student_id = oldHeadOrderNo;
+        existingMember.role = 'สมาชิก' + dept;
+        existingMember.department = dept;
+      } else {
+        allMembers = allMembers.filter(x => x.id !== existingMember.id);
+      }
+    } else if (oldHeadOrderNo && oldHeadOrderNo !== student.order_no) {
+      allMembers.push({
+        id: 'dept_mem_' + oldHeadOrderNo,
+        student_id: oldHeadOrderNo,
+        order_no: oldHeadOrderNo,
+        name: oldHeadName,
+        role: 'สมาชิก' + dept,
+        department: dept,
+        imageUrl: '',
+        homeImageUrl: '',
+        teamImageUrl: ''
+      });
+    }
   } else {
-    if (!m.department || m.department === 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน') {
-      m.department = 'สมาชิกทั่วไป (ม.' + student.grade + ')';
+    const oldOrderNo = targetSlot.order_no;
+    const oldName = targetSlot.name;
+
+    targetSlot.name = student.name;
+    targetSlot.order_no = student.order_no;
+    targetSlot.student_id = student.order_no;
+
+    if (targetSlot.role === 'ประธาน') {
+      targetSlot.department = 'ชั้นมัธยมศึกษาปีที่ ' + student.grade;
+    }
+
+    if (existingMember) {
+      if (oldOrderNo && oldOrderNo !== student.order_no) {
+        existingMember.name = oldName;
+        existingMember.order_no = oldOrderNo;
+        existingMember.student_id = oldOrderNo;
+        existingMember.role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
+        existingMember.department = 'สมาชิกทั่วไป (ม.' + (studentDirectory.find(s => s.order_no === oldOrderNo)?.grade || '') + ')';
+      } else {
+        allMembers = allMembers.filter(x => x.id !== existingMember.id);
+      }
     }
   }
+
+  deduplicateAllMembers();
 
   try {
     localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
@@ -876,7 +930,14 @@ function buildEditorCard(data, title, expectedRole, canDelete = false, isFixed =
  * Render Department Members list under each department
  */
 function buildDepartmentMembersSection(dept) {
-  const deptMembers = allMembers.filter(m => m.department === dept && m.role !== 'หัวหน้าฝ่าย');
+  // Include all members of this department, placing หัวหน้าฝ่าย first
+  const deptMembers = allMembers.filter(m => m.department === dept);
+  deptMembers.sort((a, b) => {
+    if (a.role === 'หัวหน้าฝ่าย') return -1;
+    if (b.role === 'หัวหน้าฝ่าย') return 1;
+    return (a.order_no || 999) - (b.order_no || 999);
+  });
+
   let html = `
     <div style="margin-top: 18px; border-top: 1px dashed #e2e8f0; padding-top: 14px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -897,27 +958,35 @@ function buildDepartmentMembersSection(dept) {
   } else {
     deptMembers.forEach(dm => {
       const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (dm.name || '').replace(/\s+/g, ''));
-      const gradeDisplay = studentMatch ? ` (ม.${studentMatch.grade})` : '';
+      const grade = studentMatch ? studentMatch.grade : '';
+      const gradeStr = grade ? `ม.${grade}` : '';
+      const isHead = dm.role === 'หัวหน้าฝ่าย';
 
-      html += `
-        <span style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem;">
-          <span style="font-weight: 700; color: #0f172a;">${escapeHtml(dm.name)}${gradeDisplay}</span>
-          <button type="button" style="border: none; background: transparent; color: #ef4444; cursor: pointer; padding: 0 2px;" onclick="deleteMember('${dm.id}')" title="นำออกจากฝ่ายนี้">
-            <i data-lucide="x" style="width: 12px; height: 12px;"></i>
-          </button>
-        </span>
-      `;
+      if (isHead) {
+        html += `
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #eff6ff; border: 1.5px solid #93c5fd; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; color: #1e40af;">
+            <i data-lucide="crown" style="width: 13px; height: 13px; color: #2563eb;"></i>
+            <span style="font-weight: 700;">${escapeHtml(dm.name)}</span>
+            <span style="font-size: 0.72rem; background: #dbeafe; color: #1d4ed8; padding: 1px 6px; border-radius: 4px; font-weight: 600;">หัวหน้าฝ่าย${gradeStr ? ' • ' + gradeStr : ''}</span>
+          </span>
+        `;
+      } else {
+        const gradeDisplay = gradeStr ? ` (${gradeStr})` : '';
+        html += `
+          <span style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem;">
+            <span style="font-weight: 700; color: #0f172a;">${escapeHtml(dm.name)}${gradeDisplay}</span>
+            <button type="button" style="border: none; background: transparent; color: #ef4444; cursor: pointer; padding: 0 2px;" onclick="deleteMember('${dm.id}')" title="นำออกจากฝ่ายนี้">
+              <i data-lucide="x" style="width: 12px; height: 12px;"></i>
+            </button>
+          </span>
+        `;
+      }
     });
   }
 
   html += `</div></div>`;
   return html;
 }
-
-/**
- * Open Modal to add a student to a specific department
- */
-
 
 function updateMemberData(id, field) {
   let inputEl = document.getElementById(field === 'department' ? 'dept_' + id : field + '_' + id);
@@ -1161,7 +1230,7 @@ function closeMemberModal() {
 window.closeMemberModal = closeMemberModal;
 
 function saveMemberModal() {
-  const id = document.getElementById('modalMemberId').value || 'm_' + Date.now();
+  const id = document.getElementById('modalMemberId').value;
   const name = document.getElementById('modalName').value.trim();
   const role = document.getElementById('modalRole').value;
   const dept = document.getElementById('modalDept').value.trim();
@@ -1184,8 +1253,24 @@ function saveMemberModal() {
   const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === name.replace(/\s+/g, ''));
   const orderNo = studentMatch ? studentMatch.order_no : null;
 
-  const existingIdx = allMembers.findIndex(x => String(x.id) === String(id));
-  if (existingIdx >= 0) {
+  // Check if student already exists in allMembers
+  const existingByOrder = orderNo ? allMembers.find(x => x.order_no === orderNo) : null;
+  const existingByName = allMembers.find(x => (x.name || '').replace(/\s+/g, '') === name.replace(/\s+/g, ''));
+  const foundExisting = existingByOrder || existingByName;
+
+  if (foundExisting) {
+    // Update existing member in place - DO NOT CREATE DUPLICATE
+    foundExisting.name = name;
+    if (role && role !== foundExisting.role && foundExisting.role !== 'หัวหน้าฝ่าย') {
+      foundExisting.role = role;
+    }
+    foundExisting.department = dept;
+    if (orderNo) {
+      foundExisting.order_no = orderNo;
+      foundExisting.student_id = orderNo;
+    }
+  } else if (id && allMembers.some(x => String(x.id) === String(id))) {
+    const existingIdx = allMembers.findIndex(x => String(x.id) === String(id));
     allMembers[existingIdx].name = name;
     allMembers[existingIdx].role = role;
     allMembers[existingIdx].department = dept;
@@ -1195,7 +1280,7 @@ function saveMemberModal() {
     }
   } else {
     allMembers.push({
-      id: id,
+      id: id || ('m_' + Date.now()),
       student_id: orderNo,
       order_no: orderNo,
       name: name,
@@ -1206,6 +1291,8 @@ function saveMemberModal() {
       teamImageUrl: ''
     });
   }
+
+  deduplicateAllMembers();
 
   try {
     localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
