@@ -3,6 +3,21 @@
 
 <head>
 
+  <!-- Admin Session Init (Zero-Flicker Admin State) -->
+  <script>
+    (function() {
+      try {
+        var stored = localStorage.getItem('adminAuth');
+        if (stored) {
+          var parsed = JSON.parse(stored);
+          if (parsed && parsed.expires && new Date().getTime() <= parsed.expires) {
+            document.documentElement.classList.add('is-admin');
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
+
   <!-- Theme Init (Zero-Flicker Dark Mode) -->
   <script>
     (function() {
@@ -427,6 +442,244 @@
       transform: translateY(-4px) scale(1.05);
       box-shadow: var(--shadow-hover);
       border-color: var(--accent);
+    }
+
+    /* ==========================================================
+       🛡️ ADMIN ACTIVE DEVICE INDICATORS
+       ========================================================== */
+    .dg-nav-admin-badge {
+      display: none;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(37, 99, 235, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #059669;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+      cursor: pointer;
+      white-space: nowrap;
+      margin-right: 6px;
+    }
+
+    .dg-nav-admin-badge:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(37, 99, 235, 0.18));
+      border-color: #10b981;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.22);
+      color: #047857;
+    }
+
+    [data-theme="dark"] .dg-nav-admin-badge {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+      border-color: rgba(52, 211, 153, 0.45);
+      color: #34d399;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] .dg-nav-admin-badge:hover {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(59, 130, 246, 0.3));
+      border-color: #34d399;
+      color: #6ee7b7;
+    }
+
+    .nav-pulse-dot, .admin-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: adminPulseGreen 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      flex-shrink: 0;
+    }
+
+    @keyframes adminPulseGreen {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    /* Admin Device Status Banner */
+    .roster-admin-device-banner {
+      width: 100%;
+      margin: 18px 0 24px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(240, 253, 250, 0.95), rgba(239, 246, 255, 0.95));
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      box-shadow: 0 6px 20px -4px rgba(16, 185, 129, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: fadeInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    [data-theme="dark"] .roster-admin-device-banner {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.28), rgba(30, 58, 138, 0.28));
+      border-color: rgba(52, 211, 153, 0.35);
+      box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.4);
+    }
+
+    .roster-admin-device-banner .banner-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .roster-admin-device-banner .banner-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1 1 300px;
+    }
+
+    .roster-admin-device-banner .admin-pulse-badge {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .roster-admin-device-banner .admin-pulse-badge .admin-pulse-dot {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      border: 2px solid #ffffff;
+    }
+
+    .roster-admin-device-banner .banner-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .roster-admin-device-banner .banner-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #065f46;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    [data-theme="dark"] .roster-admin-device-banner .banner-title {
+      color: #6ee7b7;
+    }
+
+    .roster-admin-device-banner .banner-role-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #047857;
+    }
+
+    [data-theme="dark"] .roster-admin-device-banner .banner-role-tag {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: rgba(52, 211, 153, 0.4);
+      color: #a7f3d0;
+    }
+
+    .roster-admin-device-banner .banner-desc {
+      font-size: 0.84rem;
+      color: #4b5563;
+    }
+
+    [data-theme="dark"] .roster-admin-device-banner .banner-desc {
+      color: #94a3b8;
+    }
+
+    .roster-admin-device-banner .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .btn-banner-dash {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: #10b981;
+      color: #ffffff !important;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+    }
+
+    .btn-banner-dash:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+      color: #ffffff !important;
+    }
+
+    .btn-banner-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-banner-logout:hover {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: #ef4444;
+      color: #dc2626;
+    }
+
+    @media (max-width: 640px) {
+      .roster-admin-device-banner .banner-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .roster-admin-device-banner .banner-right {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 6px;
+      }
+      .dg-nav-admin-badge .nav-admin-name {
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
 
     .admin-login-btn.logged-in {
@@ -5647,6 +5900,9 @@ body.dark-mode .signup-success-banner,
       </a>
 
       <div class="dg-nav-links" id="dgNavLinks">
+        <a href="/si-roster/admin" id="navAdminMobileLink" style="display: none; color: #10b981; font-weight: 700;" onclick="goToRosterAdmin(event); return false;">
+          <i class="fa-solid fa-shield-halved" style="margin-right: 6px;"></i> <span>แดชบอร์ด Admin (เข้าสู่ระบบแล้ว)</span>
+        </a>
         <a href="/">หน้าแรก</a>
         <a href="/activities.html">ข่าวสารกิจกรรม</a>
         <a href="/calendar.html">ตารางกิจกรรม</a>
@@ -5654,6 +5910,12 @@ body.dark-mode .signup-success-banner,
       </div>
 
       <div class="dg-nav-actions">
+        <!-- Admin Active Device Indicator in Nav -->
+        <a href="/si-roster/admin" id="navAdminBadge" class="dg-nav-admin-badge" style="display: none;" onclick="goToRosterAdmin(event); return false;" title="อุปกรณ์นี้เข้าสู่ระบบแอดมินอยู่ (คลิกเพื่อเปิดแดชบอร์ด)">
+          <span class="nav-pulse-dot" aria-hidden="true"></span>
+          <i class="fa-solid fa-shield-halved"></i>
+          <span class="nav-admin-name" id="navAdminName">Admin</span>
+        </a>
         <a href="/#contact" class="dg-btn-black">
           <span>ติดต่อเรา</span>
           <i data-lucide="arrow-right"></i>
@@ -5688,6 +5950,37 @@ body.dark-mode .signup-success-banner,
           <p class="dg-act-subtitle" id="rosterSubtitle">
             ระบบบริหารจัดการและลงหน้าที่สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สำหรับจัดการตารางปฏิบัติหน้าที่ มอบหมายงาน และตรวจสอบข้อมูลการลงหน้าที่ของสมาชิก
           </p>
+        </div>
+      </div>
+
+      <!-- ============ ADMIN ACTIVE DEVICE BANNER ============ -->
+      <div id="rosterAdminDeviceBanner" class="roster-admin-device-banner" style="display: none;">
+        <div class="banner-inner">
+          <div class="banner-left">
+            <div class="admin-pulse-badge">
+              <span class="admin-pulse-dot" aria-hidden="true"></span>
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="banner-text">
+              <div class="banner-title">
+                <span>อุปกรณ์นี้เข้าสู่ระบบ Admin อยู่</span>
+                <span class="banner-role-tag" id="bannerAdminRole">ผู้ดูแลระบบ</span>
+              </div>
+              <div class="banner-desc">
+                เข้าสู่ระบบในชื่อ <span id="bannerAdminName">...</span> • คุณมีสิทธิ์จัดการหน้าที่และตรวจสอบข้อมูลเชิงลึก
+              </div>
+            </div>
+          </div>
+          <div class="banner-right">
+            <a href="/si-roster/admin" class="btn-banner-dash" onclick="goToRosterAdmin(event); return false;">
+              <i class="fa-solid fa-gauge-high"></i>
+              <span>เปิดแดชบอร์ด</span>
+            </a>
+            <button type="button" class="btn-banner-logout" onclick="logoutAdminOnDevice()" title="ออกจากระบบแอดมินบนอุปกรณ์นี้">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>ออกจากระบบ</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -6265,6 +6558,122 @@ body.dark-mode .signup-success-banner,
     let systemDuties = [];
     let isAdmin = false;
     let adminInfo = null;
+
+    // --- Admin Active Device Session Manager ---
+    function getAdminAuthSession() {
+      const stored = localStorage.getItem('adminAuth');
+      if (!stored) return null;
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed.expires && new Date().getTime() > parsed.expires) {
+          localStorage.removeItem('adminAuth');
+          return null;
+        }
+        const decoded = decodeURIComponent(atob(parsed.data));
+        return JSON.parse(decoded);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function checkAdminDeviceStatus() {
+      const auth = getAdminAuthSession();
+      if (auth) {
+        isAdmin = true;
+        adminInfo = auth;
+        document.documentElement.classList.add('is-admin');
+
+        // 1. Show Nav Admin Badge
+        const navBadge = document.getElementById('navAdminBadge');
+        const navName = document.getElementById('navAdminName');
+        if (navBadge) {
+          navBadge.style.display = 'inline-flex';
+          if (navName) navName.textContent = auth.name || auth.user || 'Admin';
+        }
+
+        // 2. Show Mobile Nav Link
+        const navMobile = document.getElementById('navAdminMobileLink');
+        if (navMobile) navMobile.style.display = 'block';
+
+        // 3. Show Header Device Banner
+        const banner = document.getElementById('rosterAdminDeviceBanner');
+        const bannerName = document.getElementById('bannerAdminName');
+        const bannerRole = document.getElementById('bannerAdminRole');
+        if (banner) {
+          banner.style.display = 'block';
+          if (bannerName) {
+            bannerName.innerHTML = `<strong>${auth.name || auth.user}</strong> <span style="color: var(--text-muted); font-size: 0.8rem; font-weight: 500;">(@${auth.user})</span>`;
+          }
+          if (bannerRole && auth.role) {
+            bannerRole.textContent = auth.role === 'super' ? 'Super Admin' : 'Admin';
+          }
+        }
+
+        // 4. Update Footer Admin Button
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminLoginText = document.getElementById('adminLoginText');
+        const adminIcon = document.getElementById('adminIcon');
+        if (adminLoginBtn) {
+          adminLoginBtn.classList.add('admin-session-active');
+          adminLoginBtn.title = `อุปกรณ์นี้เข้าสู่ระบบแอดมินอยู่: ${auth.name || auth.user}`;
+        }
+        if (adminLoginText) {
+          adminLoginText.innerHTML = `<span style="color: #10b981; font-weight: 700;">Admin Mode (${auth.name || auth.user})</span>`;
+        }
+        if (adminIcon) {
+          adminIcon.className = 'fa-solid fa-shield-halved';
+          adminIcon.style.color = '#10b981';
+        }
+
+        // 5. Update Status search admin button if exists
+        const btnAdminViewAllStatus = document.getElementById('btnAdminViewAllStatus');
+        if (btnAdminViewAllStatus) btnAdminViewAllStatus.style.display = 'block';
+
+        // 6. Update Activity detail modal admin buttons container if open
+        const adminEditBtnContainer = document.getElementById('adminEditBtnContainer');
+        if (adminEditBtnContainer) adminEditBtnContainer.style.display = 'block';
+      } else {
+        isAdmin = false;
+        adminInfo = null;
+        document.documentElement.classList.remove('is-admin');
+        const navBadge = document.getElementById('navAdminBadge');
+        if (navBadge) navBadge.style.display = 'none';
+        const navMobile = document.getElementById('navAdminMobileLink');
+        if (navMobile) navMobile.style.display = 'none';
+        const banner = document.getElementById('rosterAdminDeviceBanner');
+        if (banner) banner.style.display = 'none';
+        const btnAdminViewAllStatus = document.getElementById('btnAdminViewAllStatus');
+        if (btnAdminViewAllStatus) btnAdminViewAllStatus.style.display = 'none';
+        const adminEditBtnContainer = document.getElementById('adminEditBtnContainer');
+        if (adminEditBtnContainer) adminEditBtnContainer.style.display = 'none';
+      }
+    }
+
+    function logoutAdminOnDevice() {
+      if (confirm('คุณต้องการออกจากระบบ Admin บนอุปกรณ์นี้หรือไม่?\n\nเมื่อออกจากระบบ หน้านี้จะกลับสู่มุมมองนักเรียนทั่วไป')) {
+        localStorage.removeItem('adminAuth');
+        document.documentElement.classList.remove('is-admin');
+        if (typeof showToast === 'function') {
+          showToast('ออกจากระบบ Admin บนอุปกรณ์นี้เรียบร้อยแล้ว');
+        }
+        setTimeout(() => {
+          location.reload();
+        }, 300);
+      }
+    }
+
+    // Check immediately on script load
+    checkAdminDeviceStatus();
+
+    // Listen to cross-tab storage changes (if admin logs in/out in another tab)
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'adminAuth') {
+        checkAdminDeviceStatus();
+        if (typeof buildFeed === 'function' && currentActivities) {
+          buildFeed(currentActivities);
+        }
+      }
+    });
     let currentFeedView = 'list';
     let currentCalendarMonth = new Date().getMonth();
     let currentCalendarYear = new Date().getFullYear();
@@ -6303,6 +6712,7 @@ body.dark-mode .signup-success-banner,
 
     // --- Init (Student Portal) ---
     window.onload = function () {
+      checkAdminDeviceStatus();
       loadInitialData();
       setTimeout(function () {
         if (typeof updateViewToggleIndicator === 'function') {
