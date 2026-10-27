@@ -9530,7 +9530,13 @@ body.dark-mode .signup-success-banner,
                     ${gradeBadge}
                     ${timeHtml}
                   </div>
-                  <div style="flex-shrink:0;">
+                  <div style="flex-shrink:0; display:inline-flex; align-items:center; gap:6px;">
+                    <button type="button" class="btn btn-sm" onclick="historyOpenMoveModal(${s.row}, '${escapeHtml(s.name)}', '${escapeHtml(dutyName)}')"
+                            style="background: #ffffff; border: 1px solid #d97706; color: #b45309; padding: 5px 12px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s ease;"
+                            onmouseover="this.style.background='#fef3c7'; this.style.borderColor='#b45309';"
+                            onmouseout="this.style.background='#ffffff'; this.style.borderColor='#d97706';">
+                      <i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย
+                    </button>
                     <button type="button" class="btn btn-sm" onclick="historyDeleteSingle(${s.row}, '${escapeHtml(s.name)}', '${escapeHtml(dutyName)}')"
                             style="background: #ffffff; border: 1px solid var(--danger); color: var(--danger); padding: 5px 12px; border-radius:8px; font-size:0.82rem; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s ease;"
                             onmouseover="this.style.background='var(--danger)'; this.style.color='#fff';"
@@ -9964,6 +9970,121 @@ body.dark-mode .signup-success-banner,
           toggleHistoryInlineAddForm(false);
           renderHistoryDetails(currentHistoryActivity, currentHistorySignups);
         }, 600);
+      }
+    }
+
+    let currentHistoryMoveData = null;
+    function historyOpenMoveModal(row, studentName, oldDuty) {
+      if (!currentHistoryActivity) return;
+      currentHistoryMoveData = { row: row, studentName: studentName, oldDuty: oldDuty };
+      let optionsHtml = '<option value="">-- เลือกหน้าที่ใหม่ --</option>';
+      const activeDuties = (currentHistoryActivity.duties || []).filter(function(d) { return parseInt(d.quota) > 0; });
+
+      activeDuties.forEach(function(d) {
+        if (d.duty !== oldDuty) {
+          const dutySignups = currentHistorySignups.filter(function(s) { return s.duty === d.duty; });
+          const quota = parseInt(d.quota || 0);
+          const isFull = quota > 0 && dutySignups.length >= quota;
+          let label = isFull ? `${d.duty} (เต็ม ${quota}/${quota})` : `${d.duty} (ว่าง ${quota - dutySignups.length})`;
+          optionsHtml += `<option value="${escapeHtml(d.duty)}" ${isFull ? 'disabled' : ''}>${escapeHtml(label)}</option>`;
+        }
+      });
+
+      let modalHtml = document.getElementById('historyMoveDutyModal');
+      if (!modalHtml) {
+        const div = document.createElement('div');
+        div.id = 'historyMoveDutyModal';
+        div.className = 'modal-overlay';
+        div.innerHTML = `
+          <div class="modal-content small" style="max-width: 420px; padding: 22px; border-radius: 16px; background: #ffffff; box-shadow: 0 20px 40px rgba(0,0,0,0.18);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+              <h3 style="margin:0; color:var(--text-main); font-size:1.15rem; font-weight:700; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-arrow-right-arrow-left" style="color:var(--accent);"></i> ย้ายหน้าที่ (ประวัติกิจกรรม)
+              </h3>
+              <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:1.2rem; color:var(--text-muted);" onclick="closeModal('historyMoveDutyModal')"></i>
+            </div>
+            <div style="margin-bottom: 16px; background: var(--bg); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border-light);">
+              <p style="margin: 0 0 6px 0; color:var(--text-muted); font-size:0.9rem;">รายชื่อ: <strong style="color:var(--text-main);" id="historyMoveStudentName"></strong></p>
+              <p style="margin: 0; color:var(--text-muted); font-size:0.9rem;">หน้าที่เดิม: <strong style="color:var(--text-main);" id="historyMoveOldDuty"></strong></p>
+            </div>
+            <div style="margin-bottom: 20px;">
+              <label for="historyNewDutySelect" style="display:block; margin-bottom:6px; font-weight:600; font-size:0.88rem; color:var(--text-main);">เลือกหน้าที่ใหม่:</label>
+              <select id="historyNewDutySelect" class="input-control" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-main);">
+                <!-- options -->
+              </select>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+              <button type="button" class="btn btn-secondary" onclick="closeModal('historyMoveDutyModal')" style="padding: 8px 16px; border-radius: 8px;">ยกเลิก</button>
+              <button type="button" class="btn btn-primary" id="btnSubmitHistoryMove" onclick="historySubmitMoveSignup()" style="padding: 8px 18px; border-radius: 8px;">
+                <i class="fa-solid fa-floppy-disk"></i> บันทึกการย้าย
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(div);
+      }
+
+      document.getElementById('historyMoveStudentName').textContent = studentName;
+      document.getElementById('historyMoveOldDuty').textContent = oldDuty;
+      document.getElementById('historyNewDutySelect').innerHTML = optionsHtml;
+
+      document.getElementById('historyMoveDutyModal').classList.add('active');
+    }
+
+    function historySubmitMoveSignup() {
+      if (!currentHistoryActivity || !currentHistoryMoveData) return;
+      const newDuty = document.getElementById('historyNewDutySelect').value;
+      if (!newDuty) {
+        showToast('กรุณาเลือกหน้าที่ใหม่', 'error');
+        return;
+      }
+
+      const btnEl = document.getElementById('btnSubmitHistoryMove');
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...';
+      }
+
+      const sheetName = currentHistoryActivity.sheetName;
+      const actDate = currentHistoryActivity.dateStr || currentHistoryActivity.date || '';
+      const adminName = (typeof adminInfo !== 'undefined' && adminInfo && adminInfo.name) ? adminInfo.name : 'Admin';
+
+      if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function (res) {
+            if (typeof broadcastLocalRosterChange === 'function') {
+              broadcastLocalRosterChange('roster_signup_change', { sheetName });
+            }
+            if (window.RosterAudio) window.RosterAudio.playSuccess();
+            showToast(res && res.message ? res.message : 'ย้ายหน้าที่สำเร็จ!');
+            closeModal('historyMoveDutyModal');
+            if (btnEl) {
+              btnEl.disabled = false;
+              btnEl.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกการย้าย';
+            }
+            refreshHistorySignups();
+          })
+          .withFailureHandler(function (error) {
+            showToast('ย้ายไม่สำเร็จ: ' + (error && error.message ? error.message : error), 'error');
+            if (btnEl) {
+              btnEl.disabled = false;
+              btnEl.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกการย้าย';
+            }
+          })
+          .adminMoveSignup(actDate, sheetName, currentHistoryMoveData.row, newDuty, currentHistoryMoveData.studentName, adminName);
+      } else {
+        setTimeout(function () {
+          const item = currentHistorySignups.find(function(s) { return s.row === currentHistoryMoveData.row; });
+          if (item) item.duty = newDuty;
+          if (window.RosterAudio) window.RosterAudio.playSuccess();
+          showToast('ย้ายหน้าที่สำเร็จ! (Mock)');
+          closeModal('historyMoveDutyModal');
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกการย้าย';
+          }
+          renderHistoryDetails(currentHistoryActivity, currentHistorySignups);
+        }, 500);
       }
     }
 

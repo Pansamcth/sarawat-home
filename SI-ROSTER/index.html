@@ -6213,10 +6213,6 @@ body.dark-mode .signup-success-banner,
 
         <div id="adminEditBtnContainer" style="display:none; margin-bottom: 15px;">
           <div class="admin-buttons-row" style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn btn-outline" id="btnBulkDelete"
-              style="display: none; flex:1; border-color: rgba(244,63,94,0.3); color: var(--danger);"
-              onclick="bulkDeleteSignups()"><i class="fa-solid fa-trash-can"></i> ลบที่เลือก (<span
-                id="bulkDeleteCount">0</span>)</button>
             <button class="btn btn-outline" style="flex:1; border-color: rgba(90,143,90,0.3); color: var(--success);"
               onclick="exportCurrentActivityPDF()"><i class="fa-solid fa-file-pdf"></i> Export</button>
             <button class="btn btn-outline" style="flex:1; border-color: rgba(197,165,90,0.3); color: var(--accent);"
@@ -8569,7 +8565,7 @@ body.dark-mode .signup-success-banner,
       const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
       const feedActivities = [];
-      const pastAdminActs = [];
+
 
       activities.forEach(act => {
         let evtDate = 0;
@@ -8596,11 +8592,7 @@ body.dark-mode .signup-success-banner,
           }
         }
 
-        if (isPast) {
-          if (isAdmin) {
-            pastAdminActs.push(act);
-          }
-        } else {
+        if (!isPast) {
           feedActivities.push(act);
         }
       });
@@ -8614,14 +8606,7 @@ body.dark-mode .signup-success-banner,
         return timeA - timeB;
       });
 
-      pastAdminActs.sort((a, b) => {
-        let tA = new Date(a.date).getTime();
-        let tB = new Date(b.date).getTime();
-        if (tA !== tB) return tB - tA; // Sort past activities descending
-        let timeA = a.startTime ? a.startTime : 0;
-        let timeB = b.startTime ? b.startTime : 0;
-        return timeB - timeA;
-      });
+
 
       let activeActs = [];
       let inactiveActs = [];
@@ -8640,7 +8625,7 @@ body.dark-mode .signup-success-banner,
         }
       });
 
-      const finalFeedActivities = activeActs.concat(inactiveActs).concat(pastAdminActs);
+      const finalFeedActivities = activeActs.concat(inactiveActs);
 
       if (finalFeedActivities.length === 0) {
         feed.innerHTML = `
@@ -8654,7 +8639,6 @@ body.dark-mode .signup-success-banner,
       }
 
       let renderedInactiveDivider = false;
-      let renderedPastDivider = false;
 
       finalFeedActivities.forEach((act, index) => {
         let isExpired = false;
@@ -8677,13 +8661,7 @@ body.dark-mode .signup-success-banner,
         }
         let isPast = (evtDate < todayMs) && !(act.deadline && act.deadline >= currentMs);
 
-        if (isPast && isAdmin && !renderedPastDivider) {
-          const divider = document.createElement('div');
-          divider.className = 'group-divider';
-          divider.innerHTML = `<span><i class="fa-solid fa-clock-rotate-left"></i> กิจกรรมที่ผ่านไปแล้ว (Admin only)</span>`;
-          feed.appendChild(divider);
-          renderedPastDivider = true;
-        } else if (isExpired && !isPast && !renderedInactiveDivider && activeActs.length > 0) {
+        if (isExpired && !isPast && !renderedInactiveDivider && activeActs.length > 0) {
           const divider = document.createElement('div');
           divider.className = 'group-divider';
           divider.innerHTML = `<span><i class="fa-solid fa-box-archive"></i> ปิดรับลงชื่อแล้ว</span>`;
@@ -9380,7 +9358,8 @@ body.dark-mode .signup-success-banner,
     function loadSignups(sheetName, duties) {
       const container = document.getElementById('dutiesContainer');
       container.innerHTML = '';
-      document.getElementById('btnBulkDelete').style.display = 'none';
+      const bulkDelBtn = document.getElementById('btnBulkDelete');
+      if (bulkDelBtn) bulkDelBtn.style.display = 'none';
       document.getElementById('modalLoading').style.display = 'flex';
 
       if (typeof google !== 'undefined' && google.script) {
@@ -9570,9 +9549,6 @@ body.dark-mode .signup-success-banner,
           if (currentCount > 0) {
             signupHtml = '<ul class="signup-list">';
             dutySignups.forEach(s => {
-              let deleteBtnHtml = isAdmin ? `<button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteSignup(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-trash-can"></i> ลบ</button>` : '';
-              let moveBtnHtml = isAdmin ? `<button class="move-btn" onclick="event.preventDefault(); event.stopPropagation(); openMoveModal(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย</button>` : '';
-
               let timeHtml = '';
               if (s.timestamp) {
                 const date = new Date(parseInt(s.timestamp));
@@ -9586,16 +9562,13 @@ body.dark-mode .signup-success-banner,
                 timeHtml = `<span style="font-size: 0.75rem; color: var(--text-dim); margin-left: 8px; font-weight: 400;">${d}/${month}/${yy} ${h}:${m}:${sec}:${ms}</span>`;
               }
 
-              let checkboxHtml = isAdmin ? `<input type="checkbox" class="bulk-delete-cb" data-row="${s.row}" data-name="${s.name}" data-duty="${dutyName}" style="margin-right: 10px; width: 16px; height: 16px; cursor: pointer; accent-color: #dc2626;" onchange="toggleBulkDeleteBtn()">` : '';
-
               const isHighlighted = isStudentHighlighted(s, dutyName);
               const highlightClass = isHighlighted ? ' just-registered-highlight' : '';
               const highlightIdAttr = isHighlighted ? ' id="justRegisteredItem"' : '';
               const highlightBadge = isHighlighted ? '<span class="badge-just-registered"><i class="fa-solid fa-check"></i> เพิ่งลงชื่อสำเร็จ</span>' : '';
 
               signupHtml += `<li class="${highlightClass}"${highlightIdAttr}>
-                  <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;">${checkboxHtml}<i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
-                  <div style="display:flex; margin-left: auto; padding-left: 10px;">${moveBtnHtml}${deleteBtnHtml}</div>
+                  <div class="signup-name-container" style="flex-wrap: wrap; align-items: center; display: flex;"><i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
                 </li>`;
             });
             signupHtml += '</ul>';
@@ -9682,9 +9655,6 @@ body.dark-mode .signup-success-banner,
           if (currentCount > 0) {
             signupHtml = '<ul class="signup-list">';
             dutySignups.forEach(s => {
-              let deleteBtnHtml = isAdmin ? `<button class="delete-btn" onclick="event.preventDefault(); event.stopPropagation(); deleteSignup(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-trash-can"></i> ลบ</button>` : '';
-              let moveBtnHtml = isAdmin ? `<button class="move-btn" onclick="event.preventDefault(); event.stopPropagation(); openMoveModal(${s.row}, '${s.name}', '${dutyName}')"><i class="fa-solid fa-arrow-right-arrow-left"></i> ย้าย</button>` : '';
-
               let timeHtml = '';
               if (s.timestamp) {
                 const date = new Date(parseInt(s.timestamp));
@@ -9704,7 +9674,6 @@ body.dark-mode .signup-success-banner,
 
               signupHtml += `<li class="${highlightClass}"${highlightIdAttr}>
                   <div class="signup-name-container" style="flex-wrap: wrap;"><i class="fa-solid fa-circle-check"></i> <span>${s.name}</span>${highlightBadge}${timeHtml}</div>
-                  <div style="display:flex; margin-left: auto; padding-left: 10px;">${moveBtnHtml}${deleteBtnHtml}</div>
                 </li>`;
             });
             signupHtml += '</ul>';
