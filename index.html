@@ -241,7 +241,7 @@
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="preload" href="assets/fonts/maaja.otf" as="font" type="font/otf" crossorigin />
-  <link rel="stylesheet" href="css/diego.css?v=2.4.3" />
+  <link rel="stylesheet" href="css/diego.css?v=2.4.4" />
 
   <!-- Favicon & App Icons -->
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261025" />
@@ -1504,7 +1504,7 @@
             </button>
             <div class="dg-accordion-body">
               <p>
-                <strong>SI-ROSTER</strong> คือระบบลงชื่อปฏิบัติหน้าที่ของสารวัตรนักเรียน<span class="dg-faq-badge-only">เฉพาะสารวัตรนักเรียนเท่านั้น</span> โดยพัฒนาขึ้นเพื่ออำนวยความสะดวกในการจัดการกิจกรรมและการลงชื่อเข้าร่วมปฏิบัติหน้าที่อย่างเป็นระบบ โดยสมาชิกสามารถตรวจสอบรายละเอียดกิจกรรมและลงชื่อเข้าร่วมตามเงื่อนไขที่กำหนดได้
+                <strong>SI-ROSTER</strong> คือระบบลงชื่อปฏิบัติหน้าที่ของสารวัตรนักเรียน <strong class="dg-faq-text-highlight">เฉพาะสารวัตรนักเรียนเท่านั้น</strong> โดยพัฒนาขึ้นเพื่ออำนวยความสะดวกในการจัดการกิจกรรมและการลงชื่อเข้าร่วมปฏิบัติหน้าที่อย่างเป็นระบบ โดยสมาชิกสามารถตรวจสอบรายละเอียดกิจกรรมและลงชื่อเข้าร่วมตามเงื่อนไขที่กำหนดได้
               </p>
               <p style="margin-top: 10px;">
                 ทั้งนี้ ตัวระบบได้รับการออกแบบและพัฒนาร่วมกันโดย <a href="https://www.instagram.com/pansa.jpeg"
@@ -4140,6 +4140,21 @@
 
       // --- Interactive Accordion (Diego FAQ) ---
       const accordionItems = document.querySelectorAll('.dg-accordion-item');
+      
+      // Ensure the first accordion item is open by default
+      if (accordionItems.length > 0) {
+        accordionItems.forEach((item, index) => {
+          const icon = item.querySelector('.dg-accordion-icon');
+          if (index === 0) {
+            item.classList.add('active');
+            if (icon) icon.textContent = '—';
+          } else {
+            item.classList.remove('active');
+            if (icon) icon.textContent = '+';
+          }
+        });
+      }
+
       accordionItems.forEach(item => {
         const trigger = item.querySelector('.dg-accordion-trigger');
         const icon = item.querySelector('.dg-accordion-icon');

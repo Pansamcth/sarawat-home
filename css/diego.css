@@ -3139,7 +3139,7 @@ svg:not([data-lucide]),
 }
 
 .dg-accordion-item.active .dg-accordion-body {
-  max-height: 600px;
+  max-height: 800px;
   opacity: 1;
 }
 
@@ -3151,25 +3151,13 @@ svg:not([data-lucide]),
   padding-right: 20px;
 }
 
-.dg-faq-badge-only {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
-  border: 1px solid rgba(16, 185, 129, 0.32);
-  font-size: 0.8rem;
+.dg-faq-text-highlight {
+  color: var(--dg-green-dark, #047857);
   font-weight: 700;
-  padding: 2px 9px;
-  border-radius: 9999px;
-  margin: 0 4px;
-  vertical-align: middle;
-  letter-spacing: 0.01em;
 }
 
-[data-theme="dark"] .dg-faq-badge-only {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-  border-color: rgba(52, 211, 153, 0.4);
+[data-theme="dark"] .dg-faq-text-highlight {
+  color: var(--dg-green, #10b981);
 }
 
 /* ==========================================================
