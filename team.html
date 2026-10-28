@@ -388,7 +388,7 @@
 
           if (teamMembers.length === 0) {
             teamMembers = [
-              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'ชั้นมัธยมศึกษาปีที่ 5/1', imageUrl: '', homeImageUrl: '', teamImageUrl: '' }
+              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'คณะผู้บริหาร', imageUrl: '', homeImageUrl: '', teamImageUrl: '' }
             ];
           }
 
@@ -476,7 +476,7 @@
       if (presidents.length > 0) {
         presidents.forEach(p => {
           const presImg = p.teamImageUrl || p.imageUrl || '';
-          html += `<div style="width: 100%; max-width: 340px;">` + renderCard(p.name, p.department ? `ประธาน (${p.department})` : 'ประธานคณะกรรมการสารวัตรนักเรียน', presImg, 'president') + `</div>`;
+          html += `<div style="width: 100%; max-width: 340px;">` + renderCard(p.name, 'ประธานคณะกรรมการสารวัตรนักเรียน', presImg, 'president') + `</div>`;
         });
       } else {
         html += `<div style="width: 100%; max-width: 340px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', 'ประธานคณะกรรมการสารวัตรนักเรียน', '', 'president') + `</div>`;
@@ -488,7 +488,7 @@
         html += `<h3 style="text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 1.5rem; color: var(--dg-text-primary);">รองประธานคณะกรรมการสารวัตรนักเรียน</h3>`;
         html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 60px;">`;
         vps.forEach((vp, index) => {
-          const vpTitle = vp.department ? `รองประธานคนที่ ${index + 1} (${vp.department})` : `รองประธานคณะกรรมการสารวัตรนักเรียน คนที่ ${index + 1}`;
+          const vpTitle = `รองประธานคณะกรรมการสารวัตรนักเรียน คนที่ ${index + 1}`;
           html += `<div style="width: 100%; max-width: 295px;">` + renderCard(vp.name, vpTitle, vp.imageUrl, 'vp') + `</div>`;
         });
         html += `</div>`;

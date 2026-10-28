@@ -214,7 +214,7 @@ function syncMembersWithDirectory() {
       m.order_no = s.order_no;
       m.student_id = s.order_no;
       // Normalize department names
-      if (m.department === 'ชั้นมัธยมศึกษาปีที่ ' + s.grade || m.department.startsWith('รองประธาน') || m.department.startsWith('ฝ่ายเลขานุการ')) {
+      if (m.role === 'ประธาน' || m.role === 'รองประธาน' || m.department === 'ชั้นมัธยมศึกษาปีที่ ' + s.grade || m.department.startsWith('รองประธาน') || m.department.startsWith('ฝ่ายเลขานุการ')) {
         m.department = 'คณะผู้บริหาร';
       } else if (m.department.startsWith('สมาชิกทั่วไป')) {
         m.department = 'สมาชิกทั่วไป';
@@ -483,7 +483,7 @@ function renderTeamAdminUI() {
             <span style="font-size: 0.75rem; font-weight: 600; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px;">อัตราส่วน 4:5</span>
           </div>
           <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; margin-bottom: 12px;">
-            ${escapeHtml(president.name)} ${president.grade && president.grade !== '-' ? `(ม.${president.grade})` : ''}
+            ${escapeHtml(president.name)}
           </div>
           <div style="display: flex; gap: 16px; justify-content: center; width: 100%;">
             <!-- Home Image -->
@@ -619,7 +619,7 @@ function renderTeamAdminUI() {
           <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem;">${escapeHtml(m.name)}</div>
         </td>
         <td style="text-align: center; font-weight: 600; color: #475569; font-size: 0.88rem;">
-          ${m.grade ? 'ม.' + escapeHtml(m.grade) : '-'}
+          ${(m.role === 'ประธาน' || m.role === 'รองประธาน') ? '-' : (m.grade ? 'ม.' + escapeHtml(m.grade) : '-')}
         </td>
         <td>
           <select class="col-select" onchange="handleDeptChange(${m.order_no}, this.value)">
