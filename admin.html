@@ -101,13 +101,27 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- High-Security Database Gateway Config (with Cache-Buster) -->
-  <script src="cloudflare-config.js?v=2.7.3"></script>
-  <script src="js/api-config.js?v=2.7.3"></script>
+  <script src="cloudflare-config.js?v=2.7.5"></script>
+  <script src="js/api-config.js?v=2.7.5"></script>
   
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
     window.SarawatApi = window.SarawatApi || {};
     window.SarawatAPI = window.SarawatApi;
+
+    // Early image preview error & load handlers to prevent ReferenceError during HTML parsing
+    window.handlePreviewImageError = function(img) {
+      if (!img) return;
+      img.style.display = 'none';
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (notice) notice.style.display = 'flex';
+    };
+    window.handlePreviewImageLoaded = function(img) {
+      if (!img) return;
+      img.style.display = 'block';
+      const notice = document.getElementById('adminPreviewFallbackNotice');
+      if (notice) notice.style.display = 'none';
+    };
 
     window.syncMasterRecruitmentSwitchUI = function(isOpen) {
       const chk = document.getElementById('chkMasterSwitch');
@@ -2581,7 +2595,7 @@
         </p>
       </div>
 
-      <form id="adminLoginForm" onsubmit="event.preventDefault(); handleUserLogin(event); return false;">
+      <form id="adminLoginForm" onsubmit="event.preventDefault(); if (typeof handleUserLogin === 'function') { handleUserLogin(event); } else if (typeof window.handleUserLogin === 'function') { window.handleUserLogin(event); } else { alert('กำลังโหลดระบบ กรุณารอสักครู่แล้วลองอีกครั้ง'); } return false;">
         <div class="auth-input-group">
           <label class="auth-input-label" for="loginUsernameInput">ชื่อผู้ใช้ (Username)</label>
           <div class="auth-input-wrapper">
@@ -4993,7 +5007,7 @@
             </div>
 
             <div class="admin-preview-img-container" style="max-height: 280px; overflow: hidden; background: #0f172a;">
-              <img id="adminNewsImgPreview" src="" alt="ตัวอย่างภาพกิจกรรม" style="width: 100%; height: auto; object-fit: contain; display: block;" onerror="handlePreviewImageError(this)" onload="handlePreviewImageLoaded(this)" />
+              <img id="adminNewsImgPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="ตัวอย่างภาพกิจกรรม" style="width: 100%; height: auto; object-fit: contain; display: none;" onerror="window.handlePreviewImageError && window.handlePreviewImageError(this)" onload="window.handlePreviewImageLoaded && window.handlePreviewImageLoaded(this)" />
             </div>
 
             <!-- Fallback Warning Notification (Hidden by default) -->
@@ -5773,6 +5787,7 @@
         if (window.lucide) lucide.createIcons();
       }
     }
+    window.handleUserLogin = handleUserLogin;
 
     function showLoginError(msg) {
       const errEl = document.getElementById('loginErrorMsg');
@@ -9760,7 +9775,7 @@
     });
   </script>
   <script src="js/admin-team.js"></script>
-  <script src="js/admin-recruitment.js?v=2.7.4"></script>
+  <script src="js/admin-recruitment.js?v=2.7.5"></script>
 </body>
 
 </html>
