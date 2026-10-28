@@ -3086,15 +3086,24 @@
       const end = item.dateEnd || item.endDateIso || start;
 
       if (!start) {
-        return { key: 'scheduled', label: 'ไม่ระบุ', style: 'background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;' };
+        return { key: 'scheduled', label: 'ตามกำหนดการ', style: 'background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; font-weight: 600;' };
       }
 
       if (end && today > end) {
-        return { key: 'ended', label: 'ผ่านไปแล้ว', style: 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;' };
+        return { key: 'ended', label: 'สิ้นสุดแล้ว', style: 'background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; font-weight: 600;' };
       } else if (today >= start && (!end || today <= end)) {
         return { key: 'ongoing', label: 'กำลังดำเนินการ', style: 'background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 800;' };
       } else {
-        return { key: 'upcoming', label: 'เร็ว ๆ นี้', style: 'background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-weight: 750;' };
+        // Rule: Show 'เร็วๆ นี้' only when start date is within 1 to 3 days from today
+        const [y1, m1, d1] = today.split('-').map(Number);
+        const [y2, m2, d2] = start.split('-').map(Number);
+        const diffDays = Math.round((Date.UTC(y2, m2 - 1, d2) - Date.UTC(y1, m1 - 1, d1)) / (1000 * 60 * 60 * 24));
+
+        if (diffDays > 0 && diffDays <= 3) {
+          return { key: 'upcoming', label: 'เร็วๆ นี้', style: 'background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800; box-shadow: 0 1px 4px rgba(37,99,235,0.12);' };
+        } else {
+          return { key: 'scheduled', label: 'ตามกำหนดการ', style: 'background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; font-weight: 600;' };
+        }
       }
     }
 
