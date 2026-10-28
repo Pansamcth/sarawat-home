@@ -330,7 +330,7 @@
             try { teamMembers = JSON.parse(settingsData.team_members_db); } catch (e) { }
           }
           if (Array.isArray(teamMembers) && settingsData && settingsData.president_team_image) {
-            const p = teamMembers.find(m => m.role === 'ประธาน');
+            const p = teamMembers.find(m => m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน');
             if (p && !p.teamImageUrl) {
               p.teamImageUrl = settingsData.president_team_image;
             }
@@ -350,9 +350,9 @@
               dept = 'คณะผู้บริหาร';
             }
 
-            if (role === 'ประธาน') {
+            if (role === 'ประธาน' || role === 'ประธานคณะกรรมการสารวัตรนักเรียน') {
               presidents.push(m);
-            } else if (role === 'รองประธาน') {
+            } else if (role === 'รองประธาน' || role.startsWith('รองประธาน')) {
               vps.push(m);
             } else if (role === 'เลขานุการ') {
               secs.push(m);
@@ -380,7 +380,7 @@
           } catch (e) {}
           const savedTeamImg = localStorage.getItem('dg_sarawat_president_team_image');
           if (Array.isArray(teamMembers) && savedTeamImg) {
-            const p = teamMembers.find(m => m.role === 'ประธาน');
+            const p = teamMembers.find(m => m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน');
             if (p && !p.teamImageUrl) {
               p.teamImageUrl = savedTeamImg;
             }
@@ -406,9 +406,9 @@
               dept = 'คณะผู้บริหาร';
             }
 
-            if (role === 'ประธาน') {
+            if (role === 'ประธาน' || role === 'ประธานคณะกรรมการสารวัตรนักเรียน') {
               presidents.push(m);
-            } else if (role === 'รองประธาน') {
+            } else if (role === 'รองประธาน' || role.startsWith('รองประธาน')) {
               vps.push(m);
             } else if (role === 'เลขานุการ') {
               secs.push(m);
@@ -485,10 +485,12 @@
 
       // Vice Presidents (Tier 2: Medium-Large size)
       if (vps.length > 0) {
+        vps.sort((a, b) => (a.vp_order || 99) - (b.vp_order || 99));
         html += `<h3 style="text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 1.5rem; color: var(--dg-text-primary);">รองประธานคณะกรรมการสารวัตรนักเรียน</h3>`;
         html += `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 60px;">`;
         vps.forEach((vp, index) => {
-          const vpTitle = `รองประธานคณะกรรมการสารวัตรนักเรียน คนที่ ${index + 1}`;
+          const vpNum = vp.vp_order || (index + 1);
+          const vpTitle = 'รองประธานคณะกรรมการสารวัตรนักเรียน คนที่ ' + vpNum;
           html += `<div style="width: 100%; max-width: 295px;">` + renderCard(vp.name, vpTitle, vp.imageUrl, 'vp') + `</div>`;
         });
         html += `</div>`;

@@ -33,7 +33,7 @@ const FIXED_DEPTS = [
 
 function getRolesForDepartment(dept) {
   if (dept === 'คณะผู้บริหาร') {
-    return ['ประธาน', 'รองประธาน', 'เลขานุการ'];
+    return ['ประธานคณะกรรมการสารวัตรนักเรียน', 'รองประธานคณะกรรมการสารวัตรนักเรียน', 'เลขานุการ'];
   }
   if (dept === 'สมาชิกทั่วไป') {
     return ['ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน'];
@@ -213,8 +213,15 @@ function syncMembersWithDirectory() {
       m.grade = s.grade;
       m.order_no = s.order_no;
       m.student_id = s.order_no;
-      // Normalize department names
-      if (m.role === 'ประธาน' || m.role === 'รองประธาน' || m.department === 'ชั้นมัธยมศึกษาปีที่ ' + s.grade || m.department.startsWith('รองประธาน') || m.department.startsWith('ฝ่ายเลขานุการ')) {
+      // Normalize department & full role names
+      if (m.role === 'ประธาน' || m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน') {
+        m.role = 'ประธานคณะกรรมการสารวัตรนักเรียน';
+        m.department = 'คณะผู้บริหาร';
+      } else if (m.role === 'รองประธาน' || m.role.startsWith('รองประธาน')) {
+        m.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน';
+        m.department = 'คณะผู้บริหาร';
+        if (!m.vp_order) m.vp_order = (s.order_no === 82 ? 1 : 2);
+      } else if (m.department === 'ชั้นมัธยมศึกษาปีที่ ' + s.grade || m.department.startsWith('รองประธาน') || m.department.startsWith('ฝ่ายเลขานุการ')) {
         m.department = 'คณะผู้บริหาร';
       } else if (m.department.startsWith('สมาชิกทั่วไป')) {
         m.department = 'สมาชิกทั่วไป';
@@ -239,7 +246,7 @@ window.handleDeptChange = function(orderNo, newDept) {
 
   const validRoles = getRolesForDepartment(newDept);
   if (!validRoles.includes(m.role)) {
-    if (newDept === 'คณะผู้บริหาร') m.role = 'รองประธาน';
+    if (newDept === 'คณะผู้บริหาร') { m.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน'; m.vp_order = m.vp_order || 1; }
     else if (newDept === 'สมาชิกทั่วไป') m.role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
     else m.role = 'สมาชิกฝ่าย';
   }
@@ -266,10 +273,11 @@ window.handleRoleChange = function(orderNo, newRole) {
  * Enforce exactly 1 President and 1 Head per department
  */
 function enforceUniqueLeadership(dept, role, currentOrderNo) {
-  if (role === 'ประธาน') {
+  if (role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || role === 'ประธาน') {
     allMembers.forEach(x => {
-      if (x.order_no !== currentOrderNo && x.role === 'ประธาน') {
-        x.role = 'รองประธาน';
+      if (x.order_no !== currentOrderNo && (x.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || x.role === 'ประธาน')) {
+        x.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน';
+        if (!x.vp_order) x.vp_order = 2;
       }
     });
   } else if (role === 'หัวหน้าฝ่าย') {
@@ -329,12 +337,14 @@ window.resetToSqliteDefaults = async function() {
     let dept = 'สมาชิกทั่วไป';
     let role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
 
+    let vpOrder = undefined;
     if (s.rank === 'ประธาน') {
       dept = 'คณะผู้บริหาร';
-      role = 'ประธาน';
+      role = 'ประธานคณะกรรมการสารวัตรนักเรียน';
     } else if (s.rank === 'รองประธาน') {
       dept = 'คณะผู้บริหาร';
-      role = 'รองประธาน';
+      role = 'รองประธานคณะกรรมการสารวัตรนักเรียน';
+      vpOrder = (s.order_no === 82 ? 1 : 2);
     } else if (s.rank === 'เลขานุการ') {
       dept = 'คณะผู้บริหาร';
       role = 'เลขานุการ';
@@ -354,6 +364,7 @@ window.resetToSqliteDefaults = async function() {
       grade: s.grade,
       department: dept,
       role: role,
+      vp_order: vpOrder,
       imageUrl: img.imageUrl || '',
       homeImageUrl: img.homeImageUrl || '',
       teamImageUrl: img.teamImageUrl || ''
@@ -369,6 +380,27 @@ window.resetToSqliteDefaults = async function() {
 /**
  * Render Main UI
  */
+
+/**
+ * Handle Vice President order change (คนที่เท่าไหร่: 1, 2, 3...)
+ */
+window.handleVpOrderChange = function(orderNo, newOrder) {
+  const m = allMembers.find(x => x.order_no === orderNo);
+  if (!m) return;
+  const targetOrder = parseInt(newOrder, 10) || 1;
+  const currentOrder = m.vp_order || 1;
+
+  // Swap with another VP if they already have this targetOrder
+  const otherVp = allMembers.find(x => x.order_no !== orderNo && (x.role && x.role.startsWith('รองประธาน')) && (x.vp_order === targetOrder));
+  if (otherVp) {
+    otherVp.vp_order = currentOrder;
+  }
+  m.vp_order = targetOrder;
+
+  notifyDraftChanged();
+  renderTeamAdminUI();
+};
+
 function renderTeamAdminUI() {
   const container = document.getElementById('teamAdminContainer');
   if (!container) return;
@@ -401,8 +433,9 @@ function renderTeamAdminUI() {
   }
 
   // Find leadership for photos
-  const president = allMembers.find(m => m.role === 'ประธาน') || { name: 'ยังไม่ได้ระบุ', grade: '-', order_no: 0 };
-  const vps = allMembers.filter(m => m.role === 'รองประธาน');
+  const president = allMembers.find(m => m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน') || { name: 'ยังไม่ได้ระบุ', grade: '-', order_no: 0 };
+  const vps = allMembers.filter(m => m.role && m.role.startsWith('รองประธาน'));
+  vps.sort((a, b) => (a.vp_order || 99) - (b.vp_order || 99));
   const heads = {};
   FIXED_DEPTS.forEach(dept => {
     heads[dept] = allMembers.find(m => m.department === dept && m.role === 'หัวหน้าฝ่าย');
@@ -478,7 +511,7 @@ function renderTeamAdminUI() {
           <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px;">
             <span style="font-weight: 750; font-size: 0.9rem; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
               <i data-lucide="crown" style="width: 16px; height: 16px; color: #f59e0b;"></i>
-              <span>ประธานคณะกรรมการ</span>
+              <span>ประธานคณะกรรมการสารวัตรนักเรียน</span>
             </span>
             <span style="font-size: 0.75rem; font-weight: 600; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px;">อัตราส่วน 4:5</span>
           </div>
@@ -512,10 +545,20 @@ function renderTeamAdminUI() {
         </div>
 
         <!-- Vice Presidents -->
-        ${vps.map((vp, i) => `
-          <div class="photo-card">
-            <div style="font-weight: 700; font-size: 0.86rem; color: #4338ca; margin-bottom: 4px;">รองประธานคนที่ ${i + 1}</div>
-            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 8px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 180px;">${escapeHtml(vp.name)}</div>
+        ${vps.map((vp, i) => {
+          const vpOrder = vp.vp_order || (i + 1);
+          return `
+          <div class="photo-card" style="min-width: 230px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 6px; gap: 4px;">
+              <div style="font-weight: 700; font-size: 0.78rem; color: #4338ca; text-align: left; line-height: 1.2;">
+                รองประธานคณะกรรมการสารวัตรนักเรียน
+              </div>
+              <select style="font-size: 0.76rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; border: 1.5px solid #93c5fd; background: #eff6ff; color: #1e40af; cursor: pointer;"
+                onchange="handleVpOrderChange(${vp.order_no}, this.value)" title="กำหนดว่ารองประธานเป็นคนที่เท่าไหร่">
+                ${[1, 2, 3, 4, 5].map(n => `<option value="${n}" ${vpOrder === n ? 'selected' : ''}>คนที่ ${n}</option>`).join('')}
+              </select>
+            </div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 8px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 190px;">${escapeHtml(vp.name)}</div>
             <div class="photo-frame">
               ${vp.imageUrl ? `<img src="${resolveUrl(vp.imageUrl)}" id="img_preview_${vp.id}" />` : `<i data-lucide="user" style="color: #cbd5e1; width: 32px; height: 32px;"></i>`}
             </div>
@@ -527,7 +570,8 @@ function renderTeamAdminUI() {
               ${vp.imageUrl ? `<button type="button" class="dg-btn-white" style="font-size: 0.78rem; padding: 4px 8px; color: #ef4444;" onclick="removeImage('${vp.id}')"><i data-lucide="trash-2" style="width: 12px; height: 12px;"></i></button>` : ''}
             </div>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
 
         <!-- 7 Department Heads -->
         ${FIXED_DEPTS.map(dept => {
@@ -600,9 +644,9 @@ function renderTeamAdminUI() {
             <th style="width: 60px; text-align: center;">ลำดับ</th>
             <th>ชื่อ - นามสกุล</th>
             <th style="width: 80px; text-align: center;">ชั้น</th>
-            <th style="width: 200px;">คอลัมน์ 1: สังกัด/ฝ่าย</th>
-            <th style="width: 190px;">คอลัมน์ 2: ตำแหน่งในฝ่าย</th>
-            <th style="width: 170px; text-align: center;">สถานะในทำเนียบ</th>
+            <th style="width: 170px;">คอลัมน์ 1: สังกัด/ฝ่าย</th>
+            <th style="width: 320px;">คอลัมน์ 2: ตำแหน่งในฝ่าย</th>
+            <th style="width: 230px; text-align: center;">สถานะในทำเนียบ</th>
           </tr>
         </thead>
         <tbody>
@@ -610,7 +654,9 @@ function renderTeamAdminUI() {
 
   filtered.forEach((m, idx) => {
     const roles = getRolesForDepartment(m.department);
-    const isLeadership = m.role === 'ประธาน' || m.role === 'หัวหน้าฝ่าย' || m.role === 'รองประธาน';
+    const isPres = m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน';
+    const isVp = m.role && m.role.startsWith('รองประธาน');
+    const isLeadership = isPres || isVp || m.role === 'หัวหน้าฝ่าย';
 
     html += `
       <tr>
@@ -619,7 +665,7 @@ function renderTeamAdminUI() {
           <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem;">${escapeHtml(m.name)}</div>
         </td>
         <td style="text-align: center; font-weight: 600; color: #475569; font-size: 0.88rem;">
-          ${(m.role === 'ประธาน' || m.role === 'รองประธาน') ? '-' : (m.grade ? 'ม.' + escapeHtml(m.grade) : '-')}
+          ${(isPres || isVp) ? '-' : (m.grade ? 'ม.' + escapeHtml(m.grade) : '-')}
         </td>
         <td>
           <select class="col-select" onchange="handleDeptChange(${m.order_no}, this.value)">
@@ -627,12 +673,20 @@ function renderTeamAdminUI() {
           </select>
         </td>
         <td>
-          <select class="col-select ${isLeadership ? 'role-lead' : ''}" onchange="handleRoleChange(${m.order_no}, this.value)">
-            ${roles.map(r => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${r}</option>`).join('')}
-          </select>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <select class="col-select ${isLeadership ? 'role-lead' : ''}" style="${isVp ? 'max-width: 220px;' : 'max-width: 280px;'}" onchange="handleRoleChange(${m.order_no}, this.value)">
+              ${roles.map(r => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${r}</option>`).join('')}
+            </select>
+            ${isVp ? `
+              <select class="col-select" style="width: 86px; padding: 6px 6px; font-size: 0.82rem; border-color: #93c5fd; background: #eff6ff; color: #1e40af; font-weight: 700;"
+                onchange="handleVpOrderChange(${m.order_no}, this.value)" title="กำหนดว่ารองประธานเป็นคนที่เท่าไหร่">
+                ${[1, 2, 3, 4, 5].map(n => `<option value="${n}" ${(m.vp_order || 1) === n ? 'selected' : ''}>คนที่ ${n}</option>`).join('')}
+              </select>
+            ` : ''}
+          </div>
         </td>
         <td style="text-align: center;">
-          ${renderStatusBadge(m.department, m.role)}
+          ${renderStatusBadge(m.department, m.role, m.vp_order)}
         </td>
       </tr>
     `;
@@ -660,12 +714,13 @@ function renderTeamAdminUI() {
   if (window.lucide) window.lucide.createIcons();
 }
 
-function renderStatusBadge(dept, role) {
-  if (role === 'ประธาน') {
-    return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">👑 ประธาน</span>';
+function renderStatusBadge(dept, role, vpOrder) {
+  if (role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || role === 'ประธาน') {
+    return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">👑 ประธานคณะกรรมการสารวัตรนักเรียน</span>';
   }
-  if (role === 'รองประธาน') {
-    return '<span style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">⭐ รองประธาน</span>';
+  if (typeof role === 'string' && role.startsWith('รองประธาน')) {
+    const numText = vpOrder ? ` คนที่ ${vpOrder}` : '';
+    return `<span style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">⭐ รองประธานคณะกรรมการสารวัตรนักเรียน${numText}</span>`;
   }
   if (role === 'เลขานุการ') {
     return '<span style="background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">📝 เลขานุการ</span>';
@@ -749,7 +804,7 @@ function removeImage(id, target = 'default') {
 window.removeImage = removeImage;
 
 async function saveTeamSettings() {
-  const presMember = allMembers.find(m => m.role === 'ประธาน');
+  const presMember = allMembers.find(m => m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน');
 
   try {
     localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
