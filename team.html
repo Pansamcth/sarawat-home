@@ -336,7 +336,7 @@
             }
           }
 
-          let presidents = [];
+                    let presidents = [];
           let vps = [];
           let secs = [];
           let headsByDept = {};
@@ -344,20 +344,28 @@
           let totalMembers = new Set(teamMembers.map(m => m.order_no || m.name)).size;
 
           teamMembers.forEach(m => {
-            if (m.role === 'ประธาน') {
+            const role = m.role || '';
+            let dept = m.department || 'สมาชิกทั่วไป';
+            if (dept.startsWith('ชั้นมัธยมศึกษา') || dept.startsWith('รองประธาน') || dept.startsWith('ฝ่ายเลขานุการ')) {
+              dept = 'คณะผู้บริหาร';
+            }
+
+            if (role === 'ประธาน') {
               presidents.push(m);
-            } else if (m.role === 'รองประธาน') {
+            } else if (role === 'รองประธาน') {
               vps.push(m);
-            } else if (m.role === 'เลขานุการ') {
+            } else if (role === 'เลขานุการ') {
               secs.push(m);
-            } else if (m.role === 'หัวหน้าฝ่าย') {
-              const dept = m.department || 'ไม่ระบุสังกัด';
+            } else if (role === 'หัวหน้าฝ่าย') {
               if (!headsByDept[dept]) headsByDept[dept] = [];
               headsByDept[dept].push(m);
-            } else {
-              const dept = m.department || 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
+              // Include Head in the department members list as well
               if (!membersByDept[dept]) membersByDept[dept] = [];
               membersByDept[dept].push(m);
+            } else {
+              const targetDept = (dept && dept !== 'คณะผู้บริหาร') ? dept : 'สมาชิกทั่วไป';
+              if (!membersByDept[targetDept]) membersByDept[targetDept] = [];
+              membersByDept[targetDept].push(m);
             }
           });
 
@@ -389,23 +397,31 @@
           let secs = [];
           let headsByDept = {};
           let membersByDept = {};
-          let totalMembers = teamMembers.length;
+          let totalMembers = new Set(teamMembers.map(m => m.order_no || m.name)).size;
 
           teamMembers.forEach(m => {
-            if (m.role === 'ประธาน') {
+            const role = m.role || '';
+            let dept = m.department || 'สมาชิกทั่วไป';
+            if (dept.startsWith('ชั้นมัธยมศึกษา') || dept.startsWith('รองประธาน') || dept.startsWith('ฝ่ายเลขานุการ')) {
+              dept = 'คณะผู้บริหาร';
+            }
+
+            if (role === 'ประธาน') {
               presidents.push(m);
-            } else if (m.role === 'รองประธาน') {
+            } else if (role === 'รองประธาน') {
               vps.push(m);
-            } else if (m.role === 'เลขานุการ') {
+            } else if (role === 'เลขานุการ') {
               secs.push(m);
-            } else if (m.role === 'หัวหน้าฝ่าย') {
-              const dept = m.department || 'ไม่ระบุสังกัด';
+            } else if (role === 'หัวหน้าฝ่าย') {
               if (!headsByDept[dept]) headsByDept[dept] = [];
               headsByDept[dept].push(m);
-            } else {
-              const dept = m.department || 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
+              // Include Head in the department members list as well
               if (!membersByDept[dept]) membersByDept[dept] = [];
               membersByDept[dept].push(m);
+            } else {
+              const targetDept = (dept && dept !== 'คณะผู้บริหาร') ? dept : 'สมาชิกทั่วไป';
+              if (!membersByDept[targetDept]) membersByDept[targetDept] = [];
+              membersByDept[targetDept].push(m);
             }
           });
 
@@ -546,11 +562,22 @@
               </h3>
               <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
           `;
+                    membersByDept[dept].sort((a, b) => {
+            if (a.role === 'หัวหน้าฝ่าย') return -1;
+            if (b.role === 'หัวหน้าฝ่าย') return 1;
+            return (a.order_no || 999) - (b.order_no || 999);
+          });
           membersByDept[dept].forEach(member => {
+            const isHead = member.role === 'หัวหน้าฝ่าย';
             html += `
-              <div class="dg-dept-member-pill" style="display: flex; align-items: center; padding: 12px 16px; background: var(--dg-bg-subtle); border-radius: 8px; border: 1px solid transparent; transition: all 0.2s;">
+              <div class="dg-dept-member-pill" style="display: flex; align-items: center; padding: 12px 16px; background: ${isHead ? 'rgba(59, 130, 246, 0.08)' : 'var(--dg-bg-subtle)'}; border-radius: 8px; border: 1px solid ${isHead ? '#93c5fd' : 'transparent'}; transition: all 0.2s;">
                 <div style="flex: 1; overflow: hidden;">
-                  <h4 style="font-size: 0.95rem; font-weight: 600; margin: 0; color: var(--dg-text-primary); word-break: break-word;">${member.name}</h4>${member.department && member.department !== dept ? `<div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">${member.department}</div>` : ''}
+                  <h4 style="font-size: 0.95rem; font-weight: 600; margin: 0; color: var(--dg-text-primary); word-break: break-word;">
+                    ${isHead ? '<i data-lucide="crown" style="width:14px; height:14px; color:#2563eb; margin-right:6px; vertical-align:middle; display:inline-block;"></i>' : ''}${member.name}
+                  </h4>
+                  <div style="font-size: 0.78rem; color: ${isHead ? '#2563eb' : '#64748b'}; margin-top: 2px; font-weight: ${isHead ? '600' : 'normal'};">
+                    ${isHead ? 'หัวหน้า' + dept : (member.department && member.department !== dept && member.department !== 'สมาชิกทั่วไป' ? member.department : '')}
+                  </div>
                 </div>
               </div>
             `;

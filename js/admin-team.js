@@ -1,24 +1,45 @@
 /**
- * Admin Team Management (Full DB, with Card Layout + Members Table + Unified SQLite Student Directory)
+ * Admin Team Management - Two-Column Selection System (ฝ่าย & ตำแหน่ง)
+ * Clean, fast, 100% synced with 143 SQLite Student Database
  */
 
 let allMembers = [];
 let studentDirectory = [];
 let teamMemberSearchTerm = '';
+let activeDeptFilter = 'ALL';
+let hasUnsavedChanges = false;
 
-function deduplicateAllMembers() {
-  const seen = new Set();
-  const deduped = [];
-  allMembers.forEach(m => {
-    const key = m.order_no ? 'ord_' + m.order_no : ('name_' + (m.name || '').trim().replace(/\s+/g, ''));
-    if (!seen.has(key)) {
-      seen.add(key);
-      deduped.push(m);
-    }
-  });
-  allMembers = deduped;
+const DEPARTMENTS = [
+  'คณะผู้บริหาร',
+  'ฝ่ายเอกสาร',
+  'ฝ่ายโสตทัศนศิลป์',
+  'ฝ่ายสารวัตรพยาบาล',
+  'ฝ่ายการเงิน',
+  'ฝ่ายกิจกรรม',
+  'ฝ่ายอุปกรณ์และ IT',
+  'ฝ่ายวินัย',
+  'สมาชิกทั่วไป'
+];
+
+const FIXED_DEPTS = [
+  'ฝ่ายเอกสาร',
+  'ฝ่ายโสตทัศนศิลป์',
+  'ฝ่ายสารวัตรพยาบาล',
+  'ฝ่ายการเงิน',
+  'ฝ่ายกิจกรรม',
+  'ฝ่ายอุปกรณ์และ IT',
+  'ฝ่ายวินัย'
+];
+
+function getRolesForDepartment(dept) {
+  if (dept === 'คณะผู้บริหาร') {
+    return ['ประธาน', 'รองประธาน', 'เลขานุการ'];
+  }
+  if (dept === 'สมาชิกทั่วไป') {
+    return ['ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน'];
+  }
+  return ['หัวหน้าฝ่าย', 'สมาชิกฝ่าย'];
 }
-
 
 function escapeHtml(str) {
   if (!str) return '';
@@ -36,13 +57,25 @@ function handleTeamMemberSearch(term) {
 }
 window.handleTeamMemberSearch = handleTeamMemberSearch;
 
+function setDeptFilter(dept) {
+  activeDeptFilter = dept;
+  renderTeamAdminUI();
+}
+window.setDeptFilter = setDeptFilter;
+
+function notifyDraftChanged() {
+  hasUnsavedChanges = true;
+  try {
+    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
+  } catch (e) {}
+}
+
 /**
- * Fetch Student Directory from SQLite (/api/students or /api/roster/getStudents)
+ * Fetch Student Directory from SQLite (/api/students)
  */
 async function fetchStudentDirectory() {
   try {
     const base = window.SarawatApi ? window.SarawatApi.getBaseUrl() : '';
-    // 1. Try /api/students
     let res = await fetch((base || '') + '/api/students');
     if (res.ok) {
       const data = await res.json();
@@ -52,26 +85,10 @@ async function fetchStudentDirectory() {
         return studentDirectory;
       }
     }
-    // 2. Try /api/roster/getStudents
-    res = await fetch((base || '') + '/api/roster/getStudents', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ args: [] })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const list = Array.isArray(data) ? data : (data && Array.isArray(data.result) ? data.result : []);
-      if (list.length > 0) {
-        studentDirectory = list;
-        try { localStorage.setItem('dg_sarawat_student_dir', JSON.stringify(studentDirectory)); } catch (e) {}
-        return studentDirectory;
-      }
-    }
   } catch (err) {
     console.warn('Backend student directory unavailable, checking local storage:', err.message);
   }
 
-  // 3. Fallback to localStorage
   try {
     const local = localStorage.getItem('dg_sarawat_student_dir');
     if (local) {
@@ -86,23 +103,21 @@ async function fetchStudentDirectory() {
   return studentDirectory;
 }
 
+/**
+ * Load and initialize Team Admin
+ */
 async function loadTeamAdmin() {
   const container = document.getElementById('teamAdminContainer');
   if (!container) return;
 
-  if (window.DgSkeletons) {
-    container.innerHTML = window.DgSkeletons.adminTeamEditorCards(3);
-  } else {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 60px;">
-        <i data-lucide="loader-2" class="dg-spin" style="width: 40px; height: 40px; color: var(--dg-primary);"></i>
-        <p style="margin-top: 16px;">กำลังโหลดข้อมูลคณะกรรมการและฐานข้อมูลนักเรียน...</p>
-      </div>
-    `;
-    if (window.lucide) window.lucide.createIcons();
-  }
+  container.innerHTML = `
+    <div style="text-align: center; padding: 60px;">
+      <i data-lucide="loader-2" class="dg-spin" style="width: 40px; height: 40px; color: var(--dg-primary);"></i>
+      <p style="margin-top: 16px; font-weight: 600; color: #475569;">กำลังโหลดระบบตั้งค่าทำเนียบสารวัตรนักเรียน 143 คน...</p>
+    </div>
+  `;
+  if (window.lucide) window.lucide.createIcons();
 
-  // Load student directory first
   await fetchStudentDirectory();
 
   let loadedOnline = false;
@@ -119,15 +134,13 @@ async function loadTeamAdmin() {
           if (Array.isArray(parsed) && parsed.length > 0) {
             allMembers = parsed;
             loadedOnline = true;
-            try {
-              localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-            } catch (e) {}
+            try { localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers)); } catch (e) {}
           }
         }
       }
     }
   } catch (err) {
-    console.warn('Backend team API unavailable, using local backup:', err.message);
+    console.warn('Backend team API unavailable:', err.message);
   }
 
   if (!loadedOnline) {
@@ -137,143 +150,145 @@ async function loadTeamAdmin() {
         const parsed = JSON.parse(local);
         if (Array.isArray(parsed)) allMembers = parsed;
       }
-    } catch (e) {
-      allMembers = [];
-    }
+    } catch (e) {}
   }
 
-  // Ensure president has default data seeded if missing
-  let p = allMembers.find(m => m.role === 'ประธาน');
-  if (!p) {
-    const defaultPres = studentDirectory.find(s => s.rank === 'ประธาน') || { name: 'นายอะห์นัฟ สหสันติวรกุล', grade: '5/1', order_no: 67 };
-    p = {
-      id: 'pres_main',
-      order_no: defaultPres.order_no || 67,
-      student_id: defaultPres.order_no || 67,
-      name: defaultPres.name,
-      role: 'ประธาน',
-      department: 'ชั้นมัธยมศึกษาปีที่ ' + defaultPres.grade,
-      imageUrl: '',
-      homeImageUrl: '',
-      teamImageUrl: ''
-    };
-    allMembers.unshift(p);
-  } else {
-    if (p.imageUrl === 'assets/images/president.jpg') p.imageUrl = '';
-    if (!p.homeImageUrl) p.homeImageUrl = p.imageUrl || '';
-    if (!p.teamImageUrl) p.teamImageUrl = p.imageUrl || '';
-  }
+  // Ensure all 143 students exist in allMembers 1:1
+  syncMembersWithDirectory();
 
   renderTeamAdminUI();
 }
 window.loadTeamAdmin = loadTeamAdmin;
 
 /**
- * Generate Student Dropdown Options for selecting who holds which position
+ * Sync allMembers strictly with 143 studentDirectory entries
  */
-function buildStudentSelectOptions(selectedName, selectedOrderNo) {
-  let html = `<option value="">-- เลือกจากฐานข้อมูล (${studentDirectory.length} คน) --</option>`;
-  studentDirectory.forEach(s => {
-    const cleanSName = s.name.replace(/\s+/g, '');
-    const cleanCurName = (selectedName || '').replace(/\s+/g, '');
-    const isSelected = (selectedOrderNo && String(s.order_no) === String(selectedOrderNo)) || (cleanCurName && cleanSName === cleanCurName);
-    const rankLabel = s.rank ? ` • ${s.rank}` : '';
-    html += `<option value="${s.order_no}" ${isSelected ? 'selected' : ''} data-name="${escapeHtml(s.name)}" data-grade="${escapeHtml(s.grade)}" data-rank="${escapeHtml(s.rank || '')}">${escapeHtml(s.name)} (ม.${escapeHtml(s.grade)})${escapeHtml(rankLabel)}</option>`;
+function syncMembersWithDirectory() {
+  if (!studentDirectory || studentDirectory.length === 0) return;
+
+  const existingByOrder = new Map();
+  allMembers.forEach(m => {
+    if (m.order_no) existingByOrder.set(m.order_no, m);
   });
-  return html;
-}
 
-/**
- * Handle student selection from dropdown
- */
-function selectStudentForPosition(id, orderNoStr) {
-  if (!orderNoStr) return;
-  const orderNo = parseInt(orderNoStr, 10);
-  const student = studentDirectory.find(s => s.order_no === orderNo);
-  if (!student) return;
+  const synced = [];
+  studentDirectory.forEach(s => {
+    let m = existingByOrder.get(s.order_no);
+    if (!m) {
+      // Create clean record from SQLite rank
+      let dept = 'สมาชิกทั่วไป';
+      let role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
 
-  let targetSlot = allMembers.find(x => x.id === id);
-  if (!targetSlot) return;
-
-  const existingMember = allMembers.find(x => x.order_no === orderNo && x.id !== id);
-
-  if (targetSlot.role === 'หัวหน้าฝ่าย') {
-    const dept = targetSlot.department;
-    const oldHeadOrderNo = targetSlot.order_no;
-    const oldHeadName = targetSlot.name;
-
-    // Promote the selected student to Head
-    targetSlot.name = student.name;
-    targetSlot.order_no = student.order_no;
-    targetSlot.student_id = student.order_no;
-
-    if (existingMember) {
-      if (oldHeadOrderNo && oldHeadOrderNo !== student.order_no) {
-        existingMember.name = oldHeadName;
-        existingMember.order_no = oldHeadOrderNo;
-        existingMember.student_id = oldHeadOrderNo;
-        existingMember.role = 'สมาชิก' + dept;
-        existingMember.department = dept;
-      } else {
-        allMembers = allMembers.filter(x => x.id !== existingMember.id);
+      if (s.rank === 'ประธาน') {
+        dept = 'คณะผู้บริหาร';
+        role = 'ประธาน';
+      } else if (s.rank === 'รองประธาน') {
+        dept = 'คณะผู้บริหาร';
+        role = 'รองประธาน';
+      } else if (s.rank === 'เลขานุการ') {
+        dept = 'คณะผู้บริหาร';
+        role = 'เลขานุการ';
+      } else if (s.rank === 'ฝ่ายโสตฯ') {
+        dept = 'ฝ่ายโสตทัศนศิลป์';
+        role = 'สมาชิกฝ่าย';
+      } else if (FIXED_DEPTS.includes(s.rank)) {
+        dept = s.rank;
+        role = 'สมาชิกฝ่าย';
       }
-    } else if (oldHeadOrderNo && oldHeadOrderNo !== student.order_no) {
-      allMembers.push({
-        id: 'dept_mem_' + oldHeadOrderNo,
-        student_id: oldHeadOrderNo,
-        order_no: oldHeadOrderNo,
-        name: oldHeadName,
-        role: 'สมาชิก' + dept,
+
+      m = {
+        id: 's_' + s.order_no,
+        student_id: s.order_no,
+        order_no: s.order_no,
+        name: s.name,
+        grade: s.grade,
         department: dept,
+        role: role,
         imageUrl: '',
         homeImageUrl: '',
         teamImageUrl: ''
-      });
-    }
-  } else {
-    const oldOrderNo = targetSlot.order_no;
-    const oldName = targetSlot.name;
-
-    targetSlot.name = student.name;
-    targetSlot.order_no = student.order_no;
-    targetSlot.student_id = student.order_no;
-
-    if (targetSlot.role === 'ประธาน') {
-      targetSlot.department = 'ชั้นมัธยมศึกษาปีที่ ' + student.grade;
-    }
-
-    if (existingMember) {
-      if (oldOrderNo && oldOrderNo !== student.order_no) {
-        existingMember.name = oldName;
-        existingMember.order_no = oldOrderNo;
-        existingMember.student_id = oldOrderNo;
-        existingMember.role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
-        existingMember.department = 'สมาชิกทั่วไป (ม.' + (studentDirectory.find(s => s.order_no === oldOrderNo)?.grade || '') + ')';
-      } else {
-        allMembers = allMembers.filter(x => x.id !== existingMember.id);
+      };
+    } else {
+      m.name = s.name;
+      m.grade = s.grade;
+      m.order_no = s.order_no;
+      m.student_id = s.order_no;
+      // Normalize department names
+      if (m.department === 'ชั้นมัธยมศึกษาปีที่ ' + s.grade || m.department.startsWith('รองประธาน') || m.department.startsWith('ฝ่ายเลขานุการ')) {
+        m.department = 'คณะผู้บริหาร';
+      } else if (m.department.startsWith('สมาชิกทั่วไป')) {
+        m.department = 'สมาชิกทั่วไป';
+      }
+      if (m.role.startsWith('สมาชิกฝ่าย')) {
+        m.role = 'สมาชิกฝ่าย';
       }
     }
-  }
+    synced.push(m);
+  });
 
-  deduplicateAllMembers();
-
-  try {
-    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-  } catch (e) {}
-
-  renderTeamAdminUI();
-  if (window.showToast) window.showToast(`เลือก "${student.name}" (ม.${student.grade}) เรียบร้อยแล้ว`, 'success');
+  allMembers = synced;
 }
-window.selectStudentForPosition = selectStudentForPosition;
 
 /**
- * Reset all board positions based on SQLite 143 database defaults
+ * Handle Column 1: Department change
  */
-async function resetToSqliteDefaults() {
+window.handleDeptChange = function(orderNo, newDept) {
+  const m = allMembers.find(x => x.order_no === orderNo);
+  if (!m) return;
+  m.department = newDept;
+
+  const validRoles = getRolesForDepartment(newDept);
+  if (!validRoles.includes(m.role)) {
+    if (newDept === 'คณะผู้บริหาร') m.role = 'รองประธาน';
+    else if (newDept === 'สมาชิกทั่วไป') m.role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
+    else m.role = 'สมาชิกฝ่าย';
+  }
+
+  enforceUniqueLeadership(newDept, m.role, orderNo);
+  notifyDraftChanged();
+  renderTeamAdminUI();
+};
+
+/**
+ * Handle Column 2: Role change
+ */
+window.handleRoleChange = function(orderNo, newRole) {
+  const m = allMembers.find(x => x.order_no === orderNo);
+  if (!m) return;
+  m.role = newRole;
+
+  enforceUniqueLeadership(m.department, newRole, orderNo);
+  notifyDraftChanged();
+  renderTeamAdminUI();
+};
+
+/**
+ * Enforce exactly 1 President and 1 Head per department
+ */
+function enforceUniqueLeadership(dept, role, currentOrderNo) {
+  if (role === 'ประธาน') {
+    allMembers.forEach(x => {
+      if (x.order_no !== currentOrderNo && x.role === 'ประธาน') {
+        x.role = 'รองประธาน';
+      }
+    });
+  } else if (role === 'หัวหน้าฝ่าย') {
+    allMembers.forEach(x => {
+      if (x.order_no !== currentOrderNo && x.department === dept && x.role === 'หัวหน้าฝ่าย') {
+        x.role = 'สมาชิกฝ่าย';
+      }
+    });
+  }
+}
+
+/**
+ * Reset all 143 positions back to official SQLite Database ranks
+ */
+window.resetToSqliteDefaults = async function() {
   if (typeof Swal !== 'undefined') {
     const result = await Swal.fire({
-      title: 'รีเซ็ตตำแหน่งตามฐานข้อมูล?',
-      text: 'ระบบจะนำตำแหน่ง (ประธาน, รองประธาน, เลขานุการ, ฝ่ายต่าง ๆ) จากฐานข้อมูล SQLite 143 คนมาตั้งเป็นค่าเริ่มต้นใหม่ โดยยังคงรูปภาพที่เคยอัปโหลดไว้',
+      title: 'รีเซ็ตฝ่ายและตำแหน่งตามฐานข้อมูล?',
+      text: 'ระบบจะกำหนดฝ่ายและตำแหน่งของนักเรียนทั้ง 143 คนกลับเป็นค่าเริ่มต้นตามไฟล์ฐานข้อมูลทางการ โดยยังคงรูปภาพที่เคยอัปโหลดไว้ทั้งหมด',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#0f172a',
@@ -284,14 +299,13 @@ async function resetToSqliteDefaults() {
     });
     if (!result.isConfirmed) return;
   } else {
-    if (!confirm('ยืนยันรีเซ็ตตำแหน่งตามฐานข้อมูล SQLite 143 คนหรือไม่?')) return;
+    if (!confirm('ยืนยันรีเซ็ตฝ่ายและตำแหน่งตามฐานข้อมูล SQLite 143 คนหรือไม่?')) return;
   }
 
-  // Preserve existing uploaded images by clean name
-  const existingImagesByName = new Map();
+  const existingImages = new Map();
   allMembers.forEach(m => {
-    if (m.name && (m.imageUrl || m.homeImageUrl || m.teamImageUrl)) {
-      existingImagesByName.set(m.name.replace(/\s+/g, ''), {
+    if (m.order_no && (m.imageUrl || m.homeImageUrl || m.teamImageUrl)) {
+      existingImages.set(m.order_no, {
         imageUrl: m.imageUrl || '',
         homeImageUrl: m.homeImageUrl || '',
         teamImageUrl: m.teamImageUrl || ''
@@ -299,762 +313,381 @@ async function resetToSqliteDefaults() {
     }
   });
 
-  const students = studentDirectory;
-  if (!students || students.length === 0) {
-    if (window.showToast) window.showToast('ไม่สามารถดึงข้อมูลนักเรียนได้', 'error');
-    return;
-  }
+  const defaultHeads = {
+    'ฝ่ายเอกสาร': 140,
+    'ฝ่ายโสตทัศนศิลป์': 110,
+    'ฝ่ายสารวัตรพยาบาล': 78,
+    'ฝ่ายการเงิน': 71,
+    'ฝ่ายกิจกรรม': 100,
+    'ฝ่ายอุปกรณ์และ IT': 111,
+    'ฝ่ายวินัย': 116
+  };
 
-  const newMembers = [];
+  const synced = [];
+  studentDirectory.forEach(s => {
+    const img = existingImages.get(s.order_no) || {};
+    let dept = 'สมาชิกทั่วไป';
+    let role = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
 
-  // President
-  const pres = students.find(s => s.rank === 'ประธาน');
-  if (pres) {
-    const imgs = existingImagesByName.get(pres.name.replace(/\s+/g, '')) || {};
-    newMembers.push({
-      id: 'pres_' + pres.order_no,
-      student_id: pres.order_no,
-      order_no: pres.order_no,
-      name: pres.name,
-      role: 'ประธาน',
-      department: 'ชั้นมัธยมศึกษาปีที่ ' + pres.grade,
-      imageUrl: imgs.imageUrl || '',
-      homeImageUrl: imgs.homeImageUrl || '',
-      teamImageUrl: imgs.teamImageUrl || ''
-    });
-  }
-
-  // Vice Presidents
-  const vps = students.filter(s => s.rank === 'รองประธาน');
-  vps.forEach((vp, idx) => {
-    const imgs = existingImagesByName.get(vp.name.replace(/\s+/g, '')) || {};
-    newMembers.push({
-      id: 'vp_' + vp.order_no,
-      student_id: vp.order_no,
-      order_no: vp.order_no,
-      name: vp.name,
-      role: 'รองประธาน',
-      department: 'รองประธานคนที่ ' + (idx + 1) + ' (ม.' + vp.grade + ')',
-      imageUrl: imgs.imageUrl || '',
-      homeImageUrl: '',
-      teamImageUrl: ''
-    });
-  });
-
-  // Secretaries
-  const secs = students.filter(s => s.rank === 'เลขานุการ');
-  secs.forEach(sec => {
-    const imgs = existingImagesByName.get(sec.name.replace(/\s+/g, '')) || {};
-    newMembers.push({
-      id: 'sec_' + sec.order_no,
-      student_id: sec.order_no,
-      order_no: sec.order_no,
-      name: sec.name,
-      role: 'เลขานุการ',
-      department: 'ฝ่ายเลขานุการ (ม.' + sec.grade + ')',
-      imageUrl: imgs.imageUrl || '',
-      homeImageUrl: '',
-      teamImageUrl: ''
-    });
-  });
-
-  // Fixed Departments
-  const deptRankMap = [
-    { dept: 'ฝ่ายเอกสาร', rank: 'ฝ่ายเอกสาร' },
-    { dept: 'ฝ่ายโสตทัศนศิลป์', rank: 'ฝ่ายโสตฯ' },
-    { dept: 'ฝ่ายสารวัตรพยาบาล', rank: 'ฝ่ายสารวัตรพยาบาล' },
-    { dept: 'ฝ่ายการเงิน', rank: 'ฝ่ายการเงิน' },
-    { dept: 'ฝ่ายกิจกรรม', rank: 'ฝ่ายกิจกรรม' },
-    { dept: 'ฝ่ายอุปกรณ์และ IT', rank: 'ฝ่ายอุปกรณ์และ IT' },
-    { dept: 'ฝ่ายวินัย', rank: 'ฝ่ายวินัย' }
-  ];
-
-  deptRankMap.forEach(({ dept, rank }) => {
-    const deptStudents = students.filter(s => s.rank === rank);
-    if (deptStudents.length > 0) {
-      const head = deptStudents[0];
-      const headImgs = existingImagesByName.get(head.name.replace(/\s+/g, '')) || {};
-      newMembers.push({
-        id: 'head_' + head.order_no,
-        student_id: head.order_no,
-        order_no: head.order_no,
-        name: head.name,
-        role: 'หัวหน้าฝ่าย',
-        department: dept,
-        imageUrl: headImgs.imageUrl || '',
-        homeImageUrl: '',
-        teamImageUrl: ''
-      });
-
-      for (let i = 1; i < deptStudents.length; i++) {
-        const m = deptStudents[i];
-        const mImgs = existingImagesByName.get(m.name.replace(/\s+/g, '')) || {};
-        newMembers.push({
-          id: 'dept_mem_' + m.order_no,
-          student_id: m.order_no,
-          order_no: m.order_no,
-          name: m.name,
-          role: 'สมาชิก' + dept,
-          department: dept,
-          imageUrl: mImgs.imageUrl || '',
-          homeImageUrl: '',
-          teamImageUrl: ''
-        });
-      }
+    if (s.rank === 'ประธาน') {
+      dept = 'คณะผู้บริหาร';
+      role = 'ประธาน';
+    } else if (s.rank === 'รองประธาน') {
+      dept = 'คณะผู้บริหาร';
+      role = 'รองประธาน';
+    } else if (s.rank === 'เลขานุการ') {
+      dept = 'คณะผู้บริหาร';
+      role = 'เลขานุการ';
+    } else if (s.rank === 'ฝ่ายโสตฯ') {
+      dept = 'ฝ่ายโสตทัศนศิลป์';
+      role = (defaultHeads[dept] === s.order_no) ? 'หัวหน้าฝ่าย' : 'สมาชิกฝ่าย';
+    } else if (FIXED_DEPTS.includes(s.rank)) {
+      dept = s.rank;
+      role = (defaultHeads[dept] === s.order_no) ? 'หัวหน้าฝ่าย' : 'สมาชิกฝ่าย';
     }
-  });
 
-  // General Members
-  const generalMembers = students.filter(s => s.rank === 'สมาชิกทั่วไป');
-  generalMembers.forEach(gm => {
-    newMembers.push({
-      id: 'mem_' + gm.order_no,
-      student_id: gm.order_no,
-      order_no: gm.order_no,
-      name: gm.name,
-      role: 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน',
-      department: 'สมาชิกทั่วไป (ม.' + gm.grade + ')',
-      imageUrl: '',
-      homeImageUrl: '',
-      teamImageUrl: ''
+    synced.push({
+      id: 's_' + s.order_no,
+      student_id: s.order_no,
+      order_no: s.order_no,
+      name: s.name,
+      grade: s.grade,
+      department: dept,
+      role: role,
+      imageUrl: img.imageUrl || '',
+      homeImageUrl: img.homeImageUrl || '',
+      teamImageUrl: img.teamImageUrl || ''
     });
   });
 
-  allMembers = newMembers;
-  try {
-    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-  } catch (e) {}
-
+  allMembers = synced;
+  notifyDraftChanged();
   renderTeamAdminUI();
-  if (window.showToast) window.showToast('รีเซ็ตรายชื่อตำแหน่งตามฐานข้อมูลเรียบร้อยแล้ว', 'success');
-}
-window.resetToSqliteDefaults = resetToSqliteDefaults;
+  if (window.showToast) window.showToast('รีเซ็ตฝ่ายและตำแหน่งตามฐานข้อมูลเรียบร้อยแล้ว', 'success');
+};
 
+/**
+ * Render Main UI
+ */
 function renderTeamAdminUI() {
   const container = document.getElementById('teamAdminContainer');
   if (!container) return;
 
   const countBadge = document.getElementById('teamCountBadge');
-  const activeTotal = allMembers.filter(m => m.name && m.name.trim() !== '').length;
   if (countBadge) {
-    countBadge.innerHTML = `<i class="fa-solid fa-users"></i> ${activeTotal} สมาชิก`;
+    countBadge.innerHTML = `<i class="fa-solid fa-users"></i> ${allMembers.length} สมาชิก (SQLite 100%)`;
   }
 
+  // Count stats
+  const stats = {};
+  DEPARTMENTS.forEach(d => { stats[d] = 0; });
+  allMembers.forEach(m => {
+    if (stats[m.department] !== undefined) stats[m.department]++;
+    else stats['สมาชิกทั่วไป']++;
+  });
+
+  // Filter students
   let filtered = allMembers;
+  if (activeDeptFilter !== 'ALL') {
+    filtered = filtered.filter(m => m.department === activeDeptFilter);
+  }
   if (teamMemberSearchTerm) {
-    filtered = allMembers.filter(m => 
+    filtered = filtered.filter(m =>
       (m.name && m.name.toLowerCase().includes(teamMemberSearchTerm)) ||
-      (m.role && m.role.toLowerCase().includes(teamMemberSearchTerm)) ||
-      (m.department && m.department.toLowerCase().includes(teamMemberSearchTerm))
+      (m.grade && String(m.grade).toLowerCase().includes(teamMemberSearchTerm)) ||
+      (m.department && m.department.toLowerCase().includes(teamMemberSearchTerm)) ||
+      (m.role && m.role.toLowerCase().includes(teamMemberSearchTerm))
     );
   }
 
-  let presidents = filtered.filter(m => m.role === 'ประธาน');
-  if (presidents.length === 0 && !teamMemberSearchTerm) {
-    let p = allMembers.find(m => m.role === 'ประธาน');
-    if (!p) {
-      p = { id: 'new_p', name: '', role: 'ประธาน', department: '', imageUrl: '' };
-      allMembers.push(p);
-    }
-    presidents.push(p);
-  }
-
-  let vps = filtered.filter(m => m.role === 'รองประธาน');
-  let secs = filtered.filter(m => m.role === 'เลขานุการ');
-  let heads = filtered.filter(m => m.role === 'หัวหน้าฝ่าย');
-  let members = filtered.filter(m => m.role === 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน' || (!['ประธาน', 'รองประธาน', 'เลขานุการ', 'หัวหน้าฝ่าย'].includes(m.role) && !m.role.startsWith('สมาชิกฝ่าย')));
+  // Find leadership for photos
+  const president = allMembers.find(m => m.role === 'ประธาน') || { name: 'ยังไม่ได้ระบุ', grade: '-', order_no: 0 };
+  const vps = allMembers.filter(m => m.role === 'รองประธาน');
+  const heads = {};
+  FIXED_DEPTS.forEach(dept => {
+    heads[dept] = allMembers.find(m => m.department === dept && m.role === 'หัวหน้าฝ่าย');
+  });
 
   let html = `
     <style>
-      .team-edit-card { background: #fff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-      .team-edit-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--dg-border); padding-bottom: 16px; margin-bottom: 20px; }
-      .team-edit-title { font-weight: 700; font-size: 1.1rem; color: var(--dg-primary); margin: 0; }
-      .team-grid { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: start; }
-      .team-img-col { text-align: center; }
-      .team-preview-img { width: 140px; aspect-ratio: 4 / 5; border-radius: 10px; object-fit: cover; background: var(--dg-bg-subtle); border: 1px dashed var(--dg-border); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; }
-      .team-preview-img img { width: 100%; height: 100%; object-fit: cover; }
-      .team-preview-img i { color: #cbd5e1; width: 44px; height: 44px; }
+      .team-bento-card { background: #fff; border: 1px solid var(--dg-border); border-radius: 14px; padding: 22px; margin-bottom: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+      .team-photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 16px; }
+      .photo-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+      .photo-card.is-pres { border-color: #3b82f6; background: #eff6ff; }
+      .photo-frame { width: 120px; aspect-ratio: 4 / 5; border-radius: 10px; background: #fff; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+      .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
       
-      .team-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-      .team-table th, .team-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--dg-border); }
-      .team-table th { background: #f8fafc; font-weight: 600; color: #475569; font-size: 0.9rem; }
-      .team-table tr:hover { background: #f1f5f9; }
+      .dept-filter-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+      .dept-tab-btn { padding: 6px 14px; border-radius: 9999px; border: 1px solid #cbd5e1; background: #fff; font-size: 0.84rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+      .dept-tab-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+      .dept-tab-btn.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+      .dept-tab-btn .badge-num { font-size: 0.74rem; padding: 1px 6px; border-radius: 999px; background: rgba(0,0,0,0.06); }
+      .dept-tab-btn.active .badge-num { background: rgba(255,255,255,0.2); color: #fff; }
 
-      .student-picker-wrap { margin-bottom: 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 14px; }
-      .student-picker-label { font-size: 0.84rem; font-weight: 700; color: #166534; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-      .student-picker-select { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #86efac; background: #ffffff; font-family: inherit; font-size: 0.9rem; color: #0f172a; outline: none; }
-      .student-picker-select:focus { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15); }
-      .student-matched-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.76rem; font-weight: 600; padding: 3px 10px; border-radius: 9999px; background: #dcfce7; color: #15803d; }
+      .master-team-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+      .master-team-table th, .master-team-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+      .master-team-table th { background: #f8fafc; font-weight: 700; color: #475569; font-size: 0.86rem; letter-spacing: -0.01em; }
+      .master-team-table tr:hover { background: #f8fafc; }
+      .col-select { width: 100%; max-width: 175px; padding: 7px 10px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #fff; font-size: 0.86rem; font-family: inherit; font-weight: 600; color: #0f172a; outline: none; }
+      .col-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+      .col-select.role-lead { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
     </style>
 
-    <!-- TOP TOOLBAR: Quick Sync & Status -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px;">
-      <div style="display: flex; align-items: center; gap: 10px;">
+    <!-- TOP TOOLBAR & QUICK ACTIONS -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 20px; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <span style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">
           <i data-lucide="database" style="width: 18px; height: 18px; color: #10b981; vertical-align: middle; margin-right: 4px;"></i>
-          ฐานข้อมูลสารวัตรนักเรียน SQLite: <strong>${studentDirectory.length} รายชื่อ</strong>
+          ฐานข้อมูลสารวัตรนักเรียน SQLite: <strong>143 รายชื่อ</strong>
         </span>
-        <span class="student-matched-badge">
-          <i data-lucide="check" style="width: 12px; height: 12px;"></i> เชื่อมต่อ 100%
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 9999px; background: #dcfce7; color: #15803d;">
+          <i data-lucide="check" style="width: 13px; height: 13px;"></i> เชื่อมโยง 100%
         </span>
       </div>
       <div style="display: flex; gap: 10px;">
-        <button type="button" class="dg-btn-white" onclick="resetToSqliteDefaults()" style="font-size: 0.88rem; padding: 8px 16px; border-color: #cbd5e1;" title="นำตำแหน่ง ยศ จากฐานข้อมูล 143 คนมาตั้งเป็นค่าเริ่มต้น">
+        <button type="button" class="dg-btn-white" onclick="resetToSqliteDefaults()" style="font-size: 0.86rem; padding: 8px 16px; border-color: #cbd5e1;" title="รีเซ็ตตำแหน่งนักเรียน 143 คนตามฐานข้อมูล">
           <i data-lucide="rotate-ccw" style="width: 14px; height: 14px; margin-right: 6px;"></i>
-          <span>รีเซ็ตตำแหน่งจาก SQLite</span>
+          <span>รีเซ็ตตาม SQLite</span>
+        </button>
+        <button type="button" class="dg-btn-black" onclick="saveTeamSettings()" style="font-size: 0.88rem; padding: 8px 20px;">
+          <i data-lucide="save" style="width: 14px; height: 14px; margin-right: 6px;"></i>
+          <span>บันทึกข้อมูลทำเนียบ</span>
         </button>
       </div>
     </div>
-  `;
 
-  // --- Search Notice if no results ---
-  if (teamMemberSearchTerm && filtered.length === 0) {
-    html += `
-      <div style="text-align: center; padding: 60px; color: var(--dg-text-muted); background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; margin-bottom: 24px;">
-        <i data-lucide="search-x" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 12px; display: inline-block;"></i>
-        <div style="font-weight: 700; font-size: 1rem; color: #475569;">ไม่พบสมาชิกตรงกับคำค้นหา "${escapeHtml(teamMemberSearchTerm)}"</div>
-        <div style="font-size: 0.85rem; margin-top: 4px;">ลองค้นหาด้วยชื่ออื่น หรือสังกัดฝ่าย</div>
-      </div>
-    `;
-  }
-
-  // --- President (Dual Customizable Images: Home & Team) ---
-  if (presidents.length > 0) {
-    html += buildPresidentEditorCard(presidents[0]);
-  }
-
-  // --- Vice Presidents ---
-  if (!teamMemberSearchTerm || vps.length > 0) {
-    html += `
-      <div class="team-edit-card" style="background: var(--dg-bg-subtle); border: none;">
-        <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
-          <h3 class="team-edit-title">รองประธานคณะกรรมการ</h3>
-          <button class="dg-btn-white" onclick="addExecutive('รองประธาน')" style="padding: 6px 16px; font-size: 0.9rem;">+ เพิ่มรองประธาน</button>
-        </div>
+    <!-- ==========================================
+         SECTION 1: PHOTO MANAGEMENT CARDS (TOP)
+         ========================================== -->
+    <div class="team-bento-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px; margin-bottom: 18px;">
         <div>
-    `;
-    vps.forEach((vp, idx) => {
-      html += buildEditorCard(vp, 'รองประธานคนที่ ' + (idx + 1), 'รองประธาน', true);
-    });
-    if (vps.length === 0) html += `<p style="text-align:center; color: #64748b; font-size: 0.9rem;">ยังไม่มีรองประธาน</p>`;
-    html += `</div></div>`;
-  }
-
-  // --- Secretaries ---
-  if (!teamMemberSearchTerm || secs.length > 0) {
-    html += `
-      <div class="team-edit-card" style="background: var(--dg-bg-subtle); border: none;">
-        <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
-          <h3 class="team-edit-title">ฝ่ายเลขานุการ</h3>
-          <button class="dg-btn-white" onclick="addExecutive('เลขานุการ')" style="padding: 6px 16px; font-size: 0.9rem;">+ เพิ่มเลขานุการ</button>
-        </div>
-        <div>
-    `;
-    secs.forEach(sec => {
-      html += buildEditorCard(sec, 'เลขานุการ', 'เลขานุการ', true);
-    });
-    if (secs.length === 0) {
-      html += `<p style="text-align:center; color: #64748b; font-size: 0.9rem;">ยังไม่มีเลขานุการ</p>`;
-    }
-    html += `</div></div>`;
-  }
-
-  // --- Department Heads ---
-  const fixedDepts = ['ฝ่ายเอกสาร', 'ฝ่ายโสตทัศนศิลป์', 'ฝ่ายสารวัตรพยาบาล', 'ฝ่ายการเงิน', 'ฝ่ายกิจกรรม', 'ฝ่ายอุปกรณ์และ IT', 'ฝ่ายวินัย'];
-  const matchedDepts = fixedDepts.filter(dept => {
-    if (!teamMemberSearchTerm) return true;
-    return filtered.some(m => (m.role === 'หัวหน้าฝ่าย' || m.department === dept) && m.department === dept);
-  });
-
-  if (matchedDepts.length > 0) {
-    html += `
-      <div class="team-edit-card" style="background: #f8fafc; border: none;">
-        <div class="team-edit-header" style="border-bottom-color: rgba(0,0,0,0.05);">
-          <div>
-            <h3 class="team-edit-title">หัวหน้าฝ่ายและคณะทำงานต่าง ๆ</h3>
-            <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">แสดงรูปภาพหัวหน้าฝ่าย 1 คน พร้อมรายชื่อสมาชิกคณะทำงานประจำฝ่าย</div>
+          <h3 style="font-size: 1.12rem; font-weight: 750; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="image" style="width: 20px; height: 20px; color: var(--dg-primary);"></i>
+            <span>จัดการรูปภาพโปรไฟล์คณะผู้บริหารและหัวหน้าฝ่าย</span>
+          </h3>
+          <div style="font-size: 0.82rem; color: #64748b; margin-top: 3px;">
+            ระบบจะดึงชื่อบุคคลอัตโนมัติจากคนที่ได้รับเลือกตำแหน่ง "ประธาน", "รองประธาน" และ "หัวหน้าฝ่าย" ในตารางด้านล่าง
           </div>
         </div>
-        <div>
-    `;
-    matchedDepts.forEach(dept => {
-      let deptHeads = filtered.filter(m => m.role === 'หัวหน้าฝ่าย' && m.department === dept);
-
-      if (deptHeads.length === 0 && !teamMemberSearchTerm) {
-        const h = { id: 'head_' + Date.now() + '_' + Math.random(), name: '', role: 'หัวหน้าฝ่าย', department: dept, imageUrl: '' };
-        allMembers.push(h);
-        deptHeads.push(h);
-      }
-
-      const displayTitle = 'หัวหน้า' + dept;
-      deptHeads.forEach(h => {
-        html += buildEditorCard(h, displayTitle, h.role, false, true, dept);
-      });
-    });
-    html += `</div></div>`;
-  }
-
-  // --- General Members Table ---
-  html += `
-    <div class="team-edit-card">
-      <div class="team-edit-header">
-        <div>
-          <h3 class="team-edit-title">สมาชิกทั่วไป (${members.length} คน)</h3>
-          <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">รายชื่อสมาชิกสารวัตรนักเรียนทั้งหมดในฐานข้อมูล SQLite</div>
-        </div>
-        <button class="dg-btn-black" onclick="openMemberModal()">
-          <i data-lucide="plus"></i> <span>เพิ่มสมาชิกใหม่</span>
-        </button>
       </div>
-      <table class="team-table">
+
+      <div class="team-photo-grid">
+        <!-- President Card (Dual Upload) -->
+        <div class="photo-card is-pres" style="grid-column: span 2; min-width: 320px;">
+          <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 10px;">
+            <span style="font-weight: 750; font-size: 0.9rem; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="crown" style="width: 16px; height: 16px; color: #f59e0b;"></i>
+              <span>ประธานคณะกรรมการ</span>
+            </span>
+            <span style="font-size: 0.75rem; font-weight: 600; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px;">อัตราส่วน 4:5</span>
+          </div>
+          <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; margin-bottom: 12px;">
+            ${escapeHtml(president.name)} ${president.grade && president.grade !== '-' ? `(ม.${president.grade})` : ''}
+          </div>
+          <div style="display: flex; gap: 16px; justify-content: center; width: 100%;">
+            <!-- Home Image -->
+            <div style="text-align: center;">
+              <div style="font-size: 0.74rem; font-weight: 700; color: #475569; margin-bottom: 6px;">1. รูปหน้าแรก (index)</div>
+              <div class="photo-frame">
+                ${president.homeImageUrl || president.imageUrl ? `<img src="${resolveUrl(president.homeImageUrl || president.imageUrl)}" id="img_preview_${president.id}_home" />` : `<i data-lucide="user" style="color: #cbd5e1; width: 36px; height: 36px;"></i>`}
+              </div>
+              <input type="file" id="file_${president.id}_home" accept="image/*" style="display:none;" onchange="handleImageSelect('${president.id}', 'home')" />
+              <button type="button" class="dg-btn-black" style="font-size: 0.78rem; padding: 4px 10px;" onclick="document.getElementById('file_${president.id}_home').click()">
+                ${president.homeImageUrl ? 'เปลี่ยนรูป' : 'อัปโหลด'}
+              </button>
+            </div>
+            <!-- Team Image -->
+            <div style="text-align: center;">
+              <div style="font-size: 0.74rem; font-weight: 700; color: #475569; margin-bottom: 6px;">2. รูปหน้าคณะทำงาน (team)</div>
+              <div class="photo-frame">
+                ${president.teamImageUrl || president.imageUrl ? `<img src="${resolveUrl(president.teamImageUrl || president.imageUrl)}" id="img_preview_${president.id}_team" />` : `<i data-lucide="user" style="color: #cbd5e1; width: 36px; height: 36px;"></i>`}
+              </div>
+              <input type="file" id="file_${president.id}_team" accept="image/*" style="display:none;" onchange="handleImageSelect('${president.id}', 'team')" />
+              <button type="button" class="dg-btn-black" style="font-size: 0.78rem; padding: 4px 10px;" onclick="document.getElementById('file_${president.id}_team').click()">
+                ${president.teamImageUrl ? 'เปลี่ยนรูป' : 'อัปโหลด'}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vice Presidents -->
+        ${vps.map((vp, i) => `
+          <div class="photo-card">
+            <div style="font-weight: 700; font-size: 0.86rem; color: #4338ca; margin-bottom: 4px;">รองประธานคนที่ ${i + 1}</div>
+            <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 8px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 180px;">${escapeHtml(vp.name)}</div>
+            <div class="photo-frame">
+              ${vp.imageUrl ? `<img src="${resolveUrl(vp.imageUrl)}" id="img_preview_${vp.id}" />` : `<i data-lucide="user" style="color: #cbd5e1; width: 32px; height: 32px;"></i>`}
+            </div>
+            <input type="file" id="file_${vp.id}" accept="image/*" style="display:none;" onchange="handleImageSelect('${vp.id}')" />
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="dg-btn-white" style="font-size: 0.78rem; padding: 4px 10px;" onclick="document.getElementById('file_${vp.id}').click()">
+                ${vp.imageUrl ? 'เปลี่ยนรูป' : 'อัปโหลด'}
+              </button>
+              ${vp.imageUrl ? `<button type="button" class="dg-btn-white" style="font-size: 0.78rem; padding: 4px 8px; color: #ef4444;" onclick="removeImage('${vp.id}')"><i data-lucide="trash-2" style="width: 12px; height: 12px;"></i></button>` : ''}
+            </div>
+          </div>
+        `).join('')}
+
+        <!-- 7 Department Heads -->
+        ${FIXED_DEPTS.map(dept => {
+          const h = heads[dept];
+          const hasHead = !!h;
+          const hName = hasHead ? h.name : '(ยังไม่ได้เลือก)';
+          const hId = hasHead ? h.id : 'no_head_' + dept;
+          const hImg = hasHead ? h.imageUrl : '';
+
+          return `
+            <div class="photo-card">
+              <div style="font-weight: 700; font-size: 0.84rem; color: #1e40af; margin-bottom: 3px;">หัวหน้า${dept}</div>
+              <div style="font-weight: 700; font-size: 0.92rem; color: ${hasHead ? '#0f172a' : '#94a3b8'}; margin-bottom: 8px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 180px;">
+                ${escapeHtml(hName)}
+              </div>
+              <div class="photo-frame">
+                ${hImg ? `<img src="${resolveUrl(hImg)}" id="img_preview_${hId}" />` : `<i data-lucide="user" style="color: #cbd5e1; width: 32px; height: 32px;"></i>`}
+              </div>
+              ${hasHead ? `
+                <input type="file" id="file_${hId}" accept="image/*" style="display:none;" onchange="handleImageSelect('${hId}')" />
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" class="dg-btn-white" style="font-size: 0.78rem; padding: 4px 10px;" onclick="document.getElementById('file_${hId}').click()">
+                    ${hImg ? 'เปลี่ยนรูป' : 'อัปโหลด'}
+                  </button>
+                  ${hImg ? `<button type="button" class="dg-btn-white" style="font-size: 0.78rem; padding: 4px 8px; color: #ef4444;" onclick="removeImage('${hId}')"><i data-lucide="trash-2" style="width: 12px; height: 12px;"></i></button>` : ''}
+                </div>
+              ` : `
+                <div style="font-size: 0.72rem; color: #94a3b8;">เลือกในตารางด้านล่าง</div>
+              `}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
+    <!-- ==========================================
+         SECTION 2: MASTER TWO-COLUMN TABLE (143)
+         ========================================== -->
+    <div class="team-bento-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+        <div>
+          <h3 style="font-size: 1.12rem; font-weight: 750; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="list-checks" style="width: 20px; height: 20px; color: var(--dg-primary);"></i>
+            <span>กำหนดฝ่ายและตำแหน่งนักเรียน (2 คอลัมน์อิสระ • ${allMembers.length} คน)</span>
+          </h3>
+          <div style="font-size: 0.82rem; color: #64748b; margin-top: 3px;">
+            คอลัมน์ที่ 1: เลือกสังกัดฝ่าย | คอลัมน์ที่ 2: เลือกตำแหน่งในฝ่าย (หัวหน้าฝ่าย/สมาชิกฝ่าย/ผู้บริหาร)
+          </div>
+        </div>
+      </div>
+
+      <!-- Department Filter Tabs -->
+      <div class="dept-filter-tabs">
+        <button type="button" class="dept-tab-btn ${activeDeptFilter === 'ALL' ? 'active' : ''}" onclick="setDeptFilter('ALL')">
+          <span>ทั้งหมด</span>
+          <span class="badge-num">${allMembers.length}</span>
+        </button>
+        ${DEPARTMENTS.map(d => `
+          <button type="button" class="dept-tab-btn ${activeDeptFilter === d ? 'active' : ''}" onclick="setDeptFilter('${d}')">
+            <span>${d}</span>
+            <span class="badge-num">${stats[d] || 0}</span>
+          </button>
+        `).join('')}
+      </div>
+
+      <!-- Master Table -->
+      <table class="master-team-table">
         <thead>
           <tr>
-            <th style="width: 80px; text-align: center;">ลำดับ</th>
-            <th>ชื่อ-นามสกุล</th>
-            <th>ระดับชั้น / สังกัด</th>
-            <th style="width: 150px; text-align: center;">จัดการ</th>
+            <th style="width: 60px; text-align: center;">ลำดับ</th>
+            <th>ชื่อ - นามสกุล</th>
+            <th style="width: 80px; text-align: center;">ชั้น</th>
+            <th style="width: 200px;">คอลัมน์ 1: สังกัด/ฝ่าย</th>
+            <th style="width: 190px;">คอลัมน์ 2: ตำแหน่งในฝ่าย</th>
+            <th style="width: 170px; text-align: center;">สถานะในทำเนียบ</th>
           </tr>
         </thead>
         <tbody>
   `;
-  members.forEach((m, idx) => {
-    const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (m.name || '').replace(/\s+/g, ''));
-    const orderDisplay = m.order_no || (studentMatch ? studentMatch.order_no : idx + 1);
+
+  filtered.forEach((m, idx) => {
+    const roles = getRolesForDepartment(m.department);
+    const isLeadership = m.role === 'ประธาน' || m.role === 'หัวหน้าฝ่าย' || m.role === 'รองประธาน';
+
     html += `
       <tr>
-        <td style="text-align: center; color: #64748b; font-size: 0.88rem;">${idx + 1}</td>
-        <td style="font-weight: 600; color: #0f172a;">${escapeHtml(m.name)}</td>
-        <td style="color: #475569;">${escapeHtml(m.department || (studentMatch ? 'ม.' + studentMatch.grade : '-'))}</td>
+        <td style="text-align: center; font-weight: 700; color: #64748b; font-size: 0.86rem;">${m.order_no || (idx + 1)}</td>
+        <td>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem;">${escapeHtml(m.name)}</div>
+        </td>
+        <td style="text-align: center; font-weight: 600; color: #475569; font-size: 0.88rem;">
+          ${m.grade ? 'ม.' + escapeHtml(m.grade) : '-'}
+        </td>
+        <td>
+          <select class="col-select" onchange="handleDeptChange(${m.order_no}, this.value)">
+            ${DEPARTMENTS.map(d => `<option value="${d}" ${m.department === d ? 'selected' : ''}>${d}</option>`).join('')}
+          </select>
+        </td>
+        <td>
+          <select class="col-select ${isLeadership ? 'role-lead' : ''}" onchange="handleRoleChange(${m.order_no}, this.value)">
+            ${roles.map(r => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${r}</option>`).join('')}
+          </select>
+        </td>
         <td style="text-align: center;">
-          <button class="dg-btn-white" style="padding: 6px 10px; font-size: 0.8rem;" onclick="openMemberModal('${m.id}')">แก้ไข</button>
-          <button class="dg-btn-white" style="padding: 6px 10px; font-size: 0.8rem; color: #ef4444;" onclick="deleteMember('${m.id}')">ลบ</button>
+          ${renderStatusBadge(m.department, m.role)}
         </td>
       </tr>
     `;
   });
-  if (members.length === 0) html += `<tr><td colspan="4" style="text-align:center; padding:20px; color:#64748b;">ไม่มีข้อมูลสมาชิก</td></tr>`;
+
+  if (filtered.length === 0) {
+    html += `<tr><td colspan="6" style="text-align:center; padding:30px; color:#64748b;">ไม่พบรายชื่อตรงกับตัวกรอง</td></tr>`;
+  }
+
   html += `
         </tbody>
       </table>
-    </div>
 
-    <!-- MAIN SAVE BUTTON -->
-    <div style="text-align: center; margin-top: 40px; margin-bottom: 40px;">
-      <button class="dg-btn-black" onclick="saveTeamSettings()" style="font-size: 1.1rem; padding: 14px 40px; border-radius: 50px; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">
-        <i data-lucide="save" style="margin-right: 8px;"></i>
-        <span>บันทึกข้อมูลคณะทำงานทั้งหมด</span>
-      </button>
+      <!-- Bottom Save Button -->
+      <div style="text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+        <button class="dg-btn-black" onclick="saveTeamSettings()" style="font-size: 1.05rem; padding: 12px 36px; border-radius: 50px; box-shadow: 0 4px 14px rgba(0,0,0,0.12);">
+          <i data-lucide="save" style="margin-right: 8px;"></i>
+          <span>บันทึกข้อมูลทำเนียบสารวัตรนักเรียนทั้งหมด</span>
+        </button>
+      </div>
     </div>
-
   `;
 
   container.innerHTML = html;
   if (window.lucide) window.lucide.createIcons();
 }
 
-function onModalStudentSelect(orderNoStr) {
-  if (!orderNoStr) return;
-  const orderNo = parseInt(orderNoStr, 10);
-  const student = studentDirectory.find(s => s.order_no === orderNo);
-  if (!student) return;
-
-  document.getElementById('modalName').value = student.name;
-  const deptInput = document.getElementById('modalDept');
-  if (deptInput && (!deptInput.value || deptInput.value.startsWith('ม.') || deptInput.value.startsWith('สมาชิก'))) {
-    deptInput.value = 'ม.' + student.grade + (student.rank && student.rank !== 'สมาชิกทั่วไป' ? ` (${student.rank})` : '');
+function renderStatusBadge(dept, role) {
+  if (role === 'ประธาน') {
+    return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">👑 ประธาน</span>';
   }
-}
-window.onModalStudentSelect = onModalStudentSelect;
-
-function buildPresidentEditorCard(data) {
-  if (!data.id) data.id = 'pres_main';
-  const id = data.id;
-
-  const homeImg = data.homeImageUrl || data.imageUrl || '';
-  const teamImg = data.teamImageUrl || data.imageUrl || '';
-
-  const resolveUrl = (url) => {
-    if (!url) return '';
-    if (window.resolveImageUrl) return window.resolveImageUrl(url);
-    if (url.startsWith('/')) {
-      const base = (window.SarawatApi && window.SarawatApi.getBaseUrl) ? window.SarawatApi.getBaseUrl() : '';
-      return base + url;
-    }
-    return url;
-  };
-
-  const homeResolved = resolveUrl(homeImg);
-  const teamResolved = resolveUrl(teamImg);
-
-  const homeImgContent = homeResolved ? 
-    `<img src="${homeResolved}" id="img_preview_${id}_home" style="width: 100%; height: 100%; object-fit: cover;" />` : 
-    `<i data-lucide="user" id="img_icon_${id}_home" style="color: #cbd5e1; width: 44px; height: 44px;"></i><img id="img_preview_${id}_home" style="display:none; width: 100%; height: 100%; object-fit: cover;" />`;
-
-  const teamImgContent = teamResolved ? 
-    `<img src="${teamResolved}" id="img_preview_${id}_team" style="width: 100%; height: 100%; object-fit: cover;" />` : 
-    `<i data-lucide="user" id="img_icon_${id}_team" style="color: #cbd5e1; width: 44px; height: 44px;"></i><img id="img_preview_${id}_team" style="display:none; width: 100%; height: 100%; object-fit: cover;" />`;
-
-  const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (data.name || '').replace(/\s+/g, ''));
-  const matchBadge = '';
-
-  return `
-    <div class="team-edit-card" style="background: #fff; border: 1.5px solid #cbd5e1; border-radius: 16px; padding: 26px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px;">
-      <div class="team-edit-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--dg-border); padding-bottom: 16px; margin-bottom: 22px;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="background: #0f172a; color: #fff; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
-            <i data-lucide="crown" style="width: 18px; height: 18px;"></i>
-          </div>
-          <div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <h4 style="margin: 0; font-weight: 700; font-size: 1.15rem; color: #0f172a;">ประธานคณะกรรมการสารวัตรนักเรียน</h4>
-              ${matchBadge}
-            </div>
-            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">ตำแหน่งสูงสุด • เลือกระบุตัวบุคคลจากฐานข้อมูล และตั้งค่ารูปภาพแยก 2 หน้าเว็บ</div>
-          </div>
-        </div>
-        <span style="font-size: 0.76rem; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 9999px;">
-          อัตราส่วน 4:5
-        </span>
-      </div>
-
-      <!-- Quick Student Picker from SQLite Database -->
-      <div class="student-picker-wrap">
-        <div class="student-picker-label">
-          <i data-lucide="user-check" style="width: 15px; height: 15px;"></i>
-          <span>เลือกระบุตัวบุคคลผู้ดำรงตำแหน่งประธานจากฐานข้อมูลนักเรียน (ดึงลำดับ, ชื่อ, ชั้น, ตำแหน่งเดิมอัตโนมัติ)</span>
-        </div>
-        <select class="student-picker-select" onchange="selectStudentForPosition('${id}', this.value)">
-          ${buildStudentSelectOptions(data.name, data.order_no)}
-        </select>
-      </div>
-
-      <!-- General Info: Name, Role, Dept -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0;">
-        <div class="dg-form-group" style="margin-bottom: 0;">
-          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อ - นามสกุลประธาน <span style="color: #ef4444;">*</span></label>
-          <input type="text" class="dg-input" id="name_${id}" value="${escapeHtml(data.name || '')}" placeholder="ระบุชื่อ-นามสกุล..." onchange="updateMemberData('${id}', 'name')" style="background: #fff; width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />
-        </div>
-        <div class="dg-form-group" style="margin-bottom: 0;">
-          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">กลุ่มตำแหน่ง</label>
-          <input type="text" class="dg-input" value="ประธานคณะกรรมการสารวัตรนักเรียน" disabled style="background: #e2e8f0; color: #475569; font-weight: 600; width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />
-        </div>
-        <div class="dg-form-group" style="margin-bottom: 0;">
-          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ระดับชั้น / สังกัด</label>
-          <input type="text" class="dg-input" id="dept_${id}" value="${escapeHtml(data.department || '')}" placeholder="เช่น ชั้นมัธยมศึกษาปีที่ 5/1" onchange="updateMemberData('${id}', 'department')" style="background: #fff; width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />
-        </div>
-      </div>
-
-      <!-- Dual Photo Customization Box -->
-      <div style="border-top: 1px dashed #cbd5e1; padding-top: 20px;">
-        <div style="margin-bottom: 16px;">
-          <div style="font-weight: 700; font-size: 0.98rem; color: #0f172a; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="image" style="width: 18px; height: 18px; color: var(--dg-primary);"></i>
-            <span>กำหนดรูปภาพประธาน (แยกอิสระ 2 หน้า)</span>
-          </div>
-          <div style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">
-            สามารถอัปโหลดรูปภาพที่เหมาะสมสำหรับแต่ละหน้าได้อย่างอิสระ ทั้งสองรูปจะถูกแสดงผลด้วยอัตราส่วน 4:5 โดยอัตโนมัติ
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-          
-          <!-- Box 1: Home Page Photo -->
-          <div style="background: #f8fafc; border: 1.5px solid ${homeImg ? '#93c5fd' : '#e2e8f0'}; border-radius: 14px; padding: 18px; text-align: center; transition: all 0.2s ease;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-              <span style="font-weight: 700; font-size: 0.88rem; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="home" style="width: 15px; height: 15px;"></i> 1. รูปภาพหน้าหลัก (index.html)
-              </span>
-              <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: #e0f2fe; color: #0369a1; font-weight: 600;">
-                วิสัยทัศน์ประธาน
-              </span>
-            </div>
-            
-            <div style="width: 140px; aspect-ratio: 4 / 5; border-radius: 12px; margin: 0 auto 14px; background: #fff; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
-              ${homeImgContent}
-            </div>
-
-            <input type="file" id="file_${id}_home" accept="image/*" style="display: none;" onchange="handleImageSelect('${id}', 'home')" />
-            <div style="display: flex; gap: 8px; justify-content: center;">
-              <button type="button" class="dg-btn-black" style="padding: 7px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;" onclick="document.getElementById('file_${id}_home').click()">
-                <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
-                <span>${homeImg ? 'เปลี่ยนรูปหน้าหลัก' : 'อัปโหลดรูปหน้าหลัก'}</span>
-              </button>
-              ${homeImg ? `
-                <button type="button" class="dg-btn-white" style="padding: 7px 12px; font-size: 0.84rem; color: #ef4444; border-color: #fecaca; border-radius: 8px;" onclick="removeImage('${id}', 'home')" title="ลบรูปภาพ">
-                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                </button>
-              ` : ''}
-            </div>
-            <div style="font-size: 0.76rem; color: #64748b; margin-top: 10px;">
-              ใช้แสดงในคอลัมน์รูปภาพส่วน "วิสัยทัศน์ประธาน" บนหน้าแรก
-            </div>
-          </div>
-
-          <!-- Box 2: Team Page Photo -->
-          <div style="background: #f8fafc; border: 1.5px solid ${teamImg ? '#c4b5fd' : '#e2e8f0'}; border-radius: 14px; padding: 18px; text-align: center; transition: all 0.2s ease;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-              <span style="font-weight: 700; font-size: 0.88rem; color: #5b21b6; display: flex; align-items: center; gap: 6px;">
-                <i data-lucide="users" style="width: 15px; height: 15px;"></i> 2. รูปภาพหน้าคณะทำงาน (team.html)
-              </span>
-              <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: #f3e8ff; color: #7e22ce; font-weight: 600;">
-                ทำเนียบคณะบริหาร
-              </span>
-            </div>
-            
-            <div style="width: 140px; aspect-ratio: 4 / 5; border-radius: 12px; margin: 0 auto 14px; background: #fff; border: 1px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
-              ${teamImgContent}
-            </div>
-
-            <input type="file" id="file_${id}_team" accept="image/*" style="display: none;" onchange="handleImageSelect('${id}', 'team')" />
-            <div style="display: flex; gap: 8px; justify-content: center;">
-              <button type="button" class="dg-btn-black" style="padding: 7px 16px; font-size: 0.84rem; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;" onclick="document.getElementById('file_${id}_team').click()">
-                <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
-                <span>${teamImg ? 'เปลี่ยนรูปคณะทำงาน' : 'อัปโหลดรูปคณะทำงาน'}</span>
-              </button>
-              ${teamImg ? `
-                <button type="button" class="dg-btn-white" style="padding: 7px 12px; font-size: 0.84rem; color: #ef4444; border-color: #fecaca; border-radius: 8px;" onclick="removeImage('${id}', 'team')" title="ลบรูปภาพ">
-                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                </button>
-              ` : ''}
-            </div>
-            <div style="font-size: 0.76rem; color: #64748b; margin-top: 10px;">
-              ใช้แสดงเป็นการ์ดทำเนียบประธานขนาดใหญ่สุดในหน้าคณะทำงาน
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function buildEditorCard(data, title, expectedRole, canDelete = false, isFixed = false, deptName = '') {
-  if (!data.id) data.id = 'new_' + Date.now() + Math.random();
-  const id = data.id;
-
-  const resolveUrl = (url) => {
-    if (!url) return '';
-    if (window.resolveImageUrl) return window.resolveImageUrl(url);
-    if (url.startsWith('/')) {
-      const base = (window.SarawatApi && window.SarawatApi.getBaseUrl) ? window.SarawatApi.getBaseUrl() : '';
-      return base + url;
-    }
-    return url;
-  };
-
-  const resolvedImg = resolveUrl(data.imageUrl);
-
-  const imgContent = resolvedImg ? 
-    `<img src="${resolvedImg}" id="img_preview_${id}" style="width: 100%; height: 100%; object-fit: cover;" />` : 
-    `<i data-lucide="user" id="img_icon_${id}" style="color: #cbd5e1; width: 44px; height: 44px;"></i><img id="img_preview_${id}" style="display:none; width: 100%; height: 100%; object-fit: cover;" />`;
-
-  const deleteBtn = canDelete ? 
-    `<button class="dg-btn-white" style="color: #ef4444; border-color: #fecaca; padding: 6px 12px; font-size: 0.85rem;" onclick="deleteMember('${id}')"><i data-lucide="trash-2" style="width: 14px; height: 14px; margin-right: 4px;"></i>ลบ</button>` : '';
-
-  const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (data.name || '').replace(/\s+/g, ''));
-  const matchBadge = '';
-
-  // Render department members if this is a Department Head card
-  const deptMembersSection = isFixed && deptName ? buildDepartmentMembersSection(deptName) : '';
-
-  return `
-    <div class="team-edit-card" style="background: #fff; margin-bottom: 24px;">
-      <div class="team-edit-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <h4 style="margin:0; font-weight: 700; font-size: 1.05rem; color: #0f172a;">${title}</h4>
-          ${matchBadge}
-        </div>
-        ${deleteBtn}
-      </div>
-
-      <!-- Quick Selector from Database -->
-      <div class="student-picker-wrap">
-        <div class="student-picker-label">
-          <i data-lucide="user-check" style="width: 14px; height: 14px;"></i>
-          <span>เลือกผู้ดำรงตำแหน่งจากฐานข้อมูล (แสดง: ลำดับ, ชื่อ, ชั้น, ตำแหน่งเดิม)</span>
-        </div>
-        <select class="student-picker-select" onchange="selectStudentForPosition('${id}', this.value)">
-          ${buildStudentSelectOptions(data.name, data.order_no)}
-        </select>
-      </div>
-
-      <div class="team-grid">
-        <div class="team-img-col">
-          <div class="team-preview-img">
-            ${imgContent}
-          </div>
-          <input type="file" id="file_${id}" accept="image/*" style="display: none;" onchange="handleImageSelect('${id}')" />
-          <button class="dg-btn-white" style="width: 100%; padding: 6px; font-size: 0.85rem;" onclick="document.getElementById('file_${id}').click()">
-            <i data-lucide="upload" style="width: 13px; height: 13px; margin-right: 4px;"></i>
-            <span>${resolvedImg ? 'เปลี่ยนรูป' : 'อัปโหลดรูป'}</span>
-          </button>
-          ${resolvedImg ? `<button class="dg-btn-white" style="width: 100%; padding: 6px; font-size: 0.85rem; margin-top: 6px; color: #ef4444;" onclick="removeImage('${id}')">ลบรูป</button>` : ''}
-        </div>
-        <div>
-          <div class="dg-form-group" style="margin-bottom: 12px;">
-            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อ - นามสกุล ${!data.name ? '<span style="color:#f59e0b; font-size:0.8rem; font-weight:normal; margin-left: 8px;">(ยังไม่ได้ระบุ)</span>' : ''}</label>
-            <input type="text" class="dg-input" id="name_${id}" value="${escapeHtml(data.name || '')}" placeholder="ระบุชื่อ-นามสกุล..." onchange="updateMemberData('${id}', 'name')" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="dg-form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">กลุ่มตำแหน่ง</label>
-              ${isFixed ? 
-                `<input type="text" class="dg-input" value="${data.role}" disabled style="background: #f1f5f9; color: #64748b; font-weight: 600; width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />` : 
-                `<select class="dg-input" id="role_${id}" onchange="updateMemberData('${id}', 'role')" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
-                  <option value="ประธาน" ${data.role === 'ประธาน' ? 'selected' : ''}>ประธาน</option>
-                  <option value="รองประธาน" ${data.role === 'รองประธาน' ? 'selected' : ''}>รองประธาน</option>
-                  <option value="เลขานุการ" ${data.role === 'เลขานุการ' ? 'selected' : ''}>เลขานุการ</option>
-                  <option value="หัวหน้าฝ่าย" ${data.role === 'หัวหน้าฝ่าย' ? 'selected' : ''}>หัวหน้าฝ่าย</option>
-                  <option value="ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน" ${data.role === 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน' ? 'selected' : ''}>สมาชิกทั่วไป</option>
-                </select>`
-              }
-            </div>
-            <div class="dg-form-group" style="margin-bottom: 0;">
-              <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">สังกัดฝ่าย / ระดับชั้น</label>
-              ${isFixed ?
-                `<input type="text" class="dg-input" value="${escapeHtml(data.department || '')}" disabled style="background: #f1f5f9; color: #64748b; font-weight: 600; width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />` :
-                `<input type="text" class="dg-input" id="dept_${id}" value="${escapeHtml(data.department || '')}" placeholder="เช่น รองประธานคนที่ 1 (ม.5/2)" onchange="updateMemberData('${id}', 'department')" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px;" />`
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Department Members Subsection (Option A3) -->
-      ${deptMembersSection}
-    </div>
-  `;
-}
-
-/**
- * Render Department Members list under each department
- */
-function buildDepartmentMembersSection(dept) {
-  // Include all members of this department, placing หัวหน้าฝ่าย first
-  const deptMembers = allMembers.filter(m => m.department === dept);
-  deptMembers.sort((a, b) => {
-    if (a.role === 'หัวหน้าฝ่าย') return -1;
-    if (b.role === 'หัวหน้าฝ่าย') return 1;
-    return (a.order_no || 999) - (b.order_no || 999);
-  });
-
-  let html = `
-    <div style="margin-top: 18px; border-top: 1px dashed #e2e8f0; padding-top: 14px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <div style="font-weight: 700; font-size: 0.88rem; color: #334155; display: flex; align-items: center; gap: 6px;">
-          <i data-lucide="users" style="width: 16px; height: 16px; color: var(--dg-primary);"></i>
-          <span>คณะทำงานและสมาชิกประจำ${dept} (${deptMembers.length} คน)</span>
-        </div>
-        <button type="button" class="dg-btn-white" style="font-size: 0.8rem; padding: 4px 12px; border-radius: 6px;" onclick="openAddDeptMemberModal('${dept}')">
-          <i data-lucide="plus" style="width: 12px; height: 12px; margin-right: 4px;"></i>
-          <span>เพิ่มสมาชิกเข้าฝ่าย</span>
-        </button>
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-  `;
-
-  if (deptMembers.length === 0) {
-    html += `<span style="font-size: 0.82rem; color: #94a3b8; padding: 4px 0;">ยังไม่มีสมาชิกในฝ่ายนี้</span>`;
-  } else {
-    deptMembers.forEach(dm => {
-      const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === (dm.name || '').replace(/\s+/g, ''));
-      const grade = studentMatch ? studentMatch.grade : '';
-      const gradeStr = grade ? `ม.${grade}` : '';
-      const isHead = dm.role === 'หัวหน้าฝ่าย';
-
-      if (isHead) {
-        html += `
-          <span style="display: inline-flex; align-items: center; gap: 6px; background: #eff6ff; border: 1.5px solid #93c5fd; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; color: #1e40af;">
-            <i data-lucide="crown" style="width: 13px; height: 13px; color: #2563eb;"></i>
-            <span style="font-weight: 700;">${escapeHtml(dm.name)}</span>
-            <span style="font-size: 0.72rem; background: #dbeafe; color: #1d4ed8; padding: 1px 6px; border-radius: 4px; font-weight: 600;">หัวหน้าฝ่าย${gradeStr ? ' • ' + gradeStr : ''}</span>
-          </span>
-        `;
-      } else {
-        const gradeDisplay = gradeStr ? ` (${gradeStr})` : '';
-        html += `
-          <span style="display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem;">
-            <span style="font-weight: 700; color: #0f172a;">${escapeHtml(dm.name)}${gradeDisplay}</span>
-            <button type="button" style="border: none; background: transparent; color: #ef4444; cursor: pointer; padding: 0 2px;" onclick="deleteMember('${dm.id}')" title="นำออกจากฝ่ายนี้">
-              <i data-lucide="x" style="width: 12px; height: 12px;"></i>
-            </button>
-          </span>
-        `;
-      }
-    });
+  if (role === 'รองประธาน') {
+    return '<span style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">⭐ รองประธาน</span>';
   }
-
-  html += `</div></div>`;
-  return html;
+  if (role === 'เลขานุการ') {
+    return '<span style="background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">📝 เลขานุการ</span>';
+  }
+  if (role === 'หัวหน้าฝ่าย') {
+    return `<span style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">👑 หัวหน้า${dept}</span>`;
+  }
+  if (dept && dept !== 'สมาชิกทั่วไป' && dept !== 'คณะผู้บริหาร') {
+    return `<span style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600;">สมาชิก${dept}</span>`;
+  }
+  return '<span style="background: #f1f5f9; color: #64748b; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem;">สมาชิกทั่วไป</span>';
 }
 
-function updateMemberData(id, field) {
-  let inputEl = document.getElementById(field === 'department' ? 'dept_' + id : field + '_' + id);
-  if (!inputEl) return;
-  let val = inputEl.value;
-  let m = allMembers.find(x => x.id === id);
-  if (!m) {
-    m = { id, name: '', role: 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน', department: '', imageUrl: '' };
-    allMembers.push(m);
+function resolveUrl(url) {
+  if (!url) return '';
+  if (window.resolveImageUrl) return window.resolveImageUrl(url);
+  if (url.startsWith('/')) {
+    const base = (window.SarawatApi && window.SarawatApi.getBaseUrl) ? window.SarawatApi.getBaseUrl() : '';
+    return base + url;
   }
-  m[field] = val;
-
-  // Try matching student in directory to sync order_no
-  if (field === 'name') {
-    const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === val.replace(/\s+/g, ''));
-    if (studentMatch) {
-      m.order_no = studentMatch.order_no;
-      m.student_id = studentMatch.order_no;
-    }
-  }
-
-  if (field === 'role') {
-    renderTeamAdminUI();
-  }
+  return url;
 }
-window.updateMemberData = updateMemberData;
-
-function addExecutive(role) {
-  allMembers.unshift({
-    id: 'm_' + Date.now(),
-    name: '',
-    role: role,
-    department: '',
-    imageUrl: ''
-  });
-  renderTeamAdminUI();
-}
-window.addExecutive = addExecutive;
-
-async function deleteMember(id) {
-  let m = allMembers.find(x => x.id === id);
-  const name = m && m.name ? m.name : 'สมาชิกท่านนี้';
-
-  if (typeof Swal !== 'undefined') {
-    const result = await Swal.fire({
-      title: 'ยืนยันการลบสมาชิก?',
-      text: `คุณต้องการลบ "${name}" ออกจากตำแหน่งนี้ใช่หรือไม่?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#dc2626',
-      cancelButtonColor: '#64748b',
-      confirmButtonText: 'ใช่, ลบข้อมูล',
-      cancelButtonText: 'ยกเลิก',
-      customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
-    });
-    if (!result.isConfirmed) return;
-  } else {
-    if (!confirm(`ต้องการลบ "${name}" ใช่หรือไม่?`)) return;
-  }
-
-  allMembers = allMembers.filter(x => x.id !== id);
-  try {
-    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-  } catch (e) {}
-  renderTeamAdminUI();
-  if (window.showToast) window.showToast(`ลบ "${name}" เรียบร้อยแล้ว`, 'success');
-}
-window.deleteMember = deleteMember;
 
 async function handleImageSelect(id, target = 'default') {
   const inputId = target === 'default' ? 'file_' + id : 'file_' + id + '_' + target;
@@ -1063,24 +696,11 @@ async function handleImageSelect(id, target = 'default') {
   const file = fileInput.files[0];
 
   try {
-    const previewId = target === 'default' ? 'img_preview_' + id : 'img_preview_' + id + '_' + target;
-    const iconId = target === 'default' ? 'img_icon_' + id : 'img_icon_' + id + '_' + target;
-    const previewImg = document.getElementById(previewId);
-    const icon = document.getElementById(iconId);
-    if (icon) icon.style.display = 'none';
-    if (previewImg) {
-      previewImg.style.display = 'block';
-      previewImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12a9 9 0 1 1-6.219-8.56'/%3E%3C/svg%3E";
-      previewImg.classList.add('dg-spin');
-    }
-
     const res = await window.SarawatApi.uploadImage(file);
     if (res && res.url) {
       let m = allMembers.find(x => x.id === id);
-      if (!m) {
-        m = { id, name: '', role: 'ประธาน', department: '', imageUrl: '', homeImageUrl: '', teamImageUrl: '' };
-        allMembers.push(m);
-      }
+      if (!m) return;
+
       if (target === 'home') {
         m.homeImageUrl = res.url;
         try { localStorage.setItem('dg_sarawat_president_home_image', res.url); } catch (e) {}
@@ -1094,222 +714,45 @@ async function handleImageSelect(id, target = 'default') {
         if (!m.teamImageUrl) m.teamImageUrl = res.url;
       }
 
-      try {
-        localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-      } catch (e) {}
-
+      notifyDraftChanged();
       renderTeamAdminUI();
       if (window.showToast) window.showToast('อัปโหลดรูปภาพสำเร็จ', 'success');
     }
   } catch (err) {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
-        icon: 'error',
-        title: 'อัปโหลดไม่สำเร็จ',
-        text: err.message,
-        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
-      });
-    } else {
-      alert('อัปโหลดไม่สำเร็จ: ' + err.message);
-    }
-    renderTeamAdminUI();
+    if (window.showToast) window.showToast('อัปโหลดไม่สำเร็จ: ' + err.message, 'error');
+    else alert('อัปโหลดไม่สำเร็จ: ' + err.message);
   }
 }
 window.handleImageSelect = handleImageSelect;
 
 function removeImage(id, target = 'default') {
   let m = allMembers.find(x => x.id === id);
-  if (m) {
-    if (target === 'home') {
-      m.homeImageUrl = '';
-      try { localStorage.removeItem('dg_sarawat_president_home_image'); } catch (e) {}
-    } else if (target === 'team') {
-      m.teamImageUrl = '';
-      try { localStorage.removeItem('dg_sarawat_president_team_image'); } catch (e) {}
-    } else {
-      m.imageUrl = '';
-      m.homeImageUrl = '';
-      m.teamImageUrl = '';
-    }
-    try {
-      localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-    } catch (e) {}
-    renderTeamAdminUI();
-    if (window.showToast) window.showToast('ลบรูปภาพเรียบร้อยแล้ว', 'info');
+  if (!m) return;
+
+  if (target === 'home') {
+    m.homeImageUrl = '';
+    try { localStorage.removeItem('dg_sarawat_president_home_image'); } catch (e) {}
+  } else if (target === 'team') {
+    m.teamImageUrl = '';
+    m.imageUrl = '';
+    try { localStorage.removeItem('dg_sarawat_president_team_image'); } catch (e) {}
+  } else {
+    m.imageUrl = '';
+    m.homeImageUrl = '';
+    m.teamImageUrl = '';
   }
+
+  notifyDraftChanged();
+  renderTeamAdminUI();
+  if (window.showToast) window.showToast('ลบรูปภาพเรียบร้อยแล้ว', 'info');
 }
 window.removeImage = removeImage;
 
-// Modal Logic
-function openMemberModal(id = null) {
-  const modal = document.getElementById('memberModal');
-  if (!modal) {
-    console.warn('memberModal not found in DOM');
-    return;
-  }
-  const title = document.getElementById('modalTitle');
-  const deptInput = document.getElementById('modalDept');
-  if (deptInput) deptInput.readOnly = false;
-
-  let currentName = '';
-  let currentOrderNo = null;
-
-  if (id) {
-    const m = allMembers.find(x => String(x.id) === String(id));
-    if (m) {
-      if (title) title.textContent = 'แก้ไขข้อมูลสมาชิก';
-      document.getElementById('modalMemberId').value = m.id;
-      document.getElementById('modalName').value = m.name || '';
-      document.getElementById('modalRole').value = m.role || 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
-      if (deptInput) deptInput.value = m.department || '';
-      currentName = m.name || '';
-      currentOrderNo = m.order_no || null;
-    }
-  } else {
-    if (title) title.textContent = 'เพิ่มสมาชิกใหม่';
-    document.getElementById('modalMemberId').value = '';
-    document.getElementById('modalName').value = '';
-    document.getElementById('modalRole').value = 'ผู้ปฏิบัติหน้าที่สารวัตรนักเรียน';
-    if (deptInput) deptInput.value = 'สมาชิกทั่วไป';
-  }
-
-  const sel = document.getElementById('modalStudentSelect');
-  if (sel) sel.innerHTML = buildStudentSelectOptions(currentName, currentOrderNo);
-
-  modal.classList.add('active');
-  modal.style.display = 'flex';
-  modal.style.opacity = '1';
-  modal.style.visibility = 'visible';
-  modal.style.pointerEvents = 'auto';
-  modal.style.zIndex = '9650';
-  document.body.style.overflow = 'hidden';
-  if (window.lucide) window.lucide.createIcons();
-}
-window.openMemberModal = openMemberModal;
-
-function openAddDeptMemberModal(dept) {
-  targetDeptForAdd = dept;
-  const modal = document.getElementById('memberModal');
-  if (!modal) return;
-
-  const title = document.getElementById('modalTitle');
-  if (title) title.textContent = `เพิ่มสมาชิกเข้า${dept}`;
-  document.getElementById('modalMemberId').value = '';
-  document.getElementById('modalName').value = '';
-  document.getElementById('modalRole').value = 'สมาชิก' + dept;
-  const deptInput = document.getElementById('modalDept');
-  if (deptInput) {
-    deptInput.value = dept;
-    deptInput.readOnly = true;
-  }
-  const sel = document.getElementById('modalStudentSelect');
-  if (sel) sel.innerHTML = buildStudentSelectOptions('', null);
-
-  modal.classList.add('active');
-  modal.style.display = 'flex';
-  modal.style.opacity = '1';
-  modal.style.visibility = 'visible';
-  modal.style.pointerEvents = 'auto';
-  modal.style.zIndex = '9650';
-  document.body.style.overflow = 'hidden';
-  if (window.lucide) window.lucide.createIcons();
-}
-window.openAddDeptMemberModal = openAddDeptMemberModal;
-
-function closeMemberModal() {
-  const modal = document.getElementById('memberModal');
-  if (modal) {
-    modal.classList.remove('active');
-    modal.style.display = 'none';
-    modal.style.opacity = '';
-    modal.style.visibility = '';
-    modal.style.pointerEvents = '';
-    document.body.style.overflow = '';
-  }
-}
-window.closeMemberModal = closeMemberModal;
-
-function saveMemberModal() {
-  const id = document.getElementById('modalMemberId').value;
-  const name = document.getElementById('modalName').value.trim();
-  const role = document.getElementById('modalRole').value;
-  const dept = document.getElementById('modalDept').value.trim();
-
-  if (!name) {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
-        icon: 'warning',
-        title: 'กรุณาระบุชื่อ-นามสกุล',
-        text: 'ชื่อ-นามสกุลไม่สามารถเว้นว่างได้',
-        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
-      });
-    } else {
-      alert('กรุณาระบุชื่อ-นามสกุล');
-    }
-    return;
-  }
-
-  // Find match in student directory to extract order_no and student_id
-  const studentMatch = studentDirectory.find(s => s.name.replace(/\s+/g, '') === name.replace(/\s+/g, ''));
-  const orderNo = studentMatch ? studentMatch.order_no : null;
-
-  // Check if student already exists in allMembers
-  const existingByOrder = orderNo ? allMembers.find(x => x.order_no === orderNo) : null;
-  const existingByName = allMembers.find(x => (x.name || '').replace(/\s+/g, '') === name.replace(/\s+/g, ''));
-  const foundExisting = existingByOrder || existingByName;
-
-  if (foundExisting) {
-    // Update existing member in place - DO NOT CREATE DUPLICATE
-    foundExisting.name = name;
-    if (role && role !== foundExisting.role && foundExisting.role !== 'หัวหน้าฝ่าย') {
-      foundExisting.role = role;
-    }
-    foundExisting.department = dept;
-    if (orderNo) {
-      foundExisting.order_no = orderNo;
-      foundExisting.student_id = orderNo;
-    }
-  } else if (id && allMembers.some(x => String(x.id) === String(id))) {
-    const existingIdx = allMembers.findIndex(x => String(x.id) === String(id));
-    allMembers[existingIdx].name = name;
-    allMembers[existingIdx].role = role;
-    allMembers[existingIdx].department = dept;
-    if (orderNo) {
-      allMembers[existingIdx].order_no = orderNo;
-      allMembers[existingIdx].student_id = orderNo;
-    }
-  } else {
-    allMembers.push({
-      id: id || ('m_' + Date.now()),
-      student_id: orderNo,
-      order_no: orderNo,
-      name: name,
-      role: role,
-      department: dept,
-      imageUrl: '',
-      homeImageUrl: '',
-      teamImageUrl: ''
-    });
-  }
-
-  deduplicateAllMembers();
+async function saveTeamSettings() {
+  const presMember = allMembers.find(m => m.role === 'ประธาน');
 
   try {
     localStorage.setItem('dg_sarawat_team_members', JSON.stringify(allMembers));
-  } catch (e) {}
-
-  closeMemberModal();
-  renderTeamAdminUI();
-  if (window.showToast) window.showToast('บันทึกข้อมูลสมาชิกแล้ว', 'success');
-}
-window.saveMemberModal = saveMemberModal;
-
-async function saveTeamSettings() {
-  const validMembers = allMembers.filter(m => m.name && m.name.trim() !== '');
-  const presMember = validMembers.find(m => m.role === 'ประธาน');
-
-  try {
-    localStorage.setItem('dg_sarawat_team_members', JSON.stringify(validMembers));
     if (presMember) {
       if (presMember.homeImageUrl) localStorage.setItem('dg_sarawat_president_home_image', presMember.homeImageUrl);
       else localStorage.removeItem('dg_sarawat_president_home_image');
@@ -1322,7 +765,7 @@ async function saveTeamSettings() {
   let savedOnline = false;
   try {
     const payload = {
-      team_members_db: JSON.stringify(validMembers),
+      team_members_db: JSON.stringify(allMembers),
       president_home_image: presMember ? (presMember.homeImageUrl || '') : '',
       president_team_image: presMember ? (presMember.teamImageUrl || presMember.imageUrl || '') : ''
     };
@@ -1347,10 +790,11 @@ async function saveTeamSettings() {
     }
 
     if (savedOnline) {
-      if (window.showToast) window.showToast('บันทึกข้อมูลคณะทำงานลงฐานข้อมูลเรียบร้อยแล้ว!', 'success');
-      else alert('บันทึกข้อมูลสำเร็จ!');
+      hasUnsavedChanges = false;
+      if (window.showToast) window.showToast('บันทึกข้อมูลทำเนียบ 143 คนลงฐานข้อมูลเรียบร้อยแล้ว!', 'success');
+      else alert('บันทึกข้อมูลทำเนียบสำเร็จ!');
     } else {
-      if (window.showToast) window.showToast('บันทึกข้อมูลคณะทำงานลงเครื่องเรียบร้อย (Local Draft)', 'warning');
+      if (window.showToast) window.showToast('บันทึกข้อมูลทำเนียบลงเครื่องเรียบร้อย (Local Draft)', 'warning');
       else alert('บันทึกข้อมูลลงเครื่องเรียบร้อย!');
     }
   } catch (err) {
