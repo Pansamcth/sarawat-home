@@ -86,7 +86,7 @@
 
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.2.0"></script>
+  <script src="js/api-config.js?v=2.7.6"></script>
   <script src="js/page-guard.js" data-page="calendar"></script>
   <script src="js/skeletons.js"></script>
 
@@ -2057,24 +2057,23 @@
     async function loadDynamicCalendarTags() {
       // 1. Instant Cache-First render from localStorage to eliminate layout shift
       try {
-        const cached = localStorage.getItem('dg_sarawat_tags_all') || localStorage.getItem('dg_sarawat_tags_events');
+        const cached = localStorage.getItem('dg_sarawat_tags_events');
         if (cached) {
           const parsed = JSON.parse(cached);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            const cleanTags = parsed.filter(t => t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
+            const cleanTags = parsed.filter(t => (t.target_type === 'events' || t.target_type === 'all' || !t.target_type) && t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
             renderCalendarPills(cleanTags);
           }
         }
       } catch (e) {}
 
-      // 2. Fetch fresh tags from Backend Database API (all tags)
+      // 2. Fetch fresh tags from Backend Database API specifically for events
       if (!window.SarawatApi || !window.SarawatApi.getTags) return;
       try {
-        const tags = await window.SarawatApi.getTags('all');
+        const tags = await window.SarawatApi.getTags('events');
         if (Array.isArray(tags) && tags.length > 0) {
-          const cleanTags = tags.filter(t => t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
+          const cleanTags = tags.filter(t => (t.target_type === 'events' || t.target_type === 'all' || !t.target_type) && t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
           try {
-            localStorage.setItem('dg_sarawat_tags_all', JSON.stringify(tags));
             localStorage.setItem('dg_sarawat_tags_events', JSON.stringify(cleanTags));
           } catch (e) {}
           renderCalendarPills(cleanTags);

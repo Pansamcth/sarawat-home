@@ -101,8 +101,8 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- High-Security Database Gateway Config (with Cache-Buster) -->
-  <script src="cloudflare-config.js?v=2.7.5"></script>
-  <script src="js/api-config.js?v=2.7.5"></script>
+  <script src="cloudflare-config.js?v=2.7.6"></script>
+  <script src="js/api-config.js?v=2.7.6"></script>
   
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
@@ -7340,16 +7340,28 @@
 
       container.innerHTML = relevant.map(tag => {
         const isSelected = selectedNewsTagIds.has(Number(tag.id));
-        const activeBorder = isSelected ? `2.5px solid ${tag.color || '#0f172a'}` : `1px dashed #cbd5e1`;
-        const activeOpacity = isSelected ? '1' : '0.6';
-        const activeScale = isSelected ? 'scale(1.05)' : 'scale(1)';
-        const checkIcon = isSelected ? '<i data-lucide="check" style="width:11px;height:11px;margin-right:2px;stroke-width:3;"></i>' : '';
+        const color = tag.color || '#2563eb';
+        const bg = tag.bg_color || '#eff6ff';
+        const border = tag.border_color || '#93c5fd';
+        const icon = tag.icon || 'tag';
 
-        return `
-          <button type="button" class="tag-selector-chip" onclick="toggleNewsTagSelection(${tag.id})" style="border: ${activeBorder}; opacity: ${activeOpacity}; transform: ${activeScale}; transition: all 0.15s ease; cursor: pointer; background: transparent; padding: 0; border-radius: 9999px;">
-            ${window.renderTagBadgesHtml ? window.renderTagBadgesHtml(tag) : tag.name}
-          </button>
-        `;
+        if (isSelected) {
+          return `
+            <button type="button" class="tag-selector-chip active" onclick="toggleNewsTagSelection(${tag.id})" title="คลิกเพื่อยกเลิกการเลือกแท็กนี้" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: ${bg}; color: ${color}; border: 2px solid ${color}; font-size: 0.82rem; font-weight: 800; cursor: pointer; box-shadow: 0 2px 8px ${color}33, 0 0 0 2px ${color}22; transform: scale(1.02); transition: all 0.15s ease;">
+              <i data-lucide="check" style="width: 13px; height: 13px; stroke-width: 3;"></i>
+              <span>${escapeHtml(tag.name)}</span>
+              <span style="font-size: 0.68rem; margin-left: 2px; opacity: 0.75;">✕</span>
+            </button>
+          `;
+        } else {
+          return `
+            <button type="button" class="tag-selector-chip unselected" onclick="toggleNewsTagSelection(${tag.id})" title="คลิกเพื่อเลือกแท็กนี้" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #ffffff; color: #64748b; border: 1.5px dashed #cbd5e1; font-size: 0.82rem; font-weight: 600; cursor: pointer; opacity: 0.8; transition: all 0.15s ease;" onmouseenter="this.style.opacity='1'; this.style.borderColor='${color}'; this.style.color='${color}';" onmouseleave="this.style.opacity='0.8'; this.style.borderColor='#cbd5e1'; this.style.color='#64748b';">
+              <i data-lucide="${icon}" style="width: 12px; height: 12px; stroke-width: 2.2; opacity: 0.7;"></i>
+              <span>${escapeHtml(tag.name)}</span>
+              <span style="font-size: 0.72rem; color: #94a3b8;">+</span>
+            </button>
+          `;
+        }
       }).join(' ');
 
       if (window.lucide) lucide.createIcons();
@@ -7429,18 +7441,18 @@
         countBadge.style.borderColor = count > 0 ? '#86efac' : '#cbd5e1';
       }
 
-      const allTags = cachedAdminTags || [];
-      if (allTags.length === 0) {
+      const relevantTags = (cachedAdminTags || []).filter(t => t.target_type === 'events' || t.target_type === 'all');
+      if (relevantTags.length === 0) {
         container.innerHTML = `
           <div style="font-size:0.8rem; color:#64748b; display: flex; align-items: center; gap: 8px;">
-            <span>(ยังไม่มีรายการแท็กในระบบ)</span>
-            <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 2px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700;">+ สร้างแท็กแรก</button>
+            <span>(ยังไม่มีรายการแท็กกิจกรรมในระบบ)</span>
+            <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 2px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700;">+ สร้างแท็กกิจกรรม</button>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = allTags.map(tag => {
+      container.innerHTML = relevantTags.map(tag => {
         const isSelected = selectedEventTagIds.has(Number(tag.id));
         const color = tag.color || '#2563eb';
         const bg = tag.bg_color || '#eff6ff';
@@ -7480,7 +7492,8 @@
     }
 
     function selectAllEventTags() {
-      (cachedAdminTags || []).forEach(t => selectedEventTagIds.add(Number(t.id)));
+      const relevantTags = (cachedAdminTags || []).filter(t => t.target_type === 'events' || t.target_type === 'all');
+      relevantTags.forEach(t => selectedEventTagIds.add(Number(t.id)));
       renderEventTagsSelector();
     }
 
@@ -9774,8 +9787,8 @@
       checkAuth();
     });
   </script>
-  <script src="js/admin-team.js"></script>
-  <script src="js/admin-recruitment.js?v=2.7.5"></script>
+  <script src="js/admin-team.js?v=2.7.6"></script>
+  <script src="js/admin-recruitment.js?v=2.7.6"></script>
 </body>
 
 </html>
