@@ -86,7 +86,7 @@
 
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.7.6"></script>
+  <script src="js/api-config.js?v=2.7.8"></script>
   <script src="js/page-guard.js" data-page="calendar"></script>
   <script src="js/skeletons.js"></script>
 
@@ -476,6 +476,48 @@
       display: inline-flex;
       align-items: center;
       flex-shrink: 0;
+    }
+
+    /* Past Events & Past Days Styling (Muted / Grey) */
+    .dg-cal-event-bar.is-past {
+      background: #f1f5f9 !important;
+      color: #64748b !important;
+      border-color: #cbd5e1 !important;
+      box-shadow: none !important;
+      opacity: 0.85;
+    }
+    .dg-cal-event-bar.is-past.is-single-day {
+      background: #f8fafc !important;
+      border-left-color: #94a3b8 !important;
+      color: #64748b !important;
+    }
+    .dg-cal-event-bar.is-past .dg-cal-bar-dot {
+      background: #94a3b8 !important;
+    }
+    .dg-cal-event-bar.is-past .dg-cal-bar-badge {
+      background: #e2e8f0 !important;
+      color: #475569 !important;
+    }
+    .dg-cal-event-bar.is-past .dg-cal-bar-title {
+      color: #64748b !important;
+    }
+    .dg-cal-event-bar.is-past .dg-cal-bar-arrow {
+      color: #94a3b8 !important;
+    }
+    .dg-cal-event-bar.is-past:hover {
+      opacity: 1;
+      background: #e2e8f0 !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+    }
+    .dg-cal-day-bg.is-past-day {
+      background: rgba(248, 250, 252, 0.7);
+    }
+    .dg-cal-day-bg.is-past-day .dg-cal-date-num {
+      color: #94a3b8;
+    }
+    .dg-cal-view-btn.active .dg-cal-count-pill {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
     }
 
     .dg-cal-bar-dot {
@@ -1031,7 +1073,12 @@
           </button>
           <button type="button" class="dg-cal-view-btn" id="btnViewList" onclick="switchCalendarView('list')">
             <i data-lucide="list" style="width: 15px; height: 15px;"></i>
-            <span>รายการกำหนดการ</span>
+            <span>กำหนดการปัจจุบัน</span>
+          </button>
+          <button type="button" class="dg-cal-view-btn" id="btnViewPast" onclick="switchCalendarView('past')">
+            <i data-lucide="history" style="width: 15px; height: 15px;"></i>
+            <span>กิจกรรมที่ผ่านมา</span>
+            <span class="dg-cal-count-pill" id="calPastCountBadge" style="display:none; font-size: 0.72rem; padding: 1px 7px; border-radius: 999px; background: rgba(0,0,0,0.08); margin-left: 2px;">0</span>
           </button>
         </div>
 
@@ -1694,12 +1741,14 @@
       currentViewMode = mode;
       const btnMonth = document.getElementById('btnViewMonth');
       const btnList = document.getElementById('btnViewList');
+      const btnPast = document.getElementById('btnViewPast');
       const monthWrap = document.getElementById('calendarMonthViewWrap');
       const listWrap = document.getElementById('calendarListViewWrap');
       const monthNav = document.getElementById('calMonthNavToolbar');
 
       if (btnMonth) btnMonth.classList.toggle('active', mode === 'month');
       if (btnList) btnList.classList.toggle('active', mode === 'list');
+      if (btnPast) btnPast.classList.toggle('active', mode === 'past');
 
       if (mode === 'month') {
         if (monthWrap) monthWrap.style.display = 'block';
@@ -1710,7 +1759,9 @@
         if (monthWrap) monthWrap.style.display = 'none';
         if (listWrap) listWrap.style.display = 'block';
         if (monthNav) monthNav.style.display = 'none';
+        renderCalendarEvents();
       }
+      updateResultCountLabel();
       if (window.lucide) window.lucide.createIcons();
     }
 
@@ -1796,11 +1847,15 @@
             return e >= mStart && s <= mEnd;
           });
           countLabel.textContent = 'กิจกรรมในปฏิทิน ' + thaiMonthName + ' ' + thaiYear + ' (พบ ' + monthEvents.length + ' รายการ)';
+        } else if (currentViewMode === 'past') {
+          const pastEvents = filtered.filter(evt => getEventStatus(evt).key === 'ended');
+          countLabel.textContent = 'แสดงกิจกรรมที่สิ้นสุดแล้วทั้งหมด ' + pastEvents.length + ' รายการ';
         } else {
+          const activeEvents = filtered.filter(evt => getEventStatus(evt).key !== 'ended');
           if (selectedCategory === 'all' && !searchQuery) {
-            countLabel.textContent = 'แสดงกิจกรรมทั้งหมด ' + filtered.length + ' รายการ';
+            countLabel.textContent = 'แสดงกำหนดการปัจจุบัน ' + activeEvents.length + ' รายการ';
           } else {
-            countLabel.textContent = 'พบ ' + filtered.length + ' จากทั้งหมด ' + calendarEventsCache.length + ' รายการ';
+            countLabel.textContent = 'พบกำหนดการปัจจุบัน ' + activeEvents.length + ' จากทั้งหมด ' + calendarEventsCache.length + ' รายการ';
           }
         }
       }
@@ -1838,12 +1893,24 @@
         let bgCellsHtml = '';
         week.forEach(day => {
           const isToday = (day.ymd === todayIso);
+          const isPastDay = (day.ymd < todayIso);
           const otherMonthClass = !day.isCurrentMonth ? ' is-other-month' : '';
           const todayClass = isToday ? ' is-today' : '';
-          bgCellsHtml += '<div class="dg-cal-day-bg' + otherMonthClass + todayClass + '" data-ymd="' + day.ymd + '">' +
+          const pastDayClass = isPastDay ? ' is-past-day' : '';
+          bgCellsHtml += '<div class="dg-cal-day-bg' + otherMonthClass + todayClass + pastDayClass + '" data-ymd="' + day.ymd + '">' +
             '<span class="dg-cal-date-num" title="' + day.ymd + '">' + day.dayNum + '</span>' +
           '</div>';
         });
+
+        // Determine today column index in this 7-day row (1..7)
+        let todayCol = 0;
+        if (todayIso >= weekStartYmd && todayIso <= weekEndYmd) {
+          todayCol = getDayDifference(weekStartYmd, todayIso) + 1;
+        } else if (weekEndYmd < todayIso) {
+          todayCol = 8; // Whole week is in the past
+        } else {
+          todayCol = 0; // Whole week is in the future
+        }
 
         // 2. Find intersecting events for this week
         const weekEvents = [];
@@ -1910,9 +1977,50 @@
           }
         });
 
-        // 3. Build Events Layer Bars
-        let eventsLayerHtml = '';
+        // 3. Build Events Layer Bars (Splitting multi-day past vs active on same row)
+        const renderBars = [];
         weekEvents.forEach(item => {
+          if (item.isMultiDay && item.startCol < todayCol && item.endCol >= todayCol) {
+            // Split into Past portion and Active portion sharing the exact same gridRow
+            // 1. Past portion (from item.startCol to todayCol - 1)
+            const pastEndCol = todayCol - 1;
+            const pastSpan = pastEndCol - item.startCol + 1;
+            renderBars.push({
+              ...item,
+              startCol: item.startCol,
+              endCol: pastEndCol,
+              span: pastSpan,
+              continuesPrev: item.continuesPrev,
+              continuesNext: true,
+              isPast: true,
+              splitPart: 'past'
+            });
+
+            // 2. Active portion (from todayCol onward)
+            const activeStartCol = todayCol;
+            const activeSpan = item.endCol - activeStartCol + 1;
+            renderBars.push({
+              ...item,
+              startCol: activeStartCol,
+              endCol: item.endCol,
+              span: activeSpan,
+              continuesPrev: true,
+              continuesNext: item.continuesNext,
+              isPast: false,
+              splitPart: 'active'
+            });
+          } else {
+            const isPast = (item.endCol < todayCol);
+            renderBars.push({
+              ...item,
+              isPast: isPast
+            });
+          }
+        });
+
+        let eventsLayerHtml = '';
+        renderBars.forEach(item => {
+          const pastClass = item.isPast ? ' is-past' : '';
           const catClass = 'cat-' + item.category;
           const multiClass = item.isMultiDay ? ' is-multi-day' : ' is-single-day';
           const prevClass = item.continuesPrev ? ' continues-prev' : '';
@@ -1934,7 +2042,7 @@
             } else if (item.dayText) {
               badgeLabel = item.dayText;
             }
-            const badgeText = badgeLabel ? '<span class="dg-cal-bar-badge" title="' + escapeHtml(item.dateInfo?.rangePillText || item.title) + '">' + escapeHtml(badgeLabel) + '</span>' : '';
+            const badgeText = (badgeLabel && item.splitPart !== 'active') ? '<span class="dg-cal-bar-badge" title="' + escapeHtml(item.dateInfo?.rangePillText || item.title) + '">' + escapeHtml(badgeLabel) + '</span>' : '';
             contentInner = arrowPrev + badgeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>' + arrowNext;
           } else {
             // Single-Day Event Pill
@@ -1942,7 +2050,7 @@
             contentInner = '<span class="dg-cal-bar-dot"></span>' + timeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>';
           }
 
-          eventsLayerHtml += '<div class="dg-cal-event-bar ' + catClass + multiClass + prevClass + nextClass + '" style="' + style + '" onclick="openEventDetailModal(\'' + item.id + '\')" title="' + safeTitle + ' (คลิกเพื่อดูรายละเอียด)">' +
+          eventsLayerHtml += '<div class="dg-cal-event-bar ' + catClass + multiClass + prevClass + nextClass + pastClass + '" style="' + style + '" onclick="openEventDetailModal(\'' + item.id + '\')" title="' + safeTitle + (item.isPast ? ' (กิจกรรมที่ผ่านไปแล้ว)' : '') + ' (คลิกเพื่อดูรายละเอียด)">' +
             contentInner +
           '</div>';
         });
@@ -1961,6 +2069,30 @@
       const container = document.getElementById('calendarEventsList');
       const filtered = getFilteredEvents();
 
+      // Separate active events vs ended/past events
+      const activeEvents = [];
+      const pastEvents = [];
+
+      filtered.forEach(evt => {
+        const st = getEventStatus(evt);
+        if (st.key === 'ended') {
+          pastEvents.push(evt);
+        } else {
+          activeEvents.push(evt);
+        }
+      });
+
+      // Update past count badge in view switcher button
+      const pastBadge = document.getElementById('calPastCountBadge');
+      if (pastBadge) {
+        if (pastEvents.length > 0) {
+          pastBadge.textContent = pastEvents.length;
+          pastBadge.style.display = 'inline-block';
+        } else {
+          pastBadge.style.display = 'none';
+        }
+      }
+
       updateResultCountLabel();
 
       // 1. Render Google Calendar Month View
@@ -1969,13 +2101,36 @@
       // 2. Render List View
       if (!container) return;
 
-      if (filtered.length === 0) {
-        container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 60px 24px; text-align: center;"><div style="width: 56px; height: 56px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;"><i data-lucide="calendar-x-2" style="width: 28px; height: 28px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.2rem; font-weight: 800; color: var(--dg-black); margin-bottom: 8px;">ไม่พบกิจกรรมที่ตรงกับการค้นหา</h3><p style="font-size: 0.92rem; color: var(--dg-text-secondary); margin-bottom: 20px; max-width: 460px; margin-left: auto; margin-right: auto;">ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่อื่นเพื่อตรวจสอบกิจกรรมในระบบ</p><button type="button" class="dg-btn-black" onclick="resetCalendarFilters()" style="padding: 10px 22px; font-size: 0.88rem; cursor: pointer;"><span>แสดงกิจกรรมทั้งหมด</span></button></div>';
+      const eventsToRender = (currentViewMode === 'past') ? pastEvents : activeEvents;
+
+      if (eventsToRender.length === 0) {
+        if (currentViewMode === 'past') {
+          container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 50px 24px; text-align: center;"><div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;"><i data-lucide="archive" style="width: 26px; height: 26px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.15rem; font-weight: 800; color: var(--dg-black); margin-bottom: 6px;">ไม่มีกิจกรรมที่สิ้นสุดแล้ว</h3><p style="font-size: 0.9rem; color: var(--dg-text-secondary); margin-bottom: 18px;">ยังไม่มีกิจกรรมใดที่จัดเสร็จสิ้นไปแล้วในหมวดหมู่นี้</p><button type="button" class="dg-btn-black" onclick="switchCalendarView(\'list\')" style="padding: 9px 20px; font-size: 0.86rem; cursor: pointer;"><span>ดูกำหนดการปัจจุบัน</span></button></div>';
+        } else {
+          const hasPastOption = pastEvents.length > 0 ?
+            '<div style="margin-top: 18px;"><button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'past\')" style="padding: 8px 18px; font-size: 0.86rem; border-radius: 8px;"><i data-lucide="history" style="width: 14px; height: 14px; margin-right: 6px;"></i><span>ดูกิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span></button></div>' : '';
+
+          container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 60px 24px; text-align: center;"><div style="width: 56px; height: 56px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;"><i data-lucide="calendar-x-2" style="width: 28px; height: 28px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.2rem; font-weight: 800; color: var(--dg-black); margin-bottom: 8px;">ไม่มีกำหนดการกิจกรรมในปัจจุบัน</h3><p style="font-size: 0.92rem; color: var(--dg-text-secondary); margin-bottom: 14px; max-width: 460px; margin-left: auto; margin-right: auto;">ไม่มีกิจกรรมที่กำลังดำเนินการหรือกำลังจะมาถึงในหมวดหมู่นี้</p><div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;"><button type="button" class="dg-btn-black" onclick="resetCalendarFilters()" style="padding: 10px 22px; font-size: 0.88rem; cursor: pointer;"><span>แสดงกิจกรรมทั้งหมด</span></button></div>' + hasPastOption + '</div>';
+        }
         if (window.lucide) window.lucide.createIcons();
         return;
       }
 
-      container.innerHTML = filtered.map(evt => {
+      let cardsHtml = '';
+      if (currentViewMode === 'past') {
+        cardsHtml += '<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">' +
+          '<div style="display: flex; align-items: center; gap: 8px; color: #475569; font-weight: 750; font-size: 0.94rem;">' +
+            '<i data-lucide="archive" style="width: 18px; height: 18px; color: #64748b;"></i>' +
+            '<span>กิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span>' +
+          '</div>' +
+          '<button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'list\')" style="font-size: 0.84rem; padding: 6px 14px; border-radius: 8px; background: #fff;">' +
+            '<i data-lucide="arrow-left" style="width: 14px; height: 14px; margin-right: 4px;"></i>' +
+            '<span>กลับไปดูกำหนดการปัจจุบัน</span>' +
+          '</button>' +
+        '</div>';
+      }
+
+      cardsHtml += eventsToRender.map(evt => {
         const catClass = 'cat-' + (evt.category || 'general');
         const catLabel = evt.categoryLabel || (
           evt.category === 'affairs' ? 'งานกิจการนักเรียน' :
@@ -2035,6 +2190,19 @@
         '</div>';
       }).join('');
 
+      if (currentViewMode === 'list' && pastEvents.length > 0) {
+        cardsHtml += '<div style="text-align: center; margin-top: 36px; padding: 22px; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 14px;">' +
+          '<p style="font-size: 0.92rem; color: #64748b; margin-bottom: 12px;">' +
+            'มีกิจกรรมที่จัดเสร็จสิ้นไปแล้ว <strong>' + pastEvents.length + '</strong> รายการ' +
+          '</p>' +
+          '<button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'past\')" style="padding: 8px 22px; font-size: 0.88rem; border-radius: 8px; background: #fff; cursor: pointer;">' +
+            '<i data-lucide="history" style="width: 15px; height: 15px; margin-right: 6px;"></i>' +
+            '<span>ดูกิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span>' +
+          '</button>' +
+        '</div>';
+      }
+
+      container.innerHTML = cardsHtml;
       if (window.lucide) window.lucide.createIcons();
     }
 

@@ -86,7 +86,7 @@
 
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.2.0"></script>
+  <script src="js/api-config.js?v=2.7.8"></script>
   <script src="js/page-guard.js" data-page="team"></script>
   <script src="js/skeletons.js"></script>
 
@@ -383,14 +383,29 @@
 
           // Resilient Fallback for Leadership if not matched
           if (presidents.length === 0) {
-            const defPres = teamMembers.find(m => m.order_no === 67 || (m.name && m.name.includes('อะห์นัฟ')));
-            if (defPres) presidents.push(defPres);
+            const defPres = teamMembers.find(m => Number(m.order_no) === 67 || (m.name && (m.name.includes('สหสันติ') || m.name.includes('อะห์นัฟ') || m.name.includes('อะหันฟ'))));
+            if (defPres) {
+              defPres.role = 'ประธานคณะกรรมการสารวัตรนักเรียน';
+              presidents.push(defPres);
+            } else {
+              presidents.push({
+                order_no: 67,
+                name: 'นายอะห์นัฟ สหสันติวรกุล',
+                role: 'ประธานคณะกรรมการสารวัตรนักเรียน',
+                department: 'คณะผู้บริหาร',
+                imageUrl: '',
+                homeImageUrl: '',
+                teamImageUrl: ''
+              });
+            }
           }
           if (vps.length === 0) {
-            const defVp1 = teamMembers.find(m => m.order_no === 82);
-            const defVp2 = teamMembers.find(m => m.order_no === 124);
-            if (defVp1) { defVp1.vp_order = 1; vps.push(defVp1); }
-            if (defVp2) { defVp2.vp_order = 2; vps.push(defVp2); }
+            const defVp1 = teamMembers.find(m => Number(m.order_no) === 82 || (m.name && m.name.includes('จารุวรรณ')));
+            const defVp2 = teamMembers.find(m => Number(m.order_no) === 124 || (m.name && m.name.includes('ชญาภา')));
+            if (defVp1) { defVp1.vp_order = 1; defVp1.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน'; vps.push(defVp1); }
+            else { vps.push({ order_no: 82, name: 'นางสาวจารุวรรณ ยิ้มแย้ม', role: 'รองประธานคณะกรรมการสารวัตรนักเรียน', vp_order: 1, department: 'คณะผู้บริหาร', imageUrl: '' }); }
+            if (defVp2) { defVp2.vp_order = 2; defVp2.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน'; vps.push(defVp2); }
+            else { vps.push({ order_no: 124, name: 'นางสาวชญาภา สุวรรณขาว', role: 'รองประธานคณะกรรมการสารวัตรนักเรียน', vp_order: 2, department: 'คณะผู้บริหาร', imageUrl: '' }); }
           }
 
           renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers);
@@ -450,14 +465,29 @@
           });
 
           if (presidents.length === 0) {
-            const defPres = teamMembers.find(m => m.order_no === 67 || (m.name && m.name.includes('อะห์นัฟ')));
-            if (defPres) presidents.push(defPres);
+            const defPres = teamMembers.find(m => Number(m.order_no) === 67 || (m.name && (m.name.includes('สหสันติ') || m.name.includes('อะห์นัฟ') || m.name.includes('อะหันฟ'))));
+            if (defPres) {
+              defPres.role = 'ประธานคณะกรรมการสารวัตรนักเรียน';
+              presidents.push(defPres);
+            } else {
+              presidents.push({
+                order_no: 67,
+                name: 'นายอะห์นัฟ สหสันติวรกุล',
+                role: 'ประธานคณะกรรมการสารวัตรนักเรียน',
+                department: 'คณะผู้บริหาร',
+                imageUrl: '',
+                homeImageUrl: '',
+                teamImageUrl: ''
+              });
+            }
           }
           if (vps.length === 0) {
-            const defVp1 = teamMembers.find(m => m.order_no === 82);
-            const defVp2 = teamMembers.find(m => m.order_no === 124);
-            if (defVp1) { defVp1.vp_order = 1; vps.push(defVp1); }
-            if (defVp2) { defVp2.vp_order = 2; vps.push(defVp2); }
+            const defVp1 = teamMembers.find(m => Number(m.order_no) === 82 || (m.name && m.name.includes('จารุวรรณ')));
+            const defVp2 = teamMembers.find(m => Number(m.order_no) === 124 || (m.name && m.name.includes('ชญาภา')));
+            if (defVp1) { defVp1.vp_order = 1; defVp1.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน'; vps.push(defVp1); }
+            else { vps.push({ order_no: 82, name: 'นางสาวจารุวรรณ ยิ้มแย้ม', role: 'รองประธานคณะกรรมการสารวัตรนักเรียน', vp_order: 1, department: 'คณะผู้บริหาร', imageUrl: '' }); }
+            if (defVp2) { defVp2.vp_order = 2; defVp2.role = 'รองประธานคณะกรรมการสารวัตรนักเรียน'; vps.push(defVp2); }
+            else { vps.push({ order_no: 124, name: 'นางสาวชญาภา สุวรรณขาว', role: 'รองประธานคณะกรรมการสารวัตรนักเรียน', vp_order: 2, department: 'คณะผู้บริหาร', imageUrl: '' }); }
           }
 
           renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers);
@@ -521,11 +551,17 @@
           html += `<div style="width: 100%; max-width: 340px;">` + renderCard(p.name, 'ประธานคณะกรรมการสารวัตรนักเรียน', presImg, 'president') + `</div>`;
         });
       } else {
-        html += `<div style="width: 100%; max-width: 340px;">` + renderCard('ยังไม่มีข้อมูลผู้ดำรงตำแหน่ง', 'ประธานคณะกรรมการสารวัตรนักเรียน', '', 'president') + `</div>`;
+        html += `<div style="width: 100%; max-width: 340px;">` + renderCard('นายอะห์นัฟ สหสันติวรกุล', 'ประธานคณะกรรมการสารวัตรนักเรียน', '', 'president') + `</div>`;
       }
       html += `</div>`;
 
       // Vice Presidents (Tier 2: Medium-Large size)
+      if (vps.length === 0) {
+        vps = [
+          { name: 'นางสาวจารุวรรณ ยิ้มแย้ม', role: 'รองประธานคณะกรรมการสารวัตรนักเรียน', vp_order: 1, imageUrl: '' },
+          { name: 'นางสาวชญาภา สุวรรณขาว', role: 'รองประธานคณะกรรมการสารวัตรนักเรียน', vp_order: 2, imageUrl: '' }
+        ];
+      }
       if (vps.length > 0) {
         vps.sort((a, b) => (a.vp_order || 99) - (b.vp_order || 99));
         html += `<h3 style="text-align: center; margin-bottom: 30px; font-weight: 800; font-size: 1.5rem; color: var(--dg-text-primary);">รองประธานคณะกรรมการสารวัตรนักเรียน</h3>`;
