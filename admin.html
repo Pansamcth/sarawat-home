@@ -101,8 +101,8 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- High-Security Database Gateway Config (with Cache-Buster) -->
-  <script src="cloudflare-config.js?v=2.7.6"></script>
-  <script src="js/api-config.js?v=2.7.6"></script>
+  <script src="cloudflare-config.js?v=2.7.7"></script>
+  <script src="js/api-config.js?v=2.7.7"></script>
   
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
@@ -2570,6 +2570,189 @@
       display: flex !important;
     }
 
+
+    /* ==========================================================
+       ✨ MODERN BENTO MODAL SYSTEM (Bento Cards + Sticky Action Bar)
+       ========================================================== */
+    .bento-modal-dialog {
+      display: flex;
+      flex-direction: column;
+      max-height: 88vh;
+      overflow: hidden;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      width: 100%;
+    }
+
+    .bento-modal-header {
+      flex-shrink: 0;
+      padding: 18px 24px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bento-modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 24px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+
+    .bento-modal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .bento-modal-body::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+
+    .bento-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .bento-card:hover {
+      border-color: #cbd5e1;
+    }
+
+    .bento-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f1f5f9;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .bento-card-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .bento-modal-actions {
+      flex-shrink: 0;
+      padding: 14px 24px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.03);
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    /* Visual Icon Picker Grid */
+    .preset-icons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .preset-icon-chip {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      padding: 0;
+    }
+
+    .preset-icon-chip:hover {
+      border-color: #94a3b8;
+      color: #0f172a;
+      background: #f1f5f9;
+      transform: translateY(-1px);
+    }
+
+    .preset-icon-chip.selected {
+      border-color: #2563eb;
+      background: #eff6ff;
+      color: #1d4ed8;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Segmented Time Mode Buttons */
+    .time-mode-segments {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 6px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .time-mode-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
+      text-align: center;
+      user-select: none;
+    }
+
+    .time-mode-label:hover {
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .time-mode-label.active {
+      background: #ffffff;
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .time-mode-label input {
+      display: none;
+    }
+
+    /* Bento Collapsible Details */
+    details.bento-collapsible summary {
+      cursor: pointer;
+      user-select: none;
+      outline: none;
+    }
+
+    details.bento-collapsible[open] .accordion-arrow {
+      transform: rotate(180deg);
+    }
+
   </style>
 </head>
 
@@ -4679,18 +4862,19 @@
   </div>
 
 <!-- ==========================================
-       MODAL 0: TAG CREATE / EDIT
+       MODAL 0: TAG CREATE / EDIT (BENTO REDESIGN)
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminTagModal" style="display: none; z-index: 9600;">
-    <div class="dg-modal-box" style="max-width: 620px; width: 95%;">
-      <div class="dg-modal-header">
-        <div class="dg-modal-header-info">
+    <div class="dg-modal-box bento-modal-dialog" style="max-width: 680px;">
+      <!-- Sticky Modern Header -->
+      <div class="bento-modal-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
           <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #475569 0%, #0f172a 100%); color: #fff;">
-            <i data-lucide="tag" style="width: 22px; height: 22px;"></i>
+            <i data-lucide="tag" style="width: 20px; height: 20px;"></i>
           </div>
           <div>
             <h3 id="adminTagModalTitle" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">สร้างแท็กใหม่</h3>
-            <p style="font-size: 0.82rem; color: #64748b; margin: 2px 0 0;">กำหนดสี สไตล์ และไอคอนของแท็ก</p>
+            <p style="font-size: 0.8rem; color: #64748b; margin: 2px 0 0;">กำหนดชื่อ สี สไตล์ และคลิกเลือกไอคอนที่ต้องการ</p>
           </div>
         </div>
         <button class="dg-modal-close" type="button" onclick="closeModal('adminTagModal')" title="ปิดหน้าต่าง">
@@ -4698,107 +4882,159 @@
         </button>
       </div>
 
-      <form id="adminTagForm" onsubmit="handleSaveTag(event)" class="dg-modal-form" style="padding: 24px; background: #fff;">
+      <form id="adminTagForm" onsubmit="handleSaveTag(event)" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
         <input type="hidden" id="adminTagId" />
 
-        <!-- Live Preview Box -->
-        <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 16px; margin-bottom: 20px; text-align: center;">
-          <div style="font-size: 0.76rem; font-weight: 750; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">
-            👁️ ตัวอย่างการแสดงผลจริง (Live Preview)
+        <!-- Scrollable Bento Body -->
+        <div class="bento-modal-body">
+          
+          <!-- Bento Card 1: Live Preview -->
+          <div class="bento-card" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); text-align: center; border: 1.5px dashed #cbd5e1;">
+            <div style="font-size: 0.74rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+              👁️ ตัวอย่างการแสดงผลจริง (Live Preview)
+            </div>
+            <div id="adminTagLivePreview" style="display: flex; justify-content: center; align-items: center; min-height: 44px;">
+              <span class="sarawat-tag-badge" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 750; padding: 4px 12px; border-radius: 9999px; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;">
+                <i data-lucide="tag" style="width: 13px; height: 13px;"></i>
+                <span>ชื่อแท็กตัวอย่าง</span>
+              </span>
+            </div>
           </div>
-          <div id="adminTagLivePreview" style="display: flex; justify-content: center; align-items: center; min-height: 40px;">
-            <span class="sarawat-tag-badge" style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 750; padding: 2.5px 9px; border-radius: 9999px; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;">
-              <i data-lucide="tag" style="width: 12px; height: 12px;"></i>
-              <span>ชื่อแท็กตัวอย่าง</span>
-            </span>
-          </div>
-        </div>
 
-        <div class="dg-form-row" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin-bottom: 14px;">
-          <div class="dg-form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; color: #1e293b;">ชื่อแท็ก (Name) *</label>
-            <input type="text" id="adminTagName" required placeholder="เช่น ความปลอดภัย" oninput="updateTagLivePreview()" />
-          </div>
-          <div class="dg-form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; color: #1e293b;">Slug (รหัสภาษาอังกฤษ)</label>
-            <input type="text" id="adminTagSlug" placeholder="เช่น safety (เว้นว่างได้)" />
-          </div>
-        </div>
-
-        <div class="dg-form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
-          <div class="dg-form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; color: #1e293b;">ประเภทที่ใช้ (Target Type)</label>
-            <select id="adminTagTargetType" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
-              <option value="all">ใช้ร่วมกัน (ทั้งข่าวสารและกิจกรรม)</option>
-              <option value="news">เฉพาะข่าวสาร (news)</option>
-              <option value="events">เฉพาะกิจกรรมปฏิทิน (events)</option>
-            </select>
-          </div>
-          <div class="dg-form-group" style="margin-bottom: 0;">
-            <label style="font-weight: 700; color: #1e293b;">รูปทรง Badge (Style)</label>
-            <select id="adminTagBadgeStyle" onchange="updateTagLivePreview()" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
-              <option value="pill">Pill (วงรีมนกลม)</option>
-              <option value="rounded">Rounded (มุมมน 6px)</option>
-              <option value="outline">Outline (สี่เหลี่ยมขอบ)</option>
-              <option value="glow">Glow (มีแสงสะท้อนเรืองรอง)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Color Pickers Row -->
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
-          <span style="font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 10px; display: block;">🎨 กำหนดพาเลทสี (Color Palette)</span>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-            <div>
-              <label style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีตัวอักษร</label>
-              <div style="display: flex; gap: 6px; align-items: center;">
-                <input type="color" id="adminTagColorPicker" value="#0f172a" onchange="document.getElementById('adminTagColor').value=this.value; updateTagLivePreview();" style="width: 36px; height: 36px; border: none; border-radius: 6px; cursor: pointer; padding: 0;" />
-                <input type="text" id="adminTagColor" value="#0f172a" oninput="document.getElementById('adminTagColorPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 6px 8px; width: 100%;" />
+          <!-- Bento Card 2: Tag Basic Info -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="edit-3" style="width: 16px; height: 16px; color: #0284c7;"></i>
+                <span>ข้อมูลพื้นฐานของแท็ก</span>
               </div>
             </div>
-            <div>
-              <label style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีพื้นหลัง (BG)</label>
-              <div style="display: flex; gap: 6px; align-items: center;">
-                <input type="color" id="adminTagBgPicker" value="#f1f5f9" onchange="document.getElementById('adminTagBg').value=this.value; updateTagLivePreview();" style="width: 36px; height: 36px; border: none; border-radius: 6px; cursor: pointer; padding: 0;" />
-                <input type="text" id="adminTagBg" value="#f1f5f9" oninput="document.getElementById('adminTagBgPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 6px 8px; width: 100%;" />
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">ชื่อแท็ก (Name) *</label>
+                <input type="text" id="adminTagName" required placeholder="เช่น ความปลอดภัย, กิจการนักเรียน" oninput="updateTagLivePreview()" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">รหัสภาษาอังกฤษ (Slug)</label>
+                <input type="text" id="adminTagSlug" placeholder="เช่น safety (เว้นว่างได้)" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit;" />
               </div>
             </div>
-            <div>
-              <label style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีเส้นขอบ (Border)</label>
-              <div style="display: flex; gap: 6px; align-items: center;">
-                <input type="color" id="adminTagBorderPicker" value="#cbd5e1" onchange="document.getElementById('adminTagBorder').value=this.value; updateTagLivePreview();" style="width: 36px; height: 36px; border: none; border-radius: 6px; cursor: pointer; padding: 0;" />
-                <input type="text" id="adminTagBorder" value="#cbd5e1" oninput="document.getElementById('adminTagBorderPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 6px 8px; width: 100%;" />
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">ประเภทการใช้งาน (Target Type)</label>
+                <select id="adminTagTargetType" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #ffffff;">
+                  <option value="all">🌐 ใช้ร่วมกัน (ทั้งข่าวสารและกิจกรรม)</option>
+                  <option value="news">📰 เฉพาะข่าวสาร (news)</option>
+                  <option value="events">📅 เฉพาะกิจกรรมปฏิทิน (events)</option>
+                </select>
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">รูปทรง Badge (Style)</label>
+                <select id="adminTagBadgeStyle" onchange="updateTagLivePreview()" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #ffffff;">
+                  <option value="pill">Pill (วงรีมนกลม เรียบหรู)</option>
+                  <option value="rounded">Rounded (มุมมน 6px ทันสมัย)</option>
+                  <option value="outline">Outline (สี่เหลี่ยมขอบมินิมอล)</option>
+                  <option value="glow">Glow (มีแสงสะท้อนเรืองรอง)</option>
+                </select>
               </div>
             </div>
           </div>
 
-          <!-- Quick Preset Color Palettes -->
-          <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-            <span style="font-size: 0.72rem; color: #64748b;">ชุดสีด่วน:</span>
-            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#1e3a8a', '#dbeafe', '#93c5fd', 'shield-check')">🔵 น้ำเงิน</button>
-            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#14532d', '#dcfce7', '#86efac', 'school')">🟢 เขียว</button>
-            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#7c2d12', '#ffedd5', '#fdba74', 'heart-handshake')">🟠 ส้ม</button>
-            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#831843', '#fce7f3', '#f472b6', 'award')">🔴 แดง</button>
-            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#581c87', '#f3e8ff', '#d8b4fe', 'sparkles')">🟣 ม่วง</button>
-            <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#0f172a', '#f1f5f9', '#cbd5e1', 'tag')">⚪ เทา</button>
-          </div>
-        </div>
+          <!-- Bento Card 3: Color Palette & Presets -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="palette" style="width: 16px; height: 16px; color: #8b5cf6;"></i>
+                <span>กำหนดพาเลทสี (Color Palette)</span>
+              </div>
+              <span style="font-size: 0.74rem; color: #64748b;">คลิกเลือกสีด่วนด้านล่างได้ทันที</span>
+            </div>
 
-        <!-- Icon Selector -->
-        <div class="dg-form-group">
-          <label style="font-weight: 700; color: #1e293b;">ไอคอน Lucide</label>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <input type="text" id="adminTagIcon" value="tag" placeholder="เช่น shield-check, school, award, heart-handshake, calendar" oninput="updateTagLivePreview()" style="flex: 1;" />
-            <div id="adminTagIconPreview" style="width: 42px; height: 42px; border: 1.5px solid #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #f8fafc; flex-shrink: 0;">
-              <i data-lucide="tag" style="width: 20px; height: 20px;"></i>
+            <!-- Quick Preset Color Palettes -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
+              <span style="font-size: 0.76rem; font-weight: 700; color: #475569;">ธีมสีด่วน:</span>
+              <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#1e3a8a', '#dbeafe', '#93c5fd', 'shield-check')">🔵 น้ำเงิน</button>
+              <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#14532d', '#dcfce7', '#86efac', 'school')">🟢 เขียว</button>
+              <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#7c2d12', '#ffedd5', '#fdba74', 'heart-handshake')">🟠 ส้ม</button>
+              <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#831843', '#fce7f3', '#f472b6', 'award')">🔴 แดง</button>
+              <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#581c87', '#f3e8ff', '#d8b4fe', 'sparkles')">🟣 ม่วง</button>
+              <button type="button" class="quick-pill-btn" onclick="applyTagColorPreset('#0f172a', '#f1f5f9', '#cbd5e1', 'tag')">⚪ เทา/เข้ม</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 0.76rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีตัวอักษร</label>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <input type="color" id="adminTagColorPicker" value="#0f172a" onchange="document.getElementById('adminTagColor').value=this.value; updateTagLivePreview();" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px; background: #fff;" />
+                  <input type="text" id="adminTagColor" value="#0f172a" oninput="document.getElementById('adminTagColorPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 8px; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px;" />
+                </div>
+              </div>
+              <div>
+                <label style="font-size: 0.76rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีพื้นหลัง (BG)</label>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <input type="color" id="adminTagBgPicker" value="#f1f5f9" onchange="document.getElementById('adminTagBg').value=this.value; updateTagLivePreview();" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px; background: #fff;" />
+                  <input type="text" id="adminTagBg" value="#f1f5f9" oninput="document.getElementById('adminTagBgPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 8px; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px;" />
+                </div>
+              </div>
+              <div>
+                <label style="font-size: 0.76rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">สีเส้นขอบ (Border)</label>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                  <input type="color" id="adminTagBorderPicker" value="#cbd5e1" onchange="document.getElementById('adminTagBorder').value=this.value; updateTagLivePreview();" style="width: 38px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; padding: 2px; background: #fff;" />
+                  <input type="text" id="adminTagBorder" value="#cbd5e1" oninput="document.getElementById('adminTagBorderPicker').value=this.value; updateTagLivePreview();" style="font-family: monospace; font-size: 0.82rem; padding: 8px; width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px;" />
+                </div>
+              </div>
             </div>
           </div>
+
+          <!-- Bento Card 4: Visual Icon Picker Grid -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="sparkles" style="width: 16px; height: 16px; color: #eab308;"></i>
+                <span>เลือกไอคอนสัญลักษณ์ (คลิกเลือกได้ทันที)</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 0.76rem; color: #64748b;">ไอคอนที่เลือก:</span>
+                <div id="adminTagIconPreview" style="width: 28px; height: 28px; border: 1.5px solid #cbd5e1; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: #f8fafc;">
+                  <i data-lucide="tag" style="width: 16px; height: 16px;"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Popular Icon Chips Grid -->
+            <div class="preset-icons-grid" id="presetIconsGrid">
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('tag')" data-icon="tag" title="ทั่วไป (tag)"><i data-lucide="tag"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('shield-check')" data-icon="shield-check" title="ความปลอดภัย (shield-check)"><i data-lucide="shield-check"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('school')" data-icon="school" title="โรงเรียน (school)"><i data-lucide="school"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('award')" data-icon="award" title="วิชาการ/เกียรติยศ (award)"><i data-lucide="award"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('calendar')" data-icon="calendar" title="ปฏิทิน/กิจกรรม (calendar)"><i data-lucide="calendar"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('heart-handshake')" data-icon="heart-handshake" title="จิตอาสา (heart-handshake)"><i data-lucide="heart-handshake"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('megaphone')" data-icon="megaphone" title="ประชาสัมพันธ์ (megaphone)"><i data-lucide="megaphone"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('sparkles')" data-icon="sparkles" title="กิจกรรมพิเศษ (sparkles)"><i data-lucide="sparkles"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('users')" data-icon="users" title="กิจการนักเรียน (users)"><i data-lucide="users"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('camera')" data-icon="camera" title="ภาพถ่าย/โสต (camera)"><i data-lucide="camera"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('clock')" data-icon="clock" title="เวลา/เวร (clock)"><i data-lucide="clock"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('book-open')" data-icon="book-open" title="การเรียน/อบรม (book-open)"><i data-lucide="book-open"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('flag')" data-icon="flag" title="พิธีการ (flag)"><i data-lucide="flag"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('check-circle')" data-icon="check-circle" title="ตรวจตรา (check-circle)"><i data-lucide="check-circle"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('star')" data-icon="star" title="ดีเด่น (star)"><i data-lucide="star"></i></button>
+              <button type="button" class="preset-icon-chip" onclick="selectPresetIcon('coffee')" data-icon="coffee" title="วันหยุด/พักผ่อน (coffee)"><i data-lucide="coffee"></i></button>
+            </div>
+
+            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 0.76rem; color: #64748b; white-space: nowrap;">หรือพิมพ์ชื่อไอคอน Lucide เอง:</span>
+              <input type="text" id="adminTagIcon" value="tag" placeholder="เช่น shield-check, school, award" oninput="updateTagLivePreview(); updatePresetIconHighlight(this.value);" style="padding: 6px 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: monospace; width: 100%; max-width: 220px;" />
+            </div>
+          </div>
+
         </div>
 
-        <div class="dg-modal-actions" style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" class="dg-btn-outline" onclick="closeModal('adminTagModal')">ยกเลิก</button>
-          <button type="submit" class="dg-btn-black" id="adminTagSubmitBtn">
-            <i data-lucide="check"></i>
+        <!-- Sticky Bottom Action Footer -->
+        <div class="bento-modal-actions">
+          <button type="button" class="dg-btn-outline" onclick="closeModal('adminTagModal')" style="padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer;">ยกเลิก</button>
+          <button type="submit" class="dg-btn-black" id="adminTagSubmitBtn" style="padding: 10px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
+            <i data-lucide="check" style="width: 16px; height: 16px;"></i>
             <span>บันทึกแท็ก</span>
           </button>
         </div>
@@ -4807,13 +5043,14 @@
   </div>
 
   <!-- ==========================================
-       MODAL 1: NEWS ADD / EDIT
+       MODAL 1: NEWS ADD / EDIT (BENTO REDESIGN)
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminNewsModal" style="display: none;">
-    <div class="dg-modal-box modal-lg" style="max-height: 90vh;">
-      <div class="dg-modal-header">
+    <div class="dg-modal-box bento-modal-dialog modal-lg">
+      <!-- Sticky Modern Header -->
+      <div class="bento-modal-header">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff;">
             <i data-lucide="newspaper" style="width: 20px; height: 20px;"></i>
           </div>
           <div>
@@ -4829,219 +5066,254 @@
           <i data-lucide="x" style="width: 18px; height: 18px;"></i>
         </button>
       </div>
-      <form id="adminNewsForm" onsubmit="handleSaveNews(event)" class="dg-modal-form" style="overflow-y: auto; flex: 1;">
+
+      <form id="adminNewsForm" onsubmit="handleSaveNews(event)" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
         <input type="hidden" id="adminNewsId" />
         <input type="hidden" id="adminNewsDateIso" />
         <input type="hidden" id="adminNewsEndDateIso" />
+        <input type="hidden" id="adminNewsDate" />
+        <input type="hidden" id="adminNewsTag" />
 
-        <div class="dg-form-group">
-          <label>หัวข้อข่าวสาร/กิจกรรม *</label>
-          <input type="text" id="adminNewsTitle" required
-            placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" />
-        </div>
+        <!-- Scrollable Bento Body -->
+        <div class="bento-modal-body">
 
-        <!-- Date Selection: Start Date & Optional End Date with Live Summary -->
-        <div class="dg-form-group">
-          <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="calendar"
-                style="width: 15px; height: 15px; display: inline-block; vertical-align: -2px;"></i> วันที่จัดกิจกรรม
-              *</label>
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('today')">📅 วันนี้</button>
-              <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('yesterday')">⏪ เมื่อวาน</button>
-              <button type="button" class="quick-pill-btn" onclick="clearNewsEndDate()" style="color: #64748b;">✖️
-                วันเดียว (ล้างวันสิ้นสุด)</button>
-            </div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div>
-              <span
-                style="font-size: 0.78rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">วันเริ่มต้นกิจกรรม
-                *</span>
-              <input type="date" id="adminNewsStartDatePicker" required onclick="try{this.showPicker()}catch(e){}"
-                onchange="handleNewsDatesChange()"
-                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" />
-            </div>
-            <div>
-              <span
-                style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px; display: block;">วันสิ้นสุดกิจกรรม
-                <span style="font-size: 0.72rem; font-weight: 400; color: #94a3b8;">(ไม่ระบุ =
-                  มีแค่วันเดียว)</span></span>
-              <input type="date" id="adminNewsEndDatePicker" onclick="try{this.showPicker()}catch(e){}"
-                onchange="handleNewsDatesChange()"
-                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--dg-border); border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" />
-            </div>
-          </div>
-          <input type="hidden" id="adminNewsDate" />
-          <div id="adminNewsDateBanner" class="date-helper-banner" style="margin-top: 8px;">
-            <i data-lucide="calendar" style="width: 14px; height: 14px; flex-shrink: 0; color: #16a34a;"></i>
-            <span>วันที่แสดงผล: <strong id="adminNewsDateLabel"
-                style="font-weight: 800; color: #0f172a;">-</strong></span>
-          </div>
-        </div>
-
-        <div class="dg-form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="margin: 0; font-weight: 750;"><i data-lucide="tags" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px;"></i> แท็กกิจกรรม (เลือกได้หลายแท็ก)</label>
-            <span style="font-size: 0.72rem; color: var(--dg-text-muted);">คลิกเพื่อเปิด/ปิดแท็กที่ต้องการ</span>
-          </div>
-          <div id="adminNewsTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; min-height: 38px; align-items: center; padding: 8px 12px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px;">
-            <!-- Rendered dynamically -->
-          </div>
-          <input type="text" id="adminNewsTag" placeholder="เช่น พิธีการสำคัญ, จิตอาสา (ซิงค์อัตโนมัติ)" />
-        </div>
-
-        <div class="dg-form-group">
-          <label>รายละเอียดกิจกรรม (เนื้อหาหลัก) *</label>
-          <textarea id="adminNewsDesc" rows="4" required
-            placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..."></textarea>
-          <small style="color: var(--dg-text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
-            💡 สามารถกด Enter เพื่อเว้นบรรทัดหรือแบ่งย่อหน้าได้ตามต้องการ ระบบจะแสดงผลเว้นบรรทัดตามที่พิมพ์จริง
-          </small>
-        </div>
-
-        <div class="dg-form-group">
-          <label>รายละเอียดเพิ่มเติมสำหรับป๊อบอัป (Optional / แสดงในหน้าต่างขยาย)</label>
-          <textarea id="adminNewsDetail" rows="4"
-            placeholder="ระบุเนื้อหาเชิงลึก ลำดับขั้นตอน ผลการดำเนินงาน หรือข้อความขยายความเพิ่มเติมสำหรับหน้าต่างป๊อบอัป..."></textarea>
-          <small style="color: var(--dg-text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
-            💡 รองรับการเว้นบรรทัดและแบ่งย่อหน้าอย่างสวยงามในหน้าต่างป๊อบอัป
-          </small>
-        </div>
-
-        <!-- ==========================================
-             SIMPLIFIED ACTIVITY IMAGE SYSTEM (OPTIONAL)
-             ========================================== -->
-        <div class="dg-form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <label style="margin: 0; font-weight: 750; font-size: 0.94rem;">
-              <i data-lucide="image" style="width: 16px; height: 16px; display: inline-block; vertical-align: -2px;"></i>
-              รูปภาพหน้าปกกิจกรรม (ไม่บังคับ)
-            </label>
-            <span id="adminImgSourceBadge" class="img-source-badge" style="display: none;"></span>
-          </div>
-          <small style="color: var(--dg-text-muted); font-size: 0.78rem; display: block; margin-bottom: 10px;">
-            💡 หากไม่ใส่รูปภาพ ระบบจะไม่แสดงกรอบภาพใด ๆ ทั้งในการ์ดและหน้าต่างป๊อบอัป (เหลือเฉพาะหัวข้อและเนื้อหา)
-          </small>
-
-          <div class="img-mode-tabs" style="margin-bottom: 12px;">
-            <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')">
-              <i data-lucide="upload-cloud"></i>
-              <span>อัปโหลดจากเครื่อง (Drop / Paste ⚡)</span>
-            </button>
-            <button type="button" class="img-mode-btn" id="btnImgModeUrl" onclick="switchImgMode('url')">
-              <i data-lucide="link"></i>
-              <span>วางลิงก์รูปภาพ (Image URL)</span>
-            </button>
-          </div>
-
-          <!-- Mode 1: File Upload (Modern Drag-and-Drop Zone + Hidden File Input) -->
-          <div id="panelImgUpload">
-            <input type="file" id="adminNewsImgFile"
-              accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg+xml" style="display: none;" />
-            <div class="admin-dropzone" id="adminNewsDropZone">
-              <div class="admin-dropzone-icon">
-                <i data-lucide="image-plus"></i>
+          <!-- Bento Card 1: Main Content -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="file-text" style="color: #0284c7; width: 17px; height: 17px;"></i>
+                <span>ข้อมูลเนื้อหาข่าวสาร</span>
               </div>
-              <div class="admin-dropzone-title">คลิกเพื่อเลือกไฟล์ หรือลากรูปภาพมาวางที่นี่</div>
-              <div class="admin-dropzone-desc">รองรับ JPG, PNG, WebP หรือกด <strong>Ctrl+V</strong> เพื่อวางภาพจาก Clipboard (เว้นว่างไว้ได้หากไม่ต้องการรูป)</div>
             </div>
 
-            <!-- Upload & Compression Progress Box -->
-            <div id="adminNewsUploadProgress" class="upload-progress-wrap" style="display: none;">
-              <div class="upload-file-meta">
-                <span id="uploadFileName"
-                  style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 240px; font-weight: 700;">เตรียมไฟล์...</span>
-                <span id="uploadFileSize" style="color: #64748b; font-size: 0.78rem;">0 KB</span>
+            <div class="dg-form-group" style="margin-bottom: 14px;">
+              <label style="font-weight: 700; color: #1e293b; font-size: 0.88rem; margin-bottom: 6px; display: block;">หัวข้อข่าวสาร/กิจกรรม *</label>
+              <input type="text" id="adminNewsTitle" required
+                placeholder="เช่น พิธีแต่งตั้งสารวัตรนักเรียน ประจำปีการศึกษา 2569" style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-family: inherit;" />
+            </div>
+
+            <div class="dg-form-group" style="margin-bottom: 14px;">
+              <label style="font-weight: 700; color: #1e293b; font-size: 0.88rem; margin-bottom: 6px; display: block;">รายละเอียดกิจกรรม (เนื้อหาหลัก) *</label>
+              <textarea id="adminNewsDesc" rows="4" required
+                placeholder="ระบุเนื้อหากิจกรรมและการปฏิบัติหน้าที่..." style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; font-family: inherit; line-height: 1.6;"></textarea>
+              <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 4px;">
+                💡 กด Enter เพื่อเว้นบรรทัดหรือแบ่งย่อหน้าได้ตามต้องการ ระบบจะแสดงผลตรงตามที่พิมพ์
+              </small>
+            </div>
+
+            <div class="dg-form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; color: #1e293b; font-size: 0.88rem; margin-bottom: 6px; display: block;">รายละเอียดเพิ่มเติมสำหรับป๊อบอัป (ทางเลือก / สำหรับหน้าต่างขยาย)</label>
+              <textarea id="adminNewsDetail" rows="3"
+                placeholder="ระบุเนื้อหาเชิงลึก ลำดับขั้นตอน ผลการดำเนินงาน หรือข้อความขยายความเพิ่มเติมสำหรับหน้าต่างป๊อบอัป..." style="width: 100%; padding: 11px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; font-family: inherit; line-height: 1.6;"></textarea>
+            </div>
+          </div>
+
+          <!-- Bento Card 2: Date & Tags -->
+          <div class="bento-card">
+            <!-- Date Row Header with Quick Date Buttons -->
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="calendar" style="color: #10b981; width: 17px; height: 17px;"></i>
+                <span>วันที่จัดกิจกรรม</span>
               </div>
-              <div class="upload-progress-bar-bg">
-                <div id="uploadProgressFill" class="upload-progress-fill" style="width: 0%;"></div>
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('today')" style="background: #ffffff; border-color: #cbd5e1; cursor: pointer;">📅 วันนี้</button>
+                <button type="button" class="quick-pill-btn" onclick="setQuickNewsDate('yesterday')" style="background: #ffffff; border-color: #cbd5e1; cursor: pointer;">⏪ เมื่อวาน</button>
+                <button type="button" class="quick-pill-btn" onclick="clearNewsEndDate()" style="color: #ef4444; background: #fef2f2; border-color: #fca5a5; cursor: pointer;">✖️ วันเดียว</button>
               </div>
-              <div class="upload-status-row">
-                <span id="uploadStatusText">กำลังประมวลผลรูปภาพ...</span>
-                <span id="uploadPercentNum" class="upload-pct-badge">0%</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+              <div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #334155; margin-bottom: 6px; display: block;">วันเริ่มต้นกิจกรรม *</span>
+                <input type="date" id="adminNewsStartDatePicker" required onclick="try{this.showPicker()}catch(e){}"
+                  onchange="handleNewsDatesChange()"
+                  style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" />
+              </div>
+              <div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 6px; display: block;">วันสิ้นสุดกิจกรรม <span style="font-weight: 400; color: #94a3b8;">(ไม่ระบุ = มีแค่วันเดียว)</span></span>
+                <input type="date" id="adminNewsEndDatePicker" onclick="try{this.showPicker()}catch(e){}"
+                  onchange="handleNewsDatesChange()"
+                  style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; font-weight: 700; color: #0f172a; background: #ffffff; cursor: pointer; font-family: inherit;" />
+              </div>
+            </div>
+
+            <div id="adminNewsDateBanner" class="date-helper-banner" style="margin-bottom: 18px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #166534;">
+              <i data-lucide="check-circle" style="width: 15px; height: 15px; flex-shrink: 0; color: #16a34a;"></i>
+              <span>วันที่แสดงผล: <strong id="adminNewsDateLabel" style="font-weight: 800; color: #0f172a;">-</strong></span>
+            </div>
+
+            <!-- Tags Section -->
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                <label style="margin: 0; font-weight: 750; font-size: 0.88rem; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+                  <i data-lucide="tags" style="width: 15px; height: 15px; color: #0284c7;"></i>
+                  <span>แท็กหมวดหมู่ข่าวสาร (คลิกเลือกได้หลายแท็ก)</span>
+                </label>
+                <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 3px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700; border-radius: 6px; cursor: pointer;">+ สร้างแท็กข่าว</button>
+              </div>
+              <div id="adminNewsTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 42px; align-items: center; padding: 10px 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px;">
+                <!-- Rendered dynamically -->
               </div>
             </div>
           </div>
 
-          <!-- Mode 2: Direct Image URL -->
-          <div id="panelImgUrl" style="display: none;">
-            <div style="display: flex; gap: 8px;">
-              <input type="url" id="adminNewsImgUrl"
-                placeholder="https://... (วางลิงก์รูปภาพสาธารณะ เช่น Discord, ImgBB, Google Drive)"
-                oninput="handleNewsImgUrlChange(this.value)" style="flex: 1;" />
-              <button type="button" class="dg-btn-sm-outline" onclick="handleTestImageUrl()"
-                style="white-space: nowrap; padding: 0 14px; font-weight: 700;">
-                <i data-lucide="refresh-cw"></i>
-                <span>ทดสอบ</span>
+          <!-- Bento Card 3: Image Upload & Preview -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="image" style="color: #f97316; width: 17px; height: 17px;"></i>
+                <span>รูปภาพหน้าปกกิจกรรม (ไม่บังคับ)</span>
+              </div>
+              <span id="adminImgSourceBadge" class="img-source-badge" style="display: none;"></span>
+            </div>
+            <small style="color: #64748b; font-size: 0.78rem; display: block; margin-bottom: 12px;">
+              💡 หากไม่ใส่รูปภาพ ระบบจะไม่แสดงกรอบภาพใด ๆ ทั้งในการ์ดและหน้าต่างป๊อบอัป
+            </small>
+
+            <div class="img-mode-tabs" style="margin-bottom: 12px; display: flex; gap: 8px;">
+              <button type="button" class="img-mode-btn active" id="btnImgModeUpload" onclick="switchImgMode('upload')" style="flex: 1; padding: 8px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 700;">
+                <i data-lucide="upload-cloud"></i>
+                <span>อัปโหลดจากเครื่อง (Drop / Paste ⚡)</span>
+              </button>
+              <button type="button" class="img-mode-btn" id="btnImgModeUrl" onclick="switchImgMode('url')" style="flex: 1; padding: 8px 14px; border-radius: 8px; font-size: 0.84rem; font-weight: 700;">
+                <i data-lucide="link"></i>
+                <span>วางลิงก์รูปภาพ (Image URL)</span>
               </button>
             </div>
-            <small style="color: var(--dg-text-muted); font-size: 0.76rem; display: block; margin-top: 5px;">
-              💡 วางลิงก์รูปภาพสาธารณะ ระบบจะแสดงตัวอย่างภาพทันที
-            </small>
-          </div>
 
-          <!-- Hidden storage for final Base64 / image data -->
-          <input type="hidden" id="adminNewsImgBase64" />
+            <!-- Mode 1: File Upload -->
+            <div id="panelImgUpload">
+              <input type="file" id="adminNewsImgFile"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/svg+xml" style="display: none;" />
+              <div class="admin-dropzone" id="adminNewsDropZone" style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s;">
+                <div class="admin-dropzone-icon" style="margin-bottom: 8px; color: #0284c7;">
+                  <i data-lucide="image-plus" style="width: 32px; height: 32px;"></i>
+                </div>
+                <div class="admin-dropzone-title" style="font-weight: 750; color: #0f172a; font-size: 0.92rem;">คลิกเพื่อเลือกไฟล์ หรือลากรูปภาพมาวางที่นี่</div>
+                <div class="admin-dropzone-desc" style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">รองรับ JPG, PNG, WebP หรือกด <strong>Ctrl+V</strong> เพื่อวางภาพจาก Clipboard</div>
+              </div>
 
-          <!-- Dynamic Live Image Preview Card (HIDDEN BY DEFAULT - ONLY SHOWN WHEN AN IMAGE IS ATTACHED) -->
-          <div id="adminNewsImgPreviewWrap" class="admin-preview-card" style="display: none; margin-top: 14px;">
-            <div class="admin-preview-header" style="background: #f8fafc; padding: 10px 14px; border-bottom: 1px solid var(--dg-border); border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
-              <span style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #16a34a; font-size: 0.85rem;">
-                <i data-lucide="check-circle" style="width: 15px; height: 15px;"></i>
-                <span>รูปภาพที่แนบ:</span>
-                <span id="adminPreviewStateLabel" style="font-weight: 600; color: #64748b; font-size: 0.74rem;"></span>
-              </span>
-              <div style="display: flex; gap: 6px;">
-                <button type="button" class="preview-mini-btn"
-                  onclick="document.getElementById('adminNewsImgFile').click()" id="btnPreviewChange"
-                  title="เปลี่ยนรูปภาพ">
-                  <i data-lucide="refresh-cw"></i> <span>เปลี่ยนรูป</span>
-                </button>
-                <button type="button" class="preview-mini-btn danger" onclick="clearSelectedNewsImage()"
-                  id="btnPreviewClear" title="ลบรูปออก ไม่ใส่รูป">
-                  <i data-lucide="trash-2"></i> <span>ลบรูปออก (ไม่ใช้รูป)</span>
+              <!-- Upload Progress -->
+              <div id="adminNewsUploadProgress" class="upload-progress-wrap" style="display: none; margin-top: 10px;">
+                <div class="upload-file-meta" style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                  <span id="uploadFileName" style="font-weight: 700;">เตรียมไฟล์...</span>
+                  <span id="uploadFileSize" style="color: #64748b;">0 KB</span>
+                </div>
+                <div class="upload-progress-bar-bg" style="height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
+                  <div id="uploadProgressFill" class="upload-progress-fill" style="width: 0%; height: 100%; background: #0284c7; transition: width 0.2s;"></div>
+                </div>
+                <div class="upload-status-row" style="display: flex; justify-content: space-between; font-size: 0.76rem; margin-top: 4px; color: #64748b;">
+                  <span id="uploadStatusText">กำลังประมวลผลรูปภาพ...</span>
+                  <span id="uploadPercentNum" class="upload-pct-badge">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode 2: Direct Image URL -->
+            <div id="panelImgUrl" style="display: none;">
+              <div style="display: flex; gap: 8px;">
+                <input type="url" id="adminNewsImgUrl"
+                  placeholder="https://... (วางลิงก์รูปภาพสาธารณะ เช่น Discord, ImgBB, Google Drive)"
+                  oninput="handleNewsImgUrlChange(this.value)" style="flex: 1; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;" />
+                <button type="button" class="dg-btn-sm-outline" onclick="handleTestImageUrl()"
+                  style="white-space: nowrap; padding: 0 16px; font-weight: 700; border-radius: 8px; cursor: pointer;">
+                  <i data-lucide="refresh-cw"></i>
+                  <span>ทดสอบ</span>
                 </button>
               </div>
             </div>
 
-            <div class="admin-preview-img-container" style="max-height: 280px; overflow: hidden; background: #0f172a;">
-              <img id="adminNewsImgPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="ตัวอย่างภาพกิจกรรม" style="width: 100%; height: auto; object-fit: contain; display: none;" onerror="window.handlePreviewImageError && window.handlePreviewImageError(this)" onload="window.handlePreviewImageLoaded && window.handlePreviewImageLoaded(this)" />
-            </div>
+            <!-- Hidden storage for final Base64 / image data -->
+            <input type="hidden" id="adminNewsImgBase64" />
 
-            <!-- Fallback Warning Notification (Hidden by default) -->
-            <div id="adminPreviewFallbackNotice" class="admin-preview-fallback-notice" style="display: none;">
-              <i data-lucide="alert-triangle" style="width: 16px; height: 16px; flex-shrink: 0; color: #d97706;"></i>
-              <span id="adminPreviewFallbackText">ไม่สามารถโหลดรูปภาพจากลิงก์นี้ได้</span>
+            <!-- Live Image Preview Card -->
+            <div id="adminNewsImgPreviewWrap" class="admin-preview-card" style="display: none; margin-top: 14px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+              <div class="admin-preview-header" style="background: #f8fafc; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <span style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #16a34a; font-size: 0.85rem;">
+                  <i data-lucide="check-circle" style="width: 15px; height: 15px;"></i>
+                  <span>รูปภาพที่แนบ:</span>
+                  <span id="adminPreviewStateLabel" style="font-weight: 600; color: #64748b; font-size: 0.74rem;"></span>
+                </span>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" class="preview-mini-btn"
+                    onclick="document.getElementById('adminNewsImgFile').click()" id="btnPreviewChange"
+                    title="เปลี่ยนรูปภาพ" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 0.78rem;">
+                    <i data-lucide="refresh-cw"></i> <span>เปลี่ยนรูป</span>
+                  </button>
+                  <button type="button" class="preview-mini-btn danger" onclick="clearSelectedNewsImage()"
+                    id="btnPreviewClear" title="ลบรูปออก ไม่ใส่รูป" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #fca5a5; background: #fef2f2; color: #ef4444; cursor: pointer; font-size: 0.78rem;">
+                    <i data-lucide="trash-2"></i> <span>ลบรูปออก</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="admin-preview-img-container" style="max-height: 260px; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center;">
+                <img id="adminNewsImgPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="ตัวอย่างภาพกิจกรรม" style="width: 100%; height: auto; object-fit: contain; display: none;" onerror="window.handlePreviewImageError && window.handlePreviewImageError(this)" onload="window.handlePreviewImageLoaded && window.handlePreviewImageLoaded(this)" />
+              </div>
+
+              <div id="adminPreviewFallbackNotice" class="admin-preview-fallback-notice" style="display: none; padding: 10px; background: #fffbeb; color: #b45309; font-size: 0.8rem; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="alert-triangle" style="width: 16px; height: 16px; flex-shrink: 0; color: #d97706;"></i>
+                <span id="adminPreviewFallbackText">ไม่สามารถโหลดรูปภาพจากลิงก์นี้ได้</span>
+              </div>
             </div>
           </div>
+
+          <!-- Bento Card 4: Social Links & Albums (Collapsible Accordion) -->
+          <details class="bento-card bento-collapsible" style="background: #ffffff;">
+            <summary style="list-style: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+              <div class="bento-card-title">
+                <i data-lucide="share-2" style="color: #2563eb; width: 17px; height: 17px;"></i>
+                <span>ลิงก์โซเชียลมีเดียและอัลบั้มรูปภาพ</span>
+                <span style="font-size: 0.72rem; font-weight: 500; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 999px;">ทางเลือก (Optional)</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #64748b; font-weight: 600;">
+                <span id="adminNewsSocialCountText">คลิกเพื่อเปิด/ปิด</span>
+                <i data-lucide="chevron-down" class="accordion-arrow" style="width: 16px; height: 16px; transition: transform 0.2s ease;"></i>
+              </div>
+            </summary>
+
+            <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid #f1f5f9; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #1877f2; font-weight: 900;">f</span> Facebook Post
+                </label>
+                <input type="url" id="adminNewsFb" placeholder="https://www.facebook.com/..." style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #1877f2; font-weight: 900;">f</span> Facebook Reels
+                </label>
+                <input type="url" id="adminNewsFbReels" placeholder="https://www.facebook.com/reel/..." style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #e1306c; font-weight: 900;">📸</span> Instagram Post
+                </label>
+                <input type="url" id="adminNewsIg" placeholder="https://www.instagram.com/p/..." style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #e1306c; font-weight: 900;">🎬</span> Instagram Reels
+                </label>
+                <input type="url" id="adminNewsReels" placeholder="https://www.instagram.com/reel/..." style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;" />
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0; grid-column: span 2;">
+                <label style="font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #ea4335; font-weight: 900;">🖼️</span> Google Photos (อัลบั้มรูปภาพกิจกรรม)
+                </label>
+                <input type="url" id="adminNewsPhoto" placeholder="https://photos.google.com/share/..." style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem;" />
+              </div>
+            </div>
+          </details>
+
         </div>
 
-        <div class="dg-form-group">
-          <label>ลิงก์ Facebook Posts (ถ้ามี)</label>
-          <input type="url" id="adminNewsFb" placeholder="https://www.facebook.com/..." />
-        </div>
-        <div class="dg-form-group">
-          <label>ลิงก์ Facebook Reels (ถ้ามี)</label>
-          <input type="url" id="adminNewsFbReels" placeholder="https://www.facebook.com/reel/..." />
-        </div>
-        <div class="dg-form-group">
-          <label>ลิงก์ Instagram Posts (ถ้ามี)</label>
-          <input type="url" id="adminNewsIg" placeholder="https://www.instagram.com/p/..." />
-        </div>
-        <div class="dg-form-group">
-          <label>ลิงก์ Instagram Reels (ถ้ามี)</label>
-          <input type="url" id="adminNewsReels" placeholder="https://www.instagram.com/reel/..." />
-        </div>
-        <div class="dg-form-group">
-          <label>ลิงก์ Google Photos (ถ้ามี)</label>
-          <input type="url" id="adminNewsPhoto" placeholder="https://photos.google.com/share/..." />
-        </div>
-
-        <div class="dg-modal-actions">
-          <button type="button" class="dg-btn-outline" onclick="closeModal('adminNewsModal')">ยกเลิก</button>
-          <button type="submit" id="adminNewsSubmitBtn" class="dg-btn-black">
+        <!-- Sticky Bottom Action Footer -->
+        <div class="bento-modal-actions">
+          <button type="button" class="dg-btn-outline" onclick="closeModal('adminNewsModal')" style="padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer;">ยกเลิก</button>
+          <button type="submit" id="adminNewsSubmitBtn" class="dg-btn-black" style="padding: 10px 28px; border-radius: 8px; font-size: 0.92rem; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
+            <i data-lucide="save" style="width: 16px; height: 16px;"></i>
             <span>บันทึกข่าวสาร</span>
           </button>
         </div>
@@ -5050,13 +5322,14 @@
   </div>
 
   <!-- ==========================================
-       MODAL 2: CALENDAR EVENT ADD / EDIT
+       MODAL 2: CALENDAR EVENT ADD / EDIT (BENTO REDESIGN)
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminEventModal" style="display: none;">
-    <div class="dg-modal-box modal-lg" style="max-height: 90vh;">
-      <div class="dg-modal-header">
+    <div class="dg-modal-box bento-modal-dialog modal-lg">
+      <!-- Sticky Modern Header -->
+      <div class="bento-modal-header">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff;">
             <i data-lucide="calendar-plus" style="width: 20px; height: 20px;"></i>
           </div>
           <div>
@@ -5073,196 +5346,214 @@
         </button>
       </div>
       
-      <form id="adminEventForm" onsubmit="handleSaveEvent(event)" class="dg-modal-form" style="padding: 24px; overflow-y: auto; flex: 1; background: #ffffff;">
+      <form id="adminEventForm" onsubmit="handleSaveEvent(event)" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
         <input type="hidden" id="adminEventId" />
         <input type="hidden" id="adminEventDateIso" />
         <input type="hidden" id="adminEventEndDateIso" />
+        <input type="hidden" id="adminEventTime" value="เต็มวัน" />
 
-        <!-- 1. General Info -->
-        <div style="margin-bottom: 24px;">
-          <h4 style="font-size: 0.9rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="info" style="width: 16px; height: 16px;"></i> ข้อมูลทั่วไป
-          </h4>
-          <div class="dg-form-group">
-            <label style="font-weight: 700; color: #1e293b;">ชื่อกิจกรรม / โครงการ *</label>
-            <input type="text" id="adminEventTitle" required placeholder="เช่น ประเพณีวันลอยกระทง สืบสานวัฒนธรรม" style="padding: 12px 16px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" />
-          </div>
+        <!-- Scrollable Bento Body -->
+        <div class="bento-modal-body">
 
-          <div class="dg-form-row">
-            <div class="dg-form-group">
-              <label style="font-weight: 700; color: #1e293b;">หมวดหมู่กิจกรรม *</label>
-              <select id="adminEventCategory" required style="padding: 12px 16px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); background-color: #f8fafc;">
-                <option value="general">กิจกรรมทั่วไป (general)</option>
-                <option value="affairs">กิจการนักเรียน (affairs)</option>
-                <option value="academic">วิชาการ (academic)</option>
-                <option value="prefect">ภารกิจสารวัตร (prefect)</option>
-                <option value="holiday">วันหยุด (holiday)</option>
-              </select>
-            </div>
-            <div class="dg-form-group">
-              <label style="font-weight: 700; color: #1e293b;">ชื่อหมวดหมู่ (กำหนดเอง)</label>
-              <input type="text" id="adminEventCatLabel" placeholder="เช่น กิจการนักเรียน (เว้นว่างได้)" style="padding: 12px 16px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" />
-            </div>
-          </div>
-          <div class="dg-form-group" style="margin-top: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <label style="margin: 0; font-weight: 750; color: #1e293b; display: flex; align-items: center; gap: 6px;">
-                  <i data-lucide="tags" style="width: 15px; height: 15px; color: #0284c7;"></i>
-                  <span>แท็กกิจกรรม (เลือกได้หลายแท็ก)</span>
-                </label>
-                <span id="adminEventTagsCountBadge" style="font-size: 0.72rem; font-weight: 750; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; border: 1px solid #bae6fd;">เลือกแล้ว 0 แท็ก</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <button type="button" class="quick-pill-btn" onclick="selectAllEventTags()" style="font-size: 0.72rem; padding: 3px 8px; background: #ffffff; border-color: #cbd5e1; color: #334155; border-radius: 6px; cursor: pointer;">เลือกทั้งหมด</button>
-                <button type="button" class="quick-pill-btn" onclick="clearAllEventTags()" style="font-size: 0.72rem; padding: 3px 8px; background: #fef2f2; border-color: #fca5a5; color: #dc2626; border-radius: 6px; cursor: pointer;">ล้าง</button>
-                <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 3px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700; border-radius: 6px; cursor: pointer;">+ สร้างแท็กใหม่</button>
-              </div>
-            </div>
-            <div id="adminEventTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px; align-items: center; padding: 10px 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; transition: all 0.2s ease;">
-              <!-- Rendered dynamically -->
-            </div>
-            <div style="font-size: 0.72rem; color: #64748b; margin-top: 5px;">
-              <span>💡 คลิกที่แท็กเพื่อเปิด/ปิดเลือกแท็กกิจกรรม สามารถเลือกได้หลายแท็กตามรายการแท็กที่มีในระบบ</span>
-            </div>
-          </div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
-
-        <!-- 2. Date & Time -->
-        <div style="margin-bottom: 24px;">
-          <h4 style="font-size: 0.9rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="calendar-clock" style="width: 16px; height: 16px;"></i> กำหนดเวลาและสถานที่
-          </h4>
-          
-          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-              <label style="margin: 0; font-weight: 800; color: #0f172a;">ช่วงวันจัดกิจกรรม</label>
-              <div style="display: flex; gap: 6px;">
-                <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('today')" style="background: #ffffff; border-color: #cbd5e1;">📅 วันนี้</button>
-                <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('tomorrow')" style="background: #ffffff; border-color: #cbd5e1;">⏩ พรุ่งนี้</button>
-                <button type="button" class="quick-pill-btn" onclick="clearEventEndDate()" style="background: #fef2f2; border-color: #fca5a5; color: #ef4444;">✖️ วันเดียว</button>
+          <!-- Bento Card 1: Event Info & Tags -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="calendar-days" style="color: #0284c7; width: 17px; height: 17px;"></i>
+                <span>ข้อมูลกิจกรรมและแท็กหมวดหมู่</span>
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="dg-form-group" style="margin-bottom: 14px;">
+              <label style="font-weight: 700; color: #1e293b; font-size: 0.88rem; margin-bottom: 6px; display: block;">ชื่อกิจกรรม / โครงการ *</label>
+              <input type="text" id="adminEventTitle" required placeholder="เช่น ประเพณีวันลอยกระทง สืบสานวัฒนธรรม" style="width: 100%; padding: 11px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; font-family: inherit;" />
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">หมวดหมู่กิจกรรม *</label>
+                <select id="adminEventCategory" required style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.9rem; background: #ffffff; font-family: inherit;">
+                  <option value="general">กิจกรรมทั่วไป (general)</option>
+                  <option value="affairs">กิจการนักเรียน (affairs)</option>
+                  <option value="academic">วิชาการ (academic)</option>
+                  <option value="prefect">ภารกิจสารวัตร (prefect)</option>
+                  <option value="holiday">วันหยุด (holiday)</option>
+                </select>
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">ชื่อหมวดหมู่ (กำหนดเอง)</label>
+                <input type="text" id="adminEventCatLabel" placeholder="เช่น กิจการนักเรียน (เว้นว่างได้)" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.9rem; font-family: inherit;" />
+              </div>
+            </div>
+
+            <!-- Tags Section -->
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <label style="margin: 0; font-weight: 750; color: #1e293b; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="tags" style="width: 15px; height: 15px; color: #0284c7;"></i>
+                    <span>แท็กกิจกรรม (เลือกได้หลายแท็ก)</span>
+                  </label>
+                  <span id="adminEventTagsCountBadge" style="font-size: 0.72rem; font-weight: 750; background: #f1f5f9; color: #64748b; padding: 2px 8px; border-radius: 9999px; border: 1px solid #cbd5e1;">เลือกแล้ว 0 แท็ก</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <button type="button" class="quick-pill-btn" onclick="selectAllEventTags()" style="font-size: 0.72rem; padding: 3px 8px; background: #ffffff; border-color: #cbd5e1; color: #334155; border-radius: 6px; cursor: pointer;">เลือกทั้งหมด</button>
+                  <button type="button" class="quick-pill-btn" onclick="clearAllEventTags()" style="font-size: 0.72rem; padding: 3px 8px; background: #fef2f2; border-color: #fca5a5; color: #dc2626; border-radius: 6px; cursor: pointer;">ล้าง</button>
+                  <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 3px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700; border-radius: 6px; cursor: pointer;">+ สร้างแท็กกิจกรรม</button>
+                </div>
+              </div>
+              <div id="adminEventTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 42px; align-items: center; padding: 10px 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px;">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Card 2: Date & Time Schedule -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="calendar-clock" style="color: #10b981; width: 17px; height: 17px;"></i>
+                <span>กำหนดวันและเวลาปฏิบัติงาน</span>
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('today')" style="background: #ffffff; border-color: #cbd5e1; cursor: pointer;">📅 วันนี้</button>
+                <button type="button" class="quick-pill-btn" onclick="setQuickEventDate('tomorrow')" style="background: #ffffff; border-color: #cbd5e1; cursor: pointer;">⏩ พรุ่งนี้</button>
+                <button type="button" class="quick-pill-btn" onclick="clearEventEndDate()" style="background: #fef2f2; border-color: #fca5a5; color: #ef4444; cursor: pointer;">✖️ วันเดียว</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
               <div>
                 <span style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 6px; display: block;">เริ่มต้น (Start Date) *</span>
-                <input type="date" id="adminEventStartDatePicker" required style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #ffffff; font-family: inherit; font-size: 0.95rem; color: #0f172a;" onchange="handleEventDatesChange()" />
+                <input type="date" id="adminEventStartDatePicker" required style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #ffffff; font-family: inherit; font-size: 0.95rem; color: #0f172a; cursor: pointer;" onchange="handleEventDatesChange()" />
               </div>
               <div>
                 <span style="font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 6px; display: block;">สิ้นสุด (End Date) <span style="font-weight: 400; color: #94a3b8;">(ถ้ามี)</span></span>
-                <input type="date" id="adminEventEndDatePicker" style="width: 100%; padding: 10px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #ffffff; font-family: inherit; font-size: 0.95rem; color: #0f172a;" onchange="handleEventDatesChange()" />
+                <input type="date" id="adminEventEndDatePicker" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #ffffff; font-family: inherit; font-size: 0.95rem; color: #0f172a; cursor: pointer;" onchange="handleEventDatesChange()" />
               </div>
             </div>
 
-            <div id="adminEventDateSummaryBanner" style="margin-top: 14px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+            <div id="adminEventDateSummaryBanner" style="margin-bottom: 18px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 9px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
               <i data-lucide="check-circle" style="width: 16px; height: 16px; flex-shrink: 0; color: #10b981;"></i>
               <span id="adminEventDateSummaryText">ระบบจะกรอกเลขวัน เดือน ปี และลงเวลาอัตโนมัติ</span>
             </div>
-          </div>
 
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
-            <label style="font-weight: 800; color: #0f172a; margin-bottom: 12px; display: block;">เวลาปฏิบัติงาน (Time Mode)</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
-              <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" id="adminEventTime_full" value="เต็มวัน" checked onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
-                <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">เต็มวัน</span>
-              </label>
-              <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" id="adminEventTime_morning" value="ช่วงเช้า" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
-                <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">ช่วงเช้า <br><small style="color: #64748b; font-weight: 400;">08:30 - 12:00</small></span>
-              </label>
-              <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" id="adminEventTime_afternoon" value="ช่วงบ่าย" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
-                <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">ช่วงบ่าย <br><small style="color: #64748b; font-weight: 400;">13:00 - 16:30</small></span>
-              </label>
-              <label style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
-                <input type="radio" name="adminEventTimeType" id="adminEventTime_custom" value="กำหนดเวลาเอง" onchange="handleTimeRadioChange(this.value)" style="width: 18px; height: 18px; accent-color: #0f172a;" />
-                <span style="font-weight: 600; color: #334155; font-size: 0.9rem;">กำหนดเอง</span>
-              </label>
-            </div>
+            <!-- Time Mode Segments -->
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 14px;">
+              <label style="font-weight: 750; color: #0f172a; font-size: 0.88rem; margin-bottom: 8px; display: block;">ช่วงเวลาปฏิบัติงาน (Time Mode)</label>
+              
+              <div class="time-mode-segments">
+                <label class="time-mode-label active" id="labelTime_full" onclick="updateTimeSegmentUI('เต็มวัน')">
+                  <input type="radio" name="adminEventTimeType" id="adminEventTime_full" value="เต็มวัน" checked onchange="handleTimeRadioChange(this.value)" />
+                  <span style="font-weight: 700; font-size: 0.86rem; color: #0f172a;">☀️ เต็มวัน</span>
+                </label>
+                <label class="time-mode-label" id="labelTime_morning" onclick="updateTimeSegmentUI('ช่วงเช้า')">
+                  <input type="radio" name="adminEventTimeType" id="adminEventTime_morning" value="ช่วงเช้า" onchange="handleTimeRadioChange(this.value)" />
+                  <span style="font-weight: 700; font-size: 0.86rem; color: #0f172a;">🌅 ช่วงเช้า</span>
+                  <span style="font-size: 0.7rem; color: #64748b;">08:30 - 12:00</span>
+                </label>
+                <label class="time-mode-label" id="labelTime_afternoon" onclick="updateTimeSegmentUI('ช่วงบ่าย')">
+                  <input type="radio" name="adminEventTimeType" id="adminEventTime_afternoon" value="ช่วงบ่าย" onchange="handleTimeRadioChange(this.value)" />
+                  <span style="font-weight: 700; font-size: 0.86rem; color: #0f172a;">🌇 ช่วงบ่าย</span>
+                  <span style="font-size: 0.7rem; color: #64748b;">13:00 - 16:30</span>
+                </label>
+                <label class="time-mode-label" id="labelTime_custom" onclick="updateTimeSegmentUI('กำหนดเวลาเอง')">
+                  <input type="radio" name="adminEventTimeType" id="adminEventTime_custom" value="กำหนดเวลาเอง" onchange="handleTimeRadioChange(this.value)" />
+                  <span style="font-weight: 700; font-size: 0.86rem; color: #0f172a;">⏱️ กำหนดเอง</span>
+                </label>
+              </div>
 
-            <!-- Time Pickers (When custom hours is active) -->
-            <div id="adminEventCustomTimeWrap" style="display: none; background: #f1f5f9; border-radius: 8px; padding: 16px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-                <div style="flex: 1;">
-                  <span style="font-size: 0.8rem; color: #475569; display: block; margin-bottom: 6px; font-weight: 700;">เวลาเริ่มต้น</span>
-                  <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; font-size: 0.95rem;" onchange="handleEventTimeCustomChange()" />
+              <!-- Time Pickers (When custom hours is active) -->
+              <div id="adminEventCustomTimeWrap" style="display: none; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-top: 10px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px;">
+                  <div style="flex: 1;">
+                    <span style="font-size: 0.78rem; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">เวลาเริ่มต้น</span>
+                    <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; font-size: 0.95rem;" onchange="handleEventTimeCustomChange()" />
+                  </div>
+                  <span style="color: #94a3b8; font-weight: 800; margin-top: 18px;"><i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
+                  <div style="flex: 1;">
+                    <span style="font-size: 0.78rem; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">เวลาสิ้นสุด</span>
+                    <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; font-size: 0.95rem;" onchange="handleEventTimeCustomChange()" />
+                  </div>
                 </div>
-                <span style="color: #94a3b8; font-weight: 800; margin-top: 20px;"><i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i></span>
-                <div style="flex: 1;">
-                  <span style="font-size: 0.8rem; color: #475569; display: block; margin-bottom: 6px; font-weight: 700;">เวลาสิ้นสุด</span>
-                  <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; font-size: 0.95rem;" onchange="handleEventTimeCustomChange()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Card 3: Location, Audience, Notes -->
+          <div class="bento-card">
+            <div class="bento-card-header">
+              <div class="bento-card-title">
+                <i data-lucide="map-pin" style="color: #ef4444; width: 17px; height: 17px;"></i>
+                <span>สถานที่และกลุ่มเป้าหมาย</span>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">สถานที่จัดกิจกรรม</label>
+                <div style="position: relative;">
+                  <i data-lucide="map-pin" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 16px; height: 16px;"></i>
+                  <input type="text" id="adminEventLocation" placeholder="เช่น หอประชุมใหญ่, โดมเอนกประสงค์" style="padding: 10px 14px 10px 36px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.92rem; width: 100%; font-family: inherit;" />
+                </div>
+              </div>
+              <div class="dg-form-group" style="margin-bottom: 0;">
+                <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">กลุ่มเป้าหมาย</label>
+                <div style="position: relative;">
+                  <i data-lucide="users" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 16px; height: 16px;"></i>
+                  <input type="text" id="adminEventAudience" placeholder="เช่น ม.1 - ม.6, นักเรียนทุกคน" style="padding: 10px 14px 10px 36px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.92rem; width: 100%; font-family: inherit;" />
                 </div>
               </div>
             </div>
 
-            <input type="hidden" id="adminEventTime" value="เต็มวัน" />
-          </div>
-
-          <div class="dg-form-row">
-            <div class="dg-form-group">
-              <label style="font-weight: 700; color: #1e293b;">สถานที่จัดกิจกรรม</label>
-              <div style="position: relative;">
-                <i data-lucide="map-pin" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; height: 18px;"></i>
-                <input type="text" id="adminEventLocation" placeholder="เช่น หอประชุมใหญ่" style="padding: 12px 16px 12px 40px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" />
-              </div>
-            </div>
-            <div class="dg-form-group">
-              <label style="font-weight: 700; color: #1e293b;">กลุ่มเป้าหมาย</label>
-              <div style="position: relative;">
-                <i data-lucide="users" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; height: 18px;"></i>
-                <input type="text" id="adminEventAudience" placeholder="เช่น ม.1 - ม.6" style="padding: 12px 16px 12px 40px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" />
-              </div>
+            <div class="dg-form-group" style="margin-bottom: 0;">
+              <label style="font-weight: 700; color: #1e293b; font-size: 0.86rem; margin-bottom: 6px; display: block;">ข้อปฏิบัติ & คำอธิบายเพิ่มเติม</label>
+              <textarea id="adminEventNote" rows="3" placeholder="เพิ่มคำอธิบาย กฎระเบียบ การแต่งกาย หรือภารกิจย่อย..." style="padding: 10px 14px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.92rem; width: 100%; font-family: inherit; line-height: 1.6;"></textarea>
             </div>
           </div>
-        </div>
 
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
-
-        <!-- 3. Overrides & Extra Info -->
-        <div style="margin-bottom: 16px;">
-          <h4 style="font-size: 0.9rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="file-text" style="width: 16px; height: 16px;"></i> ข้อมูลเพิ่มเติม & ตั้งค่าเอง
-          </h4>
-          
-          <div class="dg-form-group">
-            <label style="font-weight: 700; color: #1e293b;">ข้อปฏิบัติ & คำอธิบายเพิ่มเติม</label>
-            <textarea id="adminEventNote" rows="3" placeholder="เพิ่มคำอธิบาย กฎระเบียบ หรือภารกิจย่อย..." style="padding: 12px 16px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 0.95rem; width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); resize: vertical; font-family: inherit;"></textarea>
-          </div>
-
-          <details style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px;">
-            <summary style="font-size: 0.85rem; font-weight: 700; color: #64748b; cursor: pointer; display: flex; align-items: center; outline: none;">
-              แก้ไขข้อความแสดงผลวันที่ (Override Labels)
+          <!-- Bento Card 4: Advanced Overrides (Collapsible Accordion) -->
+          <details class="bento-card bento-collapsible" style="background: #ffffff;">
+            <summary style="list-style: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+              <div class="bento-card-title">
+                <i data-lucide="settings-2" style="color: #64748b; width: 17px; height: 17px;"></i>
+                <span>ปรับแต่งข้อความปฏิทินขั้นสูง (Override Labels)</span>
+                <span style="font-size: 0.72rem; font-weight: 500; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 999px;">คำนวณอัตโนมัติแล้ว</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #64748b; font-weight: 600;">
+                <span>คลิกเพื่อปรับแต่งเอง</span>
+                <i data-lucide="chevron-down" class="accordion-arrow" style="width: 16px; height: 16px; transition: transform 0.2s ease;"></i>
+              </div>
             </summary>
-            <div style="margin-top: 16px;">
-              <div class="dg-form-row">
-                <div class="dg-form-group">
-                  <label style="font-size: 0.8rem; color: #475569;">เลขวันที่ (เช่น 15 หรือ 25-29)</label>
-                  <input type="text" id="adminEventDay" required style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
+
+            <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                <div class="dg-form-group" style="margin-bottom: 0;">
+                  <label style="font-size: 0.78rem; color: #475569; font-weight: 700; margin-bottom: 4px; display: block;">เลขวันที่ (เช่น 15 หรือ 25-29)</label>
+                  <input type="text" id="adminEventDay" required style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
                 </div>
-                <div class="dg-form-group">
-                  <label style="font-size: 0.8rem; color: #475569;">เดือน & ปี (เช่น ต.ค. 69)</label>
-                  <input type="text" id="adminEventMonth" required style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
+                <div class="dg-form-group" style="margin-bottom: 0;">
+                  <label style="font-size: 0.78rem; color: #475569; font-weight: 700; margin-bottom: 4px; display: block;">เดือน & ปี (เช่น ต.ค. 69)</label>
+                  <input type="text" id="adminEventMonth" required style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
                 </div>
-                <div class="dg-form-group">
-                  <label style="font-size: 0.8rem; color: #475569;">วันในสัปดาห์ (เช่น ศุกร์)</label>
-                  <input type="text" id="adminEventWeekday" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
+                <div class="dg-form-group" style="margin-bottom: 0;">
+                  <label style="font-size: 0.78rem; color: #475569; font-weight: 700; margin-bottom: 4px; display: block;">วันในสัปดาห์ (เช่น ศุกร์)</label>
+                  <input type="text" id="adminEventWeekday" style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.9rem;" />
                 </div>
               </div>
-              <small style="color: #94a3b8; font-size: 0.75rem;">💡 ข้อมูลเหล่านี้จะถูกเติมให้อัตโนมัติเมื่อเลือกวันที่ด้านบน แต่คุณสามารถแก้ไขข้อความเองได้ตามต้องการ</small>
+              <small style="color: #94a3b8; font-size: 0.75rem;">💡 ข้อมูลเหล่านี้จะถูกเติมให้อัตโนมัติเมื่อเลือกวันที่ด้านบน แต่สามารถแก้ไขข้อความเองได้ตามต้องการ</small>
             </div>
           </details>
+
         </div>
 
-        <div class="dg-modal-actions" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 12px;">
-          <button type="button" onclick="closeModal('adminEventModal')" style="padding: 12px 24px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;">
+        <!-- Sticky Bottom Action Footer -->
+        <div class="bento-modal-actions">
+          <button type="button" onclick="closeModal('adminEventModal')" style="padding: 10px 20px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">
             ยกเลิก
           </button>
-          <button type="submit" id="adminEventSubmitBtn" style="padding: 12px 32px; border-radius: 8px; border: none; background: #0f172a; color: #ffffff; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); transition: all 0.2s;">
-            <i data-lucide="save" style="width: 18px; height: 18px;"></i>
+          <button type="submit" id="adminEventSubmitBtn" style="padding: 10px 28px; border-radius: 8px; border: none; background: #0f172a; color: #ffffff; font-weight: 800; font-size: 0.92rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); transition: all 0.2s;">
+            <i data-lucide="save" style="width: 16px; height: 16px;"></i>
             <span>บันทึกกิจกรรม</span>
           </button>
         </div>
@@ -7197,6 +7488,48 @@
       updateTagLivePreview();
     }
 
+
+    // Visual Icon Picker Helper
+    function selectPresetIcon(iconName) {
+      const input = document.getElementById('adminTagIcon');
+      if (input) {
+        input.value = iconName;
+        updateTagLivePreview();
+        updatePresetIconHighlight(iconName);
+      }
+    }
+    window.selectPresetIcon = selectPresetIcon;
+
+    function updatePresetIconHighlight(iconName) {
+      document.querySelectorAll('.preset-icon-chip').forEach(chip => {
+        if (chip.getAttribute('data-icon') === iconName) {
+          chip.classList.add('selected');
+        } else {
+          chip.classList.remove('selected');
+        }
+      });
+    }
+    window.updatePresetIconHighlight = updatePresetIconHighlight;
+
+    // Time Mode Segmented UI Helper
+    function updateTimeSegmentUI(val) {
+      const modes = ['เต็มวัน', 'ช่วงเช้า', 'ช่วงบ่าย', 'กำหนดเวลาเอง'];
+      const map = {
+        'เต็มวัน': 'labelTime_full',
+        'ช่วงเช้า': 'labelTime_morning',
+        'ช่วงบ่าย': 'labelTime_afternoon',
+        'กำหนดเวลาเอง': 'labelTime_custom'
+      };
+      modes.forEach(m => {
+        const el = document.getElementById(map[m]);
+        if (el) {
+          if (m === val) el.classList.add('active');
+          else el.classList.remove('active');
+        }
+      });
+    }
+    window.updateTimeSegmentUI = updateTimeSegmentUI;
+
     function openCreateTagModal() {
       document.getElementById('adminTagId').value = '';
       document.getElementById('adminTagName').value = '';
@@ -7205,6 +7538,7 @@
       document.getElementById('adminTagBadgeStyle').value = 'pill';
       applyTagColorPreset('#0f172a', '#f1f5f9', '#cbd5e1', 'tag');
       document.getElementById('adminTagModalTitle').textContent = 'สร้างแท็กใหม่';
+      updatePresetIconHighlight('tag');
       openModal('adminTagModal');
       updateTagLivePreview();
     }
@@ -7222,6 +7556,7 @@
       document.getElementById('adminTagBadgeStyle').value = tag.badge_style || 'pill';
       applyTagColorPreset(tag.color || '#0f172a', tag.bg_color || '#f1f5f9', tag.border_color || '#cbd5e1', tag.icon || 'tag');
       document.getElementById('adminTagModalTitle').textContent = `แก้ไขแท็ก: ${tag.name}`;
+      updatePresetIconHighlight(tag.icon || 'tag');
       openModal('adminTagModal');
       updateTagLivePreview();
     }
@@ -7714,6 +8049,8 @@
       const submitBtn = document.getElementById('adminNewsSubmitBtn');
       if (submitBtn) submitBtn.innerHTML = '<i data-lucide="plus"></i> <span>เพิ่มข่าวสาร</span>';
       
+      const socialDetails = document.querySelector('#adminNewsModal details.bento-collapsible');
+      if (socialDetails) socialDetails.open = false;
       renderNewsTagsSelector([]);
       openModal('adminNewsModal');
       if (window.lucide) lucide.createIcons();
@@ -7813,6 +8150,9 @@
       if (submitBtn) submitBtn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกการแก้ไข</span>';
       
       renderNewsTagsSelector(item.tags || []);
+      const hasSocial = Boolean(item.fbUrl || item.linkFb || item.fbReelsUrl || item.linkFbReels || item.fb_reels_url || item.igUrl || item.linkIg || item.reelsUrl || item.linkReels || item.photoUrl || item.linkPhoto);
+      const socialDetails = document.querySelector('#adminNewsModal details.bento-collapsible');
+      if (socialDetails) socialDetails.open = hasSocial;
       openModal('adminNewsModal');
       if (window.lucide) lucide.createIcons();
     }
@@ -8463,15 +8803,19 @@
       if (timeMode === 'เต็มวัน' || timeVal === 'เต็มวัน') {
         if (rFull) rFull.checked = true;
         if (customWrap) customWrap.style.display = 'none';
+        if (typeof updateTimeSegmentUI === 'function') updateTimeSegmentUI('เต็มวัน');
       } else if (timeMode === 'ช่วงเช้า' || timeVal === 'ช่วงเช้า' || timeVal.includes('08:30 - 12:00')) {
         if (rMorning) rMorning.checked = true;
         if (customWrap) customWrap.style.display = 'none';
+        if (typeof updateTimeSegmentUI === 'function') updateTimeSegmentUI('ช่วงเช้า');
       } else if (timeMode === 'ช่วงบ่าย' || timeVal === 'ช่วงบ่าย' || timeVal.includes('13:00 - 16:30')) {
         if (rAfternoon) rAfternoon.checked = true;
         if (customWrap) customWrap.style.display = 'none';
+        if (typeof updateTimeSegmentUI === 'function') updateTimeSegmentUI('ช่วงบ่าย');
       } else {
         if (rCustom) rCustom.checked = true;
         if (customWrap) customWrap.style.display = 'block';
+        if (typeof updateTimeSegmentUI === 'function') updateTimeSegmentUI('กำหนดเวลาเอง');
 
         // Extract times: convert Thai dot notation (e.g. 13.20) to colon (13:20)
         const cleanTime = timeVal.replace(/\./g, ':');
@@ -9787,8 +10131,8 @@
       checkAuth();
     });
   </script>
-  <script src="js/admin-team.js?v=2.7.6"></script>
-  <script src="js/admin-recruitment.js?v=2.7.6"></script>
+  <script src="js/admin-team.js?v=2.7.7"></script>
+  <script src="js/admin-recruitment.js?v=2.7.7"></script>
 </body>
 
 </html>
