@@ -327,16 +327,29 @@
         .then(settingsData => {
           let teamMembers = [];
           if (settingsData && settingsData.team_members_db) {
-            try { teamMembers = JSON.parse(settingsData.team_members_db); } catch (e) { }
+            try {
+              teamMembers = typeof settingsData.team_members_db === 'string'
+                ? JSON.parse(settingsData.team_members_db)
+                : settingsData.team_members_db;
+            } catch (e) { }
           }
+
+          // Fallback to localStorage if server returned empty
+          if (!Array.isArray(teamMembers) || teamMembers.length === 0) {
+            try {
+              const raw = localStorage.getItem('dg_sarawat_team_members');
+              if (raw) teamMembers = JSON.parse(raw);
+            } catch (e) {}
+          }
+
           if (Array.isArray(teamMembers) && settingsData && settingsData.president_team_image) {
-            const p = teamMembers.find(m => m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน');
+            const p = teamMembers.find(m => m.role && m.role.includes('ประธาน') && !m.role.includes('รอง'));
             if (p && !p.teamImageUrl) {
               p.teamImageUrl = settingsData.president_team_image;
             }
           }
 
-                    let presidents = [];
+          let presidents = [];
           let vps = [];
           let secs = [];
           let headsByDept = {};
@@ -344,22 +357,21 @@
           let totalMembers = new Set(teamMembers.map(m => m.order_no || m.name)).size;
 
           teamMembers.forEach(m => {
-            const role = m.role || '';
-            let dept = m.department || 'สมาชิกทั่วไป';
+            const role = (m.role || '').trim();
+            let dept = (m.department || 'สมาชิกทั่วไป').trim();
             if (dept.startsWith('ชั้นมัธยมศึกษา') || dept.startsWith('รองประธาน') || dept.startsWith('ฝ่ายเลขานุการ')) {
               dept = 'คณะผู้บริหาร';
             }
 
-            if (role === 'ประธาน' || role === 'ประธานคณะกรรมการสารวัตรนักเรียน') {
-              presidents.push(m);
-            } else if (role === 'รองประธาน' || role.startsWith('รองประธาน')) {
+            if (role.includes('รองประธาน')) {
               vps.push(m);
-            } else if (role === 'เลขานุการ') {
+            } else if (role.includes('ประธาน')) {
+              presidents.push(m);
+            } else if (role.includes('เลขา')) {
               secs.push(m);
-            } else if (role === 'หัวหน้าฝ่าย') {
+            } else if (role.includes('หัวหน้าฝ่าย')) {
               if (!headsByDept[dept]) headsByDept[dept] = [];
               headsByDept[dept].push(m);
-              // Include Head in the department members list as well
               if (!membersByDept[dept]) membersByDept[dept] = [];
               membersByDept[dept].push(m);
             } else {
@@ -368,6 +380,18 @@
               membersByDept[targetDept].push(m);
             }
           });
+
+          // Resilient Fallback for Leadership if not matched
+          if (presidents.length === 0) {
+            const defPres = teamMembers.find(m => m.order_no === 67 || (m.name && m.name.includes('อะห์นัฟ')));
+            if (defPres) presidents.push(defPres);
+          }
+          if (vps.length === 0) {
+            const defVp1 = teamMembers.find(m => m.order_no === 82);
+            const defVp2 = teamMembers.find(m => m.order_no === 124);
+            if (defVp1) { defVp1.vp_order = 1; vps.push(defVp1); }
+            if (defVp2) { defVp2.vp_order = 2; vps.push(defVp2); }
+          }
 
           renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers);
         })
@@ -378,9 +402,10 @@
             const raw = localStorage.getItem('dg_sarawat_team_members');
             if (raw) teamMembers = JSON.parse(raw);
           } catch (e) {}
+
           const savedTeamImg = localStorage.getItem('dg_sarawat_president_team_image');
           if (Array.isArray(teamMembers) && savedTeamImg) {
-            const p = teamMembers.find(m => m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน');
+            const p = teamMembers.find(m => m.role && m.role.includes('ประธาน') && !m.role.includes('รอง'));
             if (p && !p.teamImageUrl) {
               p.teamImageUrl = savedTeamImg;
             }
@@ -388,7 +413,7 @@
 
           if (teamMembers.length === 0) {
             teamMembers = [
-              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธาน', department: 'คณะผู้บริหาร', imageUrl: '', homeImageUrl: '', teamImageUrl: '' }
+              { name: 'นายอะห์นัฟ สหสันติวรกุล', role: 'ประธานคณะกรรมการสารวัตรนักเรียน', department: 'คณะผู้บริหาร', imageUrl: '', homeImageUrl: '', teamImageUrl: '' }
             ];
           }
 
@@ -400,22 +425,21 @@
           let totalMembers = new Set(teamMembers.map(m => m.order_no || m.name)).size;
 
           teamMembers.forEach(m => {
-            const role = m.role || '';
-            let dept = m.department || 'สมาชิกทั่วไป';
+            const role = (m.role || '').trim();
+            let dept = (m.department || 'สมาชิกทั่วไป').trim();
             if (dept.startsWith('ชั้นมัธยมศึกษา') || dept.startsWith('รองประธาน') || dept.startsWith('ฝ่ายเลขานุการ')) {
               dept = 'คณะผู้บริหาร';
             }
 
-            if (role === 'ประธาน' || role === 'ประธานคณะกรรมการสารวัตรนักเรียน') {
-              presidents.push(m);
-            } else if (role === 'รองประธาน' || role.startsWith('รองประธาน')) {
+            if (role.includes('รองประธาน')) {
               vps.push(m);
-            } else if (role === 'เลขานุการ') {
+            } else if (role.includes('ประธาน')) {
+              presidents.push(m);
+            } else if (role.includes('เลขา')) {
               secs.push(m);
-            } else if (role === 'หัวหน้าฝ่าย') {
+            } else if (role.includes('หัวหน้าฝ่าย')) {
               if (!headsByDept[dept]) headsByDept[dept] = [];
               headsByDept[dept].push(m);
-              // Include Head in the department members list as well
               if (!membersByDept[dept]) membersByDept[dept] = [];
               membersByDept[dept].push(m);
             } else {
@@ -425,8 +449,26 @@
             }
           });
 
+          if (presidents.length === 0) {
+            const defPres = teamMembers.find(m => m.order_no === 67 || (m.name && m.name.includes('อะห์นัฟ')));
+            if (defPres) presidents.push(defPres);
+          }
+          if (vps.length === 0) {
+            const defVp1 = teamMembers.find(m => m.order_no === 82);
+            const defVp2 = teamMembers.find(m => m.order_no === 124);
+            if (defVp1) { defVp1.vp_order = 1; vps.push(defVp1); }
+            if (defVp2) { defVp2.vp_order = 2; vps.push(defVp2); }
+          }
+
           renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers);
         });
+
+      // Live Tab Storage Listener
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'dg_sarawat_team_members' || e.key === 'dg_sarawat_president_team_image') {
+          location.reload();
+        }
+      });
     });
 
     function renderTeam(presidents, vps, secs, headsByDept, membersByDept, totalMembers) {

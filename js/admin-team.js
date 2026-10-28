@@ -641,12 +641,12 @@ function renderTeamAdminUI() {
       <table class="master-team-table">
         <thead>
           <tr>
-            <th style="width: 60px; text-align: center;">ลำดับ</th>
-            <th>ชื่อ - นามสกุล</th>
-            <th style="width: 80px; text-align: center;">ชั้น</th>
-            <th style="width: 170px;">คอลัมน์ 1: สังกัด/ฝ่าย</th>
-            <th style="width: 320px;">คอลัมน์ 2: ตำแหน่งในฝ่าย</th>
-            <th style="width: 230px; text-align: center;">สถานะในทำเนียบ</th>
+            <th style="width: 50px; text-align: center;">ลำดับ</th>
+            <th style="min-width: 170px;">ชื่อ - นามสกุล</th>
+            <th style="width: 65px; text-align: center;">ชั้น</th>
+            <th style="width: 160px;">คอลัมน์ 1: สังกัด/ฝ่าย</th>
+            <th style="min-width: 360px;">คอลัมน์ 2: ตำแหน่งในฝ่าย</th>
+            <th style="width: 170px; text-align: center;">สถานะในทำเนียบ</th>
           </tr>
         </thead>
         <tbody>
@@ -654,31 +654,31 @@ function renderTeamAdminUI() {
 
   filtered.forEach((m, idx) => {
     const roles = getRolesForDepartment(m.department);
-    const isPres = m.role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || m.role === 'ประธาน';
-    const isVp = m.role && m.role.startsWith('รองประธาน');
-    const isLeadership = isPres || isVp || m.role === 'หัวหน้าฝ่าย';
+    const isPres = m.role && m.role.includes('ประธาน') && !m.role.includes('รอง');
+    const isVp = m.role && m.role.includes('รองประธาน');
+    const isLeadership = isPres || isVp || (m.role && m.role.includes('หัวหน้าฝ่าย'));
 
     html += `
       <tr>
         <td style="text-align: center; font-weight: 700; color: #64748b; font-size: 0.86rem;">${m.order_no || (idx + 1)}</td>
         <td>
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem;">${escapeHtml(m.name)}</div>
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem; white-space: nowrap;">${escapeHtml(m.name)}</div>
         </td>
         <td style="text-align: center; font-weight: 600; color: #475569; font-size: 0.88rem;">
           ${(isPres || isVp) ? '-' : (m.grade ? 'ม.' + escapeHtml(m.grade) : '-')}
         </td>
         <td>
-          <select class="col-select" onchange="handleDeptChange(${m.order_no}, this.value)">
+          <select class="col-select" style="width: 100%; min-width: 140px; font-size: 0.84rem;" onchange="handleDeptChange(${m.order_no}, this.value)">
             ${DEPARTMENTS.map(d => `<option value="${d}" ${m.department === d ? 'selected' : ''}>${d}</option>`).join('')}
           </select>
         </td>
         <td>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <select class="col-select ${isLeadership ? 'role-lead' : ''}" style="${isVp ? 'max-width: 220px;' : 'max-width: 280px;'}" onchange="handleRoleChange(${m.order_no}, this.value)">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: nowrap;">
+            <select class="col-select ${isLeadership ? 'role-lead' : ''}" style="${isVp ? 'min-width: 250px; max-width: 280px;' : 'min-width: 250px; max-width: 320px;'}; font-size: 0.84rem; padding: 7px 10px;" onchange="handleRoleChange(${m.order_no}, this.value)">
               ${roles.map(r => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${r}</option>`).join('')}
             </select>
             ${isVp ? `
-              <select class="col-select" style="width: 86px; padding: 6px 6px; font-size: 0.82rem; border-color: #93c5fd; background: #eff6ff; color: #1e40af; font-weight: 700;"
+              <select class="col-select" style="width: 86px; flex-shrink: 0; padding: 7px 6px; font-size: 0.82rem; border-color: #93c5fd; background: #eff6ff; color: #1e40af; font-weight: 700;"
                 onchange="handleVpOrderChange(${m.order_no}, this.value)" title="กำหนดว่ารองประธานเป็นคนที่เท่าไหร่">
                 ${[1, 2, 3, 4, 5].map(n => `<option value="${n}" ${(m.vp_order || 1) === n ? 'selected' : ''}>คนที่ ${n}</option>`).join('')}
               </select>
@@ -715,23 +715,23 @@ function renderTeamAdminUI() {
 }
 
 function renderStatusBadge(dept, role, vpOrder) {
-  if (role === 'ประธานคณะกรรมการสารวัตรนักเรียน' || role === 'ประธาน') {
-    return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">👑 ประธานคณะกรรมการสารวัตรนักเรียน</span>';
+  if (role && role.includes('ประธาน') && !role.includes('รอง')) {
+    return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 750; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">👑 ประธาน</span>';
   }
-  if (typeof role === 'string' && role.startsWith('รองประธาน')) {
-    const numText = vpOrder ? ` คนที่ ${vpOrder}` : '';
-    return `<span style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">⭐ รองประธานคณะกรรมการสารวัตรนักเรียน${numText}</span>`;
+  if (role && role.includes('รองประธาน')) {
+    const numText = vpOrder ? ` (คนที่ ${vpOrder})` : '';
+    return `<span style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 750; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">⭐ รองประธาน${numText}</span>`;
   }
-  if (role === 'เลขานุการ') {
-    return '<span style="background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">📝 เลขานุการ</span>';
+  if (role && role.includes('เลขา')) {
+    return '<span style="background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 750; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">📝 เลขานุการ</span>';
   }
-  if (role === 'หัวหน้าฝ่าย') {
-    return `<span style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 750;">👑 หัวหน้า${dept}</span>`;
+  if (role && role.includes('หัวหน้าฝ่าย')) {
+    return `<span style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 750; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">👑 หัวหน้า${dept}</span>`;
   }
   if (dept && dept !== 'สมาชิกทั่วไป' && dept !== 'คณะผู้บริหาร') {
-    return `<span style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600;">สมาชิก${dept}</span>`;
+    return `<span style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center;">สมาชิก${dept}</span>`;
   }
-  return '<span style="background: #f1f5f9; color: #64748b; padding: 4px 10px; border-radius: 999px; font-size: 0.78rem;">สมาชิกทั่วไป</span>';
+  return '<span style="background: #f1f5f9; color: #64748b; padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center;">สมาชิกทั่วไป</span>';
 }
 
 function resolveUrl(url) {
