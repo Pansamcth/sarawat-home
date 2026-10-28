@@ -5090,12 +5090,25 @@
             </div>
           </div>
           <div class="dg-form-group" style="margin-top: 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <label style="margin: 0; font-weight: 750; color: #1e293b;"><i data-lucide="tags" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px;"></i> แท็กกิจกรรม (เลือกได้หลายแท็ก)</label>
-              <span style="font-size: 0.72rem; color: #64748b;">คลิกเพื่อเปิด/ปิดแท็กที่ต้องการ</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <label style="margin: 0; font-weight: 750; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+                  <i data-lucide="tags" style="width: 15px; height: 15px; color: #0284c7;"></i>
+                  <span>แท็กกิจกรรม (เลือกได้หลายแท็ก)</span>
+                </label>
+                <span id="adminEventTagsCountBadge" style="font-size: 0.72rem; font-weight: 750; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 9999px; border: 1px solid #bae6fd;">เลือกแล้ว 0 แท็ก</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="quick-pill-btn" onclick="selectAllEventTags()" style="font-size: 0.72rem; padding: 3px 8px; background: #ffffff; border-color: #cbd5e1; color: #334155; border-radius: 6px; cursor: pointer;">เลือกทั้งหมด</button>
+                <button type="button" class="quick-pill-btn" onclick="clearAllEventTags()" style="font-size: 0.72rem; padding: 3px 8px; background: #fef2f2; border-color: #fca5a5; color: #dc2626; border-radius: 6px; cursor: pointer;">ล้าง</button>
+                <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 3px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700; border-radius: 6px; cursor: pointer;">+ สร้างแท็กใหม่</button>
+              </div>
             </div>
-            <div id="adminEventTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 38px; align-items: center; padding: 8px 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+            <div id="adminEventTagsSelectorContainer" style="display: flex; gap: 8px; flex-wrap: wrap; min-height: 44px; align-items: center; padding: 10px 12px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; transition: all 0.2s ease;">
               <!-- Rendered dynamically -->
+            </div>
+            <div style="font-size: 0.72rem; color: #64748b; margin-top: 5px;">
+              <span>💡 คลิกที่แท็กเพื่อเปิด/ปิดเลือกแท็กกิจกรรม สามารถเลือกได้หลายแท็กตามรายการแท็กที่มีในระบบ</span>
             </div>
           </div>
         </div>
@@ -7349,35 +7362,92 @@
       return Array.from(selectedNewsTagIds);
     }
 
-    function renderEventTagsSelector(activeTags = []) {
+    async function ensureAdminTagsLoaded() {
+      if (!cachedAdminTags || cachedAdminTags.length === 0) {
+        if (window.SarawatApi && typeof window.SarawatApi.getTags === 'function') {
+          try {
+            const tags = await window.SarawatApi.getTags('all');
+            if (Array.isArray(tags) && tags.length > 0) cachedAdminTags = tags;
+          } catch (e) {}
+        }
+        if (!cachedAdminTags || cachedAdminTags.length === 0) {
+          try {
+            const stored = localStorage.getItem('dg_sarawat_tags_all');
+            if (stored) cachedAdminTags = JSON.parse(stored) || [];
+          } catch (e) {}
+        }
+      }
+      return cachedAdminTags || [];
+    }
+
+    function renderEventTagsSelector(activeTags = null) {
       const container = document.getElementById('adminEventTagsSelectorContainer');
       if (!container) return;
 
-      selectedEventTagIds = new Set();
-      if (Array.isArray(activeTags)) {
-        activeTags.forEach(t => {
-          if (typeof t === 'object' && t.id) selectedEventTagIds.add(Number(t.id));
-          else if (typeof t === 'number') selectedEventTagIds.add(t);
-        });
+      if (!cachedAdminTags || cachedAdminTags.length === 0) {
+        ensureAdminTagsLoaded().then(() => renderEventTagsSelector(activeTags));
       }
 
-      const relevant = (cachedAdminTags || []).filter(t => t.target_type === 'events' || t.target_type === 'all');
-      if (relevant.length === 0) {
-        container.innerHTML = '<span style="font-size:0.78rem; color:#64748b;">(ยังไม่มีรายการแท็กกิจกรรม คลิกแถบ "จัดการแท็กและสไตล์" เพื่อสร้าง)</span>';
+      if (activeTags !== null && activeTags !== undefined) {
+        selectedEventTagIds = new Set();
+        if (Array.isArray(activeTags)) {
+          activeTags.forEach(t => {
+            if (typeof t === 'object' && t && t.id) selectedEventTagIds.add(Number(t.id));
+            else if (typeof t === 'number') selectedEventTagIds.add(t);
+            else if (typeof t === 'string' && /^\d+$/.test(t)) selectedEventTagIds.add(Number(t));
+            else if (typeof t === 'string' && t.trim()) {
+              const match = (cachedAdminTags || []).find(x => (x.slug && x.slug.toLowerCase() === t.trim().toLowerCase()) || (x.name && x.name.toLowerCase() === t.trim().toLowerCase()));
+              if (match) selectedEventTagIds.add(Number(match.id));
+            }
+          });
+        }
+      }
+
+      // Update counter badge
+      const countBadge = document.getElementById('adminEventTagsCountBadge');
+      if (countBadge) {
+        const count = selectedEventTagIds.size;
+        countBadge.textContent = `เลือกแล้ว ${count} แท็ก`;
+        countBadge.style.background = count > 0 ? '#dcfce7' : '#f1f5f9';
+        countBadge.style.color = count > 0 ? '#15803d' : '#64748b';
+        countBadge.style.borderColor = count > 0 ? '#86efac' : '#cbd5e1';
+      }
+
+      const allTags = cachedAdminTags || [];
+      if (allTags.length === 0) {
+        container.innerHTML = `
+          <div style="font-size:0.8rem; color:#64748b; display: flex; align-items: center; gap: 8px;">
+            <span>(ยังไม่มีรายการแท็กในระบบ)</span>
+            <button type="button" class="quick-pill-btn" onclick="openCreateTagModal()" style="font-size: 0.72rem; padding: 2px 8px; background: #f0fdf4; border-color: #86efac; color: #16a34a; font-weight: 700;">+ สร้างแท็กแรก</button>
+          </div>
+        `;
         return;
       }
 
-      container.innerHTML = relevant.map(tag => {
+      container.innerHTML = allTags.map(tag => {
         const isSelected = selectedEventTagIds.has(Number(tag.id));
-        const activeBorder = isSelected ? `2.5px solid ${tag.color || '#0f172a'}` : `1px dashed #cbd5e1`;
-        const activeOpacity = isSelected ? '1' : '0.6';
-        const activeScale = isSelected ? 'scale(1.05)' : 'scale(1)';
+        const color = tag.color || '#2563eb';
+        const bg = tag.bg_color || '#eff6ff';
+        const border = tag.border_color || '#93c5fd';
+        const icon = tag.icon || 'tag';
 
-        return `
-          <button type="button" class="tag-selector-chip" onclick="toggleEventTagSelection(${tag.id})" style="border: ${activeBorder}; opacity: ${activeOpacity}; transform: ${activeScale}; transition: all 0.15s ease; cursor: pointer; background: transparent; padding: 0; border-radius: 9999px;">
-            ${window.renderTagBadgesHtml ? window.renderTagBadgesHtml(tag) : tag.name}
-          </button>
-        `;
+        if (isSelected) {
+          return `
+            <button type="button" class="tag-selector-chip active" onclick="toggleEventTagSelection(${tag.id})" title="คลิกเพื่อยกเลิกการเลือกแท็กนี้" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: ${bg}; color: ${color}; border: 2px solid ${color}; font-size: 0.82rem; font-weight: 800; cursor: pointer; box-shadow: 0 2px 8px ${color}33, 0 0 0 2px ${color}22; transform: scale(1.02); transition: all 0.15s ease;">
+              <i data-lucide="check" style="width: 13px; height: 13px; stroke-width: 3;"></i>
+              <span>${escapeHtml(tag.name)}</span>
+              <span style="font-size: 0.68rem; margin-left: 2px; opacity: 0.75;">✕</span>
+            </button>
+          `;
+        } else {
+          return `
+            <button type="button" class="tag-selector-chip unselected" onclick="toggleEventTagSelection(${tag.id})" title="คลิกเพื่อเลือกแท็กนี้" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 9999px; background: #ffffff; color: #64748b; border: 1.5px dashed #cbd5e1; font-size: 0.82rem; font-weight: 600; cursor: pointer; opacity: 0.8; transition: all 0.15s ease;" onmouseenter="this.style.opacity='1'; this.style.borderColor='${color}'; this.style.color='${color}';" onmouseleave="this.style.opacity='0.8'; this.style.borderColor='#cbd5e1'; this.style.color='#64748b';">
+              <i data-lucide="${icon}" style="width: 12px; height: 12px; stroke-width: 2.2; opacity: 0.7;"></i>
+              <span>${escapeHtml(tag.name)}</span>
+              <span style="font-size: 0.72rem; color: #94a3b8;">+</span>
+            </button>
+          `;
+        }
       }).join(' ');
 
       if (window.lucide) lucide.createIcons();
@@ -7390,7 +7460,17 @@
       } else {
         selectedEventTagIds.add(idNum);
       }
-      renderEventTagsSelector(Array.from(selectedEventTagIds));
+      renderEventTagsSelector();
+    }
+
+    function selectAllEventTags() {
+      (cachedAdminTags || []).forEach(t => selectedEventTagIds.add(Number(t.id)));
+      renderEventTagsSelector();
+    }
+
+    function clearAllEventTags() {
+      selectedEventTagIds.clear();
+      renderEventTagsSelector();
     }
 
     function getSelectedEventTags() {
@@ -7991,7 +8071,18 @@
       let filtered = adminEventsCache.slice();
 
       if (adminEventsCategoryFilter && adminEventsCategoryFilter !== 'all') {
-        filtered = filtered.filter(e => e.category === adminEventsCategoryFilter || e.categoryLabel === adminEventsCategoryFilter);
+        const filterVal = adminEventsCategoryFilter.toLowerCase();
+        filtered = filtered.filter(e => {
+          if (e.category && e.category.toLowerCase() === filterVal) return true;
+          if (e.categoryLabel && e.categoryLabel.toLowerCase() === filterVal) return true;
+          if (Array.isArray(e.tags)) {
+            return e.tags.some(t => {
+              const name = (typeof t === 'object' ? (t.slug || t.name || '') : String(t)).toLowerCase();
+              return name === filterVal || String(t.id) === filterVal;
+            });
+          }
+          return false;
+        });
       }
 
       if (adminEventsSearchTerm) {
@@ -8000,7 +8091,11 @@
           (e.desc && e.desc.toLowerCase().includes(adminEventsSearchTerm)) ||
           (e.location && e.location.toLowerCase().includes(adminEventsSearchTerm)) ||
           (e.audience && e.audience.toLowerCase().includes(adminEventsSearchTerm)) ||
-          (e.categoryLabel && e.categoryLabel.toLowerCase().includes(adminEventsSearchTerm))
+          (e.categoryLabel && e.categoryLabel.toLowerCase().includes(adminEventsSearchTerm)) ||
+          (Array.isArray(e.tags) && e.tags.some(t => {
+            const str = (typeof t === 'object' ? (t.name + ' ' + (t.slug || '')) : String(t)).toLowerCase();
+            return str.includes(adminEventsSearchTerm);
+          }))
         );
       }
 
@@ -8132,6 +8227,9 @@
           throw new Error('วันสิ้นสุดต้องไม่เกิดก่อนวันเริ่มต้น');
         }
 
+        const selectedTagIds = getSelectedEventTags();
+        const selectedTagObjects = (cachedAdminTags || []).filter(t => selectedTagIds.includes(Number(t.id)));
+
         const payload = {
           title,
           day,
@@ -8147,7 +8245,8 @@
           desc,
           dateStart: dateIso,
           dateEnd: endDateIso,
-          tags: getSelectedEventTags()
+          tags: selectedTagObjects,
+          tagIds: selectedTagIds
         };
         if (id) payload.id = id;
 
@@ -8273,6 +8372,7 @@
         `;
       }
 
+      if (typeof ensureAdminTagsLoaded === 'function') await ensureAdminTagsLoaded();
       renderEventTagsSelector([]);
       openModal('adminEventModal');
       if (window.lucide) lucide.createIcons();
@@ -8284,10 +8384,15 @@
       const submitBtn = document.getElementById('adminEventSubmitBtn');
       if (submitBtn) submitBtn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกการเปลี่ยนแปลง</span>';
 
+      if (typeof ensureAdminTagsLoaded === 'function') await ensureAdminTagsLoaded();
       const events = await fetchEventsApi();
       const evt = events.find(e => String(e.id) === String(id) || String(e.legacyId || '') === String(id));
       if (!evt) return;
-      renderEventTagsSelector(evt.tags || []);
+      let initialTags = evt.tags || [];
+      if ((!initialTags || initialTags.length === 0) && (evt.tagId || evt.tag_id || evt.category)) {
+        initialTags = [evt.tagId || evt.tag_id || evt.category].filter(Boolean);
+      }
+      renderEventTagsSelector(initialTags);
 
       document.getElementById('adminEventTitle').value = evt.title || '';
 

@@ -2057,20 +2057,26 @@
     async function loadDynamicCalendarTags() {
       // 1. Instant Cache-First render from localStorage to eliminate layout shift
       try {
-        const cached = localStorage.getItem('dg_sarawat_tags_events');
+        const cached = localStorage.getItem('dg_sarawat_tags_all') || localStorage.getItem('dg_sarawat_tags_events');
         if (cached) {
           const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) renderCalendarPills(parsed);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const cleanTags = parsed.filter(t => t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
+            renderCalendarPills(cleanTags);
+          }
         }
       } catch (e) {}
 
-      // 2. Fetch fresh tags from Backend Database API
+      // 2. Fetch fresh tags from Backend Database API (all tags)
       if (!window.SarawatApi || !window.SarawatApi.getTags) return;
       try {
-        const tags = await window.SarawatApi.getTags('events');
+        const tags = await window.SarawatApi.getTags('all');
         if (Array.isArray(tags) && tags.length > 0) {
           const cleanTags = tags.filter(t => t.slug !== 'featured' && t.name !== 'กิจกรรมเด่น' && t.id !== 10);
-          try { localStorage.setItem('dg_sarawat_tags_events', JSON.stringify(cleanTags)); } catch (e) {}
+          try {
+            localStorage.setItem('dg_sarawat_tags_all', JSON.stringify(tags));
+            localStorage.setItem('dg_sarawat_tags_events', JSON.stringify(cleanTags));
+          } catch (e) {}
           renderCalendarPills(cleanTags);
         }
       } catch (e) {

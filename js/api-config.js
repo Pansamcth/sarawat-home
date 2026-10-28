@@ -423,14 +423,32 @@
       const tagList = Array.isArray(tags) ? tags : [tags];
       if (tagList.length === 0) return '';
 
+      let knownTags = [];
+      try {
+        if (typeof cachedAdminTags !== 'undefined' && Array.isArray(cachedAdminTags)) {
+          knownTags = cachedAdminTags;
+        } else {
+          const stored = localStorage.getItem('dg_sarawat_tags_all') || localStorage.getItem('dg_sarawat_tags_events');
+          if (stored) knownTags = JSON.parse(stored) || [];
+        }
+      } catch (e) {}
+
       return tagList.map(t => {
         if (!t) return '';
-        const name = typeof t === 'object' ? (t.name || t.slug || '') : String(t);
-        const color = (typeof t === 'object' && t.color) ? t.color : '#0f172a';
-        const bg = (typeof t === 'object' && t.bg_color) ? t.bg_color : '#f1f5f9';
-        const border = (typeof t === 'object' && t.border_color) ? t.border_color : '#cbd5e1';
-        const icon = (typeof t === 'object' && t.icon) ? t.icon : 'tag';
-        const style = (typeof t === 'object' && t.badge_style) ? t.badge_style : 'pill';
+        let tagObj = null;
+        if (typeof t === 'object') {
+          tagObj = t;
+        } else {
+          const match = knownTags.find(k => String(k.id) === String(t) || (k.slug && k.slug.toLowerCase() === String(t).toLowerCase()) || (k.name && k.name.toLowerCase() === String(t).toLowerCase()));
+          if (match) tagObj = match;
+        }
+
+        const name = tagObj ? (tagObj.name || tagObj.slug || '') : String(t);
+        const color = (tagObj && tagObj.color) ? tagObj.color : '#0f172a';
+        const bg = (tagObj && tagObj.bg_color) ? tagObj.bg_color : '#f1f5f9';
+        const border = (tagObj && tagObj.border_color) ? tagObj.border_color : '#cbd5e1';
+        const icon = (tagObj && tagObj.icon) ? tagObj.icon : 'tag';
+        const style = (tagObj && tagObj.badge_style) ? tagObj.badge_style : 'pill';
 
         const radius = style === 'rounded' ? '6px' : (style === 'outline' ? '4px' : '9999px');
         const shadow = style === 'glow' ? `0 0 10px ${border}` : 'none';
@@ -654,7 +672,10 @@
         weekday: item.weekday || '',
         category: item.category || 'general',
         categoryLabel: item.categoryLabel || '',
+        tags: item.tags || [],
+        tagIds: item.tagIds || (Array.isArray(item.tags) ? item.tags.map(t => typeof t === 'object' ? t.id : t) : []),
         time: item.time || 'เต็มวัน',
+        timeMode: item.timeMode || '',
         location: item.location || '',
         audience: item.audience || item.target || '',
         desc: item.desc || item.note || '',
