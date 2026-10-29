@@ -9696,10 +9696,6 @@ body.dark-mode .signup-success-banner,
         const isFull = currentCount >= quota;
         const isChanged = (changedDutyName && dutyName === changedDutyName);
         const pulseClass = isChanged ? ' live-duty-pulse' : '';
-        const quota = parseInt(item.quota);
-        const dutySignups = signups.filter(s => s.duty === dutyName);
-        const currentCount = dutySignups.length;
-        const isFull = currentCount >= quota;
 
         let signupHtml = '';
         let currentViewMode = (selectedDateInfo.activity && selectedDateInfo.activity.viewMode) ? selectedDateInfo.activity.viewMode : 'counts';
