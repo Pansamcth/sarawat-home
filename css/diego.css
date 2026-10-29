@@ -926,6 +926,7 @@ svg:not([data-lucide]),
   letter-spacing: -0.015em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -937,6 +938,7 @@ svg:not([data-lucide]),
   margin: 0 0 18px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex-grow: 1;
@@ -1363,6 +1365,7 @@ svg:not([data-lucide]),
 .dg-what-title .dg-text-gradient {
   background: linear-gradient(135deg, #2563eb, #10b981);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -5094,6 +5097,7 @@ svg:not([data-lucide]),
   letter-spacing: -0.015em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -5105,6 +5109,7 @@ svg:not([data-lucide]),
   margin: 0 0 16px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex-grow: 1;
@@ -6547,6 +6552,7 @@ svg:not([data-lucide]),
     margin: 1px 0 !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     letter-spacing: -0.015em !important;
@@ -10256,6 +10262,7 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
 .dg-act-card.dg-act-card-no-cover .dg-act-card-desc,
 .dg-news-card.dg-news-card-no-cover .dg-news-card-desc {
   -webkit-line-clamp: 5;
+  line-clamp: 5;
   line-height: 1.68;
   margin-bottom: 18px;
   color: var(--dg-text-secondary);
