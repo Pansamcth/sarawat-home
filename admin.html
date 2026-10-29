@@ -12,6 +12,20 @@
   <meta name="robots" content="noindex, nofollow" />
 
   <script>
+    // Global Error Guard: Suppress unhandled errors injected by third-party browser extensions (e.g. ContentScript-*.js, Shortcut-*.js)
+    window.addEventListener('error', function(event) {
+      var fn = (event && event.filename) ? event.filename : '';
+      if (
+        fn.indexOf('Shortcut-') !== -1 ||
+        fn.indexOf('ContentScript-') !== -1 ||
+        fn.indexOf('chrome-extension://') !== -1 ||
+        fn.indexOf('moz-extension://') !== -1
+      ) {
+        if (event.preventDefault) event.preventDefault();
+        return true;
+      }
+    }, true);
+
     (function() {
       try {
         if (window.location.protocol === 'file:') return;
