@@ -2208,6 +2208,22 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
     }
 
+    @keyframes liveDutyPulseAnim {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+      40% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); border-color: #3b82f6 !important; }
+      100% { transform: scale(1); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02); }
+    }
+    .live-duty-pulse {
+      animation: liveDutyPulseAnim 0.9s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    @keyframes liveCardPulseAnim {
+      0% { transform: translateY(0); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      50% { transform: translateY(-3px); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      100% { transform: translateY(0); box-shadow: none; }
+    }
+    .live-card-pulse {
+      animation: liveCardPulseAnim 0.9s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
     .duty-card:hover {
       border-color: #cbd5e1;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
@@ -7659,6 +7675,7 @@ body.dark-mode .signup-success-banner,
 
         rosterEventSource.onopen = function () {
           isRosterSSEConnected = true;
+          startRosterSyncStatePolling(); // Relax polling while SSE stream is live
         };
 
         rosterEventSource.onmessage = function (event) {
@@ -7670,10 +7687,11 @@ body.dark-mode .signup-success-banner,
 
         rosterEventSource.onerror = function () {
           isRosterSSEConnected = false;
+          startRosterSyncStatePolling(); // Fallback to fast polling if SSE drops
           try { rosterEventSource.close(); } catch (e) {}
           rosterEventSource = null;
           clearTimeout(rosterReconnectTimer);
-          rosterReconnectTimer = setTimeout(startSSEStream, 5000);
+          rosterReconnectTimer = setTimeout(startSSEStream, 3000);
         };
       } catch (err) {}
     }
@@ -7727,11 +7745,16 @@ body.dark-mode .signup-success-banner,
 
     function startRosterSyncStatePolling() {
       if (rosterSyncStateInterval) clearInterval(rosterSyncStateInterval);
-      rosterSyncStateInterval = setInterval(checkRosterSyncState, 1500);
+      // Adaptive polling: 25s background check when SSE is active; 3s fallback if disconnected
+      const intervalMs = isRosterSSEConnected ? 25000 : 3000;
+      rosterSyncStateInterval = setInterval(checkRosterSyncState, intervalMs);
     }
 
     function handleIncomingRosterEvent(evt) {
       if (!evt || !evt.type) return;
+      if (typeof window.clearRosterClientCache === 'function') {
+        window.clearRosterClientCache();
+      }
 
       if (evt.type === 'roster_signup_change') {
         const p = evt.payload || {};
@@ -7739,12 +7762,36 @@ body.dark-mode .signup-success-banner,
         const detailModal = document.getElementById('detailModal');
         if (detailModal && detailModal.classList.contains('active') && selectedDateInfo && selectedDateInfo.activity) {
           if (!p.sheetName || p.sheetName === selectedDateInfo.activity.sheetName) {
+            // Optimistic instant local update
+            if (p.action === 'signup' && p.duty && p.name) {
+              const studentNameFull = p.name + (p.grade ? ' ' + p.grade : '');
+              if (!selectedDateInfo.signups.some(s => s.name === studentNameFull && s.duty === p.duty)) {
+                selectedDateInfo.signups.push({
+                  duty: p.duty,
+                  name: studentNameFull,
+                  grade: p.grade || '',
+                  timestamp: Date.now()
+                });
+                if (typeof updateDutiesLive === 'function') {
+                  updateDutiesLive(selectedDateInfo.activity.duties, selectedDateInfo.signups, p.duty);
+                }
+              }
+            } else if (p.action === 'cancel' && p.duty && p.name) {
+              selectedDateInfo.signups = selectedDateInfo.signups.filter(s => !(s.duty === p.duty && (s.name === p.name || s.name.startsWith(p.name))));
+              if (typeof updateDutiesLive === 'function') {
+                updateDutiesLive(selectedDateInfo.activity.duties, selectedDateInfo.signups, p.duty);
+              }
+            }
+
+            // Authoritative server fetch to guarantee 100% database sync
             if (typeof google !== 'undefined' && google.script) {
               google.script.run
                 .withSuccessHandler(function (newSignups) {
-                  selectedDateInfo.signups = newSignups || [];
-                  if (typeof updateDutiesLive === 'function') {
-                    updateDutiesLive(selectedDateInfo.activity.duties, selectedDateInfo.signups);
+                  if (Array.isArray(newSignups)) {
+                    selectedDateInfo.signups = newSignups;
+                    if (typeof updateDutiesLive === 'function') {
+                      updateDutiesLive(selectedDateInfo.activity.duties, selectedDateInfo.signups, p.duty || null);
+                    }
                   }
                 })
                 .getSignupsForActivity(selectedDateInfo.activity.sheetName);
@@ -7833,6 +7880,12 @@ body.dark-mode .signup-success-banner,
             const card = document.querySelector(`.activity-card[data-sheet-name="${act.sheetName}"]`);
             if (!card) return;
 
+            if (targetSheetName && act.sheetName === targetSheetName) {
+              card.classList.remove('live-card-pulse');
+              void card.offsetWidth;
+              card.classList.add('live-card-pulse');
+            }
+
             const now = Date.now();
             let isExpired = false;
             let isNotStarted = false;
@@ -7871,6 +7924,12 @@ body.dark-mode .signup-success-banner,
                 if (timerSpan) timerSpan.textContent = 'หมดเวลาลงชื่อ';
                 const prefixEl = badge.querySelector('.status-badge-prefix');
                 if (prefixEl) prefixEl.textContent = '';
+              } else if (!isNotStarted) {
+                badge.className = 'status-badge status-open';
+                const iconEl = badge.querySelector('i');
+                if (iconEl) iconEl.className = 'fa-solid fa-door-open';
+                const labelEl = badge.querySelector('.status-badge-label');
+                if (labelEl) labelEl.textContent = 'เปิดรับ';
               }
             }
 
@@ -9592,7 +9651,7 @@ body.dark-mode .signup-success-banner,
     }
 
 
-    function updateDutiesLive(dutiesList, signups) {
+    function updateDutiesLive(dutiesList, signups, changedDutyName = null) {
       const activeDuties = dutiesList.filter(d => parseInt(d.quota) > 0);
       if (!activeDuties || activeDuties.length === 0) return;
 
@@ -9611,21 +9670,32 @@ body.dark-mode .signup-success-banner,
         const currentVal = centralDutySelect.value;
         let optionsHtml = '<option value="">-- ' + (isAdmin ? 'เลือกหน้าที่ (Admin)' : 'เลือกหน้าที่') + ' --</option>';
         activeDuties.forEach(d => {
-          const dutySignups = signups.filter(s => s.duty === d.duty);
+          const dutyName = d.duty || d.name;
+          const dutySignups = signups.filter(s => (s.duty === dutyName || s.duty_name === dutyName));
           const isFull = dutySignups.length >= d.quota;
           if (!isFull) {
-            optionsHtml += `<option value="${d.duty}">${d.duty} (ว่าง ${d.quota - dutySignups.length})</option>`;
+            optionsHtml += `<option value="${dutyName}">${dutyName} (ว่าง ${d.quota - dutySignups.length})</option>`;
           }
         });
         centralDutySelect.innerHTML = optionsHtml;
         if (Array.from(centralDutySelect.options).some(opt => opt.value === currentVal)) {
           centralDutySelect.value = currentVal;
+        } else if (currentVal && currentVal === changedDutyName) {
+          if (typeof showCentralDutyError === 'function') {
+            showCentralDutyError(`หน้าที่ "${changedDutyName}" เพิ่งมีผู้ลงชื่อเต็มแล้ว กรุณาเลือกหน้าที่อื่น`);
+          }
         }
       }
 
       let cardsHtml = '';
       activeDuties.forEach((item) => {
-        const dutyName = item.duty;
+        const dutyName = item.duty || item.name;
+        const quota = parseInt(item.quota);
+        const dutySignups = signups.filter(s => (s.duty === dutyName || s.duty_name === dutyName));
+        const currentCount = dutySignups.length;
+        const isFull = currentCount >= quota;
+        const isChanged = (changedDutyName && dutyName === changedDutyName);
+        const pulseClass = isChanged ? ' live-duty-pulse' : '';
         const quota = parseInt(item.quota);
         const dutySignups = signups.filter(s => s.duty === dutyName);
         const currentCount = dutySignups.length;
@@ -10020,6 +10090,11 @@ body.dark-mode .signup-success-banner,
           const handleSuccess = function (res) {
             if (window.RosterAudio) window.RosterAudio.playSuccess();
             broadcastLocalRosterChange('roster_signup_change', { sheetName });
+
+            // Immediately update duties in-place behind the popup
+            if (typeof loadSignups === 'function') {
+              loadSignups(sheetName, selectedDateInfo.activity.duties);
+            }
 
             // Set last registered student for immediate highlighting in the activity
             window.lastRegisteredInfo = {

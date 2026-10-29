@@ -95,6 +95,11 @@
   const clientInflightCalls = new Map();
   const clientCallCache = new Map();
 
+  window.clearRosterClientCache = function () {
+    clientCallCache.clear();
+    clientInflightCalls.clear();
+  };
+
   function createGoogleScriptRunner() {
     let successHandler = null;
     let errorHandler = null;

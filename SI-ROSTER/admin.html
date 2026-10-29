@@ -6093,11 +6093,15 @@ body.dark-mode .signup-success-banner,
 
     function startRosterSyncStatePolling() {
       if (rosterSyncStateInterval) clearInterval(rosterSyncStateInterval);
-      rosterSyncStateInterval = setInterval(checkRosterSyncState, 1500);
+      const intervalMs = isRosterSSEConnected ? 25000 : 3000;
+      rosterSyncStateInterval = setInterval(checkRosterSyncState, intervalMs);
     }
 
     function handleIncomingRosterEvent(evt) {
       if (!evt || !evt.type) return;
+      if (typeof window.clearRosterClientCache === 'function') {
+        window.clearRosterClientCache();
+      }
 
       if (evt.type === 'roster_signup_change') {
         const p = evt.payload || {};
