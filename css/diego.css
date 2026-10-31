@@ -5050,6 +5050,12 @@ svg:not([data-lucide]),
   transform: scale(1.04);
 }
 
+.dg-act-tags-cover-wrap {
+  display: flex;
+}
+.dg-act-tags-body-wrap {
+  display: none;
+}
 .dg-act-tag {
   position: absolute;
   top: 12px;
@@ -7075,6 +7081,25 @@ svg:not([data-lucide]),
     left: 6px;
     padding: 1.5px 6px;
     font-size: 0.58rem;
+  }
+  .dg-act-tags-cover-wrap {
+    display: none !important;
+  }
+  .dg-act-tags-body-wrap {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-wrap: wrap !important;
+  }
+  .dg-act-meta-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 5px !important;
+  }
+  .dg-act-meta-row .dg-act-card-date {
+    margin-bottom: 0 !important;
   }
   .dg-act-tags-wrap,
   .dg-act-card-cover > div[style*="position: absolute"],

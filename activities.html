@@ -938,7 +938,7 @@
             ${hasImage ? `
               <div class="dg-act-card-cover">
                 <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" loading="lazy" />
-                <div class="dg-act-tags-wrap" style="position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 20px); z-index: 2;">
+                <div class="dg-act-tags-cover-wrap" style="position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 20px); z-index: 2;">
                   ${tagsHtml}
                 </div>
               </div>
@@ -951,7 +951,14 @@
                   </div>
                   ${dateHtml}
                 </div>
-              ` : dateHtml}
+              ` : `
+                <div class="dg-act-meta-row">
+                  ${dateHtml}
+                  <div class="dg-act-tags-body-wrap">
+                    ${tagsHtml}
+                  </div>
+                </div>
+              `}
               <h3 class="dg-act-card-title">${escapeHtml(item.title)}</h3>
               <p class="dg-act-card-desc" style="${hasImage ? '' : '-webkit-line-clamp: 5; margin-bottom: 18px; line-height: 1.65;'}">${escapeHtml(item.desc)}</p>
 
