@@ -3556,9 +3556,83 @@
               สำหรับหน้าหรือฟังก์ชันที่ยังอยู่ระหว่างดำเนินการหรือยังไม่ผ่านเอกสารภายในโรงเรียน สามารถปิดสวิตช์เพื่อแสดงหน้า <strong>"ระบบกำลังพัฒนา"</strong> สำหรับบุคคลทั่วไปได้ โดยผู้ดูแลระบบ (Admin) ที่ล็อกอินอยู่จะยังคงสามารถเข้าดูและตรวจสอบหน้าจริงได้ตามปกติ พร้อมแถบแจ้งเตือนพิเศษ
             </p>
 
+            <!-- 0. Master Switch: Whole Site Maintenance Mode -->
+            <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 18px 20px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="wrench" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                    <span style="font-weight: 800; font-size: 1rem; color: #92400e;">
+                      ปิดปรับปรุงทั้งระบบ (Master Maintenance Mode)
+                    </span>
+                    <span id="badgeMasterMaintenance" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เว็บไซต์เปิดให้บริการตามปกติ
+                    </span>
+                  </div>
+                  <p style="font-size: 0.82rem; color: #78350f; margin: 0; line-height: 1.5;">
+                    เมื่อเปิดสวิตช์นี้ ทุกหน้าของเว็บไซต์จะแสดงหน้าแจ้งเตือน <strong>"ระบบกำลังพัฒนา"</strong> ทันทีในคลิกเดียว (ยกเว้นผู้ดูแลระบบที่ล็อกอินอยู่จะยังเข้าชมได้ตามปกติ)
+                  </p>
+                </div>
+              </div>
+              <label class="modern-switch" style="margin-left: auto;">
+                <input type="checkbox" id="switchMasterMaintenance" onchange="syncMasterMaintenanceBadge(this.checked)" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
               
-              <!-- 1. Admission Page -->
+              <!-- 1. Homepage -->
+              <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #fee2e2; color: #b91c1c; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="home" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 2px;">
+                      หน้าหลักเว็บไซต์ (Homepage)
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">
+                      <code>/</code> หรือ <code>index.html</code> • หน้าหลักและศูนย์รวมข้อมูลภาพรวม
+                    </div>
+                    <span id="badgePageHome" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เปิดใช้งานปกติ
+                    </span>
+                  </div>
+                </div>
+                <label class="modern-switch" style="margin-left: 12px;">
+                  <input type="checkbox" id="switchPageHome" onchange="syncPageAccessBadge('Home', this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <!-- 2. SI-ROSTER Page -->
+              <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #ecfdf5; color: #047857; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="clipboard-list" style="width: 22px; height: 22px;"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; margin-bottom: 2px;">
+                      ระบบลงหน้าที่สารวัตร (SI-ROSTER)
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">
+                      <code>/SI-ROSTER/</code> • ระบบลงหน้าที่และตารางเวรสารวัตร
+                    </div>
+                    <span id="badgePageRoster" style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #15803d;">
+                      🟢 เปิดใช้งานปกติ
+                    </span>
+                  </div>
+                </div>
+                <label class="modern-switch" style="margin-left: 12px;">
+                  <input type="checkbox" id="switchPageRoster" onchange="syncPageAccessBadge('Roster', this.checked)" checked />
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <!-- 3. Admission Page -->
               <div class="page-access-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border: 1px solid var(--dg-border); border-radius: 10px; background: #f8fafc; transition: all 0.2s ease;">
                 <div style="display: flex; align-items: center; gap: 14px;">
                   <div style="width: 42px; height: 42px; border-radius: 10px; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
@@ -9025,6 +9099,20 @@
       loadPageAccessSettings();
     }
 
+    function syncMasterMaintenanceBadge(isMasterOn) {
+      const badge = document.getElementById('badgeMasterMaintenance');
+      if (!badge) return;
+      if (isMasterOn) {
+        badge.textContent = '🔴 ปิดปรับปรุงทั้งระบบ (Master Mode)';
+        badge.style.background = '#fee2e2';
+        badge.style.color = '#b91c1c';
+      } else {
+        badge.textContent = '🟢 เว็บไซต์เปิดให้บริการตามปกติ';
+        badge.style.background = '#dcfce7';
+        badge.style.color = '#15803d';
+      }
+    }
+
     function syncPageAccessBadge(pageKey, isOpen) {
       const badge = document.getElementById('badgePage' + pageKey);
       if (!badge) return;
@@ -9043,7 +9131,15 @@
       if (!window.SarawatApi || !window.SarawatApi.getSettings) return;
       try {
         const settings = await window.SarawatApi.getSettings();
-        const pages = ['Admission', 'Activities', 'Calendar', 'Team'];
+
+        // 1. Master Maintenance Mode
+        const isMasterOn = settings['site_maintenance_mode'] === '1';
+        const swMaster = document.getElementById('switchMasterMaintenance');
+        if (swMaster) swMaster.checked = isMasterOn;
+        syncMasterMaintenanceBadge(isMasterOn);
+
+        // 2. Individual Pages
+        const pages = ['Home', 'Roster', 'Admission', 'Activities', 'Calendar', 'Team'];
         pages.forEach(p => {
           const key = 'page_status_' + p.toLowerCase();
           const isOpen = settings[key] !== '0';
@@ -9066,6 +9162,9 @@
       }
 
       const payload = {
+        site_maintenance_mode: document.getElementById('switchMasterMaintenance')?.checked ? '1' : '0',
+        page_status_home: document.getElementById('switchPageHome')?.checked ? '1' : '0',
+        page_status_roster: document.getElementById('switchPageRoster')?.checked ? '1' : '0',
         page_status_admission: document.getElementById('switchPageAdmission')?.checked ? '1' : '0',
         page_status_activities: document.getElementById('switchPageActivities')?.checked ? '1' : '0',
         page_status_calendar: document.getElementById('switchPageCalendar')?.checked ? '1' : '0',
@@ -9079,6 +9178,9 @@
         await window.SarawatApi.saveSettings(payload);
 
         // Sync local cache
+        localStorage.setItem('dg_site_maintenance_mode', payload.site_maintenance_mode);
+        localStorage.setItem('dg_page_status_home', payload.page_status_home);
+        localStorage.setItem('dg_page_status_roster', payload.page_status_roster);
         localStorage.setItem('dg_page_status_admission', payload.page_status_admission);
         localStorage.setItem('dg_page_status_activities', payload.page_status_activities);
         localStorage.setItem('dg_page_status_calendar', payload.page_status_calendar);
