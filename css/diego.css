@@ -5050,11 +5050,24 @@ svg:not([data-lucide]),
   transform: scale(1.04);
 }
 
-.dg-act-tags-cover-wrap {
+.dg-act-meta-row {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.dg-act-meta-row .dg-act-card-date {
+  margin-bottom: 0;
 }
 .dg-act-tags-body-wrap {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.dg-act-tags-cover-wrap {
+  display: none !important;
 }
 .dg-act-tag {
   position: absolute;

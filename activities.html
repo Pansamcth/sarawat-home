@@ -938,27 +938,15 @@
             ${hasImage ? `
               <div class="dg-act-card-cover">
                 <img src="${window.resolveImageUrl ? window.resolveImageUrl(item.image) : item.image}" alt="${escapeHtml(item.title)}" onerror="if(window.handleActivityImageError){window.handleActivityImageError(this);}else{this.src='assets/images/activities-cover.jpg';}" loading="lazy" />
-                <div class="dg-act-tags-cover-wrap" style="position: absolute; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 20px); z-index: 2;">
-                  ${tagsHtml}
-                </div>
               </div>
             ` : ''}
             <div class="dg-act-card-body" style="${hasImage ? '' : 'padding: 24px 22px 20px; display: flex; flex-direction: column; flex-grow: 1;'}">
-              ${!hasImage ? `
-                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px;">
-                  <div style="display: flex; flex-wrap: wrap; gap: 4px;">
-                    ${tagsHtml}
-                  </div>
-                  ${dateHtml}
+              <div class="dg-act-meta-row" style="${hasImage ? '' : 'margin-bottom: 14px;'}">
+                ${dateHtml}
+                <div class="dg-act-tags-body-wrap">
+                  ${tagsHtml}
                 </div>
-              ` : `
-                <div class="dg-act-meta-row">
-                  ${dateHtml}
-                  <div class="dg-act-tags-body-wrap">
-                    ${tagsHtml}
-                  </div>
-                </div>
-              `}
+              </div>
               <h3 class="dg-act-card-title">${escapeHtml(item.title)}</h3>
               <p class="dg-act-card-desc" style="${hasImage ? '' : '-webkit-line-clamp: 5; margin-bottom: 18px; line-height: 1.65;'}">${escapeHtml(item.desc)}</p>
 
