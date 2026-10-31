@@ -1093,8 +1093,20 @@
             <i data-lucide="chevron-right" style="width: 18px; height: 18px;"></i>
           </button>
           <div class="dg-cal-title-box">
-            <span class="dg-cal-month-title" id="calCurrentMonthTitle">ตุลาคม 2569</span>
-            <span class="dg-cal-month-subtitle" id="calCurrentMonthSubtitle">ปีการศึกษา 2569</span>
+            <span class="dg-cal-month-title" id="calCurrentMonthTitle"></span>
+            <span class="dg-cal-month-subtitle" id="calCurrentMonthSubtitle"></span>
+            <script>
+              (function() {
+                try {
+                  var mNames = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+                  var d = new Date();
+                  var tEl = document.getElementById('calCurrentMonthTitle');
+                  var sEl = document.getElementById('calCurrentMonthSubtitle');
+                  if (tEl) tEl.textContent = mNames[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+                  if (sEl) sEl.textContent = 'ปีการศึกษา ' + (d.getMonth() >= 4 ? d.getFullYear() + 543 : d.getFullYear() + 542);
+                } catch(e) {}
+              })();
+            </script>
           </div>
         </div>
 
@@ -1645,8 +1657,9 @@
     let selectedCategory = 'all';
     let searchQuery = '';
     let currentViewMode = 'month';
-    let currentCalYear = 2026;
-    let currentCalMonth = 9; // 0-indexed (9 = Oct)
+    const _calNow = new Date();
+    let currentCalYear = _calNow.getFullYear();
+    let currentCalMonth = _calNow.getMonth(); // 0-indexed dynamically based on real current date
 
     // ==========================================================
     // DATA FETCHING & RENDERING
@@ -2062,6 +2075,18 @@
 
       weeksContainer.innerHTML = html;
       if (window.lucide) window.lucide.createIcons();
+
+      // Auto-scroll on mobile to make today's cell clearly visible and centered
+      try {
+        const todayEl = weeksContainer.querySelector('.dg-cal-day-bg.is-today');
+        if (todayEl && window.innerWidth < 768) {
+          const scrollWrap = document.querySelector('.dg-cal-scroll-container');
+          if (scrollWrap) {
+            const left = todayEl.offsetLeft - (scrollWrap.clientWidth / 2) + (todayEl.clientWidth / 2);
+            scrollWrap.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+          }
+        }
+      } catch (e) {}
     }
 
     function renderCalendarEvents() {
