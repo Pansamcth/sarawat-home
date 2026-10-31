@@ -7073,8 +7073,39 @@ svg:not([data-lucide]),
   .dg-act-tag {
     top: 6px;
     left: 6px;
-    padding: 2px 7px;
-    font-size: 0.65rem;
+    padding: 1.5px 6px;
+    font-size: 0.58rem;
+  }
+  .dg-act-tags-wrap,
+  .dg-act-card-cover > div[style*="position: absolute"],
+  .dg-news-cover-wrap > div[style*="position: absolute"] {
+    top: 6px !important;
+    left: 6px !important;
+    gap: 3px !important;
+    max-width: calc(100% - 12px) !important;
+  }
+  .dg-act-card .sarawat-tag-badge,
+  .dg-news-card .sarawat-tag-badge,
+  .dg-act-tag,
+  .dg-news-tag {
+    font-size: 0.58rem !important;
+    font-weight: 750 !important;
+    padding: 1.5px 6px !important;
+    gap: 3px !important;
+    border-radius: 999px !important;
+    line-height: 1.2 !important;
+  }
+  .dg-act-card .sarawat-tag-badge i,
+  .dg-act-card .sarawat-tag-badge svg,
+  .dg-news-card .sarawat-tag-badge i,
+  .dg-news-card .sarawat-tag-badge svg,
+  .dg-act-tag i,
+  .dg-act-tag svg,
+  .dg-news-tag i,
+  .dg-news-tag svg {
+    width: 9.5px !important;
+    height: 9.5px !important;
+    stroke-width: 2.2 !important;
   }
   .dg-act-card-body {
     padding: 10px 10px 8px;
