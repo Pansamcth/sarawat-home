@@ -117,6 +117,7 @@
   <!-- High-Security Database Gateway Config (with Cache-Buster) -->
   <script src="cloudflare-config.js?v=2.7.7"></script>
   <script src="js/api-config.js?v=2.7.7"></script>
+  <script src="js/world-map-data.js?v=1.0.0"></script>
   
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
@@ -381,6 +382,79 @@
 
   <style>
     /* Admin Specific Dashboard Styles */
+    /* 🛰️ System Monitor Styles: Glowing Pulse Dots & Minimal Vector Map */
+    @keyframes monPulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    @keyframes monPulseAmber {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+    @keyframes monPulseRed {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    @keyframes monMapRippleAnim {
+      0% { r: 4px; opacity: 1; stroke-width: 1.8px; }
+      100% { r: 18px; opacity: 0; stroke-width: 0.4px; }
+    }
+    .mon-pulse-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .mon-pulse-dot.healthy {
+      background: #10b981;
+      animation: monPulseGreen 1.8s infinite;
+    }
+    .mon-pulse-dot.warning {
+      background: #f59e0b;
+      animation: monPulseAmber 1.8s infinite;
+    }
+    .mon-pulse-dot.critical {
+      background: #ef4444;
+      animation: monPulseRed 1.8s infinite;
+    }
+    .mon-pulse-dot.offline {
+      background: #64748b;
+    }
+    .mon-map-country {
+      fill: #1e293b;
+      stroke: #334155;
+      stroke-width: 0.7;
+      transition: fill 0.2s ease, stroke 0.2s ease;
+      cursor: pointer;
+    }
+    .mon-map-country:hover {
+      fill: #3b82f6 !important;
+      stroke: #93c5fd !important;
+      stroke-width: 1.2;
+    }
+    .mon-map-country.active {
+      fill: #2563eb;
+      stroke: #60a5fa;
+      stroke-width: 1.1;
+      filter: drop-shadow(0 0 4px rgba(37, 99, 235, 0.7));
+    }
+    .mon-map-ripple-ring {
+      animation: monMapRippleAnim 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+      transform-origin: center;
+    }
+    .mon-map-beacon-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #38bdf8;
+      display: inline-block;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: monPulseGreen 1.5s infinite;
+    }
     body {
       background: #f8fafc;
       color: var(--dg-text-primary);
@@ -3853,8 +3927,9 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
           <!-- Left: Live Status Pill -->
           <div style="display: flex; align-items: center; gap: 12px;">
-            <div id="monLivePill" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 0.84rem; font-weight: 750; color: #065f46;">
-              <span class="pulse-dot success" style="width: 8px; height: 8px;"></span>
+            <div id="monLivePill" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 0.84rem; font-weight: 750; color: #065f46; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+              <span id="monLivePillDot" class="mon-pulse-dot healthy"></span>
+              <i id="monLivePillIcon" class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
               <span id="monLivePillText">ระบบทำงานเป็นปกติ (HEALTHY)</span>
             </div>
             <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">
@@ -3913,75 +3988,132 @@
       <!-- 📊 KPI Metric Cards (4 Columns) -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
         <!-- Card 1: Server & System -->
-        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden;">
+        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #2563eb;">
             <i class="fa-solid fa-server"></i>
           </div>
-          <div style="font-size: 0.74rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
-            🖥️ เซิร์ฟเวอร์และระบบ
+          <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-server" style="color: #2563eb;"></i>
+            <span>เซิร์ฟเวอร์และระบบ</span>
           </div>
           <div id="monServerUptime" style="font-size: 1.45rem; font-weight: 850; color: #0f172a; margin-bottom: 6px; font-family: monospace;">--:--:--</div>
-          <div style="display: flex; flex-direction: column; gap: 3px; font-size: 0.78rem; color: #475569;">
-            <div>สถานะ Node: <strong id="monNodeVer" style="color: #0f172a;">--</strong></div>
-            <div>CPU Load: <strong id="monCpuUsage" style="color: #2563eb;">--%</strong></div>
-            <div>RAM เครื่อง: <strong id="monRamUsage" style="color: #0f172a;">-- GB</strong> (<span id="monRamPercent">--%</span>)</div>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-brands fa-node-js" style="color: #22c55e; width: 14px; text-align: center;"></i>
+              <span>สถานะ Node:</span>
+              <strong id="monNodeVer" style="color: #0f172a;">--</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-microchip" style="color: #3b82f6; width: 14px; text-align: center;"></i>
+              <span>CPU Load:</span>
+              <strong id="monCpuUsage" style="color: #2563eb;">--%</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-memory" style="color: #8b5cf6; width: 14px; text-align: center;"></i>
+              <span>RAM เครื่อง:</span>
+              <strong id="monRamUsage" style="color: #0f172a;">-- GB</strong>
+              (<span id="monRamPercent">--%</span>)
+            </div>
           </div>
         </div>
 
         <!-- Card 2: Database SQLite & Latency -->
-        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden;">
+        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #8b5cf6;">
             <i class="fa-solid fa-database"></i>
           </div>
-          <div style="font-size: 0.74rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
-            ⚡ ความเร็วตอบสนอง & ฐานข้อมูล
+          <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-bolt" style="color: #8b5cf6;"></i>
+            <span>ความเร็วตอบสนอง & ฐานข้อมูล</span>
           </div>
           <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
             <span id="monDbPingVal" style="font-size: 1.45rem; font-weight: 850; color: #0f172a; font-family: monospace;">-- ms</span>
-            <span id="monDbPingBadge" style="font-size: 0.7rem; font-weight: 800; padding: 2px 7px; border-radius: 6px; background: #ecfdf5; color: #065f46;">ปกติ</span>
+            <span id="monDbPingBadge" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: #ecfdf5; color: #065f46;">
+              <i class="fa-solid fa-circle-check"></i> ปกติ
+            </span>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 3px; font-size: 0.78rem; color: #475569;">
-            <div>เฉลี่ย Latency: <strong id="monAvgLatency" style="color: #0f172a;">-- ms</strong> (ต่ำสุด: <span id="monMinLatency">--</span>, สูงสุด: <span id="monMaxLatency">--</span>)</div>
-            <div>ขนาดฐานข้อมูล: <strong id="monDbSize" style="color: #0f172a;">-- MB</strong> (WAL: <span id="monWalSize">-- MB</span>)</div>
-            <div>Event Loop Lag: <strong id="monLoopLag" style="color: #8b5cf6;">-- ms</strong></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-stopwatch" style="color: #06b6d4; width: 14px; text-align: center;"></i>
+              <span>เฉลี่ย Latency:</span>
+              <strong id="monAvgLatency" style="color: #0f172a;">-- ms</strong>
+              <span style="font-size: 0.72rem; color: #64748b;">(ต่ำสุด: <span id="monMinLatency">--</span>, สูงสุด: <span id="monMaxLatency">--</span>)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-database" style="color: #8b5cf6; width: 14px; text-align: center;"></i>
+              <span>ขนาดฐานข้อมูล:</span>
+              <strong id="monDbSize" style="color: #0f172a;">-- MB</strong>
+              <span style="font-size: 0.72rem; color: #64748b;">(WAL: <span id="monWalSize">-- MB</span>)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-clock-rotate-left" style="color: #ec4899; width: 14px; text-align: center;"></i>
+              <span>Event Loop Lag:</span>
+              <strong id="monLoopLag" style="color: #8b5cf6;">-- ms</strong>
+            </div>
           </div>
         </div>
 
         <!-- Card 3: Traffic & Live Visitors -->
-        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden;">
+        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #10b981;">
             <i class="fa-solid fa-chart-line"></i>
           </div>
-          <div style="font-size: 0.74rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
-            📊 ปริมาณคำขอ & ผู้ใช้งานสด
+          <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-chart-line" style="color: #10b981;"></i>
+            <span>ปริมาณคำขอ & ผู้ใช้งานสด</span>
           </div>
           <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
             <span id="monTotalRequests" style="font-size: 1.45rem; font-weight: 850; color: #0f172a;">--</span>
             <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">คำขอทั้งหมด</span>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 3px; font-size: 0.78rem; color: #475569;">
-            <div>ความถี่ทราฟฟิก: <strong id="monReqPerSec" style="color: #10b981; font-weight: 800;">-- req/s</strong></div>
-            <div>ผู้ใช้งานในระบบสด: <strong id="monLiveUsers" style="color: #2563eb; font-weight: 800;">-- คน</strong></div>
-            <div>Unique IP ทั้งหมด: <strong id="monUniqueIps" style="color: #0f172a;">-- IP</strong></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-arrow-trend-up" style="color: #10b981; width: 14px; text-align: center;"></i>
+              <span>ความถี่ทราฟฟิก:</span>
+              <strong id="monReqPerSec" style="color: #10b981; font-weight: 800;">-- req/s</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-users" style="color: #2563eb; width: 14px; text-align: center;"></i>
+              <span>ผู้ใช้งานในระบบสด:</span>
+              <strong id="monLiveUsers" style="color: #2563eb; font-weight: 800;">-- คน</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-network-wired" style="color: #64748b; width: 14px; text-align: center;"></i>
+              <span>Unique IP ทั้งหมด:</span>
+              <strong id="monUniqueIps" style="color: #0f172a;">-- IP</strong>
+            </div>
           </div>
         </div>
 
         <!-- Card 4: HTTP Status Breakdown -->
-        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden;">
+        <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #f59e0b;">
             <i class="fa-solid fa-shield-halved"></i>
           </div>
-          <div style="font-size: 0.74rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
-            🛡️ ผลลัพธ์สถานะ HTTP
+          <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-shield-halved" style="color: #f59e0b;"></i>
+            <span>ผลลัพธ์สถานะ HTTP</span>
           </div>
           <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
             <span id="monSuccessRate" style="font-size: 1.45rem; font-weight: 850; color: #10b981;">100%</span>
             <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">สำเร็จ (2xx)</span>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 3px; font-size: 0.78rem; color: #475569;">
-            <div>สำเร็จ (2xx): <strong id="monCount2xx" style="color: #10b981;">0</strong></div>
-            <div>ฝั่งผู้ใช้ (4xx): <strong id="monCount4xx" style="color: #f59e0b;">0</strong></div>
-            <div>ข้อผิดพลาดระบบ (5xx): <strong id="monCount5xx" style="color: #ef4444; font-weight: 800;">0</strong></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-circle-check" style="color: #10b981; width: 14px; text-align: center;"></i>
+              <span>สำเร็จ (2xx):</span>
+              <strong id="monCount2xx" style="color: #10b981;">0</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-circle-exclamation" style="color: #f59e0b; width: 14px; text-align: center;"></i>
+              <span>ฝั่งผู้ใช้ (4xx):</span>
+              <strong id="monCount4xx" style="color: #f59e0b;">0</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444; width: 14px; text-align: center;"></i>
+              <span>ข้อผิดพลาดระบบ (5xx):</span>
+              <strong id="monCount5xx" style="color: #ef4444; font-weight: 800;">0</strong>
+            </div>
           </div>
         </div>
       </div>
@@ -4037,8 +4169,43 @@
             <span id="monCountryTotalBadge" style="font-size: 0.74rem; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 99px;">0 ประเทศ</span>
           </div>
 
-          <div id="monCountryList" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
-            <div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลสถิติประเทศ</div>
+          <!-- 🗺️ Minimalist Vector World Map -->
+          <div id="monWorldMapContainer" style="position: relative; width: 100%; height: 215px; background: #0a0f1d; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1px solid #1e293b; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);">
+            <!-- Top status overlay in map -->
+            <div style="position: absolute; top: 10px; left: 14px; z-index: 10; display: flex; align-items: center; gap: 8px; pointer-events: none;">
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 750; color: #38bdf8; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px);">
+                <span class="mon-map-beacon-dot"></span>
+                <span>MINIMAL VECTOR WORLD MAP</span>
+              </span>
+            </div>
+            <div id="monMapActiveNodesBadge" style="position: absolute; top: 10px; right: 14px; z-index: 10; font-size: 0.72rem; font-weight: 700; color: #94a3b8; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px);">
+              0 ประเทศใช้งาน
+            </div>
+
+            <!-- SVG Map Element -->
+            <svg id="monWorldMapSvg" viewBox="0 0 1000 500" style="width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 12px rgba(0,0,0,0.5));">
+              <!-- Lat/Long Minimal Graticules -->
+              <g stroke="rgba(255,255,255,0.06)" stroke-width="0.8" stroke-dasharray="3,3">
+                <line x1="0" y1="250" x2="1000" y2="250" />
+                <line x1="500" y1="0" x2="500" y2="500" />
+                <line x1="0" y1="125" x2="1000" y2="125" />
+                <line x1="0" y1="375" x2="1000" y2="375" />
+                <line x1="250" y1="0" x2="250" y2="500" />
+                <line x1="750" y1="0" x2="750" y2="500" />
+              </g>
+              <!-- World Countries Paths Layer -->
+              <g id="monMapCountriesLayer"></g>
+              <!-- Active Country Beacons Layer -->
+              <g id="monMapBeaconsLayer"></g>
+            </svg>
+
+            <!-- Floating Map Tooltip -->
+            <div id="monMapTooltip" style="position: absolute; display: none; z-index: 20; pointer-events: none; background: rgba(15, 23, 42, 0.94); border: 1px solid #38bdf8; border-radius: 8px; padding: 6px 12px; font-size: 0.78rem; color: #f8fafc; box-shadow: 0 4px 14px rgba(0,0,0,0.6); backdrop-filter: blur(8px); transform: translate(-50%, -125%); white-space: nowrap; transition: opacity 0.15s ease;">
+            </div>
+          </div>
+
+          <div id="monCountryList" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+            <div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 20px;">ยังไม่มีข้อมูลสถิติประเทศ</div>
           </div>
         </div>
 
@@ -11004,19 +11171,182 @@
         renderSystemMonitorData(data);
       } catch (err) {
         console.error('Failed to load system monitor data:', err);
-        const livePill = document.getElementById('monLivePill');
-        const liveText = document.getElementById('monLivePillText');
-        if (livePill && liveText) {
-          livePill.style.background = '#fef2f2';
-          livePill.style.borderColor = '#fecaca';
-          livePill.style.color = '#991b1b';
-          liveText.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
-        }
+        updateMonitorLivePill('OFFLINE', 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
         if (isManual) {
           showToast('ไม่สามารถดึงข้อมูลสถานะเซิร์ฟเวอร์ได้: ' + (err.message || err), 'error');
         }
       } finally {
         isMonitorFetching = false;
+      }
+    }
+
+    // Helper: Update Live Status Pill with glowing animated pulse and icons
+    function updateMonitorLivePill(status, customText) {
+      const livePill = document.getElementById('monLivePill');
+      if (!livePill) return;
+
+      if (status === 'CRITICAL') {
+        livePill.style.background = '#fef2f2';
+        livePill.style.borderColor = '#fecaca';
+        livePill.style.color = '#991b1b';
+        livePill.innerHTML = `
+          <span class="mon-pulse-dot critical"></span>
+          <i class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 0.95rem;"></i>
+          <span id="monLivePillText">${customText || 'ระบบมีปัญหาร้ายแรง (CRITICAL)'}</span>
+        `;
+      } else if (status === 'WARNING') {
+        livePill.style.background = '#fffbeb';
+        livePill.style.borderColor = '#fde68a';
+        livePill.style.color = '#92400e';
+        livePill.innerHTML = `
+          <span class="mon-pulse-dot warning"></span>
+          <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 0.95rem;"></i>
+          <span id="monLivePillText">${customText || 'ระบบมีข้อความแจ้งเตือน (WARNING)'}</span>
+        `;
+      } else if (status === 'OFFLINE') {
+        livePill.style.background = '#f1f5f9';
+        livePill.style.borderColor = '#cbd5e1';
+        livePill.style.color = '#475569';
+        livePill.innerHTML = `
+          <span class="mon-pulse-dot offline"></span>
+          <i class="fa-solid fa-plug-circle-xmark" style="color: #64748b; font-size: 0.95rem;"></i>
+          <span id="monLivePillText">${customText || 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (OFFLINE)'}</span>
+        `;
+      } else {
+        // HEALTHY
+        livePill.style.background = '#ecfdf5';
+        livePill.style.borderColor = '#a7f3d0';
+        livePill.style.color = '#065f46';
+        livePill.innerHTML = `
+          <span class="mon-pulse-dot healthy"></span>
+          <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
+          <span id="monLivePillText">${customText || 'ระบบทำงานเป็นปกติ (HEALTHY)'}</span>
+        `;
+      }
+    }
+
+    // Helper: Minimalist Vector World Map Renderer
+    let isMapInitialized = false;
+    function renderMinimalWorldMap(countries) {
+      const mapSvg = document.getElementById('monWorldMapSvg');
+      const countriesLayer = document.getElementById('monMapCountriesLayer');
+      const beaconsLayer = document.getElementById('monMapBeaconsLayer');
+      const tooltip = document.getElementById('monMapTooltip');
+      const nodesBadge = document.getElementById('monMapActiveNodesBadge');
+
+      if (!mapSvg || !countriesLayer || !beaconsLayer) return;
+
+      const mapData = window.MINIMAL_WORLD_MAP;
+      if (!Array.isArray(mapData) || mapData.length === 0) {
+        return;
+      }
+
+      // 1. Initial SVG paths injection
+      if (!isMapInitialized || countriesLayer.children.length === 0) {
+        let pathsHtml = '';
+        mapData.forEach(c => {
+          pathsHtml += `<path id="map-country-${c.iso}" class="mon-map-country" data-iso="${c.iso}" data-name="${escapeHtml(c.name)}" d="${c.d}" />`;
+        });
+        countriesLayer.innerHTML = pathsHtml;
+        isMapInitialized = true;
+
+        // Tooltip event handlers
+        countriesLayer.addEventListener('mousemove', function(e) {
+          const target = e.target;
+          if (target && target.tagName === 'path' && target.classList.contains('mon-map-country')) {
+            const iso = target.getAttribute('data-iso');
+            const name = target.getAttribute('data-name');
+            const stat = target.__monStat || null;
+
+            if (tooltip) {
+              const rect = mapSvg.getBoundingClientRect();
+              const mouseX = e.clientX - rect.left;
+              const mouseY = e.clientY - rect.top;
+
+              tooltip.style.left = mouseX + 'px';
+              tooltip.style.top = mouseY + 'px';
+              tooltip.style.display = 'block';
+
+              if (stat) {
+                tooltip.innerHTML = `
+                  <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                    <span style="font-size:1.15rem; line-height:1;">${stat.flag || '🌐'}</span>
+                    <strong style="color:#ffffff; font-size:0.85rem;">${stat.name || name}</strong>
+                    <span style="color:#38bdf8; font-size:0.7rem; font-family:monospace; background:rgba(56,189,248,0.2); padding:1px 5px; border-radius:4px;">${iso}</span>
+                  </div>
+                  <div style="color:#94a3b8; font-size:0.75rem;">
+                    คำขอ: <strong style="color:#38bdf8;">${stat.count.toLocaleString()}</strong> (${stat.percent}%)
+                  </div>
+                `;
+              } else {
+                tooltip.innerHTML = `
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span style="font-size:1rem;">🌐</span>
+                    <strong style="color:#e2e8f0; font-size:0.82rem;">${name}</strong>
+                    <span style="color:#64748b; font-size:0.7rem; font-family:monospace;">${iso}</span>
+                  </div>
+                  <div style="color:#64748b; font-size:0.72rem; margin-top:2px;">ยังไม่มีทราฟฟิกในรอบนี้</div>
+                `;
+              }
+            }
+          }
+        });
+
+        countriesLayer.addEventListener('mouseleave', function() {
+          if (tooltip) tooltip.style.display = 'none';
+        });
+      }
+
+      // 2. Map country codes to active stats
+      const countryMap = new Map();
+      if (Array.isArray(countries)) {
+        countries.forEach(c => {
+          if (c && c.code) countryMap.set(c.code.toUpperCase(), c);
+        });
+      }
+
+      // 3. Highlight active country paths
+      const paths = countriesLayer.querySelectorAll('.mon-map-country');
+      paths.forEach(p => {
+        const iso = p.getAttribute('data-iso');
+        const stat = countryMap.get(iso);
+        p.__monStat = stat || null;
+        if (stat) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      // 4. Render radar beacons for active countries
+      let beaconsHtml = '';
+      let totalHits = 0;
+      countryMap.forEach((stat, iso) => {
+        totalHits += (stat.count || 0);
+        const entry = mapData.find(item => item.iso === iso);
+        const coords = entry ? entry.c : [500, 250];
+        const cx = coords[0];
+        const cy = coords[1];
+
+        beaconsHtml += `
+          <g class="mon-map-beacon" transform="translate(${cx}, ${cy})" style="pointer-events: none;">
+            <!-- Pulsing ripple rings -->
+            <circle class="mon-map-ripple-ring" r="6" fill="none" stroke="#38bdf8" stroke-width="1.6" />
+            <circle class="mon-map-ripple-ring" r="14" fill="none" stroke="#38bdf8" stroke-width="1" style="animation-delay: 0.6s;" />
+            <!-- Core dot -->
+            <circle r="4" fill="#38bdf8" />
+            <circle r="2" fill="#ffffff" />
+            <!-- Text Badge -->
+            <rect x="7" y="-8" width="${iso.length * 8 + 10}" height="15" rx="4" fill="rgba(15, 23, 42, 0.85)" stroke="#38bdf8" stroke-width="0.8" />
+            <text x="12" y="3" fill="#38bdf8" font-size="9" font-weight="800" font-family="monospace">${iso}</text>
+          </g>
+        `;
+      });
+      beaconsLayer.innerHTML = beaconsHtml;
+
+      // 5. Update active nodes badge
+      if (nodesBadge) {
+        nodesBadge.textContent = `${countryMap.size} ประเทศใช้งาน (${totalHits.toLocaleString()} คำขอ)`;
       }
     }
 
@@ -11058,20 +11388,13 @@
       const ramPercent = (sys.systemRamPercent !== undefined) ? sys.systemRamPercent.toFixed(1) : (sys.heapUsedMb && sys.heapTotalMb ? ((sys.heapUsedMb / sys.heapTotalMb) * 100).toFixed(1) : '0');
 
       // 1. Health Status Banner & Top Live Pill
-      const livePill = document.getElementById('monLivePill');
-      const liveText = document.getElementById('monLivePillText');
       const banner = document.getElementById('monHealthBanner');
       const bIconWrap = document.getElementById('monHealthIconWrap');
       const bTitle = document.getElementById('monHealthTitle');
       const bDetails = document.getElementById('monHealthDetails');
 
       if (health.status === 'CRITICAL') {
-        if (livePill && liveText) {
-          livePill.style.background = '#fef2f2';
-          livePill.style.borderColor = '#fecaca';
-          livePill.style.color = '#991b1b';
-          liveText.textContent = 'ระบบมีปัญหาร้ายแรง (CRITICAL)';
-        }
+        updateMonitorLivePill('CRITICAL', 'ระบบมีปัญหาร้ายแรง (CRITICAL)');
         if (banner) {
           banner.style.display = 'block';
           banner.style.background = '#fef2f2';
@@ -11087,12 +11410,7 @@
           playSystemAlarmTone(true);
         }
       } else if (health.status === 'WARNING') {
-        if (livePill && liveText) {
-          livePill.style.background = '#fffbeb';
-          livePill.style.borderColor = '#fde68a';
-          livePill.style.color = '#92400e';
-          liveText.textContent = 'ระบบมีข้อความแจ้งเตือน (WARNING)';
-        }
+        updateMonitorLivePill('WARNING', 'ระบบมีข้อความแจ้งเตือน (WARNING)');
         if (banner) {
           banner.style.display = 'block';
           banner.style.background = '#fffbeb';
@@ -11108,12 +11426,7 @@
           playSystemAlarmTone(false);
         }
       } else {
-        if (livePill && liveText) {
-          livePill.style.background = '#ecfdf5';
-          livePill.style.borderColor = '#a7f3d0';
-          livePill.style.color = '#065f46';
-          liveText.textContent = 'ระบบทำงานเป็นปกติ (HEALTHY)';
-        }
+        updateMonitorLivePill('HEALTHY', 'ระบบทำงานเป็นปกติ (HEALTHY)');
         if (banner) {
           banner.style.display = 'none';
         }
@@ -11146,11 +11459,11 @@
       if (elDbPingVal) elDbPingVal.textContent = (dbPing !== null ? dbPing.toFixed(2) : '0.10') + ' ms';
       if (elDbPingBadge) {
         if (dbPing !== null && dbPing > 50) {
-          elDbPingBadge.textContent = 'ช้า';
+          elDbPingBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ช้า';
           elDbPingBadge.style.background = '#fef3c7';
           elDbPingBadge.style.color = '#d97706';
         } else {
-          elDbPingBadge.textContent = 'ปกติ';
+          elDbPingBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> ปกติ';
           elDbPingBadge.style.background = '#ecfdf5';
           elDbPingBadge.style.color = '#065f46';
         }
@@ -11231,23 +11544,25 @@
         monitorStatusChartInstance.update();
       }
 
-      // 8. Country Breakdown (monCountryList & monCountryTotalBadge)
+      // 8. Country Breakdown (renderMinimalWorldMap & monCountryList)
+      renderMinimalWorldMap(traffic.countries);
+
       const cList = document.getElementById('monCountryList');
       const cBadge = document.getElementById('monCountryTotalBadge');
       if (cBadge) cBadge.textContent = (traffic.countries ? traffic.countries.length : 0) + ' ประเทศ';
       if (cList && Array.isArray(traffic.countries)) {
         if (traffic.countries.length === 0) {
-          cList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลสถิติประเทศ</div>';
+          cList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 20px;">ยังไม่มีข้อมูลสถิติประเทศ</div>';
         } else {
           let html = '';
           traffic.countries.slice(0, 10).forEach(c => {
             html += `
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
                 <div style="display: flex; align-items: center; gap: 8px; min-width: 140px;">
                   <span style="font-size: 1.25rem; line-height: 1;">${c.flag || '🌐'}</span>
                   <div>
                     <div style="font-size: 0.82rem; font-weight: 750; color: #0f172a;">${c.name}</div>
-                    <div style="font-size: 0.7rem; color: #64748b;">${c.code}</div>
+                    <div style="font-size: 0.7rem; color: #64748b; font-family: monospace;">${c.code}</div>
                   </div>
                 </div>
                 <div style="flex: 1; max-width: 160px;">
@@ -11269,31 +11584,51 @@
       // 9. Active Pages Breakdown (monPageList)
       const pageList = document.getElementById('monPageList');
       if (pageList) {
-        const pages = traffic.pages || {};
-        const pageLabels = {
-          'roster_student': { title: 'หน้านักเรียน (Student Roster)', icon: 'fa-user-graduate', color: '#2563eb' },
-          'roster_admin': { title: 'ระบบแอดมิน (Admin Portal)', icon: 'fa-user-shield', color: '#8b5cf6' },
-          'home': { title: 'หน้าหลัก (Home)', icon: 'fa-house', color: '#10b981' },
-          'calendar': { title: 'ปฏิทินกิจกรรม (Calendar)', icon: 'fa-calendar', color: '#f59e0b' },
-          'activities': { title: 'กิจกรรมและข่าวสาร (Activities)', icon: 'fa-newspaper', color: '#06b6d4' },
-          'api': { title: 'API Endpoints', icon: 'fa-network-wired', color: '#64748b' }
-        };
-        const entries = Object.entries(pages);
-        if (entries.length === 0) {
+        const rawPages = Array.isArray(traffic.pages) ? traffic.pages : [];
+        if (rawPages.length === 0) {
           pageList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลการเข้าชมหน้าเว็บ</div>';
         } else {
+          // Sort pages: first by active live viewers (descending), then by cumulative views (descending)
+          const sortedPages = [...rawPages].sort((a, b) => {
+            if ((b.activeNow || 0) !== (a.activeNow || 0)) {
+              return (b.activeNow || 0) - (a.activeNow || 0);
+            }
+            return (b.totalViews || 0) - (a.totalViews || 0);
+          });
+
           let html = '';
-          entries.forEach(([key, val]) => {
-            const info = pageLabels[key] || { title: key, icon: 'fa-file', color: '#64748b' };
+          sortedPages.forEach(p => {
+            const hasLive = (p.activeNow && p.activeNow > 0);
+            const liveBadge = hasLive
+              ? `<span style="display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 3px 10px; border-radius: 99px; font-size: 0.74rem; font-weight: 800; box-shadow: 0 1px 3px rgba(16,185,129,0.15);">
+                   <span class="mon-pulse-dot healthy" style="width: 7px; height: 7px;"></span>
+                   <span>${p.activeNow.toLocaleString()} คนดูสด</span>
+                 </span>`
+              : `<span style="display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; color: #94a3b8; padding: 3px 8px; border-radius: 99px; font-size: 0.72rem; font-weight: 600;">
+                   <span>0 คน</span>
+                 </span>`;
+
             html += `
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <i class="fa-solid ${info.icon}" style="color: ${info.color}; font-size: 0.9rem; width: 18px; text-align: center;"></i>
-                  <span style="font-size: 0.82rem; font-weight: 700; color: #1e293b;">${info.title}</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #f1f5f9; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+                  <div style="width: 32px; height: 32px; border-radius: 8px; background: ${p.color || '#3b82f6'}18; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fa-solid ${p.icon || 'fa-file'}" style="color: ${p.color || '#3b82f6'}; font-size: 0.95rem;"></i>
+                  </div>
+                  <div style="min-width: 0;">
+                    <div style="font-size: 0.84rem; font-weight: 750; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.title}</div>
+                    <div style="font-size: 0.7rem; color: #64748b; font-family: monospace;">${p.path || ''}</div>
+                  </div>
                 </div>
-                <div>
-                  <strong style="font-size: 0.86rem; color: #0f172a;">${val.toLocaleString()}</strong>
-                  <span style="font-size: 0.72rem; color: #64748b;"> คำขอ</span>
+
+                <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+                  <!-- Live viewers right now -->
+                  <div>${liveBadge}</div>
+
+                  <!-- Total requests / views -->
+                  <div style="text-align: right; min-width: 75px;">
+                    <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a;">${(p.totalViews || 0).toLocaleString()} <span style="font-size: 0.7rem; font-weight: 600; color: #64748b;">ครั้ง</span></div>
+                    <div style="font-size: 0.68rem; color: #94a3b8; font-family: monospace;">${p.uniqueIps || 0} IPs</div>
+                  </div>
                 </div>
               </div>
             `;

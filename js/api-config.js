@@ -1397,4 +1397,90 @@
   window.formatThaiDate = window.SarawatApi.formatThaiDate.bind(window.SarawatApi);
   window.formatDateRange = window.SarawatApi.formatDateRange.bind(window.SarawatApi);
   window.renderTagBadgesHtml = window.SarawatApi.renderTagBadgesHtml.bind(window.SarawatApi);
+
+  // ==========================================================
+  // 🛰️ REAL-TIME CLIENT TELEMETRY & BEACON ENGINE
+  // Reports active live visitor presence per page to System Monitor
+  // ==========================================================
+  (function initSiteTelemetry() {
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+
+    try {
+      // 1. Determine session ID (persists across page navigations in current tab)
+      let sid = sessionStorage.getItem("sarawat_client_sid");
+      if (!sid) {
+        sid = "s_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now();
+        sessionStorage.setItem("sarawat_client_sid", sid);
+      }
+      window.__SARAWAT_SESSION_ID__ = sid;
+
+      // 2. Identify pageKey from pathname
+      const path = (window.location.pathname || "").toLowerCase();
+      let pageKey = "home";
+      if (path.includes("/si-roster/admin")) {
+        pageKey = "roster_admin";
+      } else if (path.includes("/admin.html")) {
+        pageKey = "admin_central";
+      } else if (path.includes("/si-roster") || path.includes("roster.html")) {
+        pageKey = "roster_student";
+      } else if (path.includes("calendar")) {
+        pageKey = "calendar";
+      } else if (path.includes("activities")) {
+        pageKey = "activities";
+      } else if (path.includes("admission") || path.includes("recruitment")) {
+        pageKey = "admission";
+      } else if (path.includes("team")) {
+        pageKey = "team";
+      } else if (path.includes("privacy") || path.includes("terms")) {
+        pageKey = "policies";
+      } else if (path === "/" || path.endsWith("/index.html") || path.endsWith("/")) {
+        pageKey = "home";
+      }
+      window.__SARAWAT_PAGE_KEY__ = pageKey;
+
+      // Skip SI-ROSTER pages which have their own dedicated high-frequency SSE/polling loop
+      if (pageKey === "roster_student" || pageKey === "roster_admin") {
+        return;
+      }
+
+      function sendBeaconPing(action) {
+        try {
+          const act = action || "ping";
+          const base = (window.SarawatApi && typeof window.SarawatApi.getBaseUrl === "function")
+            ? window.SarawatApi.getBaseUrl()
+            : (window.location.origin.includes("localhost") ? "http://localhost:5000" : "");
+          const url = base + "/api/dashboard/beacon?action=" + act + "&sid=" + encodeURIComponent(sid) + "&page=" + pageKey;
+          if (act === "leave" && navigator.sendBeacon) {
+            navigator.sendBeacon(url);
+          } else {
+            fetch(url, { method: "POST", keepalive: (act === "leave") }).catch(function () {});
+          }
+        } catch (e) {}
+      }
+
+      // Initial ping on page load
+      sendBeaconPing("ping");
+
+      // Heartbeat every 10 seconds while page is visible
+      setInterval(function () {
+        if (!document.hidden) {
+          sendBeaconPing("ping");
+        }
+      }, 10000);
+
+      // Visibility change & page unload
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          sendBeaconPing("leave");
+        } else {
+          sendBeaconPing("ping");
+        }
+      });
+
+      window.addEventListener("pagehide", function () { sendBeaconPing("leave"); });
+      window.addEventListener("beforeunload", function () { sendBeaconPing("leave"); });
+    } catch (err) {
+      // Non-blocking
+    }
+  })();
 })();
