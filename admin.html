@@ -425,22 +425,22 @@
       background: #64748b;
     }
     .mon-map-country {
-      fill: #1e293b;
-      stroke: #334155;
-      stroke-width: 0.7;
+      fill: #ffffff;
+      stroke: #cbd5e1;
+      stroke-width: 0.75;
       transition: fill 0.2s ease, stroke 0.2s ease;
       cursor: pointer;
     }
     .mon-map-country:hover {
-      fill: #3b82f6 !important;
-      stroke: #93c5fd !important;
+      fill: #bfdbfe !important;
+      stroke: #3b82f6 !important;
       stroke-width: 1.2;
     }
     .mon-map-country.active {
       fill: #2563eb;
-      stroke: #60a5fa;
+      stroke: #1d4ed8;
       stroke-width: 1.1;
-      filter: drop-shadow(0 0 4px rgba(37, 99, 235, 0.7));
+      filter: drop-shadow(0 2px 6px rgba(37, 99, 235, 0.45));
     }
     .mon-map-ripple-ring {
       animation: monMapRippleAnim 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
@@ -3928,7 +3928,6 @@
           <!-- Left: Live Status Pill -->
           <div style="display: flex; align-items: center; gap: 12px;">
             <div id="monLivePill" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 0.84rem; font-weight: 750; color: #065f46; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-              <span id="monLivePillDot" class="mon-pulse-dot healthy"></span>
               <i id="monLivePillIcon" class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
               <span id="monLivePillText">ระบบทำงานเป็นปกติ (HEALTHY)</span>
             </div>
@@ -4170,22 +4169,15 @@
           </div>
 
           <!-- 🗺️ Minimalist Vector World Map -->
-          <div id="monWorldMapContainer" style="position: relative; width: 100%; height: 215px; background: #0a0f1d; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1px solid #1e293b; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);">
-            <!-- Top status overlay in map -->
-            <div style="position: absolute; top: 10px; left: 14px; z-index: 10; display: flex; align-items: center; gap: 8px; pointer-events: none;">
-              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 750; color: #38bdf8; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px);">
-                <span class="mon-map-beacon-dot"></span>
-                <span>MINIMAL VECTOR WORLD MAP</span>
-              </span>
-            </div>
-            <div id="monMapActiveNodesBadge" style="position: absolute; top: 10px; right: 14px; z-index: 10; font-size: 0.72rem; font-weight: 700; color: #94a3b8; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px);">
+          <div id="monWorldMapContainer" style="position: relative; width: 100%; height: 215px; background: #f8fafc; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1.5px solid #e2e8f0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.03);">
+            <div id="monMapActiveNodesBadge" style="position: absolute; top: 10px; right: 14px; z-index: 10; font-size: 0.72rem; font-weight: 750; color: #475569; background: rgba(255, 255, 255, 0.92); border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px); box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
               0 ประเทศใช้งาน
             </div>
 
             <!-- SVG Map Element -->
-            <svg id="monWorldMapSvg" viewBox="0 0 1000 500" style="width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 12px rgba(0,0,0,0.5));">
+            <svg id="monWorldMapSvg" viewBox="0 0 1000 500" style="width: 100%; height: 100%; display: block;">
               <!-- Lat/Long Minimal Graticules -->
-              <g stroke="rgba(255,255,255,0.06)" stroke-width="0.8" stroke-dasharray="3,3">
+              <g stroke="rgba(0,0,0,0.05)" stroke-width="0.8" stroke-dasharray="3,3">
                 <line x1="0" y1="250" x2="1000" y2="250" />
                 <line x1="500" y1="0" x2="500" y2="500" />
                 <line x1="0" y1="125" x2="1000" y2="125" />
@@ -11180,7 +11172,7 @@
       }
     }
 
-    // Helper: Update Live Status Pill with glowing animated pulse and icons
+    // Helper: Update Live Status Pill with single icon only
     function updateMonitorLivePill(status, customText) {
       const livePill = document.getElementById('monLivePill');
       if (!livePill) return;
@@ -11190,8 +11182,7 @@
         livePill.style.borderColor = '#fecaca';
         livePill.style.color = '#991b1b';
         livePill.innerHTML = `
-          <span class="mon-pulse-dot critical"></span>
-          <i class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ระบบมีปัญหาร้ายแรง (CRITICAL)'}</span>
         `;
       } else if (status === 'WARNING') {
@@ -11199,8 +11190,7 @@
         livePill.style.borderColor = '#fde68a';
         livePill.style.color = '#92400e';
         livePill.innerHTML = `
-          <span class="mon-pulse-dot warning"></span>
-          <i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ระบบมีข้อความแจ้งเตือน (WARNING)'}</span>
         `;
       } else if (status === 'OFFLINE') {
@@ -11208,8 +11198,7 @@
         livePill.style.borderColor = '#cbd5e1';
         livePill.style.color = '#475569';
         livePill.innerHTML = `
-          <span class="mon-pulse-dot offline"></span>
-          <i class="fa-solid fa-plug-circle-xmark" style="color: #64748b; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="fa-solid fa-plug-circle-xmark" style="color: #64748b; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (OFFLINE)'}</span>
         `;
       } else {
@@ -11218,8 +11207,7 @@
         livePill.style.borderColor = '#a7f3d0';
         livePill.style.color = '#065f46';
         livePill.innerHTML = `
-          <span class="mon-pulse-dot healthy"></span>
-          <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ระบบทำงานเป็นปกติ (HEALTHY)'}</span>
         `;
       }
@@ -11331,14 +11319,14 @@
         beaconsHtml += `
           <g class="mon-map-beacon" transform="translate(${cx}, ${cy})" style="pointer-events: none;">
             <!-- Pulsing ripple rings -->
-            <circle class="mon-map-ripple-ring" r="6" fill="none" stroke="#38bdf8" stroke-width="1.6" />
-            <circle class="mon-map-ripple-ring" r="14" fill="none" stroke="#38bdf8" stroke-width="1" style="animation-delay: 0.6s;" />
+            <circle class="mon-map-ripple-ring" r="6" fill="none" stroke="#2563eb" stroke-width="1.8" />
+            <circle class="mon-map-ripple-ring" r="14" fill="none" stroke="#2563eb" stroke-width="1.2" style="animation-delay: 0.6s;" />
             <!-- Core dot -->
-            <circle r="4" fill="#38bdf8" />
+            <circle r="4.5" fill="#2563eb" />
             <circle r="2" fill="#ffffff" />
             <!-- Text Badge -->
-            <rect x="7" y="-8" width="${iso.length * 8 + 10}" height="15" rx="4" fill="rgba(15, 23, 42, 0.85)" stroke="#38bdf8" stroke-width="0.8" />
-            <text x="12" y="3" fill="#38bdf8" font-size="9" font-weight="800" font-family="monospace">${iso}</text>
+            <rect x="7" y="-9" width="${iso.length * 8 + 10}" height="16" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1" />
+            <text x="12" y="3" fill="#2563eb" font-size="9" font-weight="800" font-family="monospace">${iso}</text>
           </g>
         `;
       });
