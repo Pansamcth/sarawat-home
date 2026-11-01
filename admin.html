@@ -10741,9 +10741,26 @@
         return;
       }
 
-      // 1. Traffic & Latency Line Chart (chartMonTraffic)
+      // 1. Traffic & Latency Line Chart (chartMonTraffic) - Curvy, Smooth with Fluid Animations
       const trafficCtx = document.getElementById('chartMonTraffic');
       if (trafficCtx && !monitorTrafficChartInstance) {
+        let gradientBlue = 'rgba(37, 99, 235, 0.15)';
+        let gradientGreen = 'rgba(16, 185, 129, 0.10)';
+        try {
+          const ctx2d = trafficCtx.getContext('2d');
+          const g1 = ctx2d.createLinearGradient(0, 0, 0, 250);
+          g1.addColorStop(0, 'rgba(37, 99, 235, 0.30)');
+          g1.addColorStop(0.65, 'rgba(37, 99, 235, 0.05)');
+          g1.addColorStop(1, 'rgba(37, 99, 235, 0.0)');
+          gradientBlue = g1;
+
+          const g2 = ctx2d.createLinearGradient(0, 0, 0, 250);
+          g2.addColorStop(0, 'rgba(16, 185, 129, 0.22)');
+          g2.addColorStop(0.65, 'rgba(16, 185, 129, 0.04)');
+          g2.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+          gradientGreen = g2;
+        } catch (e) {}
+
         monitorTrafficChartInstance = new Chart(trafficCtx, {
           type: 'line',
           data: {
@@ -10753,25 +10770,40 @@
                 label: 'ปริมาณคำขอ (Req/s)',
                 data: [],
                 borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.12)',
-                borderWidth: 2,
+                backgroundColor: gradientBlue,
+                borderWidth: 2.8,
+                borderCapStyle: 'round',
+                borderJoinStyle: 'round',
                 fill: true,
-                tension: 0.35,
+                tension: 0.45,
+                cubicInterpolationMode: 'monotone',
                 yAxisID: 'y',
-                pointRadius: 2,
-                pointHoverRadius: 5
+                pointRadius: 3,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#2563eb',
+                pointBorderWidth: 2,
+                pointHoverRadius: 6,
+                pointHoverBorderWidth: 3
               },
               {
                 label: 'ความหน่วง API (ms)',
                 data: [],
                 borderColor: '#10b981',
-                backgroundColor: 'transparent',
-                borderWidth: 2,
-                borderDash: [4, 4],
-                tension: 0.35,
+                backgroundColor: gradientGreen,
+                borderWidth: 2.2,
+                borderDash: [5, 4],
+                borderCapStyle: 'round',
+                borderJoinStyle: 'round',
+                fill: true,
+                tension: 0.45,
+                cubicInterpolationMode: 'monotone',
                 yAxisID: 'y1',
-                pointRadius: 2,
-                pointHoverRadius: 5
+                pointRadius: 3,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#10b981',
+                pointBorderWidth: 2,
+                pointHoverRadius: 6,
+                pointHoverBorderWidth: 3
               }
             ]
           },
@@ -10779,6 +10811,20 @@
             responsive: true,
             maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
+            animation: {
+              duration: 800,
+              easing: 'easeOutQuart'
+            },
+            animations: {
+              y: {
+                duration: 650,
+                easing: 'easeOutCubic'
+              },
+              tension: {
+                duration: 650,
+                easing: 'easeInOutCubic'
+              }
+            },
             scales: {
               x: {
                 grid: { display: false },
@@ -10807,10 +10853,12 @@
               legend: {
                 position: 'top',
                 align: 'end',
-                labels: { boxWidth: 12, font: { family: 'Kanit, sans-serif', size: 12 }, color: '#475569' }
+                labels: { boxWidth: 12, font: { family: 'Kanit, sans-serif', size: 12 }, color: '#475569', usePointStyle: true, pointStyle: 'circle' }
               },
               tooltip: {
-                padding: 10,
+                padding: 12,
+                cornerRadius: 10,
+                boxPadding: 4,
                 bodyFont: { family: 'Kanit, sans-serif' },
                 titleFont: { family: 'Plus Jakarta Sans, sans-serif' }
               }
@@ -11077,13 +11125,13 @@
         monitorTrafficChartInstance.data.labels = labels;
         monitorTrafficChartInstance.data.datasets[0].data = rpsData;
         monitorTrafficChartInstance.data.datasets[1].data = latData;
-        monitorTrafficChartInstance.update('none');
+        monitorTrafficChartInstance.update();
       }
 
       // 7. HTTP Status Doughnut Chart update (chartMonStatus)
       if (monitorStatusChartInstance) {
         monitorStatusChartInstance.data.datasets[0].data = [s2xx, s3xx, s4xx, s5xx];
-        monitorStatusChartInstance.update('none');
+        monitorStatusChartInstance.update();
       }
 
       // 8. Country Breakdown (monCountryList & monCountryTotalBadge)
