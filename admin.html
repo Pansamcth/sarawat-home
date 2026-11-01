@@ -455,6 +455,25 @@
       box-shadow: 0 0 8px #38bdf8;
       animation: monPulseGreen 1.5s infinite;
     }
+    #monPageList::-webkit-scrollbar,
+    #monCountryList::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    #monPageList::-webkit-scrollbar-track,
+    #monCountryList::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 99px;
+    }
+    #monPageList::-webkit-scrollbar-thumb,
+    #monCountryList::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
+    #monPageList::-webkit-scrollbar-thumb:hover,
+    #monCountryList::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
     body {
       background: #f8fafc;
       color: var(--dg-text-primary);
@@ -4153,23 +4172,22 @@
         </div>
       </div>
 
-      <!-- 🌍 2 Columns: IP Country Breakdown + Active Pages Breakdown -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 20px; margin-bottom: 24px;">
-        <!-- Left: Countries Breakdown -->
-        <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
-            <div>
-              <h3 style="font-size: 0.96rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="globe" style="width: 17px; height: 17px; color: #2563eb;"></i>
-                <span>สถิติประเทศของ IP ผู้ใช้งาน (Country Geo Traffic)</span>
-              </h3>
-              <p style="font-size: 0.76rem; color: #64748b; margin: 0;">ตรวจจับผ่าน Cloudflare Header (CF-IPCountry) & Local IP</p>
-            </div>
-            <span id="monCountryTotalBadge" style="font-size: 0.74rem; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 3px 10px; border-radius: 99px;">0 ประเทศ</span>
+      <!-- 🌍 Section: IP Country Geo Traffic & World Map (Full Width Block) -->
+      <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 0.96rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="globe" style="width: 17px; height: 17px; color: #2563eb;"></i>
+              <span>สถิติประเทศของ IP ผู้ใช้งาน (Country Geo Traffic)</span>
+            </h3>
+            <p style="font-size: 0.76rem; color: #64748b; margin: 0;">ตรวจจับผ่าน Cloudflare Header (CF-IPCountry) & Local IP พร้อมแผนที่แบบ Minimalist Vector</p>
           </div>
+          <span id="monCountryTotalBadge" style="font-size: 0.74rem; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 4px 12px; border-radius: 99px; border: 1px solid #bfdbfe;">0 ประเทศ</span>
+        </div>
 
-          <!-- 🗺️ Minimalist Vector World Map -->
-          <div id="monWorldMapContainer" style="position: relative; width: 100%; height: 215px; background: #f8fafc; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1.5px solid #e2e8f0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.03);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; align-items: start;">
+          <!-- Left: Minimalist Vector World Map -->
+          <div id="monWorldMapContainer" style="position: relative; width: 100%; height: 260px; background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.03);">
             <div id="monMapActiveNodesBadge" style="position: absolute; top: 10px; right: 14px; z-index: 10; font-size: 0.72rem; font-weight: 750; color: #475569; background: rgba(255, 255, 255, 0.92); border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px); box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
               0 ประเทศใช้งาน
             </div>
@@ -4196,26 +4214,30 @@
             </div>
           </div>
 
-          <div id="monCountryList" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+          <!-- Right: Country List with Scrollbar -->
+          <div id="monCountryList" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
             <div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 20px;">ยังไม่มีข้อมูลสถิติประเทศ</div>
           </div>
         </div>
+      </div>
 
-        <!-- Right: Active Pages & Visitors -->
-        <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
-            <div>
-              <h3 style="font-size: 0.96rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="layout" style="width: 17px; height: 17px; color: #8b5cf6;"></i>
-                <span>การใช้งานและผู้เข้าชมแยกตามหน้าเว็บ (Page Activity)</span>
-              </h3>
-              <p style="font-size: 0.76rem; color: #64748b; margin: 0;">จำแนกตามหน้านักเรียน, ระบบ Admin, รับสมัคร และ API</p>
-            </div>
+      <!-- 📄 Section: Active Pages & Visitors ("ขยายเมนูการเลื่อนให้เท่ากับตัวบล็อกใหญ่") -->
+      <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 0.96rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="layout" style="width: 17px; height: 17px; color: #8b5cf6;"></i>
+              <span>การใช้งานและผู้เข้าชมแยกตามหน้าเว็บ (Page Activity)</span>
+            </h3>
+            <p style="font-size: 0.76rem; color: #64748b; margin: 0;">จำแนกตามหน้านักเรียน, ระบบ Admin, รับสมัคร และ API พร้อมตรวจสอบสถานะผู้เข้าชมสดแบบ Real-time</p>
           </div>
+          <span id="monPageTotalBadge" style="font-size: 0.74rem; font-weight: 800; color: #8b5cf6; background: #f5f3ff; padding: 4px 12px; border-radius: 99px; border: 1px solid #ddd6fe;">
+            ทุกหน้าในระบบ
+          </span>
+        </div>
 
-          <div id="monPageList" style="display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto;">
-            <!-- Rendered by JS -->
-          </div>
+        <div id="monPageList" style="display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; padding-right: 4px;">
+          <!-- Rendered by JS -->
         </div>
       </div>
 
@@ -11584,38 +11606,57 @@
             return (b.totalViews || 0) - (a.totalViews || 0);
           });
 
+          const totalPageViews = sortedPages.reduce((sum, item) => sum + (item.totalViews || 0), 0);
+          const pageBadge = document.getElementById('monPageTotalBadge');
+          if (pageBadge) {
+            const liveTotal = sortedPages.reduce((sum, item) => sum + (item.activeNow || 0), 0);
+            pageBadge.textContent = `${sortedPages.length} หน้า (${liveTotal} คนดูสด)`;
+          }
+
           let html = '';
           sortedPages.forEach(p => {
             const hasLive = (p.activeNow && p.activeNow > 0);
             const liveBadge = hasLive
-              ? `<span style="display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 3px 10px; border-radius: 99px; font-size: 0.74rem; font-weight: 800; box-shadow: 0 1px 3px rgba(16,185,129,0.15);">
+              ? `<span style="display: inline-flex; align-items: center; gap: 6px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 99px; font-size: 0.76rem; font-weight: 800; box-shadow: 0 1px 3px rgba(16,185,129,0.15);">
                    <span class="mon-pulse-dot healthy" style="width: 7px; height: 7px;"></span>
                    <span>${p.activeNow.toLocaleString()} คนดูสด</span>
                  </span>`
-              : `<span style="display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; color: #94a3b8; padding: 3px 8px; border-radius: 99px; font-size: 0.72rem; font-weight: 600;">
+              : `<span style="display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; color: #94a3b8; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 600;">
                    <span>0 คน</span>
                  </span>`;
 
+            const pct = totalPageViews > 0 ? Math.round(((p.totalViews || 0) / totalPageViews) * 100) : 0;
+
             html += `
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #f1f5f9; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
-                <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-                  <div style="width: 32px; height: 32px; border-radius: 8px; background: ${p.color || '#3b82f6'}18; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <i class="fa-solid ${p.icon || 'fa-file'}" style="color: ${p.color || '#3b82f6'}; font-size: 0.95rem;"></i>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 18px; background: #f8fafc; border-radius: 12px; border: 1px solid #f1f5f9; transition: all 0.15s ease; flex-wrap: wrap;" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#cbd5e1';" onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#f1f5f9';">
+                <!-- Left: Icon + Full Title + Path Badge -->
+                <div style="display: flex; align-items: center; gap: 12px; min-width: 240px; flex: 1.2;">
+                  <div style="width: 38px; height: 38px; border-radius: 10px; background: ${p.color || '#3b82f6'}18; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <i class="fa-solid ${p.icon || 'fa-file'}" style="color: ${p.color || '#3b82f6'}; font-size: 1.05rem;"></i>
                   </div>
-                  <div style="min-width: 0;">
-                    <div style="font-size: 0.84rem; font-weight: 750; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.title}</div>
-                    <div style="font-size: 0.7rem; color: #64748b; font-family: monospace;">${p.path || ''}</div>
+                  <div>
+                    <div style="font-size: 0.88rem; font-weight: 800; color: #0f172a; line-height: 1.35; margin-bottom: 2px;">${p.title}</div>
+                    <div style="display: inline-block; font-size: 0.71rem; color: #64748b; font-family: monospace; background: #e2e8f0; padding: 1px 7px; border-radius: 5px;">${p.path || ''}</div>
                   </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
-                  <!-- Live viewers right now -->
+                <!-- Middle & Right Info -->
+                <div style="display: flex; align-items: center; gap: 18px; flex-shrink: 0; flex-wrap: wrap;">
+                  <!-- Live viewers badge -->
                   <div>${liveBadge}</div>
 
-                  <!-- Total requests / views -->
-                  <div style="text-align: right; min-width: 75px;">
-                    <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a;">${(p.totalViews || 0).toLocaleString()} <span style="font-size: 0.7rem; font-weight: 600; color: #64748b;">ครั้ง</span></div>
-                    <div style="font-size: 0.68rem; color: #94a3b8; font-family: monospace;">${p.uniqueIps || 0} IPs</div>
+                  <!-- Percentage visual bar -->
+                  <div style="width: 140px; display: flex; align-items: center; gap: 8px;">
+                    <div style="flex: 1; height: 7px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
+                      <div style="width: ${pct}%; height: 100%; background: ${p.color || '#3b82f6'}; border-radius: 99px; transition: width 0.3s ease;"></div>
+                    </div>
+                    <span style="font-size: 0.74rem; font-weight: 750; color: #64748b; width: 34px; text-align: right;">${pct}%</span>
+                  </div>
+
+                  <!-- Cumulative Views & IPs -->
+                  <div style="text-align: right; min-width: 90px;">
+                    <div style="font-size: 0.88rem; font-weight: 800; color: #0f172a;">${(p.totalViews || 0).toLocaleString()} <span style="font-size: 0.72rem; font-weight: 600; color: #64748b;">ครั้ง</span></div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; font-family: monospace;">${p.uniqueIps || 0} IPs</div>
                   </div>
                 </div>
               </div>
