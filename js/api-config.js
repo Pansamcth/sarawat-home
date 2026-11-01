@@ -256,6 +256,34 @@
       return { success: true };
     },
 
+    // ⚡ Real-time System Monitor Telemetry (Super Admin Only)
+    getSystemMonitorStats: async function () {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
+      const res = await fetch(`${base}/api/dashboard/stats`, {
+        headers: this.getAuthHeaders({ 'Accept': 'application/json' })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      return data;
+    },
+
+    sendDiscordTestAlert: async function () {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
+      const res = await fetch(`${base}/api/dashboard/test-discord`, {
+        method: 'POST',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      return data;
+    },
+
     getSettings: async function () {
       const base = this.getBaseUrl();
       if (!base) return {};
