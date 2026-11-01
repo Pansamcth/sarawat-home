@@ -266,6 +266,9 @@
             err.remainingAttempts = data && typeof data.remainingAttempts === 'number' ? data.remainingAttempts : undefined;
             throw err;
           }
+          if (data && data.token && typeof this.setAuthToken === 'function') {
+            this.setAuthToken(data.token, true);
+          }
           return data;
         } catch (fetchErr) {
           if (fetchErr.isAuthError) throw fetchErr;
@@ -5855,6 +5858,7 @@
       if (currentAdminUser) {
         applyRolePermissions(currentAdminUser.role, currentAdminUser.username);
       }
+      startAdminSessionHeartbeat();
       try {
         initDashboard();
       } catch (err) {
@@ -6119,6 +6123,9 @@
               username: res.user || u,
               role: res.role || 'Admin'
             };
+            if (res.token && window.SarawatApi && typeof window.SarawatApi.setAuthToken === 'function') {
+              window.SarawatApi.setAuthToken(res.token, true);
+            }
           }
         } catch (apiErr) {
           console.warn('Backend login attempt:', apiErr.message);
@@ -6555,6 +6562,45 @@
       }
     }
 
+    let adminSessionHeartbeatTimer = null;
+
+    function startAdminSessionHeartbeat() {
+      if (adminSessionHeartbeatTimer) clearInterval(adminSessionHeartbeatTimer);
+      adminSessionHeartbeatTimer = setInterval(async () => {
+        if (!window.SarawatApi || !window.SarawatApi.getAuthToken()) return;
+        try {
+          const check = await window.SarawatApi.verifyAuth();
+          if (check && !check.valid && !check.offline) {
+            clearInterval(adminSessionHeartbeatTimer);
+            adminSessionHeartbeatTimer = null;
+            sessionStorage.removeItem('sarawat_admin_auth');
+            sessionStorage.removeItem('sarawat_admin_user');
+            lockAdminAuth();
+            if (check.code === 'SESSION_EVICTED') {
+              showSessionEvictedNotice();
+            } else {
+              showToast('เซสชันของคุณหมดอายุแล้ว กรุณาเข้าสู่ระบบใหม่', 'warning');
+            }
+          }
+        } catch (e) {}
+      }, 15000);
+    }
+
+    function showSessionEvictedNotice() {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'เซสชันสิ้นสุดลงแล้ว',
+          text: 'เซสชันของคุณสิ้นสุดลงแล้ว เนื่องจากมีการเข้าสู่ระบบจากอุปกรณ์อื่นเกินขีดจำกัด (สูงสุด 3 เครื่อง ต่อ 1 ผู้ใช้ ระบบออกจากระบบเครื่องที่เก่าที่สุดให้อัตโนมัติ)',
+          confirmButtonText: 'รับทราบ',
+          confirmButtonColor: '#0f172a',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      } else {
+        alert('เซสชันของคุณสิ้นสุดลงแล้ว เนื่องจากมีการเข้าสู่ระบบจากเครื่องอื่นเกิน 3 เครื่อง (ออกจากระบบเครื่องที่เก่าที่สุดอัตโนมัติ)');
+      }
+    }
+
     async function handleLogout() {
       const result = await Swal.fire({
         title: 'ออกจากระบบ Admin?',
@@ -6569,6 +6615,10 @@
       });
       if (!result.isConfirmed) return;
 
+      if (adminSessionHeartbeatTimer) {
+        clearInterval(adminSessionHeartbeatTimer);
+        adminSessionHeartbeatTimer = null;
+      }
       if (window.SarawatApi && typeof window.SarawatApi.logout === 'function') {
         try { await window.SarawatApi.logout(); } catch (e) {}
       }

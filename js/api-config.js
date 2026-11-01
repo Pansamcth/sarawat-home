@@ -218,17 +218,22 @@
         const res = await fetch(`${base}/api/auth/verify`, {
           headers: this.getAuthHeaders({ 'Accept': 'application/json' })
         });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.valid && data.user) {
-            this.setAuthUser(data.user);
-            return { valid: true, user: data.user };
-          }
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.valid || data.success)) {
+          const userObj = (data.user && typeof data.user === 'object') ? data.user : { username: data.user || 'Admin', role: data.role || 'Admin' };
+          this.setAuthUser(userObj);
+          return { valid: true, user: userObj };
         }
         if (res.status === 401) {
           this.clearAuth();
+          return { 
+            valid: false, 
+            status: 401, 
+            code: data.code || 'UNAUTHORIZED', 
+            error: data.error || 'เซสชันหมดอายุหรือไม่ถูกต้อง' 
+          };
         }
-        return { valid: false, status: res.status };
+        return { valid: false, status: res.status, error: data.error };
       } catch (err) {
         const user = this.getAuthUser();
         return { valid: !!user, user: user, offline: true, error: err.message };

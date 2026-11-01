@@ -88,7 +88,16 @@
     window.onload = function () {
       const authCookie = getLoginCookie();
       if (authCookie) {
-        loginSuccess(authCookie.user, authCookie.name, authCookie.role, true);
+        loginSuccess(authCookie.user, authCookie.name, authCookie.role, true, authCookie.token);
+        if (authCookie.token && typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function (sess) {
+              if (sess && !sess.valid) {
+                adminLogout(sess.code === 'SESSION_EVICTED');
+              }
+            })
+            .verifyAdminSession(authCookie.token);
+        }
       }
       loadInitialData();
       setTimeout(function () {
@@ -2427,8 +2436,8 @@
     }
 
     // --- Cookie Logic ---
-    function setLoginCookie(user, name, role) {
-      const data = JSON.stringify({ user: user, name: name, role: role });
+    function setLoginCookie(user, name, role, token) {
+      const data = JSON.stringify({ user: user, name: name, role: role, token: token || '' });
       const encoded = btoa(encodeURIComponent(data));
       const expires = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 days
       localStorage.setItem('adminAuth', JSON.stringify({ data: encoded, expires: expires }));
@@ -2477,7 +2486,7 @@
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (res) {
-            loginSuccess(res.user, res.name, res.role);
+            loginSuccess(res.user, res.name, res.role, false, res ? res.token : '');
             btn.disabled = false;
             btn.innerHTML = 'เข้าสู่ระบบ';
           })
@@ -2492,12 +2501,13 @@
       }
     }
 
-    function loginSuccess(user, name, role, fromCookie = false) {
+    function loginSuccess(user, name, role, fromCookie = false, token = '') {
       isAdmin = true;
-      adminInfo = { user: user, name: name, role: role || 'Superadmin' };
+      const effectiveToken = token || (adminInfo && adminInfo.token ? adminInfo.token : '');
+      adminInfo = { user: user, name: name, role: role || 'Superadmin', token: effectiveToken };
 
       if (!fromCookie) {
-        setLoginCookie(user, name, role);
+        setLoginCookie(user, name, role, effectiveToken);
       }
 
       closeModal('loginModal');
@@ -2517,10 +2527,18 @@
       }
     }
 
-    function adminLogout() {
+    function adminLogout(isEvicted = false) {
+      if (adminInfo && adminInfo.token && typeof google !== 'undefined' && google.script) {
+        try {
+          google.script.run.rosterLogout(adminInfo.token);
+        } catch (e) {}
+      }
       clearLoginCookie();
       isAdmin = false;
       adminInfo = null;
+      if (isEvicted) {
+        showToast('เซสชันสิ้นสุดลงเนื่องจากมีผู้เข้าสู่ระบบเกิน 3 เครื่อง', 'warning');
+      }
       if (document.getElementById('adminLoginBtn')) document.getElementById('adminLoginBtn').classList.remove('logged-in');
       if (document.getElementById('adminIcon')) document.getElementById('adminIcon').className = 'fa-solid fa-door-open';
       if (document.getElementById('adminLoginText')) {

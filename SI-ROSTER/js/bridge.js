@@ -157,15 +157,36 @@
             clientCallCooldowns.set(method, now);
           }
 
+          let currentRosterToken = '';
+          try {
+            const stored = localStorage.getItem('adminAuth');
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              if (parsed && (!parsed.expires || Date.now() <= parsed.expires)) {
+                const decoded = decodeURIComponent(atob(parsed.data));
+                const authObj = JSON.parse(decoded);
+                if (authObj && authObj.token) {
+                  currentRosterToken = authObj.token;
+                }
+              }
+            }
+          } catch (e) {}
+
+          const reqHeaders = {
+            'Content-Type': 'application/json',
+            'Bypass-Tunnel-Reminder': 'true',
+            'X-Device-Id': getOrCreateDeviceId(),
+            'X-Client-Timestamp': String(Date.now())
+          };
+          if (currentRosterToken) {
+            reqHeaders['X-Roster-Token'] = currentRosterToken;
+            reqHeaders['Authorization'] = 'Bearer ' + currentRosterToken;
+          }
+
           const performFetch = async () => {
             const res = await fetch(url, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Bypass-Tunnel-Reminder': 'true',
-                'X-Device-Id': getOrCreateDeviceId(),
-                'X-Client-Timestamp': String(Date.now())
-              },
+              headers: reqHeaders,
               body: JSON.stringify({ args })
             });
 
@@ -182,7 +203,15 @@
               err.retryAfterSeconds = data ? (data.retryAfterSeconds || 0) : 0;
               err.lockedOut = data ? !!data.lockedOut : false;
               err.remainingAttempts = data && typeof data.remainingAttempts === 'number' ? data.remainingAttempts : undefined;
+              err.code = data ? data.code : undefined;
+              err.isSessionEvicted = data ? !!data.isSessionEvicted : false;
               err.status = res.status;
+
+              if (err.isSessionEvicted || err.code === 'SESSION_EVICTED') {
+                if (typeof window.triggerRosterSessionEvicted === 'function') {
+                  window.triggerRosterSessionEvicted();
+                }
+              }
               throw err;
             }
           };

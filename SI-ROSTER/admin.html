@@ -5203,8 +5203,17 @@ body.dark-mode .signup-success-banner,
     window.onload = function () {
       const authCookie = getLoginCookie();
       if (authCookie) {
-        loginSuccess(authCookie.user, authCookie.name, authCookie.role, true);
+        loginSuccess(authCookie.user, authCookie.name, authCookie.role, true, authCookie.token);
         loadInitialData();
+        if (authCookie.token && typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function (sess) {
+              if (sess && !sess.valid) {
+                adminLogout(sess.code === 'SESSION_EVICTED');
+              }
+            })
+            .verifyAdminSession(authCookie.token);
+        }
       } else {
         openAdminMenu();
       }
@@ -6047,18 +6056,26 @@ body.dark-mode .signup-success-banner,
     async function checkRosterSyncState() {
       if (document.hidden) return;
       const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
-      const url = `${apiBase}/api/roster/syncState?sid=${encodeURIComponent(rosterSessionId)}&page=${rosterPageKey}&_t=${Date.now()}`;
+      const adminToken = (isAdmin && adminInfo && adminInfo.token) ? adminInfo.token : '';
+      const tokenParam = adminToken ? `&token=${encodeURIComponent(adminToken)}` : '';
+      const url = `${apiBase}/api/roster/syncState?sid=${encodeURIComponent(rosterSessionId)}&page=${rosterPageKey}${tokenParam}&_t=${Date.now()}`;
       try {
         const res = await fetch(url, {
           headers: {
             'Bypass-Tunnel-Reminder': 'true',
             'X-Session-ID': rosterSessionId,
-            'X-Page-Key': rosterPageKey
+            'X-Page-Key': rosterPageKey,
+            'X-Roster-Token': adminToken
           }
         });
         if (!res.ok) return;
         const data = await res.json();
         if (!data || !data.success) return;
+
+        if (data.sessionEvicted) {
+          adminLogout(true);
+          return;
+        }
 
         // Initial seed: don't trigger events on very first load
         if (lastSignupsHash === null) {
@@ -7825,8 +7842,8 @@ body.dark-mode .signup-success-banner,
     }
 
     // --- Cookie Logic ---
-    function setLoginCookie(user, name, role) {
-      const data = JSON.stringify({ user: user, name: name, role: role });
+    function setLoginCookie(user, name, role, token) {
+      const data = JSON.stringify({ user: user, name: name, role: role, token: token || '' });
       const encoded = btoa(encodeURIComponent(data));
       const expires = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 days
       localStorage.setItem('adminAuth', JSON.stringify({ data: encoded, expires: expires }));
@@ -7930,7 +7947,7 @@ body.dark-mode .signup-success-banner,
         google.script.run
           .withSuccessHandler(function (res) {
             if (rosterLoginLockoutTimer) clearInterval(rosterLoginLockoutTimer);
-            loginSuccess(res.user, res.name, res.role);
+            loginSuccess(res.user, res.name, res.role, false, res ? res.token : '');
             btn.disabled = false;
             btn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>';
           })
@@ -7956,12 +7973,13 @@ body.dark-mode .signup-success-banner,
       }
     }
 
-    function loginSuccess(user, name, role, fromCookie = false) {
+    function loginSuccess(user, name, role, fromCookie = false, token = '') {
       isAdmin = true;
-      adminInfo = { user: user, name: name, role: role || 'Superadmin' };
+      const effectiveToken = token || (adminInfo && adminInfo.token ? adminInfo.token : '');
+      adminInfo = { user: user, name: name, role: role || 'Superadmin', token: effectiveToken };
 
       if (!fromCookie) {
-        setLoginCookie(user, name, role);
+        setLoginCookie(user, name, role, effectiveToken);
         showToast('เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ ' + name);
       }
 
@@ -7975,7 +7993,12 @@ body.dark-mode .signup-success-banner,
       openDashboard();
     }
 
-    function adminLogout() {
+    function adminLogout(isEvicted = false) {
+      if (adminInfo && adminInfo.token && typeof google !== 'undefined' && google.script) {
+        try {
+          google.script.run.rosterLogout(adminInfo.token);
+        } catch (e) {}
+      }
       clearLoginCookie();
       isAdmin = false;
       adminInfo = null;
@@ -7991,9 +8014,26 @@ body.dark-mode .signup-success-banner,
       const loginView = document.getElementById('adminLoginView');
       if (loginView) loginView.style.display = 'flex';
 
-      showToast('ออกจากระบบ Admin แล้ว');
+      if (isEvicted) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'warning',
+            title: 'เซสชันสิ้นสุดลงแล้ว',
+            text: 'เซสชันของคุณสิ้นสุดลงแล้ว เนื่องจากมีการเข้าสู่ระบบจากอุปกรณ์อื่นเกินขีดจำกัด (สูงสุด 3 เครื่อง ต่อ 1 ผู้ใช้)',
+            confirmButtonText: 'รับทราบ',
+            confirmButtonColor: '#0f172a'
+          });
+        } else {
+          alert('เซสชันของคุณสิ้นสุดลงแล้ว เนื่องจากมีการเข้าสู่ระบบจากเครื่องอื่นเกิน 3 เครื่อง (ออกจากระบบเครื่องที่เก่าที่สุดอัตโนมัติ)');
+        }
+      } else {
+        showToast('ออกจากระบบ Admin แล้ว');
+      }
       openAdminMenu();
     }
+    window.triggerRosterSessionEvicted = function () {
+      adminLogout(true);
+    };
 
     // --- Dashboard Logic ---
     let dashAdmins = [];
