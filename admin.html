@@ -10537,7 +10537,7 @@
        👑 SYSTEM MONITOR CONTROLLER (SUPER ADMIN ONLY)
        ========================================================================== */
     let monitorPollingIntervalId = null;
-    let monitorPollingIntervalSeconds = 3;
+    let monitorPollingIntervalMs = 3000;
     let monitorAudioEnabled = false;
     let monitorTrafficChartInstance = null;
     let monitorStatusChartInstance = null;
@@ -10601,35 +10601,28 @@
     }
 
     function updateMonitorAudioUI() {
-      const btn = document.getElementById('monAudioToggleBtn');
-      const txt = document.getElementById('monAudioStatusText');
-      if (btn && txt) {
+      const icon = document.getElementById('iconMonAudio');
+      const txt = document.getElementById('textMonAudio');
+      if (icon && txt) {
         if (monitorAudioEnabled) {
-          btn.style.borderColor = '#10b981';
-          btn.style.background = '#ecfdf5';
-          btn.style.color = '#065f46';
+          icon.className = 'fa-solid fa-volume-high';
+          icon.style.color = '#10b981';
           txt.textContent = 'เสียงเตือน: เปิด';
-          const icon = btn.querySelector('[data-lucide]');
-          if (icon) icon.setAttribute('data-lucide', 'volume-2');
         } else {
-          btn.style.borderColor = '#cbd5e1';
-          btn.style.background = '#ffffff';
-          btn.style.color = '#475569';
+          icon.className = 'fa-solid fa-volume-xmark';
+          icon.style.color = '#94a3b8';
           txt.textContent = 'เสียงเตือน: ปิด';
-          const icon = btn.querySelector('[data-lucide]');
-          if (icon) icon.setAttribute('data-lucide', 'volume-x');
         }
-        if (window.lucide) lucide.createIcons();
       }
     }
 
     function changeMonitorRefreshInterval(val) {
-      const sec = parseInt(val, 10);
-      monitorPollingIntervalSeconds = isNaN(sec) ? 3 : sec;
+      const ms = parseInt(val, 10);
+      monitorPollingIntervalMs = isNaN(ms) ? 3000 : ms;
       stopSystemMonitorPolling();
-      if (monitorPollingIntervalSeconds > 0) {
+      if (monitorPollingIntervalMs > 0) {
         startSystemMonitorPolling();
-        showToast('เปลี่ยนความถี่อัปเดตเป็น ' + monitorPollingIntervalSeconds + ' วินาที', 'info');
+        showToast('เปลี่ยนความถี่อัปเดตเป็น ' + (monitorPollingIntervalMs / 1000) + ' วินาที', 'info');
       } else {
         showToast('หยุดการอัปเดตอัตโนมัติชั่วคราว', 'warning');
       }
@@ -10637,10 +10630,10 @@
 
     function startSystemMonitorPolling() {
       stopSystemMonitorPolling();
-      if (monitorPollingIntervalSeconds <= 0) return;
+      if (monitorPollingIntervalMs <= 0) return;
       monitorPollingIntervalId = setInterval(() => {
         loadSystemMonitorData(false);
-      }, monitorPollingIntervalSeconds * 1000);
+      }, monitorPollingIntervalMs);
     }
 
     function stopSystemMonitorPolling() {
@@ -10651,11 +10644,10 @@
     }
 
     async function testDiscordWebhookAlert() {
-      const btn = document.getElementById('monTestDiscordBtn');
+      const btn = document.getElementById('btnTestDiscord');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> <span>กำลังส่ง Discord...</span>';
-        if (window.lucide) lucide.createIcons();
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>กำลังส่ง Discord...</span>';
       }
 
       try {
@@ -10681,8 +10673,7 @@
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = '<i data-lucide="bell-ring" style="width: 14px; height: 14px; color: #6366f1;"></i> <span>ทดสอบแจ้งเตือน Discord</span>';
-          if (window.lucide) lucide.createIcons();
+          btn.innerHTML = '<i class="fa-brands fa-discord" style="font-size: 0.95rem;"></i> <span>ทดสอบส่ง Discord Alert</span>';
         }
       }
     }
@@ -10693,8 +10684,8 @@
         return;
       }
 
-      // 1. Traffic & Latency Line Chart
-      const trafficCtx = document.getElementById('monTrafficLatencyChart');
+      // 1. Traffic & Latency Line Chart (chartMonTraffic)
+      const trafficCtx = document.getElementById('chartMonTraffic');
       if (trafficCtx && !monitorTrafficChartInstance) {
         monitorTrafficChartInstance = new Chart(trafficCtx, {
           type: 'line',
@@ -10704,8 +10695,8 @@
               {
                 label: 'ปริมาณคำขอ (Req/s)',
                 data: [],
-                borderColor: '#3b82f6',
-                backgroundColor: 'rgba(59, 130, 246, 0.12)',
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37, 99, 235, 0.12)',
                 borderWidth: 2,
                 fill: true,
                 tension: 0.35,
@@ -10771,13 +10762,13 @@
         });
       }
 
-      // 2. HTTP Status Doughnut Chart
-      const statusCtx = document.getElementById('monHttpStatusChart');
+      // 2. HTTP Status Doughnut Chart (chartMonStatus)
+      const statusCtx = document.getElementById('chartMonStatus');
       if (statusCtx && !monitorStatusChartInstance) {
         monitorStatusChartInstance = new Chart(statusCtx, {
           type: 'doughnut',
           data: {
-            labels: ['2xx Success', '3xx Redirect', '4xx Client Err', '5xx Server Err'],
+            labels: ['2xx สำเร็จ', '3xx ส่งต่อ', '4xx ข้อผิดพลาดผู้ใช้', '5xx ข้อผิดพลาดระบบ'],
             datasets: [
               {
                 data: [0, 0, 0, 0],
@@ -10791,9 +10782,12 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '72%',
+            cutout: '70%',
             plugins: {
-              legend: { display: false },
+              legend: {
+                position: 'bottom',
+                labels: { boxWidth: 12, font: { family: 'Kanit, sans-serif', size: 11 }, color: '#475569', padding: 14 }
+              },
               tooltip: {
                 callbacks: {
                   label: function(ctx) {
@@ -10820,14 +10814,15 @@
       if (isMonitorFetching) return;
       isMonitorFetching = true;
 
-      const refreshBtn = document.getElementById('monManualRefreshBtn');
-      if (isManual && refreshBtn) {
-        const icon = refreshBtn.querySelector('[data-lucide]');
-        if (icon) icon.classList.add('spin');
-      }
-
       try {
-        const rawRes = await window.SarawatApi.getSystemMonitorStats();
+        let rawRes = null;
+        if (window.SarawatApi && typeof window.SarawatApi.getSystemMonitorStats === 'function') {
+          rawRes = await window.SarawatApi.getSystemMonitorStats();
+        } else {
+          const res = await fetch('/api/dashboard/stats');
+          rawRes = await res.json();
+        }
+
         const data = (rawRes && rawRes.data) ? rawRes.data : rawRes;
         if (!data || (!data.server && !data.system && !data.health)) {
           throw new Error('ไม่ได้รับข้อมูลสถานะจากเซิร์ฟเวอร์');
@@ -10849,10 +10844,6 @@
         }
       } finally {
         isMonitorFetching = false;
-        if (refreshBtn) {
-          const icon = refreshBtn.querySelector('[data-lucide]');
-          if (icon) icon.classList.remove('spin');
-        }
       }
     }
 
@@ -10872,28 +10863,33 @@
       const health = data.health || { status: 'HEALTHY', issues: [] };
       const statusCounts = traffic.statusCounts || traffic.statusCodes || {};
 
+      // Calculate key values
+      const totalReqs = traffic.totalRequests || 0;
       const rps = (traffic.requestsPerSec !== undefined) ? traffic.requestsPerSec : (traffic.rps || 0);
       const avgLatency = (pings.avgResponseTimeMs !== undefined) ? pings.avgResponseTimeMs : (traffic.avgResponseTimeMs || 0);
+      const minLatency = (pings.minResponseTimeMs !== undefined) ? pings.minResponseTimeMs : 0;
+      const maxLatency = (pings.maxResponseTimeMs !== undefined) ? pings.maxResponseTimeMs : 0;
       const dbPing = (pings.dbPingMs !== undefined) ? pings.dbPingMs : (db.pingMs !== undefined ? db.pingMs : null);
       const eventLag = (pings.nodeEventLoopMs !== undefined) ? pings.nodeEventLoopMs : (sys.eventLoopLagMs || 0);
-      const totalReqs = traffic.totalRequests || 0;
+      
       const s2xx = statusCounts['2xx'] || 0;
       const s3xx = statusCounts['3xx'] || 0;
       const s4xx = statusCounts['4xx'] || 0;
       const s5xx = statusCounts['5xx'] || 0;
-      const totalErrors = s4xx + s5xx;
-      const errorRate = totalReqs > 0 ? ((totalErrors / totalReqs) * 100) : 0;
-      const uptimeStr = server.uptimeStr || sys.uptimeFormatted || 'N/A';
-      const heapUsed = (sys.heapUsedMb !== undefined) ? sys.heapUsedMb : (sys.memory ? sys.memory.heapUsedMB : 0);
+      const successRate = totalReqs > 0 ? ((s2xx / totalReqs) * 100).toFixed(1) : '100.0';
+
+      const uptimeStr = server.uptimeStr || sys.uptimeFormatted || '--:--:--';
+      const nodeVer = server.nodeVersion || sys.nodeVersion || '--';
+      const cpuUsage = (sys.cpuPercent !== undefined) ? sys.cpuPercent.toFixed(1) : '0.0';
+      const ramUsedGb = (sys.processRssMb ? (sys.processRssMb / 1024).toFixed(2) : (sys.heapUsedMb ? (sys.heapUsedMb / 1024).toFixed(2) : '0.10'));
+      const ramPercent = (sys.systemRamPercent !== undefined) ? sys.systemRamPercent.toFixed(1) : (sys.heapUsedMb && sys.heapTotalMb ? ((sys.heapUsedMb / sys.heapTotalMb) * 100).toFixed(1) : '0');
 
       // 1. Health Status Banner & Top Live Pill
       const livePill = document.getElementById('monLivePill');
       const liveText = document.getElementById('monLivePillText');
       const banner = document.getElementById('monHealthBanner');
+      const bIconWrap = document.getElementById('monHealthIconWrap');
       const bTitle = document.getElementById('monHealthTitle');
-      const bBadge = document.getElementById('monHealthBadge');
-      const bDesc = document.getElementById('monHealthDesc');
-      const bIcon = document.getElementById('monHealthIcon');
       const bDetails = document.getElementById('monHealthDetails');
 
       if (health.status === 'CRITICAL') {
@@ -10904,12 +10900,15 @@
           liveText.textContent = 'ระบบมีปัญหาร้ายแรง (CRITICAL)';
         }
         if (banner) {
-          banner.style.background = '#fff1f2';
-          banner.style.borderColor = '#fecdd3';
-          if (bTitle) { bTitle.textContent = 'พบข้อผิดพลาดร้ายแรงในระบบ (CRITICAL)'; bTitle.style.color = '#9f1239'; }
-          if (bBadge) { bBadge.textContent = 'CRITICAL'; bBadge.style.background = '#e11d48'; bBadge.style.color = '#ffffff'; }
-          if (bDesc) { bDesc.textContent = health.issues && health.issues.length ? health.issues.join(' • ') : 'ระบบหรือฐานข้อมูลกำลังพบปัญหาเร่งด่วน โปรดตรวจสอบทันที'; bDesc.style.color = '#be123c'; }
-          if (bIcon) { bIcon.setAttribute('data-lucide', 'alert-octagon'); bIcon.style.color = '#e11d48'; }
+          banner.style.display = 'block';
+          banner.style.background = '#fef2f2';
+          banner.style.borderColor = '#fecaca';
+          if (bIconWrap) {
+            bIconWrap.style.background = '#fee2e2';
+            bIconWrap.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="color: #dc2626; font-size: 1.15rem;"></i>';
+          }
+          if (bTitle) { bTitle.textContent = 'ระบบตรวจพบปัญหาร้ายแรง (Critical Error)'; bTitle.style.color = '#991b1b'; }
+          if (bDetails) { bDetails.textContent = health.issues && health.issues.length ? health.issues.join(' • ') : 'ระบบหรือฐานข้อมูลกำลังพบปัญหาเร่งด่วน โปรดตรวจสอบทันที'; bDetails.style.color = '#7f1d1d'; }
         }
         if (monitorLastHealthStatus !== 'CRITICAL') {
           playSystemAlarmTone(true);
@@ -10922,12 +10921,15 @@
           liveText.textContent = 'ระบบมีข้อความแจ้งเตือน (WARNING)';
         }
         if (banner) {
+          banner.style.display = 'block';
           banner.style.background = '#fffbeb';
-          banner.style.borderColor = '#fef3c7';
-          if (bTitle) { bTitle.textContent = 'ระบบมีข้อความแจ้งเตือนที่ควรตรวจสอบ (WARNING)'; bTitle.style.color = '#92400e'; }
-          if (bBadge) { bBadge.textContent = 'WARNING'; bBadge.style.background = '#f59e0b'; bBadge.style.color = '#ffffff'; }
-          if (bDesc) { bDesc.textContent = health.issues && health.issues.length ? health.issues.join(' • ') : 'ประสิทธิภาพบางส่วนลดลง หรือมีความหน่วงสูงกว่าเกณฑ์'; bDesc.style.color = '#b45309'; }
-          if (bIcon) { bIcon.setAttribute('data-lucide', 'alert-triangle'); bIcon.style.color = '#f59e0b'; }
+          banner.style.borderColor = '#fde68a';
+          if (bIconWrap) {
+            bIconWrap.style.background = '#fef3c7';
+            bIconWrap.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #d97706; font-size: 1.15rem;"></i>';
+          }
+          if (bTitle) { bTitle.textContent = 'ระบบตรวจพบข้อควรระวัง (System Warning)'; bTitle.style.color = '#92400e'; }
+          if (bDetails) { bDetails.textContent = health.issues && health.issues.length ? health.issues.join(' • ') : 'ประสิทธิภาพบางส่วนลดลง หรือมีความหน่วงสูงกว่าเกณฑ์'; bDetails.style.color = '#78350f'; }
         }
         if (monitorLastHealthStatus === 'HEALTHY') {
           playSystemAlarmTone(false);
@@ -10940,45 +10942,76 @@
           liveText.textContent = 'ระบบทำงานเป็นปกติ (HEALTHY)';
         }
         if (banner) {
-          banner.style.background = '#f0fdf4';
-          banner.style.borderColor = '#bbf7d0';
-          if (bTitle) { bTitle.textContent = 'ระบบทำงานได้อย่างราบรื่นและมีเสถียรภาพ (HEALTHY)'; bTitle.style.color = '#065f46'; }
-          if (bBadge) { bBadge.textContent = 'ALL NORMAL'; bBadge.style.background = '#10b981'; bBadge.style.color = '#ffffff'; }
-          if (bDesc) { bDesc.textContent = 'API, ฐานข้อมูล SQLite และบริการทั้งหมดทำงานเป็นปกติ ความหน่วงและอัตราข้อผิดพลาดอยู่ในเกณฑ์ที่ยอดเยี่ยม'; bDesc.style.color = '#047857'; }
-          if (bIcon) { bIcon.setAttribute('data-lucide', 'check-circle-2'); bIcon.style.color = '#10b981'; }
+          banner.style.display = 'none';
         }
       }
       monitorLastHealthStatus = health.status;
 
-      if (bDetails) {
-        bDetails.innerHTML = '⚡ Event Loop Lag: ' + (eventLag ? eventLag.toFixed(2) + 'ms' : '0ms') +
-          ' | DB Ping: ' + (dbPing !== null ? dbPing.toFixed(2) + 'ms' : 'OK') +
-          ' | Node RAM: ' + (heapUsed ? heapUsed.toFixed(1) + 'MB' : '-') +
-          ' | CPU: ' + (sys.cpuPercent !== undefined ? sys.cpuPercent.toFixed(1) + '%' : '-');
-      }
+      // 2. Populate Card 1: Server & System
+      const elUptime = document.getElementById('monServerUptime');
+      const elNodeVer = document.getElementById('monNodeVer');
+      const elCpuUsage = document.getElementById('monCpuUsage');
+      const elRamUsage = document.getElementById('monRamUsage');
+      const elRamPercent = document.getElementById('monRamPercent');
 
-      // 2. KPI Cards
-      const elRps = document.getElementById('monKpiRps');
-      const elRpsSub = document.getElementById('monKpiRpsSub');
-      if (elRps) elRps.textContent = rps.toFixed(1);
-      if (elRpsSub) elRpsSub.textContent = 'คำขอสะสม: ' + totalReqs.toLocaleString();
-
-      const elAvgLat = document.getElementById('monKpiAvgLatency');
-      const elDbLat = document.getElementById('monKpiDbLatency');
-      if (elAvgLat) elAvgLat.textContent = avgLatency.toFixed(1) + ' ms';
-      if (elDbLat) elDbLat.textContent = 'DB Ping: ' + (dbPing !== null ? dbPing.toFixed(2) + ' ms' : 'N/A');
-
-      const elErrRate = document.getElementById('monKpiErrorRate');
-      const elErrCount = document.getElementById('monKpiErrorCount');
-      if (elErrRate) elErrRate.textContent = errorRate.toFixed(1) + ' %';
-      if (elErrCount) elErrCount.textContent = '4xx: ' + s4xx + ' | 5xx: ' + s5xx;
-
-      const elUptime = document.getElementById('monKpiUptime');
-      const elMem = document.getElementById('monKpiMem');
       if (elUptime) elUptime.textContent = uptimeStr;
-      if (elMem) elMem.textContent = 'Node ' + (server.nodeVersion || sys.nodeVersion || '') + ' • Heap ' + (heapUsed ? heapUsed.toFixed(1) + 'MB' : '-');
+      if (elNodeVer) elNodeVer.textContent = nodeVer;
+      if (elCpuUsage) elCpuUsage.textContent = cpuUsage + '%';
+      if (elRamUsage) elRamUsage.textContent = ramUsedGb + ' GB';
+      if (elRamPercent) elRamPercent.textContent = ramPercent + '%';
 
-      // 3. Traffic & Latency Chart update
+      // 3. Populate Card 2: Database SQLite & Latency
+      const elDbPingVal = document.getElementById('monDbPingVal');
+      const elDbPingBadge = document.getElementById('monDbPingBadge');
+      const elAvgLatency = document.getElementById('monAvgLatency');
+      const elMinLatency = document.getElementById('monMinLatency');
+      const elMaxLatency = document.getElementById('monMaxLatency');
+      const elDbSize = document.getElementById('monDbSize');
+      const elWalSize = document.getElementById('monWalSize');
+      const elLoopLag = document.getElementById('monLoopLag');
+
+      if (elDbPingVal) elDbPingVal.textContent = (dbPing !== null ? dbPing.toFixed(2) : '0.10') + ' ms';
+      if (elDbPingBadge) {
+        if (dbPing !== null && dbPing > 50) {
+          elDbPingBadge.textContent = 'ช้า';
+          elDbPingBadge.style.background = '#fef3c7';
+          elDbPingBadge.style.color = '#d97706';
+        } else {
+          elDbPingBadge.textContent = 'ปกติ';
+          elDbPingBadge.style.background = '#ecfdf5';
+          elDbPingBadge.style.color = '#065f46';
+        }
+      }
+      if (elAvgLatency) elAvgLatency.textContent = avgLatency.toFixed(1) + ' ms';
+      if (elMinLatency) elMinLatency.textContent = minLatency.toFixed(1) + ' ms';
+      if (elMaxLatency) elMaxLatency.textContent = maxLatency.toFixed(1) + ' ms';
+      if (elDbSize) elDbSize.textContent = (db.fileSizeMb || '0.00') + ' MB';
+      if (elWalSize) elWalSize.textContent = (db.walSizeMb || '0.00') + ' MB';
+      if (elLoopLag) elLoopLag.textContent = eventLag.toFixed(2) + ' ms';
+
+      // 4. Populate Card 3: Traffic & Live Visitors
+      const elTotalRequests = document.getElementById('monTotalRequests');
+      const elReqPerSec = document.getElementById('monReqPerSec');
+      const elLiveUsers = document.getElementById('monLiveUsers');
+      const elUniqueIps = document.getElementById('monUniqueIps');
+
+      if (elTotalRequests) elTotalRequests.textContent = totalReqs.toLocaleString();
+      if (elReqPerSec) elReqPerSec.textContent = rps.toFixed(1) + ' req/s';
+      if (elLiveUsers) elLiveUsers.textContent = (traffic.totalActiveVisitors !== undefined ? traffic.totalActiveVisitors : (traffic.activeConnections || 0)) + ' คน';
+      if (elUniqueIps) elUniqueIps.textContent = (traffic.activeUniqueIps !== undefined ? traffic.activeUniqueIps : 0) + ' IP';
+
+      // 5. Populate Card 4: HTTP Status Breakdown
+      const elSuccessRate = document.getElementById('monSuccessRate');
+      const elCount2xx = document.getElementById('monCount2xx');
+      const elCount4xx = document.getElementById('monCount4xx');
+      const elCount5xx = document.getElementById('monCount5xx');
+
+      if (elSuccessRate) elSuccessRate.textContent = successRate + '%';
+      if (elCount2xx) elCount2xx.textContent = s2xx.toLocaleString();
+      if (elCount4xx) elCount4xx.textContent = s4xx.toLocaleString();
+      if (elCount5xx) elCount5xx.textContent = s5xx.toLocaleString();
+
+      // 6. Traffic & Latency Chart update (chartMonTraffic)
       if (monitorTrafficChartInstance && Array.isArray(data.history)) {
         const labels = data.history.map(h => h.time || h.timeStr || '');
         const rpsData = data.history.map(h => (h.rps !== undefined ? h.rps : 0));
@@ -10990,59 +11023,84 @@
         monitorTrafficChartInstance.update('none');
       }
 
-      // 4. HTTP Status Doughnut Chart update
+      // 7. HTTP Status Doughnut Chart update (chartMonStatus)
       if (monitorStatusChartInstance) {
         monitorStatusChartInstance.data.datasets[0].data = [s2xx, s3xx, s4xx, s5xx];
         monitorStatusChartInstance.update('none');
-
-        const elTot = document.getElementById('monTotalRequestsCount');
-        if (elTot) elTot.textContent = totalReqs.toLocaleString();
-        const el2 = document.getElementById('monHttp2xxCount');
-        if (el2) el2.textContent = s2xx.toLocaleString();
-        const el3 = document.getElementById('monHttp3xxCount');
-        if (el3) el3.textContent = s3xx.toLocaleString();
-        const el4 = document.getElementById('monHttp4xxCount');
-        if (el4) el4.textContent = s4xx.toLocaleString();
-        const el5 = document.getElementById('monHttp5xxCount');
-        if (el5) el5.textContent = s5xx.toLocaleString();
       }
 
-      // 5. Country Breakdown Table / List
-      const countryContainer = document.getElementById('monCountryListContainer');
-      const countryCountEl = document.getElementById('monCountryUniqueCount');
-      if (countryContainer && Array.isArray(traffic.countries)) {
-        if (countryCountEl) countryCountEl.textContent = traffic.countries.length + ' ประเทศ';
+      // 8. Country Breakdown (monCountryList & monCountryTotalBadge)
+      const cList = document.getElementById('monCountryList');
+      const cBadge = document.getElementById('monCountryTotalBadge');
+      if (cBadge) cBadge.textContent = (traffic.countries ? traffic.countries.length : 0) + ' ประเทศ';
+      if (cList && Array.isArray(traffic.countries)) {
         if (traffic.countries.length === 0) {
-          countryContainer.innerHTML = '<div style="text-align: center; padding: 24px; color: #94a3b8; font-size: 0.88rem;">ยังไม่มีข้อมูลตำแหน่งคำขอ</div>';
+          cList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลสถิติประเทศ</div>';
         } else {
           let html = '';
-          traffic.countries.slice(0, 7).forEach(c => {
+          traffic.countries.slice(0, 10).forEach(c => {
             html += `
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
                 <div style="display: flex; align-items: center; gap: 8px; min-width: 140px;">
                   <span style="font-size: 1.25rem; line-height: 1;">${c.flag || '🌐'}</span>
                   <div>
-                    <div style="font-size: 0.84rem; font-weight: 700; color: #0f172a;">${c.name}</div>
-                    <div style="font-size: 0.72rem; color: #64748b; font-weight: 600;">${c.code}</div>
+                    <div style="font-size: 0.82rem; font-weight: 750; color: #0f172a;">${c.name}</div>
+                    <div style="font-size: 0.7rem; color: #64748b;">${c.code}</div>
                   </div>
                 </div>
-                <div style="flex: 1; max-width: 180px;">
-                  <div style="height: 6px; background: #f1f5f9; border-radius: 99px; overflow: hidden;">
-                    <div style="width: ${c.percent}%; height: 100%; background: #3b82f6; border-radius: 99px;"></div>
+                <div style="flex: 1; max-width: 160px;">
+                  <div style="height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
+                    <div style="width: ${c.percent}%; height: 100%; background: #2563eb; border-radius: 99px;"></div>
                   </div>
                 </div>
-                <div style="text-align: right; min-width: 70px;">
-                  <span style="font-size: 0.84rem; font-weight: 750; color: #0f172a;">${c.count.toLocaleString()}</span>
-                  <span style="font-size: 0.72rem; color: #64748b; margin-left: 4px;">(${c.percent}%)</span>
+                <div style="text-align: right; min-width: 65px;">
+                  <span style="font-size: 0.82rem; font-weight: 800; color: #0f172a;">${c.count.toLocaleString()}</span>
+                  <span style="font-size: 0.7rem; color: #64748b; margin-left: 3px;">(${c.percent}%)</span>
                 </div>
               </div>
             `;
           });
-          countryContainer.innerHTML = html;
+          cList.innerHTML = html;
         }
       }
 
-      // 6. Recent Requests Table
+      // 9. Active Pages Breakdown (monPageList)
+      const pageList = document.getElementById('monPageList');
+      if (pageList) {
+        const pages = traffic.pages || {};
+        const pageLabels = {
+          'roster_student': { title: 'หน้านักเรียน (Student Roster)', icon: 'fa-user-graduate', color: '#2563eb' },
+          'roster_admin': { title: 'ระบบแอดมิน (Admin Portal)', icon: 'fa-user-shield', color: '#8b5cf6' },
+          'home': { title: 'หน้าหลัก (Home)', icon: 'fa-house', color: '#10b981' },
+          'calendar': { title: 'ปฏิทินกิจกรรม (Calendar)', icon: 'fa-calendar', color: '#f59e0b' },
+          'activities': { title: 'กิจกรรมและข่าวสาร (Activities)', icon: 'fa-newspaper', color: '#06b6d4' },
+          'api': { title: 'API Endpoints', icon: 'fa-network-wired', color: '#64748b' }
+        };
+        const entries = Object.entries(pages);
+        if (entries.length === 0) {
+          pageList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลการเข้าชมหน้าเว็บ</div>';
+        } else {
+          let html = '';
+          entries.forEach(([key, val]) => {
+            const info = pageLabels[key] || { title: key, icon: 'fa-file', color: '#64748b' };
+            html += `
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid ${info.icon}" style="color: ${info.color}; font-size: 0.9rem; width: 18px; text-align: center;"></i>
+                  <span style="font-size: 0.82rem; font-weight: 700; color: #1e293b;">${info.title}</span>
+                </div>
+                <div>
+                  <strong style="font-size: 0.86rem; color: #0f172a;">${val.toLocaleString()}</strong>
+                  <span style="font-size: 0.72rem; color: #64748b;"> คำขอ</span>
+                </div>
+              </div>
+            `;
+          });
+          pageList.innerHTML = html;
+        }
+      }
+
+      // 10. Recent Requests Table (monRequestTableBody)
       const reqTbody = document.getElementById('monRequestTableBody');
       if (reqTbody && Array.isArray(data.recentRequests)) {
         if (data.recentRequests.length === 0) {

@@ -258,8 +258,7 @@
 
     // ⚡ Real-time System Monitor Telemetry (Super Admin Only)
     getSystemMonitorStats: async function () {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/dashboard/stats`, {
         headers: this.getAuthHeaders({ 'Accept': 'application/json' })
       });
@@ -271,8 +270,7 @@
     },
 
     sendDiscordTestAlert: async function () {
-      const base = this.getBaseUrl();
-      if (!base) throw new Error('ไม่พบการเชื่อมต่อฐานข้อมูล');
+      const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/dashboard/test-discord`, {
         method: 'POST',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' })
