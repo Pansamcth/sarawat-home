@@ -118,6 +118,7 @@
   <script src="cloudflare-config.js?v=2.7.7"></script>
   <script src="js/api-config.js?v=2.7.7"></script>
   <script src="js/world-map-data.js?v=1.0.0"></script>
+  <script src="js/thailand-map-data.js?v=1.0.0"></script>
   
   <script>
     // Safeguard Polyfill: ป้องกันเบราว์เซอร์หรือ Vercel แคชไฟล์ js/api-config.js รุ่นเก่า ทำให้ฟังก์ชัน auth หาย
@@ -454,6 +455,39 @@
       display: inline-block;
       box-shadow: 0 0 8px #38bdf8;
       animation: monPulseGreen 1.5s infinite;
+    }
+    .mon-map-province {
+      fill: #ffffff;
+      stroke: #cbd5e1;
+      stroke-width: 0.75;
+      transition: fill 0.2s ease, stroke 0.2s ease;
+      cursor: pointer;
+    }
+    .mon-map-province:hover {
+      fill: #bfdbfe !important;
+      stroke: #3b82f6 !important;
+      stroke-width: 1.2;
+    }
+    .mon-map-province.active {
+      fill: #2563eb;
+      stroke: #1d4ed8;
+      stroke-width: 1.1;
+      filter: drop-shadow(0 2px 6px rgba(37, 99, 235, 0.45));
+    }
+    #monProvinceList::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    #monProvinceList::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 99px;
+    }
+    #monProvinceList::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
+    #monProvinceList::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
     }
     #monPageList::-webkit-scrollbar,
     #monCountryList::-webkit-scrollbar {
@@ -4172,51 +4206,47 @@
         </div>
       </div>
 
-      <!-- 🌍 Section: IP Country Geo Traffic & World Map (Full Width Block) -->
+      <!-- 🇹🇭 Section: Thailand Province Geo Traffic & Map (Full Width Block) -->
       <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 24px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; flex-wrap: wrap; gap: 10px;">
           <div>
             <h3 style="font-size: 0.96rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="globe" style="width: 17px; height: 17px; color: #2563eb;"></i>
-              <span>สถิติประเทศของ IP ผู้ใช้งาน (Country Geo Traffic)</span>
+              <i data-lucide="map-pin" style="width: 17px; height: 17px; color: #2563eb;"></i>
+              <span>สถิติจังหวัดของผู้ใช้งานในประเทศไทย (Thailand Province Geo Traffic)</span>
             </h3>
-            <p style="font-size: 0.76rem; color: #64748b; margin: 0;">ตรวจจับผ่าน Cloudflare Header (CF-IPCountry) & Local IP พร้อมแผนที่แบบ Minimalist Vector</p>
+            <p style="font-size: 0.76rem; color: #64748b; margin: 0;">ตรวจจับผ่าน Cloudflare Header & IP Geolocation เจาะลึกรายจังหวัด 77 จังหวัดทั่วไทย</p>
           </div>
-          <span id="monCountryTotalBadge" style="font-size: 0.74rem; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 4px 12px; border-radius: 99px; border: 1px solid #bfdbfe;">0 ประเทศ</span>
+          <span id="monProvinceTotalBadge" style="font-size: 0.74rem; font-weight: 800; color: #2563eb; background: #eff6ff; padding: 4px 12px; border-radius: 99px; border: 1px solid #bfdbfe;">0 จังหวัด</span>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; align-items: start;">
-          <!-- Left: Minimalist Vector World Map -->
-          <div id="monWorldMapContainer" style="position: relative; width: 100%; height: 260px; background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.03);">
-            <div id="monMapActiveNodesBadge" style="position: absolute; top: 10px; right: 14px; z-index: 10; font-size: 0.72rem; font-weight: 750; color: #475569; background: rgba(255, 255, 255, 0.92); border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 99px; backdrop-filter: blur(4px); box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
-              0 ประเทศใช้งาน
+        <div style="display: grid; grid-template-columns: minmax(320px, 1.2fr) minmax(300px, 1fr); gap: 20px; align-items: center;">
+          <!-- Left: Minimalist Vector Thailand Map -->
+          <div id="monThailandMapContainer" style="position: relative; width: 100%; height: 420px; background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center;">
+            <div id="monMapActiveNodesBadge" style="position: absolute; top: 12px; right: 14px; z-index: 10; font-size: 0.72rem; font-weight: 750; color: #475569; background: rgba(255, 255, 255, 0.92); border: 1px solid #cbd5e1; padding: 4px 12px; border-radius: 99px; backdrop-filter: blur(4px); box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+              0 จังหวัดใช้งาน
             </div>
 
             <!-- SVG Map Element -->
-            <svg id="monWorldMapSvg" viewBox="0 0 1000 500" style="width: 100%; height: 100%; display: block;">
-              <!-- Lat/Long Minimal Graticules -->
-              <g stroke="rgba(0,0,0,0.05)" stroke-width="0.8" stroke-dasharray="3,3">
-                <line x1="0" y1="250" x2="1000" y2="250" />
-                <line x1="500" y1="0" x2="500" y2="500" />
-                <line x1="0" y1="125" x2="1000" y2="125" />
-                <line x1="0" y1="375" x2="1000" y2="375" />
-                <line x1="250" y1="0" x2="250" y2="500" />
-                <line x1="750" y1="0" x2="750" y2="500" />
+            <svg id="monThailandMapSvg" viewBox="0 0 500 850" style="width: 100%; height: 100%; max-height: 420px; display: block;">
+              <!-- Subtle Background Compass / Grid Lines -->
+              <g stroke="rgba(0,0,0,0.03)" stroke-width="0.8" stroke-dasharray="4,4">
+                <line x1="250" y1="0" x2="250" y2="850" />
+                <line x1="0" y1="425" x2="500" y2="425" />
               </g>
-              <!-- World Countries Paths Layer -->
-              <g id="monMapCountriesLayer"></g>
-              <!-- Active Country Beacons Layer -->
+              <!-- Thailand Provinces Layer -->
+              <g id="monMapProvincesLayer"></g>
+              <!-- Active Province Beacons Layer -->
               <g id="monMapBeaconsLayer"></g>
             </svg>
 
             <!-- Floating Map Tooltip -->
-            <div id="monMapTooltip" style="position: absolute; display: none; z-index: 20; pointer-events: none; background: rgba(15, 23, 42, 0.94); border: 1px solid #38bdf8; border-radius: 8px; padding: 6px 12px; font-size: 0.78rem; color: #f8fafc; box-shadow: 0 4px 14px rgba(0,0,0,0.6); backdrop-filter: blur(8px); transform: translate(-50%, -125%); white-space: nowrap; transition: opacity 0.15s ease;">
+            <div id="monMapTooltip" style="position: absolute; display: none; z-index: 20; pointer-events: none; background: rgba(15, 23, 42, 0.94); border: 1px solid #38bdf8; border-radius: 8px; padding: 8px 12px; font-size: 0.78rem; color: #f8fafc; box-shadow: 0 4px 14px rgba(0,0,0,0.6); backdrop-filter: blur(8px); transform: translate(-50%, -125%); white-space: nowrap; transition: opacity 0.15s ease;">
             </div>
           </div>
 
-          <!-- Right: Country List with Scrollbar -->
-          <div id="monCountryList" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
-            <div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 20px;">ยังไม่มีข้อมูลสถิติประเทศ</div>
+          <!-- Right: Province List with Scrollbar -->
+          <div id="monProvinceList" style="max-height: 420px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px;">
+            <div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลสถิติจังหวัด</div>
           </div>
         </div>
       </div>
@@ -11235,37 +11265,39 @@
       }
     }
 
-    // Helper: Minimalist Vector World Map Renderer
-    let isMapInitialized = false;
-    function renderMinimalWorldMap(countries) {
-      const mapSvg = document.getElementById('monWorldMapSvg');
-      const countriesLayer = document.getElementById('monMapCountriesLayer');
+    // Helper: Minimalist Vector Thailand Map Renderer (เจาะเฉพาะจังหวัด)
+    let isThailandMapInitialized = false;
+    function renderThailandProvincesMap(provinces) {
+      const mapSvg = document.getElementById('monThailandMapSvg');
+      const provincesLayer = document.getElementById('monMapProvincesLayer');
       const beaconsLayer = document.getElementById('monMapBeaconsLayer');
       const tooltip = document.getElementById('monMapTooltip');
       const nodesBadge = document.getElementById('monMapActiveNodesBadge');
 
-      if (!mapSvg || !countriesLayer || !beaconsLayer) return;
+      if (!mapSvg || !provincesLayer || !beaconsLayer) return;
 
-      const mapData = window.MINIMAL_WORLD_MAP;
+      const mapData = window.THAILAND_PROVINCES_MAP;
       if (!Array.isArray(mapData) || mapData.length === 0) {
         return;
       }
 
       // 1. Initial SVG paths injection
-      if (!isMapInitialized || countriesLayer.children.length === 0) {
+      if (!isThailandMapInitialized || provincesLayer.children.length === 0) {
         let pathsHtml = '';
-        mapData.forEach(c => {
-          pathsHtml += `<path id="map-country-${c.iso}" class="mon-map-country" data-iso="${c.iso}" data-name="${escapeHtml(c.name)}" d="${c.d}" />`;
+        mapData.forEach(p => {
+          pathsHtml += `<path id="map-province-${p.code}" class="mon-map-province" data-code="${p.code}" data-th="${escapeHtml(p.th)}" data-en="${escapeHtml(p.en)}" data-region="${escapeHtml(p.region)}" d="${p.d}" />`;
         });
-        countriesLayer.innerHTML = pathsHtml;
-        isMapInitialized = true;
+        provincesLayer.innerHTML = pathsHtml;
+        isThailandMapInitialized = true;
 
         // Tooltip event handlers
-        countriesLayer.addEventListener('mousemove', function(e) {
+        provincesLayer.addEventListener('mousemove', function(e) {
           const target = e.target;
-          if (target && target.tagName === 'path' && target.classList.contains('mon-map-country')) {
-            const iso = target.getAttribute('data-iso');
-            const name = target.getAttribute('data-name');
+          if (target && target.tagName === 'path' && target.classList.contains('mon-map-province')) {
+            const code = target.getAttribute('data-code');
+            const th = target.getAttribute('data-th');
+            const en = target.getAttribute('data-en');
+            const region = target.getAttribute('data-region');
             const stat = target.__monStat || null;
 
             if (tooltip) {
@@ -11279,47 +11311,49 @@
 
               if (stat) {
                 tooltip.innerHTML = `
-                  <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
-                    <span style="font-size:1.15rem; line-height:1;">${stat.flag || '🌐'}</span>
-                    <strong style="color:#ffffff; font-size:0.85rem;">${stat.name || name}</strong>
-                    <span style="color:#38bdf8; font-size:0.7rem; font-family:monospace; background:rgba(56,189,248,0.2); padding:1px 5px; border-radius:4px;">${iso}</span>
+                  <div style="display:flex; align-items:center; gap:6px; margin-bottom:3px;">
+                    <span style="font-size:1.1rem; line-height:1;">📍</span>
+                    <strong style="color:#ffffff; font-size:0.86rem;">${stat.name || th}</strong>
+                    <span style="color:#94a3b8; font-size:0.72rem;">(${stat.en || en})</span>
+                    <span style="color:#38bdf8; font-size:0.68rem; background:rgba(56,189,248,0.2); padding:1px 6px; border-radius:4px;">${region}</span>
                   </div>
-                  <div style="color:#94a3b8; font-size:0.75rem;">
-                    คำขอ: <strong style="color:#38bdf8;">${stat.count.toLocaleString()}</strong> (${stat.percent}%)
+                  <div style="color:#cbd5e1; font-size:0.75rem;">
+                    คำขอ: <strong style="color:#38bdf8; font-size:0.82rem;">${(stat.count || 0).toLocaleString()}</strong> ครั้ง (${stat.percent || 0}%)
                   </div>
                 `;
               } else {
                 tooltip.innerHTML = `
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <span style="font-size:1rem;">🌐</span>
-                    <strong style="color:#e2e8f0; font-size:0.82rem;">${name}</strong>
-                    <span style="color:#64748b; font-size:0.7rem; font-family:monospace;">${iso}</span>
+                  <div style="display:flex; align-items:center; gap:6px; margin-bottom:2px;">
+                    <span style="font-size:1rem;">📍</span>
+                    <strong style="color:#e2e8f0; font-size:0.84rem;">${th}</strong>
+                    <span style="color:#94a3b8; font-size:0.72rem;">(${en})</span>
+                    <span style="color:#64748b; font-size:0.68rem; background:#334155; padding:1px 5px; border-radius:4px;">${region}</span>
                   </div>
-                  <div style="color:#64748b; font-size:0.72rem; margin-top:2px;">ยังไม่มีทราฟฟิกในรอบนี้</div>
+                  <div style="color:#64748b; font-size:0.72rem;">ยังไม่มีทราฟฟิกในรอบนี้</div>
                 `;
               }
             }
           }
         });
 
-        countriesLayer.addEventListener('mouseleave', function() {
+        provincesLayer.addEventListener('mouseleave', function() {
           if (tooltip) tooltip.style.display = 'none';
         });
       }
 
-      // 2. Map country codes to active stats
-      const countryMap = new Map();
-      if (Array.isArray(countries)) {
-        countries.forEach(c => {
-          if (c && c.code) countryMap.set(c.code.toUpperCase(), c);
+      // 2. Map province codes to active stats
+      const provinceStatMap = new Map();
+      if (Array.isArray(provinces)) {
+        provinces.forEach(p => {
+          if (p && p.code) provinceStatMap.set(String(p.code), p);
         });
       }
 
-      // 3. Highlight active country paths
-      const paths = countriesLayer.querySelectorAll('.mon-map-country');
+      // 3. Highlight active province paths
+      const paths = provincesLayer.querySelectorAll('.mon-map-province');
       paths.forEach(p => {
-        const iso = p.getAttribute('data-iso');
-        const stat = countryMap.get(iso);
+        const code = p.getAttribute('data-code');
+        const stat = provinceStatMap.get(code);
         p.__monStat = stat || null;
         if (stat) {
           p.classList.add('active');
@@ -11328,35 +11362,28 @@
         }
       });
 
-      // 4. Render radar beacons for active countries
+      // 4. Render radar beacons for active provinces
       let beaconsHtml = '';
       let totalHits = 0;
-      countryMap.forEach((stat, iso) => {
+      provinceStatMap.forEach((stat, code) => {
         totalHits += (stat.count || 0);
-        const entry = mapData.find(item => item.iso === iso);
-        const coords = entry ? entry.c : [500, 250];
+        const entry = mapData.find(item => item.code === code);
+        const coords = entry ? entry.c : [204, 385];
         const cx = coords[0];
         const cy = coords[1];
 
         beaconsHtml += `
-          <g class="mon-map-beacon" transform="translate(${cx}, ${cy})" style="pointer-events: none;">
-            <!-- Pulsing ripple rings -->
-            <circle class="mon-map-ripple-ring" r="6" fill="none" stroke="#2563eb" stroke-width="1.8" />
-            <circle class="mon-map-ripple-ring" r="14" fill="none" stroke="#2563eb" stroke-width="1.2" style="animation-delay: 0.6s;" />
-            <!-- Core dot -->
-            <circle r="4.5" fill="#2563eb" />
-            <circle r="2" fill="#ffffff" />
-            <!-- Text Badge -->
-            <rect x="7" y="-9" width="${iso.length * 8 + 10}" height="16" rx="4" fill="#ffffff" stroke="#2563eb" stroke-width="1" />
-            <text x="12" y="3" fill="#2563eb" font-size="9" font-weight="800" font-family="monospace">${iso}</text>
+          <g transform="translate(${cx}, ${cy})" style="pointer-events: none;">
+            <circle class="mon-map-ripple-ring" r="5" fill="none" stroke="#2563eb" opacity="0.9" stroke-width="1.6" />
+            <circle class="mon-map-ripple-ring" r="12" fill="none" stroke="#60a5fa" opacity="0.6" stroke-width="1.1" style="animation-delay: 0.65s;" />
+            <circle r="4" fill="#2563eb" stroke="#ffffff" stroke-width="1.2" />
           </g>
         `;
       });
       beaconsLayer.innerHTML = beaconsHtml;
 
-      // 5. Update active nodes badge
       if (nodesBadge) {
-        nodesBadge.textContent = `${countryMap.size} ประเทศใช้งาน (${totalHits.toLocaleString()} คำขอ)`;
+        nodesBadge.textContent = `${provinceStatMap.size} จังหวัดใช้งาน (${totalHits.toLocaleString()} คำขอ)`;
       }
     }
 
@@ -11554,40 +11581,55 @@
         monitorStatusChartInstance.update();
       }
 
-      // 8. Country Breakdown (renderMinimalWorldMap & monCountryList)
-      renderMinimalWorldMap(traffic.countries);
+      // 8. Thailand Provinces Breakdown (renderThailandProvincesMap & monProvinceList)
+      const rawProvinces = Array.isArray(traffic.provinces) && traffic.provinces.length > 0
+        ? traffic.provinces
+        : [{ code: '10', name: 'กรุงเทพมหานคร', en: 'Bangkok', region: 'ภาคกลาง', count: traffic.totalRequests || 1, percent: 100 }];
 
-      const cList = document.getElementById('monCountryList');
-      const cBadge = document.getElementById('monCountryTotalBadge');
-      if (cBadge) cBadge.textContent = (traffic.countries ? traffic.countries.length : 0) + ' ประเทศ';
-      if (cList && Array.isArray(traffic.countries)) {
-        if (traffic.countries.length === 0) {
-          cList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 20px;">ยังไม่มีข้อมูลสถิติประเทศ</div>';
+      renderThailandProvincesMap(rawProvinces);
+
+      const pList = document.getElementById('monProvinceList');
+      const pBadge = document.getElementById('monProvinceTotalBadge');
+      if (pBadge) pBadge.textContent = rawProvinces.length + ' จังหวัด';
+      if (pList) {
+        if (rawProvinces.length === 0) {
+          pList.innerHTML = '<div style="text-align: center; color: #94a3b8; font-size: 0.84rem; padding: 30px;">ยังไม่มีข้อมูลสถิติจังหวัด</div>';
         } else {
           let html = '';
-          traffic.countries.slice(0, 10).forEach(c => {
+          rawProvinces.forEach((p, index) => {
+            const rank = index + 1;
+            const rankBadge = rank === 1
+              ? '<span style="font-size: 0.72rem; font-weight: 800; background: #fef3c7; color: #b45309; padding: 2px 7px; border-radius: 6px;">#1</span>'
+              : `<span style="font-size: 0.72rem; font-weight: 750; background: #f1f5f9; color: #64748b; padding: 2px 6px; border-radius: 6px;">#${rank}</span>`;
+
             html += `
-              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
-                <div style="display: flex; align-items: center; gap: 8px; min-width: 140px;">
-                  <span style="font-size: 1.25rem; line-height: 1;">${c.flag || '🌐'}</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #f1f5f9; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9'; this.style.borderColor='#cbd5e1';" onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#f1f5f9';">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 160px; flex: 1.2;">
+                  ${rankBadge}
                   <div>
-                    <div style="font-size: 0.82rem; font-weight: 750; color: #0f172a;">${c.name}</div>
-                    <div style="font-size: 0.7rem; color: #64748b; font-family: monospace;">${c.code}</div>
+                    <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 6px;">
+                      <span>${p.name}</span>
+                      <span style="font-size: 0.68rem; font-weight: 600; color: #64748b; background: #e2e8f0; padding: 1px 6px; border-radius: 4px;">${p.region || 'ภาคกลาง'}</span>
+                    </div>
+                    <div style="font-size: 0.7rem; color: #64748b; font-family: monospace;">${p.en || ''}</div>
                   </div>
                 </div>
-                <div style="flex: 1; max-width: 160px;">
-                  <div style="height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
-                    <div style="width: ${c.percent}%; height: 100%; background: #2563eb; border-radius: 99px;"></div>
+
+                <div style="flex: 1; max-width: 140px; display: flex; align-items: center; gap: 8px;">
+                  <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;">
+                    <div style="width: ${p.percent}%; height: 100%; background: #2563eb; border-radius: 99px;"></div>
                   </div>
+                  <span style="font-size: 0.72rem; font-weight: 750; color: #64748b; width: 34px; text-align: right;">${p.percent}%</span>
                 </div>
-                <div style="text-align: right; min-width: 65px;">
-                  <span style="font-size: 0.82rem; font-weight: 800; color: #0f172a;">${c.count.toLocaleString()}</span>
-                  <span style="font-size: 0.7rem; color: #64748b; margin-left: 3px;">(${c.percent}%)</span>
+
+                <div style="text-align: right; min-width: 70px;">
+                  <span style="font-size: 0.84rem; font-weight: 800; color: #0f172a;">${(p.count || 0).toLocaleString()}</span>
+                  <span style="font-size: 0.7rem; color: #64748b; margin-left: 2px;">ครั้ง</span>
                 </div>
               </div>
             `;
           });
-          cList.innerHTML = html;
+          pList.innerHTML = html;
         }
       }
 
