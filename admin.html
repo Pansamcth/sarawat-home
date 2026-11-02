@@ -3611,9 +3611,9 @@
             <select id="fbFilterStatus" onchange="filterAdminFeedbacks()" style="padding: 7px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; background: #ffffff; outline: none;">
               <option value="all">ทั้งหมด (All Status)</option>
               <option value="pending">⏳ รอดำเนินการ (Pending)</option>
-              <option value="reviewing">🔍 กำลังตรวจสอบ (Reviewing)</option>
-              <option value="resolved">✅ ดำเนินการแล้ว (Resolved)</option>
-              <option value="rejected">✖ ยุติเรื่อง (Closed)</option>
+              <option value="reviewing">🔍 กำลังตรวจสอบ / นำเข้าที่ประชุม (Reviewing)</option>
+              <option value="resolved">✅ ดำเนินการแก้ไขแล้ว / บรรลุผล (Resolved)</option>
+              <option value="rejected">❌ ยุติเรื่อง / ไม่อยู่ในขอบเขต (Closed)</option>
             </select>
           </div>
         </div>
@@ -6338,7 +6338,7 @@
               <option value="pending">⏳ รอดำเนินการ (Pending)</option>
               <option value="reviewing">🔍 กำลังตรวจสอบ / นำเข้าที่ประชุม (Reviewing)</option>
               <option value="resolved">✅ ดำเนินการแก้ไขแล้ว / บรรลุผล (Resolved)</option>
-              <option value="rejected">✖ ยุติเรื่อง / ไม่อยู่ในขอบเขต (Closed)</option>
+              <option value="rejected">❌ ยุติเรื่อง / ไม่อยู่ในขอบเขต (Closed)</option>
             </select>
           </div>
           <div class="dg-form-group" style="margin-bottom: 0;">
@@ -10676,11 +10676,13 @@
           case 'pending':
             return '<span style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">⏳ รอดำเนินการ</span>';
           case 'reviewing':
-            return '<span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">🔍 กำลังตรวจ</span>';
+          case 'in_progress':
+            return '<span style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">🔍 กำลังตรวจสอบ</span>';
           case 'resolved':
-            return '<span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">✅ ดำเนินการแล้ว</span>';
+            return '<span style="background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">✅ ดำเนินการแก้ไขแล้ว</span>';
           case 'rejected':
-            return '<span style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">✖ ยุติเรื่อง</span>';
+          case 'closed':
+            return '<span style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">❌ ยุติเรื่อง</span>';
           default:
             return '<span style="background: #f1f5f9; color: #64748b; padding: 3px 8px; border-radius: 999px; font-size: 0.74rem; font-weight: 750;">' + (status || 'ไม่ระบุ') + '</span>';
         }
