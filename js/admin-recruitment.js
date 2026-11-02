@@ -122,7 +122,8 @@
       const base = this.getBaseUrl();
       if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
       const res = await fetch(`${base}/api/recruitment/applicant/${id}?admin=${encodeURIComponent(admin)}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: this.getAuthHeaders ? this.getAuthHeaders() : {}
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'ลบใบสมัครไม่สำเร็จ');
@@ -135,7 +136,7 @@
       if (!base) throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (Offline)');
       const res = await fetch(`${base}/api/recruitment/applicants/clear`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAuthHeaders ? this.getAuthHeaders({ 'Content-Type': 'application/json' }) : { 'Content-Type': 'application/json' },
         body: JSON.stringify({ admin })
       });
       const data = await res.json();

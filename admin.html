@@ -727,6 +727,8 @@
       box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
     }
 
+    #tabBtnDiscordBot[style*="inline-flex"],
+    #tabBtnDiscordBot[style*="flex"],
     #tabBtnAdminUsers[style*="inline-flex"],
     #tabBtnAdminUsers[style*="flex"],
     #tabBtnBackup[style*="inline-flex"],
@@ -3170,6 +3172,13 @@
             <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
           </div>
         </button>
+        <button type="button" class="admin-tab-btn" id="tabBtnDiscordBot" data-tab="tab-discord" style="display: none;">
+          <div class="admin-tab-btn-content">
+            <i class="fa-brands fa-discord" style="font-size: 1.05rem; color: #5865F2;"></i>
+            <span>จัดการ Discord Bot</span>
+          </div>
+          <span class="admin-role-badge super" style="font-size: 0.62rem; padding: 1px 6px;">👑 Super</span>
+        </button>
         <button type="button" class="admin-tab-btn" id="tabBtnSystemMonitor" data-tab="tab-system-monitor" style="display: none;">
           <div class="admin-tab-btn-content">
             <i data-lucide="activity"></i>
@@ -4420,6 +4429,234 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    
+    <!-- ==========================================
+         TAB: DISCORD BOT MANAGEMENT (SUPER ADMIN ONLY)
+         ========================================== -->
+    <div class="admin-pane" id="tab-discord" style="display: none;">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill" style="background: rgba(88, 101, 242, 0.1); color: #5865F2; border-color: rgba(88, 101, 242, 0.25);">
+              <i class="fa-brands fa-discord"></i> DISCORD ENGINE • จัดการและตั้งค่าระบบบอท
+            </span>
+            <span class="admin-file-badge"><i class="fa-solid fa-server"></i> SARAWAT BOT • Discord Gateway & REST</span>
+            <span class="admin-role-badge super" style="font-size: 0.75rem; padding: 3px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
+          </div>
+          <h2 style="display: flex; align-items: center; gap: 10px;">
+            <i class="fa-brands fa-discord" style="color: #5865F2;"></i> ระบบจัดการ Discord Bot (Custom Activity & Alerts)
+          </h2>
+          <p class="admin-section-subtitle">
+            กำหนดสถานะออนไลน์ กิจกรรม (Custom Activity / Rich Presence) ข้อความ Dynamic หมุนเวียนสถานะอัตโนมัติ และทดสอบการแจ้งเตือน
+          </p>
+        </div>
+      </div>
+
+      <!-- 🤖 DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CARD (Super Admin Only) -->
+      <div class="admin-card" id="cardDiscordPresence" style="margin-top: 24px; margin-bottom: 24px; border: 1.5px solid #5865F2; background: linear-gradient(to bottom, #f6f7ff 0%, #ffffff 120px); border-radius: 14px; box-shadow: 0 4px 16px rgba(88, 101, 242, 0.08);">
+        <div class="admin-card-header" style="background: transparent; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid #e0e3ff; padding: 18px 22px;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: #5865F2; color: #fff; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">DISCORD BOT ENGINE</span>
+              <span class="admin-role-badge super" style="font-size: 0.72rem; padding: 3px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
+              <span id="discordBotGatewayBadge" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">🟢 Gateway Online</span>
+            </div>
+            <h3 style="margin-top: 6px; font-size: 1.15rem; color: #1e1b4b; display: flex; align-items: center; gap: 8px;">
+              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> จัดการสถานะและกิจกรรมของบอท (Custom Activity / Rich Presence)
+            </h3>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #4752c4; padding: 7px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 750; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" id="btnTestDiscordInPresence" onclick="testDiscordWebhookAlert(event)">
+              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> <span>ทดสอบส่ง Alert</span>
+            </button>
+            <button type="button" class="btn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 7px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 750; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" onclick="loadDiscordPresenceSettings()">
+              <i class="fa-solid fa-rotate"></i> <span>โหลดค่าปัจจุบัน</span>
+            </button>
+            <button type="button" class="btn" id="btnSaveDiscordPresence" style="background: #5865F2; border: 1px solid #4752c4; color: #ffffff; padding: 7px 18px; border-radius: 10px; font-size: 0.82rem; font-weight: 750; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 8px rgba(88, 101, 242, 0.3);" onclick="saveDiscordPresenceSettings()">
+              <i class="fa-solid fa-floppy-disk"></i> <span>บันทึกและอัปเดตสถานะ Bot</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-card-body" style="padding: 22px;">
+          <!-- Non-SuperAdmin Notice Banner -->
+          <div id="discordPresenceNoPermBanner" style="display: none; margin-bottom: 20px; padding: 12px 16px; border-radius: 10px; background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; font-size: 0.84rem; font-weight: 600;">
+            <i class="fa-solid fa-lock" style="margin-right: 6px;"></i> การตั้งค่านี้สงวนสิทธิ์เฉพาะผู้ดูแลระบบระดับ Super Admin เท่านั้น (คุณสามารถดูการตั้งค่าปัจจุบันได้ แต่ไม่สามารถแก้ไขได้)
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+            <!-- Left Column: Form Settings -->
+            <div>
+              <!-- 1. Enable Presence Toggle -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 18px;">
+                <div>
+                  <div style="font-size: 0.9rem; font-weight: 800; color: #0f172a;">เปิดใช้งานสถานะ Custom Activity</div>
+                  <div style="font-size: 0.78rem; color: #64748b;">ให้ Discord Bot แสดงสถานะกิจกรรมหรือข้อความต่อสาธารณะ</div>
+                </div>
+                <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin: 0; cursor: pointer;">
+                  <input type="checkbox" id="presenceEnabled" style="opacity: 0; width: 0; height: 0;" onchange="updatePresencePreview()">
+                  <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px;" class="slider-toggle"></span>
+                </label>
+              </div>
+
+              <!-- 2. Status Type (Online, Idle, DND) -->
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                  สถานะออนไลน์ของ Bot (Status)
+                </label>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                  <label style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 0.82rem; font-weight: 700;">
+                    <input type="radio" name="presenceStatus" value="online" checked onchange="updatePresencePreview()">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></span>
+                    <span>Online (ออนไลน์)</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 0.82rem; font-weight: 700;">
+                    <input type="radio" name="presenceStatus" value="idle" onchange="updatePresencePreview()">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></span>
+                    <span>Idle (ไม่อยู่)</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 0.82rem; font-weight: 700;">
+                    <input type="radio" name="presenceStatus" value="dnd" onchange="updatePresencePreview()">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>
+                    <span>DND (ห้ามรบกวน)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- 3. Activity Type -->
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                  ประเภทกิจกรรม (Activity Type)
+                </label>
+                <select id="presenceActivityType" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem; background: #fff; font-weight: 600;" onchange="handlePresenceTypeChange()">
+                  <option value="3">กำลังดู (Watching)</option>
+                  <option value="0">กำลังเล่น (Playing)</option>
+                  <option value="2">กำลังฟัง (Listening to)</option>
+                  <option value="5">กำลังแข่งขันใน (Competing in)</option>
+                  <option value="4">สถานะกำหนดเอง (Custom Status)</option>
+                  <option value="1">กำลังถ่ายทอดสด (Streaming)</option>
+                </select>
+              </div>
+
+              <!-- 4. Activity Name (ข้อความหลัก) -->
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                  ข้อความสถานะ / ชื่อกิจกรรม (Activity Name)
+                </label>
+                <input type="text" id="presenceActivityName" placeholder="เช่น ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem;" oninput="updatePresencePreview()">
+              </div>
+
+              <!-- 5. Activity State (ข้อความย่อย / บรรทัดที่สอง) -->
+              <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                  ข้อความรายละเอียดเพิ่มเติม (Activity Details / State)
+                </label>
+                <input type="text" id="presenceActivityState" placeholder="เช่น พร้อมปฏิบัติหน้าที่ 🛡️" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem;" oninput="updatePresencePreview()">
+              </div>
+
+              <!-- Stream URL (Only visible if Streaming) -->
+              <div id="presenceStreamUrlGroup" style="display: none; margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                  ลิงก์สตรีม Twitch / YouTube (Stream URL)
+                </label>
+                <input type="url" id="presenceStreamUrl" placeholder="https://twitch.tv/... หรือ https://youtube.com/..." style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem;">
+              </div>
+
+              <!-- 6. Quick Dynamic Placeholders Chips -->
+              <div style="margin-bottom: 20px;">
+                <div style="font-size: 0.76rem; font-weight: 750; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">
+                  คลิกเพื่อแทรกตัวแปร Dynamic ลงในข้อความ:
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{applicants_count}')">
+                    + {applicants_count} (ผู้สมัครทั้งหมด)
+                  </button>
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{pending_applicants}')">
+                    + {pending_applicants} (รอตรวจสอบ)
+                  </button>
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{students_count}')">
+                    + {students_count} (สารวัตรนักเรียน)
+                  </button>
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{server_uptime}')">
+                    + {server_uptime} (ระยะเวลา Uptime)
+                  </button>
+                </div>
+              </div>
+
+              <!-- 7. Rotation Toggle (Disabled by default as chosen) -->
+              <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                  <div>
+                    <div style="font-size: 0.86rem; font-weight: 800; color: #0f172a;">ระบบสลับข้อความอัตโนมัติ (Activity Rotation)</div>
+                    <div style="font-size: 0.76rem; color: #64748b;">สลับรายการข้อความตามรอบเวลาที่กำหนด</div>
+                  </div>
+                  <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin: 0; cursor: pointer;">
+                    <input type="checkbox" id="presenceRotationEnabled" style="opacity: 0; width: 0; height: 0;" onchange="togglePresenceRotationUI()">
+                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px;" class="slider-toggle"></span>
+                  </label>
+                </div>
+
+                <div id="presenceRotationGroup" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-top: 10px;">
+                  <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                    ความถี่ในการสลับข้อความ (วินาที)
+                  </label>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="number" id="presenceRotationInterval" min="15" max="3600" value="30" style="width: 100px; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.86rem;">
+                    <span style="font-size: 0.82rem; color: #64748b;">วินาที (แนะนำอย่างน้อย 30 วินาที เพื่อไม่ให้เกิน Rate Limit)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Discord Simulation Live Preview -->
+            <div>
+              <div style="font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 8px; text-transform: uppercase;">
+                ตัวอย่างจำลองบน Discord (Live Preview)
+              </div>
+              <div style="background: #2b2d31; border-radius: 14px; padding: 20px; color: #ffffff; box-shadow: 0 4px 16px rgba(0,0,0,0.15);">
+                <!-- Discord User Profile Preview -->
+                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px; border-bottom: 1px solid #35373c; padding-bottom: 14px;">
+                  <div style="position: relative; width: 48px; height: 48px; flex-shrink: 0;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: #5865F2; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff;">
+                      <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <span id="previewStatusDot" style="position: absolute; bottom: -1px; right: -1px; width: 14px; height: 14px; border-radius: 50%; background: #22c55e; border: 3px solid #2b2d31;"></span>
+                  </div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <span style="font-weight: 750; font-size: 0.95rem; color: #f2f3f5;">Sarawat BOT</span>
+                      <span style="background: #5865F2; color: #ffffff; font-size: 0.62rem; font-weight: 800; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">BOT</span>
+                    </div>
+                    <div style="font-size: 0.74rem; color: #949ba4;">sarawat-backend#0000</div>
+                  </div>
+                </div>
+
+                <!-- Activity Card Inside Profile -->
+                <div style="background: #1e1f22; border-radius: 10px; padding: 14px;">
+                  <div style="font-size: 0.72rem; font-weight: 800; color: #b5bac1; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;" id="previewActivityHeader">
+                    กำลังดู (WATCHING)
+                  </div>
+                  <div style="font-size: 0.9rem; font-weight: 750; color: #f2f3f5; margin-bottom: 2px; word-break: break-word;" id="previewActivityName">
+                    ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล
+                  </div>
+                  <div style="font-size: 0.78rem; color: #949ba4; word-break: break-word;" id="previewActivityState">
+                    พร้อมปฏิบัติหน้าที่ 🛡️
+                  </div>
+                </div>
+
+                <!-- Helper tip -->
+                <div style="margin-top: 14px; font-size: 0.74rem; color: #949ba4; line-height: 1.5; display: flex; align-items: flex-start; gap: 6px;">
+                  <i class="fa-solid fa-circle-info" style="color: #5865F2; margin-top: 2px;"></i>
+                  <span>ข้อความจะถูกแปลงตัวแปร Dynamic (เช่น จำนวนผู้สมัคร, สมาชิก) ให้เป็นตัวเลขจริงแบบเรียลไทม์ และจะส่งไปแสดงผลบน Discord ทันทีที่กดบันทึก</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
       </div>
     </div>
 
@@ -6828,6 +7065,11 @@
         tabBtnBackup.style.display = isSuper ? 'inline-flex' : 'none';
       }
 
+      const tabBtnDiscord = document.getElementById('tabBtnDiscordBot');
+      if (tabBtnDiscord) {
+        tabBtnDiscord.style.display = isSuper ? 'inline-flex' : 'none';
+      }
+
       const tabBtnSystemMonitor = document.getElementById('tabBtnSystemMonitor');
       if (tabBtnSystemMonitor) {
         tabBtnSystemMonitor.style.display = isSuper ? 'inline-flex' : 'none';
@@ -6838,7 +7080,8 @@
         const adminsPane = document.getElementById('tab-admins');
         const backupPane = document.getElementById('tab-backup');
         const monPane = document.getElementById('tab-system-monitor');
-        if ((adminsPane && adminsPane.classList.contains('active')) || (backupPane && backupPane.classList.contains('active')) || (monPane && monPane.classList.contains('active'))) {
+        const discordPane = document.getElementById('tab-discord');
+        if ((adminsPane && adminsPane.classList.contains('active')) || (backupPane && backupPane.classList.contains('active')) || (monPane && monPane.classList.contains('active')) || (discordPane && discordPane.classList.contains('active'))) {
           const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
           if (newsTabBtn) newsTabBtn.click();
         }
@@ -11031,8 +11274,9 @@
       }
     }
 
-    async function testDiscordWebhookAlert() {
-      const btn = document.getElementById('btnTestDiscord');
+    async function testDiscordWebhookAlert(ev) {
+      const btn = (ev && ev.currentTarget) ? ev.currentTarget : document.getElementById('btnTestDiscord');
+      const origHtml = btn ? btn.innerHTML : '';
       if (btn) {
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>กำลังส่ง Discord...</span>';
@@ -11061,11 +11305,271 @@
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = '<i class="fa-brands fa-discord" style="font-size: 0.95rem;"></i> <span>ทดสอบส่ง Discord Alert</span>';
+          btn.innerHTML = origHtml || '<i class="fa-brands fa-discord" style="font-size: 0.95rem;"></i> <span>ทดสอบส่ง Discord Alert</span>';
         }
       }
     }
 
+
+    // ==========================================
+    // DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CONTROLLER
+    // ==========================================
+    async function loadDiscordPresenceSettings() {
+      const card = document.getElementById('cardDiscordPresence');
+      if (!card) return;
+
+      const user = (window.SarawatApi && window.SarawatApi.getAuthUser) ? window.SarawatApi.getAuthUser() : null;
+      const isSuperAdmin = (user && user.role === 'Super Admin');
+
+      const noPermBanner = document.getElementById('discordPresenceNoPermBanner');
+      const btnSave = document.getElementById('btnSaveDiscordPresence');
+
+      if (!isSuperAdmin) {
+        if (noPermBanner) noPermBanner.style.display = 'block';
+        if (btnSave) {
+          btnSave.disabled = true;
+          btnSave.style.opacity = '0.5';
+          btnSave.style.cursor = 'not-allowed';
+          btnSave.title = 'สงวนสิทธิ์เฉพาะ Super Admin เท่านั้น';
+        }
+      } else {
+        if (noPermBanner) noPermBanner.style.display = 'none';
+        if (btnSave) {
+          btnSave.disabled = false;
+          btnSave.style.opacity = '1';
+          btnSave.style.cursor = 'pointer';
+          btnSave.title = '';
+        }
+      }
+
+      try {
+        if (!window.SarawatApi || !window.SarawatApi.getDiscordPresence) return;
+        const res = await window.SarawatApi.getDiscordPresence();
+        if (res && res.success && res.config) {
+          const cfg = res.config;
+          const chkEnabled = document.getElementById('presenceEnabled');
+          if (chkEnabled) chkEnabled.checked = cfg.enabled !== false;
+
+          const statusRadios = document.querySelectorAll('input[name="presenceStatus"]');
+          statusRadios.forEach(r => {
+            r.checked = (r.value === (cfg.status || 'online'));
+            if (!isSuperAdmin) r.disabled = true;
+          });
+
+          const selType = document.getElementById('presenceActivityType');
+          if (selType) {
+            selType.value = cfg.activity_type !== undefined ? String(cfg.activity_type) : '3';
+            if (!isSuperAdmin) selType.disabled = true;
+          }
+
+          const txtName = document.getElementById('presenceActivityName');
+          if (txtName) {
+            txtName.value = cfg.activity_name || '';
+            if (!isSuperAdmin) txtName.disabled = true;
+          }
+
+          const txtState = document.getElementById('presenceActivityState');
+          if (txtState) {
+            txtState.value = cfg.activity_state || '';
+            if (!isSuperAdmin) txtState.disabled = true;
+          }
+
+          const txtStream = document.getElementById('presenceStreamUrl');
+          if (txtStream) {
+            txtStream.value = cfg.stream_url || '';
+            if (!isSuperAdmin) txtStream.disabled = true;
+          }
+
+          const chkRot = document.getElementById('presenceRotationEnabled');
+          if (chkRot) {
+            chkRot.checked = !!cfg.rotation_enabled;
+            if (!isSuperAdmin) chkRot.disabled = true;
+          }
+
+          const txtInt = document.getElementById('presenceRotationInterval');
+          if (txtInt) {
+            txtInt.value = cfg.rotation_interval || 30;
+            if (!isSuperAdmin) txtInt.disabled = true;
+          }
+
+          if (chkEnabled && !isSuperAdmin) chkEnabled.disabled = true;
+
+          const badge = document.getElementById('discordBotGatewayBadge');
+          if (badge) {
+            if (res.connected) {
+              badge.textContent = '🟢 Gateway Online';
+              badge.style.background = '#dcfce7';
+              badge.style.color = '#15803d';
+            } else {
+              badge.textContent = '🔴 Gateway Offline';
+              badge.style.background = '#fee2e2';
+              badge.style.color = '#991b1b';
+            }
+          }
+
+          handlePresenceTypeChange();
+          togglePresenceRotationUI();
+          updatePresencePreview();
+        }
+      } catch (err) {
+        console.warn('Cannot load Discord presence settings:', err.message);
+      }
+    }
+
+    async function saveDiscordPresenceSettings() {
+      const user = (window.SarawatApi && window.SarawatApi.getAuthUser) ? window.SarawatApi.getAuthUser() : null;
+      if (!user || user.role !== 'Super Admin') {
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่มีสิทธิ์ทำรายการ',
+          text: 'การตั้งค่าสถานะ Discord Bot สงวนสิทธิ์เฉพาะระดับ Super Admin เท่านั้น',
+          confirmButtonColor: '#000000'
+        });
+        return;
+      }
+
+      const btn = document.getElementById('btnSaveDiscordPresence');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>กำลังบันทึก...</span>';
+      }
+
+      try {
+        const enabled = document.getElementById('presenceEnabled')?.checked ?? true;
+        const statusRadio = document.querySelector('input[name="presenceStatus"]:checked');
+        const status = statusRadio ? statusRadio.value : 'online';
+        const activity_type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
+        const activity_name = document.getElementById('presenceActivityName')?.value || '';
+        const activity_state = document.getElementById('presenceActivityState')?.value || '';
+        const stream_url = document.getElementById('presenceStreamUrl')?.value || '';
+        const rotation_enabled = document.getElementById('presenceRotationEnabled')?.checked || false;
+        const rotation_interval = parseInt(document.getElementById('presenceRotationInterval')?.value || '30', 10);
+
+        const payload = {
+          enabled,
+          status,
+          activity_type,
+          activity_name,
+          activity_state,
+          stream_url,
+          rotation_enabled,
+          rotation_interval
+        };
+
+        const res = await window.SarawatApi.updateDiscordPresence(payload);
+        if (res && res.success) {
+          if (window.showToast) {
+            window.showToast('อัปเดตสถานะ Discord Bot สำเร็จแล้ว', 'success');
+          } else {
+            Swal.fire({
+              icon: 'success',
+              title: 'บันทึกสำเร็จ!',
+              text: 'อัปเดตสถานะ Custom Activity ของ Discord Bot เรียบร้อยแล้ว',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          }
+          loadDiscordPresenceSettings();
+        } else {
+          throw new Error((res && res.error) || 'บันทึกไม่สำเร็จ');
+        }
+      } catch (err) {
+        console.error('Failed to save Discord presence:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'บันทึกไม่สำเร็จ',
+          text: err.message || 'เกิดข้อผิดพลาดในการบันทึกสถานะ Bot',
+          confirmButtonColor: '#000000'
+        });
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>บันทึกและอัปเดตสถานะ Bot</span>';
+        }
+      }
+    }
+
+    function updatePresencePreview() {
+      const enabled = document.getElementById('presenceEnabled')?.checked ?? true;
+      const statusRadio = document.querySelector('input[name="presenceStatus"]:checked');
+      const status = statusRadio ? statusRadio.value : 'online';
+      const type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
+      let name = document.getElementById('presenceActivityName')?.value || '';
+      let state = document.getElementById('presenceActivityState')?.value || '';
+
+      const dot = document.getElementById('previewStatusDot');
+      if (dot) {
+        if (!enabled || status === 'offline') dot.style.background = '#80848e';
+        else if (status === 'idle') dot.style.background = '#f59e0b';
+        else if (status === 'dnd') dot.style.background = '#ef4444';
+        else dot.style.background = '#22c55e';
+      }
+
+      const header = document.getElementById('previewActivityHeader');
+      const pName = document.getElementById('previewActivityName');
+      const pState = document.getElementById('previewActivityState');
+
+      if (!enabled) {
+        if (header) header.textContent = 'ไม่มีกิจกรรม (NO ACTIVITY)';
+        if (pName) pName.textContent = 'บอทไม่ได้เปิดใช้งานการแสดงสถานะ';
+        if (pState) pState.textContent = '';
+        return;
+      }
+
+      const typeLabels = {
+        0: 'กำลังเล่น (PLAYING)',
+        1: 'กำลังถ่ายทอดสด (STREAMING)',
+        2: 'กำลังฟัง (LISTENING TO)',
+        3: 'กำลังดู (WATCHING)',
+        4: 'สถานะกำหนดเอง (CUSTOM STATUS)',
+        5: 'กำลังแข่งขันใน (COMPETING IN)'
+      };
+
+      if (header) header.textContent = typeLabels[type] || 'กำลังดู (WATCHING)';
+
+      if (!name && !state) {
+        name = 'ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล';
+        state = 'พร้อมปฏิบัติหน้าที่ 🛡️';
+      }
+
+      if (pName) pName.textContent = name;
+      if (pState) pState.textContent = state;
+    }
+
+    function handlePresenceTypeChange() {
+      const type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
+      const streamGroup = document.getElementById('presenceStreamUrlGroup');
+      if (streamGroup) {
+        streamGroup.style.display = (type === 1) ? 'block' : 'none';
+      }
+      updatePresencePreview();
+    }
+
+    function togglePresenceRotationUI() {
+      const rot = document.getElementById('presenceRotationEnabled')?.checked;
+      const rotGroup = document.getElementById('presenceRotationGroup');
+      if (rotGroup) {
+        rotGroup.style.display = rot ? 'block' : 'none';
+      }
+    }
+
+    function insertPresencePlaceholder(tag) {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.id === 'presenceActivityName' || activeEl.id === 'presenceActivityState')) {
+        const start = activeEl.selectionStart || activeEl.value.length;
+        const end = activeEl.selectionEnd || activeEl.value.length;
+        activeEl.value = activeEl.value.substring(0, start) + tag + activeEl.value.substring(end);
+        activeEl.focus();
+        activeEl.setSelectionRange(start + tag.length, start + tag.length);
+      } else {
+        const txtName = document.getElementById('presenceActivityName');
+        if (txtName) {
+          txtName.value = (txtName.value ? txtName.value + ' ' : '') + tag;
+        }
+      }
+      updatePresencePreview();
+    }
+
     function initSystemMonitorCharts() {
       if (typeof Chart === 'undefined') {
         console.warn('Chart.js is not loaded yet');
@@ -11307,6 +11811,7 @@
         monitorTrafficChartInstance.options.scales.x.realtime.pause = false;
       }
       await loadSystemMonitorData(true);
+      loadDiscordPresenceSettings();
       startSystemMonitorPolling();
     }
 
@@ -12057,6 +12562,16 @@
               renderAdminsList();
             } else if (paneId === 'tab-settings') {
               initSettings();
+            } else if (paneId === 'tab-discord') {
+              if (currentAdminUser.role !== 'Super Admin') {
+                showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงการตั้งค่า Discord Bot ได้', 'warning');
+                const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
+                if (newsTabBtn) newsTabBtn.click();
+                return;
+              }
+              if (typeof loadDiscordPresenceSettings === 'function') {
+                loadDiscordPresenceSettings();
+              }
             } else if (paneId === 'tab-system-monitor') {
               if (currentAdminUser.role !== 'Super Admin') {
                 showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงมอนิเตอร์ระบบได้', 'warning');
@@ -12106,12 +12621,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-

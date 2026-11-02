@@ -282,6 +282,32 @@
       return data;
     },
 
+    getDiscordPresence: async function () {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/discord/presence`, {
+        headers: this.getAuthHeaders({ 'Accept': 'application/json' })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      return data;
+    },
+
+    updateDiscordPresence: async function (presenceData) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/discord/presence`, {
+        method: 'PUT',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(presenceData)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      return data;
+    },
+
     getSettings: async function () {
       const base = this.getBaseUrl();
       if (!base) return {};
