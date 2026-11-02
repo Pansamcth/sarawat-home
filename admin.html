@@ -4456,7 +4456,7 @@
       </div>
 
       <!-- 🤖 DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CARD (Super Admin Only) -->
-      <div class="admin-card" id="cardDiscordPresence" style="margin-top: 24px; margin-bottom: 24px; border: 1.5px solid #5865F2; background: linear-gradient(to bottom, #f6f7ff 0%, #ffffff 120px); border-radius: 14px; box-shadow: 0 4px 16px rgba(88, 101, 242, 0.08);">
+      <div class="admin-card" id="cardDiscordPresence" style="margin-top: 10px; margin-bottom: 24px; border: 1.5px solid #5865F2; background: linear-gradient(to bottom, #f8f9ff 0%, #ffffff 140px); border-radius: 16px; box-shadow: 0 4px 20px rgba(88, 101, 242, 0.08);">
         <div class="admin-card-header" style="background: transparent; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid #e0e3ff; padding: 18px 22px;">
           <div>
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -4465,10 +4465,10 @@
               <span id="discordBotGatewayBadge" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">🟢 Gateway Online</span>
             </div>
             <h3 style="margin-top: 6px; font-size: 1.15rem; color: #1e1b4b; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> จัดการสถานะและกิจกรรมของบอท (Custom Activity / Rich Presence)
+              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> ตั้งค่า Custom Activity & Rich Presence (CustomRP Engine)
             </h3>
           </div>
-          <div style="display: flex; gap: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button type="button" class="btn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #4752c4; padding: 7px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 750; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" id="btnTestDiscordInPresence" onclick="testDiscordWebhookAlert(event)">
               <i class="fa-brands fa-discord" style="color: #5865F2;"></i> <span>ทดสอบส่ง Alert</span>
             </button>
@@ -4487,14 +4487,14 @@
             <i class="fa-solid fa-lock" style="margin-right: 6px;"></i> การตั้งค่านี้สงวนสิทธิ์เฉพาะผู้ดูแลระบบระดับ Super Admin เท่านั้น (คุณสามารถดูการตั้งค่าปัจจุบันได้ แต่ไม่สามารถแก้ไขได้)
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-            <!-- Left Column: Form Settings -->
-            <div>
-              <!-- 1. Enable Presence Toggle -->
-              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 18px;">
+          <div style="display: grid; grid-template-columns: minmax(360px, 1.15fr) minmax(320px, 0.85fr); gap: 24px; align-items: start;">
+            <!-- Left Column: CustomRP Form Settings -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+              <!-- Top Quick Bar: Enable Toggle + Bot Status -->
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 16px;">
                 <div>
-                  <div style="font-size: 0.9rem; font-weight: 800; color: #0f172a;">เปิดใช้งานสถานะ Custom Activity</div>
-                  <div style="font-size: 0.78rem; color: #64748b;">ให้ Discord Bot แสดงสถานะกิจกรรมหรือข้อความต่อสาธารณะ</div>
+                  <div style="font-size: 0.88rem; font-weight: 800; color: #0f172a;">เปิดใช้งาน Custom Activity</div>
+                  <div style="font-size: 0.74rem; color: #64748b;">ให้บอทแสดงสถานะกิจกรรมและเวลาใน Discord Gateway</div>
                 </div>
                 <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin: 0; cursor: pointer;">
                   <input type="checkbox" id="presenceEnabled" style="opacity: 0; width: 0; height: 0;" onchange="updatePresencePreview()">
@@ -4502,36 +4502,36 @@
                 </label>
               </div>
 
-              <!-- 2. Status Type (Online, Idle, DND) -->
-              <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+              <!-- Status Type (Online, Idle, DND) -->
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
                   สถานะออนไลน์ของ Bot (Status)
                 </label>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                  <label style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 0.82rem; font-weight: 700;">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <label style="display: flex; align-items: center; gap: 7px; padding: 8px 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff; font-size: 0.8rem; font-weight: 700;">
                     <input type="radio" name="presenceStatus" value="online" checked onchange="updatePresencePreview()">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></span>
-                    <span>Online (ออนไลน์)</span>
+                    <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #22c55e;"></span>
+                    <span>Online</span>
                   </label>
-                  <label style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 0.82rem; font-weight: 700;">
+                  <label style="display: flex; align-items: center; gap: 7px; padding: 8px 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff; font-size: 0.8rem; font-weight: 700;">
                     <input type="radio" name="presenceStatus" value="idle" onchange="updatePresencePreview()">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></span>
-                    <span>Idle (ไม่อยู่)</span>
+                    <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #f59e0b;"></span>
+                    <span>Idle</span>
                   </label>
-                  <label style="display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; background: #fff; font-size: 0.82rem; font-weight: 700;">
+                  <label style="display: flex; align-items: center; gap: 7px; padding: 8px 10px; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff; font-size: 0.8rem; font-weight: 700;">
                     <input type="radio" name="presenceStatus" value="dnd" onchange="updatePresencePreview()">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ef4444;"></span>
-                    <span>DND (ห้ามรบกวน)</span>
+                    <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #ef4444;"></span>
+                    <span>DND</span>
                   </label>
                 </div>
               </div>
 
-              <!-- 3. Activity Type -->
-              <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+              <!-- Activity Type -->
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
                   ประเภทกิจกรรม (Activity Type)
                 </label>
-                <select id="presenceActivityType" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem; background: #fff; font-weight: 600;" onchange="handlePresenceTypeChange()">
+                <select id="presenceActivityType" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; background: #fff; font-weight: 600;" onchange="handlePresenceTypeChange()">
                   <option value="3">กำลังดู (Watching)</option>
                   <option value="0">กำลังเล่น (Playing)</option>
                   <option value="2">กำลังฟัง (Listening to)</option>
@@ -4541,57 +4541,95 @@
                 </select>
               </div>
 
-              <!-- 4. Activity Name (ข้อความหลัก) -->
-              <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
-                  ข้อความสถานะ / ชื่อกิจกรรม (Activity Name)
-                </label>
-                <input type="text" id="presenceActivityName" placeholder="เช่น ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem;" oninput="updatePresencePreview()">
+              <!-- Name (Line 1 / Main Title) -->
+              <div style="margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <label style="font-size: 0.8rem; font-weight: 750; color: #334155;">
+                    ชื่อกิจกรรม (Name) <span style="color: #ef4444;">*</span>
+                  </label>
+                  <span style="font-size: 0.7rem; color: #64748b;">หัวข้อหลักกิจกรรม</span>
+                </div>
+                <input type="text" id="presenceActivityName" placeholder="เช่น ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" oninput="updatePresencePreview()">
               </div>
 
-              <!-- 5. Activity State (ข้อความย่อย / บรรทัดที่สอง) -->
-              <div style="margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
-                  ข้อความรายละเอียดเพิ่มเติม (Activity Details / State)
-                </label>
-                <input type="text" id="presenceActivityState" placeholder="เช่น พร้อมปฏิบัติหน้าที่ 🛡️" style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem;" oninput="updatePresencePreview()">
+              <!-- Details (Line 2 / Activity Details) -->
+              <div style="margin-bottom: 14px;" id="presenceDetailsGroup">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <label style="font-size: 0.8rem; font-weight: 750; color: #334155;">
+                    รายละเอียดกิจกรรม (Details)
+                  </label>
+                  <span style="font-size: 0.7rem; color: #64748b;">ข้อความบรรทัดที่ 2</span>
+                </div>
+                <input type="text" id="presenceActivityDetails" placeholder="เช่น ดูแลความปลอดภัย & ตรวจระเบียบวินัย" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" oninput="updatePresencePreview()">
+              </div>
+
+              <!-- State (Line 3 / Activity State) -->
+              <div style="margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <label style="font-size: 0.8rem; font-weight: 750; color: #334155;">
+                    สถานะย่อย (State)
+                  </label>
+                  <span style="font-size: 0.7rem; color: #64748b;">ข้อความบรรทัดที่ 3</span>
+                </div>
+                <input type="text" id="presenceActivityState" placeholder="เช่น พร้อมปฏิบัติหน้าที่ 🛡️" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" oninput="updatePresencePreview()">
               </div>
 
               <!-- Stream URL (Only visible if Streaming) -->
-              <div id="presenceStreamUrlGroup" style="display: none; margin-bottom: 16px;">
-                <label style="display: block; font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+              <div id="presenceStreamUrlGroup" style="display: none; margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
                   ลิงก์สตรีม Twitch / YouTube (Stream URL)
                 </label>
-                <input type="url" id="presenceStreamUrl" placeholder="https://twitch.tv/... หรือ https://youtube.com/..." style="width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; font-size: 0.86rem;">
+                <input type="url" id="presenceStreamUrl" placeholder="https://twitch.tv/... หรือ https://youtube.com/..." style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;">
               </div>
 
-              <!-- 6. Quick Dynamic Placeholders Chips -->
-              <div style="margin-bottom: 20px;">
-                <div style="font-size: 0.76rem; font-weight: 750; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">
-                  คลิกเพื่อแทรกตัวแปร Dynamic ลงในข้อความ:
+              <!-- Timestamp Mode (Elapsed timer like CustomRP) -->
+              <div style="margin-bottom: 16px; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                  การแสดงเวลานับเวลา (Timestamp / Elapsed)
+                </label>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 6px;">
+                  <label style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff; font-size: 0.78rem;">
+                    <input type="radio" name="presenceTimestampMode" value="uptime" checked onchange="updatePresencePreview()">
+                    <span>⏱️ นับเวลาเปิดเซิร์ฟเวอร์ต่อเนื่อง (Server Uptime)</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff; font-size: 0.78rem;">
+                    <input type="radio" name="presenceTimestampMode" value="connection" onchange="updatePresencePreview()">
+                    <span>⏱️ นับเวลาตั้งแต่ Bot เชื่อมต่อ Gateway (Since connection)</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; background: #fff; font-size: 0.78rem;">
+                    <input type="radio" name="presenceTimestampMode" value="none" onchange="updatePresencePreview()">
+                    <span>❌ ไม่แสดงเวลานับถอยหลัง / เวลาผ่านไป</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Quick Dynamic Placeholders Chips -->
+              <div style="margin-bottom: 16px; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+                <div style="font-size: 0.74rem; font-weight: 750; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">
+                  คลิกเพื่อแทรกลงในช่องข้อความที่กำลังพิมพ์:
                 </div>
                 <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{applicants_count}')">
-                    + {applicants_count} (ผู้สมัครทั้งหมด)
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{applicants_count}')">
+                    + {applicants_count} (ผู้สมัคร)
                   </button>
-                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{pending_applicants}')">
-                    + {pending_applicants} (รอตรวจสอบ)
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{pending_applicants}')">
+                    + {pending_applicants} (รอตรวจ)
                   </button>
-                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{students_count}')">
-                    + {students_count} (สารวัตรนักเรียน)
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{students_count}')">
+                    + {students_count} (สารวัตร)
                   </button>
-                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.74rem; padding: 4px 10px; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{server_uptime}')">
-                    + {server_uptime} (ระยะเวลา Uptime)
+                  <button type="button" class="btn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.72rem; padding: 3px 8px; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="insertPresencePlaceholder('{server_uptime}')">
+                    + {server_uptime} (Uptime)
                   </button>
                 </div>
               </div>
 
-              <!-- 7. Rotation Toggle (Disabled by default as chosen) -->
-              <div style="border-top: 1px solid #e2e8f0; padding-top: 16px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+              <!-- Rotation Toggle -->
+              <div style="border-top: 1px solid #e2e8f0; padding-top: 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                   <div>
-                    <div style="font-size: 0.86rem; font-weight: 800; color: #0f172a;">ระบบสลับข้อความอัตโนมัติ (Activity Rotation)</div>
-                    <div style="font-size: 0.76rem; color: #64748b;">สลับรายการข้อความตามรอบเวลาที่กำหนด</div>
+                    <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a;">สลับข้อความอัตโนมัติ (Activity Rotation)</div>
+                    <div style="font-size: 0.72rem; color: #64748b;">สลับรายการข้อความตามรอบเวลาที่กำหนด</div>
                   </div>
                   <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin: 0; cursor: pointer;">
                     <input type="checkbox" id="presenceRotationEnabled" style="opacity: 0; width: 0; height: 0;" onchange="togglePresenceRotationUI()">
@@ -4599,67 +4637,125 @@
                   </label>
                 </div>
 
-                <div id="presenceRotationGroup" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-top: 10px;">
-                  <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
+                <div id="presenceRotationGroup" style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-top: 8px;">
+                  <label style="display: block; font-size: 0.78rem; font-weight: 750; color: #334155; margin-bottom: 5px;">
                     ความถี่ในการสลับข้อความ (วินาที)
                   </label>
                   <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="number" id="presenceRotationInterval" min="15" max="3600" value="30" style="width: 100px; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.86rem;">
-                    <span style="font-size: 0.82rem; color: #64748b;">วินาที (แนะนำอย่างน้อย 30 วินาที เพื่อไม่ให้เกิน Rate Limit)</span>
+                    <input type="number" id="presenceRotationInterval" min="15" max="3600" value="30" style="width: 90px; padding: 6px 8px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem;">
+                    <span style="font-size: 0.78rem; color: #64748b;">วินาที (แนะนำ 30-60 วินาที เพื่อไม่ให้เกิน Rate Limit)</span>
                   </div>
                 </div>
+              </div>
+
+              <!-- Info Box: Bot Support vs CustomRP -->
+              <div style="margin-top: 16px; padding: 12px; border-radius: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; font-size: 0.74rem; color: #475569; line-height: 1.5;">
+                <div style="font-weight: 750; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                  <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+                  <span>ฟีเจอร์ที่ Discord Bot รองรับผ่าน Gateway:</span>
+                </div>
+                <div>• ประเภทกิจกรรม (Type), ชื่อ (Name), รายละเอียด (Details), สถานะ (State), สถานะออนไลน์ (Status) และเวลานับผ่านไป (Elapsed Time) ทำงานได้ 100%</div>
+                <div style="color: #64748b; margin-top: 4px;">• <em>หมายเหตุ:</em> รูปภาพ Large/Small Image และปุ่ม URL บนหน้าโปรไฟล์ในโปรแกรม CustomRP เป็นฟีเจอร์เฉพาะของ User RPC (Game SDK) โดยสำหรับ Discord Bot จะใช้ปุ่ม Action Buttons ส่งตรงในห้องแชทแทน</div>
               </div>
             </div>
 
-            <!-- Right Column: Discord Simulation Live Preview -->
-            <div>
-              <div style="font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 8px; text-transform: uppercase;">
-                ตัวอย่างจำลองบน Discord (Live Preview)
+            <!-- Right Column: Discord Simulation Live Preview (CustomRP Style Modal) -->
+            <div style="position: sticky; top: 20px;">
+              <div style="font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 8px; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between;">
+                <span>ตัวอย่างโปรไฟล์จำลอง (Live Preview)</span>
+                <span style="font-size: 0.7rem; color: #5865F2; background: #eef2ff; padding: 2px 6px; border-radius: 4px; font-weight: 700;">CustomRP Style</span>
               </div>
-              <div style="background: #2b2d31; border-radius: 14px; padding: 20px; color: #ffffff; box-shadow: 0 4px 16px rgba(0,0,0,0.15);">
-                <!-- Discord User Profile Preview -->
-                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px; border-bottom: 1px solid #35373c; padding-bottom: 14px;">
-                  <div style="position: relative; width: 48px; height: 48px; flex-shrink: 0;">
-                    <div style="width: 48px; height: 48px; border-radius: 50%; background: #5865F2; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #fff;">
-                      <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <span id="previewStatusDot" style="position: absolute; bottom: -1px; right: -1px; width: 14px; height: 14px; border-radius: 50%; background: #22c55e; border: 3px solid #2b2d31;"></span>
-                  </div>
-                  <div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                      <span style="font-weight: 750; font-size: 0.95rem; color: #f2f3f5;">Sarawat BOT</span>
-                      <span style="background: #5865F2; color: #ffffff; font-size: 0.62rem; font-weight: 800; padding: 1px 5px; border-radius: 4px; text-transform: uppercase;">BOT</span>
-                    </div>
-                    <div style="font-size: 0.74rem; color: #949ba4;">sarawat-backend#0000</div>
+
+              <!-- Discord Profile Card Container -->
+              <div style="background: #111214; border-radius: 16px; overflow: hidden; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.3); border: 1px solid #2b2d31;">
+                <!-- Header Banner -->
+                <div style="height: 90px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #1e293b 100%); position: relative; overflow: hidden;">
+                  <div style="position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; background: rgba(88, 101, 242, 0.25); border-radius: 50%; filter: blur(20px);"></div>
+                  <div style="position: absolute; bottom: 8px; right: 12px; display: flex; gap: 6px;">
+                    <span style="background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 99px; font-size: 0.68rem; color: #cbd5e1; display: flex; align-items: center; gap: 4px;">
+                      <i class="fa-solid fa-server" style="color: #818cf8; font-size: 0.65rem;"></i> Sarawat Guild
+                    </span>
                   </div>
                 </div>
 
-                <!-- Activity Card Inside Profile -->
-                <div style="background: #1e1f22; border-radius: 10px; padding: 14px;">
-                  <div style="font-size: 0.72rem; font-weight: 800; color: #b5bac1; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;" id="previewActivityHeader">
-                    กำลังดู (WATCHING)
+                <!-- Avatar and Profile Info Area -->
+                <div style="padding: 0 16px 16px 16px; position: relative;">
+                  <!-- Avatar circle overlapping banner -->
+                  <div style="position: relative; width: 68px; height: 68px; margin-top: -34px; margin-bottom: 10px;">
+                    <div style="width: 68px; height: 68px; border-radius: 50%; background: #5865F2; border: 5px solid #111214; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+                      <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <!-- Status dot -->
+                    <span id="previewStatusDot" style="position: absolute; bottom: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: #22c55e; border: 3.5px solid #111214;"></span>
                   </div>
-                  <div style="font-size: 0.9rem; font-weight: 750; color: #f2f3f5; margin-bottom: 2px; word-break: break-word;" id="previewActivityName">
-                    ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล
-                  </div>
-                  <div style="font-size: 0.78rem; color: #949ba4; word-break: break-word;" id="previewActivityState">
-                    พร้อมปฏิบัติหน้าที่ 🛡️
-                  </div>
-                </div>
 
-                <!-- Helper tip -->
-                <div style="margin-top: 14px; font-size: 0.74rem; color: #949ba4; line-height: 1.5; display: flex; align-items: flex-start; gap: 6px;">
-                  <i class="fa-solid fa-circle-info" style="color: #5865F2; margin-top: 2px;"></i>
-                  <span>ข้อความจะถูกแปลงตัวแปร Dynamic (เช่น จำนวนผู้สมัคร, สมาชิก) ให้เป็นตัวเลขจริงแบบเรียลไทม์ และจะส่งไปแสดงผลบน Discord ทันทีที่กดบันทึก</span>
+                  <!-- Username and Tag -->
+                  <div style="margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                      <span style="font-weight: 800; font-size: 1.05rem; color: #f2f3f5;">Sarawat BOT</span>
+                      <span style="background: #5865F2; color: #ffffff; font-size: 0.62rem; font-weight: 800; padding: 1.5px 5px; border-radius: 4px; text-transform: uppercase;">BOT</span>
+                      <span style="background: rgba(255,255,255,0.08); color: #949ba4; font-size: 0.65rem; padding: 1.5px 6px; border-radius: 4px;">APP</span>
+                    </div>
+                    <div style="font-size: 0.74rem; color: #949ba4; margin-top: 1px;">sarawat-backend • decha-pat.ac.th</div>
+                  </div>
+
+                  <!-- Custom Status Bubble (if Custom Status selected) -->
+                  <div id="previewCustomStatusBubble" style="display: none; background: #2b2d31; border-radius: 8px; padding: 6px 10px; margin-bottom: 12px; font-size: 0.78rem; color: #dbdee1; border: 1px solid #35373c;">
+                    <span style="margin-right: 5px;">💬</span>
+                    <span id="previewCustomStatusText">สถานะกำหนดเอง</span>
+                  </div>
+
+                  <!-- Discord Activity Card (CustomRP Style) -->
+                  <div style="background: #1e1f22; border-radius: 10px; padding: 14px; border: 1px solid #2b2d31;">
+                    <!-- Activity Type Header (e.g. PLAYING A GAME) -->
+                    <div style="font-size: 0.7rem; font-weight: 850; color: #b5bac1; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px;" id="previewActivityHeader">
+                      กำลังดู (WATCHING)
+                    </div>
+
+                    <!-- Main Activity Info Flex Layout -->
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                      <!-- App Icon / Large Image Badge -->
+                      <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5 0%, #5865F2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);">
+                        <i id="previewActivityIcon" class="fa-solid fa-eye"></i>
+                      </div>
+
+                      <!-- Text Details -->
+                      <div style="min-width: 0; flex: 1;">
+                        <div style="font-size: 0.88rem; font-weight: 750; color: #f2f3f5; line-height: 1.3; margin-bottom: 2px; word-break: break-word;" id="previewActivityName">
+                          ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล
+                        </div>
+                        <div style="font-size: 0.78rem; color: #dbdee1; line-height: 1.3; margin-bottom: 2px; word-break: break-word;" id="previewActivityDetails">
+                          ดูแลความปลอดภัย & ตรวจระเบียบวินัย
+                        </div>
+                        <div style="font-size: 0.78rem; color: #dbdee1; line-height: 1.3; margin-bottom: 3px; word-break: break-word;" id="previewActivityState">
+                          พร้อมปฏิบัติหน้าที่ 🛡️
+                        </div>
+                        <!-- Live Elapsed Timer -->
+                        <div style="font-size: 0.74rem; color: #949ba4; display: flex; align-items: center; gap: 4px; margin-top: 4px;" id="previewActivityTimerContainer">
+                          <i class="fa-regular fa-clock" style="font-size: 0.7rem;"></i>
+                          <span id="previewActivityTimer">00:00:00 elapsed</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Simulated Action Button (Discord Channel Feature) -->
+                    <div style="margin-top: 14px; pt-2; border-top: 1px solid #2b2d31; padding-top: 10px;">
+                      <button type="button" style="width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 7px 12px; color: #f2f3f5; font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: default;">
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
+                        <span>เข้าสู่เว็บไซต์สารวัตรนักเรียน</span>
+                      </button>
+                      <div style="font-size: 0.66rem; color: #80848e; text-align: center; margin-top: 6px;">
+                        (ปุ่ม Interactive ActionRow แสดงในช่องแชท Discord)
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      
       </div>
     </div>
-
 
     <!-- ==========================================
          TAB 4: BACKUP & SYNC (EXPORT/IMPORT JSON & SERVER BACKUP)
@@ -11312,8 +11408,11 @@
 
 
     // ==========================================
-    // DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CONTROLLER
+    // DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CONTROLLER (CustomRP Engine)
     // ==========================================
+    let presenceElapsedTimerId = null;
+    let presenceTimerSeconds = 142; // default starting preview elapsed seconds
+
     async function loadDiscordPresenceSettings() {
       const card = document.getElementById('cardDiscordPresence');
       if (!card) return;
@@ -11368,6 +11467,12 @@
             if (!isSuperAdmin) txtName.disabled = true;
           }
 
+          const txtDetails = document.getElementById('presenceActivityDetails');
+          if (txtDetails) {
+            txtDetails.value = cfg.activity_details || '';
+            if (!isSuperAdmin) txtDetails.disabled = true;
+          }
+
           const txtState = document.getElementById('presenceActivityState');
           if (txtState) {
             txtState.value = cfg.activity_state || '';
@@ -11379,6 +11484,12 @@
             txtStream.value = cfg.stream_url || '';
             if (!isSuperAdmin) txtStream.disabled = true;
           }
+
+          const timeRadios = document.querySelectorAll('input[name="presenceTimestampMode"]');
+          timeRadios.forEach(r => {
+            r.checked = (r.value === (cfg.timestamp_mode || 'uptime'));
+            if (!isSuperAdmin) r.disabled = true;
+          });
 
           const chkRot = document.getElementById('presenceRotationEnabled');
           if (chkRot) {
@@ -11410,6 +11521,7 @@
           handlePresenceTypeChange();
           togglePresenceRotationUI();
           updatePresencePreview();
+          startPresencePreviewTimer();
         }
       } catch (err) {
         console.warn('Cannot load Discord presence settings:', err.message);
@@ -11440,8 +11552,11 @@
         const status = statusRadio ? statusRadio.value : 'online';
         const activity_type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
         const activity_name = document.getElementById('presenceActivityName')?.value || '';
+        const activity_details = document.getElementById('presenceActivityDetails')?.value || '';
         const activity_state = document.getElementById('presenceActivityState')?.value || '';
         const stream_url = document.getElementById('presenceStreamUrl')?.value || '';
+        const timeRadio = document.querySelector('input[name="presenceTimestampMode"]:checked');
+        const timestamp_mode = timeRadio ? timeRadio.value : 'uptime';
         const rotation_enabled = document.getElementById('presenceRotationEnabled')?.checked || false;
         const rotation_interval = parseInt(document.getElementById('presenceRotationInterval')?.value || '30', 10);
 
@@ -11450,8 +11565,10 @@
           status,
           activity_type,
           activity_name,
+          activity_details,
           activity_state,
           stream_url,
+          timestamp_mode,
           rotation_enabled,
           rotation_interval
         };
@@ -11489,13 +11606,72 @@
       }
     }
 
+    function handlePresenceTypeChange() {
+      const type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
+      const streamGroup = document.getElementById('presenceStreamUrlGroup');
+      const detailsGroup = document.getElementById('presenceDetailsGroup');
+      const bubble = document.getElementById('previewCustomStatusBubble');
+
+      if (streamGroup) {
+        streamGroup.style.display = (type === 1) ? 'block' : 'none';
+      }
+      if (detailsGroup) {
+        detailsGroup.style.display = (type === 4) ? 'none' : 'block';
+      }
+      if (bubble) {
+        bubble.style.display = (type === 4) ? 'block' : 'none';
+      }
+      updatePresencePreview();
+    }
+
+    function togglePresenceRotationUI() {
+      const chk = document.getElementById('presenceRotationEnabled');
+      const grp = document.getElementById('presenceRotationGroup');
+      if (grp) grp.style.display = (chk && chk.checked) ? 'block' : 'none';
+    }
+
+    let lastFocusedPresenceInput = null;
+    document.addEventListener('focusin', (e) => {
+      if (e.target && ['presenceActivityName', 'presenceActivityDetails', 'presenceActivityState'].includes(e.target.id)) {
+        lastFocusedPresenceInput = e.target;
+      }
+    });
+
+    function insertPresencePlaceholder(tag) {
+      const targetInput = lastFocusedPresenceInput || document.getElementById('presenceActivityName');
+      if (!targetInput) return;
+      const start = targetInput.selectionStart || targetInput.value.length;
+      const end = targetInput.selectionEnd || targetInput.value.length;
+      targetInput.value = targetInput.value.substring(0, start) + tag + targetInput.value.substring(end);
+      targetInput.focus();
+      targetInput.selectionStart = targetInput.selectionEnd = start + tag.length;
+      updatePresencePreview();
+    }
+
+    function startPresencePreviewTimer() {
+      if (presenceElapsedTimerId) clearInterval(presenceElapsedTimerId);
+      presenceElapsedTimerId = setInterval(() => {
+        presenceTimerSeconds++;
+        const timerElem = document.getElementById('previewActivityTimer');
+        if (timerElem) {
+          const hrs = String(Math.floor(presenceTimerSeconds / 3600)).padStart(2, '0');
+          const mins = String(Math.floor((presenceTimerSeconds % 3600) / 60)).padStart(2, '0');
+          const secs = String(presenceTimerSeconds % 60).padStart(2, '0');
+          timerElem.textContent = `${hrs}:${mins}:${secs} elapsed`;
+        }
+      }, 1000);
+    }
+
     function updatePresencePreview() {
       const enabled = document.getElementById('presenceEnabled')?.checked ?? true;
       const statusRadio = document.querySelector('input[name="presenceStatus"]:checked');
       const status = statusRadio ? statusRadio.value : 'online';
       const type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
-      let name = document.getElementById('presenceActivityName')?.value || '';
-      let state = document.getElementById('presenceActivityState')?.value || '';
+      let name = document.getElementById('presenceActivityName')?.value || 'ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล';
+      let details = document.getElementById('presenceActivityDetails')?.value || 'ดูแลความปลอดภัย & ตรวจระเบียบวินัย';
+      let state = document.getElementById('presenceActivityState')?.value || 'พร้อมปฏิบัติหน้าที่ 🛡️';
+      const timeRadio = document.querySelector('input[name="presenceTimestampMode"]:checked');
+      const timeMode = timeRadio ? timeRadio.value : 'uptime';
 
       const dot = document.getElementById('previewStatusDot');
       if (dot) {
@@ -11507,17 +11683,28 @@
 
       const header = document.getElementById('previewActivityHeader');
       const pName = document.getElementById('previewActivityName');
+      const pDetails = document.getElementById('previewActivityDetails');
       const pState = document.getElementById('previewActivityState');
+      const pIcon = document.getElementById('previewActivityIcon');
+      const pTimerContainer = document.getElementById('previewActivityTimerContainer');
+      const customBubble = document.getElementById('previewCustomStatusBubble');
+      const customText = document.getElementById('previewCustomStatusText');
+
+      if (pTimerContainer) {
+        pTimerContainer.style.display = (timeMode === 'none') ? 'none' : 'flex';
+      }
 
       if (!enabled) {
         if (header) header.textContent = 'ไม่มีกิจกรรม (NO ACTIVITY)';
         if (pName) pName.textContent = 'บอทไม่ได้เปิดใช้งานการแสดงสถานะ';
+        if (pDetails) pDetails.textContent = '';
         if (pState) pState.textContent = '';
+        if (customBubble) customBubble.style.display = 'none';
         return;
       }
 
       const typeLabels = {
-        0: 'กำลังเล่น (PLAYING)',
+        0: 'กำลังเล่น (PLAYING A GAME)',
         1: 'กำลังถ่ายทอดสด (STREAMING)',
         2: 'กำลังฟัง (LISTENING TO)',
         3: 'กำลังดู (WATCHING)',
@@ -11525,51 +11712,32 @@
         5: 'กำลังแข่งขันใน (COMPETING IN)'
       };
 
-      if (header) header.textContent = typeLabels[type] || 'กำลังดู (WATCHING)';
+      const typeIcons = {
+        0: 'fa-solid fa-gamepad',
+        1: 'fa-solid fa-video',
+        2: 'fa-solid fa-headphones',
+        3: 'fa-solid fa-eye',
+        4: 'fa-solid fa-comment-dots',
+        5: 'fa-solid fa-trophy'
+      };
 
-      if (!name && !state) {
-        name = 'ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล';
-        state = 'พร้อมปฏิบัติหน้าที่ 🛡️';
-      }
+      if (header) header.textContent = typeLabels[type] || 'กิจกรรม (ACTIVITY)';
+      if (pIcon) pIcon.className = typeIcons[type] || 'fa-solid fa-shield-halved';
 
-      if (pName) pName.textContent = name;
-      if (pState) pState.textContent = state;
-    }
-
-    function handlePresenceTypeChange() {
-      const type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
-      const streamGroup = document.getElementById('presenceStreamUrlGroup');
-      if (streamGroup) {
-        streamGroup.style.display = (type === 1) ? 'block' : 'none';
-      }
-      updatePresencePreview();
-    }
-
-    function togglePresenceRotationUI() {
-      const rot = document.getElementById('presenceRotationEnabled')?.checked;
-      const rotGroup = document.getElementById('presenceRotationGroup');
-      if (rotGroup) {
-        rotGroup.style.display = rot ? 'block' : 'none';
-      }
-    }
-
-    function insertPresencePlaceholder(tag) {
-      const activeEl = document.activeElement;
-      if (activeEl && (activeEl.id === 'presenceActivityName' || activeEl.id === 'presenceActivityState')) {
-        const start = activeEl.selectionStart || activeEl.value.length;
-        const end = activeEl.selectionEnd || activeEl.value.length;
-        activeEl.value = activeEl.value.substring(0, start) + tag + activeEl.value.substring(end);
-        activeEl.focus();
-        activeEl.setSelectionRange(start + tag.length, start + tag.length);
+      if (type === 4) {
+        // Custom Status
+        if (customBubble) customBubble.style.display = 'block';
+        if (customText) customText.textContent = state || name || 'สถานะกำหนดเอง';
+        if (pName) pName.textContent = state || name;
+        if (pDetails) pDetails.textContent = '';
+        if (pState) pState.textContent = '';
       } else {
-        const txtName = document.getElementById('presenceActivityName');
-        if (txtName) {
-          txtName.value = (txtName.value ? txtName.value + ' ' : '') + tag;
-        }
+        if (customBubble) customBubble.style.display = 'none';
+        if (pName) pName.textContent = name || 'ระบบสารวัตรนักเรียน';
+        if (pDetails) pDetails.textContent = details || '';
+        if (pState) pState.textContent = state || '';
       }
-      updatePresencePreview();
     }
-
     function initSystemMonitorCharts() {
       if (typeof Chart === 'undefined') {
         console.warn('Chart.js is not loaded yet');
