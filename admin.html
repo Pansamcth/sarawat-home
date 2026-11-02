@@ -11042,7 +11042,7 @@
           Swal.fire({
             icon: 'success',
             title: 'ส่งแจ้งเตือน Discord สำเร็จ!',
-            text: 'ระบบได้ส่งข้อความทดสอบไปยัง Discord Webhook เรียบร้อยแล้ว',
+            text: 'ระบบได้ส่งข้อความทดสอบผ่าน Discord Bot (Sarawat BOT) เรียบร้อยแล้ว',
             confirmButtonColor: '#000000'
           });
         } else {
@@ -11053,7 +11053,7 @@
         Swal.fire({
           icon: 'error',
           title: 'ส่งไม่สำเร็จ',
-          text: 'เกิดข้อผิดพลาดในการส่ง Discord Webhook: ' + (err.message || err),
+          text: 'เกิดข้อผิดพลาดในการส่ง Discord Bot Alert: ' + (err.message || err),
           confirmButtonColor: '#000000'
         });
       } finally {
