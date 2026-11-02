@@ -484,10 +484,10 @@
       height: 6px;
     }
     .mon-console-terminal-body::-webkit-scrollbar-track {
-      background: #090d16;
+      background: #f8fafc;
     }
     .mon-console-terminal-body::-webkit-scrollbar-thumb {
-      background: #334155;
+      background: #cbd5e1;
       border-radius: 99px;
     }
     .mon-console-terminal-body::-webkit-scrollbar-thumb:hover {
@@ -4353,33 +4353,33 @@
           </button>
         </div>
 
-        <!-- Terminal Window Box: Embedded dark macOS console -->
-        <div style="border-radius: 12px; border: 1px solid #1e293b; overflow: hidden; background: #090d16; box-shadow: 0 4px 14px rgba(15,23,42,0.08);">
-          <!-- Terminal Header Bar with Window Controls -->
-          <div style="background: #0f172a; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+        <!-- Terminal Window Box: Clean Pure White / Light Theme macOS Console -->
+        <div style="border-radius: 12px; border: 1.5px solid #e2e8f0; overflow: hidden; background: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+          <!-- Terminal Header Bar (Light macOS Window Controls) -->
+          <div style="background: #f8fafc; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #e2e8f0;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-              <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-left: 6px;">sarawat@backend-host: ~/console</span>
+              <span style="width: 11px; height: 11px; border-radius: 50%; background: #ff5f56; border: 1px solid #e0443e; display: inline-block;"></span>
+              <span style="width: 11px; height: 11px; border-radius: 50%; background: #ffbd2e; border: 1px solid #dea123; display: inline-block;"></span>
+              <span style="width: 11px; height: 11px; border-radius: 50%; background: #27c93f; border: 1px solid #1aab29; display: inline-block;"></span>
+              <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.74rem; color: #64748b; font-weight: 700; margin-left: 8px;">sarawat@backend-host: ~/console</span>
             </div>
-            <span style="font-family: ui-monospace, monospace; font-size: 0.68rem; color: #38bdf8; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.25); padding: 2px 8px; border-radius: 4px;">NODE.JS v24 (SQLITE)</span>
+            <span style="font-family: ui-monospace, monospace; font-size: 0.70rem; color: #0284c7; background: #f0f9ff; border: 1px solid #bae6fd; padding: 3px 9px; border-radius: 6px; font-weight: 750;">NODE.JS v24 (SQLITE)</span>
           </div>
 
-          <!-- Scrollable Output Terminal with Custom Dark Scrollbar -->
-          <div id="monConsoleOutput" class="mon-console-terminal-body" style="background: #090d16; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.81rem; line-height: 1.6; color: #e2e8f0; min-height: 190px; max-height: 290px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; user-select: text;">======================================================================
+          <!-- Scrollable Output Terminal with Light Theme Body & Crisp Text -->
+          <div id="monConsoleOutput" class="mon-console-terminal-body" style="background: #fcfdfe; padding: 16px 18px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.83rem; line-height: 1.65; color: #1e293b; min-height: 200px; max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; user-select: text;">======================================================================
   🚀 SARAWAT SYSTEM INTERACTIVE CONSOLE v1.0
   🌐 Engine: Node.js + SQLite (sarawat.db)
   💡 พิมพ์คำสั่ง เช่น /status, /backup, /restart หรือกดปุ่มคำสั่งด่วนด้านบน
 ======================================================================</div>
 
-          <!-- Terminal Input & Prompt Bar -->
-          <div style="background: #0f172a; padding: 8px 14px; border-top: 1px solid #1e293b; display: flex; align-items: center; gap: 10px;">
-            <span style="color: #10b981; font-family: ui-monospace, monospace; font-weight: 800; font-size: 0.88rem; user-select: none;">sarawat&gt;</span>
-            <input type="text" id="monConsoleInput" placeholder="พิมพ์คำสั่ง เช่น /backup, /status, /help..." autocomplete="off" spellcheck="false" style="flex: 1; background: transparent; border: none; color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.84rem; outline: none; padding: 5px 0;" onkeydown="handleConsoleInputKey(event)">
-            <button type="button" id="monConsoleSubmitBtn" onclick="submitConsoleCommand()" style="background: #2563eb; color: #ffffff; border: none; border-radius: 7px; padding: 7px 18px; font-size: 0.80rem; font-weight: 750; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif; transition: all 0.2s; white-space: nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+          <!-- Terminal Input & Prompt Bar (Light Theme) -->
+          <div style="background: #f8fafc; padding: 10px 16px; border-top: 1.5px solid #e2e8f0; display: flex; align-items: center; gap: 10px;">
+            <span style="color: #059669; font-family: ui-monospace, monospace; font-weight: 850; font-size: 0.90rem; user-select: none;">sarawat&gt;</span>
+            <input type="text" id="monConsoleInput" placeholder="พิมพ์คำสั่ง เช่น /backup, /status, /help..." autocomplete="off" spellcheck="false" style="flex: 1; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; color: #0f172a; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85rem; outline: none; padding: 7px 12px; transition: border-color 0.2s, box-shadow 0.2s;" onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" onkeydown="handleConsoleInputKey(event)">
+            <button type="button" id="monConsoleSubmitBtn" onclick="submitConsoleCommand()" style="background: #2563eb; color: #ffffff; border: none; border-radius: 8px; padding: 8px 20px; font-size: 0.82rem; font-weight: 750; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif; transition: all 0.2s; white-space: nowrap; box-shadow: 0 1px 3px rgba(37,99,235,0.25);" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
               <span>ส่งคำสั่ง</span>
-              <i data-lucide="send" style="width: 13px; height: 13px;"></i>
+              <i data-lucide="send" style="width: 14px; height: 14px;"></i>
             </button>
           </div>
         </div>
