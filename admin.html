@@ -4541,37 +4541,37 @@
                 </select>
               </div>
 
-              <!-- Name (Line 1 / Main Title) -->
+              <!-- Name (Line 1 in Discord) -->
               <div style="margin-bottom: 14px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                  <label style="font-size: 0.8rem; font-weight: 750; color: #334155;">
+                  <label style="font-size: 0.82rem; font-weight: 750; color: #0f172a;">
                     ชื่อกิจกรรม (Name) <span style="color: #ef4444;">*</span>
                   </label>
-                  <span style="font-size: 0.7rem; color: #64748b;">หัวข้อหลักกิจกรรม</span>
+                  <span style="font-size: 0.72rem; color: #0284c7; font-weight: 700; background: #e0f2fe; padding: 2px 7px; border-radius: 4px;">📌 บรรทัดที่ 1 ใน Discord</span>
                 </div>
-                <input type="text" id="presenceActivityName" placeholder="เช่น ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" oninput="updatePresencePreview()">
+                <input type="text" id="presenceActivityName" placeholder="เช่น สารวัตรนักเรียน เดชะปัตตนยานุกูล" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem; font-weight: 600;" oninput="updatePresencePreview()">
               </div>
 
-              <!-- Details (Line 2 / Activity Details) -->
-              <div style="margin-bottom: 14px;" id="presenceDetailsGroup">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                  <label style="font-size: 0.8rem; font-weight: 750; color: #334155;">
-                    รายละเอียดกิจกรรม (Details)
-                  </label>
-                  <span style="font-size: 0.7rem; color: #64748b;">ข้อความบรรทัดที่ 2</span>
-                </div>
-                <input type="text" id="presenceActivityDetails" placeholder="เช่น ดูแลความปลอดภัย & ตรวจระเบียบวินัย" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" oninput="updatePresencePreview()">
-              </div>
-
-              <!-- State (Line 3 / Activity State) -->
+              <!-- State (Line 2 in Discord) -->
               <div style="margin-bottom: 14px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                  <label style="font-size: 0.8rem; font-weight: 750; color: #334155;">
-                    สถานะย่อย (State)
+                  <label style="font-size: 0.82rem; font-weight: 750; color: #0f172a;">
+                    ข้อความสถานะ (State)
                   </label>
-                  <span style="font-size: 0.7rem; color: #64748b;">ข้อความบรรทัดที่ 3</span>
+                  <span style="font-size: 0.72rem; color: #16a34a; font-weight: 700; background: #dcfce7; padding: 2px 7px; border-radius: 4px;">📌 บรรทัดที่ 2 ใน Discord</span>
                 </div>
                 <input type="text" id="presenceActivityState" placeholder="เช่น พร้อมปฏิบัติหน้าที่ 🛡️" style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" oninput="updatePresencePreview()">
+              </div>
+
+              <!-- Details (Optional / RPC only) -->
+              <div style="margin-bottom: 14px;" id="presenceDetailsGroup">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: #475569;">
+                    รายละเอียดเพิ่มเติม (Details)
+                  </label>
+                  <span style="font-size: 0.7rem; color: #94a3b8;">(ฟิลด์เสริม / CustomRP)</span>
+                </div>
+                <input type="text" id="presenceActivityDetails" placeholder="เช่น ดูแลความปลอดภัย & ตรวจระเบียบวินัย" style="width: 100%; padding: 8px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.82rem; color: #475569;" oninput="updatePresencePreview()">
               </div>
 
               <!-- Stream URL (Only visible if Streaming) -->
@@ -4729,17 +4729,25 @@
               </div>
             </div>
 
-            <!-- Right Column: Discord Simulation Live Preview (CustomRP Style Modal) -->
+            <!-- Right Column: Discord Simulation Live Preview (Matches Real Discord 100%) -->
             <div style="position: sticky; top: 20px;">
-              <div style="font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 8px; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between;">
-                <span>ตัวอย่างโปรไฟล์จำลอง (Live Preview)</span>
-                <span style="font-size: 0.7rem; color: #5865F2; background: #eef2ff; padding: 2px 6px; border-radius: 4px; font-weight: 700;">CustomRP Style</span>
+              <div style="font-size: 0.82rem; font-weight: 750; color: #334155; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                <span>ตัวอย่างการแสดงผลใน Discord (LIVE PREVIEW)</span>
+                <!-- Mode Switcher -->
+                <div style="display: inline-flex; align-items: center; background: #e2e8f0; padding: 2px; border-radius: 7px; gap: 2px;">
+                  <button type="button" id="btnPreviewModeReal" onclick="setPreviewMode('real')" style="border: none; background: #5865F2; color: #ffffff; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                    🟢 Discord จริง
+                  </button>
+                  <button type="button" id="btnPreviewModeRpc" onclick="setPreviewMode('rpc')" style="border: none; background: transparent; color: #64748b; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                    🎮 โหมด CustomRP
+                  </button>
+                </div>
               </div>
 
               <!-- Discord Profile Card Container -->
-              <div style="background: #111214; border-radius: 16px; overflow: hidden; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.3); border: 1px solid #2b2d31;">
+              <div style="background: #111214; border-radius: 16px; overflow: hidden; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.35); border: 1px solid #2b2d31;">
                 <!-- Header Banner -->
-                <div style="height: 90px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #1e293b 100%); position: relative; overflow: hidden;">
+                <div style="height: 80px; background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #1e293b 100%); position: relative; overflow: hidden;">
                   <div style="position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; background: rgba(88, 101, 242, 0.25); border-radius: 50%; filter: blur(20px);"></div>
                   <div style="position: absolute; bottom: 8px; right: 12px; display: flex; gap: 6px;">
                     <span style="background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 99px; font-size: 0.68rem; color: #cbd5e1; display: flex; align-items: center; gap: 4px;">
@@ -4775,63 +4783,73 @@
                     <span id="previewCustomStatusText">สถานะกำหนดเอง</span>
                   </div>
 
-                  <!-- Discord Activity Card (CustomRP Style) -->
-                  <div style="background: #1e1f22; border-radius: 10px; padding: 14px; border: 1px solid #2b2d31;">
-                    <!-- Activity Type Header (e.g. PLAYING A GAME) -->
-                    <div style="font-size: 0.7rem; font-weight: 850; color: #b5bac1; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px;" id="previewActivityHeader">
-                      กำลังดู (WATCHING)
+                  <!-- ==========================================
+                       DISCORD ACTIVITY CARD (EXACTLY MATCHES DISCORD CLIENT)
+                       ========================================== -->
+                  <div id="previewMainDiscordCard" style="background: #1e1f22; border-radius: 8px; padding: 12px 14px; border: 1px solid #2b2d31;">
+                    <!-- Activity Type Header (e.g. Watching, Playing a game) -->
+                    <div style="font-size: 0.78rem; font-weight: 800; color: #b5bac1; text-transform: none; margin-bottom: 4px; letter-spacing: 0.2px;" id="previewActivityHeader">
+                      Watching
                     </div>
 
-                    <!-- Main Activity Info Flex Layout -->
-                    <div style="display: flex; gap: 12px; align-items: flex-start;">
-                      <!-- App Icon / Large Image Badge with Small Image Overlay -->
-                      <div style="position: relative; width: 56px; height: 56px; flex-shrink: 0;">
-                        <!-- Fallback Icon Box -->
-                        <div id="previewFallbackIconBox" style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5 0%, #5865F2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);">
-                          <i id="previewActivityIcon" class="fa-solid fa-eye"></i>
+                    <!-- Line 1: Activity Name (Bold White text) -->
+                    <div style="font-size: 0.95rem; font-weight: 750; color: #f2f3f5; line-height: 1.35; word-break: break-word;" id="previewActivityName">
+                      สารวัตรนักเรียน เดชะปัตตนยานุกูล
+                    </div>
+
+                    <!-- Line 2: Activity State (Subtitle) -->
+                    <div style="font-size: 0.82rem; color: #dbdee1; line-height: 1.35; margin-top: 2px; word-break: break-word;" id="previewActivityState">
+                      พร้อมปฏิบัติหน้าที่ 🛡️
+                    </div>
+
+                    <!-- Streaming Mode Watch Button (Supported natively by Discord Client) -->
+                    <div id="previewStreamWatchBtn" style="display: none; margin-top: 10px;">
+                      <a id="previewStreamWatchLink" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: #5865F2; color: #ffffff; padding: 7px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 750; text-decoration: none; box-shadow: 0 2px 6px rgba(88, 101, 242, 0.4);">
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.72rem;"></i>
+                        <span>Watch / รับชมสตรีม</span>
+                      </a>
+                    </div>
+
+                    <!-- Optional / CustomRP Extended Assets (Hidden by default in Real Discord Mode) -->
+                    <div id="previewRpcAssetsBlock" style="display: none; margin-top: 12px; border-top: 1px solid #2b2d31; padding-top: 10px;">
+                      <div style="display: flex; gap: 10px; align-items: flex-start;">
+                        <div style="position: relative; width: 48px; height: 48px; flex-shrink: 0;" id="previewIconWrapper">
+                          <div id="previewFallbackIconBox" style="width: 48px; height: 48px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5 0%, #5865F2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #fff;">
+                            <i id="previewActivityIcon" class="fa-solid fa-eye"></i>
+                          </div>
+                          <img id="previewLargeImg" src="" alt="Large Image" style="display: none; width: 48px; height: 48px; border-radius: 10px; object-fit: cover;" onerror="this.style.display='none'; document.getElementById('previewFallbackIconBox').style.display='flex';">
+                          <div id="previewSmallImgContainer" style="display: none; position: absolute; bottom: -3px; right: -3px; width: 18px; height: 18px; border-radius: 50%; background: #111214; padding: 1.5px;">
+                            <img id="previewSmallImg" src="" alt="Small Image" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                          </div>
                         </div>
-                        <!-- Large Image -->
-                        <img id="previewLargeImg" src="" alt="Large Image" style="display: none; width: 56px; height: 56px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" onerror="this.style.display='none'; document.getElementById('previewFallbackIconBox').style.display='flex';">
-                        <!-- Small Image Overlay -->
-                        <div id="previewSmallImgContainer" style="display: none; position: absolute; bottom: -4px; right: -4px; width: 22px; height: 22px; border-radius: 50%; background: #111214; padding: 2px;">
-                          <img id="previewSmallImg" src="" alt="Small Image" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        <div style="flex: 1; min-width: 0;">
+                          <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.3;" id="previewActivityDetails">
+                            ดูแลความปลอดภัย & ตรวจระเบียบวินัย
+                          </div>
+                          <div style="font-size: 0.72rem; color: #949ba4; display: flex; align-items: center; gap: 4px; margin-top: 3px;" id="previewActivityTimerContainer">
+                            <i class="fa-regular fa-clock" style="font-size: 0.68rem;"></i>
+                            <span id="previewActivityTimer">00:00:00 elapsed</span>
+                          </div>
                         </div>
                       </div>
 
-                      <!-- Text Details -->
-                      <div style="min-width: 0; flex: 1;">
-                        <div style="font-size: 0.88rem; font-weight: 750; color: #f2f3f5; line-height: 1.3; margin-bottom: 2px; word-break: break-word;" id="previewActivityName">
-                          ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล
-                        </div>
-                        <div style="font-size: 0.78rem; color: #dbdee1; line-height: 1.3; margin-bottom: 2px; word-break: break-word;" id="previewActivityDetails">
-                          ดูแลความปลอดภัย & ตรวจระเบียบวินัย
-                        </div>
-                        <div style="font-size: 0.78rem; color: #dbdee1; line-height: 1.3; margin-bottom: 3px; word-break: break-word;" id="previewActivityState">
-                          พร้อมปฏิบัติหน้าที่ 🛡️
-                        </div>
-                        <!-- Live Elapsed Timer -->
-                        <div style="font-size: 0.74rem; color: #949ba4; display: flex; align-items: center; gap: 4px; margin-top: 4px;" id="previewActivityTimerContainer">
-                          <i class="fa-regular fa-clock" style="font-size: 0.7rem;"></i>
-                          <span id="previewActivityTimer">00:00:00 elapsed</span>
-                        </div>
+                      <!-- Buttons Group (CustomRP style) -->
+                      <div id="previewButtonsGroup" style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                        <a id="previewBtn1" href="#" target="_blank" style="display: none; width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 6px 10px; color: #f2f3f5; font-size: 0.76rem; font-weight: 700; text-align: center; text-decoration: none; align-items: center; justify-content: center; gap: 6px;">
+                          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.68rem;"></i>
+                          <span id="previewBtn1Text">ปุ่มที่ 1</span>
+                        </a>
+                        <a id="previewBtn2" href="#" target="_blank" style="display: none; width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 6px 10px; color: #f2f3f5; font-size: 0.76rem; font-weight: 700; text-align: center; text-decoration: none; align-items: center; justify-content: center; gap: 6px;">
+                          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.68rem;"></i>
+                          <span id="previewBtn2Text">ปุ่มที่ 2</span>
+                        </a>
                       </div>
                     </div>
 
-                    <!-- Action Buttons Container (Dynamic from Button 1 & 2) -->
-                    <div id="previewButtonsGroup" style="margin-top: 14px; border-top: 1px solid #2b2d31; padding-top: 10px; display: flex; flex-direction: column; gap: 6px;">
-                      <!-- Button 1 Preview -->
-                      <a id="previewBtn1" href="#" target="_blank" style="display: none; width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 7px 12px; color: #f2f3f5; font-size: 0.78rem; font-weight: 700; text-align: center; text-decoration: none; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s ease;">
-                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
-                        <span id="previewBtn1Text">ปุ่มที่ 1</span>
-                      </a>
-                      <!-- Button 2 Preview -->
-                      <a id="previewBtn2" href="#" target="_blank" style="display: none; width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 7px 12px; color: #f2f3f5; font-size: 0.78rem; font-weight: 700; text-align: center; text-decoration: none; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s ease;">
-                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
-                        <span id="previewBtn2Text">ปุ่มที่ 2</span>
-                      </a>
-                      <div id="previewButtonsEmptyNotice" style="font-size: 0.68rem; color: #64748b; text-align: center; padding: 4px 0;">
-                        (ใส่ชื่อและลิงก์ปุ่มที่ 1 และ 2 ด้านซ้ายเพื่อแสดงปุ่มบนโปรไฟล์)
-                      </div>
+                    <!-- Clean Footer Hint -->
+                    <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.68rem; color: #949ba4; display: flex; align-items: center; justify-content: space-between;">
+                      <span id="previewModeStatusHint">🟢 แสดงผลตาม Discord Client จริง</span>
+                      <span style="color: #64748b;">Bot Presence Gateway v10</span>
                     </div>
                   </div>
                 </div>
@@ -11822,14 +11840,49 @@
       }, 1000);
     }
 
+    let currentPreviewMode = 'real';
+    function setPreviewMode(mode) {
+      currentPreviewMode = mode;
+      const btnReal = document.getElementById('btnPreviewModeReal');
+      const btnRpc = document.getElementById('btnPreviewModeRpc');
+      const rpcBlock = document.getElementById('previewRpcAssetsBlock');
+      const hint = document.getElementById('previewModeStatusHint');
+
+      if (mode === 'real') {
+        if (btnReal) {
+          btnReal.style.background = '#5865F2';
+          btnReal.style.color = '#ffffff';
+        }
+        if (btnRpc) {
+          btnRpc.style.background = 'transparent';
+          btnRpc.style.color = '#64748b';
+        }
+        if (rpcBlock) rpcBlock.style.display = 'none';
+        if (hint) hint.textContent = '🟢 แสดงผลตาม Discord Client จริง (2 บรรทัด)';
+      } else {
+        if (btnReal) {
+          btnReal.style.background = 'transparent';
+          btnReal.style.color = '#64748b';
+        }
+        if (btnRpc) {
+          btnRpc.style.background = '#5865F2';
+          btnRpc.style.color = '#ffffff';
+        }
+        if (rpcBlock) rpcBlock.style.display = 'block';
+        if (hint) hint.textContent = '🎮 มุมมองจำลองแบบขยาย (CustomRP RPC)';
+      }
+    }
+    window.setPreviewMode = setPreviewMode;
+
     function updatePresencePreview() {
       const enabled = document.getElementById('presenceEnabled')?.checked ?? true;
       const statusRadio = document.querySelector('input[name="presenceStatus"]:checked');
       const status = statusRadio ? statusRadio.value : 'online';
       const type = parseInt(document.getElementById('presenceActivityType')?.value || '3', 10);
-      let name = document.getElementById('presenceActivityName')?.value || 'ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล';
-      let details = document.getElementById('presenceActivityDetails')?.value || 'ดูแลความปลอดภัย & ตรวจระเบียบวินัย';
+      let name = document.getElementById('presenceActivityName')?.value || 'สารวัตรนักเรียน เดชะปัตตนยานุกูล';
+      let details = document.getElementById('presenceActivityDetails')?.value || '';
       let state = document.getElementById('presenceActivityState')?.value || 'พร้อมปฏิบัติหน้าที่ 🛡️';
+      const streamUrl = (document.getElementById('presenceStreamUrl')?.value || '').trim();
       const largeImg = (document.getElementById('presenceLargeImage')?.value || '').trim();
       const largeTxt = (document.getElementById('presenceLargeText')?.value || '').trim();
       const smallImg = (document.getElementById('presenceSmallImage')?.value || '').trim();
@@ -11861,8 +11914,10 @@
       const pTimerContainer = document.getElementById('previewActivityTimerContainer');
       const customBubble = document.getElementById('previewCustomStatusBubble');
       const customText = document.getElementById('previewCustomStatusText');
+      const streamWatchBtn = document.getElementById('previewStreamWatchBtn');
+      const streamWatchLink = document.getElementById('previewStreamWatchLink');
 
-      // Update Large Image
+      // Update Extended RPC Assets (Images)
       if (largeImg && (largeImg.startsWith('http://') || largeImg.startsWith('https://'))) {
         if (pLargeImg) {
           pLargeImg.src = largeImg;
@@ -11875,7 +11930,6 @@
         if (pFallback) pFallback.style.display = 'flex';
       }
 
-      // Update Small Image
       if (smallImg && (smallImg.startsWith('http://') || smallImg.startsWith('https://'))) {
         if (pSmallContainer && pSmallImg) {
           pSmallImg.src = smallImg;
@@ -11886,21 +11940,18 @@
         if (pSmallContainer) pSmallContainer.style.display = 'none';
       }
 
-      // Update Buttons
+      // Update Extended Buttons
       const btn1Elem = document.getElementById('previewBtn1');
       const btn1TextElem = document.getElementById('previewBtn1Text');
       const btn2Elem = document.getElementById('previewBtn2');
       const btn2TextElem = document.getElementById('previewBtn2Text');
-      const noticeElem = document.getElementById('previewButtonsEmptyNotice');
 
-      let hasButtons = false;
       if (btn1Label && btn1Url) {
         if (btn1Elem) {
           btn1Elem.style.display = 'inline-flex';
           btn1Elem.href = btn1Url;
         }
         if (btn1TextElem) btn1TextElem.textContent = btn1Label;
-        hasButtons = true;
       } else {
         if (btn1Elem) btn1Elem.style.display = 'none';
       }
@@ -11911,13 +11962,8 @@
           btn2Elem.href = btn2Url;
         }
         if (btn2TextElem) btn2TextElem.textContent = btn2Label;
-        hasButtons = true;
       } else {
         if (btn2Elem) btn2Elem.style.display = 'none';
-      }
-
-      if (noticeElem) {
-        noticeElem.style.display = hasButtons ? 'none' : 'block';
       }
 
       if (pTimerContainer) {
@@ -11925,21 +11971,23 @@
       }
 
       if (!enabled) {
-        if (header) header.textContent = 'ไม่มีกิจกรรม (NO ACTIVITY)';
+        if (header) header.textContent = 'No Activity';
         if (pName) pName.textContent = 'บอทไม่ได้เปิดใช้งานการแสดงสถานะ';
         if (pDetails) pDetails.textContent = '';
         if (pState) pState.textContent = '';
         if (customBubble) customBubble.style.display = 'none';
+        if (streamWatchBtn) streamWatchBtn.style.display = 'none';
         return;
       }
 
-      const typeLabels = {
-        0: 'กำลังเล่น (PLAYING A GAME)',
-        1: 'กำลังถ่ายทอดสด (STREAMING)',
-        2: 'กำลังฟัง (LISTENING TO)',
-        3: 'กำลังดู (WATCHING)',
-        4: 'สถานะกำหนดเอง (CUSTOM STATUS)',
-        5: 'กำลังแข่งขันใน (COMPETING IN)'
+      // EXACT DISCORD CLIENT HEADERS (Matching Image 1)
+      const discordTypeHeaders = {
+        0: 'Playing a game',
+        1: 'Streaming',
+        2: 'Listening to',
+        3: 'Watching',
+        4: 'Custom Status',
+        5: 'Competing in'
       };
 
       const typeIcons = {
@@ -11951,8 +11999,16 @@
         5: 'fa-solid fa-trophy'
       };
 
-      if (header) header.textContent = typeLabels[type] || 'กิจกรรม (ACTIVITY)';
-      if (pIcon) pIcon.className = typeIcons[type] || 'fa-solid fa-shield-halved';
+      if (header) header.textContent = discordTypeHeaders[type] || 'Watching';
+      if (pIcon) pIcon.className = typeIcons[type] || 'fa-solid fa-eye';
+
+      // Streaming Watch Button
+      if (type === 1 && streamUrl) {
+        if (streamWatchBtn) streamWatchBtn.style.display = 'block';
+        if (streamWatchLink) streamWatchLink.href = streamUrl;
+      } else {
+        if (streamWatchBtn) streamWatchBtn.style.display = 'none';
+      }
 
       if (type === 4) {
         // Custom Status
@@ -11963,9 +12019,12 @@
         if (pState) pState.textContent = '';
       } else {
         if (customBubble) customBubble.style.display = 'none';
-        if (pName) pName.textContent = name || 'ระบบสารวัตรนักเรียน';
-        if (pDetails) pDetails.textContent = details || '';
-        if (pState) pState.textContent = state || '';
+        // Line 1: Activity Name (Bold White text)
+        if (pName) pName.textContent = name || 'สารวัตรนักเรียน เดชะปัตตนยานุกูล';
+        // Line 2: Activity State (Subtitle)
+        if (pState) pState.textContent = state || 'พร้อมปฏิบัติหน้าที่ 🛡️';
+        // Details (for extended RPC view)
+        if (pDetails) pDetails.textContent = details || 'ดูแลความปลอดภัย & ตรวจระเบียบวินัย';
       }
     }
     
