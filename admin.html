@@ -4465,7 +4465,7 @@
               <span id="discordBotGatewayBadge" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">🟢 Gateway Online</span>
             </div>
             <h3 style="margin-top: 6px; font-size: 1.15rem; color: #1e1b4b; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> ตั้งค่า Custom Activity & Rich Presence (CustomRP Engine)
+              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> จัดการ Custom Activity & Rich Presence (รูปภาพ, ลิงก์, สถานะ)
             </h3>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -4494,7 +4494,7 @@
               <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 16px;">
                 <div>
                   <div style="font-size: 0.88rem; font-weight: 800; color: #0f172a;">เปิดใช้งาน Custom Activity</div>
-                  <div style="font-size: 0.74rem; color: #64748b;">ให้บอทแสดงสถานะกิจกรรมและเวลาใน Discord Gateway</div>
+                  <div style="font-size: 0.74rem; color: #64748b;">ให้บอทแสดงสถานะกิจกรรม รูปภาพ และปุ่มลิงก์ใน Discord Gateway</div>
                 </div>
                 <label style="position: relative; display: inline-block; width: 44px; height: 24px; margin: 0; cursor: pointer;">
                   <input type="checkbox" id="presenceEnabled" style="opacity: 0; width: 0; height: 0;" onchange="updatePresencePreview()">
@@ -4582,8 +4582,88 @@
                 <input type="url" id="presenceStreamUrl" placeholder="https://twitch.tv/... หรือ https://youtube.com/..." style="width: 100%; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;">
               </div>
 
+              <!-- ================= SECTION: LARGE & SMALL IMAGE (ASSETS) ================= -->
+              <div style="margin-bottom: 16px; border-top: 1.5px solid #e2e8f0; padding-top: 14px;">
+                <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-regular fa-image" style="color: #5865F2;"></i>
+                  <span>การแสดงรูปภาพกิจกรรม (Large & Small Image)</span>
+                </div>
+                <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 10px;">
+                  ใส่ลิงก์รูปภาพสาธารณะ (เช่น https://i.imgur.com/... หรือ Discord CDN)
+                </div>
+
+                <!-- Large Image -->
+                <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 10px;">
+                  <div>
+                    <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #475569; margin-bottom: 4px;">
+                      Large Image (URL รูปภาพใหญ่)
+                    </label>
+                    <input type="text" id="presenceLargeImage" placeholder="https://... หรือ คีย์ Art Asset" style="width: 100%; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #475569; margin-bottom: 4px;">
+                      Large Image Text (ข้อความชี้รูป)
+                    </label>
+                    <input type="text" id="presenceLargeText" placeholder="เช่น สารวัตรนักเรียน" style="width: 100%; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                  </div>
+                </div>
+
+                <!-- Small Image -->
+                <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px;">
+                  <div>
+                    <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #475569; margin-bottom: 4px;">
+                      Small Image (URL ไอคอนเล็กมุมขวา)
+                    </label>
+                    <input type="text" id="presenceSmallImage" placeholder="https://... หรือ คีย์ไอคอน" style="width: 100%; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #475569; margin-bottom: 4px;">
+                      Small Image Text (ข้อความชี้ไอคอน)
+                    </label>
+                    <input type="text" id="presenceSmallText" placeholder="เช่น ออนไลน์พร้อมรบ" style="width: 100%; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= SECTION: ACTION BUTTONS (LINKS) ================= -->
+              <div style="margin-bottom: 16px; border-top: 1.5px solid #e2e8f0; padding-top: 14px;">
+                <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-link" style="color: #5865F2;"></i>
+                  <span>ปุ่มกดลิงก์ (Custom Presence Buttons)</span>
+                </div>
+                <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 10px;">
+                  กำหนดปุ่มคลิกลิงก์บนโปรไฟล์ได้สูงสุด 2 ปุ่ม
+                </div>
+
+                <!-- Button 1 -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 8px;">
+                  <div style="font-size: 0.76rem; font-weight: 750; color: #334155; margin-bottom: 6px;">🔘 ปุ่มที่ 1 (Button 1)</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 8px;">
+                    <div>
+                      <input type="text" id="presenceButton1Label" placeholder="ข้อความปุ่ม เช่น เข้าสู่เว็บไซต์" style="width: 100%; padding: 7px 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                    </div>
+                    <div>
+                      <input type="url" id="presenceButton1Url" placeholder="ลิงก์ URL เช่น https://sarawat-system.com" style="width: 100%; padding: 7px 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Button 2 -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px;">
+                  <div style="font-size: 0.76rem; font-weight: 750; color: #334155; margin-bottom: 6px;">🔘 ปุ่มที่ 2 (Button 2)</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 8px;">
+                    <div>
+                      <input type="text" id="presenceButton2Label" placeholder="ข้อความปุ่ม เช่น สมัครสารวัตร" style="width: 100%; padding: 7px 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                    </div>
+                    <div>
+                      <input type="url" id="presenceButton2Url" placeholder="ลิงก์ URL เช่น https://sarawat-system.com/recruit" style="width: 100%; padding: 7px 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem;" oninput="updatePresencePreview()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- Timestamp Mode (Elapsed timer like CustomRP) -->
-              <div style="margin-bottom: 16px; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+              <div style="margin-bottom: 16px; border-top: 1.5px solid #e2e8f0; padding-top: 14px;">
                 <label style="display: block; font-size: 0.8rem; font-weight: 750; color: #334155; margin-bottom: 6px;">
                   การแสดงเวลานับเวลา (Timestamp / Elapsed)
                 </label>
@@ -4647,16 +4727,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Info Box: Bot Support vs CustomRP -->
-              <div style="margin-top: 16px; padding: 12px; border-radius: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; font-size: 0.74rem; color: #475569; line-height: 1.5;">
-                <div style="font-weight: 750; color: #1e293b; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                  <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
-                  <span>ฟีเจอร์ที่ Discord Bot รองรับผ่าน Gateway:</span>
-                </div>
-                <div>• ประเภทกิจกรรม (Type), ชื่อ (Name), รายละเอียด (Details), สถานะ (State), สถานะออนไลน์ (Status) และเวลานับผ่านไป (Elapsed Time) ทำงานได้ 100%</div>
-                <div style="color: #64748b; margin-top: 4px;">• <em>หมายเหตุ:</em> รูปภาพ Large/Small Image และปุ่ม URL บนหน้าโปรไฟล์ในโปรแกรม CustomRP เป็นฟีเจอร์เฉพาะของ User RPC (Game SDK) โดยสำหรับ Discord Bot จะใช้ปุ่ม Action Buttons ส่งตรงในห้องแชทแทน</div>
-              </div>
             </div>
 
             <!-- Right Column: Discord Simulation Live Preview (CustomRP Style Modal) -->
@@ -4714,9 +4784,18 @@
 
                     <!-- Main Activity Info Flex Layout -->
                     <div style="display: flex; gap: 12px; align-items: flex-start;">
-                      <!-- App Icon / Large Image Badge -->
-                      <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5 0%, #5865F2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);">
-                        <i id="previewActivityIcon" class="fa-solid fa-eye"></i>
+                      <!-- App Icon / Large Image Badge with Small Image Overlay -->
+                      <div style="position: relative; width: 56px; height: 56px; flex-shrink: 0;">
+                        <!-- Fallback Icon Box -->
+                        <div id="previewFallbackIconBox" style="width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5 0%, #5865F2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);">
+                          <i id="previewActivityIcon" class="fa-solid fa-eye"></i>
+                        </div>
+                        <!-- Large Image -->
+                        <img id="previewLargeImg" src="" alt="Large Image" style="display: none; width: 56px; height: 56px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" onerror="this.style.display='none'; document.getElementById('previewFallbackIconBox').style.display='flex';">
+                        <!-- Small Image Overlay -->
+                        <div id="previewSmallImgContainer" style="display: none; position: absolute; bottom: -4px; right: -4px; width: 22px; height: 22px; border-radius: 50%; background: #111214; padding: 2px;">
+                          <img id="previewSmallImg" src="" alt="Small Image" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        </div>
                       </div>
 
                       <!-- Text Details -->
@@ -4738,14 +4817,20 @@
                       </div>
                     </div>
 
-                    <!-- Simulated Action Button (Discord Channel Feature) -->
-                    <div style="margin-top: 14px; pt-2; border-top: 1px solid #2b2d31; padding-top: 10px;">
-                      <button type="button" style="width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 7px 12px; color: #f2f3f5; font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: default;">
+                    <!-- Action Buttons Container (Dynamic from Button 1 & 2) -->
+                    <div id="previewButtonsGroup" style="margin-top: 14px; border-top: 1px solid #2b2d31; padding-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                      <!-- Button 1 Preview -->
+                      <a id="previewBtn1" href="#" target="_blank" style="display: none; width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 7px 12px; color: #f2f3f5; font-size: 0.78rem; font-weight: 700; text-align: center; text-decoration: none; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s ease;">
                         <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
-                        <span>เข้าสู่เว็บไซต์สารวัตรนักเรียน</span>
-                      </button>
-                      <div style="font-size: 0.66rem; color: #80848e; text-align: center; margin-top: 6px;">
-                        (ปุ่ม Interactive ActionRow แสดงในช่องแชท Discord)
+                        <span id="previewBtn1Text">ปุ่มที่ 1</span>
+                      </a>
+                      <!-- Button 2 Preview -->
+                      <a id="previewBtn2" href="#" target="_blank" style="display: none; width: 100%; background: #2b2d31; border: 1px solid #383a40; border-radius: 6px; padding: 7px 12px; color: #f2f3f5; font-size: 0.78rem; font-weight: 700; text-align: center; text-decoration: none; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s ease;">
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
+                        <span id="previewBtn2Text">ปุ่มที่ 2</span>
+                      </a>
+                      <div id="previewButtonsEmptyNotice" style="font-size: 0.68rem; color: #64748b; text-align: center; padding: 4px 0;">
+                        (ใส่ชื่อและลิงก์ปุ่มที่ 1 และ 2 ด้านซ้ายเพื่อแสดงปุ่มบนโปรไฟล์)
                       </div>
                     </div>
                   </div>
@@ -11408,8 +11493,18 @@
 
 
     // ==========================================
-    // DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CONTROLLER (CustomRP Engine)
+    // DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CONTROLLER (CustomRP Engine with Image & Links)
     // ==========================================
+    function isCurrentSuperAdmin() {
+      try {
+        if (window.currentAdminUser && window.currentAdminUser.role === 'Super Admin') return true;
+        if (typeof currentAdminUser !== 'undefined' && currentAdminUser && currentAdminUser.role === 'Super Admin') return true;
+        const apiUser = (window.SarawatApi && typeof window.SarawatApi.getAuthUser === 'function') ? window.SarawatApi.getAuthUser() : null;
+        if (apiUser && apiUser.role === 'Super Admin') return true;
+      } catch (e) {}
+      return false;
+    }
+
     let presenceElapsedTimerId = null;
     let presenceTimerSeconds = 142; // default starting preview elapsed seconds
 
@@ -11418,7 +11513,7 @@
       if (!card) return;
 
       const user = (window.SarawatApi && window.SarawatApi.getAuthUser) ? window.SarawatApi.getAuthUser() : null;
-      const isSuperAdmin = (user && user.role === 'Super Admin');
+      const isSuperAdmin = isCurrentSuperAdmin();
 
       const noPermBanner = document.getElementById('discordPresenceNoPermBanner');
       const btnSave = document.getElementById('btnSaveDiscordPresence');
@@ -11485,6 +11580,55 @@
             if (!isSuperAdmin) txtStream.disabled = true;
           }
 
+          // Image & Button fields
+          const txtLargeImg = document.getElementById('presenceLargeImage');
+          if (txtLargeImg) {
+            txtLargeImg.value = cfg.large_image || '';
+            if (!isSuperAdmin) txtLargeImg.disabled = true;
+          }
+
+          const txtLargeTxt = document.getElementById('presenceLargeText');
+          if (txtLargeTxt) {
+            txtLargeTxt.value = cfg.large_text || '';
+            if (!isSuperAdmin) txtLargeTxt.disabled = true;
+          }
+
+          const txtSmallImg = document.getElementById('presenceSmallImage');
+          if (txtSmallImg) {
+            txtSmallImg.value = cfg.small_image || '';
+            if (!isSuperAdmin) txtSmallImg.disabled = true;
+          }
+
+          const txtSmallTxt = document.getElementById('presenceSmallText');
+          if (txtSmallTxt) {
+            txtSmallTxt.value = cfg.small_text || '';
+            if (!isSuperAdmin) txtSmallTxt.disabled = true;
+          }
+
+          const txtBtn1Label = document.getElementById('presenceButton1Label');
+          if (txtBtn1Label) {
+            txtBtn1Label.value = cfg.button1_label || '';
+            if (!isSuperAdmin) txtBtn1Label.disabled = true;
+          }
+
+          const txtBtn1Url = document.getElementById('presenceButton1Url');
+          if (txtBtn1Url) {
+            txtBtn1Url.value = cfg.button1_url || '';
+            if (!isSuperAdmin) txtBtn1Url.disabled = true;
+          }
+
+          const txtBtn2Label = document.getElementById('presenceButton2Label');
+          if (txtBtn2Label) {
+            txtBtn2Label.value = cfg.button2_label || '';
+            if (!isSuperAdmin) txtBtn2Label.disabled = true;
+          }
+
+          const txtBtn2Url = document.getElementById('presenceButton2Url');
+          if (txtBtn2Url) {
+            txtBtn2Url.value = cfg.button2_url || '';
+            if (!isSuperAdmin) txtBtn2Url.disabled = true;
+          }
+
           const timeRadios = document.querySelectorAll('input[name="presenceTimestampMode"]');
           timeRadios.forEach(r => {
             r.checked = (r.value === (cfg.timestamp_mode || 'uptime'));
@@ -11529,8 +11673,7 @@
     }
 
     async function saveDiscordPresenceSettings() {
-      const user = (window.SarawatApi && window.SarawatApi.getAuthUser) ? window.SarawatApi.getAuthUser() : null;
-      if (!user || user.role !== 'Super Admin') {
+      if (!isCurrentSuperAdmin()) {
         Swal.fire({
           icon: 'error',
           title: 'ไม่มีสิทธิ์ทำรายการ',
@@ -11555,6 +11698,15 @@
         const activity_details = document.getElementById('presenceActivityDetails')?.value || '';
         const activity_state = document.getElementById('presenceActivityState')?.value || '';
         const stream_url = document.getElementById('presenceStreamUrl')?.value || '';
+        const large_image = document.getElementById('presenceLargeImage')?.value || '';
+        const large_text = document.getElementById('presenceLargeText')?.value || '';
+        const small_image = document.getElementById('presenceSmallImage')?.value || '';
+        const small_text = document.getElementById('presenceSmallText')?.value || '';
+        const button1_label = document.getElementById('presenceButton1Label')?.value || '';
+        const button1_url = document.getElementById('presenceButton1Url')?.value || '';
+        const button2_label = document.getElementById('presenceButton2Label')?.value || '';
+        const button2_url = document.getElementById('presenceButton2Url')?.value || '';
+
         const timeRadio = document.querySelector('input[name="presenceTimestampMode"]:checked');
         const timestamp_mode = timeRadio ? timeRadio.value : 'uptime';
         const rotation_enabled = document.getElementById('presenceRotationEnabled')?.checked || false;
@@ -11568,6 +11720,14 @@
           activity_details,
           activity_state,
           stream_url,
+          large_image,
+          large_text,
+          small_image,
+          small_text,
+          button1_label,
+          button1_url,
+          button2_label,
+          button2_url,
           timestamp_mode,
           rotation_enabled,
           rotation_interval
@@ -11576,12 +11736,12 @@
         const res = await window.SarawatApi.updateDiscordPresence(payload);
         if (res && res.success) {
           if (window.showToast) {
-            window.showToast('อัปเดตสถานะ Discord Bot สำเร็จแล้ว', 'success');
+            window.showToast('อัปเดตสถานะ Discord Bot สำเร็จแล้ว (รูปภาพ & ลิงก์พร้อมใช้งาน)', 'success');
           } else {
             Swal.fire({
               icon: 'success',
               title: 'บันทึกสำเร็จ!',
-              text: 'อัปเดตสถานะ Custom Activity ของ Discord Bot เรียบร้อยแล้ว',
+              text: 'อัปเดตสถานะ Custom Activity (รูปภาพและปุ่มลิงก์) ของ Discord Bot เรียบร้อยแล้ว',
               timer: 2000,
               showConfirmButton: false
             });
@@ -11632,7 +11792,7 @@
 
     let lastFocusedPresenceInput = null;
     document.addEventListener('focusin', (e) => {
-      if (e.target && ['presenceActivityName', 'presenceActivityDetails', 'presenceActivityState'].includes(e.target.id)) {
+      if (e.target && ['presenceActivityName', 'presenceActivityDetails', 'presenceActivityState', 'presenceLargeImage', 'presenceLargeText', 'presenceButton1Label', 'presenceButton1Url', 'presenceButton2Label', 'presenceButton2Url'].includes(e.target.id)) {
         lastFocusedPresenceInput = e.target;
       }
     });
@@ -11670,6 +11830,14 @@
       let name = document.getElementById('presenceActivityName')?.value || 'ระบบสารวัตรนักเรียน เดชะปัตตนยานุกูล';
       let details = document.getElementById('presenceActivityDetails')?.value || 'ดูแลความปลอดภัย & ตรวจระเบียบวินัย';
       let state = document.getElementById('presenceActivityState')?.value || 'พร้อมปฏิบัติหน้าที่ 🛡️';
+      const largeImg = (document.getElementById('presenceLargeImage')?.value || '').trim();
+      const largeTxt = (document.getElementById('presenceLargeText')?.value || '').trim();
+      const smallImg = (document.getElementById('presenceSmallImage')?.value || '').trim();
+      const smallTxt = (document.getElementById('presenceSmallText')?.value || '').trim();
+      const btn1Label = (document.getElementById('presenceButton1Label')?.value || '').trim();
+      const btn1Url = (document.getElementById('presenceButton1Url')?.value || '').trim();
+      const btn2Label = (document.getElementById('presenceButton2Label')?.value || '').trim();
+      const btn2Url = (document.getElementById('presenceButton2Url')?.value || '').trim();
       const timeRadio = document.querySelector('input[name="presenceTimestampMode"]:checked');
       const timeMode = timeRadio ? timeRadio.value : 'uptime';
 
@@ -11686,9 +11854,71 @@
       const pDetails = document.getElementById('previewActivityDetails');
       const pState = document.getElementById('previewActivityState');
       const pIcon = document.getElementById('previewActivityIcon');
+      const pFallback = document.getElementById('previewFallbackIconBox');
+      const pLargeImg = document.getElementById('previewLargeImg');
+      const pSmallContainer = document.getElementById('previewSmallImgContainer');
+      const pSmallImg = document.getElementById('previewSmallImg');
       const pTimerContainer = document.getElementById('previewActivityTimerContainer');
       const customBubble = document.getElementById('previewCustomStatusBubble');
       const customText = document.getElementById('previewCustomStatusText');
+
+      // Update Large Image
+      if (largeImg && (largeImg.startsWith('http://') || largeImg.startsWith('https://'))) {
+        if (pLargeImg) {
+          pLargeImg.src = largeImg;
+          pLargeImg.style.display = 'block';
+          pLargeImg.title = largeTxt || name;
+        }
+        if (pFallback) pFallback.style.display = 'none';
+      } else {
+        if (pLargeImg) pLargeImg.style.display = 'none';
+        if (pFallback) pFallback.style.display = 'flex';
+      }
+
+      // Update Small Image
+      if (smallImg && (smallImg.startsWith('http://') || smallImg.startsWith('https://'))) {
+        if (pSmallContainer && pSmallImg) {
+          pSmallImg.src = smallImg;
+          pSmallImg.title = smallTxt || '';
+          pSmallContainer.style.display = 'block';
+        }
+      } else {
+        if (pSmallContainer) pSmallContainer.style.display = 'none';
+      }
+
+      // Update Buttons
+      const btn1Elem = document.getElementById('previewBtn1');
+      const btn1TextElem = document.getElementById('previewBtn1Text');
+      const btn2Elem = document.getElementById('previewBtn2');
+      const btn2TextElem = document.getElementById('previewBtn2Text');
+      const noticeElem = document.getElementById('previewButtonsEmptyNotice');
+
+      let hasButtons = false;
+      if (btn1Label && btn1Url) {
+        if (btn1Elem) {
+          btn1Elem.style.display = 'inline-flex';
+          btn1Elem.href = btn1Url;
+        }
+        if (btn1TextElem) btn1TextElem.textContent = btn1Label;
+        hasButtons = true;
+      } else {
+        if (btn1Elem) btn1Elem.style.display = 'none';
+      }
+
+      if (btn2Label && btn2Url) {
+        if (btn2Elem) {
+          btn2Elem.style.display = 'inline-flex';
+          btn2Elem.href = btn2Url;
+        }
+        if (btn2TextElem) btn2TextElem.textContent = btn2Label;
+        hasButtons = true;
+      } else {
+        if (btn2Elem) btn2Elem.style.display = 'none';
+      }
+
+      if (noticeElem) {
+        noticeElem.style.display = hasButtons ? 'none' : 'block';
+      }
 
       if (pTimerContainer) {
         pTimerContainer.style.display = (timeMode === 'none') ? 'none' : 'flex';
@@ -11738,6 +11968,7 @@
         if (pState) pState.textContent = state || '';
       }
     }
+    
     function initSystemMonitorCharts() {
       if (typeof Chart === 'undefined') {
         console.warn('Chart.js is not loaded yet');
@@ -11979,7 +12210,6 @@
         monitorTrafficChartInstance.options.scales.x.realtime.pause = false;
       }
       await loadSystemMonitorData(true);
-      loadDiscordPresenceSettings();
       startSystemMonitorPolling();
     }
 
@@ -12731,7 +12961,7 @@
             } else if (paneId === 'tab-settings') {
               initSettings();
             } else if (paneId === 'tab-discord') {
-              if (currentAdminUser.role !== 'Super Admin') {
+              if (!isCurrentSuperAdmin()) {
                 showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงการตั้งค่า Discord Bot ได้', 'warning');
                 const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
                 if (newsTabBtn) newsTabBtn.click();
@@ -12741,7 +12971,7 @@
                 loadDiscordPresenceSettings();
               }
             } else if (paneId === 'tab-system-monitor') {
-              if (currentAdminUser.role !== 'Super Admin') {
+              if (!isCurrentSuperAdmin()) {
                 showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงมอนิเตอร์ระบบได้', 'warning');
                 const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
                 if (newsTabBtn) newsTabBtn.click();
@@ -12749,7 +12979,7 @@
               }
               initSystemMonitorTab();
             } else if (paneId === 'tab-backup') {
-              if (currentAdminUser.role !== 'Super Admin') {
+              if (!isCurrentSuperAdmin()) {
                 showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงระบบสำรองข้อมูลได้', 'warning');
                 const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
                 if (newsTabBtn) newsTabBtn.click();
@@ -12763,6 +12993,15 @@
         });
       });
     }
+
+    window.isCurrentSuperAdmin = isCurrentSuperAdmin;
+    window.loadDiscordPresenceSettings = loadDiscordPresenceSettings;
+    window.saveDiscordPresenceSettings = saveDiscordPresenceSettings;
+    window.updatePresencePreview = updatePresencePreview;
+    window.handlePresenceTypeChange = handlePresenceTypeChange;
+    window.insertPresencePlaceholder = insertPresencePlaceholder;
+    window.togglePresenceRotationUI = togglePresenceRotationUI;
+    if (typeof testDiscordWebhookAlert === 'function') window.testDiscordWebhookAlert = testDiscordWebhookAlert;
 
     document.addEventListener('DOMContentLoaded', () => {
       try {
