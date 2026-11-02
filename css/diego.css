@@ -4483,12 +4483,12 @@ svg:not([data-lucide]),
   line-height: 1.7;
   color: var(--dg-text-primary);
   margin-bottom: 0px;
-  white-space: pre-line;
   word-break: break-word;
 }
 
 .dg-news-modal-desc p {
   margin: 0;
+  padding: 0;
   white-space: pre-line;
   word-break: break-word;
 }
@@ -4496,12 +4496,12 @@ svg:not([data-lucide]),
 .dg-news-modal-subdesc {
   font-size: 0.92rem;
   color: var(--dg-text-secondary);
-  line-height: 1.68;
+  line-height: 1.65;
   background: var(--dg-bg-subtle);
   border-left: 3px solid var(--dg-black);
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 0 8px 8px 0;
-  margin-top: 12px;
+  margin-top: 8px;
   white-space: pre-line;
   word-break: break-word;
 }

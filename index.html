@@ -2837,12 +2837,7 @@
 
         <div class="dg-news-modal-body">
           <div class="dg-news-modal-desc">
-            <p>${escapeHtml(item.desc || '')}</p>
-            ${item.detail ? `
-              <div class="dg-news-modal-subdesc">
-                ${escapeHtml(item.detail)}
-              </div>
-            ` : ''}
+            <p>${escapeHtml((item.desc || '').trim())}</p>${item.detail && item.detail.trim() ? `<div class="dg-news-modal-subdesc">${escapeHtml(item.detail.trim())}</div>` : ''}
           </div>
 
           ${hasAnyLinks ? `
