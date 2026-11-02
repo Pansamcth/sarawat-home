@@ -308,6 +308,19 @@
       return data;
     },
 
+    getDiscordEmojis: async function () {
+      const base = this.getBaseUrl() || '';
+      try {
+        const res = await fetch(`${base}/api/discord/emojis`, {
+          headers: this.getAuthHeaders({ 'Accept': 'application/json' })
+        });
+        const data = await res.json().catch(() => ({}));
+        return (data && data.success && Array.isArray(data.emojis)) ? data.emojis : [];
+      } catch (e) {
+        return [];
+      }
+    },
+
     getSettings: async function () {
       const base = this.getBaseUrl();
       if (!base) return {};
