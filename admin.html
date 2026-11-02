@@ -478,6 +478,21 @@
       width: 6px;
       height: 6px;
     }
+    
+    .mon-console-terminal-body::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .mon-console-terminal-body::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    .mon-console-terminal-body::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 99px;
+    }
+    .mon-console-terminal-body::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
     #monProvinceList::-webkit-scrollbar-track {
       background: #f1f5f9;
       border-radius: 99px;
@@ -4290,60 +4305,83 @@
 
       
       <!-- 🖥️ INTERACTIVE SERVER CONSOLE & SLASH COMMANDS (SUPER ADMIN ONLY) -->
-      <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #1e293b; background: #0b1120; color: #f8fafc; box-shadow: 0 4px 20px rgba(0,0,0,0.22); margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="display: flex; gap: 6px; align-items: center;">
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
-              <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-            </div>
-            <div>
-              <h3 style="font-size: 0.98rem; font-weight: 800; color: #f8fafc; margin: 0; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="terminal-square" style="width: 18px; height: 18px; color: #38bdf8;"></i>
-                <span>เซิร์ฟเวอร์คอนโซลแบบโต้ตอบ (Interactive Server Console)</span>
-              </h3>
-              <p style="font-size: 0.74rem; color: #94a3b8; margin: 2px 0 0 0;">รันคำสั่งแบบ Slash Commands สั่งสำรองข้อมูล ตรวจสอบสถานะ หรือควบคุมเซิร์ฟเวอร์แบบ Real-time</p>
-            </div>
+      <div class="admin-card" style="padding: 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 24px;">
+        <!-- Card Header: Matches all other admin cards -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 0.98rem; font-weight: 800; color: #0f172a; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="terminal" style="width: 18px; height: 18px; color: #2563eb;"></i>
+              <span>เซิร์ฟเวอร์คอนโซลแบบโต้ตอบ (Interactive Server Console)</span>
+            </h3>
+            <p style="font-size: 0.76rem; color: #64748b; margin: 0;">รันคำสั่งแบบ Slash Commands สั่งสำรองข้อมูล ตรวจสอบสถานะ หรือควบคุมเซิร์ฟเวอร์แบบ Real-time</p>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 0.72rem; font-weight: 750; color: #34d399; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 10px; border-radius: 99px; display: flex; align-items: center; gap: 6px;">
-              <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-              ONLINE REPL
+            <span style="font-size: 0.72rem; font-weight: 750; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 8px; display: flex; align-items: center; gap: 6px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+              ● ONLINE REPL
             </span>
-            <button type="button" onclick="clearConsoleOutput()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; font-size: 0.74rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.14)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">
-              🧹 ล้างหน้าจอ (/clear)
+            <button type="button" onclick="clearConsoleOutput()" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.74rem; font-weight: 700; padding: 4px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f1f5f9'; this.style.color='#0f172a';" onmouseout="this.style.background='#f8fafc'; this.style.color='#64748b';">
+              <i class="fa-solid fa-broom" style="margin-right: 4px;"></i>ล้างหน้าจอ (/clear)
             </button>
           </div>
         </div>
 
-        <!-- Quick Slash Command Shortcut Pills -->
-        <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center;">
-          <span style="font-size: 0.74rem; color: #64748b; font-weight: 700; margin-right: 4px;">คำสั่งด่วน:</span>
-          <button type="button" onclick="quickExecuteConsole('/backup')" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.76rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: ui-monospace, monospace; transition: all 0.15s;" onmouseover="this.style.background='rgba(16, 185, 129, 0.25)'" onmouseout="this.style.background='rgba(16, 185, 129, 0.12)'">⚡ /backup</button>
-          <button type="button" onclick="quickExecuteConsole('/status')" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 0.76rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: ui-monospace, monospace; transition: all 0.15s;" onmouseover="this.style.background='rgba(56, 189, 248, 0.25)'" onmouseout="this.style.background='rgba(56, 189, 248, 0.12)'">📊 /status</button>
-          <button type="button" onclick="quickExecuteConsole('/restart')" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-size: 0.76rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: ui-monospace, monospace; transition: all 0.15s;" onmouseover="this.style.background='rgba(245, 158, 11, 0.25)'" onmouseout="this.style.background='rgba(245, 158, 11, 0.12)'">🔄 /restart</button>
-          <button type="button" onclick="quickExecuteConsole('/stop')" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171; font-size: 0.76rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: ui-monospace, monospace; transition: all 0.15s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.25)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.12)'">🛑 /stop</button>
-          <button type="button" onclick="quickExecuteConsole('/help')" style="background: rgba(148, 163, 184, 0.12); border: 1px solid rgba(148, 163, 184, 0.35); color: #cbd5e1; font-size: 0.76rem; font-weight: 700; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: ui-monospace, monospace; transition: all 0.15s;" onmouseover="this.style.background='rgba(148, 163, 184, 0.25)'" onmouseout="this.style.background='rgba(148, 163, 184, 0.12)'">❓ /help</button>
+        <!-- Quick Slash Command Shortcut Pills: Styled matching system badges -->
+        <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;">
+          <span style="font-size: 0.76rem; color: #64748b; font-weight: 750; margin-right: 4px;">
+            <i class="fa-solid fa-bolt" style="color: #f59e0b; margin-right: 3px;"></i>คำสั่งด่วน:
+          </span>
+          <button type="button" onclick="quickExecuteConsole('/backup')" style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; font-size: 0.76rem; font-weight: 750; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#ecfdf5'">
+            <i class="fa-solid fa-database" style="color: #059669; font-size: 0.75rem;"></i>
+            <span>/backup</span>
+          </button>
+          <button type="button" onclick="quickExecuteConsole('/status')" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-size: 0.76rem; font-weight: 750; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
+            <i class="fa-solid fa-chart-simple" style="color: #2563eb; font-size: 0.75rem;"></i>
+            <span>/status</span>
+          </button>
+          <button type="button" onclick="quickExecuteConsole('/restart')" style="background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 0.76rem; font-weight: 750; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='#fffbeb'">
+            <i class="fa-solid fa-rotate" style="color: #d97706; font-size: 0.75rem;"></i>
+            <span>/restart</span>
+          </button>
+          <button type="button" onclick="quickExecuteConsole('/stop')" style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: 0.76rem; font-weight: 750; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fef2f2'">
+            <i class="fa-solid fa-power-off" style="color: #dc2626; font-size: 0.75rem;"></i>
+            <span>/stop</span>
+          </button>
+          <button type="button" onclick="quickExecuteConsole('/help')" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; font-size: 0.76rem; font-weight: 750; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
+            <i class="fa-solid fa-circle-question" style="color: #64748b; font-size: 0.75rem;"></i>
+            <span>/help</span>
+          </button>
         </div>
 
-        <!-- Scrollable Output Terminal -->
-        <div id="monConsoleOutput" style="background: #030712; border: 1px solid #1e293b; border-radius: 8px; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.81rem; line-height: 1.55; color: #e2e8f0; min-height: 190px; max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; user-select: text;">======================================================================
+        <!-- Terminal Window Box: Embedded dark macOS console -->
+        <div style="border-radius: 12px; border: 1px solid #1e293b; overflow: hidden; background: #090d16; box-shadow: 0 4px 14px rgba(15,23,42,0.08);">
+          <!-- Terminal Header Bar with Window Controls -->
+          <div style="background: #0f172a; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+              <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.72rem; color: #94a3b8; font-weight: 600; margin-left: 6px;">sarawat@backend-host: ~/console</span>
+            </div>
+            <span style="font-family: ui-monospace, monospace; font-size: 0.68rem; color: #38bdf8; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.25); padding: 2px 8px; border-radius: 4px;">NODE.JS v24 (SQLITE)</span>
+          </div>
+
+          <!-- Scrollable Output Terminal with Custom Dark Scrollbar -->
+          <div id="monConsoleOutput" class="mon-console-terminal-body" style="background: #090d16; padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.81rem; line-height: 1.6; color: #e2e8f0; min-height: 190px; max-height: 290px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; user-select: text;">======================================================================
   🚀 SARAWAT SYSTEM INTERACTIVE CONSOLE v1.0
   🌐 Engine: Node.js + SQLite (sarawat.db)
   💡 พิมพ์คำสั่ง เช่น /status, /backup, /restart หรือกดปุ่มคำสั่งด่วนด้านบน
 ======================================================================</div>
 
-        <!-- Terminal Input & Prompt Bar -->
-        <div style="display: flex; gap: 8px; margin-top: 12px;">
-          <div style="display: flex; align-items: center; flex: 1; background: #030712; border: 1px solid #334155; border-radius: 8px; padding: 0 14px; transition: border-color 0.2s;" id="monConsoleInputWrapper">
-            <span style="color: #10b981; font-family: ui-monospace, monospace; font-weight: 800; font-size: 0.88rem; margin-right: 10px; user-select: none;">sarawat&gt;</span>
-            <input type="text" id="monConsoleInput" placeholder="พิมพ์คำสั่ง เช่น /backup, /status, /help..." autocomplete="off" spellcheck="false" style="flex: 1; background: transparent; border: none; color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85rem; padding: 11px 0; outline: none;" onkeydown="handleConsoleInputKey(event)" onfocus="document.getElementById('monConsoleInputWrapper').style.borderColor='#38bdf8'" onblur="document.getElementById('monConsoleInputWrapper').style.borderColor='#334155'">
+          <!-- Terminal Input & Prompt Bar -->
+          <div style="background: #0f172a; padding: 8px 14px; border-top: 1px solid #1e293b; display: flex; align-items: center; gap: 10px;">
+            <span style="color: #10b981; font-family: ui-monospace, monospace; font-weight: 800; font-size: 0.88rem; user-select: none;">sarawat&gt;</span>
+            <input type="text" id="monConsoleInput" placeholder="พิมพ์คำสั่ง เช่น /backup, /status, /help..." autocomplete="off" spellcheck="false" style="flex: 1; background: transparent; border: none; color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.84rem; outline: none; padding: 5px 0;" onkeydown="handleConsoleInputKey(event)">
+            <button type="button" id="monConsoleSubmitBtn" onclick="submitConsoleCommand()" style="background: #2563eb; color: #ffffff; border: none; border-radius: 7px; padding: 7px 18px; font-size: 0.80rem; font-weight: 750; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif; transition: all 0.2s; white-space: nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+              <span>ส่งคำสั่ง</span>
+              <i data-lucide="send" style="width: 13px; height: 13px;"></i>
+            </button>
           </div>
-          <button type="button" id="monConsoleSubmitBtn" onclick="submitConsoleCommand()" style="background: #2563eb; color: #ffffff; border: none; border-radius: 8px; padding: 0 18px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; white-space: nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
-            <span>ส่งคำสั่ง</span>
-            <i data-lucide="send" style="width: 14px; height: 14px;"></i>
-          </button>
         </div>
       </div>
 
@@ -11936,11 +11974,11 @@
       }
 
       appendConsoleOutput(rawCmd, true);
-      appendConsoleOutput('⏳ กำลังประมวลผลคำสั่ง...');
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.7';
+        submitBtn.innerHTML = `<span>กำลังส่ง...</span> <i class="fa-solid fa-spinner fa-spin" style="font-size: 12px;"></i>`;
+        submitBtn.style.opacity = '0.8';
       }
 
       try {
@@ -11974,7 +12012,9 @@
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>ส่งคำสั่ง</span> <i data-lucide="send" style="width: 13px; height: 13px;"></i>`;
           submitBtn.style.opacity = '1';
+          if (window.lucide) lucide.createIcons();
         }
         inputEl.focus();
       }
