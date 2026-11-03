@@ -1221,6 +1221,14 @@
       return data;
     },
 
+    getRecruitmentQueueStatus: async function (ticketId) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/queue-status/${encodeURIComponent(ticketId)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ไม่สามารถตรวจสอบสถานะคิวได้');
+      return data;
+    },
+
     checkApplicantStatus: async function (studentId) {
       const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/check-status/${encodeURIComponent(studentId)}`);

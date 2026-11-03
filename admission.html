@@ -3211,11 +3211,275 @@
       await initThaiAddressData();
 
       // ==========================================
+      // 🚀 CLIENT-SIDE IMAGE COMPRESSION (แก้ Safari Load failed & ส่งเร็ว 10-20 เท่า)
+      // ==========================================
+      async function compressApplicantPhoto(file, maxDimension = 1000, quality = 0.82) {
+        if (!file || !file.type.startsWith('image/')) return file;
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onerror = () => resolve(file);
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onerror = () => resolve(file);
+            img.onload = () => {
+              let width = img.width;
+              let height = img.height;
+              if (width > maxDimension || height > maxDimension) {
+                if (width > height) {
+                  height = Math.round((height * maxDimension) / width);
+                  width = maxDimension;
+                } else {
+                  width = Math.round((width * maxDimension) / height);
+                  height = maxDimension;
+                }
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+
+              canvas.toBlob((blob) => {
+                if (!blob || blob.size >= file.size) {
+                  return resolve(file);
+                }
+                const compressedFile = new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), {
+                  type: 'image/jpeg',
+                  lastModified: Date.now()
+                });
+                resolve(compressedFile);
+              }, 'image/jpeg', quality);
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // ==========================================
+      // 🐍 SNAKE EATING APPLE ANIMATION CONTROLLER
+      // ==========================================
+      let activeSnakeAnimationId = null;
+
+      function startSnakeAnimation(canvasId) {
+        stopSnakeAnimation();
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const CELL = 10;
+        const COLS = Math.floor(W / CELL);
+        const ROWS = Math.floor(H / CELL);
+
+        let snake = [
+          { x: 5, y: 6 },
+          { x: 4, y: 6 },
+          { x: 3, y: 6 },
+          { x: 2, y: 6 }
+        ];
+        let dir = { x: 1, y: 0 };
+        const applesList = [
+          { x: 16, y: 6 },
+          { x: 16, y: 10 },
+          { x: 5, y: 10 },
+          { x: 5, y: 3 },
+          { x: 18, y: 3 },
+          { x: 10, y: 7 },
+          { x: 10, y: 2 }
+        ];
+        let appleIdx = 0;
+        let apple = { ...applesList[0] };
+        let biteScale = 1;
+        let appleScale = 1;
+        let lastStepTime = 0;
+
+        function nextApple() {
+          appleIdx = (appleIdx + 1) % applesList.length;
+          apple = { ...applesList[appleIdx] };
+          appleScale = 0;
+        }
+
+        function step() {
+          const head = snake[0];
+          let nextDir = { ...dir };
+          if (head.x < apple.x && dir.x >= 0) nextDir = { x: 1, y: 0 };
+          else if (head.x > apple.x && dir.x <= 0) nextDir = { x: -1, y: 0 };
+          else if (head.y < apple.y && dir.y >= 0) nextDir = { x: 0, y: 1 };
+          else if (head.y > apple.y && dir.y <= 0) nextDir = { x: 0, y: -1 };
+          else if (head.x !== apple.x) nextDir = { x: head.x < apple.x ? 1 : -1, y: 0 };
+          else if (head.y !== apple.y) nextDir = { x: 0, y: head.y < apple.y ? 1 : -1 };
+
+          dir = nextDir;
+          const newHead = {
+            x: (head.x + dir.x + COLS) % COLS,
+            y: (head.y + dir.y + ROWS) % ROWS
+          };
+
+          snake.unshift(newHead);
+
+          if (Math.abs(newHead.x - apple.x) <= 1 && Math.abs(newHead.y - apple.y) <= 1) {
+            biteScale = 1.35;
+            nextApple();
+          } else {
+            snake.pop();
+          }
+        }
+
+        function render() {
+          ctx.clearRect(0, 0, W, H);
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+          // Grid dots
+          ctx.fillStyle = isDark ? '#334155' : '#E2E8F0';
+          for (let x = 5; x < W; x += 10) {
+            for (let y = 5; y < H; y += 10) {
+              ctx.beginPath();
+              ctx.arc(x, y, 1, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          // Draw Apple
+          if (appleScale < 1) appleScale += 0.15;
+          const ax = apple.x * CELL + CELL / 2;
+          const ay = apple.y * CELL + CELL / 2;
+          const ar = (CELL / 2) * Math.min(appleScale, 1);
+
+          ctx.fillStyle = '#22C55E';
+          ctx.beginPath();
+          ctx.ellipse(ax + 2, ay - ar - 1, 3, 1.5, Math.PI / 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#EF4444';
+          ctx.beginPath();
+          ctx.arc(ax, ay, ar, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = 'rgba(255,255,255,0.6)';
+          ctx.beginPath();
+          ctx.arc(ax - ar / 3, ay - ar / 3, ar / 3, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Draw Snake
+          if (biteScale > 1) biteScale -= 0.05;
+
+          for (let i = snake.length - 1; i >= 0; i--) {
+            const seg = snake[i];
+            const sx = seg.x * CELL + CELL / 2;
+            const sy = seg.y * CELL + CELL / 2;
+            const isHead = i === 0;
+
+            ctx.fillStyle = isHead ? '#10B981' : '#34D399';
+            ctx.beginPath();
+            const radius = isHead ? (CELL / 2) * biteScale : (CELL / 2) * (1 - (i / snake.length) * 0.3);
+            ctx.arc(sx, sy, Math.max(radius, 2), 0, Math.PI * 2);
+            ctx.fill();
+
+            // Eyes
+            if (isHead) {
+              ctx.fillStyle = '#ffffff';
+              const eyeOffX = dir.y !== 0 ? 3 : 0;
+              const eyeOffY = dir.x !== 0 ? 3 : 0;
+              const lookX = dir.x * 2;
+              const lookY = dir.y * 2;
+
+              ctx.beginPath();
+              ctx.arc(sx + eyeOffX + lookX, sy + eyeOffY + lookY, 2, 0, Math.PI * 2);
+              ctx.arc(sx - eyeOffX + lookX, sy - eyeOffY + lookY, 2, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.fillStyle = '#0f172a';
+              ctx.beginPath();
+              ctx.arc(sx + eyeOffX + lookX * 1.3, sy + eyeOffY + lookY * 1.3, 1, 0, Math.PI * 2);
+              ctx.arc(sx - eyeOffX + lookX * 1.3, sy - eyeOffY + lookY * 1.3, 1, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+
+        function frameLoop(now) {
+          if (now - lastStepTime > 110) {
+            step();
+            lastStepTime = now;
+          }
+          render();
+          activeSnakeAnimationId = requestAnimationFrame(frameLoop);
+        }
+        activeSnakeAnimationId = requestAnimationFrame(frameLoop);
+      }
+
+      function stopSnakeAnimation() {
+        if (activeSnakeAnimationId) {
+          cancelAnimationFrame(activeSnakeAnimationId);
+          activeSnakeAnimationId = null;
+        }
+      }
+
+      function renderSnakeLoadingModal(queuePosition = 0, queueTotal = 0) {
+        if (typeof Swal === 'undefined') return;
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const isQueued = queuePosition > 0;
+
+        const html = `
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <div style="width: 220px; height: 130px; margin: 0 auto 16px auto; background: ${isDark ? '#1e293b' : '#f8fafc'}; border: 2px solid ${isDark ? '#334155' : '#e2e8f0'}; border-radius: 18px; position: relative; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);">
+              <canvas id="admissionSnakeCanvas" width="220" height="130" style="display: block; width: 100%; height: 100%;"></canvas>
+            </div>
+
+            <div id="swalQueueBadge" style="display: ${isQueued ? 'inline-flex' : 'none'}; align-items: center; gap: 6px; background: ${isDark ? '#1e3a5f' : '#eff6ff'}; color: ${isDark ? '#60a5fa' : '#2563eb'}; font-size: 0.88rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 1px solid ${isDark ? '#2563eb' : '#bfdbfe'}; margin-bottom: 10px;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #2563eb; display: inline-block;"></span>
+              <span id="swalQueueBadgeText">คิวของคุณ: ลำดับที่ ${queuePosition} ${queueTotal > 1 ? `(จาก ${queueTotal} คน)` : ''}</span>
+            </div>
+
+            <h2 id="swalLoadingTitle" style="color: ${isDark ? '#f8fafc' : '#0F172A'}; font-weight: 800; font-size: 1.45rem; margin: 0 0 8px 0; letter-spacing: -0.3px;">
+              ${isQueued ? 'กำลังรอคิวประมวลผล' : 'กำลังบันทึกข้อมูล'}
+            </h2>
+            <div id="swalLoadingSubtext" style="color: ${isDark ? '#94a3b8' : '#64748B'}; font-size: 0.95rem; line-height: 1.5; margin-bottom: 4px;">
+              ${isQueued ? 'มีผู้ยื่นใบสมัครพร้อมกันหลายท่าน ระบบกำลังจัดคิวให้อัตโนมัติ' : 'ระบบกำลังส่งข้อมูลใบสมัครของคุณ<br>กรุณารอสักครู่...'}
+            </div>
+          </div>
+        `;
+
+        Swal.fire({
+          html: html,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          customClass: { popup: 'custom-swal-popup' },
+          didOpen: () => {
+            startSnakeAnimation('admissionSnakeCanvas');
+          },
+          willClose: () => {
+            stopSnakeAnimation();
+          }
+        });
+      }
+
+      function updateQueueModal(position, total) {
+        const badge = document.getElementById('swalQueueBadge');
+        const badgeText = document.getElementById('swalQueueBadgeText');
+        const title = document.getElementById('swalLoadingTitle');
+        const subtext = document.getElementById('swalLoadingSubtext');
+        if (badge && badgeText) {
+          badge.style.display = position > 0 ? 'inline-flex' : 'none';
+          badgeText.textContent = `คิวของคุณ: ลำดับที่ ${position} ${total > 1 ? `(จาก ${total} คน)` : ''}`;
+        }
+        if (title) {
+          title.textContent = position === 0 ? 'กำลังบันทึกข้อมูล' : 'กำลังรอคิวประมวลผล';
+        }
+        if (subtext) {
+          subtext.innerHTML = position === 0 
+            ? 'ระบบกำลังบันทึกข้อมูลใบสมัครของคุณ กรุณารอสักครู่...'
+            : 'มีผู้ยื่นใบสมัครพร้อมกันหลายท่าน ระบบกำลังจัดคิวให้อัตโนมัติ';
+        }
+      }
+
+      // ==========================================
       // PHOTO UPLOAD & PREVIEW LOGIC
       // ==========================================
       btnChoosePhoto.addEventListener('click', () => applicantPhoto.click());
 
-      applicantPhoto.addEventListener('change', (e) => {
+      applicantPhoto.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
@@ -3272,7 +3536,13 @@
           return;
         }
 
-        selectedPhotoFile = file;
+        // ทำการบีบอัดรูปภาพล่วงหน้าทันที เพื่อให้ตอนกดส่งทำได้รวดเร็วทันใจ
+        try {
+          const comp = await compressApplicantPhoto(file, 1000, 0.82);
+          selectedPhotoFile = comp;
+        } catch (compErr) {
+          selectedPhotoFile = file;
+        }
         const reader = new FileReader();
         reader.onload = (evt) => {
           photoPreviewImg.src = evt.target.result;
@@ -3642,7 +3912,7 @@
       });
 
       // ==========================================
-      // STEP 2 SUBMIT APPLICATION (SI-ROSTER POPUP FLOW)
+      // STEP 2 SUBMIT APPLICATION (SNAKE ANIMATION & QUEUE)
       // ==========================================
       btnSubmitApplication.addEventListener('click', async () => {
         const chkPdpa = document.getElementById('chkPdpa');
@@ -3701,7 +3971,13 @@
         // Prepare FormData
         const formData = new FormData();
         if (selectedPhotoFile) {
-          formData.append('photo', selectedPhotoFile);
+          try {
+            // บีบอัดรูปถ่ายก่อนส่ง ลดขนาดเหลือ ~150KB เพื่อให้ส่งรวดเร็วทันที ป้องกัน Safari Load failed
+            const comp = await compressApplicantPhoto(selectedPhotoFile, 1000, 0.82);
+            formData.append('photo', comp);
+          } catch (e) {
+            formData.append('photo', selectedPhotoFile);
+          }
         }
 
         formData.append('student_id', studentId);
@@ -3730,26 +4006,9 @@
         formData.append('cf-turnstile-response', turnstileToken);
 
         // ========================================================
-        // POPUP LOADING STEP ONLY (กำลังบันทึกข้อมูล - สไตล์ SI-ROSTER)
+        // 🐍 POPUP LOADING STEP (เกมงูกินแอปเปิล + ระบบคิว)
         // ========================================================
-        if (typeof Swal !== 'undefined') {
-          Swal.fire({
-            html: `
-              <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
-                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
-                </div>
-                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
-                <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 6px;">
-                  ระบบกำลังส่งข้อมูลใบสมัครของคุณ<br>กรุณารอสักครู่...
-                </div>
-              </div>
-            `,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            customClass: { popup: 'custom-swal-popup' }
-          });
-        }
+        renderSnakeLoadingModal(0, 0);
 
         const btnTxt = document.getElementById('txtBtnSubmit');
         const origTxt = btnTxt.textContent;
@@ -3810,9 +4069,41 @@
             return;
           } else {
             res = await window.SarawatAPI.submitRecruitmentApplication(formData);
+
+            // หากเซิร์ฟเวอร์จัดเข้าคิว (Queued System)
+            if (res && res.queued && res.ticketId) {
+              updateQueueModal(res.position, res.totalInQueue);
+
+              let isDone = false;
+              let pollAttempts = 0;
+              while (!isDone && pollAttempts < 120) { // รอคิวได้สูงสุดประมาณ 2-3 นาที
+                pollAttempts++;
+                await new Promise(r => setTimeout(r, 1200));
+
+                if (typeof Swal !== 'undefined' && !Swal.isVisible()) {
+                  break; // ผู้ใช้ปิดหน้าต่างไปแล้ว
+                }
+
+                try {
+                  const qStatus = await window.SarawatAPI.getRecruitmentQueueStatus(res.ticketId);
+                  if (qStatus && qStatus.status === 'completed' && qStatus.result) {
+                    res = qStatus.result;
+                    isDone = true;
+                  } else if (qStatus && qStatus.status === 'error') {
+                    throw new Error(qStatus.error || 'เกิดข้อผิดพลาดในการประมวลผลใบสมัคร');
+                  } else if (qStatus && qStatus.status === 'processing') {
+                    updateQueueModal(0, 0);
+                  } else if (qStatus && qStatus.status === 'waiting') {
+                    updateQueueModal(qStatus.position, qStatus.totalInQueue);
+                  }
+                } catch (pollErr) {
+                  console.warn('Queue polling warning:', pollErr);
+                }
+              }
+            }
           }
 
-          if (res.success) {
+          if (res && res.success) {
             // Close loading popup
             if (typeof Swal !== 'undefined') {
               Swal.close();
@@ -3848,6 +4139,8 @@
             stepNode3.className = 'recruit-step-node completed active';
 
             window.scrollTo({ top: 250, behavior: 'smooth' });
+          } else {
+            throw new Error((res && res.error) || 'ไม่สามารถบันทึกข้อมูลใบสมัครได้');
           }
         } catch (err) {
           // ========================================================
@@ -3888,28 +4181,12 @@
         }
       });
 
-      // Helper function to preview the loading popup for testing/demo
-      window.previewLoadingPopup = function (durationMs = 3000) {
-        if (typeof Swal === 'undefined') return;
-        Swal.fire({
-          html: `
-            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-              <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
-                <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
-              </div>
-              <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
-              <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 6px;">
-                ระบบกำลังส่งข้อมูลใบสมัครของคุณ<br>กรุณารอสักครู่...
-              </div>
-            </div>
-          `,
-          showConfirmButton: false,
-          allowOutsideClick: true,
-          customClass: { popup: 'custom-swal-popup' }
-        });
+      // Helper function to preview the snake loading popup for testing/demo
+      window.previewLoadingPopup = function (durationMs = 4000, demoQueuePosition = 2, demoQueueTotal = 5) {
+        renderSnakeLoadingModal(demoQueuePosition, demoQueueTotal);
         if (durationMs > 0) {
           setTimeout(() => {
-            if (Swal.isVisible()) Swal.close();
+            if (typeof Swal !== 'undefined' && Swal.isVisible()) Swal.close();
           }, durationMs);
         }
       };
