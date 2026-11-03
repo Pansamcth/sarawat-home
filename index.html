@@ -236,7 +236,7 @@
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
   <script src="js/bridge.js"></script>
-  <script src="js/api-config.js?v=2.8.0"></script>
+  <script src="js/api-config.js?v=2.8.1"></script>
   <script src="js/page-guard.js" data-page="home"></script>
   <script src="js/skeletons.js"></script>
 
@@ -3101,7 +3101,7 @@
   // 🔗 Copy News Detail Link Helper
   // =========================================================================
   window.copyNewsDetailLink = function(id, btn) {
-    const url = window.location.origin + '/activities.html?id=' + encodeURIComponent(id);
+    const url = window.location.origin + '/activities?id=' + encodeURIComponent(id);
     function showDone() {
       if (!btn) return;
       const originalHtml = btn.innerHTML;
@@ -3639,7 +3639,7 @@
     }
 
     window.copyEventDetailLink = function(id, btn) {
-      const url = window.location.origin + '/calendar.html?id=' + encodeURIComponent(id);
+      const url = window.location.origin + '/calendar?id=' + encodeURIComponent(id);
       function showDone() {
         if (!btn) return;
         const originalHtml = btn.innerHTML;
@@ -3836,7 +3836,7 @@
               '<i data-lucide="calendar-plus" style="width: 14px; height: 14px; color: #2563eb;"></i>' +
               '<span>Google Calendar</span>' +
             '</a>' +
-            '<a href="calendar.html" class="dg-btn-sm-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill);">' +
+            '<a href="calendar" class="dg-btn-sm-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill);">' +
               '<span>เปิดหน้าปฏิทิน</span>' +
               '<i data-lucide="arrow-up-right"></i>' +
             '</a>' +

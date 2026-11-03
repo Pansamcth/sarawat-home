@@ -86,7 +86,7 @@
 
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.7.9"></script>
+  <script src="js/api-config.js?v=2.8.1"></script>
   <script src="js/page-guard.js" data-page="calendar"></script>
   <script src="js/skeletons.js"></script>
 
@@ -1792,6 +1792,17 @@
   </div>
 
   <!-- ============ JAVASCRIPT LOGIC ============ -->
+    <script>
+    // Clean Address Bar URL (strip .html if present)
+    if (window.history && window.history.replaceState) {
+      try {
+        var p = window.location.pathname || '';
+        if (p.endsWith('/calendar.html')) {
+          window.history.replaceState(null, '', '/calendar' + window.location.search + window.location.hash);
+        }
+      } catch (e) {}
+    }
+  </script>
   <script>
     // ==========================================================
     // THAI CALENDAR & DATE UTILITIES
@@ -2744,7 +2755,8 @@
             u.searchParams.delete('cat');
             u.searchParams.delete('tag');
           }
-          window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+          u.pathname = u.pathname.replace(/\.html$/i, '');
+            window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
         } catch (e) {
           console.error('Failed to update calendar category URL param:', e);
         }
@@ -2875,7 +2887,7 @@
     }
 
     window.copyEventDetailLink = function(id, btn) {
-      const url = window.location.origin + '/calendar.html?id=' + encodeURIComponent(id);
+      const url = window.location.origin + '/calendar?id=' + encodeURIComponent(id);
       function showDone() {
         if (!btn) return;
         const originalHtml = btn.innerHTML;
@@ -3050,8 +3062,9 @@
       if (updateUrl) {
         try {
           const u = new URL(window.location.href);
+          u.pathname = u.pathname.replace(/\.html$/i, '');
           u.searchParams.set('id', evt.id);
-          window.history.pushState({ modal: 'eventDetailModal', id: evt.id }, '', u.toString());
+          window.history.pushState({ modal: 'eventDetailModal', id: evt.id }, '', u.pathname + u.search + u.hash);
         } catch (e) {}
       }
       } catch (err) {
