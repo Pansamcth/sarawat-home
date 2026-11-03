@@ -3607,19 +3607,21 @@
 
     function lockBodyScroll() {
       window.__dgModalLockCount++;
-      if (window.__dgModalLockCount === 1) {
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-      }
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
     }
 
-    function unlockBodyScroll() {
+    function unlockBodyScroll(force = false) {
       if (window.__dgModalLockCount > 0) {
         window.__dgModalLockCount--;
       }
-      if (window.__dgModalLockCount === 0) {
+      const anyActive = document.querySelector('.dg-modal-backdrop.active, .pdpa-modal-backdrop.active, .modal-overlay.active');
+      if (!anyActive || force || window.__dgModalLockCount <= 0) {
+        window.__dgModalLockCount = 0;
         document.documentElement.style.overflow = '';
         document.body.style.overflow = '';
+        document.documentElement.style.position = '';
+        document.body.style.position = '';
       }
     }
 

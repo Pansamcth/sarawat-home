@@ -2188,20 +2188,21 @@
 
     function lockBodyScroll() {
       window.__dgModalLockCount++;
-      if (window.__dgModalLockCount === 1) {
-        // ล็อกการเลื่อนโดยไม่แตะ position fixed เพื่อรักษาระดับการเลื่อนเดิมไว้ 100% ไม่เด้งไปด้านบน
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-      }
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
     }
 
-    function unlockBodyScroll() {
+    function unlockBodyScroll(force = false) {
       if (window.__dgModalLockCount > 0) {
         window.__dgModalLockCount--;
       }
-      if (window.__dgModalLockCount === 0) {
+      const anyActive = document.querySelector('.dg-modal-backdrop.active, .pdpa-modal-backdrop.active, .modal-overlay.active');
+      if (!anyActive || force || window.__dgModalLockCount <= 0) {
+        window.__dgModalLockCount = 0;
         document.documentElement.style.overflow = '';
         document.body.style.overflow = '';
+        document.documentElement.style.position = '';
+        document.body.style.position = '';
       }
     }
 
@@ -2345,6 +2346,7 @@
     function openModal(id, updateUrl = true) {
       const modal = document.getElementById(id);
       if (modal) {
+        if (modal.classList.contains('active')) return;
         modal.classList.add('active');
         lockBodyScroll();
         if (id === 'feedbackModal') resetFeedbackWizard();
@@ -2374,11 +2376,23 @@
 
         // Clean up direct link query params / hash from URL
         if (window.history && window.history.replaceState) {
-          const search = window.location.search.toLowerCase();
-          const hash = window.location.hash.toLowerCase();
-          if (search.includes('feedback') || search.includes('complaint') || hash === '#feedback' || hash === '#complaint') {
-            window.history.replaceState({}, '', window.location.pathname);
-          }
+          try {
+            const u = new URL(window.location.href);
+            let changed = false;
+            ['feedback', 'complaint', 'id', 'event', 'news', 'activity', 'post'].forEach(k => {
+              if (u.searchParams.has(k)) {
+                u.searchParams.delete(k);
+                changed = true;
+              }
+            });
+            if (u.hash === '#feedback' || u.hash === '#complaint' || (u.hash && u.hash.startsWith('#news-'))) {
+              u.hash = '';
+              changed = true;
+            }
+            if (changed) {
+              window.history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + (u.hash ? u.hash : ''));
+            }
+          } catch (e) {}
         }
       }
     }
