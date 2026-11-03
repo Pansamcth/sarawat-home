@@ -147,6 +147,11 @@
       z-index: 99999 !important;
     }
 
+    .swal2-popup.custom-swal-popup,
+    .swal2-popup.custom-swal-popup * {
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
+    }
+
     .swal2-popup.custom-swal-popup {
       background: #ffffff !important;
       border: none !important;
@@ -156,7 +161,7 @@
       margin: 0 1rem !important;
       width: 92% !important;
       max-width: 420px !important;
-      font-family: 'Kanit', sans-serif !important;
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
     }
 
     .custom-swal-btn {
@@ -3422,7 +3427,7 @@
         const isQueued = queuePosition > 0;
 
         const html = `
-          <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <div style="display: flex; flex-direction: column; align-items: center; text-align: center; font-family: 'Kanit', sans-serif !important;">
             <div style="width: 220px; height: 130px; margin: 0 auto 16px auto; background: ${isDark ? '#1e293b' : '#f8fafc'}; border: 2px solid ${isDark ? '#334155' : '#e2e8f0'}; border-radius: 18px; position: relative; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);">
               <canvas id="admissionSnakeCanvas" width="220" height="130" style="display: block; width: 100%; height: 100%;"></canvas>
             </div>
