@@ -3686,7 +3686,7 @@
         }
         if (errTurnstile) errTurnstile.style.display = 'none';
 
-        // ดึงข้อมูลสำหรับสรุปและยืนยัน
+        // ดึงข้อมูลผู้สมัคร
         const studentId = document.getElementById('inpStudentId').value.trim();
         const prefix = document.getElementById('selPrefix').value;
         const firstName = document.getElementById('inpFirstName').value.trim();
@@ -3697,50 +3697,6 @@
         const phone = document.getElementById('inpPhone').value.trim().replace(/[-\s]/g, '');
         const gpax = document.getElementById('inpGpax').value.trim();
         const club = document.getElementById('selClub').value;
-
-        // ========================================================
-        // 1. POPUP CONFIRMATION STEP (ยืนยันการส่งใบสมัคร - สไตล์ SI-ROSTER)
-        // ========================================================
-        if (typeof Swal !== 'undefined') {
-          const confirmResult = await Swal.fire({
-            html: `
-              <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #DBEAFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(59, 130, 246, 0.22);">
-                  <i class="fa-solid fa-file-signature" style="font-size: 34px; color: #3B82F6;"></i>
-                </div>
-                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">${isEditingMode ? 'ยืนยันการแก้ไขข้อมูล' : 'ยืนยันการส่งใบสมัคร'}</h2>
-                <div style="color: #64748B; font-size: 0.95rem; line-height: 1.55; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
-                  <div style="margin-bottom: 4px; font-size: 0.85rem; color: #64748B;">ระบบกำลังจะบันทึกใบสมัครของ</div>
-                  <div style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; line-height: 1.2;">${fullName}</div>
-                  <div style="font-size: 0.92rem; color: #334155; margin-bottom: 4px;"><strong>รหัสนักเรียน:</strong> <span style="color: #0F172A; font-weight: 700;">${studentId}</span> (ม.${grade}/${classroom})</div>
-                  <div style="font-size: 0.92rem; color: #334155; margin-bottom: 4px;"><strong>สายงาน/ฝ่ายที่สมัคร:</strong> <strong style="color: #2563EB; font-weight: 700;">${club}</strong></div>
-                  <div style="font-size: 0.92rem; color: #334155; margin-bottom: 4px;"><strong>เบอร์โทรศัพท์:</strong> ${phone}</div>
-                  <div style="font-size: 0.92rem; color: #334155;"><strong>เกรดเฉลี่ย (GPAX):</strong> ${gpax}</div>
-                  <div style="font-size: 0.82rem; color: #94A3B8; border-top: 1px dashed #CBD5E1; padding-top: 6px; margin-top: 8px;">
-                    กรุณาตรวจสอบข้อมูลให้ถูกต้องครบถ้วนก่อนกดยืนยัน
-                  </div>
-                </div>
-              </div>
-            `,
-            showConfirmButton: true,
-            showCancelButton: true,
-            confirmButtonColor: '#0F172A',
-            cancelButtonColor: '#F1F5F9',
-            confirmButtonText: isEditingMode ? 'ยืนยันการแก้ไข' : 'ยืนยันการส่งใบสมัคร',
-            cancelButtonText: '<span style="color: #64748B;">ยกเลิก</span>',
-            reverseButtons: true,
-            customClass: {
-              popup: 'custom-swal-popup',
-              confirmButton: 'custom-swal-btn',
-              cancelButton: 'custom-swal-btn'
-            },
-            buttonsStyling: true
-          });
-
-          if (!confirmResult.isConfirmed) {
-            return;
-          }
-        }
 
         // Prepare FormData
         const formData = new FormData();
@@ -3774,7 +3730,7 @@
         formData.append('cf-turnstile-response', turnstileToken);
 
         // ========================================================
-        // 2. POPUP LOADING STEP (กำลังบันทึกข้อมูล - สไตล์ SI-ROSTER)
+        // POPUP LOADING STEP ONLY (กำลังบันทึกข้อมูล - สไตล์ SI-ROSTER)
         // ========================================================
         if (typeof Swal !== 'undefined') {
           Swal.fire({
@@ -3806,38 +3762,13 @@
             const currentEditingId = editingStudentId;
             res = await window.SarawatAPI.submitApplicantCorrection(currentEditingId, formData);
 
-            // Audio & Time
-            if (window.RosterAudio) window.RosterAudio.playSuccess();
-            const currentTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const currentDate = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
-
+            // Close loading popup
             if (typeof Swal !== 'undefined') {
-              await Swal.fire({
-                html: `
-                  <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
-                      <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
-                    </div>
-                    <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">แก้ไขข้อมูลเรียบร้อยแล้ว</h2>
-                    <div style="color: #64748B; font-size: 0.9rem; line-height: 1.6; text-align: left; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; margin-bottom: 10px;">
-                      <div style="margin-bottom: 4px;"><strong>ชื่อผู้สมัคร:</strong> <span style="color: #1E293B; font-weight: 600;">${fullName}</span> (รหัส ${currentEditingId})</div>
-                      <div style="margin-bottom: 4px;"><strong>ระดับชั้น:</strong> <span style="color: #1E293B; font-weight: 600;">ม.${grade}/${classroom}</span></div>
-                      <div style="margin-bottom: 4px;"><strong>สายงานที่เลือก:</strong> <span style="color: #10B981; font-weight: 700;">${club}</span></div>
-                      <div style="margin-bottom: 4px;"><strong>สถานะใหม่:</strong> <span style="color: #2563EB; font-weight: 700;">รอการตรวจสอบอีกครั้ง (Reviewing)</span></div>
-                      <div><strong>เวลาที่บันทึก:</strong> <span style="color: #10B981; font-weight: 700;">${currentDate} ${currentTime} น.</span></div>
-                    </div>
-                    <div style="color: #EF4444; font-size: 0.85rem; margin-top: 5px; font-weight: 500;">
-                      <i class="fa-solid fa-camera" style="margin-right: 5px;"></i> หมายเหตุ: กรุณาแคปหน้าจอนี้ไว้เพื่อเป็นหลักฐาน
-                    </div>
-                  </div>
-                `,
-                showConfirmButton: true,
-                confirmButtonColor: '#0F172A',
-                confirmButtonText: 'ตกลง',
-                customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' },
-                buttonsStyling: true
-              });
+              Swal.close();
             }
+
+            // Audio & Feedback
+            if (window.RosterAudio) window.RosterAudio.playSuccess();
 
             isEditingMode = false;
             editingStudentId = null;
@@ -3882,41 +3813,13 @@
           }
 
           if (res.success) {
-            // Audio & Time
-            if (window.RosterAudio) window.RosterAudio.playSuccess();
-            const currentTime = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const currentDate = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
-
-            // ========================================================
-            // 3. POPUP SUCCESS STEP (ส่งใบสมัครเรียบร้อยแล้ว - สไตล์ SI-ROSTER)
-            // ========================================================
+            // Close loading popup
             if (typeof Swal !== 'undefined') {
-              await Swal.fire({
-                html: `
-                  <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
-                      <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
-                    </div>
-                    <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ส่งใบสมัครเรียบร้อยแล้ว</h2>
-                    <div style="color: #64748B; font-size: 0.9rem; line-height: 1.6; text-align: left; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; width: 100%; box-sizing: border-box; margin-bottom: 10px;">
-                      ${res.applicationCode ? `<div style="margin-bottom: 5px;"><strong>รหัสอ้างอิง:</strong> <span style="color: #2563EB; font-weight: 800; font-size: 1.05rem; letter-spacing: 0.5px;">${res.applicationCode}</span></div>` : ''}
-                      <div style="margin-bottom: 4px;"><strong>ชื่อผู้สมัคร:</strong> <span style="color: #1E293B; font-weight: 600;">${res.applicantName || fullName}</span> (รหัส ${res.studentId || studentId})</div>
-                      <div style="margin-bottom: 4px;"><strong>ระดับชั้น:</strong> <span style="color: #1E293B; font-weight: 600;">ม.${grade}/${classroom}</span></div>
-                      <div style="margin-bottom: 4px;"><strong>สายงานที่เลือก:</strong> <span style="color: #10B981; font-weight: 700;">${club}</span></div>
-                      <div><strong>เวลาที่ส่ง:</strong> <span style="color: #10B981; font-weight: 700;">${currentDate} ${currentTime} น.</span></div>
-                    </div>
-                    <div style="color: #EF4444; font-size: 0.85rem; margin-top: 5px; font-weight: 500;">
-                      <i class="fa-solid fa-camera" style="margin-right: 5px;"></i> หมายเหตุ: กรุณาแคปหน้าจอนี้ไว้เพื่อเป็นหลักฐาน
-                    </div>
-                  </div>
-                `,
-                showConfirmButton: true,
-                confirmButtonColor: '#0F172A',
-                confirmButtonText: 'ตกลง',
-                customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' },
-                buttonsStyling: true
-              });
+              Swal.close();
             }
+
+            // Audio Feedback
+            if (window.RosterAudio) window.RosterAudio.playSuccess();
 
             // Populate Step 3
             document.getElementById('successRefCode').textContent = res.applicationCode;
@@ -3948,7 +3851,7 @@
           }
         } catch (err) {
           // ========================================================
-          // 4. POPUP ERROR STEP (เกิดข้อผิดพลาด - สไตล์ SI-ROSTER)
+          // POPUP ERROR STEP (เกิดข้อผิดพลาด - สไตล์ SI-ROSTER)
           // ========================================================
           if (window.RosterAudio) window.RosterAudio.playError();
           if (typeof turnstile !== 'undefined' && turnstileWidgetId !== null) {
@@ -3984,6 +3887,32 @@
           btnSubmitApplication.disabled = false;
         }
       });
+
+      // Helper function to preview the loading popup for testing/demo
+      window.previewLoadingPopup = function (durationMs = 3000) {
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+          html: `
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+              <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
+              </div>
+              <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังบันทึกข้อมูล</h2>
+              <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 6px;">
+                ระบบกำลังส่งข้อมูลใบสมัครของคุณ<br>กรุณารอสักครู่...
+              </div>
+            </div>
+          `,
+          showConfirmButton: false,
+          allowOutsideClick: true,
+          customClass: { popup: 'custom-swal-popup' }
+        });
+        if (durationMs > 0) {
+          setTimeout(() => {
+            if (Swal.isVisible()) Swal.close();
+          }, durationMs);
+        }
+      };
 
       // Step 3 button to track status
       btnGoTrackStatus.addEventListener('click', () => {
