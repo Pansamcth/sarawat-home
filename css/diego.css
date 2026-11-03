@@ -10464,3 +10464,38 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
 [data-theme="dark"] .dg-news-card.dg-news-card-no-cover .dg-news-card-desc {
   color: #94a3b8 !important;
 }
+
+
+/* Auto-Linkified URLs in Event / Activity Descriptions */
+.dg-auto-link {
+  color: #2563eb !important;
+  font-weight: 700 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1.5px !important;
+  text-underline-offset: 3px !important;
+  transition: color 0.15s ease, opacity 0.15s ease;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  display: inline;
+  cursor: pointer !important;
+}
+
+.dg-auto-link:hover {
+  color: #1d4ed8 !important;
+  opacity: 0.88;
+}
+
+.dg-auto-link svg {
+  display: inline-block;
+  vertical-align: -1px;
+  margin-left: 3px;
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .dg-auto-link {
+  color: #60a5fa !important;
+}
+
+[data-theme="dark"] .dg-auto-link:hover {
+  color: #93c5fd !important;
+}

@@ -1529,5 +1529,41 @@
     } catch (err) {
       // Non-blocking
     }
+
+  // =========================================================================
+  // 🔗 Auto-Linkify Helper (แปลง URL ในข้อความให้อยู่ในรูป <a> ที่กดได้อัตโนมัติ)
+  // =========================================================================
+  const SVG_EXT_LINK = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align: -1px; margin-left: 3px; opacity: 0.85;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>';
+
+  window.linkifyText = function(text) {
+    if (!text) return '';
+    const str = String(text);
+    const escaped = str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    const urlRegex = /(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi;
+
+    return escaped.replace(urlRegex, function(matched) {
+      let url = matched;
+      let trailing = '';
+      const punctuationMatch = url.match(/[.,;:)]}>]+$/);
+      if (punctuationMatch) {
+        trailing = punctuationMatch[0];
+        url = url.slice(0, -trailing.length);
+      }
+
+      const href = url.startsWith('www.') ? 'https://' + url : url;
+      if (!/^https?:\/\//i.test(href)) {
+        return matched;
+      }
+
+      return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" class="dg-auto-link" onclick="event.stopPropagation();">' + url + SVG_EXT_LINK + '</a>' + trailing;
+    });
+  };
+
   })();
 })();

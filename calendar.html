@@ -1963,6 +1963,15 @@
       return trimmed;
     }
 
+
+    function linkifyText(text) {
+      if (typeof window.linkifyText === 'function') {
+        return window.linkifyText(text);
+      }
+      if (!text) return '';
+      return escapeHtml(text);
+    }
+
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
@@ -2512,7 +2521,7 @@
         const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
         const locHtml = evt.location ? '<span class="dg-event-meta-loc"><i data-lucide="map-pin" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '';
         const audienceHtml = evt.audience ? '<span class="dg-event-meta-audience"><i data-lucide="users" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '';
-        const descHtml = evt.desc ? '<p class="dg-event-desc">' + escapeHtml(evt.desc) + '</p>' : '';
+        const descHtml = evt.desc ? '<p class="dg-event-desc">' + linkifyText(evt.desc) + '</p>' : '';
 
         return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
           '<div class="dg-event-date-box' + (dateInfo && dateInfo.isRange ? ' is-range' : '') + '">' +
@@ -2898,8 +2907,8 @@
             '</h4>' +
           '</div>' +
           (hasDesc ?
-            '<div style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 18px; font-size: 0.93rem; color: var(--dg-text-primary); line-height: 1.75; white-space: pre-line; word-break: break-word;">' +
-              escapeHtml(evt.desc) +
+            '<div style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 18px; font-size: 0.93rem; color: var(--dg-text-primary); line-height: 1.75; white-space: pre-line; overflow-wrap: anywhere; word-break: break-word;">' +
+              linkifyText(evt.desc) +
             '</div>'
           :
             '<div style="background: var(--dg-bg); border: 1.5px dashed var(--dg-border); border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; color: var(--dg-text-muted);">' +

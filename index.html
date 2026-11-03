@@ -3081,6 +3081,15 @@
       openModal('newsDetailModal');
     }
 
+
+    function linkifyText(text) {
+      if (typeof window.linkifyText === 'function') {
+        return window.linkifyText(text);
+      }
+      if (!text) return '';
+      return escapeHtml(text);
+    }
+
     function escapeHtml(text) {
       if (!text) return '';
       return String(text)
@@ -3700,8 +3709,8 @@
             '</h4>' +
           '</div>' +
           (hasDesc ?
-            '<div style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 18px; font-size: 0.93rem; color: var(--dg-text-primary); line-height: 1.75; white-space: pre-line; word-break: break-word;">' +
-              escapeHtml(evt.desc) +
+            '<div style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 18px; font-size: 0.93rem; color: var(--dg-text-primary); line-height: 1.75; white-space: pre-line; overflow-wrap: anywhere; word-break: break-word;">' +
+              linkifyText(evt.desc) +
             '</div>'
           :
             '<div style="background: var(--dg-bg); border: 1.5px dashed var(--dg-border); border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; color: var(--dg-text-muted);">' +
@@ -3928,7 +3937,7 @@
 
           const descHtml = evt.desc ? `
             <p class="dg-event-desc">
-              ${escapeHtml(evt.desc)}
+              ${linkifyText(evt.desc)}
             </p>
           ` : '';
 
