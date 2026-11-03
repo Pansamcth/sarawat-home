@@ -86,7 +86,7 @@
 
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
-  <script src="js/api-config.js?v=2.7.8"></script>
+  <script src="js/api-config.js?v=2.7.9"></script>
   <script src="js/page-guard.js" data-page="calendar"></script>
   <script src="js/skeletons.js"></script>
 
@@ -1974,11 +1974,48 @@
 
 
     function linkifyText(text) {
-      if (typeof window.linkifyText === 'function') {
-        return window.linkifyText(text);
-      }
       if (!text) return '';
-      return escapeHtml(text);
+      // หลีกเลี่ยงปัญหา function hoisting ชนกับ window.linkifyText
+      if (typeof window.SarawatLinkify === 'function') {
+        try {
+          return window.SarawatLinkify(text);
+        } catch (e) {
+          console.warn('[calendar linkifyText] SarawatLinkify error:', e);
+        }
+      }
+      if (window.SarawatApi && typeof window.SarawatApi.linkify === 'function') {
+        try {
+          return window.SarawatApi.linkify(text);
+        } catch (e) {
+          console.warn('[calendar linkifyText] SarawatApi.linkify error:', e);
+        }
+      }
+      if (typeof window.linkifyText === 'function' && window.linkifyText !== linkifyText) {
+        try {
+          return window.linkifyText(text);
+        } catch (e) {
+          console.warn('[calendar linkifyText] window.linkifyText error:', e);
+        }
+      }
+      // Fallback ปลอดภัยในตัว ไม่มีการเรียกซ้ำวนลูป 100%
+      try {
+        const escaped = escapeHtml(text);
+        const SVG_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align: -1px; margin-left: 3px; opacity: 0.85;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>';
+        return escaped.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi, function(matched) {
+          let url = matched;
+          let trailing = '';
+          const m = url.match(/[.,;:)\x5D\x7D>]+$/);
+          if (m) {
+            trailing = m[0];
+            url = url.slice(0, -trailing.length);
+          }
+          const href = url.startsWith('www.') ? 'https://' + url : url;
+          if (!/^https?:\/\//i.test(href)) return matched;
+          return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" class="dg-auto-link" onclick="event.stopPropagation();">' + url + SVG_ICON + '</a>' + trailing;
+        });
+      } catch (err) {
+        return escapeHtml(text);
+      }
     }
 
     function escapeHtml(str) {
@@ -2822,6 +2859,7 @@
     };
 
     function openEventDetailModal(id, updateUrl = true) {
+      try {
       const evt = calendarEventsCache.find(e =>
         String(e.id) === String(id) ||
         String(e.legacyId || '') === String(id) ||
@@ -2965,6 +3003,9 @@
           u.searchParams.set('id', evt.id);
           window.history.pushState({ modal: 'eventDetailModal', id: evt.id }, '', u.toString());
         } catch (e) {}
+      }
+      } catch (err) {
+        console.error('[calendar] openEventDetailModal error:', err);
       }
     }
 
