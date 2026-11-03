@@ -1,13 +1,12 @@
 /**
  * In-App Browser Resolver
  * =========================================================================
- * ตรวจจับและจัดการการเข้าชมเว็บผ่าน In-App Browser (LINE, Facebook, Instagram,
- * Messenger, Twitter/X, TikTok, WeChat และ WebViews):
- * - Android: เด้งเปิดเบราว์เซอร์หลักของระบบ (Default Browser) ทันทีอัตโนมัติ
- *   ผ่าน Android Intent URL Scheme
- * - iOS: หากเป็นแอป LINE จะเด้งเปิด Safari ผ่าน openExternalBrowser=1 ทันที
- *   ส่วนแอปอื่นๆ บน iOS (FB, IG ฯลฯ) ที่ระบบปฏิบัติการไม่อนุญาตให้สั่งเด้งภายนอก
- *   จะอนุญาตให้เข้าใช้งานเว็บได้ตามปกติ โดยไม่บล็อกและไม่ขึ้นกล่องแจ้งเตือนใดๆ
+ * - iPhone / iPad (iOS): ไม่บังคับไปเบราว์เซอร์เริ่มต้น อนุญาตให้เปิดใช้งาน
+ *   ภายใน In-App Browser ได้ตามปกติโดยสมบูรณ์ ไม่บล็อก ไม่ขึ้นแจ้งเตือนใดๆ
+ * - Android: บังคับเด้งเปิดเบราว์เซอร์หลักของเครื่อง (Default Browser) ทันที
+ *   ผ่าน Intent (หรือ openExternalBrowser=1 สำหรับ LINE)
+ * - ระบบลงหน้าที่ (SI-ROSTER): ข้ามการทำงานของไฟล์นี้ เพื่อให้ใช้ระบบเด้งแบบเดิม
+ *   (SI-ROSTER/js/line-browser-guard.js) จัดการตามรูปแบบเฉพาะของระบบลงเวลา
  * =========================================================================
  */
 (function () {
@@ -15,16 +14,34 @@
 
   if (typeof window === 'undefined' || !window.location || !navigator) return;
 
-  // ป้องกันการทำงานซ้ำซ้อนหากโหลดหลายสคริปต์
+  // ป้องกันการทำงานซ้ำซ้อน
   if (window.__DG_INAPP_RESOLVER_LOADED__) return;
   window.__DG_INAPP_RESOLVER_LOADED__ = true;
 
-  function getDetectionInfo() {
+  function resolveInAppNavigation() {
+    var path = (window.location.pathname || '').toLowerCase();
+    var host = (window.location.hostname || '').toLowerCase();
+
+    // ระบบลงหน้าที่ (SI-ROSTER) ใช้ระบบเด้งแบบเดิม (line-browser-guard.js)
+    if (path.includes('/si-roster') || path.includes('/roster') || host.startsWith('roster.') || host.startsWith('rosters.')) {
+      return;
+    }
+
     var ua = navigator.userAgent || navigator.vendor || window.opera || '';
     var search = window.location.search || '';
 
     var isAndroid = /Android/i.test(ua) || search.indexOf('test_android=1') !== -1;
     var isIOS = /iPhone|iPad|iPod/i.test(ua) || search.indexOf('test_ios=1') !== -1;
+
+    // ตระกูล iPhone / iPad: ไม่บังคับไปเบราว์เซอร์เริ่มต้นแล้ว ให้ใช้งานในแอปได้ตามปกติ
+    if (isIOS) {
+      return;
+    }
+
+    // เฉพาะ Android: บังคับเปิดเบราว์เซอร์หลักของเครื่อง
+    if (!isAndroid) {
+      return;
+    }
 
     var isLine = /Line\//i.test(ua) || /LineApp/i.test(ua) || /LineClient/i.test(ua) || search.indexOf('test_line=1') !== -1;
     var isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBIOS/i.test(ua) || search.indexOf('test_fb=1') !== -1;
@@ -33,27 +50,10 @@
     var isTwitter = /Twitter|X\//i.test(ua) || search.indexOf('test_twitter=1') !== -1;
     var isTikTok = /musical_ly|ByteLocale|TikTok/i.test(ua) || search.indexOf('test_tiktok=1') !== -1;
     var isMicroMessenger = /MicroMessenger/i.test(ua);
-    var isGenericWebView = (isAndroid && (/wv/i.test(ua) || /Version\/[0-9.]+\s+Chrome/i.test(ua) || /Build\/.+;\s+wv\)/i.test(ua))) || search.indexOf('test_inapp=1') !== -1;
+    var isGenericWebView = /wv/i.test(ua) || /Version\/[0-9.]+\s+Chrome/i.test(ua) || /Build\/.+;\s+wv\)/i.test(ua) || search.indexOf('test_inapp=1') !== -1;
 
     var isInApp = isLine || isFacebook || isInstagram || isMessenger || isTwitter || isTikTok || isMicroMessenger || isGenericWebView;
-
-    return {
-      isInApp: isInApp,
-      isAndroid: isAndroid,
-      isIOS: isIOS,
-      isLine: isLine,
-      isFacebook: isFacebook,
-      isInstagram: isInstagram,
-      isMessenger: isMessenger,
-      isTwitter: isTwitter,
-      isTikTok: isTikTok,
-      isGenericWebView: isGenericWebView
-    };
-  }
-
-  function resolveInAppNavigation() {
-    var info = getDetectionInfo();
-    if (!info.isInApp) return;
+    if (!isInApp) return;
 
     // ป้องกัน Redirect Loop ด้วย sessionStorage (debounce 15 วินาที)
     try {
@@ -65,8 +65,8 @@
 
     var currentHref = window.location.href;
 
-    // 1. LINE (ทั้งบน iOS และ Android รองรับ openExternalBrowser=1 อย่างเป็นทางการ)
-    if (info.isLine) {
+    // 1. Android LINE: ส่งคำสั่งเปิดเบราว์เซอร์หลักผ่าน openExternalBrowser=1
+    if (isLine) {
       if (!/[?&]openExternalBrowser=1\b/i.test(window.location.search)) {
         try {
           sessionStorage.setItem('dg_inapp_redir_ts', String(Date.now()));
@@ -76,39 +76,20 @@
         window.location.replace(currentHref + sep + 'openExternalBrowser=1');
         return;
       }
-      return;
     }
 
-    // 2. Android: เด้งเปิดเบราว์เซอร์หลักของเครื่อง (Default Browser) ทันทีผ่าน Intent
-    if (info.isAndroid) {
-      try {
-        sessionStorage.setItem('dg_inapp_redir_ts', String(Date.now()));
-      } catch (e) {}
+    // 2. Android In-App อื่นๆ (Facebook, Instagram, TikTok, WebViews ฯลฯ): เด้งเปิด Default Browser ทันทีผ่าน Intent
+    try {
+      sessionStorage.setItem('dg_inapp_redir_ts', String(Date.now()));
+    } catch (e) {}
 
-      var rawTarget = window.location.host + window.location.pathname + window.location.search + window.location.hash;
-      var scheme = (window.location.protocol || 'https:').replace(':', '') || 'https';
-      var intentUrl = 'intent://' + rawTarget + '#Intent;scheme=' + scheme + ';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end;';
+    var rawTarget = window.location.host + window.location.pathname + window.location.search + window.location.hash;
+    var scheme = (window.location.protocol || 'https:').replace(':', '') || 'https';
+    var intentUrl = 'intent://' + rawTarget + '#Intent;scheme=' + scheme + ';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end;';
 
-      window.location.replace(intentUrl);
-      return;
-    }
-
-    // 3. iOS สำหรับแอปอื่นๆ (เช่น Facebook, Instagram, Twitter, TikTok):
-    // ไม่บล็อก ไม่ขึ้นแจ้งเตือน ปล่อยให้ใช้งานภายใน In-App Browser ได้ตามปกติ
+    window.location.replace(intentUrl);
   }
 
-  // เรียกทำงานทันทีเพื่อความรวดเร็วก่อนที่ DOM จะเรนเดอร์
+  // รันตรวจสอบทันที
   resolveInAppNavigation();
-
-  // Export functions สำหรับใช้งานเพิ่มเติมหรือตรวจสอบย้อนหลัง
-  window.dgInAppInfo = getDetectionInfo;
-  window.checkInAppBrowser = function () {
-    var info = getDetectionInfo();
-    return { detected: info.isInApp, info: info };
-  };
-  window.checkLineInAppBrowser = function () {
-    return getDetectionInfo().isLine;
-  };
-  window.showLineBrowserBlocker = function () {};
-  window.showInAppBrowserBlocker = function () {};
 })();
