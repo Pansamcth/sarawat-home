@@ -1,5 +1,67 @@
 /**
  * =========================================================================
+ * 📱 IN-APP BROWSER RESOLVER (ตรวจจับและจัดการเบราว์เซอร์ในแอปอัตโนมัติ)
+ * =========================================================================
+ * - Android: เด้งเปิดเบราว์เซอร์เริ่มต้นของเครื่อง (Default Browser) ทันทีอัตโนมัติ
+ * - iOS: ถ้าเป็น LINE จะเด้งเปิด Safari ผ่าน ?openExternalBrowser=1 ทันที
+ *   ถ้าเป็นแอปอื่น (FB, IG ฯลฯ) อนุญาตให้เปิดใช้งานได้ตามปกติ ไม่บล็อก ไม่ขึ้น Modal
+ */
+(function () {
+  'use strict';
+  if (typeof window === 'undefined' || !window.location || !navigator) return;
+  if (window.__DG_INAPP_RESOLVER_LOADED__) return;
+  window.__DG_INAPP_RESOLVER_LOADED__ = true;
+
+  try {
+    var ua = navigator.userAgent || navigator.vendor || window.opera || '';
+    var search = window.location.search || '';
+
+    var isAndroid = /Android/i.test(ua) || search.indexOf('test_android=1') !== -1;
+    var isIOS = /iPhone|iPad|iPod/i.test(ua) || search.indexOf('test_ios=1') !== -1;
+
+    var isLine = /Line\//i.test(ua) || /LineApp/i.test(ua) || /LineClient/i.test(ua) || search.indexOf('test_line=1') !== -1;
+    var isFacebook = /FBAN|FBAV|FB_IAB|FB4A|FBIOS/i.test(ua) || search.indexOf('test_fb=1') !== -1;
+    var isInstagram = /Instagram/i.test(ua) || search.indexOf('test_ig=1') !== -1;
+    var isMessenger = /Messenger/i.test(ua) || /FB_IAB\/MESSENGER/i.test(ua) || /FBAN\/MessengerLite/i.test(ua) || /FBAN\/Orca/i.test(ua) || search.indexOf('test_messenger=1') !== -1;
+    var isTwitter = /Twitter|X\//i.test(ua) || search.indexOf('test_twitter=1') !== -1;
+    var isTikTok = /musical_ly|ByteLocale|TikTok/i.test(ua) || search.indexOf('test_tiktok=1') !== -1;
+    var isMicroMessenger = /MicroMessenger/i.test(ua);
+    var isGenericWebView = (isAndroid && (/wv/i.test(ua) || /Version\/[0-9.]+\s+Chrome/i.test(ua) || /Build\/.+;\s+wv\)/i.test(ua))) || search.indexOf('test_inapp=1') !== -1;
+
+    var isInApp = isLine || isFacebook || isInstagram || isMessenger || isTwitter || isTikTok || isMicroMessenger || isGenericWebView;
+    if (!isInApp) return;
+
+    var lastRedir = sessionStorage.getItem('dg_inapp_redir_ts');
+    if (lastRedir && (Date.now() - Number(lastRedir)) < 15000) return;
+
+    var currentHref = window.location.href;
+
+    // 1. LINE บน iOS และ Android
+    if (isLine) {
+      if (!/[?&]openExternalBrowser=1\b/i.test(window.location.search)) {
+        sessionStorage.setItem('dg_inapp_redir_ts', String(Date.now()));
+        var sep = currentHref.indexOf('?') !== -1 ? '&' : '?';
+        window.location.replace(currentHref + sep + 'openExternalBrowser=1');
+      }
+      return;
+    }
+
+    // 2. Android: เด้งเปิด Default Browser ทันทีผ่าน Intent
+    if (isAndroid) {
+      sessionStorage.setItem('dg_inapp_redir_ts', String(Date.now()));
+      var rawTarget = window.location.host + window.location.pathname + window.location.search + window.location.hash;
+      var scheme = (window.location.protocol || 'https:').replace(':', '') || 'https';
+      var intentUrl = 'intent://' + rawTarget + '#Intent;scheme=' + scheme + ';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end;';
+      window.location.replace(intentUrl);
+      return;
+    }
+
+    // 3. iOS สำหรับแอปอื่นๆ (FB, IG ฯลฯ): ให้รันใน In-App ได้ตามปกติ ไม่บล็อกและไม่แจ้งเตือน
+  } catch (e) {}
+})();
+
+/**
+ * =========================================================================
  * 🌐 CLOUDFLARE TUNNEL CONFIGURATION (ไฟล์ตั้งค่าลิงก์เซิร์ฟเวอร์หลักจุดเดียว)
  * =========================================================================
  * 
@@ -79,4 +141,3 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
     return typeof root.SARAWAT_API_BASE === 'string' ? root.SARAWAT_API_BASE : resolveApiBase();
   };
 })();
-
