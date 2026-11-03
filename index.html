@@ -2,7 +2,6 @@
 <html lang="th">
 
 <head>
-  <script src="/js/inapp-browser-resolver.js"></script>
   <script>
     (function() {
       try {
@@ -871,6 +870,61 @@
     display: block !important;
   }
 
+
+    /* Event Detail Modal Refined UI */
+    #eventDetailModal .dg-modal-box {
+      max-width: 580px;
+      width: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--dg-bg-card);
+      border: 1px solid var(--dg-border);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
+      position: relative;
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif;
+    }
+    #eventDetailModal .dg-modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+    #eventDetailModal .dg-modal-close:hover {
+      background: rgba(255, 255, 255, 0.28);
+      transform: scale(1.05);
+    }
+    @media (max-width: 480px) {
+      .dg-event-modal-bento-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .dg-modal-footer-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+      }
+      .dg-modal-footer-row > div {
+        width: 100% !important;
+        justify-content: stretch !important;
+      }
+      .dg-modal-footer-row button,
+      .dg-modal-footer-row a {
+        flex: 1 !important;
+        text-align: center !important;
+        justify-content: center !important;
+      }
+    }
   </style>
 </head>
 
@@ -2001,8 +2055,8 @@
 
   <!-- 4. School Event Detail Modal (ป๊อปอัปแสดงรายละเอียดกิจกรรมของโรงเรียน) -->
   <div class="dg-modal-backdrop" id="eventDetailModal" onclick="if(event.target === this) closeModal('eventDetailModal')">
-    <div class="dg-modal-box" style="max-width: 620px; border-radius: 20px; padding: 0; overflow: hidden; background: #ffffff; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative;">
-      <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง" style="position: absolute; top: 18px; right: 20px; z-index: 10; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <div class="dg-modal-box">
+      <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x" style="width: 18px; height: 18px;"></i>
       </button>
 
@@ -3334,6 +3388,62 @@
     // ==========================================================
     // EVENT DETAIL POP-UP MODAL
     // ==========================================================
+    function generateGoogleCalendarUrl(evt) {
+      try {
+        const title = encodeURIComponent(evt.title || 'กิจกรรมโรงเรียน');
+        const details = encodeURIComponent((evt.desc || '') + (evt.location ? '\n\nสถานที่: ' + evt.location : ''));
+        const location = encodeURIComponent(evt.location || '');
+
+        let dtStart = (evt.dateStart || evt.dateIso || '').replace(/[-:]/g, '').substring(0, 8);
+        let dtEnd = (evt.dateEnd || evt.endDateIso || evt.dateStart || evt.dateIso || '').replace(/[-:]/g, '').substring(0, 8);
+
+        if (dtStart.length === 8 && dtEnd.length === 8) {
+          const y = parseInt(dtEnd.substring(0, 4), 10);
+          const m = parseInt(dtEnd.substring(4, 6), 10) - 1;
+          const d = parseInt(dtEnd.substring(6, 8), 10);
+          const endD = new Date(Date.UTC(y, m, d + 1));
+          dtEnd = endD.toISOString().substring(0, 10).replace(/-/g, '');
+        }
+        return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + title + '&dates=' + dtStart + '/' + dtEnd + '&details=' + details + '&location=' + location;
+      } catch (e) {
+        return 'https://calendar.google.com/';
+      }
+    }
+
+    window.copyEventDetailLink = function(id, btn) {
+      const url = window.location.origin + '/calendar.html?id=' + encodeURIComponent(id);
+      function showDone() {
+        if (!btn) return;
+        const originalHtml = btn.innerHTML;
+        btn.style.borderColor = '#10b981';
+        btn.style.color = '#10b981';
+        btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>คัดลอกแล้ว!</span>';
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(function() {
+          btn.style.borderColor = '';
+          btn.style.color = '';
+          btn.innerHTML = originalHtml;
+          if (window.lucide) window.lucide.createIcons();
+        }, 2200);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(showDone).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        try {
+          const inp = document.createElement('input');
+          inp.value = url;
+          document.body.appendChild(inp);
+          inp.select();
+          document.execCommand('copy');
+          document.body.removeChild(inp);
+          showDone();
+        } catch (e) {}
+      }
+    };
+
     function openEventDetailModal(id) {
       if (!id) return;
 
@@ -3398,91 +3508,122 @@
       if (evt.tags && evt.tags.length > 0) {
         modalTagsHtml = window.renderTagBadgesHtml(evt.tags);
       } else {
-        modalTagsHtml = '<span class="dg-event-category-badge ' + catClass + '" style="background: rgba(255,255,255,0.15); color: #ffffff; border-color: rgba(255,255,255,0.25);">' + escapeHtml(catLabel) + '</span>';
+        modalTagsHtml = '<span class="dg-event-category-badge ' + catClass + '" style="font-size: 0.76rem; padding: 3px 12px; border-radius: var(--dg-radius-pill); font-weight: 700; background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.22); display: inline-flex; align-items: center; gap: 5px;"><i data-lucide="flag" style="width: 13px; height: 13px;"></i><span>' + escapeHtml(catLabel) + '</span></span>';
       }
 
+      const googleCalUrl = generateGoogleCalendarUrl(evt);
+      const hasDesc = evt.desc && evt.desc.trim() !== '' && evt.desc.trim() !== 'ไม่มีรายละเอียดเพิ่มเติมสำหรับกิจกรรมนี้';
+
       container.innerHTML = '' +
-        '<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 30px 24px; color: #ffffff;">' +
-          '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">' +
+        '<div style="background: linear-gradient(135deg, #0b1329 0%, #1e293b 100%); padding: 28px 24px 22px; color: #ffffff; position: relative;">' +
+          '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; padding-right: 48px;">' +
             modalTagsHtml +
-            '<span class="dg-modal-status-badge status-' + (status.key || 'upcoming') + '" style="font-size: 0.74rem; padding: 2px 10px; border-radius: var(--dg-radius-pill); font-weight: 750; ' + status.style + '">' +
+            '<span class="dg-modal-status-badge status-' + (status.key || 'upcoming') + '" style="font-size: 0.76rem; padding: 3px 12px; border-radius: var(--dg-radius-pill); font-weight: 750; ' + status.style + '">' +
+              '<span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block;"></span>' +
               escapeHtml(status.label) +
             '</span>' +
           '</div>' +
-          '<h2 style="font-family: var(--dg-font-sans); font-size: 1.35rem; font-weight: 850; line-height: 1.4; color: #ffffff; margin: 0;">' +
+          '<h2 style="font-family: \'Kanit\', var(--dg-font-sans); font-size: 1.38rem; font-weight: 850; line-height: 1.4; color: #ffffff; margin: 0; word-break: break-word; padding-right: 40px; letter-spacing: -0.3px;">' +
             escapeHtml(evt.title || '') +
           '</h2>' +
         '</div>' +
 
-        '<div style="padding: 24px 30px; background: var(--dg-bg); border-bottom: 1px solid var(--dg-border);">' +
-          '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">' +
-            '<div style="display: flex; gap: 10px;">' +
-              '<div class="dg-modal-icon-cal" style="width: 34px; height: 34px; border-radius: 8px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-            '<i data-lucide="calendar" style="width: 18px; height: 18px;"></i>' +
+        '<div style="padding: 20px 24px; background: var(--dg-bg); border-bottom: 1px solid var(--dg-border);">' +
+          '<div class="dg-event-modal-bento-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-family: \'Kanit\', var(--dg-font-sans);">' +
+            '<div style="grid-column: 1 / -1; background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
+              '<div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(2, 132, 199, 0.12); color: #0284c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="calendar" style="width: 20px; height: 20px;"></i>' +
               '</div>' +
-              '<div>' +
-                '<span class="dg-modal-info-label" style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">กำหนดการ / วันที่</span>' +
-                '<span class="dg-modal-info-value" style="font-size: 0.92rem; font-weight: 750; color: var(--dg-text-primary); line-height: 1.3;">' + escapeHtml(dateText) + '</span>' +
-              '</div>' +
-            '</div>' +
-
-            '<div style="display: flex; gap: 10px;">' +
-              '<div class="dg-modal-icon-clock" style="width: 34px; height: 34px; border-radius: 8px; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-            '<i data-lucide="clock" style="width: 18px; height: 18px;"></i>' +
-              '</div>' +
-              '<div>' +
-                '<span class="dg-modal-info-label" style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">เวลาปฏิบัติงาน</span>' +
-                '<span class="dg-modal-info-value" style="font-size: 0.92rem; font-weight: 750; color: var(--dg-text-primary); line-height: 1.3;">' + escapeHtml(evt.time || 'เต็มวัน') + '</span>' +
+              '<div style="min-width: 0; flex: 1;">' +
+                '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">กำหนดการ / วันที่จัดกิจกรรม</span>' +
+                '<span style="font-size: 0.96rem; font-weight: 800; color: var(--dg-text-primary); line-height: 1.35; display: block; word-break: break-word;">' + escapeHtml(dateText) + '</span>' +
               '</div>' +
             '</div>' +
 
-            '<div style="display: flex; gap: 10px;">' +
-              '<div class="dg-modal-icon-loc" style="width: 34px; height: 34px; border-radius: 8px; background: #fce7f3; color: #db2777; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-            '<i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>' +
+            '<div style="background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
+              '<div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(217, 119, 6, 0.12); color: #d97706; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="clock" style="width: 18px; height: 18px;"></i>' +
               '</div>' +
-              '<div>' +
-                '<span class="dg-modal-info-label" style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">สถานที่จัดกิจกรรม</span>' +
-                '<span class="dg-modal-info-value" style="font-size: 0.92rem; font-weight: 750; color: var(--dg-text-primary); line-height: 1.3;">' + escapeHtml(evt.location || 'ภายในสถานศึกษา') + '</span>' +
+              '<div style="min-width: 0; flex: 1;">' +
+                '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">เวลาปฏิบัติงาน</span>' +
+                '<span style="font-size: 0.94rem; font-weight: 800; color: var(--dg-text-primary); line-height: 1.35; display: block; word-break: break-word;">' + escapeHtml(evt.time || 'เต็มวัน') + '</span>' +
               '</div>' +
             '</div>' +
 
-            '<div style="display: flex; gap: 10px;">' +
-              '<div class="dg-modal-icon-users" style="width: 34px; height: 34px; border-radius: 8px; background: #dcfce7; color: #16a34a; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-            '<i data-lucide="users" style="width: 18px; height: 18px;"></i>' +
+            '<div style="background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
+              '<div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(219, 39, 119, 0.12); color: #db2777; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>' +
               '</div>' +
-              '<div>' +
-                '<span class="dg-modal-info-label" style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; display: block;">กลุ่มเป้าหมาย / ผู้เข้าร่วม</span>' +
-                '<span class="dg-modal-info-value" style="font-size: 0.92rem; font-weight: 750; color: var(--dg-text-primary); line-height: 1.3;">' + escapeHtml(evt.audience || 'นักเรียนและบุคลากร') + '</span>' +
+              '<div style="min-width: 0; flex: 1;">' +
+                '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">สถานที่จัดกิจกรรม</span>' +
+                '<span style="font-size: 0.94rem; font-weight: 800; color: var(--dg-text-primary); line-height: 1.35; display: block; word-break: break-word;">' + escapeHtml(evt.location || 'ภายในสถานศึกษา') + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div style="grid-column: 1 / -1; background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
+              '<div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(22, 163, 74, 0.12); color: #16a34a; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
+                '<i data-lucide="users" style="width: 18px; height: 18px;"></i>' +
+              '</div>' +
+              '<div style="min-width: 0; flex: 1;">' +
+                '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">กลุ่มเป้าหมาย / ผู้เข้าร่วม</span>' +
+                '<span style="font-size: 0.94rem; font-weight: 800; color: var(--dg-text-primary); line-height: 1.35; display: block; word-break: break-word;">' + escapeHtml(evt.audience || 'นักเรียนและบุคลากรทุกท่าน') + '</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
         '</div>' +
 
-        '<div style="padding: 26px 30px; background: var(--dg-bg-card); border-bottom: 1px solid var(--dg-border); border-top: 1px solid var(--dg-border);">' +
-          '<h4 class="dg-modal-section-title" style="font-size: 0.86rem; font-weight: 800; color: var(--dg-text-primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">' +
-            '<i data-lucide="file-text" style="width: 16px; height: 16px; color: #64748b;"></i>' +
-            '<span>รายละเอียดกิจกรรมและข้อปฏิบัติ</span>' +
-          '</h4>' +
-          '<div class="dg-modal-desc-body" style="font-size: 0.93rem; color: var(--dg-text-secondary); line-height: 1.7; white-space: pre-line;">' +
-            escapeHtml(evt.desc || 'ไม่มีรายละเอียดเพิ่มเติมสำหรับกิจกรรมนี้') +
+        '<div style="padding: 22px 24px; background: var(--dg-bg-card); font-family: \'Kanit\', var(--dg-font-sans);">' +
+          '<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">' +
+            '<h4 style="font-size: 0.92rem; font-weight: 800; color: var(--dg-text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">' +
+              '<span style="width: 28px; height: 28px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); color: #6366f1; display: inline-flex; align-items: center; justify-content: center;">' +
+                '<i data-lucide="file-text" style="width: 15px; height: 15px;"></i>' +
+              '</span>' +
+              '<span>รายละเอียดกิจกรรมและข้อปฏิบัติ</span>' +
+            '</h4>' +
           '</div>' +
+          (hasDesc ?
+            '<div style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: 12px; padding: 16px 18px; font-size: 0.93rem; color: var(--dg-text-primary); line-height: 1.75; white-space: pre-line; word-break: break-word;">' +
+              escapeHtml(evt.desc) +
+            '</div>'
+          :
+            '<div style="background: var(--dg-bg); border: 1.5px dashed var(--dg-border); border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; color: var(--dg-text-muted);">' +
+              '<div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(100, 116, 139, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--dg-text-muted);">' +
+                '<i data-lucide="info" style="width: 18px; height: 18px;"></i>' +
+              '</div>' +
+              '<div style="font-size: 0.88rem; line-height: 1.5; color: var(--dg-text-secondary);">' +
+                'ไม่มีรายละเอียดหรือข้อปฏิบัติเพิ่มเติมสำหรับกิจกรรมนี้' +
+              '</div>' +
+            '</div>'
+          ) +
         '</div>' +
 
-        '<div class="dg-modal-footer-row" style="padding: 16px 30px; background: var(--dg-bg); border-top: 1px solid var(--dg-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">' +
-          '<a href="calendar.html" class="dg-btn-sm-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">' +
-            '<span>เปิดหน้าปฏิทินโรงเรียน</span>' +
-            '<i data-lucide="arrow-up-right"></i>' +
-          '</a>' +
-          '<button type="button" class="dg-btn-black" onclick="closeModal(\'eventDetailModal\')" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">' +
-            '<span>ปิดหน้าต่าง</span>' +
-          '</button>' +
+        '<div class="dg-modal-footer-row" style="padding: 16px 24px; background: var(--dg-bg); border-top: 1px solid var(--dg-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-family: \'Kanit\', var(--dg-font-sans);">' +
+          '<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">' +
+            '<button type="button" class="dg-btn-sm-outline" onclick="copyEventDetailLink(\'' + escapeHtml(evt.id) + '\', this)" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill); cursor: pointer;">' +
+              '<i data-lucide="share-2" style="width: 14px; height: 14px;"></i>' +
+              '<span>คัดลอกลิงก์</span>' +
+            '</button>' +
+            '<a href="' + googleCalUrl + '" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill);">' +
+              '<i data-lucide="calendar-plus" style="width: 14px; height: 14px; color: #2563eb;"></i>' +
+              '<span>Google Calendar</span>' +
+            '</a>' +
+            '<a href="calendar.html" class="dg-btn-sm-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill);">' +
+              '<span>เปิดหน้าปฏิทิน</span>' +
+              '<i data-lucide="arrow-up-right"></i>' +
+            '</a>' +
+          '</div>' +
+          '<div>' +
+            '<button type="button" class="dg-btn-black" onclick="closeModal(\'eventDetailModal\')" style="padding: 9px 24px; font-size: 0.9rem; font-weight: 750; border-radius: var(--dg-radius-pill); cursor: pointer;">' +
+              '<span>ปิดหน้าต่าง</span>' +
+            '</button>' +
+          '</div>' +
         '</div>';
 
       if (window.lucide) window.lucide.createIcons();
       openModal('eventDetailModal');
     }
 
-    // ==========================================================
+        // ==========================================================
     // UPCOMING SCHOOL EVENTS (TOP ~5 CHRONOLOGICAL)
     // ==========================================================
     async function renderUpcomingEvents() {
