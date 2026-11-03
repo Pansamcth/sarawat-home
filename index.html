@@ -3244,6 +3244,35 @@
       }
     }
 
+
+    function formatCalendarBarTime(timeStr) {
+      if (!timeStr) return '';
+      const trimmed = String(timeStr).trim();
+      if (!trimmed || trimmed === 'เต็มวัน') return '';
+
+      // Match time range like "15:10 - 16:00 น.", "15:10-16:00", "15:10 – 16:00 น.", "15:10 ถึง 16:00"
+      const rangeMatch = trimmed.match(/^(\d{1,2}:\d{2})\s*(?:น\.)?\s*[-–—ถึง]\s*(\d{1,2}:\d{2})(?:\s*น\.)?/i);
+      if (rangeMatch) {
+        const hasUnit = /น\./.test(trimmed);
+        return rangeMatch[1] + (hasUnit ? ' น.' : '');
+      }
+
+      // If separated by hyphen/dash without full regex match
+      if (trimmed.includes('-') || trimmed.includes('–') || trimmed.includes('—')) {
+        const parts = trimmed.split(/[-–—]/);
+        const firstPart = parts[0].trim();
+        if (firstPart) {
+          const hasUnit = /น\./.test(trimmed);
+          if (hasUnit && !/น\./.test(firstPart)) {
+            return firstPart + ' น.';
+          }
+          return firstPart;
+        }
+      }
+
+      return trimmed;
+    }
+
     function getDayDifference(startStr, endStr) {
       if (!startStr || !endStr) return 0;
       const [y1, m1, d1] = startStr.split('-').map(Number);
@@ -3452,12 +3481,14 @@
             const badgeText = badgeLabel ? '<span class="dg-cal-bar-badge" title="' + escapeHtml(item.dateInfo?.rangePillText || item.title) + '">' + escapeHtml(badgeLabel) + '</span>' : '';
             contentInner = arrowPrev + badgeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>' + arrowNext;
           } else {
-            // Single-Day Event Pill
-            const timeText = item.time && item.time !== 'เต็มวัน' ? '<span style="font-size: 0.7rem; font-weight: 700; opacity: 0.85; flex-shrink: 0;">' + escapeHtml(item.time) + '</span>' : '';
+            // Single-Day Event Pill: show start time only in calendar view to preserve space for title
+            const barTime = formatCalendarBarTime(item.time);
+            const timeText = barTime ? '<span style="font-size: 0.7rem; font-weight: 700; opacity: 0.85; flex-shrink: 0;">' + escapeHtml(barTime) + '</span>' : '';
             contentInner = '<span class="dg-cal-bar-dot"></span>' + timeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>';
           }
 
-          eventsLayerHtml += '<div class="dg-cal-event-bar ' + catClass + multiClass + prevClass + nextClass + '" style="' + style + '" onclick="openEventDetailModal(\'' + item.id + '\')" title="' + safeTitle + ' (คลิกเพื่อดูรายละเอียด)">' +
+          const tooltipTime = (item.time && item.time !== 'เต็มวัน') ? ' (' + item.time + ')' : '';
+          eventsLayerHtml += '<div class="dg-cal-event-bar ' + catClass + multiClass + prevClass + nextClass + '" style="' + style + '" onclick="openEventDetailModal(\'' + item.id + '\')" title="' + safeTitle + tooltipTime + ' (คลิกเพื่อดูรายละเอียด)">' +
             contentInner +
           '</div>';
         });
