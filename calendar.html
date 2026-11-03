@@ -91,7 +91,7 @@
   <script src="js/skeletons.js"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
-  <link rel="stylesheet" href="css/diego.css?v=2.4.3" />
+  <link rel="stylesheet" href="css/diego.css?v=2.4.4" />
 
   <!-- Favicon & App Icons -->
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261025" />
@@ -1257,6 +1257,53 @@
         justify-content: center !important;
       }
     }
+
+  /* ==========================================================
+     CATEGORY FILTER PILLS HORIZONTAL TOUCH/SWIPE SCROLL (MOBILE)
+     ========================================================== */
+  @media (max-width: 768px) {
+    .dg-act-controls-bar {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+    }
+    .dg-act-filter-pills {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 0 !important;
+      box-sizing: border-box !important;
+      padding-top: 2px !important;
+      padding-bottom: 8px !important;
+      margin: 0 !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x pan-y !important;
+      overscroll-behavior-x: contain !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+      cursor: grab;
+    }
+    .dg-act-filter-pills:active {
+      cursor: grabbing;
+    }
+    .dg-act-filter-pills::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+    .dg-act-pill-btn {
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+      padding: 6px 14px !important;
+      font-size: 0.8rem !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+    }
+  }
   </style>
 </head>
 
@@ -2682,6 +2729,9 @@
         const isMatch = (cat === 'all' && bCat === 'all') ||
           (cat !== 'all' && (bCat === cat || bName === cat || bSlug === cat || bId === String(cat)));
         btn.classList.toggle('active', Boolean(isMatch));
+        if (isMatch) {
+          try { btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch (e) {}
+        }
       });
       renderCalendarEvents();
       if (updateUrl) {
@@ -3089,9 +3139,59 @@
       }
     }, { passive: true });
 
+
+    function enablePillsHorizontalScroll(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      let isDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+      let hasDragged = false;
+
+      container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        hasDragged = false;
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDown) {
+          isDown = false;
+          setTimeout(() => { hasDragged = false; }, 60);
+        }
+      });
+
+      container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        if (Math.abs(walk) > 4) {
+          hasDragged = true;
+          container.scrollLeft = scrollLeft - walk;
+        }
+      });
+
+      container.addEventListener('click', (e) => {
+        if (hasDragged) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+
+      container.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0 && Math.abs(e.deltaX) < Math.abs(e.deltaY)) {
+          if (container.scrollWidth > container.clientWidth) {
+            container.scrollLeft += e.deltaY;
+          }
+        }
+      }, { passive: true });
+    }
     // Initialize on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       loadDynamicCalendarTags();
+      enablePillsHorizontalScroll('calendarCategoryPills');
       loadCalendarEvents().then(() => {
         handleCalendarQueryParams();
       });
