@@ -9589,6 +9589,29 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   border-color: var(--dg-border) !important;
 }
 /* Event Detail Modal Status Badges */
+.dg-modal-status-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 0.76rem !important;
+  padding: 3px 12px !important;
+  border-radius: var(--dg-radius-pill, 9999px) !important;
+  font-weight: 750 !important;
+  line-height: 1.3 !important;
+  vertical-align: middle !important;
+}
+
+.dg-modal-status-badge .dg-status-dot {
+  width: 6px !important;
+  height: 6px !important;
+  min-width: 6px !important;
+  min-height: 6px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+}
+
 [data-theme="dark"] #eventDetailModalContent .dg-modal-status-badge,
 [data-theme="dark"] #eventDetailModalContent .dg-event-status-pill {
   font-weight: 750 !important;

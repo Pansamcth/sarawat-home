@@ -3605,9 +3605,9 @@
         '<div style="background: linear-gradient(135deg, #0b1329 0%, #1e293b 100%); padding: 28px 24px 22px; color: #ffffff; position: relative;">' +
           '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; padding-right: 48px;">' +
             modalTagsHtml +
-            '<span class="dg-modal-status-badge status-' + (status.key || 'upcoming') + '" style="font-size: 0.76rem; padding: 3px 12px; border-radius: var(--dg-radius-pill); font-weight: 750; ' + status.style + '">' +
-              '<span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block;"></span>' +
-              escapeHtml(status.label) +
+            '<span class="dg-modal-status-badge status-' + (status.key || 'upcoming') + '" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; padding: 3px 12px; border-radius: var(--dg-radius-pill); font-weight: 750; ' + status.style + '">' +
+              '<span class="dg-status-dot" style="width: 6px; height: 6px; min-width: 6px; min-height: 6px; border-radius: 50%; background: currentColor; display: inline-block; flex-shrink: 0;"></span>' +
+              '<span>' + escapeHtml(status.label) + '</span>' +
             '</span>' +
           '</div>' +
           '<h2 style="font-family: \'Kanit\', var(--dg-font-sans); font-size: 1.38rem; font-weight: 850; line-height: 1.4; color: #ffffff; margin: 0; word-break: break-word; padding-right: 40px; letter-spacing: -0.3px;">' +
