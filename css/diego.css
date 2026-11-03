@@ -9540,6 +9540,28 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   color: #fbbf24 !important;
 }
 
+/* Event Detail Modal Global Edge-to-Edge Guard */
+#eventDetailModal .dg-modal-box {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+@media (max-width: 768px) {
+  #eventDetailModal.dg-modal-backdrop {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  #eventDetailModal .dg-modal-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+  }
+}
+
 /* 8. Event Detail Modal Content Overrides (calendar.html & index.html) */
 [data-theme="dark"] #eventDetailModal .dg-modal-box {
   background: var(--dg-bg-card) !important;

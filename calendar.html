@@ -1121,23 +1121,38 @@
       transform: scale(0.96);
     }
 
-    /* Event Detail Modal Refined UI */
+        /* Event Detail Modal Refined Edge-to-Edge UI (PC & Mobile) */
+    #eventDetailModal.dg-modal-backdrop {
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
     #eventDetailModal .dg-modal-box {
-      max-width: 580px;
-      width: 100%;
-      border-radius: 24px;
-      overflow: hidden;
-      background: var(--dg-bg-card);
-      border: 1px solid var(--dg-border);
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
-      position: relative;
-      font-family: 'Kanit', var(--dg-font-sans), sans-serif;
+      max-width: 580px !important;
+      width: 100% !important;
+      border-radius: 24px !important;
+      overflow: hidden !important;
+      background: var(--dg-bg-card) !important;
+      border: 1px solid var(--dg-border) !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35) !important;
+      position: relative !important;
+      font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
+      padding: 0 !important; /* CRITICAL: 0 padding ensures header & footer are 100% full-bleed edge-to-edge */
+      margin: auto !important;
+      box-sizing: border-box !important;
+    }
+    #eventDetailModalContent {
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: block !important;
     }
     #eventDetailModal .dg-modal-close {
       position: absolute;
       top: 18px;
       right: 18px;
-      z-index: 10;
+      z-index: 20;
       background: rgba(255, 255, 255, 0.16);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
@@ -1156,21 +1171,59 @@
       background: rgba(255, 255, 255, 0.28);
       transform: scale(1.05);
     }
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
+      #eventDetailModal.dg-modal-backdrop {
+        align-items: flex-end !important;
+        padding: 0 !important;
+      }
+      #eventDetailModal .dg-modal-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 24px 24px 0 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-bottom: none !important;
+        max-height: 90vh !important;
+        max-height: 90dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      #eventDetailModal .dg-modal-close {
+        top: 14px !important;
+        right: 14px !important;
+        width: 36px !important;
+        height: 36px !important;
+      }
+    }
+    @media (max-width: 640px) {
       .dg-event-modal-bento-grid {
         grid-template-columns: 1fr !important;
+        gap: 10px !important;
       }
       .dg-modal-footer-row {
         flex-direction: column !important;
         align-items: stretch !important;
+        gap: 10px !important;
+        padding: 14px 18px !important;
+        padding-bottom: max(18px, env(safe-area-inset-bottom, 16px)) !important;
       }
-      .dg-modal-footer-row > div {
+      .dg-modal-footer-row > div:first-child {
+        display: flex !important;
+        gap: 8px !important;
         width: 100% !important;
-        justify-content: stretch !important;
       }
-      .dg-modal-footer-row button,
-      .dg-modal-footer-row a {
-        flex: 1 !important;
+      .dg-modal-footer-row > div:first-child > * {
+        flex: 1 1 0% !important;
+        text-align: center !important;
+        justify-content: center !important;
+      }
+      .dg-modal-footer-row > div:last-child {
+        width: 100% !important;
+      }
+      .dg-modal-footer-row > div:last-child button {
+        width: 100% !important;
         text-align: center !important;
         justify-content: center !important;
       }
@@ -1485,7 +1538,7 @@
 
   <!-- ============ EVENT DETAIL POP-UP MODAL ============ -->
   <div class="dg-modal-backdrop" id="eventDetailModal" onclick="if(event.target === this) closeModal('eventDetailModal')">
-    <div class="dg-modal-box">
+    <div class="dg-modal-box" style="padding: 0 !important; overflow: hidden !important; border-radius: 24px !important;">
       <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x" style="width: 18px; height: 18px;"></i>
       </button>
