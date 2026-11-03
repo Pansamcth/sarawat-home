@@ -1576,6 +1576,49 @@
     }
   }
 
+
+  // =========================================================================
+  // 🔗 Copy News Detail Link Helper
+  // =========================================================================
+  window.copyNewsDetailLink = function(id, btn) {
+    const url = window.location.origin + '/activities.html?id=' + encodeURIComponent(id);
+    function showDone() {
+      if (!btn) return;
+      const originalHtml = btn.innerHTML;
+      btn.style.borderColor = '#10b981';
+      btn.style.color = '#10b981';
+      btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>คัดลอกแล้ว!</span>';
+      if (window.lucide) window.lucide.createIcons();
+      setTimeout(function() {
+        btn.style.borderColor = '';
+        btn.style.color = '';
+        btn.innerHTML = originalHtml;
+        if (window.lucide) window.lucide.createIcons();
+      }, 2200);
+    }
+    function fallback() {
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = url;
+        temp.style.position = 'fixed';
+        temp.style.left = '-9999px';
+        document.body.appendChild(temp);
+        temp.focus();
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showDone();
+      } catch (e) {
+        alert('ลิงก์สำหรับข่าวสารกิจกรรมนี้: ' + url);
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showDone).catch(fallback);
+    } else {
+      fallback();
+    }
+  };
+
   window.linkifyText = autoLinkifyCore;
   window.SarawatLinkify = autoLinkifyCore;
   if (typeof window.SarawatApi === 'object' && window.SarawatApi) {

@@ -236,13 +236,13 @@
   <!-- API & Cloudflare Tunnel Config -->
   <script src="cloudflare-config.js"></script>
   <script src="js/bridge.js"></script>
-  <script src="js/api-config.js?v=2.7.9"></script>
+  <script src="js/api-config.js?v=2.8.0"></script>
   <script src="js/page-guard.js" data-page="home"></script>
   <script src="js/skeletons.js"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
   <link rel="preload" href="assets/fonts/maaja.otf" as="font" type="font/otf" crossorigin />
-  <link rel="stylesheet" href="css/diego.css?v=2.4.4" />
+  <link rel="stylesheet" href="css/diego.css?v=2.4.5" />
 
   <!-- Favicon & App Icons -->
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261025" />
@@ -3078,7 +3078,11 @@
         </div>
 
         <div class="dg-news-modal-footer">
-          <button type="button" class="dg-btn-black" onclick="closeModal('newsDetailModal')" style="cursor: pointer;">
+          <button type="button" class="dg-btn-sm-outline" onclick="copyNewsDetailLink('${escapeHtml(item.id)}', this)" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill); cursor: pointer;">
+            <i data-lucide="share-2" style="width: 14px; height: 14px;"></i>
+            <span>คัดลอกลิงก์</span>
+          </button>
+          <button type="button" class="dg-btn-black" onclick="closeModal('newsDetailModal')" style="padding: 9px 24px; font-size: 0.9rem; font-weight: 750; border-radius: var(--dg-radius-pill); cursor: pointer;">
             <span>ปิดหน้าต่าง</span>
           </button>
         </div>
@@ -3091,6 +3095,49 @@
       openModal('newsDetailModal');
     }
 
+
+
+  // =========================================================================
+  // 🔗 Copy News Detail Link Helper
+  // =========================================================================
+  window.copyNewsDetailLink = function(id, btn) {
+    const url = window.location.origin + '/activities.html?id=' + encodeURIComponent(id);
+    function showDone() {
+      if (!btn) return;
+      const originalHtml = btn.innerHTML;
+      btn.style.borderColor = '#10b981';
+      btn.style.color = '#10b981';
+      btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>คัดลอกแล้ว!</span>';
+      if (window.lucide) window.lucide.createIcons();
+      setTimeout(function() {
+        btn.style.borderColor = '';
+        btn.style.color = '';
+        btn.innerHTML = originalHtml;
+        if (window.lucide) window.lucide.createIcons();
+      }, 2200);
+    }
+    function fallback() {
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = url;
+        temp.style.position = 'fixed';
+        temp.style.left = '-9999px';
+        document.body.appendChild(temp);
+        temp.focus();
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showDone();
+      } catch (e) {
+        alert('ลิงก์สำหรับข่าวสารกิจกรรมนี้: ' + url);
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showDone).catch(fallback);
+    } else {
+      fallback();
+    }
+  };
 
     function linkifyText(text) {
       if (!text) return '';

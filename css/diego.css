@@ -4658,9 +4658,14 @@ svg:not([data-lucide]),
 
 
 .dg-news-modal-footer {
-  margin-top: 26px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--dg-border);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .dg-news-read-more-btn {
