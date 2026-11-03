@@ -10499,3 +10499,87 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
 [data-theme="dark"] .dg-auto-link:hover {
   color: #93c5fd !important;
 }
+
+
+/* Event Bars: Full-Day Solid vs Timed Translucent in Dark Mode */
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-academic {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-left: none !important;
+}
+
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-affairs,
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-discipline {
+  background: linear-gradient(135deg, #881337 0%, #e11d48 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-left: none !important;
+}
+
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-prefect {
+  background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-left: none !important;
+}
+
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-holiday,
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-student-affairs {
+  background: linear-gradient(135deg, #064e3b 0%, #10b981 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-left: none !important;
+}
+
+[data-theme="dark"] .dg-cal-event-bar.is-full-day.cat-general {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-left: none !important;
+}
+
+/* Timed Events in Dark Mode: Translucent tint */
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-academic {
+  background: rgba(30, 58, 138, 0.4) !important;
+  color: #93c5fd !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+  border-left: 3.5px solid #3b82f6 !important;
+}
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-academic .dg-cal-bar-dot { background: #60a5fa !important; }
+
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-affairs,
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-discipline {
+  background: rgba(136, 19, 55, 0.4) !important;
+  color: #fecdd3 !important;
+  border: 1px solid rgba(225, 29, 72, 0.35) !important;
+  border-left: 3.5px solid #f43f5e !important;
+}
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-affairs .dg-cal-bar-dot,
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-discipline .dg-cal-bar-dot { background: #fb7185 !important; }
+
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-prefect {
+  background: rgba(76, 29, 149, 0.4) !important;
+  color: #ddd6fe !important;
+  border: 1px solid rgba(124, 58, 237, 0.35) !important;
+  border-left: 3.5px solid #a855f7 !important;
+}
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-prefect .dg-cal-bar-dot { background: #c084fc !important; }
+
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-holiday,
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-student-affairs {
+  background: rgba(6, 78, 59, 0.4) !important;
+  color: #a7f3d0 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border-left: 3.5px solid #10b981 !important;
+}
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-holiday .dg-cal-bar-dot,
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-student-affairs .dg-cal-bar-dot { background: #34d399 !important; }
+
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-general {
+  background: rgba(30, 41, 59, 0.55) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(71, 85, 105, 0.45) !important;
+  border-left: 3.5px solid #94a3b8 !important;
+}
+[data-theme="dark"] .dg-cal-event-bar.is-timed.cat-general .dg-cal-bar-dot { background: #94a3b8 !important; }

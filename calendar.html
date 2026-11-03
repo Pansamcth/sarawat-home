@@ -429,41 +429,50 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Single-Day Event styling in Calendar Grid */
-    .dg-cal-event-bar.is-single-day {
+    /* Full-Day Event Bars: Solid Filled with Event Color, White Text */
+    .dg-cal-event-bar.is-full-day {
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      border-radius: 6px;
+      padding: 3.5px 9px;
+      font-weight: 750;
+    }
+
+    /* Timed Events (with specific time/time period): Translucent pill styling */
+    .dg-cal-event-bar.is-timed {
       border-radius: 6px;
       padding: 3px 8px;
     }
 
-    .dg-cal-event-bar.is-single-day.cat-academic {
+    .dg-cal-event-bar.is-timed.cat-academic {
       background: #eff6ff;
       color: #1e40af;
       border: 1px solid #bfdbfe;
       border-left: 3.5px solid #2563eb;
     }
 
-    .dg-cal-event-bar.is-single-day.cat-affairs {
+    .dg-cal-event-bar.is-timed.cat-affairs {
       background: #fff1f2;
       color: #9f1239;
       border: 1px solid #fecdd3;
       border-left: 3.5px solid #e11d48;
     }
 
-    .dg-cal-event-bar.is-single-day.cat-prefect {
+    .dg-cal-event-bar.is-timed.cat-prefect {
       background: #f5f3ff;
       color: #5b21b6;
       border: 1px solid #ede9fe;
       border-left: 3.5px solid #7c3aed;
     }
 
-    .dg-cal-event-bar.is-single-day.cat-holiday {
+    .dg-cal-event-bar.is-timed.cat-holiday {
       background: #ecfdf5;
       color: #065f46;
       border: 1px solid #a7f3d0;
       border-left: 3.5px solid #10b981;
     }
 
-    .dg-cal-event-bar.is-single-day.cat-general {
+    .dg-cal-event-bar.is-timed.cat-general {
       background: #f8fafc;
       color: var(--dg-text-primary);
       border: 1px solid #e2e8f0;
@@ -542,11 +551,11 @@
       flex-shrink: 0;
     }
 
-    .dg-cal-event-bar.is-single-day.cat-academic .dg-cal-bar-dot { background: #2563eb; }
-    .dg-cal-event-bar.is-single-day.cat-affairs .dg-cal-bar-dot { background: #e11d48; }
-    .dg-cal-event-bar.is-single-day.cat-prefect .dg-cal-bar-dot { background: #7c3aed; }
-    .dg-cal-event-bar.is-single-day.cat-holiday .dg-cal-bar-dot { background: #10b981; }
-    .dg-cal-event-bar.is-single-day.cat-general .dg-cal-bar-dot { background: #475569; }
+    .dg-cal-event-bar.is-timed.cat-academic .dg-cal-bar-dot { background: #2563eb; }
+    .dg-cal-event-bar.is-timed.cat-affairs .dg-cal-bar-dot { background: #e11d48; }
+    .dg-cal-event-bar.is-timed.cat-prefect .dg-cal-bar-dot { background: #7c3aed; }
+    .dg-cal-event-bar.is-timed.cat-holiday .dg-cal-bar-dot { background: #10b981; }
+    .dg-cal-event-bar.is-timed.cat-general .dg-cal-bar-dot { background: #475569; }
 
     .dg-cal-bar-title {
       white-space: nowrap;
@@ -2290,9 +2299,12 @@
           }
         });
 
-        // Sort events: Multi-day first (longer span first), then earlier startCol
+        // Sort events: Multi-day & Full-day first (longer span first), then earlier startCol
         weekEvents.sort((a, b) => {
           if (a.isMultiDay !== b.isMultiDay) return a.isMultiDay ? -1 : 1;
+          const aFull = !a.time || a.time.trim() === '' || a.time.trim() === 'เต็มวัน';
+          const bFull = !b.time || b.time.trim() === '' || b.time.trim() === 'เต็มวัน';
+          if (aFull !== bFull) return aFull ? -1 : 1;
           if (b.span !== a.span) return b.span - a.span;
           return a.startCol - b.startCol;
         });
@@ -2364,9 +2376,10 @@
 
         let eventsLayerHtml = '';
         renderBars.forEach(item => {
+          const isFullDay = item.isMultiDay || !item.time || item.time.trim() === '' || item.time.trim() === 'เต็มวัน';
+          const multiClass = item.isMultiDay ? ' is-multi-day is-full-day' : (isFullDay ? ' is-single-day is-full-day' : ' is-single-day is-timed');
           const pastClass = item.isPast ? ' is-past' : '';
           const catClass = 'cat-' + item.category;
-          const multiClass = item.isMultiDay ? ' is-multi-day' : ' is-single-day';
           const prevClass = item.continuesPrev ? ' continues-prev' : '';
           const nextClass = item.continuesNext ? ' continues-next' : '';
           const fullTitle = item.title;
@@ -2388,8 +2401,11 @@
             }
             const badgeText = (badgeLabel && item.splitPart !== 'active') ? '<span class="dg-cal-bar-badge" title="' + escapeHtml(item.dateInfo?.rangePillText || item.title) + '">' + escapeHtml(badgeLabel) + '</span>' : '';
             contentInner = arrowPrev + badgeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>' + arrowNext;
+          } else if (isFullDay) {
+            // Single-Day All-Day Event (เต็มวัน): Solid filled background with event color, white text, no bullet dot
+            contentInner = '<span class="dg-cal-bar-title">' + safeTitle + '</span>';
           } else {
-            // Single-Day Event Pill: show start time only in calendar view to preserve space for title
+            // Timed Event (มีการกำหนดเวลา / ช่วงเวลา): Translucent pill with colored dot & start time
             const barTime = formatCalendarBarTime(item.time);
             const timeText = barTime ? '<span style="font-size: 0.7rem; font-weight: 700; opacity: 0.85; flex-shrink: 0;">' + escapeHtml(barTime) + '</span>' : '';
             contentInner = '<span class="dg-cal-bar-dot"></span>' + timeText + '<span class="dg-cal-bar-title">' + safeTitle + '</span>';
