@@ -871,7 +871,7 @@
   }
 
 
-        /* Event Detail Modal Refined Edge-to-Edge UI (PC & Mobile) */
+            /* Event Detail Modal Refined Edge-to-Edge UI (PC & Mobile with Scroll) */
     #eventDetailModal.dg-modal-backdrop {
       align-items: center;
       justify-content: center;
@@ -881,8 +881,13 @@
     #eventDetailModal .dg-modal-box {
       max-width: 580px !important;
       width: 100% !important;
+      max-height: 88vh !important;
+      max-height: 88dvh !important;
       border-radius: 24px !important;
-      overflow: hidden !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior: contain !important;
       background: var(--dg-bg-card) !important;
       border: 1px solid var(--dg-border) !important;
       box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35) !important;
@@ -891,6 +896,19 @@
       padding: 0 !important; /* CRITICAL: 0 padding ensures header & footer are 100% full-bleed edge-to-edge */
       margin: auto !important;
       box-sizing: border-box !important;
+    }
+    #eventDetailModal .dg-modal-box::-webkit-scrollbar {
+      width: 6px;
+    }
+    #eventDetailModal .dg-modal-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #eventDetailModal .dg-modal-box::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
+    #eventDetailModal .dg-modal-box::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.6);
     }
     #eventDetailModalContent {
       width: 100% !important;
@@ -935,9 +953,10 @@
         border-left: none !important;
         border-right: none !important;
         border-bottom: none !important;
-        max-height: 90vh !important;
-        max-height: 90dvh !important;
+        max-height: 88vh !important;
+        max-height: 88dvh !important;
         overflow-y: auto !important;
+        overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
       }
       #eventDetailModal .dg-modal-close {
@@ -957,7 +976,8 @@
         align-items: stretch !important;
         gap: 10px !important;
         padding: 14px 18px !important;
-        padding-bottom: max(18px, env(safe-area-inset-bottom, 16px)) !important;
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 16px)) !important;
+        border-radius: 0 !important;
       }
       .dg-modal-footer-row > div:first-child {
         display: flex !important;
@@ -2108,7 +2128,7 @@
 
   <!-- 4. School Event Detail Modal (ป๊อปอัปแสดงรายละเอียดกิจกรรมของโรงเรียน) -->
   <div class="dg-modal-backdrop" id="eventDetailModal" onclick="if(event.target === this) closeModal('eventDetailModal')">
-    <div class="dg-modal-box" style="padding: 0 !important; overflow: hidden !important; border-radius: 24px !important;">
+    <div class="dg-modal-box" style="padding: 0 !important; overflow-y: auto !important; overflow-x: hidden !important; border-radius: 24px !important;">
       <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง">
         <i data-lucide="x" style="width: 18px; height: 18px;"></i>
       </button>

@@ -9540,10 +9540,15 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   color: #fbbf24 !important;
 }
 
-/* Event Detail Modal Global Edge-to-Edge Guard */
+/* Event Detail Modal Global Edge-to-Edge Guard (with Scroll Support) */
 #eventDetailModal .dg-modal-box {
   padding: 0 !important;
-  overflow: hidden !important;
+  max-height: 88vh !important;
+  max-height: 88dvh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
 }
 @media (max-width: 768px) {
   #eventDetailModal.dg-modal-backdrop {
@@ -9559,6 +9564,11 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
     border-left: none !important;
     border-right: none !important;
     border-bottom: none !important;
+    max-height: 88vh !important;
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
