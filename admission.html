@@ -148,8 +148,23 @@
     }
 
     .swal2-popup.custom-swal-popup,
-    .swal2-popup.custom-swal-popup * {
+    .swal2-popup.custom-swal-popup h1,
+    .swal2-popup.custom-swal-popup h2,
+    .swal2-popup.custom-swal-popup h3,
+    .swal2-popup.custom-swal-popup p,
+    .swal2-popup.custom-swal-popup div,
+    .swal2-popup.custom-swal-popup span,
+    .swal2-popup.custom-swal-popup button,
+    .swal2-popup.custom-swal-popup input,
+    .swal2-popup.custom-swal-popup strong {
       font-family: 'Kanit', var(--dg-font-sans), sans-serif !important;
+    }
+
+    .swal2-popup.custom-swal-popup i[class*="fa-"],
+    .swal2-popup.custom-swal-popup .fa-solid,
+    .swal2-popup.custom-swal-popup .fas,
+    .swal2-popup.custom-swal-popup .far {
+      font-family: "Font Awesome 6 Free" !important;
     }
 
     .swal2-popup.custom-swal-popup {
@@ -4163,7 +4178,11 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.22);">
-                    <i class="fa-solid fa-circle-xmark" style="font-size: 38px; color: #EF4444;"></i>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="15" y1="9" x2="9" y2="15"></line>
+                      <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ส่งใบสมัครไม่สำเร็จ</h2>
                   <div style="color: #991B1B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 12px; width: 100%; background: #FEF2F2; border: 1.5px solid #FCA5A5; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: center;">
