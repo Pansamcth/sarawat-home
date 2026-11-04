@@ -774,6 +774,15 @@
       outline: none;
     }
 
+    .question-textarea {
+      min-height: 110px;
+      height: auto !important;
+      overflow-y: hidden;
+      resize: none;
+      line-height: 1.6;
+      box-sizing: border-box;
+    }
+
     .recruit-input:focus,
     .recruit-select:focus {
       border-color: #0f172a;
@@ -2932,6 +2941,7 @@
                 ta.value = a.answer_text || a.answerText || '';
                 const cnt = document.getElementById(`counterQuestion_${qId}`);
                 if (cnt) cnt.textContent = ta.value.length;
+                ta.dispatchEvent(new Event('input'));
               }
             });
           }
@@ -3062,7 +3072,7 @@
                     data-max="${maxLen}"
                     data-req="${q.is_required ? 1 : 0}"
                     placeholder="${escapeHtml(ph)}"
-                    style="min-height: 110px; line-height: 1.6; font-size: 0.92rem; resize: vertical; padding: 12px 14px; margin-top: 6px;"
+                    style="min-height: 110px; height: auto; overflow-y: hidden; resize: none; line-height: 1.6; font-size: 0.92rem; padding: 12px 14px; margin-top: 6px; box-sizing: border-box;"
                     maxlength="${maxLen}"
                   ></textarea>
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
@@ -3075,19 +3085,28 @@
               `;
             }).join('');
 
-            // Hook live character counter
+            // Hook live character counter & auto-expand height
             attitudeQuestions.forEach(q => {
               const ta = document.getElementById(`inpQuestion_${q.id}`);
               const counter = document.getElementById(`counterQuestion_${q.id}`);
-              if (ta && counter) {
+              if (ta) {
+                const autoResize = () => {
+                  ta.style.height = 'auto';
+                  ta.style.height = Math.max(110, ta.scrollHeight) + 'px';
+                };
+
                 ta.addEventListener('input', () => {
-                  counter.textContent = ta.value.length;
+                  autoResize();
+                  if (counter) counter.textContent = ta.value.length;
                   if (ta.value.length >= (q.min_length || 0)) {
                     ta.classList.remove('has-error');
                     const errEl = document.getElementById(`errQuestion_${q.id}`);
                     if (errEl) errEl.style.display = 'none';
                   }
                 });
+
+                // Initial auto-expand in case value is prefilled
+                autoResize();
               }
             });
           }
