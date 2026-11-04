@@ -364,6 +364,7 @@
         search,
         status,
         grade,
+        trash: isTrashModeActive ? 1 : 0,
         page,
         limit: pageLimit
       });
@@ -372,11 +373,11 @@
         tbody.innerHTML = `
           <tr>
             <td colspan="10" style="padding: 48px 20px; text-align: center; color: #94a3b8;">
-              <div style="width: 48px; height: 48px; border-radius: 50%; background: #f8fafc; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px; color: #cbd5e1;">
-                <i data-lucide="inbox" style="width: 24px; height: 24px;"></i>
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: #f8fafc; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px; color: ${isTrashModeActive ? '#ef4444' : '#cbd5e1'};">
+                <i data-lucide="${isTrashModeActive ? 'trash-2' : 'inbox'}" style="width: 24px; height: 24px;"></i>
               </div>
-              <div style="font-size: 0.95rem; font-weight: 700; color: #64748b;">ไม่พบรายการใบสมัคร</div>
-              <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">ลองเปลี่ยนคำค้นหาหรือตัวกรองด้านบน</div>
+              <div style="font-size: 0.95rem; font-weight: 700; color: #64748b;">${isTrashModeActive ? 'ไม่มีรายการในถังขยะ' : 'ไม่พบรายการใบสมัคร'}</div>
+              <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">${isTrashModeActive ? 'ยังไม่มีใบสมัครที่ถูกย้ายลงถังขยะ' : 'ลองเปลี่ยนคำค้นหาหรือตัวกรองด้านบน'}</div>
             </td>
           </tr>
         `;
@@ -406,7 +407,11 @@
         return `
           <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease; ${a.is_deleted ? 'background:#fff7f7;' : ''}" onmouseover="this.style.background='#fbfcfe'" onmouseout="this.style.background='${a.is_deleted ? '#fff7f7' : 'transparent'}'">
             <td style="padding: 12px 12px; text-align: center;">
-              <input type="checkbox" class="chk-applicant-row" data-id="${a.id}" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; cursor: pointer; accent-color: #0f172a; border-radius: 4px;" />
+              ${a.is_deleted ? `
+                <span title="อยู่ในถังขยะ" style="color: #ef4444; font-size: 0.85rem;"><i data-lucide="trash-2" style="width: 16px; height: 16px; display:inline-block; vertical-align:middle; color:#ef4444;"></i></span>
+              ` : `
+                <input type="checkbox" class="chk-applicant-row" data-id="${a.id}" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; cursor: pointer; accent-color: #0f172a; border-radius: 4px;" />
+              `}
             </td>
             <td style="padding: 12px 16px; font-weight: 800; color: #0f172a; white-space: nowrap;">
               ${a.application_code}
@@ -586,13 +591,13 @@
     let confirmed = false;
     if (typeof Swal !== 'undefined') {
       const res = await Swal.fire({
-        title: 'ยืนยันการลบใบสมัคร?',
-        html: `คุณต้องการลบใบสมัคร <b>${escapeHtml(displayCode)}${escapeHtml(displayName)}</b> หรือไม่?<br><br><span style="color:#dc2626; font-size:0.88rem;">การลบนี้จะลบข้อมูลผู้สมัคร, ประวัติการพิจารณา และรูปถ่ายออกจากระบบอย่างถาวร (ไม่สามารถกู้คืนได้)</span>`,
+        title: 'ย้ายใบสมัครไปยังถังขยะ?',
+        html: `คุณต้องการย้ายใบสมัคร <b>${escapeHtml(displayCode)}${escapeHtml(displayName)}</b> ไปยังถังขยะหรือไม่?<br><br><span style="color:#64748b; font-size:0.88rem;">ใบสมัครจะถูกย้ายไปยังถังขยะ และสามารถกู้คืนกลับสู่ระบบได้ทุกเมื่อ</span>`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#dc2626',
+        confirmButtonColor: '#ef4444',
         cancelButtonColor: '#64748b',
-        confirmButtonText: 'ใช่, ลบใบสมัคร',
+        confirmButtonText: 'ใช่, ย้ายไปถังขยะ',
         cancelButtonText: 'ยกเลิก',
         customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
       });
@@ -942,6 +947,8 @@
         btnToggleTrash.style.background = isTrashModeActive ? '#fee2e2' : '#ffffff';
         btnToggleTrash.style.borderColor = isTrashModeActive ? '#fca5a5' : '#cbd5e1';
       }
+      selectedApplicantIds.clear();
+      syncBulkSelectionBar();
       loadApplicantsTable(1);
     }
 
