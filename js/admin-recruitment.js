@@ -808,10 +808,14 @@
 
             return `
               <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);">
-                <div style="background: #f8fafc; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
-                  <div style="font-size: 0.90rem; font-weight: 750; color: #0f172a; line-height: 1.45; display: flex; align-items: flex-start; gap: 8px;">
-                    <span style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; border-radius: 6px; background: #0f172a; color: #ffffff; font-size: 0.75rem; font-weight: 800; flex-shrink: 0;">${qNum}</span>
-                    <span>${qText}</span>
+                <div style="background: #f8fafc; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                  <div style="display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center;">
+                    <div style="font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif; font-size: 1.35rem; font-weight: 900; line-height: 1; color: #0f172a; min-width: 20px;">
+                      ${qNum}
+                    </div>
+                    <div style="font-size: 0.90rem; font-weight: 750; color: #0f172a; line-height: 1.45;">
+                      ${qText}
+                    </div>
                   </div>
                   <span style="font-size: 0.72rem; font-weight: 600; color: #64748b; background: #ffffff; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 6px; flex-shrink: 0;">
                     ${charCount} ตัวอักษร
