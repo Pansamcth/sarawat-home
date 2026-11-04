@@ -179,6 +179,30 @@
   };
 
     let isTrashModeActive = false;
+  const selectedApplicantIds = new Set();
+
+  function syncBulkSelectionBar() {
+    const bar = document.getElementById('barBulkApplicantActions');
+    const txtCount = document.getElementById('txtBulkSelectedCount');
+    const chkAll = document.getElementById('chkSelectAllApplicants');
+
+    const count = selectedApplicantIds.size;
+    if (txtCount) txtCount.textContent = count;
+
+    if (bar) {
+      bar.style.display = count > 0 ? 'flex' : 'none';
+    }
+
+    if (chkAll) {
+      const visibleCheckboxes = document.querySelectorAll('.chk-applicant-row');
+      if (visibleCheckboxes.length > 0) {
+        const allChecked = Array.from(visibleCheckboxes).every(cb => cb.checked);
+        chkAll.checked = allChecked;
+      } else {
+        chkAll.checked = false;
+      }
+    }
+  }
   let adminQuestionsCache = [];
 
   function getActiveAdminRole() {
@@ -316,11 +340,11 @@
     if (!tbody) return;
 
     if (window.DgSkeletons) {
-      tbody.innerHTML = window.DgSkeletons.tableRows(9, 6);
+      tbody.innerHTML = window.DgSkeletons.tableRows(10, 6);
     } else {
       tbody.innerHTML = `
         <tr>
-          <td colspan="9" style="padding: 30px; text-align: center; color: #94a3b8;">
+          <td colspan="10" style="padding: 30px; text-align: center; color: #94a3b8;">
             <div style="display: inline-flex; align-items: center; gap: 8px;">
               <i data-lucide="loader-2" class="spin" style="width: 18px; height: 18px;"></i>
               <span>กำลังโหลดข้อมูลใบสมัคร...</span>
@@ -347,7 +371,7 @@
       if (!res.success || !res.applicants || res.applicants.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="9" style="padding: 48px 20px; text-align: center; color: #94a3b8;">
+            <td colspan="10" style="padding: 48px 20px; text-align: center; color: #94a3b8;">
               <div style="width: 48px; height: 48px; border-radius: 50%; background: #f8fafc; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px; color: #cbd5e1;">
                 <i data-lucide="inbox" style="width: 24px; height: 24px;"></i>
               </div>
@@ -378,8 +402,12 @@
           ? `<span style="display:inline-block; margin-left:4px; padding:2px 7px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:9999px; font-size:0.72rem; font-weight:750;">${Number(a.evaluation_score).toFixed(1)} คะแนน</span>`
           : '';
 
+        const isChecked = selectedApplicantIds.has(String(a.id));
         return `
           <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease; ${a.is_deleted ? 'background:#fff7f7;' : ''}" onmouseover="this.style.background='#fbfcfe'" onmouseout="this.style.background='${a.is_deleted ? '#fff7f7' : 'transparent'}'">
+            <td style="padding: 12px 12px; text-align: center;">
+              <input type="checkbox" class="chk-applicant-row" data-id="${a.id}" ${isChecked ? 'checked' : ''} style="width: 17px; height: 17px; cursor: pointer; accent-color: #0f172a; border-radius: 4px;" />
+            </td>
             <td style="padding: 12px 16px; font-weight: 800; color: #0f172a; white-space: nowrap;">
               ${a.application_code}
               ${evalScoreBadge}
@@ -442,6 +470,20 @@
           </tr>
         `;
       }).join('');
+
+      // Attach row checkbox listeners
+      document.querySelectorAll('.chk-applicant-row').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const id = cb.getAttribute('data-id');
+          if (cb.checked) {
+            if (id) selectedApplicantIds.add(String(id));
+          } else {
+            if (id) selectedApplicantIds.delete(String(id));
+          }
+          syncBulkSelectionBar();
+        });
+      });
+      syncBulkSelectionBar();
 
       // Attach row click listeners
       document.querySelectorAll('.btn-view-applicant').forEach(btn => {
@@ -912,6 +954,184 @@
     if (btnExitTrash) {
       btnExitTrash.addEventListener('click', () => {
         setTrashMode(false);
+      });
+    }
+
+    // Bulk Selection & Status Update
+    const chkSelectAll = document.getElementById('chkSelectAllApplicants');
+    if (chkSelectAll) {
+      chkSelectAll.addEventListener('change', () => {
+        const isChecked = chkSelectAll.checked;
+        document.querySelectorAll('.chk-applicant-row').forEach(cb => {
+          cb.checked = isChecked;
+          const id = cb.getAttribute('data-id');
+          if (isChecked) {
+            if (id) selectedApplicantIds.add(String(id));
+          } else {
+            if (id) selectedApplicantIds.delete(String(id));
+          }
+        });
+        syncBulkSelectionBar();
+      });
+    }
+
+    const btnClearBulk = document.getElementById('btnClearBulkSelection');
+    if (btnClearBulk) {
+      btnClearBulk.addEventListener('click', () => {
+        selectedApplicantIds.clear();
+        document.querySelectorAll('.chk-applicant-row').forEach(cb => { cb.checked = false; });
+        if (chkSelectAll) chkSelectAll.checked = false;
+        syncBulkSelectionBar();
+      });
+    }
+
+    const btnApplyBulk = document.getElementById('btnApplyBulkStatus');
+    if (btnApplyBulk) {
+      btnApplyBulk.addEventListener('click', async () => {
+        if (selectedApplicantIds.size === 0) {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'info',
+              title: 'ยังไม่ได้เลือกรายการ',
+              text: 'กรุณาติ๊กเลือกผู้สมัครที่ต้องการเปลี่ยนสถานะอย่างน้อย 1 คน',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+          }
+          return;
+        }
+
+        const targetStatus = document.getElementById('selBulkTargetStatus')?.value || 'reviewing';
+        const adminNotes = (document.getElementById('txtBulkAdminNotes')?.value || '').trim();
+        const count = selectedApplicantIds.size;
+
+        const statusMap = {
+          pending: { label: 'รอการตรวจสอบ (Pending)', color: '#d97706', bg: '#fef3c7' },
+          reviewing: { label: 'กำลังตรวจสอบ (Reviewing)', color: '#2563eb', bg: '#eff6ff' },
+          approved: { label: 'ผ่านการคัดเลือก (Approved)', color: '#16a34a', bg: '#f0fdf4' },
+          rejected: { label: 'ไม่ผ่านการคัดเลือก (Rejected)', color: '#dc2626', bg: '#fef2f2' },
+          correction_needed: { label: 'ขอให้แก้ไขข้อมูล (Correction Needed)', color: '#9333ea', bg: '#faf5ff' }
+        };
+        const sInfo = statusMap[targetStatus] || { label: targetStatus, color: '#475569', bg: '#f1f5f9' };
+
+        // Confirmation Modal in SI-ROSTER Style
+        const confirmRes = await Swal.fire({
+          html: `
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+              <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #BFDBFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.22);">
+                <i class="fa-solid fa-users-gear" style="font-size: 32px; color: #2563EB;"></i>
+              </div>
+              <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการปรับสถานะแบบกลุ่ม</h2>
+              <div style="color: #475569; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
+                <div style="font-size: 0.88rem; color: #64748B; margin-bottom: 4px;">จำนวนผู้สมัครที่เลือก:</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 8px;">${count} คน</div>
+                <div style="font-size: 0.88rem; color: #64748B; margin-bottom: 4px;">ปรับเปลี่ยนสถานะเป็น:</div>
+                <div style="display: inline-block; padding: 4px 12px; border-radius: 9999px; font-weight: 800; font-size: 0.88rem; background: ${sInfo.bg}; color: ${sInfo.color}; border: 1px solid ${sInfo.color}30;">
+                  ${sInfo.label}
+                </div>
+                ${adminNotes ? `
+                  <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #CBD5E1; font-size: 0.82rem; color: #475569;">
+                    <strong>บันทึกของกรรมการ:</strong> "${adminNotes}"
+                  </div>
+                ` : ''}
+              </div>
+              <div style="font-size: 0.85rem; color: #64748b; line-height: 1.45;">
+                ระบบจะอัปเดตสถานะ บันทึกประวัติ และส่งการแจ้งเตือนไปยัง Discord ทันที
+              </div>
+            </div>
+          `,
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonColor: '#2563EB',
+          cancelButtonColor: '#F1F5F9',
+          confirmButtonText: 'ยืนยันการเปลี่ยนสถานะ',
+          cancelButtonText: '<span style="color: #64748B;">ยกเลิก</span>',
+          reverseButtons: true,
+          customClass: {
+            popup: 'custom-swal-popup',
+            confirmButton: 'custom-swal-btn',
+            cancelButton: 'custom-swal-btn'
+          }
+        });
+
+        if (!confirmRes.isConfirmed) return;
+
+        // SI-ROSTER Loading
+        Swal.fire({
+          html: `
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+              <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #BFDBFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #2563EB;"></i>
+              </div>
+              <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังอัปเดตสถานะ</h2>
+              <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
+                กำลังบันทึกและส่งข้อมูลแจ้งเตือนสำหรับผู้สมัคร ${count} คน...
+              </div>
+            </div>
+          `,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          customClass: { popup: 'custom-swal-popup' }
+        });
+
+        try {
+          const res = await getApi().adminBulkUpdateApplicantStatus(
+            Array.from(selectedApplicantIds),
+            targetStatus,
+            adminNotes
+          );
+
+          if (res && res.success) {
+            if (window.RosterAudio && typeof window.RosterAudio.playSuccess === 'function') {
+              window.RosterAudio.playSuccess();
+            }
+
+            Swal.fire({
+              html: `
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                  <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
+                    <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
+                  </div>
+                  <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">อัปเดตสถานะสำเร็จ</h2>
+                  <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
+                    ปรับปรุงสถานะผู้สมัครเรียบร้อยแล้วทั้งหมด <strong>${res.updatedCount || count}</strong> คน
+                  </div>
+                </div>
+              `,
+              timer: 2200,
+              showConfirmButton: false,
+              customClass: { popup: 'custom-swal-popup' }
+            });
+
+            selectedApplicantIds.clear();
+            const inpNotes = document.getElementById('txtBulkAdminNotes');
+            if (inpNotes) inpNotes.value = '';
+            syncBulkSelectionBar();
+            loadApplicantsTable(currentPage);
+            loadRecruitmentOverview();
+          } else {
+            throw new Error(res.error || 'เกิดข้อผิดพลาดในการอัปเดตสถานะ');
+          }
+        } catch (err) {
+          if (window.RosterAudio && typeof window.RosterAudio.playError === 'function') {
+            window.RosterAudio.playError();
+          }
+          Swal.fire({
+            html: `
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);">
+                  <i class="fa-solid fa-triangle-exclamation" style="font-size: 34px; color: #EF4444;"></i>
+                </div>
+                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ไม่สามารถอัปเดตสถานะได้</h2>
+                <div style="color: #991B1B; font-size: 0.92rem; line-height: 1.5; background: #FEF2F2; border: 1.5px solid #FCA5A5; padding: 12px 16px; border-radius: 12px; margin-top: 10px; width: 100%; box-sizing: border-box;">
+                  ${err.message || 'เกิดข้อผิดพลาดในการดำเนินการ'}
+                </div>
+              </div>
+            `,
+            confirmButtonColor: '#0F172A',
+            confirmButtonText: 'ตกลง',
+            customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+          });
+        }
       });
     }
 

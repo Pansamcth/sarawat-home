@@ -116,7 +116,7 @@
 
   <!-- High-Security Database Gateway Config (with Cache-Buster) -->
   <script src="cloudflare-config.js?v=2.7.7"></script>
-  <script src="js/api-config.js?v=2.7.10"></script>
+  <script src="js/api-config.js?v=2.7.12"></script>
   <script src="js/world-map-data.js?v=1.0.0"></script>
   <script src="js/thailand-map-data.js?v=1.0.0"></script>
   
@@ -5482,6 +5482,9 @@
           <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
             <thead>
               <tr style="background: #f8fafc; border-bottom: 1px solid var(--dg-border); color: #475569; font-weight: 700;">
+                <th style="width: 44px; padding: 14px 12px; text-align: center;">
+                  <input type="checkbox" id="chkSelectAllApplicants" style="width: 17px; height: 17px; cursor: pointer; accent-color: #0f172a; border-radius: 4px;" title="เลือกทั้งหมด">
+                </th>
                 <th style="padding: 14px 16px;">เลขอ้างอิง</th>
                 <th style="padding: 14px 16px;">รูปถ่าย</th>
                 <th style="padding: 14px 16px;">รหัส นร.</th>
@@ -5564,6 +5567,37 @@
               หน้าถัดไป
             </button>
           </div>
+        </div>
+      </div>
+
+      <!-- Floating Bulk Action Bar for Recruitment Applicants -->
+      <div id="barBulkApplicantActions" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 1050; background: #0f172a; color: #ffffff; padding: 10px 20px; border-radius: 9999px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.45); align-items: center; gap: 14px; border: 1.5px solid rgba(255,255,255,0.18); backdrop-filter: blur(8px); animation: modalFadeIn 0.2s ease;">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.88rem; white-space: nowrap;">
+          <span style="background: #2563eb; color: #ffffff; padding: 2px 10px; border-radius: 9999px; font-size: 0.82rem; font-weight: 800;" id="txtBulkSelectedCount">0</span>
+          <span>รายการที่เลือก</span>
+        </div>
+        <div style="height: 22px; width: 1px; background: rgba(255,255,255,0.2);"></div>
+        <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+          <label style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">เปลี่ยนสถานะเป็น:</label>
+          <select id="selBulkTargetStatus" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; border-radius: 8px; padding: 6px 12px; font-size: 0.84rem; font-weight: 600; outline: none; cursor: pointer;">
+            <option value="pending">⏳ รอการตรวจสอบ (Pending)</option>
+            <option value="reviewing">🔍 กำลังตรวจสอบ (Reviewing)</option>
+            <option value="approved">✅ ผ่านการคัดเลือก (Approved)</option>
+            <option value="rejected">❌ ไม่ผ่านการคัดเลือก (Rejected)</option>
+            <option value="correction_needed">✏️ ขอให้แก้ไขข้อมูล (Correction)</option>
+          </select>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="text" id="txtBulkAdminNotes" placeholder="หมายเหตุ / บันทึกของกรรมการ (ถ้ามี)" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; border-radius: 8px; padding: 6px 12px; font-size: 0.84rem; width: 220px; outline: none;" />
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+          <button type="button" id="btnApplyBulkStatus" style="background: #2563eb; color: #ffffff; border: none; padding: 7px 16px; font-size: 0.84rem; border-radius: 9999px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.3); transition: all 0.15s ease;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+            <i class="fa-solid fa-check-double" style="font-size: 13px;"></i>
+            <span>อัปเดตสถานะ</span>
+          </button>
+          <button type="button" id="btnClearBulkSelection" style="background: transparent; border: none; color: #94a3b8; font-size: 0.82rem; cursor: pointer; padding: 6px 10px; font-weight: 600; border-radius: 9999px; transition: color 0.15s ease;" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#94a3b8'">
+            ยกเลิกการเลือก
+          </button>
         </div>
       </div>
     </div>
@@ -13681,7 +13715,7 @@
     });
   </script>
   <script src="js/admin-team.js?v=2.7.7"></script>
-  <script src="js/admin-recruitment.js?v=2.7.10"></script>
+  <script src="js/admin-recruitment.js?v=2.7.12"></script>
 </body>
 
 </html>

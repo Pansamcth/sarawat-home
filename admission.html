@@ -119,7 +119,7 @@
 
   <!-- Central API Config -->
   <script src="/cloudflare-config.js?v=2.7.3"></script>
-  <script src="/js/api-config.js?v=2.7.11"></script>
+  <script src="/js/api-config.js?v=2.7.12"></script>
   <script src="/js/page-guard.js" data-page="admission"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
@@ -2427,6 +2427,19 @@
               </div>
             </div>
 
+            <!-- REVIEWING NOTICE (CANNOT WITHDRAW WHEN REVIEWING) -->
+            <div id="stReviewingNotice" class="recruit-callout info" style="display: none; margin-top: 20px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px 18px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 36px; height: 36px; border-radius: 10px; background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="fa-solid fa-lock" style="font-size: 16px;"></i>
+                </div>
+                <div style="font-size: 0.88rem; line-height: 1.55; color: #1e40af;">
+                  <strong style="font-weight: 800; color: #1e3a8a;">ใบสมัครอยู่ในขั้นตอนกำลังตรวจสอบ</strong><br>
+                  ขณะนี้คณะกรรมการกำลังดำเนินการตรวจประเมินใบสมัครของท่าน จึงไม่สามารถขอยกเลิกหรือถอนตัวได้ในขั้นตอนนี้
+                </div>
+              </div>
+            </div>
+
             <!-- SELF-WITHDRAWAL ACTION BUTTON -->
             <div id="boxWithdrawalAction" style="display: none; margin-top: 24px; padding-top: 18px; border-top: 1px dashed #e2e8f0; text-align: center;">
               <button type="button" id="btnOpenWithdrawModal" class="dg-btn-outline"
@@ -4638,6 +4651,27 @@
         btnOpenWithdrawModal.addEventListener('click', async () => {
           if (!currentCheckedApplicant) return;
 
+          // Double check: ห้ามถอนตัวถ้าสถานะไม่ใช่ pending
+          if (currentCheckedApplicant.status !== 'pending') {
+            Swal.fire({
+              html: `
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                  <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #BFDBFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);">
+                    <i class="fa-solid fa-lock" style="font-size: 32px; color: #2563EB;"></i>
+                  </div>
+                  <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ไม่สามารถถอนตัวได้</h2>
+                  <div style="color: #475569; font-size: 0.95rem; line-height: 1.5;">
+                    ใบสมัครของท่านเข้าสู่ขั้นตอน <strong>กำลังตรวจสอบ</strong> หรือประกาศผลแล้ว จึงไม่สามารถขอถอนตัวได้ครับ
+                  </div>
+                </div>
+              `,
+              confirmButtonColor: '#0F172A',
+              confirmButtonText: 'รับทราบ',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
+            return;
+          }
+
           const appName = currentCheckedApplicant.applicantName || 'ผู้สมัคร';
           const studentId = currentCheckedApplicant.studentId || '';
           const appCode = currentCheckedApplicant.applicationCode || '';
@@ -4659,9 +4693,24 @@
                     ⚠️ คำเตือน: เมื่อยืนยันการถอนตัวแล้ว ใบสมัครจะถูกยกเลิกทันที คณะกรรมการจะไม่นำข้อมูลเข้าสู่การคัดเลือก และไม่สามารถขอคืนสิทธิ์ได้
                   </div>
                 </div>
+
+                <div style="width: 100%; text-align: left; margin-bottom: 12px;">
+                  <label style="font-size: 0.84rem; font-weight: 700; color: #334155; display: block; margin-bottom: 5px;">
+                    1. กรอกเลขอ้างอิงใบสมัครเพื่อยืนยัน <span style="color: #DC2626;">*</span>:
+                  </label>
+                  <input type="text" id="swalWithdrawCodeInput" placeholder="เช่น ${appCode}" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.92rem; font-family: monospace; font-weight: 700; text-transform: uppercase; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" autocomplete="off" />
+                </div>
+
+                <div style="width: 100%; text-align: left; margin-bottom: 12px;">
+                  <label style="font-size: 0.84rem; font-weight: 700; color: #334155; display: block; margin-bottom: 5px;">
+                    2. ยืนยันเบอร์โทรศัพท์ 10 หลักที่ใช้สมัคร <span style="color: #DC2626;">*</span>:
+                  </label>
+                  <input type="tel" id="swalWithdrawPhoneInput" maxlength="10" placeholder="0XXXXXXXXX" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.92rem; font-family: monospace; font-weight: 700; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" autocomplete="off" />
+                </div>
+
                 <div style="width: 100%; text-align: left;">
                   <label style="font-size: 0.84rem; font-weight: 700; color: #475569; display: block; margin-bottom: 5px;">
-                    ระบุเหตุผลในการขอถอนตัว <span style="font-weight: 400; color: #94A3B8;">(ระบุหรือไม่ระบุก็ได้)</span>:
+                    3. ระบุเหตุผลในการขอถอนตัว <span style="font-weight: 400; color: #94A3B8;">(ถ้ามี)</span>:
                   </label>
                   <input type="text" id="swalWithdrawReasonInput" placeholder="เช่น สละสิทธิ์, ติดภารกิจอื่น" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.9rem; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" />
                 </div>
@@ -4681,14 +4730,27 @@
             },
             buttonsStyling: true,
             preConfirm: () => {
-              const reasonEl = document.getElementById('swalWithdrawReasonInput');
-              return reasonEl ? reasonEl.value.trim() : '';
+              const enteredCode = (document.getElementById('swalWithdrawCodeInput')?.value || '').trim().toUpperCase();
+              const enteredPhone = (document.getElementById('swalWithdrawPhoneInput')?.value || '').trim().replace(/[-\s]/g, '');
+              const reason = (document.getElementById('swalWithdrawReasonInput')?.value || '').trim();
+
+              if (!enteredCode || enteredCode !== (appCode || '').trim().toUpperCase()) {
+                Swal.showValidationMessage('เลขอ้างอิงใบสมัครไม่ถูกต้อง กรุณาตรวจสอบให้ตรงกับที่ระบุด้านบน');
+                return false;
+              }
+
+              if (!/^0\d{9}$/.test(enteredPhone)) {
+                Swal.showValidationMessage('กรุณากรอกเบอร์โทรศัพท์ 10 หลักที่ใช้ในการสมัคร');
+                return false;
+              }
+
+              return { code: enteredCode, phone: enteredPhone, reason };
             }
           });
 
-          if (!result.isConfirmed) return;
+          if (!result.isConfirmed || !result.value) return;
 
-          const reason = result.value || '';
+          const { phone, reason } = result.value;
 
           // 1. Show SI-ROSTER Loading Popup
           Swal.fire({
@@ -4712,6 +4774,7 @@
             const res = await window.SarawatAPI.withdrawRecruitmentApplication({
               student_id: studentId,
               application_code: appCode,
+              phone: phone,
               reason: reason
             });
 

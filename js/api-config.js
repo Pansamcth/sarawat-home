@@ -1198,14 +1198,16 @@
       }
     },
 
-    withdrawRecruitmentApplication: async function (studentId, applicationCode, reason = '') {
+    withdrawRecruitmentApplication: async function (studentId, applicationCode, phone = '', reason = '') {
       let sId = studentId;
       let appCode = applicationCode;
+      let pNum = phone;
       let rText = reason;
       if (typeof studentId === 'object' && studentId !== null) {
         sId = studentId.student_id || studentId.studentId || '';
         appCode = studentId.application_code || studentId.applicationCode || '';
-        rText = studentId.reason || reason || '';
+        pNum = studentId.phone || '';
+        rText = studentId.reason || '';
       }
       const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/withdraw`, {
@@ -1214,6 +1216,7 @@
         body: JSON.stringify({
           student_id: String(sId).trim(),
           application_code: String(appCode).trim().toUpperCase(),
+          phone: String(pNum).trim().replace(/[-\s]/g, ''),
           reason: String(rText).trim()
         })
       });
@@ -1338,6 +1341,22 @@
       const res = await fetch(`${base}/api/recruitment/applicant/${id}`, { headers: this.getAuthHeaders() });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
+      return data;
+    },
+
+    adminBulkUpdateApplicantStatus: async function (applicantIds, newStatus, adminNotes = '') {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/applicants/bulk-status`, {
+        method: 'PUT',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          applicant_ids: applicantIds,
+          status: newStatus,
+          admin_notes: adminNotes
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ปรับสถานะผู้สมัครแบบกลุ่มไม่สำเร็จ');
       return data;
     },
 
