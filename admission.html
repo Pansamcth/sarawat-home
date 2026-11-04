@@ -26,7 +26,7 @@
         if (window.location.protocol === 'file:') return;
         var h = window.location.hostname;
         var p = window.location.pathname;
-        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local') || h === '192.168.1.2' || /^192\.168\.\d{1,3}\.\d{1,3}$/.test(h) || /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h);
         var isVercel = h.endsWith('.vercel.app');
         var isAdmissionsSubdomain = /^admissions?\./i.test(h);
 
@@ -119,7 +119,7 @@
 
   <!-- Central API Config -->
   <script src="/cloudflare-config.js?v=2.7.3"></script>
-  <script src="/js/api-config.js?v=2.7.9"></script>
+  <script src="/js/api-config.js?v=2.7.10"></script>
   <script src="/js/page-guard.js" data-page="admission"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
@@ -2103,6 +2103,25 @@
                 </div>
               </div>
 
+                            <!-- SECTION 6: ATTITUDE & MOTIVATION QUESTIONS -->
+              <div class="recruit-form-section" id="sectionAttitudeQuestions">
+                <div class="recruit-card-header">
+                  <div class="recruit-card-icon">
+                    <i data-lucide="message-square-quote"></i>
+                  </div>
+                  <div>
+                    <h3 class="recruit-card-title">6. ทัศนคติ อุดมคติ และแรงจูงใจในการสมัคร</h3>
+                    <p class="recruit-card-subtitle">โปรดตอบคำถามด้วยความคิดเห็นของท่านเองอย่างจริงใจ เพื่อประกอบการพิจารณาคัดเลือก</p>
+                  </div>
+                </div>
+
+                <div id="containerAttitudeQuestions" style="display: flex; flex-direction: column; gap: 20px;">
+                  <div style="text-align: center; padding: 24px; color: #64748b; font-size: 0.9rem;">
+                    กำลังโหลดชุดคำถามประเมินทัศนคติ...
+                  </div>
+                </div>
+              </div>
+
               <!-- ACTION BUTTON STEP 1 -->
               <div class="recruit-actions-row">
                 <a href="index.html" class="btn-step-prev">
@@ -2166,6 +2185,17 @@
                   </div>
                 </div>
               </div>
+
+              <!-- REVIEW ATTITUDE ANSWERS (STEP 2) -->
+                <div id="boxReviewAttitude" style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed #e2e8f0;">
+                  <div style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="message-square-quote" style="width: 18px; height: 18px; color: #2563eb;"></i>
+                    <span>คำตอบประเมินทัศนคติและอุดมคติ</span>
+                  </div>
+                  <div id="reviewAttitudeContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Rendered dynamically -->
+                  </div>
+                </div>
 
               <!-- LOW GPAX NOTICE IN STEP 2 REVIEW (EDITORIAL CALLOUT) -->
               <div id="boxReviewGpaxNotice" class="recruit-callout warning" style="display: none; margin-bottom: 24px;">
@@ -2395,6 +2425,55 @@
     </div>
   </main>
 
+    <!-- ============ WITHDRAWAL MODAL ============ -->
+  <div class="pdpa-modal-backdrop" id="withdrawModal" style="display: none; z-index: 9999;">
+    <div class="pdpa-modal-box" style="max-width: 500px; text-align: left; padding: 24px; border-radius: 20px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: #fef2f2; color: #dc2626; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="user-x" style="width: 20px; height: 20px;"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">ขอยกเลิก / ถอนตัวจากการสมัคร</h3>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">การดำเนินการนี้ไม่สามารถยกเลิกย้อนหลังได้</div>
+          </div>
+        </div>
+        <button type="button" id="btnCloseWithdrawModal" style="background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.2rem; padding: 4px;">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
+      </div>
+
+      <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px; font-size: 0.85rem; color: #991b1b; line-height: 1.55; margin-bottom: 18px;">
+        <strong>⚠️ คำเตือนสำคัญ:</strong> เมื่อยืนยันการถอนตัวแล้ว ใบสมัครจะถูกยกเลิกทันที คณะกรรมการจะไม่นำข้อมูลเข้าสู่การคัดเลือก และไม่สามารถขอคืนสิทธิ์ได้
+      </div>
+
+      <div class="recruit-form-group" style="margin-bottom: 14px;">
+        <label class="recruit-label" for="inpWithdrawAppCode">
+          <span>กรอกเลขอ้างอิงใบสมัครเพื่อยืนยัน <span class="req">*</span></span>
+        </label>
+        <input type="text" id="inpWithdrawAppCode" class="recruit-input" placeholder="เช่น SP70-XXXX" style="font-family: monospace; font-weight: 700; font-size: 0.95rem; text-transform: uppercase;" />
+        <div class="recruit-field-error" id="errWithdrawAppCode" style="display: none; margin-top: 6px;">กรุณากรอกเลขอ้างอิงใบสมัครให้ถูกต้อง</div>
+      </div>
+
+      <div class="recruit-form-group" style="margin-bottom: 22px;">
+        <label class="recruit-label" for="inpWithdrawReason">
+          <span>เหตุผลในการขอถอนตัว <span class="opt">(ถ้ามี)</span></span>
+        </label>
+        <textarea id="inpWithdrawReason" class="recruit-input" style="height: 80px; font-size: 0.88rem; line-height: 1.5;" placeholder="ระบุเหตุผล เช่น สละสิทธิ์, ติดภารกิจอื่น, ย้ายโรงเรียน"></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-step-prev" id="btnCancelWithdraw" style="height: 42px; padding: 0 18px; border-radius: 10px;">
+          ยกเลิก
+        </button>
+        <button type="button" class="dg-btn-black" id="btnConfirmWithdraw" style="background: #dc2626; border-color: #dc2626; height: 42px; padding: 0 20px; border-radius: 10px; color: #ffffff; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+          <span id="txtConfirmWithdraw">ยืนยันการถอนตัว</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ PDPA MODAL ============ -->
   <div class="pdpa-modal-backdrop" id="pdpaModal">
     <div class="pdpa-modal-box">
@@ -2595,6 +2674,16 @@
 
   <!-- ============ FRONTEND JAVASCRIPT LOGIC ============ -->
   <script>
+    function escapeHtml(text) {
+      if (!text && text !== 0) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       // 1. Initialize Lucide Icons
       if (window.lucide) {
@@ -2615,6 +2704,9 @@
       }, { passive: true });
 
       // 3. Application State
+      let attitudeQuestions = [];
+      let collectedAttitudeAnswers = [];
+      let currentCheckedApplicant = null;
       let systemSettings = {
         isOpen: true,
         academicYear: '2570',
@@ -2801,7 +2893,16 @@
           if (document.getElementById('selPrefix')) document.getElementById('selPrefix').value = app.prefix || 'นาย';
           if (document.getElementById('inpFirstName')) document.getElementById('inpFirstName').value = app.firstName || '';
           if (document.getElementById('inpLastName')) document.getElementById('inpLastName').value = app.lastName || '';
-          if (document.getElementById('selGrade')) document.getElementById('selGrade').value = app.gradeLevel || 'ม.4';
+          if (document.getElementById('selGrade')) {
+            const selG = document.getElementById('selGrade');
+            if (app.gradeLevel && !Array.from(selG.options).some(o => o.value === app.gradeLevel)) {
+              const opt = document.createElement('option');
+              opt.value = app.gradeLevel;
+              opt.textContent = app.gradeLevel;
+              selG.appendChild(opt);
+            }
+            selG.value = app.gradeLevel || '';
+          }
           if (document.getElementById('inpClassroom')) document.getElementById('inpClassroom').value = app.classroom || '';
           if (document.getElementById('inpPhone')) document.getElementById('inpPhone').value = app.phone || '';
           if (document.getElementById('inpGpax')) document.getElementById('inpGpax').value = app.gpax || '';
@@ -2833,6 +2934,19 @@
             photoPreviewImg.style.display = 'block';
             photoPlaceholder.style.display = 'none';
             btnRemovePhoto.style.display = 'inline-flex';
+          }
+
+          // Prefill attitude answers in edit mode
+          if (Array.isArray(app.answers)) {
+            app.answers.forEach(a => {
+              const qId = a.question_id || a.questionId;
+              const ta = document.getElementById(`inpQuestion_${qId}`);
+              if (ta) {
+                ta.value = a.answer_text || a.answerText || '';
+                const cnt = document.getElementById(`counterQuestion_${qId}`);
+                if (cnt) cnt.textContent = ta.value.length;
+              }
+            });
           }
 
           // Update editing banner content
@@ -2921,6 +3035,83 @@
       }
 
       // ==========================================
+      // ==========================================
+      // LOAD ATTITUDE QUESTIONS
+      // ==========================================
+      async function loadAttitudeQuestions() {
+        const container = document.getElementById('containerAttitudeQuestions');
+        if (!container) return;
+        try {
+          const res = await window.SarawatAPI.getRecruitmentQuestions();
+          if (res && res.success && Array.isArray(res.questions)) {
+            attitudeQuestions = res.questions;
+            if (attitudeQuestions.length === 0) {
+              container.innerHTML = '<div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 0.88rem; font-style: italic;">ไม่มีชุดคำถามประเมินทัศนคติในรอบนี้</div>';
+              return;
+            }
+
+            container.innerHTML = attitudeQuestions.map((q, idx) => {
+              const minLen = q.min_length || 0;
+              const maxLen = q.max_length || 1000;
+              const desc = q.question_desc || q.help_text || '';
+              const ph = q.placeholder || 'พิมพ์คำตอบของคุณที่นี่...';
+              return `
+                <div class="attitude-question-item" style="text-align: left; margin-bottom: 22px;">
+                  <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 6px;">
+                    <span style="display: inline-flex; align-items: center; justify-content: center; background: #0f172a; color: #ffffff; min-width: 26px; height: 26px; border-radius: 7px; font-size: 0.82rem; font-weight: 700; flex-shrink: 0; margin-top: 1px;">${idx + 1}</span>
+                    <div style="flex: 1;">
+                      <label for="inpQuestion_${q.id}" style="font-size: 0.98rem; font-weight: 750; color: #0f172a; line-height: 1.5; cursor: pointer; display: inline;">
+                        ${escapeHtml(q.question_text)}
+                        ${q.is_required ? '<span style="color: #ef4444; font-weight: 700; margin-left: 4px;">*</span>' : '<span style="font-size: 0.8rem; color: #94a3b8; font-weight: 400; margin-left: 4px;">(ไม่บังคับ)</span>'}
+                      </label>
+                      ${desc ? `<div style="font-size: 0.84rem; color: #64748b; margin-top: 3px; line-height: 1.5; font-weight: 400;">${escapeHtml(desc)}</div>` : ''}
+                    </div>
+                  </div>
+                  <textarea 
+                    class="recruit-input question-textarea" 
+                    id="inpQuestion_${q.id}" 
+                    data-qid="${q.id}"
+                    data-min="${minLen}"
+                    data-max="${maxLen}"
+                    data-req="${q.is_required ? 1 : 0}"
+                    placeholder="${escapeHtml(ph)}"
+                    style="min-height: 110px; line-height: 1.6; font-size: 0.92rem; resize: vertical; padding: 12px 14px; margin-top: 6px;"
+                    maxlength="${maxLen}"
+                  ></textarea>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+                    <div class="recruit-field-error" id="errQuestion_${q.id}" style="display: none; margin: 0;">กรุณาตอบคำถามข้อนี้</div>
+                    <div style="margin-left: auto;">
+                      <span id="counterQuestion_${q.id}" style="font-weight: 600; color: #64748b;">0</span> / ${maxLen} ตัวอักษร
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+            // Hook live character counter
+            attitudeQuestions.forEach(q => {
+              const ta = document.getElementById(`inpQuestion_${q.id}`);
+              const counter = document.getElementById(`counterQuestion_${q.id}`);
+              if (ta && counter) {
+                ta.addEventListener('input', () => {
+                  counter.textContent = ta.value.length;
+                  if (ta.value.length >= (q.min_length || 0)) {
+                    ta.classList.remove('has-error');
+                    const errEl = document.getElementById(`errQuestion_${q.id}`);
+                    if (errEl) errEl.style.display = 'none';
+                  }
+                });
+              }
+            });
+          }
+        } catch (err) {
+          console.warn('Error loading attitude questions:', err);
+          if (container) {
+            container.innerHTML = '<div style="color: #ef4444; font-size: 0.85rem; padding: 16px;">ไม่สามารถโหลดชุดคำถามได้ กรุณาลองใหม่อีกครั้ง</div>';
+          }
+        }
+      }
+
       // LOAD LIVE RECRUITMENT STATUS & CLUBS
       // ==========================================
       async function loadStatusAndClubs() {
@@ -2931,9 +3122,38 @@
               isOpen: Boolean(statusRes.isOpen),
               academicYear: statusRes.academicYear || '2570',
               minGpax: Number(statusRes.minGpax) || 2.50,
+              allowedGrades: (statusRes.allowedGrades || 'ม.4,ม.5').split(',').map(s => s.trim()).filter(Boolean),
               pdpaContent: statusRes.pdpaContent || '',
               turnstileSiteKey: statusRes.turnstileSiteKey || '0x4AAAAAAFnbMUUAVol_w9cB'
             };
+
+            // Dynamically populate grade dropdown based on configured allowed grades
+            const gradeLabelsMap = {
+              'ม.1': 'มัธยมศึกษาปีที่ 1 (ม.1)',
+              'ม.2': 'มัธยมศึกษาปีที่ 2 (ม.2)',
+              'ม.3': 'มัธยมศึกษาปีที่ 3 (ม.3)',
+              'ม.4': 'มัธยมศึกษาปีที่ 4 (ม.4)',
+              'ม.5': 'มัธยมศึกษาปีที่ 5 (ม.5)',
+              'ม.6': 'มัธยมศึกษาปีที่ 6 (ม.6)'
+            };
+            const allowedGradesList = systemSettings.allowedGrades;
+            const selGradeEl = document.getElementById('selGrade');
+            if (selGradeEl) {
+              const currentGradeVal = selGradeEl.value;
+              selGradeEl.innerHTML = '<option value="">-- เลือกระดับชั้น --</option>' +
+                allowedGradesList.map(g => `<option value="${g}">${gradeLabelsMap[g] || g}</option>`).join('');
+              if (allowedGradesList.includes(currentGradeVal)) {
+                selGradeEl.value = currentGradeVal;
+              }
+            }
+            const optGradeLabelEl = document.querySelector('label[for="selGrade"] .opt');
+            if (optGradeLabelEl) {
+              optGradeLabelEl.textContent = `(เฉพาะ ${allowedGradesList.join(', ')})`;
+            }
+            const errGradeEl = document.getElementById('errGrade');
+            if (errGradeEl) {
+              errGradeEl.textContent = `เปิดรับเฉพาะนักเรียนชั้น ${allowedGradesList.join(', ')}`;
+            }
 
             const labelMinGpax = document.getElementById('labelMinGpax');
             if (labelMinGpax) {
@@ -2968,6 +3188,18 @@
                 }
                 if (title) title.textContent = 'ไม่สามารถเชื่อมต่อระบบรับสมัครได้ชั่วคราว';
                 if (desc) desc.textContent = 'ระบบไม่สามารถดึงข้อมูลสถานะได้ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ต หรือลองใหม่อีกครั้ง';
+              } else if (statusRes.isQuotaFull) {
+                // ผู้สมัครครบตามจำนวนจำกัดแล้ว
+                if (badge) {
+                  badge.className = 'schedule-badge-status closed';
+                  badge.innerHTML = '<span class="status-dot red"></span><span>ผู้สมัครครบตามจำนวนแล้ว</span>';
+                }
+                if (iconWrap) {
+                  iconWrap.className = 'recruit-closed-icon-wrap closed';
+                  iconWrap.innerHTML = '<i data-lucide="users" style="width: 30px; height: 30px;"></i>';
+                }
+                if (title) title.textContent = 'ยอดผู้สมัครครบตามจำนวนจำกัดแล้ว';
+                if (desc) desc.textContent = `ระบบได้ปิดรับสมัครชั่วคราวเนื่องจากมีผู้ยื่นใบสมัครครบตามจำนวนที่กำหนดแล้ว (${statusRes.currentApplicantCount || 0}/${statusRes.maxApplicants || 0} คน) ขออภัยในความไม่สะดวก`;
               } else if (isBeforeStart) {
                 // ยังไม่ถึงเวลารับสมัคร
                 if (badge) {
@@ -3045,6 +3277,7 @@
       }
 
       await loadStatusAndClubs();
+      await loadAttitudeQuestions();
 
       // ==========================================
       // THAI ADDRESS CASCADING DROPDOWNS (จังหวัด -> อำเภอ -> ตำบล -> รหัสไปรษณีย์)
@@ -3770,9 +4003,16 @@
 
         // 5. Grade & Room
         const grade = document.getElementById('selGrade').value;
-        if (grade !== 'ม.4' && grade !== 'ม.5') {
+        const allowedGradesForVal = (systemSettings && systemSettings.allowedGrades && systemSettings.allowedGrades.length > 0)
+          ? systemSettings.allowedGrades
+          : ['ม.4', 'ม.5'];
+        if (!grade || !allowedGradesForVal.includes(grade)) {
           document.getElementById('selGrade').classList.add('has-error');
-          document.getElementById('errGrade').style.display = 'block';
+          const errGradeEl = document.getElementById('errGrade');
+          if (errGradeEl) {
+            errGradeEl.textContent = `เปิดรับเฉพาะนักเรียนชั้น ${allowedGradesForVal.join(', ')}`;
+            errGradeEl.style.display = 'block';
+          }
           hasError = true;
         }
         const room = document.getElementById('inpClassroom').value.trim();
@@ -3851,6 +4091,44 @@
           hasError = true;
         }
 
+        // 10. Attitude Questions Validation (Section 6)
+        collectedAttitudeAnswers = [];
+        if (Array.isArray(attitudeQuestions) && attitudeQuestions.length > 0) {
+          attitudeQuestions.forEach(q => {
+            const ta = document.getElementById(`inpQuestion_${q.id}`);
+            const errEl = document.getElementById(`errQuestion_${q.id}`);
+            const val = (ta ? ta.value : '').trim();
+            const minLen = q.min_length || 0;
+            const maxLen = q.max_length || 1000;
+            const isReq = Boolean(q.is_required);
+
+            if (isReq && (!val || val.length < minLen)) {
+              if (ta) ta.classList.add('has-error');
+              if (errEl) {
+                errEl.textContent = `กรุณาตอบคำถามข้อนี้ (อย่างน้อย ${minLen} ตัวอักษร, ปัจจุบัน ${val.length} ตัวอักษร)`;
+                errEl.style.display = 'block';
+              }
+              hasError = true;
+            } else if (val && val.length < minLen) {
+              if (ta) ta.classList.add('has-error');
+              if (errEl) {
+                errEl.textContent = `คำตอบสั้นเกินไป กรุณาตอบอย่างน้อย ${minLen} ตัวอักษร (ปัจจุบัน ${val.length} ตัวอักษร)`;
+                errEl.style.display = 'block';
+              }
+              hasError = true;
+            } else {
+              if (ta) ta.classList.remove('has-error');
+              if (errEl) errEl.style.display = 'none';
+            }
+
+            collectedAttitudeAnswers.push({
+              questionId: q.id,
+              questionText: q.question_text,
+              answerText: val
+            });
+          });
+        }
+
         if (hasError) {
           const firstErr = document.querySelector('.has-error, .recruit-field-error[style*="block"]');
           if (firstErr) {
@@ -3911,6 +4189,26 @@
         ].filter(Boolean).join(' ');
 
         document.getElementById('reviewAddress').textContent = fullAddr;
+
+        // Populate Attitude Answers in Step 2 Review Dossier
+        const reviewAttitudeBox = document.getElementById('boxReviewAttitude');
+        const reviewAttitudeContainer = document.getElementById('reviewAttitudeContainer');
+        if (reviewAttitudeContainer) {
+          if (collectedAttitudeAnswers && collectedAttitudeAnswers.length > 0) {
+            if (reviewAttitudeBox) reviewAttitudeBox.style.display = 'block';
+            reviewAttitudeContainer.innerHTML = collectedAttitudeAnswers.map((ans, idx) => `
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px;">
+                <div style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                  <span style="display: inline-flex; align-items: center; justify-content: center; background: #0f172a; color: #ffffff; min-width: 22px; height: 22px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; margin-top: 1px;">${idx + 1}</span>
+                  <span style="font-weight: 700; font-size: 0.88rem; color: #0f172a; line-height: 1.5;">${escapeHtml(ans.questionText)}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #334155; line-height: 1.6; white-space: pre-wrap; word-break: break-word; background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #edf2f7;">${ans.answerText ? escapeHtml(ans.answerText) : '<span style="color: #94a3b8; font-style: italic;">(ไม่ได้ระบุคำตอบ)</span>'}</div>
+              </div>
+            `).join('');
+          } else {
+            if (reviewAttitudeBox) reviewAttitudeBox.style.display = 'none';
+          }
+        }
 
         // Switch to Step 2
         stepPane1.style.display = 'none';
@@ -4026,6 +4324,7 @@
         formData.append('website_hp', (document.getElementById('recruit_hp')?.value || '').trim());
         formData.append('cf_turnstile_response', turnstileToken);
         formData.append('cf-turnstile-response', turnstileToken);
+        formData.append('answers', JSON.stringify(collectedAttitudeAnswers));
 
         // ========================================================
         // 🐍 POPUP LOADING STEP (เกมงูกินแอปเปิล + ระบบคิว)
@@ -4299,6 +4598,29 @@
               stCorrectionBox.style.display = 'none';
             }
 
+            currentCheckedApplicant = res;
+
+            // Handle Withdrawn Status & Self-withdrawal button
+            const stWithdrawnAlert = document.getElementById('stWithdrawnAlert');
+            const stWithdrawnText = document.getElementById('stWithdrawnText');
+            const boxWithdrawalAction = document.getElementById('boxWithdrawalAction');
+
+            if (res.status === 'withdrawn') {
+              if (stWithdrawnAlert) {
+                stWithdrawnAlert.style.display = 'block';
+                if (stWithdrawnText) {
+                  stWithdrawnText.textContent = res.withdrawalReason ? `เหตุผลในการถอนตัว: ${res.withdrawalReason}` : 'ใบสมัครนี้ได้ถูกยกเลิก/ถอนตัวจากการรับสมัครเรียบร้อยแล้ว';
+                }
+              }
+              if (boxWithdrawalAction) boxWithdrawalAction.style.display = 'none';
+            } else {
+              if (stWithdrawnAlert) stWithdrawnAlert.style.display = 'none';
+              if (boxWithdrawalAction) {
+                const canWithdraw = res.status !== 'approved' && res.status !== 'rejected' && res.allowWithdrawal !== false;
+                boxWithdrawalAction.style.display = canWithdraw ? 'block' : 'none';
+              }
+            }
+
             statusResultBox.style.display = 'block';
           }
         } catch (err) {
@@ -4333,6 +4655,112 @@
         });
       }
 
+      
+      // ==========================================
+      // WITHDRAWAL MODAL HANDLERS
+      // ==========================================
+      const withdrawModal = document.getElementById('withdrawModal');
+      const btnOpenWithdrawModal = document.getElementById('btnOpenWithdrawModal');
+      const btnCloseWithdrawModal = document.getElementById('btnCloseWithdrawModal');
+      const btnCancelWithdraw = document.getElementById('btnCancelWithdraw');
+      const btnConfirmWithdraw = document.getElementById('btnConfirmWithdraw');
+      const inpWithdrawAppCode = document.getElementById('inpWithdrawAppCode');
+      const inpWithdrawReason = document.getElementById('inpWithdrawReason');
+      const errWithdrawAppCode = document.getElementById('errWithdrawAppCode');
+
+      function openWithdrawModal() {
+        if (!currentCheckedApplicant) return;
+        if (inpWithdrawAppCode) {
+          inpWithdrawAppCode.value = '';
+          inpWithdrawAppCode.classList.remove('has-error');
+        }
+        if (inpWithdrawReason) inpWithdrawReason.value = '';
+        if (errWithdrawAppCode) errWithdrawAppCode.style.display = 'none';
+        if (withdrawModal) withdrawModal.style.display = 'flex';
+      }
+
+      function closeWithdrawModal() {
+        if (withdrawModal) withdrawModal.style.display = 'none';
+      }
+
+      if (btnOpenWithdrawModal) btnOpenWithdrawModal.addEventListener('click', openWithdrawModal);
+      if (btnCloseWithdrawModal) btnCloseWithdrawModal.addEventListener('click', closeWithdrawModal);
+      if (btnCancelWithdraw) btnCancelWithdraw.addEventListener('click', closeWithdrawModal);
+      if (withdrawModal) {
+        withdrawModal.addEventListener('click', (e) => {
+          if (e.target === withdrawModal) closeWithdrawModal();
+        });
+      }
+
+      if (btnConfirmWithdraw) {
+        btnConfirmWithdraw.addEventListener('click', async () => {
+          if (!currentCheckedApplicant) return;
+          const enteredCode = (inpWithdrawAppCode?.value || '').trim().toUpperCase();
+          const expectedCode = (currentCheckedApplicant.applicationCode || '').trim().toUpperCase();
+
+          if (!enteredCode || enteredCode !== expectedCode) {
+            if (inpWithdrawAppCode) inpWithdrawAppCode.classList.add('has-error');
+            if (errWithdrawAppCode) {
+              errWithdrawAppCode.textContent = 'เลขอ้างอิงใบสมัครไม่ถูกต้อง กรุณาตรวจสอบให้ตรงกับที่แสดงด้านบน';
+              errWithdrawAppCode.style.display = 'block';
+            }
+            return;
+          }
+
+          if (inpWithdrawAppCode) inpWithdrawAppCode.classList.remove('has-error');
+          if (errWithdrawAppCode) errWithdrawAppCode.style.display = 'none';
+
+          const reason = (inpWithdrawReason?.value || '').trim();
+
+          btnConfirmWithdraw.disabled = true;
+          const origHtml = btnConfirmWithdraw.innerHTML;
+          btnConfirmWithdraw.innerHTML = '<span>กำลังยกเลิกใบสมัคร...</span>';
+
+          try {
+            const res = await window.SarawatAPI.withdrawRecruitmentApplication({
+              student_id: currentCheckedApplicant.studentId,
+              application_code: enteredCode,
+              reason: reason
+            });
+
+            if (res && res.success) {
+              closeWithdrawModal();
+              if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'ถอนตัวจากการสมัครสำเร็จ',
+                  text: 'ระบบได้ดำเนินการยกเลิกใบสมัครของท่านเรียบร้อยแล้ว',
+                  confirmButtonColor: '#0F172A',
+                  confirmButtonText: 'ตกลง'
+                });
+              } else {
+                alert('ระบบได้ดำเนินการยกเลิกใบสมัครของท่านเรียบร้อยแล้ว');
+              }
+              // Refresh status
+              document.getElementById('btnSearchStatus').click();
+            } else {
+              throw new Error(res.error || 'ไม่สามารถดำเนินการถอนตัวได้');
+            }
+          } catch (err) {
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: err.message,
+                confirmButtonColor: '#0F172A',
+                confirmButtonText: 'ตกลง'
+              });
+            } else {
+              alert('เกิดข้อผิดพลาด: ' + err.message);
+            }
+          } finally {
+            btnConfirmWithdraw.disabled = false;
+            btnConfirmWithdraw.innerHTML = origHtml;
+            if (window.lucide) lucide.createIcons();
+          }
+        });
+      }
+      
       // Automatically check URL and SessionStorage for Edit Mode
       // e.g. recruit.html?edit=36463 or #edit-36463
       try {
@@ -4355,7 +4783,7 @@
       (function setupSubdomainLinkRouting() {
         try {
           var h = window.location.hostname || '';
-          var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+          var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local') || h === '192.168.1.2' || /^192\.168\.\d{1,3}\.\d{1,3}$/.test(h) || /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h);
           var isVercel = h.endsWith('.vercel.app');
           var isAdmissionsSubdomain = /^admissions?\./i.test(h);
 

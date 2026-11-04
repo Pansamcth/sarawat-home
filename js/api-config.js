@@ -1186,6 +1186,30 @@
     // ==========================================
     // 🛡️ RECRUITMENT APIS (ระบบรับสมัครสารวัตรนักเรียน ปีการศึกษา 2570)
     // ==========================================
+    getRecruitmentQuestions: async function () {
+      const base = this.getBaseUrl() || '';
+      try {
+        const res = await fetch(`${base}/api/recruitment/questions`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.error('getRecruitmentQuestions error:', err);
+        return { success: false, questions: [], error: err.message };
+      }
+    },
+
+    withdrawRecruitmentApplication: async function (studentId, applicationCode, reason = '') {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/withdraw`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: studentId, application_code: applicationCode, reason: reason })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ถอนตัวใบสมัครไม่สำเร็จ');
+      return data;
+    },
+
     getRecruitmentStatus: async function () {
       const base = this.getBaseUrl() || '';
       try {
@@ -1290,6 +1314,7 @@
       if (params.club) q.set('club', params.club);
       if (params.page) q.set('page', params.page);
       if (params.limit) q.set('limit', params.limit);
+      if (params.trash !== undefined) q.set('trash', params.trash);
 
       const res = await fetch(`${base}/api/recruitment/applicants?${q.toString()}`, { headers: this.getAuthHeaders() });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1367,6 +1392,63 @@
         headers: this.getAuthHeaders()
       });
       return await res.json();
+    },
+
+    adminGetRecruitmentQuestions: async function () {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/admin-questions`, { headers: this.getAuthHeaders() });
+      return await res.json();
+    },
+
+    adminCreateRecruitmentQuestion: async function (data) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/admin-questions`, {
+        method: 'POST',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    },
+
+    adminUpdateRecruitmentQuestion: async function (id, data) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/admin-questions/${id}`, {
+        method: 'PUT',
+        headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify(data)
+      });
+      return await res.json();
+    },
+
+    adminDeleteRecruitmentQuestion: async function (id) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/admin-questions/${id}`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+      return await res.json();
+    },
+
+    adminRestoreApplicant: async function (id) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/applicant/${id}/restore`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'กู้คืนใบสมัครไม่สำเร็จ');
+      return data;
+    },
+
+    adminPermanentDeleteApplicant: async function (id) {
+      const base = this.getBaseUrl() || '';
+      const res = await fetch(`${base}/api/recruitment/applicant/${id}/permanent`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'ลบใบสมัครถาวรไม่สำเร็จ');
+      return data;
     },
 
     adminDeleteApplicant: async function (id, admin = 'Admin') {

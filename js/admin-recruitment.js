@@ -1,3 +1,14 @@
+
+  // Safe HTML Escaper
+  function escapeHtml(text) {
+    if (text === undefined || text === null) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 /**
  * Admin Recruitment Management (ระบบรับสมัครสารวัตรนักเรียน ปี 2570)
  * ===================================================================
@@ -163,8 +174,25 @@
     reviewing: 'กำลังตรวจสอบ',
     approved: 'ผ่านการคัดเลือก',
     rejected: 'ไม่ผ่านการคัดเลือก',
-    correction_needed: 'รอแก้ไขข้อมูล'
+    correction_needed: 'รอแก้ไขข้อมูล',
+    withdrawn: 'ถอนตัว/ยกเลิก'
   };
+
+    let isTrashModeActive = false;
+  let adminQuestionsCache = [];
+
+  function getActiveAdminRole() {
+    try {
+      if (window.currentAdminUser && window.currentAdminUser.role) return window.currentAdminUser.role;
+      const role = localStorage.getItem('dg_sarawat_admin_role');
+      if (role) return role;
+    } catch (e) {}
+    return 'Admin';
+  }
+
+  function isSuperAdmin() {
+    return getActiveAdminRole() === 'Super Admin';
+  }
 
   // Helper: Get logged-in admin name
   function getActiveAdminName() {
@@ -197,17 +225,40 @@
     try {
       const stats = await getApi().adminGetRecruitmentStats();
       if (stats && stats.success) {
-        document.getElementById('statTotalApplicants').textContent = stats.total || 0;
-        document.getElementById('statPendingApplicants').textContent = stats.byStatus.pending || 0;
-        document.getElementById('statReviewingApplicants').textContent = stats.byStatus.reviewing || 0;
-        document.getElementById('statApprovedApplicants').textContent = stats.byStatus.approved || 0;
-        document.getElementById('statCorrectionApplicants').textContent = stats.byStatus.correction_needed || 0;
-        document.getElementById('statRejectedApplicants').textContent = stats.byStatus.rejected || 0;
+        const total = stats.total || 0;
+        const pending = stats.byStatus?.pending || 0;
+        const reviewing = stats.byStatus?.reviewing || 0;
+        const approved = stats.byStatus?.approved || 0;
+        const correction = stats.byStatus?.correction_needed || 0;
+        const rejected = stats.byStatus?.rejected || 0;
+        const withdrawn = stats.withdrawn || stats.byStatus?.withdrawn || 0;
+        const maxCap = stats.maxApplicants || 100;
+        const targetQ = stats.targetQuota || 30;
+        const trash = stats.trashCount || 0;
+
+        const setTxt = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val;
+        };
+
+        setTxt('statTotalApplicants', total);
+        setTxt('statPendingApplicants', pending);
+        setTxt('statReviewingApplicants', reviewing);
+        setTxt('statApprovedApplicants', approved);
+        setTxt('statCorrectionApplicants', correction);
+        setTxt('statRejectedApplicants', rejected);
+        setTxt('statWithdrawnApplicants', withdrawn);
+        setTxt('statTrashCount', trash);
+
+        const elQuota = document.getElementById('statQuotaSummary');
+        if (elQuota) {
+          elQuota.innerHTML = `<span style="color:#047857;">${approved}</span>/${targetQ} ผ่าน • <span style="color:#1e3a8a;">${total}</span>/${maxCap} สมัคร`;
+        }
 
         // Update sidebar badge
         const badge = document.getElementById('recruitmentCounterBadge');
         if (badge) {
-          const pendingCount = (stats.byStatus.pending || 0) + (stats.byStatus.reviewing || 0);
+          const pendingCount = pending + reviewing;
           if (pendingCount > 0) {
             badge.textContent = pendingCount;
             badge.style.display = 'inline-block';
@@ -322,10 +373,16 @@
           ? (a.photo_url.startsWith('http') ? a.photo_url : (getApi().getBaseUrl() + a.photo_url))
           : 'assets/icons/sarawat-logo.png';
 
+        const isLowGpax = Number(a.gpax) < (recruitmentSettingsCache?.min_gpax || 2.50);
+        const evalScoreBadge = (a.evaluation_score !== null && a.evaluation_score !== undefined)
+          ? `<span style="display:inline-block; margin-left:4px; padding:2px 7px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; border-radius:9999px; font-size:0.72rem; font-weight:750;">${Number(a.evaluation_score).toFixed(1)} คะแนน</span>`
+          : '';
+
         return `
-          <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#fbfcfe'" onmouseout="this.style.background='transparent'">
+          <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease; ${a.is_deleted ? 'background:#fff7f7;' : ''}" onmouseover="this.style.background='#fbfcfe'" onmouseout="this.style.background='${a.is_deleted ? '#fff7f7' : 'transparent'}'">
             <td style="padding: 12px 16px; font-weight: 800; color: #0f172a; white-space: nowrap;">
               ${a.application_code}
+              ${evalScoreBadge}
             </td>
             <td style="padding: 12px 16px;">
               <img src="${photoSrc}" alt="${a.first_name}" style="width: 38px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; background: #e2e8f0; display: block;" onerror="this.src='assets/icons/sarawat-logo.png'" />
@@ -335,13 +392,14 @@
             </td>
             <td style="padding: 12px 16px; font-weight: 750; color: #0f172a;">
               ${a.prefix}${a.first_name} ${a.last_name}
+              ${a.is_deleted ? `<div style="font-size:0.72rem; color:#dc2626; font-weight:600;">(ลบเมื่อ ${a.deleted_at ? new Date(a.deleted_at).toLocaleDateString('th-TH') : '-'} โดย ${a.deleted_by || '-'})</div>` : ''}
             </td>
             <td style="padding: 12px 16px; color: #475569; white-space: nowrap;">
               ${a.grade_level}/${a.classroom}
             </td>
             <td style="padding: 12px 16px; font-weight: 750; color: #0f172a; white-space: nowrap;">
               <span>${Number(a.gpax).toFixed(2)}</span>
-              ${Number(a.gpax) < (recruitmentSettingsCache?.min_gpax || 2.50) ? `
+              ${isLowGpax ? `
                 <span title="ต่ำกว่าเกณฑ์ขั้นต่ำ (${(recruitmentSettingsCache?.min_gpax || 2.50).toFixed(2)})" style="display: inline-block; margin-left: 4px; padding: 1px 6px; font-size: 0.7rem; font-weight: 800; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: 9999px;">
                   ⚠️ ต่ำกว่าเกณฑ์
                 </span>
@@ -351,19 +409,34 @@
               <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${a.club}</div>
             </td>
             <td style="padding: 12px 16px; white-space: nowrap;">
-              <span class="status-badge ${a.status}" style="font-size: 0.78rem; padding: 3px 10px;">
-                ${a.statusLabel}
-              </span>
+              ${a.is_deleted ? `
+                <span class="status-badge" style="background:#fee2e2; color:#991b1b; border:1px solid #fecaca; font-size:0.75rem; padding:3px 10px;">
+                  ถังขยะ (Deleted)
+                </span>
+              ` : `
+                <span class="status-badge ${a.status}" style="font-size: 0.78rem; padding: 3px 10px;">
+                  ${a.statusLabel || a.status}
+                </span>
+              `}
             </td>
             <td style="padding: 12px 16px; text-align: right; white-space: nowrap;">
               <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px;">
                 <button type="button" class="photo-btn-select btn-view-applicant" data-id="${a.id}" style="padding: 6px 14px; font-size: 0.8rem;">
                   <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
-                  <span>ตรวจใบสมัคร</span>
+                  <span>${a.is_deleted ? 'ดูข้อมูล/กู้คืน' : 'ตรวจใบสมัคร'}</span>
                 </button>
-                <button type="button" class="btn-step-prev btn-delete-single-applicant" data-id="${a.id}" data-code="${a.application_code}" data-name="${a.prefix}${a.first_name} ${a.last_name}" title="ลบใบสมัครนี้ออกจากระบบ" style="padding: 6px 10px; font-size: 0.8rem; color: #ef4444; border-color: #fecaca; background: #fff1f2; transition: all 0.15s ease;">
-                  <i data-lucide="trash-2" style="width: 14px; height: 14px; color: #ef4444;"></i>
-                </button>
+                ${a.is_deleted ? `
+                  <button type="button" class="btn-step-prev btn-restore-single-applicant" data-id="${a.id}" data-name="${a.first_name} ${a.last_name}" data-code="${a.application_code}" title="กู้คืนใบสมัครกลับสู่ระบบ" style="padding: 6px 10px; font-size: 0.8rem; color: #059669; border-color: #a7f3d0; background: #ecfdf5;">
+                    <i data-lucide="rotate-ccw" style="width: 14px; height: 14px; color: #059669;"></i>
+                  </button>
+                  <button type="button" class="btn-step-prev btn-perm-delete-single" data-id="${a.id}" data-name="${a.first_name} ${a.last_name}" data-code="${a.application_code}" title="ลบถาวร (Super Admin)" style="padding: 6px 10px; font-size: 0.8rem; color: #dc2626; border-color: #fca5a5; background: #fff1f2;">
+                    <i data-lucide="trash-2" style="width: 14px; height: 14px; color: #dc2626;"></i>
+                  </button>
+                ` : `
+                  <button type="button" class="btn-step-prev btn-delete-single-applicant" data-id="${a.id}" data-code="${a.application_code}" data-name="${a.prefix}${a.first_name} ${a.last_name}" title="ย้ายใบสมัครไปยังถังขยะ" style="padding: 6px 10px; font-size: 0.8rem; color: #ef4444; border-color: #fecaca; background: #fff1f2; transition: all 0.15s ease;">
+                    <i data-lucide="trash-2" style="width: 14px; height: 14px; color: #ef4444;"></i>
+                  </button>
+                `}
               </div>
             </td>
           </tr>
@@ -375,6 +448,26 @@
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-id');
           openApplicantReviewModal(id);
+        });
+      });
+
+      document.querySelectorAll('.btn-restore-single-applicant').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const code = btn.getAttribute('data-code');
+          const name = btn.getAttribute('data-name');
+          confirmAndRestoreApplicant(id, name, code);
+        });
+      });
+
+      document.querySelectorAll('.btn-perm-delete-single').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const code = btn.getAttribute('data-code');
+          const name = btn.getAttribute('data-name');
+          confirmAndPermanentDeleteApplicant(id, name, code);
         });
       });
 
@@ -646,6 +739,53 @@
       selStatus.value = a.status;
 
       document.getElementById('mdlAdminNotes').value = a.admin_notes || '';
+      const inpEvalScore = document.getElementById('mdlEvaluationScore');
+      if (inpEvalScore) {
+        inpEvalScore.value = (a.evaluation_score !== null && a.evaluation_score !== undefined) ? a.evaluation_score : '';
+      }
+
+      // Populate Attitude & Motivation Answers List
+      const answersList = document.getElementById('mdlAttitudeAnswersList');
+      const countBadge = document.getElementById('mdlAnswersCountBadge');
+      if (answersList) {
+        if (!a.answers || a.answers.length === 0) {
+          if (countBadge) countBadge.textContent = '0 ข้อ';
+          answersList.innerHTML = '<div style="color: #94a3b8; font-size: 0.85rem; text-align: center; padding: 14px; font-style: italic;">ผู้สมัครรายนี้ไม่ได้ระบุคำตอบทัศนคติ หรือยื่นสมัครก่อนมีระบบคำถาม</div>';
+        } else {
+          if (countBadge) countBadge.textContent = `${a.answers.length} ข้อ`;
+          answersList.innerHTML = a.answers.map((ans, idx) => `
+            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px;">
+                <div style="font-size: 0.88rem; font-weight: 750; color: #0f172a;">
+                  <span style="display: inline-block; width: 22px; height: 22px; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.75rem; text-align: center; line-height: 22px; margin-right: 6px;">${idx + 1}</span>
+                  ${escapeHtml(ans.question_text || `คำถามข้อที่ ${idx + 1}`)}
+                </div>
+                <span style="font-size: 0.72rem; color: #64748b; background: #ffffff; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 9999px; flex-shrink: 0;">
+                  ${(ans.answer_text || '').length} ตัวอักษร
+                </span>
+              </div>
+              <div style="font-size: 0.90rem; color: #334155; line-height: 1.6; white-space: pre-line; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid #edf2f7; margin-top: 8px;">
+                ${ans.answer_text ? escapeHtml(ans.answer_text) : '<span style="color:#94a3b8; font-style:italic;">(ไม่มีข้อความคำตอบ)</span>'}
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Configure Modal Footer Buttons for Trash Mode vs Normal Mode
+      const btnDelCurrent = document.getElementById('btnDeleteCurrentApplicant');
+      const boxTrashActions = document.getElementById('boxTrashActionsInModal');
+      const btnSaveDec = document.getElementById('btnSaveApplicantDecision');
+
+      if (a.is_deleted || isTrashModeActive) {
+        if (btnDelCurrent) btnDelCurrent.style.display = 'none';
+        if (boxTrashActions) boxTrashActions.style.display = 'flex';
+        if (btnSaveDec) btnSaveDec.style.display = 'none';
+      } else {
+        if (btnDelCurrent) btnDelCurrent.style.display = 'inline-flex';
+        if (boxTrashActions) boxTrashActions.style.display = 'none';
+        if (btnSaveDec) btnSaveDec.style.display = 'inline-flex';
+      }
       document.getElementById('mdlCorrectionNote').value = a.correction_note || '';
 
       const corrGroup = document.getElementById('mdlCorrectionNoteGroup');
@@ -741,6 +881,33 @@
   // 5. EVENT LISTENERS INITIALIZATION
   // ==========================================================
   function setupRecruitmentEventListeners() {
+    // Toggle Trash Mode
+    const btnToggleTrash = document.getElementById('btnToggleTrashView');
+    const bannerTrash = document.getElementById('bannerTrashMode');
+    const btnExitTrash = document.getElementById('btnExitTrashMode');
+
+    function setTrashMode(active) {
+      isTrashModeActive = active;
+      if (bannerTrash) bannerTrash.style.display = isTrashModeActive ? 'flex' : 'none';
+      if (btnToggleTrash) {
+        btnToggleTrash.style.background = isTrashModeActive ? '#fee2e2' : '#ffffff';
+        btnToggleTrash.style.borderColor = isTrashModeActive ? '#fca5a5' : '#cbd5e1';
+      }
+      loadApplicantsTable(1);
+    }
+
+    if (btnToggleTrash) {
+      btnToggleTrash.addEventListener('click', () => {
+        setTrashMode(!isTrashModeActive);
+      });
+    }
+
+    if (btnExitTrash) {
+      btnExitTrash.addEventListener('click', () => {
+        setTrashMode(false);
+      });
+    }
+
     // 5.1 Filters & Search
     const inpSearch = document.getElementById('adminApplicantSearch');
     if (inpSearch) {
@@ -854,10 +1021,128 @@
       });
     }
 
-    // 5.4.1 Delete Single Applicant from Review Modal
+    // ==========================================
+  // RESTORE & PERMANENT DELETE HANDLERS
+  // ==========================================
+  async function confirmAndRestoreApplicant(id, name, code) {
+    if (!id) return;
+    const displayName = name ? ` (${name})` : '';
+    const displayCode = code || `ID #${id}`;
+
+    let confirmed = false;
+    if (typeof Swal !== 'undefined') {
+      const res = await Swal.fire({
+        title: 'ยืนยันการกู้คืนใบสมัคร?',
+        html: `ต้องการกู้คืนใบสมัคร <b>${escapeHtml(displayCode)}${escapeHtml(displayName)}</b> กลับสู่ระบบรับสมัครตามปกติหรือไม่?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#059669',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'กู้คืนใบสมัคร',
+        cancelButtonText: 'ยกเลิก'
+      });
+      confirmed = res.isConfirmed;
+    } else {
+      confirmed = confirm(`ต้องการกู้คืนใบสมัคร ${displayCode}${displayName} กลับสู่ระบบรับสมัครตามปกติหรือไม่?`);
+    }
+    if (!confirmed) return;
+
+    try {
+      const res = await getApi().adminRestoreApplicant(id, getActiveAdminName());
+      if (window.showToast) window.showToast(res.message || 'กู้คืนใบสมัครเรียบร้อยแล้ว', 'success');
+      else alert(res.message || 'กู้คืนใบสมัครเรียบร้อยแล้ว');
+
+      const modalReview = document.getElementById('adminApplicantReviewModal');
+      if (modalReview) hideModalSafely(modalReview);
+
+      await refreshRecruitmentStats();
+      await loadApplicantsTable(currentPage);
+    } catch (err) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.message });
+      } else {
+        alert('เกิดข้อผิดพลาด: ' + err.message);
+      }
+    }
+  }
+  window.confirmAndRestoreApplicant = confirmAndRestoreApplicant;
+
+  async function confirmAndPermanentDeleteApplicant(id, name, code) {
+    if (!id) return;
+    if (!isSuperAdmin()) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่มีสิทธิ์ดำเนินการ',
+          text: 'เฉพาะ Super Admin เท่านั้นที่สามารถลบข้อมูลผู้สมัครถาวรออกจากฐานข้อมูลได้'
+        });
+      } else {
+        alert('เฉพาะ Super Admin เท่านั้นที่สามารถลบข้อมูลผู้สมัครถาวรออกจากฐานข้อมูลได้');
+      }
+      return;
+    }
+
+    const displayName = name ? ` (${name})` : '';
+    const displayCode = code || `ID #${id}`;
+
+    let confirmed = false;
+    if (typeof Swal !== 'undefined') {
+      const res = await Swal.fire({
+        title: '⚠️ ยืนยันการลบถาวร (Super Admin)',
+        html: `คุณแน่ใจหรือไม่ว่าต้องการลบใบสมัคร <b>${escapeHtml(displayCode)}${escapeHtml(displayName)}</b> ออกจากฐานข้อมูลอย่างถาวร?<br><br><span style="color:#dc2626; font-size:0.85rem;">คำเตือน: ข้อมูลผู้สมัคร รูปถ่าย และคำตอบประเมินทั้งหมดจะถูกลบทิ้งอย่างถาวร ไม่สามารถกู้คืนได้อีกต่อไป</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ลบถาวรทันที',
+        cancelButtonText: 'ยกเลิก'
+      });
+      confirmed = res.isConfirmed;
+    } else {
+      confirmed = confirm(`⚠️ ยืนยันการลบถาวร: ต้องการลบใบสมัคร ${displayCode}${displayName} ออกจากฐานข้อมูลอย่างถาวรหรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้`);
+    }
+    if (!confirmed) return;
+
+    try {
+      const res = await getApi().adminPermanentDeleteApplicant(id, getActiveAdminName(), getActiveAdminRole());
+      if (window.showToast) window.showToast(res.message || 'ลบใบสมัครถาวรเรียบร้อยแล้ว', 'success');
+      else alert(res.message || 'ลบใบสมัครถาวรเรียบร้อยแล้ว');
+
+      const modalReview = document.getElementById('adminApplicantReviewModal');
+      if (modalReview) hideModalSafely(modalReview);
+
+      await refreshRecruitmentStats();
+      await loadApplicantsTable(currentPage);
+    } catch (err) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาดในการลบถาวร', text: err.message });
+      } else {
+        alert('เกิดข้อผิดพลาดในการลบถาวร: ' + err.message);
+      }
+    }
+  }
+  window.confirmAndPermanentDeleteApplicant = confirmAndPermanentDeleteApplicant;
+
+  // 5.4.1 Delete Single Applicant from Review Modal
     const btnDeleteCurrent = document.getElementById('btnDeleteCurrentApplicant');
     if (btnDeleteCurrent) {
-      btnDeleteCurrent.addEventListener('click', () => {
+      const btnRestoreCurrent = document.getElementById('btnRestoreCurrentApplicant');
+    if (btnRestoreCurrent) {
+      btnRestoreCurrent.addEventListener('click', () => {
+        if (!currentViewingApplicantId) return;
+        confirmAndRestoreApplicant(currentViewingApplicantId, document.getElementById('mdlAppName')?.textContent, document.getElementById('mdlAppCode')?.textContent);
+      });
+    }
+
+    const btnPermDeleteCurrent = document.getElementById('btnPermanentDeleteCurrentApplicant');
+    if (btnPermDeleteCurrent) {
+      btnPermDeleteCurrent.addEventListener('click', () => {
+        if (!currentViewingApplicantId) return;
+        confirmAndPermanentDeleteApplicant(currentViewingApplicantId, document.getElementById('mdlAppName')?.textContent, document.getElementById('mdlAppCode')?.textContent);
+      });
+    }
+
+    btnDeleteCurrent.addEventListener('click', () => {
         if (!currentViewingApplicantId) return;
         const code = document.getElementById('mdlAppCode')?.textContent?.trim() || '';
         const name = document.getElementById('mdlAppName')?.textContent?.trim() || '';
@@ -968,9 +1253,11 @@
 
     const tabSetGen = document.getElementById('tabBtnSetGeneral');
     const tabSetClubs = document.getElementById('tabBtnSetClubs');
+    const tabSetQuestions = document.getElementById('tabBtnSetQuestions');
     const tabSetLogs = document.getElementById('tabBtnSetLogs');
     if (tabSetGen) tabSetGen.onclick = () => window.switchRecruitSettingsTab('gen');
     if (tabSetClubs) tabSetClubs.onclick = () => window.switchRecruitSettingsTab('clubs');
+    if (tabSetQuestions) tabSetQuestions.onclick = () => window.switchRecruitSettingsTab('questions');
     if (tabSetLogs) tabSetLogs.onclick = () => window.switchRecruitSettingsTab('logs');
 
     // Save General Settings
@@ -978,10 +1265,28 @@
     if (btnSaveGen) {
       btnSaveGen.addEventListener('click', async () => {
         try {
+          const allowedGradesStr = document.getElementById('cfgAllowedGrades').value.trim();
+          if (!allowedGradesStr) {
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                icon: 'warning',
+                title: 'กรุณาเลือกระดับชั้น',
+                text: 'กรุณาเลือกระดับชั้นที่เปิดรับสมัครอย่างน้อย 1 ระดับชั้น (ม.1 - ม.6)',
+                customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+              });
+            } else {
+              alert('กรุณาเลือกระดับชั้นที่เปิดรับสมัครอย่างน้อย 1 ระดับชั้น (ม.1 - ม.6)');
+            }
+            return;
+          }
+
           const payload = {
             academic_year: document.getElementById('cfgAcademicYear').value.trim(),
             min_gpax: parseFloat(document.getElementById('cfgMinGpax').value),
             allowed_grades: document.getElementById('cfgAllowedGrades').value.trim(),
+            max_applicants: parseInt(document.getElementById('cfgMaxApplicants')?.value || '100', 10),
+            target_quota: parseInt(document.getElementById('cfgTargetQuota')?.value || '30', 10),
+            allow_withdrawal: document.getElementById('cfgAllowWithdrawal')?.checked ? 1 : 0,
             is_open: document.getElementById('cfgIsOpen')?.value === '0' ? 0 : 1,
             start_datetime: document.getElementById('cfgStartDatetime').value || null,
             end_datetime: document.getElementById('cfgEndDatetime').value || null,
@@ -1021,6 +1326,30 @@
     if (btnCancelAddClub && boxAddClub) {
       btnCancelAddClub.addEventListener('click', () => { boxAddClub.style.display = 'none'; });
     }
+    
+    // Attitude Question Form handlers
+    const btnOpenAddQ = document.getElementById('btnOpenAddQuestionModal');
+    const btnCancelQForm = document.getElementById('btnCancelQuestionForm');
+    const btnCancelQEdit = document.getElementById('btnCancelQuestionEdit');
+    const btnSaveQ = document.getElementById('btnSaveQuestion');
+
+    if (btnOpenAddQ && !btnOpenAddQ._bound) {
+      btnOpenAddQ._bound = true;
+      btnOpenAddQ.addEventListener('click', () => openQuestionForm(null));
+    }
+    if (btnCancelQForm && !btnCancelQForm._bound) {
+      btnCancelQForm._bound = true;
+      btnCancelQForm.addEventListener('click', closeQuestionForm);
+    }
+    if (btnCancelQEdit && !btnCancelQEdit._bound) {
+      btnCancelQEdit._bound = true;
+      btnCancelQEdit.addEventListener('click', closeQuestionForm);
+    }
+    if (btnSaveQ && !btnSaveQ._bound) {
+      btnSaveQ._bound = true;
+      btnSaveQ.addEventListener('click', saveQuestionFromForm);
+    }
+
     if (btnSaveNewClub) {
       btnSaveNewClub.addEventListener('click', async () => {
         const type = document.getElementById('inpNewClubType')?.value || 'club';
@@ -1074,7 +1403,14 @@
         const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
         setVal('cfgAcademicYear', s.academic_year || '2570');
         setVal('cfgMinGpax', s.min_gpax || '2.50');
-        setVal('cfgAllowedGrades', s.allowed_grades || 'ม.4,ม.5');
+        const allowedGradesVal = s.allowed_grades || 'ม.4,ม.5';
+        setVal('cfgAllowedGrades', allowedGradesVal);
+        syncGradeCheckboxesFromValue(allowedGradesVal);
+        setVal('cfgMaxApplicants', s.max_applicants || '100');
+        setVal('cfgTargetQuota', s.target_quota || '30');
+        if (document.getElementById('cfgAllowWithdrawal')) {
+          document.getElementById('cfgAllowWithdrawal').checked = Number(s.allow_withdrawal) !== 0;
+        }
         setVal('cfgAnnouncementText', s.announcement_text || '');
         setVal('cfgPdpaContent', s.pdpa_content || '');
         setVal('cfgIsOpen', String(s.is_open !== undefined ? s.is_open : 1));
@@ -1177,16 +1513,72 @@
     }
   }
 
+    // ==========================================
+  // MULTI-SELECT GRADE HELPERS
+  // ==========================================
+  function syncGradeCheckboxesFromValue(valStr) {
+    const grades = (valStr || '').split(',').map(g => g.trim()).filter(Boolean);
+    document.querySelectorAll('.chk-grade-option').forEach(chk => {
+      const isChecked = grades.includes(chk.value);
+      chk.checked = isChecked;
+      const parentLabel = chk.closest('.grade-pill-option');
+      if (parentLabel) parentLabel.classList.toggle('is-selected', isChecked);
+    });
+    const summaryEl = document.getElementById('lblAllowedGradesSummary');
+    if (summaryEl) {
+      summaryEl.textContent = grades.length > 0 ? grades.join(', ') : '(ยังไม่ได้เลือก - กรุณาเลือกอย่างน้อย 1 ระดับชั้น)';
+      summaryEl.style.color = grades.length > 0 ? '#0f172a' : '#dc2626';
+    }
+  }
+  window.syncGradeCheckboxesFromValue = syncGradeCheckboxesFromValue;
+
+  function syncSelectedGrades() {
+    const checked = Array.from(document.querySelectorAll('.chk-grade-option:checked')).map(c => c.value);
+    const order = ['ม.1', 'ม.2', 'ม.3', 'ม.4', 'ม.5', 'ม.6'];
+    checked.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    const valStr = checked.join(',');
+    const hiddenInput = document.getElementById('cfgAllowedGrades');
+    if (hiddenInput) hiddenInput.value = valStr;
+
+    document.querySelectorAll('.chk-grade-option').forEach(chk => {
+      const parentLabel = chk.closest('.grade-pill-option');
+      if (parentLabel) parentLabel.classList.toggle('is-selected', chk.checked);
+    });
+
+    const summaryEl = document.getElementById('lblAllowedGradesSummary');
+    if (summaryEl) {
+      summaryEl.textContent = checked.length > 0 ? checked.join(', ') : '(ยังไม่ได้เลือก - กรุณาเลือกอย่างน้อย 1 ระดับชั้น)';
+      summaryEl.style.color = checked.length > 0 ? '#0f172a' : '#dc2626';
+    }
+  }
+  window.syncSelectedGrades = syncSelectedGrades;
+
+  window.selectAllGrades = function (selectAll) {
+    document.querySelectorAll('.chk-grade-option').forEach(chk => {
+      chk.checked = Boolean(selectAll);
+    });
+    syncSelectedGrades();
+  };
+
+  window.selectHighSchoolGrades = function () {
+    document.querySelectorAll('.chk-grade-option').forEach(chk => {
+      chk.checked = ['ม.4', 'ม.5', 'ม.6'].includes(chk.value);
+    });
+    syncSelectedGrades();
+  };
+
   function switchRecruitSettingsTab(tab) {
     const tabSetGen = document.getElementById('tabBtnSetGeneral');
     const tabSetClubs = document.getElementById('tabBtnSetClubs');
+    const tabSetQuestions = document.getElementById('tabBtnSetQuestions');
     const tabSetLogs = document.getElementById('tabBtnSetLogs');
     const paneSetGen = document.getElementById('setPaneGeneral');
     const paneSetClubs = document.getElementById('setPaneClubs');
+    const paneSetQuestions = document.getElementById('setPaneQuestions');
     const paneSetLogs = document.getElementById('setPaneLogs');
 
-    [tabSetGen, tabSetClubs, tabSetLogs].forEach(b => b?.classList.remove('active'));
-    [paneSetGen, paneSetClubs, paneSetLogs].forEach(p => { if (p) p.style.display = 'none'; });
+    [tabSetGen, tabSetClubs, tabSetQuestions, tabSetLogs].forEach(b => b?.classList.remove('active'));
+    [paneSetGen, paneSetClubs, paneSetQuestions, paneSetLogs].forEach(p => { if (p) p.style.display = 'none'; });
 
     if (tab === 'gen') {
       tabSetGen?.classList.add('active');
@@ -1195,6 +1587,10 @@
       tabSetClubs?.classList.add('active');
       if (paneSetClubs) paneSetClubs.style.display = 'block';
       loadClubsTable();
+    } else if (tab === 'questions') {
+      tabSetQuestions?.classList.add('active');
+      if (paneSetQuestions) paneSetQuestions.style.display = 'block';
+      loadAdminQuestions();
     } else if (tab === 'logs') {
       tabSetLogs?.classList.add('active');
       if (paneSetLogs) paneSetLogs.style.display = 'block';
@@ -1225,5 +1621,234 @@
   } else {
     setupRecruitmentEventListeners();
   }
+
+
+
+  // ==========================================================
+  // 6. ATTITUDE QUESTIONS MANAGER
+  // ==========================================================
+  async function loadAdminQuestions() {
+    const tbody = document.getElementById('tblAdminQuestionsBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '<tr><td colspan="6" style="padding: 24px; text-align: center; color: #94a3b8;"><i data-lucide="loader-2" class="spin" style="width: 18px; height: 18px; display:inline-block; vertical-align:middle; margin-right:6px;"></i>กำลังโหลดคำถาม...</td></tr>';
+    if (window.lucide) lucide.createIcons();
+
+    try {
+      const api = getApi();
+      if (!api) {
+        throw new Error('API Client ไม่พร้อมใช้งาน');
+      }
+      let res = null;
+      if (typeof api.adminGetRecruitmentQuestions === 'function') {
+        res = await api.adminGetRecruitmentQuestions().catch(err => {
+          console.warn('adminGetRecruitmentQuestions error, trying public questions:', err);
+          return null;
+        });
+      }
+      if (!res || !res.success) {
+        if (typeof api.getRecruitmentQuestions === 'function') {
+          res = await api.getRecruitmentQuestions().catch(err => {
+            console.warn('getRecruitmentQuestions fallback failed:', err);
+            return null;
+          });
+        }
+      }
+      if (res && res.success && Array.isArray(res.questions)) {
+        adminQuestionsCache = res.questions;
+        if (adminQuestionsCache.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="padding: 32px; text-align: center; color: #94a3b8;">ยังไม่มีชุดคำถามประเมินทัศนคติในระบบ กดปุ่ม "เพิ่มคำถามใหม่" ด้านบนเพื่อเริ่มต้น</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = adminQuestionsCache.map((q, idx) => `
+          <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#fbfcfe'" onmouseout="this.style.background='transparent'">
+            <td style="padding: 12px 14px; text-align: center; font-weight: 800; color: #64748b;">${q.order_index || q.display_order || (idx + 1)}</td>
+            <td style="padding: 12px 14px;">
+              <div style="font-weight: 700; color: #0f172a; margin-bottom: 3px;">${escapeHtml(q.question_text)}</div>
+              ${(q.question_desc || q.help_text) ? `<div style="font-size: 0.78rem; color: #64748b;">💡 ${escapeHtml(q.question_desc || q.help_text)}</div>` : ''}
+            </td>
+            <td style="padding: 12px 14px; text-align: center; font-size: 0.82rem; color: #475569;">
+              ${q.min_length || 0} - ${q.max_length || 1000} ตัวอักษร
+            </td>
+            <td style="padding: 12px 14px; text-align: center;">
+              ${q.is_required ? '<span style="color:#dc2626; font-weight:700; font-size:0.78rem;">จำเป็น</span>' : '<span style="color:#64748b; font-size:0.78rem;">ไม่บังคับ</span>'}
+            </td>
+            <td style="padding: 12px 14px; text-align: center;">
+              ${q.is_active ? '<span class="status-badge approved" style="font-size:0.72rem; padding:2px 8px;">เปิดใช้</span>' : '<span class="status-badge" style="background:#f1f5f9; color:#94a3b8; font-size:0.72rem; padding:2px 8px;">ปิด</span>'}
+            </td>
+            <td style="padding: 12px 14px; text-align: right; white-space: nowrap;">
+              <button type="button" class="btn-step-prev btn-edit-question" data-id="${q.id}" style="padding: 4px 10px; font-size: 0.78rem; margin-right: 4px;">
+                <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
+                <span>แก้ไข</span>
+              </button>
+              <button type="button" class="btn-step-prev btn-delete-question" data-id="${q.id}" data-text="${escapeHtml(q.question_text)}" style="padding: 4px 8px; font-size: 0.78rem; color: #ef4444; border-color: #fecaca; background: #fff1f2;">
+                <i data-lucide="trash-2" style="width: 12px; height: 12px; color: #ef4444;"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+        // Attach edit & delete events
+        document.querySelectorAll('.btn-edit-question').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-id'), 10);
+            const q = adminQuestionsCache.find(x => x.id === id);
+            if (q) openQuestionForm(q);
+          });
+        });
+
+        document.querySelectorAll('.btn-delete-question').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-id'), 10);
+            const text = btn.getAttribute('data-text');
+            confirmAndDeleteQuestion(id, text);
+          });
+        });
+
+        if (window.lucide) lucide.createIcons();
+      } else {
+        const errMsg = (res && res.error) ? res.error : 'ไม่สามารถโหลดคำถามได้';
+        tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #ef4444;">${escapeHtml(errMsg)}</td></tr>`;
+      }
+    } catch (err) {
+      console.warn('Error loading admin questions:', err);
+      tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #ef4444;">ไม่สามารถโหลดคำถามได้ (${escapeHtml(err.message)})</td></tr>`;
+    }
+  }
+  window.loadAdminQuestions = loadAdminQuestions;
+
+  function openQuestionForm(q = null) {
+    const box = document.getElementById('boxQuestionForm');
+    if (!box) return;
+
+    document.getElementById('txtQuestionFormTitle').textContent = q ? 'แก้ไขคำถามประเมินทัศนคติ' : 'เพิ่มคำถามประเมินทัศนคติใหม่';
+    document.getElementById('inpQuestionId').value = q ? q.id : '';
+    document.getElementById('inpQuestionText').value = q ? q.question_text : '';
+    document.getElementById('inpQuestionHelp').value = q ? (q.question_desc || q.help_text || '') : '';
+    document.getElementById('inpQuestionMinLen').value = q ? (q.min_length || 0) : 30;
+    document.getElementById('inpQuestionMaxLen').value = q ? (q.max_length || 1000) : 1000;
+    document.getElementById('inpQuestionOrder').value = q ? (q.order_index || q.display_order || 1) : (adminQuestionsCache.length + 1);
+    document.getElementById('selQuestionRequired').value = q ? (q.is_required ? '1' : '0') : '1';
+    document.getElementById('selQuestionActive').value = q ? (q.is_active ? '1' : '0') : '1';
+
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('inpQuestionText')?.focus();
+  }
+  window.openQuestionForm = openQuestionForm;
+
+  function closeQuestionForm() {
+    const box = document.getElementById('boxQuestionForm');
+    if (box) box.style.display = 'none';
+  }
+  window.closeQuestionForm = closeQuestionForm;
+
+  async function saveQuestionFromForm() {
+    const id = document.getElementById('inpQuestionId')?.value;
+    const text = document.getElementById('inpQuestionText')?.value.trim();
+    const help = document.getElementById('inpQuestionHelp')?.value.trim();
+    const minLen = parseInt(document.getElementById('inpQuestionMinLen')?.value || '0', 10);
+    const maxLen = parseInt(document.getElementById('inpQuestionMaxLen')?.value || '1000', 10);
+    const order = parseInt(document.getElementById('inpQuestionOrder')?.value || '1', 10);
+    const isRequired = document.getElementById('selQuestionRequired')?.value === '1';
+    const isActive = document.getElementById('selQuestionActive')?.value === '1';
+
+    if (!text) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'กรุณากรอกข้อความ',
+          text: 'กรุณากรอกข้อความคำถามประเมินทัศนคติ',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      } else {
+        alert('กรุณากรอกข้อความคำถาม');
+      }
+      document.getElementById('inpQuestionText')?.focus();
+      return;
+    }
+
+    const payload = {
+      academic_year: document.getElementById('cfgAcademicYear')?.value.trim() || '2570',
+      question_text: text,
+      question_desc: help,
+      help_text: help,
+      min_length: minLen,
+      max_length: maxLen,
+      order_index: order,
+      display_order: order,
+      is_required: isRequired ? 1 : 0,
+      is_active: isActive ? 1 : 0,
+      admin: getActiveAdminName()
+    };
+
+    try {
+      if (id) {
+        await getApi().adminUpdateRecruitmentQuestion(id, payload);
+        if (window.showToast) window.showToast('แก้ไขคำถามเรียบร้อยแล้ว', 'success');
+        else alert('แก้ไขคำถามเรียบร้อยแล้ว');
+      } else {
+        await getApi().adminCreateRecruitmentQuestion(payload);
+        if (window.showToast) window.showToast('เพิ่มคำถามใหม่เรียบร้อยแล้ว', 'success');
+        else alert('เพิ่มคำถามใหม่เรียบร้อยแล้ว');
+      }
+      closeQuestionForm();
+      await loadAdminQuestions();
+    } catch (err) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: 'เกิดข้อผิดพลาดในการบันทึกคำถาม: ' + err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      } else {
+        alert('เกิดข้อผิดพลาดในการบันทึกคำถาม: ' + err.message);
+      }
+    }
+  }
+  window.saveQuestionFromForm = saveQuestionFromForm;
+
+  async function confirmAndDeleteQuestion(id, text) {
+    if (!id) return;
+    let confirmed = false;
+    if (typeof Swal !== 'undefined') {
+      const res = await Swal.fire({
+        title: 'ยืนยันการลบคำถาม?',
+        html: `ต้องการลบคำถาม: <b>"${escapeHtml(text)}"</b> หรือไม่?<br><span style="color:#ef4444; font-size:0.82rem;">คำถามนี้จะไม่แสดงให้ผู้สมัครตอบอีกต่อไป</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ใช่, ลบคำถาม',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      confirmed = res.isConfirmed;
+    } else {
+      confirmed = confirm(`ต้องการลบคำถาม: "${text}" หรือไม่?\n\nคำถามนี้จะไม่แสดงให้ผู้สมัครตอบอีกต่อไป`);
+    }
+    if (!confirmed) return;
+
+    try {
+      await getApi().adminDeleteRecruitmentQuestion(id);
+      if (window.showToast) window.showToast('ลบคำถามเรียบร้อยแล้ว', 'success');
+      else alert('ลบคำถามเรียบร้อยแล้ว');
+      await loadAdminQuestions();
+    } catch (err) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: 'เกิดข้อผิดพลาดในการลบคำถาม: ' + err.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      } else {
+        alert('เกิดข้อผิดพลาดในการลบคำถาม: ' + err.message);
+      }
+    }
+  }
+  window.confirmAndDeleteQuestion = confirmAndDeleteQuestion;
 
 })();
