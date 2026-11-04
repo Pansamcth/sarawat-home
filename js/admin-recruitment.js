@@ -753,22 +753,29 @@
           answersList.innerHTML = '<div style="color: #94a3b8; font-size: 0.85rem; text-align: center; padding: 14px; font-style: italic;">ผู้สมัครรายนี้ไม่ได้ระบุคำตอบทัศนคติ หรือยื่นสมัครก่อนมีระบบคำถาม</div>';
         } else {
           if (countBadge) countBadge.textContent = `${a.answers.length} ข้อ`;
-          answersList.innerHTML = a.answers.map((ans, idx) => `
-            <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px 16px;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px;">
-                <div style="font-size: 0.88rem; font-weight: 750; color: #0f172a;">
-                  <span style="display: inline-block; width: 22px; height: 22px; border-radius: 6px; background: #0f172a; color: #fff; font-size: 0.75rem; text-align: center; line-height: 22px; margin-right: 6px;">${idx + 1}</span>
-                  ${escapeHtml(ans.question_text || `คำถามข้อที่ ${idx + 1}`)}
+          answersList.innerHTML = a.answers.map((ans, idx) => {
+            const qNum = ans.order_index || (idx + 1);
+            const qText = escapeHtml(ans.question_text || `คำถามข้อที่ ${qNum}`);
+            const aText = ans.answer_text ? escapeHtml(ans.answer_text) : '';
+            const charCount = (ans.answer_text || '').length;
+
+            return `
+              <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);">
+                <div style="background: #f8fafc; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+                  <div style="font-size: 0.90rem; font-weight: 750; color: #0f172a; line-height: 1.45; display: flex; align-items: flex-start; gap: 8px;">
+                    <span style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; border-radius: 6px; background: #0f172a; color: #ffffff; font-size: 0.75rem; font-weight: 800; flex-shrink: 0;">${qNum}</span>
+                    <span>${qText}</span>
+                  </div>
+                  <span style="font-size: 0.72rem; font-weight: 600; color: #64748b; background: #ffffff; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 6px; flex-shrink: 0;">
+                    ${charCount} ตัวอักษร
+                  </span>
                 </div>
-                <span style="font-size: 0.72rem; color: #64748b; background: #ffffff; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 9999px; flex-shrink: 0;">
-                  ${(ans.answer_text || '').length} ตัวอักษร
-                </span>
+                <div style="font-size: 0.92rem; color: #1e293b; line-height: 1.65; white-space: pre-wrap; word-break: break-word; background: #ffffff; padding: 14px 16px; border-left: 4px solid #3b82f6;">
+                  ${aText ? aText : '<span style="color:#94a3b8; font-style:italic;">(ผู้สมัครไม่ได้ระบุข้อความคำตอบ)</span>'}
+                </div>
               </div>
-              <div style="font-size: 0.90rem; color: #334155; line-height: 1.6; white-space: pre-line; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid #edf2f7; margin-top: 8px;">
-                ${ans.answer_text ? escapeHtml(ans.answer_text) : '<span style="color:#94a3b8; font-style:italic;">(ไม่มีข้อความคำตอบ)</span>'}
-              </div>
-            </div>
-          `).join('');
+            `;
+          }).join('')
         }
       }
 
