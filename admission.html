@@ -119,7 +119,7 @@
 
   <!-- Central API Config -->
   <script src="/cloudflare-config.js?v=2.7.3"></script>
-  <script src="/js/api-config.js?v=2.7.10"></script>
+  <script src="/js/api-config.js?v=2.7.11"></script>
   <script src="/js/page-guard.js" data-page="admission"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
@@ -2448,56 +2448,7 @@
     </div>
   </main>
 
-    <!-- ============ WITHDRAWAL MODAL ============ -->
-  <div class="pdpa-modal-backdrop" id="withdrawModal" style="display: none; z-index: 9999;">
-    <div class="pdpa-modal-box" style="max-width: 500px; text-align: left; padding: 24px; border-radius: 20px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: #fef2f2; color: #dc2626; display: flex; align-items: center; justify-content: center;">
-            <i data-lucide="user-x" style="width: 20px; height: 20px;"></i>
-          </div>
-          <div>
-            <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">ขอยกเลิก / ถอนตัวจากการสมัคร</h3>
-            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">การดำเนินการนี้ไม่สามารถยกเลิกย้อนหลังได้</div>
-          </div>
-        </div>
-        <button type="button" id="btnCloseWithdrawModal" style="background: none; border: none; cursor: pointer; color: #94a3b8; font-size: 1.2rem; padding: 4px;">
-          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
-        </button>
-      </div>
-
-      <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px; font-size: 0.85rem; color: #991b1b; line-height: 1.55; margin-bottom: 18px;">
-        <strong>⚠️ คำเตือนสำคัญ:</strong> เมื่อยืนยันการถอนตัวแล้ว ใบสมัครจะถูกยกเลิกทันที คณะกรรมการจะไม่นำข้อมูลเข้าสู่การคัดเลือก และไม่สามารถขอคืนสิทธิ์ได้
-      </div>
-
-      <div class="recruit-form-group" style="margin-bottom: 14px;">
-        <label class="recruit-label" for="inpWithdrawAppCode">
-          <span>กรอกเลขอ้างอิงใบสมัครเพื่อยืนยัน <span class="req">*</span></span>
-        </label>
-        <input type="text" id="inpWithdrawAppCode" class="recruit-input" placeholder="เช่น SP70-XXXX" style="font-family: monospace; font-weight: 700; font-size: 0.95rem; text-transform: uppercase;" />
-        <div class="recruit-field-error" id="errWithdrawAppCode" style="display: none; margin-top: 6px;">กรุณากรอกเลขอ้างอิงใบสมัครให้ถูกต้อง</div>
-      </div>
-
-      <div class="recruit-form-group" style="margin-bottom: 22px;">
-        <label class="recruit-label" for="inpWithdrawReason">
-          <span>เหตุผลในการขอถอนตัว <span class="opt">(ถ้ามี)</span></span>
-        </label>
-        <textarea id="inpWithdrawReason" class="recruit-input" style="height: 80px; font-size: 0.88rem; line-height: 1.5;" placeholder="ระบุเหตุผล เช่น สละสิทธิ์, ติดภารกิจอื่น, ย้ายโรงเรียน"></textarea>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button type="button" class="btn-step-prev" id="btnCancelWithdraw" style="height: 42px; padding: 0 18px; border-radius: 10px;">
-          ยกเลิก
-        </button>
-        <button type="button" class="dg-btn-black" id="btnConfirmWithdraw" style="background: #dc2626; border-color: #dc2626; height: 42px; padding: 0 20px; border-radius: 10px; color: #ffffff; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
-          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
-          <span id="txtConfirmWithdraw">ยืนยันการถอนตัว</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ PDPA MODAL ============ -->
+    <!-- ============ PDPA MODAL ============ -->
   <div class="pdpa-modal-backdrop" id="pdpaModal">
     <div class="pdpa-modal-box">
       <div class="pdpa-modal-header">
@@ -4680,110 +4631,143 @@
 
       
       // ==========================================
-      // WITHDRAWAL MODAL HANDLERS
+      // WITHDRAWAL HANDLER (SI-ROSTER CONFIRMATION MODAL)
       // ==========================================
-      const withdrawModal = document.getElementById('withdrawModal');
       const btnOpenWithdrawModal = document.getElementById('btnOpenWithdrawModal');
-      const btnCloseWithdrawModal = document.getElementById('btnCloseWithdrawModal');
-      const btnCancelWithdraw = document.getElementById('btnCancelWithdraw');
-      const btnConfirmWithdraw = document.getElementById('btnConfirmWithdraw');
-      const inpWithdrawAppCode = document.getElementById('inpWithdrawAppCode');
-      const inpWithdrawReason = document.getElementById('inpWithdrawReason');
-      const errWithdrawAppCode = document.getElementById('errWithdrawAppCode');
-
-      function openWithdrawModal() {
-        if (!currentCheckedApplicant) return;
-        if (inpWithdrawAppCode) {
-          inpWithdrawAppCode.value = '';
-          inpWithdrawAppCode.classList.remove('has-error');
-        }
-        if (inpWithdrawReason) inpWithdrawReason.value = '';
-        if (errWithdrawAppCode) errWithdrawAppCode.style.display = 'none';
-        if (withdrawModal) withdrawModal.style.display = 'flex';
-      }
-
-      function closeWithdrawModal() {
-        if (withdrawModal) withdrawModal.style.display = 'none';
-      }
-
-      if (btnOpenWithdrawModal) btnOpenWithdrawModal.addEventListener('click', openWithdrawModal);
-      if (btnCloseWithdrawModal) btnCloseWithdrawModal.addEventListener('click', closeWithdrawModal);
-      if (btnCancelWithdraw) btnCancelWithdraw.addEventListener('click', closeWithdrawModal);
-      if (withdrawModal) {
-        withdrawModal.addEventListener('click', (e) => {
-          if (e.target === withdrawModal) closeWithdrawModal();
-        });
-      }
-
-      if (btnConfirmWithdraw) {
-        btnConfirmWithdraw.addEventListener('click', async () => {
+      if (btnOpenWithdrawModal) {
+        btnOpenWithdrawModal.addEventListener('click', async () => {
           if (!currentCheckedApplicant) return;
-          const enteredCode = (inpWithdrawAppCode?.value || '').trim().toUpperCase();
-          const expectedCode = (currentCheckedApplicant.applicationCode || '').trim().toUpperCase();
 
-          if (!enteredCode || enteredCode !== expectedCode) {
-            if (inpWithdrawAppCode) inpWithdrawAppCode.classList.add('has-error');
-            if (errWithdrawAppCode) {
-              errWithdrawAppCode.textContent = 'เลขอ้างอิงใบสมัครไม่ถูกต้อง กรุณาตรวจสอบให้ตรงกับที่แสดงด้านบน';
-              errWithdrawAppCode.style.display = 'block';
+          const appName = currentCheckedApplicant.applicantName || 'ผู้สมัคร';
+          const studentId = currentCheckedApplicant.studentId || '';
+          const appCode = currentCheckedApplicant.applicationCode || '';
+          const club = currentCheckedApplicant.club || '';
+
+          const result = await Swal.fire({
+            html: `
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.22);">
+                  <i class="fa-solid fa-user-xmark" style="font-size: 34px; color: #DC2626;"></i>
+                </div>
+                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการยกเลิกใบสมัคร</h2>
+                <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
+                  <div style="margin-bottom: 4px; font-size: 0.85rem; color: #64748B;">ระบบกำลังจะยกเลิกใบสมัครของ</div>
+                  <div style="font-size: 1.25rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; line-height: 1.2;">${appName}</div>
+                  <div style="font-size: 0.92rem; color: #334155; margin-bottom: 4px;">รหัสนักเรียน: <strong>${studentId}</strong> • เลขอ้างอิง: <strong style="color: #DC2626;">${appCode}</strong></div>
+                  <div style="font-size: 0.92rem; color: #334155;">ชุมนุม: <strong>${club}</strong></div>
+                  <div style="font-size: 0.82rem; color: #DC2626; border-top: 1px dashed #CBD5E1; padding-top: 8px; margin-top: 8px; line-height: 1.45;">
+                    ⚠️ คำเตือน: เมื่อยืนยันการถอนตัวแล้ว ใบสมัครจะถูกยกเลิกทันที คณะกรรมการจะไม่นำข้อมูลเข้าสู่การคัดเลือก และไม่สามารถขอคืนสิทธิ์ได้
+                  </div>
+                </div>
+                <div style="width: 100%; text-align: left;">
+                  <label style="font-size: 0.84rem; font-weight: 700; color: #475569; display: block; margin-bottom: 5px;">
+                    ระบุเหตุผลในการขอถอนตัว <span style="font-weight: 400; color: #94A3B8;">(ระบุหรือไม่ระบุก็ได้)</span>:
+                  </label>
+                  <input type="text" id="swalWithdrawReasonInput" placeholder="เช่น สละสิทธิ์, ติดภารกิจอื่น" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.9rem; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" />
+                </div>
+              </div>
+            `,
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonColor: '#DC2626',
+            cancelButtonColor: '#F1F5F9',
+            confirmButtonText: 'ยืนยันการยกเลิกใบสมัคร',
+            cancelButtonText: '<span style="color: #64748B;">ยกเลิก</span>',
+            reverseButtons: true,
+            customClass: {
+              popup: 'custom-swal-popup',
+              confirmButton: 'custom-swal-btn',
+              cancelButton: 'custom-swal-btn'
+            },
+            buttonsStyling: true,
+            preConfirm: () => {
+              const reasonEl = document.getElementById('swalWithdrawReasonInput');
+              return reasonEl ? reasonEl.value.trim() : '';
             }
-            return;
-          }
+          });
 
-          if (inpWithdrawAppCode) inpWithdrawAppCode.classList.remove('has-error');
-          if (errWithdrawAppCode) errWithdrawAppCode.style.display = 'none';
+          if (!result.isConfirmed) return;
 
-          const reason = (inpWithdrawReason?.value || '').trim();
+          const reason = result.value || '';
 
-          btnConfirmWithdraw.disabled = true;
-          const origHtml = btnConfirmWithdraw.innerHTML;
-          btnConfirmWithdraw.innerHTML = '<span>กำลังยกเลิกใบสมัคร...</span>';
+          // 1. Show SI-ROSTER Loading Popup
+          Swal.fire({
+            html: `
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
+                </div>
+                <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังยกเลิกใบสมัคร</h2>
+                <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
+                  ระบบกำลังดำเนินการยกเลิกใบสมัครของคุณ<br>กรุณารอสักครู่...
+                </div>
+              </div>
+            `,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            customClass: { popup: 'custom-swal-popup' }
+          });
 
           try {
             const res = await window.SarawatAPI.withdrawRecruitmentApplication({
-              student_id: currentCheckedApplicant.studentId,
-              application_code: enteredCode,
+              student_id: studentId,
+              application_code: appCode,
               reason: reason
             });
 
             if (res && res.success) {
-              closeWithdrawModal();
-              if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'ถอนตัวจากการสมัครสำเร็จ',
-                  text: 'ระบบได้ดำเนินการยกเลิกใบสมัครของท่านเรียบร้อยแล้ว',
-                  confirmButtonColor: '#0F172A',
-                  confirmButtonText: 'ตกลง'
-                });
-              } else {
-                alert('ระบบได้ดำเนินการยกเลิกใบสมัครของท่านเรียบร้อยแล้ว');
+              if (window.RosterAudio && typeof window.RosterAudio.playSuccess === 'function') {
+                window.RosterAudio.playSuccess();
               }
-              // Refresh status
-              document.getElementById('btnSearchStatus').click();
+              // 2. Show SI-ROSTER Success Popup
+              Swal.fire({
+                html: `
+                  <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
+                      <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
+                    </div>
+                    <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยกเลิกใบสมัครสำเร็จ</h2>
+                    <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
+                      ระบบได้ดำเนินการยกเลิกใบสมัครของท่านเรียบร้อยแล้ว
+                    </div>
+                  </div>
+                `,
+                timer: 2500,
+                showConfirmButton: false,
+                customClass: { popup: 'custom-swal-popup' }
+              });
+
+              // Refresh Inline Status Box
+              const btnSearch = document.getElementById('btnSearchStatus');
+              if (btnSearch) btnSearch.click();
             } else {
               throw new Error(res.error || 'ไม่สามารถดำเนินการถอนตัวได้');
             }
           } catch (err) {
-            if (typeof Swal !== 'undefined') {
-              Swal.fire({
-                icon: 'error',
-                title: 'เกิดข้อผิดพลาด',
-                text: err.message,
-                confirmButtonColor: '#0F172A',
-                confirmButtonText: 'ตกลง'
-              });
-            } else {
-              alert('เกิดข้อผิดพลาด: ' + err.message);
+            if (window.RosterAudio && typeof window.RosterAudio.playError === 'function') {
+              window.RosterAudio.playError();
             }
-          } finally {
-            btnConfirmWithdraw.disabled = false;
-            btnConfirmWithdraw.innerHTML = origHtml;
-            if (window.lucide) lucide.createIcons();
+            // 3. Show SI-ROSTER Error Popup
+            Swal.fire({
+              html: `
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                  <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 34px; color: #EF4444;"></i>
+                  </div>
+                  <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ไม่สามารถยกเลิกใบสมัครได้</h2>
+                  <div style="color: #991B1B; font-size: 0.92rem; line-height: 1.5; background: #FEF2F2; border: 1.5px solid #FCA5A5; padding: 12px 16px; border-radius: 12px; margin-top: 10px; width: 100%; box-sizing: border-box;">
+                    ${err.message || 'เกิดข้อผิดพลาดในการดำเนินการ กรุณาลองใหม่อีกครั้ง'}
+                  </div>
+                </div>
+              `,
+              confirmButtonColor: '#0F172A',
+              confirmButtonText: 'ตกลง',
+              customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+            });
           }
         });
       }
-      
+
       // Automatically check URL and SessionStorage for Edit Mode
       // e.g. recruit.html?edit=36463 or #edit-36463
       try {

@@ -1199,11 +1199,23 @@
     },
 
     withdrawRecruitmentApplication: async function (studentId, applicationCode, reason = '') {
+      let sId = studentId;
+      let appCode = applicationCode;
+      let rText = reason;
+      if (typeof studentId === 'object' && studentId !== null) {
+        sId = studentId.student_id || studentId.studentId || '';
+        appCode = studentId.application_code || studentId.applicationCode || '';
+        rText = studentId.reason || reason || '';
+      }
       const base = this.getBaseUrl() || '';
       const res = await fetch(`${base}/api/recruitment/withdraw`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ student_id: studentId, application_code: applicationCode, reason: reason })
+        body: JSON.stringify({
+          student_id: String(sId).trim(),
+          application_code: String(appCode).trim().toUpperCase(),
+          reason: String(rText).trim()
+        })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'ถอนตัวใบสมัครไม่สำเร็จ');
