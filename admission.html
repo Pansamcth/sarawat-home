@@ -2416,6 +2416,29 @@
               </div>
             </div>
 
+            <!-- WITHDRAWN STATUS ALERT (IF ALREADY WITHDRAWN) -->
+            <div id="stWithdrawnAlert" class="recruit-callout danger" style="display: none; margin-top: 20px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 14px 16px;">
+              <div style="display: flex; align-items: flex-start; gap: 10px;">
+                <i data-lucide="user-x" style="width: 20px; height: 20px; flex-shrink: 0; color: #dc2626; margin-top: 2px;"></i>
+                <div style="font-size: 0.88rem; line-height: 1.6;">
+                  <strong style="font-weight: 800; color: #991b1b;">ใบสมัครนี้ถูกยกเลิกแล้ว</strong><br>
+                  <span id="stWithdrawnText" style="color: #b91c1c;">ใบสมัครนี้ได้ถูกยกเลิก/ถอนตัวจากการรับสมัครเรียบร้อยแล้ว</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SELF-WITHDRAWAL ACTION BUTTON -->
+            <div id="boxWithdrawalAction" style="display: none; margin-top: 24px; padding-top: 18px; border-top: 1px dashed #e2e8f0; text-align: center;">
+              <button type="button" id="btnOpenWithdrawModal" class="dg-btn-outline"
+                style="border-radius: 10px; background: #ffffff; border: 1.5px solid #fecaca; color: #dc2626; padding: 10px 20px; font-size: 0.88rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: all 0.2s ease;">
+                <i data-lucide="user-x" style="width: 16px; height: 16px; color: #dc2626;"></i>
+                <span>ขอยกเลิก / ถอนตัวจากการสมัคร</span>
+              </button>
+              <p style="font-size: 0.78rem; color: #94a3b8; margin: 8px 0 0 0;">
+                * สามารถขอยกเลิกใบสมัครได้ก่อนที่คณะกรรมการจะประกาศผลการคัดเลือก
+              </p>
+            </div>
+
           </div>
 
         </div>
