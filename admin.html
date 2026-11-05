@@ -1464,14 +1464,14 @@
       height: 100%;
       height: 100dvh;
       background: #f8fafc;
-      background: radial-gradient(circle at 50% 20%, #f8fafc 0%, #e2e8f0 100%);
       z-index: 99999;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      padding-top: max(20px, env(safe-area-inset-top));
-      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      padding: 24px 20px;
+      padding-top: max(24px, env(safe-area-inset-top));
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
       padding-left: max(20px, env(safe-area-inset-left));
       padding-right: max(20px, env(safe-area-inset-right));
       backdrop-filter: blur(8px);
@@ -1483,19 +1483,208 @@
     }
 
     .auth-card {
-      max-width: 440px;
+      max-width: 860px;
       width: 100%;
       background: #ffffff;
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      border-radius: 16px;
-      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.02);
-      padding: 36px 32px;
-      animation: authCardIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid #e2e8f0;
+      border-radius: 26px;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
+      display: grid !important;
+      grid-template-columns: 1fr 1.15fr;
+      overflow: hidden;
+      padding: 0;
+      animation: authCardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .auth-card[style*="display: none"],
+    .auth-card[style*="display:none"] {
+      display: none !important;
+    }
+
+    /* Left Branding Pane (White Background + Dot Grid Paper) */
+    .auth-card-left {
+      background-color: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 36px;
+      text-align: center;
+      color: #0f172a;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .auth-card-pattern {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: radial-gradient(circle, #cbd5e1 0.85px, transparent 0.85px);
+      background-size: 18px 18px;
+      opacity: 0.75;
+    }
+
+    .auth-card-brand-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .auth-brand-logos {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .auth-brand-logos img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+    }
+
+    .auth-brand-logos-divider {
+      width: 1px;
+      height: 32px;
+      background: #cbd5e1;
+    }
+
+    .auth-brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.015em;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      white-space: nowrap;
+      font-family: var(--dg-font-sans);
+    }
+
+    .auth-brand-org {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .auth-brand-subtitle {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 400;
+      line-height: 1.45;
+      max-width: 320px;
+    }
+
+    /* Right Form Pane */
+    .auth-card-right {
+      background: #ffffff;
+      padding: 48px 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    .auth-form-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      font-family: var(--dg-font-sans);
+    }
+
+    .auth-form-desc {
+      font-size: 0.9rem;
+      color: #64748b;
+      line-height: 1.4;
+      margin-bottom: 26px;
+    }
+
+    .auth-login-copyright {
+      margin-top: 24px;
+      font-size: 0.82rem;
+      color: #64748b;
+      font-family: var(--dg-font-sans, sans-serif);
+      text-align: center;
+      letter-spacing: 0.015em;
+      font-weight: 500;
+    }
+
+    .auth-login-copyright a {
+      color: #334155;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.15s ease;
+    }
+
+    .auth-login-copyright a:hover {
+      color: #0f172a;
     }
 
     @keyframes authCardIn {
-      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 768px) {
+      .auth-card {
+        grid-template-columns: 1fr;
+        border-radius: 20px;
+        max-width: 440px;
+      }
+
+      .auth-card-left {
+        padding: 32px 24px 28px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .auth-brand-logos {
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .auth-brand-logos img {
+        width: 44px;
+        height: 44px;
+      }
+
+      .auth-brand-logos-divider {
+        height: 26px;
+      }
+
+      .auth-brand-title {
+        font-size: clamp(1.05rem, 4.5vw, 1.25rem);
+        white-space: normal;
+      }
+
+      .auth-card-right {
+        padding: 32px 24px;
+      }
+
+      .auth-form-title {
+        font-size: 1.45rem;
+      }
+
+      .auth-login-copyright {
+        margin-top: 18px;
+        font-size: 0.76rem;
+      }
     }
 
     .auth-input-group {
@@ -2931,56 +3120,73 @@
 
     <!-- 1. REGULAR LOGIN CARD (Username & Password) -->
     <div class="auth-card" id="authLoginCard">
-      <div style="text-align: center; margin-bottom: 24px;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 16px;">
-          <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
-            style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));" />
-          <span style="display: inline-block; width: 1px; height: 32px; background: #e2e8f0;"></span>
-          <img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo"
-            style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(212,175,55,0.3));" />
+      <!-- LEFT COLUMN: BRANDING & IDENTITY (WHITE BACKGROUND + DOT GRID PAPER) -->
+      <div class="auth-card-left">
+        <!-- Dot Grid Paper Pattern -->
+        <div class="auth-card-pattern"></div>
+
+        <div class="auth-card-brand-content">
+          <!-- Dual Logos (ไม่มีบล็อก/กล่องพื้นหลัง) -->
+          <div class="auth-brand-logos">
+            <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" title="โรงเรียนเดชะปัตตนยานุกูล" />
+            <div class="auth-brand-logos-divider"></div>
+            <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน" title="สารวัตรนักเรียน" />
+          </div>
+
+          <!-- Official Hierarchy Text: ระบบจัดการหน้าเว็บสารวัตรนักเรียน (บรรทัดเดียว) -->
+          <h1 class="auth-brand-title">ระบบจัดการหน้าเว็บสารวัตรนักเรียน</h1>
+          <p class="auth-brand-org">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</p>
+          <p class="auth-brand-subtitle">สังกัดสำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน กระทรวงศึกษาธิการ</p>
         </div>
-        <h2 style="font-family: var(--dg-font-sans); font-size: 1.45rem; font-weight: 800; margin: 0 0 6px; color: #0f172a;">
-          เข้าสู่ระบบผู้ดูแลสารวัตรนักเรียน
-        </h2>
-        <p style="font-size: 0.88rem; color: var(--dg-text-secondary); margin: 0;">
-          กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าใช้งาน
-        </p>
       </div>
 
-      <form id="adminLoginForm" onsubmit="event.preventDefault(); if (typeof handleUserLogin === 'function') { handleUserLogin(event); } else if (typeof window.handleUserLogin === 'function') { window.handleUserLogin(event); } else { alert('กำลังโหลดระบบ กรุณารอสักครู่แล้วลองอีกครั้ง'); } return false;">
-        <div class="auth-input-group">
-          <label class="auth-input-label" for="loginUsernameInput">ชื่อผู้ใช้ (Username)</label>
-          <div class="auth-input-wrapper">
-            <input type="text" id="loginUsernameInput" class="auth-input" placeholder="กรอกชื่อผู้ใช้" required autocomplete="username" autofocus />
+      <!-- RIGHT COLUMN: LOGIN FORM -->
+      <div class="auth-card-right">
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">เข้าสู่ระบบ</h2>
+          <p class="auth-form-desc">กรอกชื่อผู้ใช้และรหัสผ่านเพื่อเริ่มใช้งาน</p>
+        </div>
+
+        <form id="adminLoginForm" onsubmit="event.preventDefault(); if (typeof handleUserLogin === 'function') { handleUserLogin(event); } else if (typeof window.handleUserLogin === 'function') { window.handleUserLogin(event); } else { alert('กำลังโหลดระบบ กรุณารอสักครู่แล้วลองอีกครั้ง'); } return false;">
+          <div class="auth-input-group">
+            <label class="auth-input-label" for="loginUsernameInput">ชื่อผู้ใช้ (Username)</label>
+            <div class="auth-input-wrapper">
+              <input type="text" id="loginUsernameInput" class="auth-input" placeholder="กรอกชื่อผู้ใช้" required autocomplete="username" autofocus />
+            </div>
           </div>
-        </div>
 
-        <div class="auth-input-group">
-          <label class="auth-input-label" for="loginPasswordInput">รหัสผ่าน (Password)</label>
-          <div class="auth-input-wrapper">
-            <input type="password" id="loginPasswordInput" class="auth-input" placeholder="กรอกรหัสผ่าน" required autocomplete="current-password" />
-            <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('loginPasswordInput', 'loginEyeIcon')" title="แสดง/ซ่อนรหัสผ่าน">
-              <i data-lucide="eye" id="loginEyeIcon" style="width: 18px; height: 18px;"></i>
-            </button>
+          <div class="auth-input-group">
+            <label class="auth-input-label" for="loginPasswordInput">รหัสผ่าน (Password)</label>
+            <div class="auth-input-wrapper">
+              <input type="password" id="loginPasswordInput" class="auth-input" placeholder="กรอกรหัสผ่าน" required autocomplete="current-password" />
+              <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('loginPasswordInput', 'loginEyeIcon')" title="แสดง/ซ่อนรหัสผ่าน">
+                <i data-lucide="eye" id="loginEyeIcon" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
           </div>
+
+          <div id="loginErrorMsg" class="auth-alert-error" style="display: none;">
+            <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+            <span id="loginErrorText">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</span>
+          </div>
+
+          <button type="submit" id="adminLoginBtn" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 14px; font-weight: 700; border-radius: 12px; margin-top: 10px; box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.25);">
+            <span>เข้าสู่ระบบ (Sign In)</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center;">
+          <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
+            <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
+          </a>
         </div>
-
-        <div id="loginErrorMsg" class="auth-alert-error" style="display: none;">
-          <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
-          <span id="loginErrorText">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</span>
-        </div>
-
-        <button type="submit" id="adminLoginBtn" class="dg-btn-black" style="width: 100%; justify-content: center; padding: 13px; font-weight: 700; border-radius: 8px;">
-          <span>เข้าสู่ระบบ (Sign In)</span>
-          <i data-lucide="arrow-right"></i>
-        </button>
-      </form>
-
-      <!-- Database setting removed (configured centrally via cloudflare-config.js) --><div style="margin-top: 16px; text-align: center;">
-        <a href="index.html" class="dg-arrow-link" style="font-size: 0.82rem; justify-content: center;">
-          <span>← กลับสู่หน้าหลักของเว็บไซต์</span>
-        </a>
       </div>
+    </div>
+
+    <!-- Copyright Notice (Official Request) -->
+    <div class="auth-login-copyright">
+      &copy; 2569 Truant Patrol Decha. All rights reserved. Developed by <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira Wattanakitpaisan</a>
     </div>
 
     <!-- 2. FIRST-TIME SUPER ADMIN SETUP CARD (Displayed when 0 admins exist) -->

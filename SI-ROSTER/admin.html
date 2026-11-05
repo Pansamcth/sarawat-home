@@ -1077,16 +1077,16 @@
       height: 100vh;
       height: 100dvh;
       background: #f8fafc;
-      background: radial-gradient(circle at 50% 30%, #f8fafc 0%, #edf2f7 100%);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 99999;
-      padding: 24px;
+      padding: 24px 20px;
       padding-top: max(24px, env(safe-area-inset-top));
       padding-bottom: max(24px, env(safe-area-inset-bottom));
-      padding-left: max(24px, env(safe-area-inset-left));
-      padding-right: max(24px, env(safe-area-inset-right));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
       box-sizing: border-box;
       font-family: 'Kanit', sans-serif;
       overflow-y: auto;
@@ -1096,55 +1096,141 @@
 
     .custom-login-card {
       background: #ffffff;
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      border-radius: 28px;
+      border: 1px solid #e2e8f0;
+      border-radius: 26px;
       width: 100%;
-      max-width: 450px;
-      padding: 44px 38px 36px 38px;
-      box-shadow: 0 20px 45px -12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+      max-width: 860px;
+      padding: 0;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
       color: #0f172a;
+      display: grid !important;
+      grid-template-columns: 1fr 1.15fr;
+      overflow: hidden;
       animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Left Branding Pane (White Background + Dot Grid Paper) */
+    .custom-login-left {
+      background-color: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 36px;
+      text-align: center;
+      color: #0f172a;
+      overflow: hidden;
       box-sizing: border-box;
     }
 
-    .custom-logos-header {
+    .custom-login-pattern {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: radial-gradient(circle, #cbd5e1 0.85px, transparent 0.85px);
+      background-size: 18px 18px;
+      opacity: 0.75;
+    }
+
+    .custom-login-brand-content {
+      position: relative;
+      z-index: 2;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .custom-logos-header {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      margin-bottom: 22px;
+      gap: 16px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .custom-logos-header img {
+      height: 54px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
     }
 
     .custom-logos-divider {
       width: 1px;
-      height: 36px;
-      background: #e2e8f0;
+      height: 32px;
+      background: #cbd5e1;
+    }
+
+    .custom-brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.015em;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      white-space: nowrap;
+    }
+
+    .custom-brand-org {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .custom-brand-subtitle {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 400;
+      line-height: 1.45;
+      max-width: 320px;
+    }
+
+    /* Right Form Pane */
+    .custom-login-right {
+      background: #ffffff;
+      padding: 48px 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-sizing: border-box;
     }
 
     .custom-login-title {
-      font-size: 1.45rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: #0f172a;
-      margin: 0 0 8px 0;
-      text-align: center;
-      letter-spacing: -0.2px;
+      margin: 0 0 4px 0;
+      text-align: left;
+      letter-spacing: -0.02em;
     }
 
     .custom-login-subtitle {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #64748b;
-      margin: 0 0 28px 0;
-      text-align: center;
+      margin: 0 0 26px 0;
+      text-align: left;
       font-weight: 400;
+      line-height: 1.4;
     }
 
     .custom-form-group {
       margin-bottom: 20px;
+      text-align: left;
     }
 
     .custom-form-label {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: #0f172a;
       margin-bottom: 8px;
       display: block;
@@ -1156,7 +1242,7 @@
       padding: 13px 16px;
       border: 1.5px solid #cbd5e1;
       border-radius: 12px;
-      background: #ffffff;
+      background: #f8fafc;
       font-family: 'Kanit', sans-serif;
       font-size: 0.95rem;
       color: #1e293b;
@@ -1166,11 +1252,79 @@
 
     .custom-login-input:focus {
       border-color: #0f172a;
+      background: #ffffff;
       box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
     }
 
     .custom-login-input::placeholder {
       color: #94a3b8;
+    }
+
+    .roster-login-copyright {
+      margin-top: 24px;
+      font-size: 0.82rem;
+      color: #64748b;
+      font-family: 'Kanit', sans-serif;
+      text-align: center;
+      letter-spacing: 0.015em;
+      font-weight: 500;
+    }
+
+    .roster-login-copyright a {
+      color: #334155;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.15s ease;
+    }
+
+    .roster-login-copyright a:hover {
+      color: #0f172a;
+    }
+
+    @media (max-width: 768px) {
+      .custom-login-card {
+        grid-template-columns: 1fr;
+        border-radius: 20px;
+        max-width: 440px;
+      }
+
+      .custom-login-left {
+        padding: 32px 24px 28px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .custom-logos-header {
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .custom-logos-header img {
+        height: 44px;
+      }
+
+      .custom-logos-divider {
+        height: 26px;
+      }
+
+      .custom-brand-title {
+        font-size: clamp(1.05rem, 4.5vw, 1.25rem);
+        white-space: normal;
+      }
+
+      .custom-login-right {
+        padding: 32px 24px;
+      }
+
+      .custom-login-title {
+        font-size: 1.45rem;
+      }
+
+      .roster-login-copyright {
+        margin-top: 18px;
+        font-size: 0.76rem;
+      }
     }
 
     .toggle-pass-btn {
@@ -4109,50 +4263,67 @@ body.dark-mode .signup-success-banner,
   <!-- Admin Dedicated Login View (Exact UI Match) -->
   <div id="adminLoginView" class="admin-login-wrapper">
     <div class="custom-login-card">
-      <div class="custom-logos-header">
-        <img src="../assets/icons/school-logo.png" onerror="if(this.src!=='/assets/icons/school-logo.png')this.src='/assets/icons/school-logo.png'" alt="School Crest" style="height: 52px; width: auto; object-fit: contain;">
-        <div class="custom-logos-divider"></div>
-        <img src="../assets/icons/sarawat-logo.png" onerror="if(this.src!=='/assets/icons/sarawat-logo.png')this.src='/assets/icons/sarawat-logo.png'" alt="Sarawat Emblem" style="height: 48px; width: auto; object-fit: contain;">
-      </div>
+      <!-- LEFT COLUMN: BRANDING & IDENTITY (WHITE BACKGROUND + DOT GRID PAPER) -->
+      <div class="custom-login-left">
+        <!-- Dot Grid Paper Pattern -->
+        <div class="custom-login-pattern"></div>
 
-      <h1 class="custom-login-title">เข้าสู่ระบบ Admin SI-ROSTER</h1>
-      <p class="custom-login-subtitle">กรุณากรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าใช้งาน</p>
+        <div class="custom-login-brand-content">
+          <!-- Dual Logos (ไม่มีบล็อก/กล่องพื้นหลัง) -->
+          <div class="custom-logos-header">
+            <img src="../assets/icons/school-logo.png" onerror="if(this.src!=='/assets/icons/school-logo.png')this.src='/assets/icons/school-logo.png'" alt="School Crest" />
+            <div class="custom-logos-divider"></div>
+            <img src="../assets/icons/sarawat-logo.png" onerror="if(this.src!=='/assets/icons/sarawat-logo.png')this.src='/assets/icons/sarawat-logo.png'" alt="Sarawat Emblem" />
+          </div>
 
-      <div class="custom-form-group">
-        <label class="custom-form-label">ชื่อผู้ใช้ (Username)</label>
-        <input type="text" id="loginUser" class="custom-login-input" placeholder="กรอกชื่อผู้ใช้" autocomplete="username"
-          onkeydown="if(event.key === 'Enter') document.getElementById('loginPass').focus()">
-      </div>
-
-      <div class="custom-form-group">
-        <label class="custom-form-label">รหัสผ่าน (Password)</label>
-        <div style="position: relative;">
-          <input type="password" id="loginPass" class="custom-login-input" placeholder="กรอกรหัสผ่าน" autocomplete="current-password"
-            style="padding-right: 48px;" onkeydown="if(event.key === 'Enter') submitLogin()">
-          <button type="button" onclick="togglePasswordVisibility()" class="toggle-pass-btn" title="แสดง/ซ่อนรหัสผ่าน">
-            <i id="togglePassIcon" class="fa-regular fa-eye"></i>
-          </button>
+          <!-- Official Hierarchy Text: ระบบจัดการหน้าเว็บสารวัตรนักเรียน (บรรทัดเดียว) -->
+          <h1 class="custom-brand-title">ระบบจัดการหน้าเว็บสารวัตรนักเรียน</h1>
+          <p class="custom-brand-org">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</p>
+          <p class="custom-brand-subtitle">สังกัดสำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน กระทรวงศึกษาธิการ</p>
         </div>
       </div>
 
-      <div id="loginErrorMsg" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #ef4444; padding: 10px 14px; border-radius: 10px; font-size: 0.88rem; margin-top: 14px; text-align: center;"></div>
+      <!-- RIGHT COLUMN: LOGIN FORM -->
+      <div class="custom-login-right">
+        <h1 class="custom-login-title">เข้าสู่ระบบ</h1>
+        <p class="custom-login-subtitle">ระบบลงหน้าที่ (SI-ROSTER) - กรอกชื่อผู้ใช้และรหัสผ่านเพื่อเริ่มใช้งาน</p>
 
-      <button class="custom-login-btn" id="btnLoginSubmit" onclick="submitLogin()">
-        <span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>
-      </button>
+        <div class="custom-form-group">
+          <label class="custom-form-label">ชื่อผู้ใช้ (Username)</label>
+          <input type="text" id="loginUser" class="custom-login-input" placeholder="กรอกชื่อผู้ใช้" autocomplete="username"
+            onkeydown="if(event.key === 'Enter') document.getElementById('loginPass').focus()">
+        </div>
 
-      
+        <div class="custom-form-group">
+          <label class="custom-form-label">รหัสผ่าน (Password)</label>
+          <div style="position: relative;">
+            <input type="password" id="loginPass" class="custom-login-input" placeholder="กรอกรหัสผ่าน" autocomplete="current-password"
+              style="padding-right: 48px;" onkeydown="if(event.key === 'Enter') submitLogin()">
+            <button type="button" onclick="togglePasswordVisibility()" class="toggle-pass-btn" title="แสดง/ซ่อนรหัสผ่าน">
+              <i id="togglePassIcon" class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
 
-      <div style="text-align: center; margin-top: 18px;">
-        <a href="/si-roster" onclick="goToRosterStudent(event); return false;" class="custom-back-link">
-          ← กลับสู่หน้าระบบลงหน้าที่ (SI-ROSTER)
-        </a>
+        <div id="loginErrorMsg" style="display: none; background: #fef2f2; border: 1px solid #fecaca; color: #ef4444; padding: 10px 14px; border-radius: 10px; font-size: 0.88rem; margin-top: 14px; text-align: center;"></div>
+
+        <button class="custom-login-btn" id="btnLoginSubmit" onclick="submitLogin()" style="background: #0f172a; border-radius: 12px; padding: 14px; font-weight: 700; margin-top: 24px; box-shadow: 0 10px 20px -4px rgba(15, 23, 42, 0.25);">
+          <span>เข้าสู่ระบบ (Sign In)</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="/si-roster" onclick="goToRosterStudent(event); return false;" class="custom-back-link">
+            ← กลับสู่หน้าระบบลงหน้าที่ (SI-ROSTER)
+          </a>
+        </div>
       </div>
     </div>
+
+    <!-- Copyright Notice (Official Request) -->
+    <div class="roster-login-copyright">
+      &copy; 2569 Truant Patrol Decha. All rights reserved. Developed by <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira Wattanakitpaisan</a>
+    </div>
   </div>
-
-
-</div>
 
   <!-- ============ AUTH-ISOLATED ROSTER ADMIN PORTAL ============ -->
   <div id="adminPortalApp" style="display: none;">
