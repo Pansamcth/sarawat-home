@@ -3363,16 +3363,48 @@
       if (Object.keys(grouped).length === 0) {
         html += `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`;
       } else {
+        let currentRemaining = 22;
         orderedDuties.forEach((d, dutyIdx) => {
           if (!grouped[d]) return;
           const members = grouped[d];
-          const isLargeDuty = members.length > 12;
-          const isSmallDuty = members.length <= 12;
-          const pageBreakBefore = (dutyIdx > 0 && isLargeDuty) ? 'page-break-before: always; break-before: always;' : '';
-          const pageBreakInside = isSmallDuty ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
+          const totalNeeded = 2 + members.length;
+          let pageBreakBefore = false;
+          let pageBreakInsideAvoid = false;
 
-          html += `<div style="margin-bottom: 18px; ${pageBreakBefore} ${pageBreakInside}">
-             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; ${pageBreakInside}">
+          if (dutyIdx > 0) {
+            if (members.length <= 10) {
+              if (totalNeeded > currentRemaining) {
+                pageBreakBefore = true;
+                currentRemaining = 28;
+              }
+            } else {
+              if (currentRemaining < 6) {
+                pageBreakBefore = true;
+                currentRemaining = 28;
+              }
+            }
+          }
+
+          if (totalNeeded <= currentRemaining) {
+            if (members.length <= 10) {
+              pageBreakInsideAvoid = true;
+            }
+            currentRemaining -= totalNeeded;
+          } else {
+            let remainingDutyRows = totalNeeded - currentRemaining;
+            currentRemaining = 28;
+            while (remainingDutyRows > 28) {
+              remainingDutyRows -= 28;
+              currentRemaining = 28;
+            }
+            currentRemaining -= remainingDutyRows;
+          }
+
+          const pageBreakBeforeStyle = pageBreakBefore ? 'page-break-before: always; break-before: always;' : '';
+          const pageBreakInsideStyle = pageBreakInsideAvoid ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
+
+          html += `<div style="margin-bottom: 18px; ${pageBreakBeforeStyle} ${pageBreakInsideStyle}">
+             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; ${pageBreakInsideStyle}">
                <thead style="display: table-header-group;">
                  <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
                    <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">

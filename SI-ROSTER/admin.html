@@ -10578,16 +10578,48 @@ body.dark-mode .signup-success-banner,
       if (Object.keys(grouped).length === 0) {
         html += `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`;
       } else {
+        let currentRemaining = 22;
         orderedDuties.forEach((d, dutyIdx) => {
           if (!grouped[d]) return;
           const members = grouped[d];
-          const isLargeDuty = members.length > 12;
-          const isSmallDuty = members.length <= 12;
-          const pageBreakBefore = (dutyIdx > 0 && isLargeDuty) ? 'page-break-before: always; break-before: always;' : '';
-          const pageBreakInside = isSmallDuty ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
+          const totalNeeded = 2 + members.length;
+          let pageBreakBefore = false;
+          let pageBreakInsideAvoid = false;
 
-          html += `<div style="margin-bottom: 18px; ${pageBreakBefore} ${pageBreakInside}">
-             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; ${pageBreakInside}">
+          if (dutyIdx > 0) {
+            if (members.length <= 10) {
+              if (totalNeeded > currentRemaining) {
+                pageBreakBefore = true;
+                currentRemaining = 28;
+              }
+            } else {
+              if (currentRemaining < 6) {
+                pageBreakBefore = true;
+                currentRemaining = 28;
+              }
+            }
+          }
+
+          if (totalNeeded <= currentRemaining) {
+            if (members.length <= 10) {
+              pageBreakInsideAvoid = true;
+            }
+            currentRemaining -= totalNeeded;
+          } else {
+            let remainingDutyRows = totalNeeded - currentRemaining;
+            currentRemaining = 28;
+            while (remainingDutyRows > 28) {
+              remainingDutyRows -= 28;
+              currentRemaining = 28;
+            }
+            currentRemaining -= remainingDutyRows;
+          }
+
+          const pageBreakBeforeStyle = pageBreakBefore ? 'page-break-before: always; break-before: always;' : '';
+          const pageBreakInsideStyle = pageBreakInsideAvoid ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
+
+          html += `<div style="margin-bottom: 18px; ${pageBreakBeforeStyle} ${pageBreakInsideStyle}">
+             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; ${pageBreakInsideStyle}">
                <thead style="display: table-header-group;">
                  <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
                    <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
@@ -10886,17 +10918,49 @@ body.dark-mode .signup-success-banner,
       if (Object.keys(grouped).length === 0) {
         html += `<div style="text-align: center; padding: 25px; background: #fafafa; border: 1px dashed #cbd5e1; border-radius: 6px; color: #64748b; font-size: 13.5px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</div>`;
       } else {
+        let currentRemaining = 20;
         orderedDuties.forEach((d, dutyIdx) => {
           if (!grouped[d]) return;
           const members = grouped[d];
-          const isLargeDuty = members.length > 12;
-          const isSmallDuty = members.length <= 12;
-          const pageBreakBefore = (dutyIdx > 0 && isLargeDuty) ? 'page-break-before: always; break-before: always;' : '';
-          const pageBreakInside = isSmallDuty ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
+          const totalNeeded = 2 + members.length;
+          let pageBreakBefore = false;
+          let pageBreakInsideAvoid = false;
+
+          if (dutyIdx > 0) {
+            if (members.length <= 10) {
+              if (totalNeeded > currentRemaining) {
+                pageBreakBefore = true;
+                currentRemaining = 26;
+              }
+            } else {
+              if (currentRemaining < 6) {
+                pageBreakBefore = true;
+                currentRemaining = 26;
+              }
+            }
+          }
+
+          if (totalNeeded <= currentRemaining) {
+            if (members.length <= 10) {
+              pageBreakInsideAvoid = true;
+            }
+            currentRemaining -= totalNeeded;
+          } else {
+            let remainingDutyRows = totalNeeded - currentRemaining;
+            currentRemaining = 26;
+            while (remainingDutyRows > 26) {
+              remainingDutyRows -= 26;
+              currentRemaining = 26;
+            }
+            currentRemaining -= remainingDutyRows;
+          }
+
+          const pageBreakBeforeStyle = pageBreakBefore ? 'page-break-before: always; break-before: always;' : '';
+          const pageBreakInsideStyle = pageBreakInsideAvoid ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
 
           html += `
-            <div style="margin-bottom: 16px; ${pageBreakBefore} ${pageBreakInside} background: #ffffff;">
-              <table style="width: 100%; border-collapse: collapse; border: 1px solid #cbd5e1; margin-bottom: 14px; ${pageBreakInside}">
+            <div style="margin-bottom: 16px; ${pageBreakBeforeStyle} ${pageBreakInsideStyle} background: #ffffff;">
+              <table style="width: 100%; border-collapse: collapse; border: 1px solid #cbd5e1; margin-bottom: 14px; ${pageBreakInsideStyle}">
                 <thead style="display: table-header-group;">
                   <tr style="background: #f8fafc; border-bottom: 1.5px solid #0f172a; page-break-inside: avoid !important; break-inside: avoid !important;">
                     <th colspan="5" style="padding: 7px 12px; border: none; border-bottom: 1.5px solid #0f172a; text-align: left; vertical-align: middle;">
