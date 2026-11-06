@@ -3498,21 +3498,26 @@
       } else {
         orderedDuties.forEach(d => {
           if (!grouped[d]) return;
-          html += `<div style="margin-bottom: 20px; page-break-inside: avoid;">
-             <div style="font-size: 15px; font-weight: bold; margin-bottom: 6px; text-decoration: underline;">หน้าที่ที่รับผิดชอบ: ${d}</div>
-             <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-               <thead>
-                 <tr>
-                   <th style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center; font-weight: bold; width: 6%;">ลำดับ</th>
-                   <th style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center; font-weight: bold; width: 6%;"></th>
-                   <th style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center; font-weight: bold; width: 48%;">ชื่อ - นามสกุล</th>
-                   <th style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center; font-weight: bold; width: 15%;">ชั้น</th>
-                   <th style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center; font-weight: bold; width: 25%;">หมายเหตุ</th>
+          const members = grouped[d];
+          html += `<div style="margin-bottom: 18px; page-break-inside: auto; break-inside: auto;">
+             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto;">
+               <thead style="display: table-header-group;">
+                 <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+                   <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
+                     หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${members.length} นาย)</span>
+                   </th>
+                 </tr>
+                 <tr style="page-break-inside: avoid !important; break-inside: avoid !important; background: #ffffff;">
+                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 6%;">ลำดับ</th>
+                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 7%;">ตรวจเวร</th>
+                   <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 47%;">ชื่อ - นามสกุล</th>
+                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 14%;">ชั้น</th>
+                   <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 26%;">หมายเหตุ</th>
                  </tr>
                </thead>
-               <tbody>
+               <tbody style="display: table-row-group;">
            `;
-          grouped[d].forEach((fullName, idx) => {
+          members.forEach((fullName, idx) => {
             const parts = fullName.trim().split(' ');
             let className = '';
             let justName = fullName;
@@ -3522,12 +3527,12 @@
               justName = parts.join(' ');
             }
 
-            html += `<tr>
-              <td style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center;">${idx + 1}</td>
-              <td style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center;"><div style="width: 13px; height: 13px; border: 1px solid #000; display: inline-block; vertical-align: middle;"></div></td>
-              <td style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: left;">${justName}</td>
-              <td style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center;">${className}</td>
-              <td style="border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; text-align: center;"></td>
+            html += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+              <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${idx + 1}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"><div style="width: 13px; height: 13px; border: 1px solid #000; display: inline-block; vertical-align: middle;"></div></td>
+              <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: left; white-space: nowrap; page-break-inside: avoid !important; break-inside: avoid !important;">${justName}</td>
+              <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${className}</td>
+              <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"></td>
             </tr>`;
           });
           html += `</tbody></table></div>`;
@@ -3604,12 +3609,24 @@
           <title>Export PDF - ${title}</title>
           <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
           <style>
-            @page { size: A4; margin: 10mm; }
+            @page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }
+            * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body { font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; background: white; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-            th, td { border: 1px solid #000; padding: 3px 4px; font-size: 13px; line-height: 1.2; color: #000; }
-            th { text-align: center; font-weight: bold; background: transparent; }
-            td { text-align: center; font-weight: normal; background: transparent; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto; }
+            thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }
+            tbody { display: table-row-group; }
+            tfoot { display: table-footer-group; }
+            tr { page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: auto; break-after: auto; }
+            th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }
+            th { text-align: center; font-weight: bold; }
+            td { text-align: center; font-weight: normal; }
+            @media print {
+              body { background: white; }
+              table { page-break-inside: auto; break-inside: auto; }
+              thead { display: table-header-group !important; }
+              tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+              td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+            }
           </style>
         </head>
         <body>
