@@ -10559,17 +10559,19 @@ body.dark-mode .signup-success-banner,
       Swal.close();
       let html = `
         <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0;">
-          <table style="width: 100%; margin-bottom: 15px; border: none; border-collapse: collapse;">
+          <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
-              <td style="width: 90px; border: none; vertical-align: middle; text-align: left; padding: 0;">
-                <img src="https://raw.githubusercontent.com/Pansamcth/Pansamcth.github.io/main/si-roster/assets/icons/logo.png" alt="Logo" style="width: 75px; height: 75px; object-fit: contain;">
+              <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
+                <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 58px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
+                <span style="display: inline-block; width: 1px; height: 38px; background: #cbd5e1; margin: 0 8px; vertical-align: middle;"></span>
+                <img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';">
               </td>
               <td style="border: none; vertical-align: middle; text-align: left; padding: 0;">
-                <div style="margin: 2px 0; line-height: 1.25; font-size: 16px; font-weight: bold;">งานสารวัตรนักเรียน</div>
-                <div style="margin: 2px 0; line-height: 1.25; font-size: 14px; font-weight: bold;">โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี</div>
-                <div style="margin: 2px 0; line-height: 1.25; font-size: 14px; font-weight: bold;">การปฏิบัติหน้าที่ : ${title}</div>
-                <div style="margin: 2px 0; line-height: 1.25; font-size: 14px; font-weight: bold;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
-                <div style="margin: 2px 0; line-height: 1.25; font-size: 12px; font-weight: normal;">ระบบเลือกหน้าที่อิเล็กทรอนิกส์</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 16px; font-weight: bold; color: #000;">สารวัตรนักเรียน</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 14px; font-weight: bold; color: #000;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">การปฏิบัติหน้าที่ : ${title}</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
               </td>
             </tr>
           </table>
@@ -10836,19 +10838,24 @@ body.dark-mode .signup-success-banner,
           <!-- Minimalist Header Table: Logos together on left with subtle divider -->
           <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
             <tr>
-              <td style="vertical-align: middle; text-align: left; padding: 0 0 10px 0; border: none; width: ${showDualLogo ? '135px' : '70px'};">
+              <td style="vertical-align: middle; text-align: left; padding: 0 14px 10px 0; border: none; width: 140px; white-space: nowrap;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="School Crest" style="height: 52px; width: auto; object-fit: contain;">
-                  ${showDualLogo ? '<img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="Sarawat Emblem" style="height: 48px; width: auto; object-fit: contain;">' : ''}
+                  <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 56px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
+                  <span style="display: inline-block; width: 1px; height: 36px; background: #cbd5e1; margin: 0 2px;"></span>
+                  <img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน" style="height: 52px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';">
                 </div>
               </td>
               <td style="vertical-align: middle; text-align: left; padding: 0 0 10px 14px; border: none; border-left: 1px solid #cbd5e1;">
-                <div style="font-size: 14.5px; font-weight: 700; color: #0f172a; line-height: 1.25;">งานสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
-                <div style="font-size: 13px; font-weight: 600; color: #334155; margin-top: 3px;">
-                  บันทึกการปฏิบัติหน้าที่: <span style="color: #0f172a;">${title}</span>
+                <div style="font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.25;">สารวัตรนักเรียน</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: #334155; margin-top: 2px;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                <div style="font-size: 13px; font-weight: 600; color: #334155; margin-top: 2px;">
+                  การปฏิบัติหน้าที่ : <span style="color: #0f172a;">${title}</span>
                 </div>
-                <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
-                  วันที่จัดกิจกรรม: <span style="color: #1e293b; font-weight: 500;">${dateDisplay}</span>
+                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                  วันที่จัดกิจกรรม : <span style="color: #1e293b; font-weight: 500;">${dateDisplay}</span>
+                </div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                  ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER
                 </div>
               </td>
               <td style="vertical-align: middle; text-align: right; padding: 0 0 10px 0; border: none; white-space: nowrap;">
