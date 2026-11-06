@@ -311,7 +311,8 @@
         const base = this.getBaseUrl();
         if (!base) return null;
         try {
-          const res = await fetch(`${base}/api/admins`);
+          const headers = typeof this.getAuthHeaders === 'function' ? this.getAuthHeaders() : {};
+          const res = await fetch(`${base}/api/admins`, { headers });
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return await res.json();
         } catch (e) {
@@ -322,9 +323,10 @@
     if (typeof window.SarawatApi.createAdmin !== 'function') {
       window.SarawatApi.createAdmin = async function (u, p, r) {
         const base = this.getBaseUrl();
+        const headers = typeof this.getAuthHeaders === 'function' ? this.getAuthHeaders({ 'Content-Type': 'application/json' }) : { 'Content-Type': 'application/json' };
         const res = await fetch(`${base}/api/admins`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ username: u, password: p, role: r })
         });
         const data = await res.json().catch(() => ({}));
@@ -335,9 +337,10 @@
     if (typeof window.SarawatApi.resetAdminPassword !== 'function') {
       window.SarawatApi.resetAdminPassword = async function (id, newP) {
         const base = this.getBaseUrl();
+        const headers = typeof this.getAuthHeaders === 'function' ? this.getAuthHeaders({ 'Content-Type': 'application/json' }) : { 'Content-Type': 'application/json' };
         const res = await fetch(`${base}/api/admins/${id}/reset-password`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ newPassword: newP })
         });
         const data = await res.json().catch(() => ({}));
@@ -348,7 +351,8 @@
     if (typeof window.SarawatApi.deleteAdmin !== 'function') {
       window.SarawatApi.deleteAdmin = async function (id) {
         const base = this.getBaseUrl();
-        const res = await fetch(`${base}/api/admins/${id}`, { method: 'DELETE' });
+        const headers = typeof this.getAuthHeaders === 'function' ? this.getAuthHeaders() : {};
+        const res = await fetch(`${base}/api/admins/${id}`, { method: 'DELETE', headers });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.success) throw new Error(data.error || 'ลบผู้ดูแลไม่สำเร็จ');
         return data;
@@ -357,9 +361,10 @@
     if (typeof window.SarawatApi.changePassword !== 'function') {
       window.SarawatApi.changePassword = async function (u, curP, newP) {
         const base = this.getBaseUrl();
+        const headers = typeof this.getAuthHeaders === 'function' ? this.getAuthHeaders({ 'Content-Type': 'application/json' }) : { 'Content-Type': 'application/json' };
         const res = await fetch(`${base}/api/admins/change-password`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify({ username: u, currentPassword: curP, newPassword: newP })
         });
         const data = await res.json().catch(() => ({}));
@@ -7600,11 +7605,26 @@
             sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
             enterAdminDashboard();
             return;
+          } else if (authCheck && !authCheck.offline) {
+            // Token is invalid/expired on the backend
+            sessionStorage.removeItem('sarawat_admin_auth');
+            sessionStorage.removeItem('sarawat_admin_user');
+            if (window.SarawatApi.clearAuth) window.SarawatApi.clearAuth();
+            lockAdminAuth();
+            await checkSetupStatusAndToggleForm();
+            return;
           }
+        } else {
+          // Connected to backend, but NO token is stored. Clean stale session storage so user cannot bypass login
+          sessionStorage.removeItem('sarawat_admin_auth');
+          sessionStorage.removeItem('sarawat_admin_user');
+          lockAdminAuth();
+          await checkSetupStatusAndToggleForm();
+          return;
         }
       }
 
-      // 2. Check local session storage if offline / local mode
+      // 2. Check local session storage ONLY if offline / local mode
       const isAuth = sessionStorage.getItem('sarawat_admin_auth');
       const savedUserStr = sessionStorage.getItem('sarawat_admin_user');
 
@@ -7842,11 +7862,23 @@
             startAdminLockoutCountdown(apiErr.retryAfterSeconds || 900);
             return;
           }
+          // If backend responded with an Auth error (wrong credentials), stop and do not silently fallback to localAdmins without token!
+          if (apiErr.isAuthError || apiErr.status === 401 || apiErr.status === 400 || apiErr.status === 403) {
+            showLoginError(apiErr.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            const pInput = document.getElementById('loginPasswordInput');
+            if (pInput) { pInput.value = ''; pInput.focus(); }
+            if (loginBtn) {
+              loginBtn.disabled = false;
+              loginBtn.innerHTML = '<span>เข้าสู่ระบบ (Sign In)</span><i data-lucide="arrow-right"></i>';
+              if (window.lucide) lucide.createIcons();
+            }
+            return;
+          }
         }
       }
 
-      // 2. Local Storage fallback authentication (only if NOT locked out by security rule)
-      if (!authenticatedUser && !isRateLocked) {
+      // 2. Local Storage fallback authentication (only if offline and NOT locked out by security rule)
+      if (!authenticatedUser && !isRateLocked && (!window.SarawatApi || !window.SarawatApi.getBaseUrl())) {
         const localAdmins = getLocalAdmins();
         const found = localAdmins.find(a => a.username.toLowerCase() === u.toLowerCase() && a.password === p);
         if (found) {
@@ -8286,7 +8318,18 @@
     function startAdminSessionHeartbeat() {
       if (adminSessionHeartbeatTimer) clearInterval(adminSessionHeartbeatTimer);
       adminSessionHeartbeatTimer = setInterval(async () => {
-        if (!window.SarawatApi || !window.SarawatApi.getAuthToken()) return;
+        if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) return;
+        const token = window.SarawatApi.getAuthToken();
+        if (!token) {
+          clearInterval(adminSessionHeartbeatTimer);
+          adminSessionHeartbeatTimer = null;
+          sessionStorage.removeItem('sarawat_admin_auth');
+          sessionStorage.removeItem('sarawat_admin_user');
+          lockAdminAuth();
+          showToast('ไม่พบสิทธิ์การใช้งาน กรุณาเข้าสู่ระบบใหม่', 'warning');
+          await checkSetupStatusAndToggleForm();
+          return;
+        }
         try {
           const check = await window.SarawatApi.verifyAuth();
           if (check && !check.valid && !check.offline) {
@@ -8294,12 +8337,14 @@
             adminSessionHeartbeatTimer = null;
             sessionStorage.removeItem('sarawat_admin_auth');
             sessionStorage.removeItem('sarawat_admin_user');
+            if (window.SarawatApi.clearAuth) window.SarawatApi.clearAuth();
             lockAdminAuth();
             if (check.code === 'SESSION_EVICTED') {
               showSessionEvictedNotice();
             } else {
               showToast('เซสชันของคุณหมดอายุแล้ว กรุณาเข้าสู่ระบบใหม่', 'warning');
             }
+            await checkSetupStatusAndToggleForm();
           }
         } catch (e) {}
       }, 15000);
@@ -10957,7 +11002,16 @@
 
         showToast('🟢 บันทึกการตั้งค่าเปิด-ปิดหน้าเว็บเรียบร้อยแล้ว');
       } catch (err) {
-        showToast('เกิดข้อผิดพลาดในการบันทึก: ' + (err.message || 'Error'), 'error');
+        if (err.status === 401 || (err.message && (err.message.includes('401') || err.message.includes('Token') || err.message.includes('เซสชัน')))) {
+          showToast('เซสชันหมดอายุหรือไม่พบสิทธิ์การเข้าถึง กรุณาเข้าสู่ระบบใหม่', 'error');
+          sessionStorage.removeItem('sarawat_admin_auth');
+          sessionStorage.removeItem('sarawat_admin_user');
+          if (window.SarawatApi && window.SarawatApi.clearAuth) window.SarawatApi.clearAuth();
+          lockAdminAuth();
+          if (typeof checkSetupStatusAndToggleForm === 'function') checkSetupStatusAndToggleForm();
+        } else {
+          showToast('เกิดข้อผิดพลาดในการบันทึก: ' + (err.message || 'Error'), 'error');
+        }
       } finally {
         if (btn) {
           btn.disabled = false;

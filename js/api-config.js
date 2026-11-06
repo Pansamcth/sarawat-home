@@ -161,11 +161,8 @@
     setAuthToken: function (token, rememberMe = true) {
       if (!token) return;
       try {
-        if (rememberMe) {
-          localStorage.setItem(this.TOKEN_KEY, token);
-        } else {
-          sessionStorage.setItem(this.TOKEN_KEY, token);
-        }
+        localStorage.setItem(this.TOKEN_KEY, token);
+        sessionStorage.setItem(this.TOKEN_KEY, token);
       } catch (e) {}
     },
 
@@ -337,12 +334,28 @@
     saveSettings: async function (settings) {
       const base = this.getBaseUrl();
       if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const token = this.getAuthToken();
+      if (!token) {
+        const err = new Error('กรุณาเข้าสู่ระบบก่อนบันทึกการตั้งค่า (ไม่พบ Token ยืนยันตัวตน)');
+        err.status = 401;
+        throw err;
+      }
       const res = await fetch(`${base}/api/settings`, {
         method: 'POST',
         headers: this.getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(settings)
       });
-      if (!res.ok) throw new Error(`บันทึกการตั้งค่าไม่สำเร็จ (HTTP ${res.status})`);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          this.clearAuth();
+          const err = new Error(data.error || 'เซสชันหมดอายุหรือไม่ได้รับอนุญาต กรุณาเข้าสู่ระบบใหม่');
+          err.status = 401;
+          err.code = data.code || 'UNAUTHORIZED';
+          throw err;
+        }
+        throw new Error(data.error || `บันทึกการตั้งค่าไม่สำเร็จ (HTTP ${res.status})`);
+      }
       return await res.json();
     },
     // ==========================================
