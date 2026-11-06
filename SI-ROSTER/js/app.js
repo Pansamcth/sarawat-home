@@ -3482,7 +3482,7 @@
               <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
                 <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 58px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
                 <span style="display: inline-block; width: 1px; height: 38px; background: #cbd5e1; margin: 0 8px; vertical-align: middle;"></span>
-                <img src="https://www.sarawatdc.site/assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat-logo.png';">
+                <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
               </td>
               <td style="border: none; vertical-align: middle; text-align: left; padding: 0;">
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 16px; font-weight: bold; color: #000;">สารวัตรนักเรียน</div>
