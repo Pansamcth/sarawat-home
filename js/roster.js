@@ -3363,20 +3363,25 @@
       if (Object.keys(grouped).length === 0) {
         html += `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`;
       } else {
-        orderedDuties.forEach(d => {
+        orderedDuties.forEach((d, dutyIdx) => {
           if (!grouped[d]) return;
           const members = grouped[d];
-          html += `<div style="margin-bottom: 18px; page-break-inside: auto; break-inside: auto;">
-             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto;">
+          const isLargeDuty = members.length > 12;
+          const isSmallDuty = members.length <= 12;
+          const pageBreakBefore = (dutyIdx > 0 && isLargeDuty) ? 'page-break-before: always; break-before: always;' : '';
+          const pageBreakInside = isSmallDuty ? 'page-break-inside: avoid !important; break-inside: avoid !important;' : 'page-break-inside: auto; break-inside: auto;';
+
+          html += `<div style="margin-bottom: 18px; ${pageBreakBefore} ${pageBreakInside}">
+             <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; ${pageBreakInside}">
                <thead style="display: table-header-group;">
                  <tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
                    <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
-                     หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${members.length} นาย)</span>
+                     หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${members.length} คน)</span>
                    </th>
                  </tr>
                  <tr style="page-break-inside: avoid !important; break-inside: avoid !important; background: #ffffff;">
                    <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 6%;">ลำดับ</th>
-                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 7%;">ตรวจเวร</th>
+                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 7%;"></th>
                    <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 47%;">ชื่อ - นามสกุล</th>
                    <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 14%;">ชั้น</th>
                    <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 26%;">หมายเหตุ</th>
