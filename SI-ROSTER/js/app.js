@@ -3496,47 +3496,63 @@
       if (Object.keys(grouped).length === 0) {
         html += `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`;
       } else {
+        const CHUNK_SIZE = 18;
         orderedDuties.forEach((d, dutyIdx) => {
           if (!grouped[d]) return;
-          const members = grouped[d];
+          const allMembers = grouped[d];
 
-          html += `
-             <table class="roster-duty-table" style="width: 100%; border-collapse: collapse; margin-bottom: 16px; page-break-inside: auto; break-inside: auto;">
-               <thead style="display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important;">
-                 <tr style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important;">
-                   <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
-                     หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${members.length} คน)</span>
-                   </th>
-                 </tr>
-                 <tr style="page-break-inside: avoid !important; break-inside: avoid !important; background: #ffffff;">
-                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 6%;">ลำดับ</th>
-                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 7%;"></th>
-                   <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 47%;">ชื่อ - นามสกุล</th>
-                   <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 14%;">ชั้น</th>
-                   <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 26%;">หมายเหตุ</th>
-                 </tr>
-               </thead>
-               <tbody style="display: table-row-group;">
-           `;
-          members.forEach((fullName, idx) => {
-            const parts = fullName.trim().split(' ');
-            let className = '';
-            let justName = fullName;
-            const lastPart = parts[parts.length - 1];
-            if (lastPart && lastPart.includes('/')) {
-              className = parts.pop();
-              justName = parts.join(' ');
-            }
+          const chunks = [];
+          for (let i = 0; i < allMembers.length; i += CHUNK_SIZE) {
+            chunks.push({
+              members: allMembers.slice(i, i + CHUNK_SIZE),
+              offset: i,
+              isContinuation: i > 0
+            });
+          }
 
-            html += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
-              <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${idx + 1}</td>
-              <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"><div style="width: 13px; height: 13px; border: 1px solid #000; display: inline-block; vertical-align: middle;"></div></td>
-              <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: left; white-space: nowrap; page-break-inside: avoid !important; break-inside: avoid !important;">${justName}</td>
-              <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${className}</td>
-              <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"></td>
-            </tr>`;
+          chunks.forEach(chunk => {
+            const dutyTitle = chunk.isContinuation
+              ? `หน้าที่ที่รับผิดชอบ: ${d} (ต่อ)`
+              : `หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${allMembers.length} คน)</span>`;
+
+            html += `
+               <table class="roster-duty-table" style="width: 100%; border-collapse: collapse; margin-bottom: 14px; page-break-inside: avoid !important; break-inside: avoid !important;">
+                 <thead>
+                   <tr style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important;">
+                     <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
+                       ${dutyTitle}
+                     </th>
+                   </tr>
+                   <tr style="background: #ffffff; page-break-inside: avoid !important; break-inside: avoid !important;">
+                     <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 6%;">ลำดับ</th>
+                     <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 7%;"></th>
+                     <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 47%;">ชื่อ - นามสกุล</th>
+                     <th style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 14%;">ชั้น</th>
+                     <th style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; font-weight: bold; width: 26%;">หมายเหตุ</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+             `;
+            chunk.members.forEach((fullName, idx) => {
+              const parts = fullName.trim().split(' ');
+              let className = '';
+              let justName = fullName;
+              const lastPart = parts[parts.length - 1];
+              if (lastPart && lastPart.includes('/')) {
+                className = parts.pop();
+                justName = parts.join(' ');
+              }
+
+              html += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+                <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${chunk.offset + idx + 1}</td>
+                <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"><div style="width: 13px; height: 13px; border: 1px solid #000; display: inline-block; vertical-align: middle;"></div></td>
+                <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: left; white-space: nowrap; page-break-inside: avoid !important; break-inside: avoid !important;">${justName}</td>
+                <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${className}</td>
+                <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"></td>
+              </tr>`;
+            });
+            html += `</tbody></table>`;
           });
-          html += `</tbody></table>`;
         });
       }
 
