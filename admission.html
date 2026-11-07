@@ -112,8 +112,7 @@
   <!-- Lucide Icons -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
-  <!-- FontAwesome 6 Icons, SweetAlert2 & Audio Feedback (SI-ROSTER Style) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- SweetAlert2 & Audio Feedback -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="/SI-ROSTER/js/roster-audio.js"></script>
 
@@ -161,7 +160,7 @@
     }
 
     .swal2-popup.custom-swal-popup i[class*="fa-"],
-    .swal2-popup.custom-swal-popup .fa-solid,
+    .swal2-popup.custom-swal-popup .,
     .swal2-popup.custom-swal-popup .fas,
     .swal2-popup.custom-swal-popup .far {
       font-family: "Font Awesome 6 Free" !important;
@@ -1565,7 +1564,9 @@
     .status-dot.green { background: #16a34a; }
     .status-dot.red { background: #dc2626; }
     .status-dot.amber { background: #d97706; }
-  </style>
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .animate-spin { animation: spin 1s linear infinite; }
+</style>
 </head>
 
 <body>
@@ -2440,7 +2441,7 @@
             <div id="stReviewingNotice" class="recruit-callout info" style="display: none; margin-top: 20px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px 18px;">
               <div style="display: flex; align-items: center; gap: 12px;">
                 <div style="width: 36px; height: 36px; border-radius: 10px; background: #dbeafe; color: #2563eb; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="fa-solid fa-lock" style="font-size: 16px;"></i>
+                  <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
                 </div>
                 <div style="font-size: 0.88rem; line-height: 1.55; color: #1e40af;">
                   <strong style="font-weight: 800; color: #1e3a8a;">ใบสมัครอยู่ในขั้นตอนกำลังตรวจสอบ</strong><br>
@@ -2524,8 +2525,8 @@
             Have any questions<br>
             in your mind!
           </h2>
-          <a href="https://web.facebook.com/sarawatdechaa" target="_blank" rel="noopener noreferrer" class="dg-arrow-link">
-            <span>ส่งข้อความหาเราผ่าน Facebook</span>
+          <a href="mailto:truant_patrol@decha.ac.th" class="dg-arrow-link" title="ส่งอีเมลหาเรา: truant_patrol@decha.ac.th">
+            <span>ส่งอีเมลหาเรา: truant_patrol@decha.ac.th</span>
             <i data-lucide="arrow-right"></i>
           </a>
 
@@ -3758,7 +3759,7 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 70px; height: 70px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);">
-                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: #EF4444;"></i>
+                    <i data-lucide="alert-triangle" style="width: 32px; height: 32px; color: #EF4444;"></i>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin: 0 0 8px 0;">ประเภทไฟล์ไม่ถูกต้อง</h2>
                   <div style="color: #64748B; font-size: 0.92rem; line-height: 1.5;">
@@ -3784,7 +3785,7 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 70px; height: 70px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);">
-                    <i class="fa-solid fa-file-circle-exclamation" style="font-size: 32px; color: #EF4444;"></i>
+                    <i data-lucide="file-warning" style="width: 32px; height: 32px; color: #EF4444;"></i>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin: 0 0 8px 0;">ขนาดไฟล์ใหญ่เกินไป</h2>
                   <div style="color: #64748B; font-size: 0.92rem; line-height: 1.5;">
@@ -4273,7 +4274,7 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 70px; height: 70px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.22);">
-                    <i class="fa-solid fa-shield-halved" style="font-size: 32px; color: #EAB308;"></i>
+                    <i data-lucide="shield" style="width: 32px; height: 32px; color: #EAB308;"></i>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.35rem; margin: 0 0 8px 0; letter-spacing: -0.3px;">ยังไม่ได้ยืนยันความปลอดภัย</h2>
                   <div style="color: #64748B; font-size: 0.92rem; line-height: 1.5;">
@@ -4684,7 +4685,7 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #BFDBFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);">
-                    <i class="fa-solid fa-lock" style="font-size: 32px; color: #2563EB;"></i>
+                    <i data-lucide="lock" style="width: 32px; height: 32px; color: #2563EB;"></i>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ไม่สามารถถอนตัวได้</h2>
                   <div style="color: #475569; font-size: 0.95rem; line-height: 1.5;">
@@ -4708,7 +4709,7 @@
             html: `
               <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                 <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.22);">
-                  <i class="fa-solid fa-user-xmark" style="font-size: 34px; color: #DC2626;"></i>
+                  <i data-lucide="user-x" style="width: 34px; height: 34px; color: #DC2626;"></i>
                 </div>
                 <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการยกเลิกใบสมัคร</h2>
                 <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
@@ -4784,7 +4785,7 @@
             html: `
               <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                 <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEFCE8; border: 2px solid #FEF08A; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);">
-                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #EAB308;"></i>
+                  <i data-lucide="loader-2" class="animate-spin" style="width: 36px; height: 36px; color: #EAB308;"></i>
                 </div>
                 <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังยกเลิกใบสมัคร</h2>
                 <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
@@ -4814,7 +4815,7 @@
                 html: `
                   <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                     <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
-                      <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
+                      <i data-lucide="check-circle-2" style="width: 38px; height: 38px; color: #10B981;"></i>
                     </div>
                     <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยกเลิกใบสมัครสำเร็จ</h2>
                     <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
@@ -4842,7 +4843,7 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);">
-                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 34px; color: #EF4444;"></i>
+                    <i data-lucide="alert-triangle" style="width: 34px; height: 34px; color: #EF4444;"></i>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ไม่สามารถยกเลิกใบสมัครได้</h2>
                   <div style="color: #991B1B; font-size: 0.92rem; line-height: 1.5; background: #FEF2F2; border: 1.5px solid #FCA5A5; padding: 12px 16px; border-radius: 12px; margin-top: 10px; width: 100%; box-sizing: border-box;">
@@ -4960,6 +4961,17 @@
   </script>
   <!-- Theme Manager System -->
   <script src="js/theme-manager.js"></script>
+
+  <script>
+    // Lucide MutationObserver for dynamic modal icons
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+      const observer = new MutationObserver(() => {
+        if (window.lucide) window.lucide.createIcons();
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
 </body>
 
 </html>

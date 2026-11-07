@@ -58,7 +58,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&family=Source+Code+Pro:wght@600;700&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <!-- Diego Minimalist Swiss Agency Design System -->
@@ -465,6 +464,8 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@latest/font/simple-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 
 <body>
@@ -525,22 +526,22 @@
       <div class="policy-controls-bar">
         <div class="policy-segmented-tabs">
           <a href="/si-roster/terms-of-service" class="policy-tab-item active">
-            <i class="fa-solid fa-file-contract"></i>
+            <i data-lucide="file-text"></i>
             <span>ข้อตกลงการใช้บริการ (TOS)</span>
           </a>
           <a href="/si-roster/privacy-policy" class="policy-tab-item">
-            <i class="fa-solid fa-user-shield"></i>
+            <i data-lucide="shield-check"></i>
             <span>นโยบายความเป็นส่วนตัว (PP)</span>
           </a>
         </div>
 
         <div class="policy-utility-actions">
           <button type="button" class="policy-action-btn" onclick="window.print()">
-            <i class="fa-solid fa-print"></i>
+            <i data-lucide="printer"></i>
             <span>พิมพ์ / PDF</span>
           </button>
           <button type="button" class="policy-action-btn" onclick="copyCurrentUrl()">
-            <i class="fa-solid fa-share-nodes"></i>
+            <i data-lucide="share-2"></i>
             <span>คัดลอกลิงก์</span>
           </button>
         </div>
@@ -556,19 +557,19 @@
         <!-- Metadata Banner -->
         <div class="policy-meta-banner">
           <div class="policy-meta-pill verified">
-            <i class="fa-solid fa-circle-check"></i>
+            <i data-lucide="check-circle-2"></i>
             <span>สถานะ: ตรวจสอบและมีผลบังคับใช้ (Verified)</span>
           </div>
           <div class="policy-meta-pill">
-            <i class="fa-solid fa-user-pen"></i>
+            <i data-lucide="user-check"></i>
             <span>ผู้เขียน: นายรุจิระ วัฒนกิจไพศาล (Rujira Wattanakitpaisan)</span>
           </div>
           <div class="policy-meta-pill">
-            <i class="fa-regular fa-clock"></i>
+            <i data-lucide="clock"></i>
             <span>แก้ไขล่าสุด: 14 ตุลาคม 2569 เวลา 09:52 น.</span>
           </div>
           <div class="policy-meta-pill">
-            <i class="fa-solid fa-school"></i>
+            <i data-lucide="school"></i>
             <span>โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี</span>
           </div>
         </div>
@@ -623,7 +624,7 @@
           </p>
 
           <div class="policy-callout danger">
-            <i class="fa-solid fa-triangle-exclamation policy-callout-icon"></i>
+            <i data-lucide="alert-triangle" class="policy-callout-icon"></i>
             <div>
               <div class="policy-callout-title">ข้อห้ามเด็ดขาดในการใช้งานระบบ</div>
               <ul class="policy-list" style="margin-top: 8px; margin-bottom: 0;">
@@ -680,7 +681,7 @@
           </p>
 
           <div class="policy-callout warning">
-            <i class="fa-solid fa-gavel policy-callout-icon"></i>
+            <i data-lucide="gavel" class="policy-callout-icon"></i>
             <div>
               <div class="policy-callout-title">มาตรการทางวินัยโรงเรียน</div>
               ในกรณีที่พบว่าผู้ใช้งานมีการจงใจทุจริต แอบอ้างชื่อผู้อื่น หรือเจตนาก่อกวนระบบจนเกิดความเสียหาย ผู้ดูแลระบบอาจรวบรวมข้อมูล Log การใช้งาน (เช่น IP Address และวันเวลาการส่งข้อมูล) เพื่อส่งมอบให้แก่ครูฝ่ายปกครองพิจารณาลงโทษตามกฎระเบียบและข้อบังคับของโรงเรียนต่อไป
@@ -742,7 +743,7 @@
         <!-- Concluding Banner -->
         <div class="policy-footer-note">
           <h4>
-            <i class="fa-solid fa-signature"></i>
+            <i data-lucide="signature"></i>
             การรับทราบและการยอมรับเงื่อนไข
           </h4>
           <p>
@@ -892,11 +893,11 @@
             <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
               <a href="https://www.instagram.com/pansa.jpeg/" target="_blank" rel="noopener noreferrer"
                 style="color: #111827; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; font-size: 0.95rem; font-weight: 600;">
-                <i class="fa-brands fa-instagram" style="font-size: 1.25rem;"></i> Rujira Wattanakitpaisan
+                <i class="si si-instagram" style="font-size: 1.25rem;"></i> Rujira Wattanakitpaisan
               </a>
               <a href="https://www.instagram.com/peth_040253" target="_blank" rel="noopener noreferrer"
                 style="color: #111827; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; font-size: 0.95rem; font-weight: 600;">
-                <i class="fa-brands fa-instagram" style="font-size: 1.25rem;"></i> Phatchara Kaewla-iad
+                <i class="si si-instagram" style="font-size: 1.25rem;"></i> Phatchara Kaewla-iad
               </a>
             </div>
           </div>
@@ -969,8 +970,8 @@
 
               <a href="/si-roster/admin" id="adminLoginBtn" class="minimal-link"
                 style="margin-top: 0; height: 24px;">
-                <i id="adminIcon" class="fa-solid fa-door-open" style="margin-right: 6px; font-size: 0.85rem;"></i>
-                <span id="adminLoginText">Admin Login</span> <i class="fa-solid fa-arrow-right-long arrow-icon"></i>
+                <i id="adminIcon" data-lucide="door-open" style="margin-right: 6px; width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                <span id="adminLoginText">Admin Login</span> <i data-lucide="arrow-right" class="arrow-icon"></i>
               </a>
             </div>
 
@@ -998,7 +999,7 @@
                 style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #18181b, #60A5FA); color: white; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(59,130,246,0.3);"
                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)';"
                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)';">
-                <i class="fa-solid fa-comment-dots"></i> ข้อเสนอแนะ
+                <i data-lucide="message-square"></i> ข้อเสนอแนะ
               </a>
             </div>
           </div>

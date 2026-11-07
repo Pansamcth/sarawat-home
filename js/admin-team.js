@@ -407,7 +407,7 @@ function renderTeamAdminUI() {
 
   const countBadge = document.getElementById('teamCountBadge');
   if (countBadge) {
-    countBadge.innerHTML = `<i class="fa-solid fa-users"></i> ${allMembers.length} สมาชิก (SQLite 100%)`;
+    countBadge.innerHTML = `<i data-lucide="users"></i> ${allMembers.length} สมาชิก (SQLite 100%)`;
   }
 
   // Count stats

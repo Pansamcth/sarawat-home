@@ -91,12 +91,12 @@
           try {
             document.querySelectorAll('[data-lucide="facebook"]').forEach(el => {
               el.removeAttribute('data-lucide');
-              el.className = 'fa-brands fa-facebook';
+              el.className = 'si si-facebook';
               el.style.fontSize = '12px';
             });
             document.querySelectorAll('[data-lucide="instagram"]').forEach(el => {
               el.removeAttribute('data-lucide');
-              el.className = 'fa-brands fa-instagram';
+              el.className = 'si si-instagram';
               el.style.fontSize = '12px';
             });
           } catch (e) {}
@@ -107,7 +107,6 @@
   </script>
 
   <!-- FontAwesome 6 & SweetAlert2 (Matching SI-ROSTER Admin System) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!-- Leaflet CSS & JS for OpenStreetMap -->
@@ -164,7 +163,7 @@
 
       if (badge) {
         badge.className = boolVal ? 'status-badge approved' : 'status-badge rejected';
-        badge.innerHTML = boolVal ? '<i class="fa-solid fa-circle-check"></i> เปิดรับสมัครอยู่' : '<i class="fa-solid fa-circle-xmark"></i> ปิดระบบชั่วคราว';
+        badge.innerHTML = boolVal ? '<i data-lucide="check-circle-2"></i> เปิดรับสมัครอยู่' : '<i data-lucide="x-circle"></i> ปิดระบบชั่วคราว';
       }
 
       if (icon) {
@@ -3117,6 +3116,7 @@
   <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@nckrtl/chartjs-plugin-streaming@3.0.0/dist/chartjs-plugin-streaming.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@latest/font/simple-icons.min.css">
 </head>
 
 <body>
@@ -3272,7 +3272,7 @@
     <div class="admin-nav-inner">
       <div style="display: flex; align-items: center; gap: 12px;">
         <button type="button" class="admin-hamburger-btn" id="sidebarHamburgerBtn" onclick="toggleMobileSidebar()" aria-label="Toggle navigation menu" title="เปิดเมนู">
-          <i class="fa-solid fa-bars"></i>
+          <i data-lucide="menu"></i>
         </button>
         <a href="admin.html" class="admin-brand" style="text-decoration: none !important; color: #0f172a; display: inline-flex; align-items: center; gap: 8px;">
           <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="width: 32px; height: 32px; object-fit: contain; display: block;" /><span style="display: inline-block; width: 1px; height: 20px; background: #e2e8f0; margin: 0 2px;"></span><img src="assets/icons/sarawat-logo.png" alt="Sarawat Logo" style="width: 32px; height: 32px; object-fit: contain; display: block;" />
@@ -3320,10 +3320,10 @@
         </div>
         <div class="admin-sidebar-header-actions">
           <button type="button" class="admin-sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarDesktop()" title="ย่อ/ขยายแถบเมนู">
-            <i class="fa-solid fa-bars-staggered" id="sidebarCollapseIcon"></i>
+            <i data-lucide="menu" id="sidebarCollapseIcon"></i>
           </button>
           <button type="button" class="admin-sidebar-close-btn" onclick="toggleMobileSidebar(false)" title="ปิดเมนู">
-            <i class="fa-solid fa-xmark"></i>
+            <i data-lucide="x"></i>
           </button>
         </div>
       </div>
@@ -3349,6 +3349,13 @@
             <span>จัดการแท็กและสไตล์</span>
           </div>
           <span class="admin-badge" id="tagsCounterBadge" style="background: #475569; display: inline-flex; font-size: 0.68rem; padding: 1px 7px;">0</span>
+        </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-trash" id="tabBtnTrash">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="trash-2"></i>
+            <span>ถังขยะ</span>
+          </div>
+          <span class="admin-badge" id="trashCounterBadge" style="background: #ef4444; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
         </button>
         <button type="button" class="admin-tab-btn" data-tab="tab-team">
           <div class="admin-tab-btn-content">
@@ -3385,7 +3392,7 @@
         </button>
         <button type="button" class="admin-tab-btn" id="tabBtnDiscordBot" data-tab="tab-discord" style="display: none;">
           <div class="admin-tab-btn-content">
-            <i class="fa-brands fa-discord" style="font-size: 1.05rem; color: #5865F2;"></i>
+            <i class="si si-discord" style="font-size: 1.05rem; color: #5865F2;"></i>
             <span>จัดการ Discord Bot</span>
           </div>
           <span class="admin-role-badge super" style="font-size: 0.62rem; padding: 1px 6px;">👑 Super</span>
@@ -3459,11 +3466,11 @@
       <!-- Action Toolbar for Team -->
       <div class="admin-action-toolbar">
         <div class="admin-search-box" style="max-width: 420px;">
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <i data-lucide="search"></i>
           <input type="text" id="teamSearchInput" placeholder="ค้นหาชื่อสมาชิก หรือสังกัดฝ่าย..." oninput="if(typeof handleTeamMemberSearch==='function')handleTeamMemberSearch(this.value)" />
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
-          <span class="admin-counter-badge" id="teamCountBadge"><i class="fa-solid fa-users"></i> สมาชิกคณะทำงาน</span>
+          <span class="admin-counter-badge" id="teamCountBadge"><i data-lucide="users"></i> สมาชิกคณะทำงาน</span>
         </div>
       </div>
     
@@ -3530,7 +3537,7 @@
         </div>
         <div style="display: flex; align-items: center; gap: 12px; flex: 1; justify-content: flex-end;">
           <div class="admin-search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i data-lucide="search"></i>
             <input type="text" id="adminNewsSearchInput" placeholder="ค้นหาตามชื่อข่าวสาร, เนื้อหา, ป้ายกำกับ..." oninput="handleAdminNewsSearch(this.value)" />
           </div>
           <span class="admin-counter-badge" id="newsCountBadge">0 ข่าว</span>
@@ -3765,6 +3772,104 @@
             <!-- Dynamic rows -->
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB: TRASH BIN (ถังขยะและกู้คืนข้อมูล)
+         ========================================== -->
+    <div class="admin-pane" id="tab-trash" style="display: none;">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="trash-2" style="width: 13px; height: 13px;"></i> TRASH BIN • ระบบถังขยะและกู้คืน</span>
+            <span class="admin-file-badge"><i data-lucide="database" style="width: 13px; height: 13px;"></i> Soft-Delete: is_deleted = 1</span>
+          </div>
+          <h2>ถังขยะและกู้คืนข้อมูล (Trash & Recovery)</h2>
+          <p>รายการข่าวสารและกิจกรรมที่ถูกลบออกจากระบบ สามารถตรวจสอบ กู้คืน หรือลบอย่างถาวรโดย Super Admin</p>
+        </div>
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-outline" onclick="loadTrashData()" style="padding: 10px 16px; font-size: 0.85rem;">
+            <i data-lucide="refresh-cw"></i>
+            <span>รีเฟรชถังขยะ</span>
+          </button>
+          <button type="button" id="btnEmptyTrashCurrentTab" class="dg-btn-danger" onclick="handleEmptyTrashCurrentTab()" style="padding: 10px 18px; font-size: 0.85rem; display: none; background: #ef4444; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; align-items: center; gap: 8px;">
+            <i data-lucide="trash"></i>
+            <span>ล้างถังขยะทั้งหมด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Trash Sub-tabs & Search Toolbar -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 20px; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="trashSubTabNewsBtn" class="trash-subtab-btn active" onclick="switchTrashSubTab('news')" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 0.86rem; font-weight: 700; cursor: pointer; border: 1.5px solid #cbd5e1; background: #fff; color: #1e293b; transition: all 0.2s ease;">
+            <i data-lucide="newspaper" style="width: 16px; height: 16px;"></i>
+            <span>ข่าวสารในหน้าหลัก</span>
+            <span id="trashSubCountNews" style="font-size: 0.78rem; opacity: 0.8;">(0)</span>
+          </button>
+          <button type="button" id="trashSubTabEventsBtn" class="trash-subtab-btn" onclick="switchTrashSubTab('events')" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 0.86rem; font-weight: 700; cursor: pointer; border: 1.5px solid #cbd5e1; background: #fff; color: #1e293b; transition: all 0.2s ease;">
+            <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+            <span>ตารางกิจกรรมโรงเรียน</span>
+            <span id="trashSubCountEvents" style="font-size: 0.78rem; opacity: 0.8;">(0)</span>
+          </button>
+        </div>
+
+        <div style="position: relative; min-width: 260px;">
+          <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #94a3b8; pointer-events: none;"></i>
+          <input type="text" id="trashSearchInput" placeholder="ค้นหาในถังขยะ..." oninput="handleTrashSearch(this.value)" style="width: 100%; padding: 8px 12px 8px 36px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 0.85rem; outline: none; background: #fff; color: #1e293b;">
+        </div>
+      </div>
+
+      <!-- SubTab Content: News Trash -->
+      <div id="trashContentNews" style="display: block;">
+        <div class="admin-table-wrapper" style="background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto;">
+          <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; text-align: left;">
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 60px;">ภาพ</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569;">หัวข้อข่าวสาร</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 120px;">วันที่ลบ</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 110px;">ผู้สั่งลบ</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; text-align: right; width: 180px;">การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="trashNewsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+          <div id="trashNewsEmptyState" style="display: none; padding: 48px 20px; text-align: center; color: #64748b;">
+            <i data-lucide="trash-2" style="width: 44px; height: 44px; color: #cbd5e1; margin-bottom: 12px;"></i>
+            <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 700; color: #334155;">ถังขยะข่าวสารว่างเปล่า</h4>
+            <p style="margin: 0; font-size: 0.84rem;">ไม่มีรายการข่าวสารที่อยู่ในถังขยะในขณะนี้</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SubTab Content: Events Trash -->
+      <div id="trashContentEvents" style="display: none;">
+        <div class="admin-table-wrapper" style="background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto;">
+          <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; text-align: left;">
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569;">ชื่อกิจกรรม</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 140px;">วัน/เวลากิจกรรม</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 130px;">สถานที่</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 120px;">วันที่ลบ</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; width: 110px;">ผู้สั่งลบ</th>
+                <th style="padding: 12px 16px; font-size: 0.82rem; font-weight: 700; color: #475569; text-align: right; width: 180px;">การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="trashEventsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+          <div id="trashEventsEmptyState" style="display: none; padding: 48px 20px; text-align: center; color: #64748b;">
+            <i data-lucide="trash-2" style="width: 44px; height: 44px; color: #cbd5e1; margin-bottom: 12px;"></i>
+            <h4 style="margin: 0 0 6px 0; font-size: 1rem; font-weight: 700; color: #334155;">ถังขยะกิจกรรมว่างเปล่า</h4>
+            <p style="margin: 0; font-size: 0.84rem;">ไม่มีรายการกิจกรรมโรงเรียนที่อยู่ในถังขยะในขณะนี้</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -4216,7 +4321,7 @@
           <!-- Left: Live Status Pill -->
           <div style="display: flex; align-items: center; gap: 12px;">
             <div id="monLivePill" style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 0.84rem; font-weight: 700; color: #065f46; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-              <i id="monLivePillIcon" class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
+              <i id="monLivePillIcon" class="check-circle-2" style="color: #10b981; font-size: 0.95rem;"></i>
               <span id="monLivePillText">ระบบทำงานเป็นปกติ (HEALTHY)</span>
             </div>
             <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">
@@ -4240,13 +4345,13 @@
 
             <!-- Audio Alarm Toggle -->
             <button type="button" class="btn" id="btnToggleMonAudio" onclick="toggleMonitorAudio()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #334155; font-size: 0.82rem; font-weight: 700; padding: 7px 14px; border-radius: 10px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; transition: all 0.2s ease;">
-              <i class="fa-solid fa-volume-high" id="iconMonAudio" style="color: #2563eb;"></i>
+              <i data-lucide="volume-2" id="iconMonAudio" style="color: #2563eb;"></i>
               <span id="textMonAudio">เสียงเตือน: เปิด</span>
             </button>
 
             <!-- Test Discord Webhook Button -->
             <button type="button" class="btn" id="btnTestDiscord" onclick="testDiscordWebhookAlert()" style="background: #5865f2; border: 1px solid #4752c4; color: #ffffff; font-size: 0.82rem; font-weight: 700; padding: 7px 16px; border-radius: 10px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(88, 101, 242, 0.25);">
-              <i class="fa-brands fa-discord" style="font-size: 0.95rem;"></i>
+              <i class="si si-discord" style="font-size: 0.95rem;"></i>
               <span>ทดสอบส่ง Discord Alert</span>
             </button>
 
@@ -4263,7 +4368,7 @@
       <div id="monHealthBanner" style="display: none; margin-bottom: 24px; padding: 16px 20px; border-radius: 14px; background: #fffbeb; border: 1.5px solid #fde68a; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.08);">
         <div style="display: flex; align-items: flex-start; gap: 14px;">
           <div id="monHealthIconWrap" style="width: 36px; height: 36px; border-radius: 10px; background: #fef3c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-            <i class="fa-solid fa-triangle-exclamation" style="color: #d97706; font-size: 1.15rem;"></i>
+            <i data-lucide="alert-triangle" style="color: #d97706; font-size: 1.15rem;"></i>
           </div>
           <div style="flex: 1;">
             <div id="monHealthTitle" style="font-size: 0.96rem; font-weight: 800; color: #92400e; margin-bottom: 4px;">ระบบตรวจพบข้อควรระวัง</div>
@@ -4277,26 +4382,26 @@
         <!-- Card 1: Server & System -->
         <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #2563eb;">
-            <i class="fa-solid fa-server"></i>
+            <i data-lucide="server"></i>
           </div>
           <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-server" style="color: #2563eb;"></i>
+            <i data-lucide="server" style="color: #2563eb;"></i>
             <span>เซิร์ฟเวอร์และระบบ</span>
           </div>
           <div id="monServerUptime" style="font-size: 1.45rem; font-weight: 800; color: #0f172a; margin-bottom: 6px; font-family: monospace;">--:--:--</div>
           <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-brands fa-node-js" style="color: #22c55e; width: 14px; text-align: center;"></i>
+              <i class="si si-nodedotjs" style="color: #22c55e; width: 14px; text-align: center;"></i>
               <span>สถานะ Node:</span>
               <strong id="monNodeVer" style="color: #0f172a;">--</strong>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-microchip" style="color: #3b82f6; width: 14px; text-align: center;"></i>
+              <i data-lucide="cpu" style="color: #3b82f6; width: 14px; text-align: center;"></i>
               <span>CPU Load:</span>
               <strong id="monCpuUsage" style="color: #2563eb;">--%</strong>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-memory" style="color: #8b5cf6; width: 14px; text-align: center;"></i>
+              <i data-lucide="hard-drive" style="color: #8b5cf6; width: 14px; text-align: center;"></i>
               <span>RAM เครื่อง:</span>
               <strong id="monRamUsage" style="color: #0f172a;">-- GB</strong>
               (<span id="monRamPercent">--%</span>)
@@ -4307,33 +4412,33 @@
         <!-- Card 2: Database SQLite & Latency -->
         <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #8b5cf6;">
-            <i class="fa-solid fa-database"></i>
+            <i data-lucide="database"></i>
           </div>
           <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-bolt" style="color: #8b5cf6;"></i>
+            <i data-lucide="zap" style="color: #8b5cf6;"></i>
             <span>ความเร็วตอบสนอง & ฐานข้อมูล</span>
           </div>
           <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
             <span id="monDbPingVal" style="font-size: 1.45rem; font-weight: 800; color: #0f172a; font-family: monospace;">-- ms</span>
             <span id="monDbPingBadge" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: #ecfdf5; color: #065f46;">
-              <i class="fa-solid fa-circle-check"></i> ปกติ
+              <i data-lucide="check-circle-2"></i> ปกติ
             </span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-stopwatch" style="color: #06b6d4; width: 14px; text-align: center;"></i>
+              <i data-lucide="timer" style="color: #06b6d4; width: 14px; text-align: center;"></i>
               <span>เฉลี่ย Latency:</span>
               <strong id="monAvgLatency" style="color: #0f172a;">-- ms</strong>
               <span style="font-size: 0.72rem; color: #64748b;">(ต่ำสุด: <span id="monMinLatency">--</span>, สูงสุด: <span id="monMaxLatency">--</span>)</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-database" style="color: #8b5cf6; width: 14px; text-align: center;"></i>
+              <i data-lucide="database" style="color: #8b5cf6; width: 14px; height: 14px;"></i>
               <span>ขนาดฐานข้อมูล:</span>
               <strong id="monDbSize" style="color: #0f172a;">-- MB</strong>
               <span style="font-size: 0.72rem; color: #64748b;">(WAL: <span id="monWalSize">-- MB</span>)</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-clock-rotate-left" style="color: #ec4899; width: 14px; text-align: center;"></i>
+              <i data-lucide="history" style="color: #ec4899; width: 14px; text-align: center;"></i>
               <span>Event Loop Lag:</span>
               <strong id="monLoopLag" style="color: #8b5cf6;">-- ms</strong>
             </div>
@@ -4343,10 +4448,10 @@
         <!-- Card 3: Traffic & Live Visitors -->
         <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #10b981;">
-            <i class="fa-solid fa-chart-line"></i>
+            <i data-lucide="line-chart"></i>
           </div>
           <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-chart-line" style="color: #10b981;"></i>
+            <i data-lucide="line-chart" style="color: #10b981;"></i>
             <span>ปริมาณคำขอ & ผู้ใช้งานสด</span>
           </div>
           <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
@@ -4355,17 +4460,17 @@
           </div>
           <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-arrow-trend-up" style="color: #10b981; width: 14px; text-align: center;"></i>
+              <i data-lucide="trending-up" style="color: #10b981; width: 14px; text-align: center;"></i>
               <span>ความถี่ทราฟฟิก:</span>
               <strong id="monReqPerSec" style="color: #10b981; font-weight: 800;">-- req/s</strong>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-users" style="color: #2563eb; width: 14px; text-align: center;"></i>
+              <i data-lucide="users" style="color: #2563eb; width: 14px; height: 14px; text-align: center;"></i>
               <span>ผู้ใช้งานในระบบสด:</span>
               <strong id="monLiveUsers" style="color: #2563eb; font-weight: 800;">-- คน</strong>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-network-wired" style="color: #64748b; width: 14px; text-align: center;"></i>
+              <i data-lucide="network" style="color: #64748b; width: 14px; text-align: center;"></i>
               <span>Unique IP ทั้งหมด:</span>
               <strong id="monUniqueIps" style="color: #0f172a;">-- IP</strong>
             </div>
@@ -4375,10 +4480,10 @@
         <!-- Card 4: HTTP Status Breakdown -->
         <div class="admin-card" style="padding: 18px 20px; border-radius: 14px; border: 1px solid #e2e8f0; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="position: absolute; right: 14px; top: 14px; opacity: 0.12; font-size: 2.2rem; color: #f59e0b;">
-            <i class="fa-solid fa-shield-halved"></i>
+            <i data-lucide="shield"></i>
           </div>
           <div style="font-size: 0.76rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-shield-halved" style="color: #f59e0b;"></i>
+            <i data-lucide="shield" style="color: #f59e0b;"></i>
             <span>ผลลัพธ์สถานะ HTTP</span>
           </div>
           <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px;">
@@ -4387,17 +4492,17 @@
           </div>
           <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: #475569;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-circle-check" style="color: #10b981; width: 14px; text-align: center;"></i>
+              <i class="check-circle-2" style="color: #10b981; width: 14px; text-align: center;"></i>
               <span>สำเร็จ (2xx):</span>
               <strong id="monCount2xx" style="color: #10b981;">0</strong>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-circle-exclamation" style="color: #f59e0b; width: 14px; text-align: center;"></i>
+              <i data-lucide="alert-circle" style="color: #f59e0b; width: 14px; text-align: center;"></i>
               <span>ฝั่งผู้ใช้ (4xx):</span>
               <strong id="monCount4xx" style="color: #f59e0b;">0</strong>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444; width: 14px; text-align: center;"></i>
+              <i data-lucide="alert-triangle" style="color: #ef4444; width: 14px; text-align: center;"></i>
               <span>ข้อผิดพลาดระบบ (5xx):</span>
               <strong id="monCount5xx" style="color: #ef4444; font-weight: 800;">0</strong>
             </div>
@@ -4487,7 +4592,7 @@
           <div>
             <div style="font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
               <span style="display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-trophy" style="color: #f59e0b; font-size: 0.76rem;"></i>
+                <i data-lucide="trophy" style="color: #f59e0b; font-size: 0.76rem;"></i>
                 <span>3 อันดับจังหวัดที่มีผู้ใช้งานสูงสุด (Top 3 Active Provinces)</span>
               </span>
               <span style="font-size: 0.7rem; color: #94a3b8; font-weight: normal;">สถิติคำขอสะสม</span>
@@ -4541,7 +4646,7 @@
               ● ONLINE REPL
             </span>
             <button type="button" onclick="clearConsoleOutput()" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.74rem; font-weight: 700; padding: 4px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f1f5f9'; this.style.color='#0f172a';" onmouseout="this.style.background='#f8fafc'; this.style.color='#64748b';">
-              <i class="fa-solid fa-broom" style="margin-right: 4px;"></i>ล้างหน้าจอ (/clear)
+              <i data-lucide="trash" style="margin-right: 4px;"></i>ล้างหน้าจอ (/clear)
             </button>
           </div>
         </div>
@@ -4549,26 +4654,26 @@
         <!-- Quick Slash Command Shortcut Pills: Styled matching system badges -->
         <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;">
           <span style="font-size: 0.76rem; color: #64748b; font-weight: 700; margin-right: 4px;">
-            <i class="fa-solid fa-bolt" style="color: #f59e0b; margin-right: 3px;"></i>คำสั่งด่วน:
+            <i data-lucide="zap" style="color: #f59e0b; margin-right: 3px;"></i>คำสั่งด่วน:
           </span>
           <button type="button" onclick="quickExecuteConsole('/backup')" style="background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#ecfdf5'">
-            <i class="fa-solid fa-database" style="color: #059669; font-size: 0.75rem;"></i>
+            <i data-lucide="database" style="color: #059669; width: 12px; height: 12px;"></i>
             <span>/backup</span>
           </button>
           <button type="button" onclick="quickExecuteConsole('/status')" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
-            <i class="fa-solid fa-chart-simple" style="color: #2563eb; font-size: 0.75rem;"></i>
+            <i data-lucide="bar-chart-2" style="color: #2563eb; font-size: 0.75rem;"></i>
             <span>/status</span>
           </button>
           <button type="button" onclick="quickExecuteConsole('/restart')" style="background: #fffbeb; border: 1px solid #fde68a; color: #92400e; font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='#fffbeb'">
-            <i class="fa-solid fa-rotate" style="color: #d97706; font-size: 0.75rem;"></i>
+            <i data-lucide="rotate-cw" style="color: #d97706; font-size: 0.75rem;"></i>
             <span>/restart</span>
           </button>
           <button type="button" onclick="quickExecuteConsole('/stop')" style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='#fef2f2'">
-            <i class="fa-solid fa-power-off" style="color: #dc2626; font-size: 0.75rem;"></i>
+            <i data-lucide="power" style="color: #dc2626; font-size: 0.75rem;"></i>
             <span>/stop</span>
           </button>
           <button type="button" onclick="quickExecuteConsole('/help')" style="background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; font-size: 0.76rem; font-weight: 700; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-family: ui-monospace, monospace; display: flex; align-items: center; gap: 6px; transition: all 0.15s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">
-            <i class="fa-solid fa-circle-question" style="color: #64748b; font-size: 0.75rem;"></i>
+            <i data-lucide="help-circle" style="color: #64748b; font-size: 0.75rem;"></i>
             <span>/help</span>
           </button>
         </div>
@@ -4652,13 +4757,13 @@
         <div class="admin-section-title">
           <div class="admin-section-badges">
             <span class="admin-section-pill" style="background: rgba(88, 101, 242, 0.1); color: #5865F2; border-color: rgba(88, 101, 242, 0.25);">
-              <i class="fa-brands fa-discord"></i> DISCORD ENGINE • จัดการและตั้งค่าระบบบอท
+              <i class="si si-discord"></i> DISCORD ENGINE • จัดการและตั้งค่าระบบบอท
             </span>
-            <span class="admin-file-badge"><i class="fa-solid fa-server"></i> SARAWAT BOT • Discord Gateway & REST</span>
+            <span class="admin-file-badge"><i data-lucide="server"></i> SARAWAT BOT • Discord Gateway & REST</span>
             <span class="admin-role-badge super" style="font-size: 0.75rem; padding: 3px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
           </div>
           <h2 style="display: flex; align-items: center; gap: 10px;">
-            <i class="fa-brands fa-discord" style="color: #5865F2;"></i> ระบบจัดการ Discord Bot (Custom Activity & Alerts)
+            <i class="si si-discord" style="color: #5865F2;"></i> ระบบจัดการ Discord Bot (Custom Activity & Alerts)
           </h2>
           <p class="admin-section-subtitle">
             กำหนดสถานะออนไลน์ กิจกรรม (Custom Activity / Rich Presence) ข้อความ Dynamic หมุนเวียนสถานะอัตโนมัติ และทดสอบการแจ้งเตือน
@@ -4676,18 +4781,18 @@
               <span id="discordBotGatewayBadge" style="background: #dcfce7; color: #15803d; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">🟢 Gateway Online</span>
             </div>
             <h3 style="margin-top: 6px; font-size: 1.15rem; color: #1e1b4b; display: flex; align-items: center; gap: 8px;">
-              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> จัดการ Custom Activity & Rich Presence (รูปภาพ, ลิงก์, สถานะ)
+              <i class="si si-discord" style="color: #5865F2;"></i> จัดการ Custom Activity & Rich Presence (รูปภาพ, ลิงก์, สถานะ)
             </h3>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button type="button" class="btn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #4752c4; padding: 7px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" id="btnTestDiscordInPresence" onclick="testDiscordWebhookAlert(event)">
-              <i class="fa-brands fa-discord" style="color: #5865F2;"></i> <span>ทดสอบส่ง Alert</span>
+              <i class="si si-discord" style="color: #5865F2;"></i> <span>ทดสอบส่ง Alert</span>
             </button>
             <button type="button" class="btn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 7px 14px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" onclick="loadDiscordPresenceSettings()">
-              <i class="fa-solid fa-rotate"></i> <span>โหลดค่าปัจจุบัน</span>
+              <i data-lucide="rotate-cw"></i> <span>โหลดค่าปัจจุบัน</span>
             </button>
             <button type="button" class="btn" id="btnSaveDiscordPresence" style="background: #5865F2; border: 1px solid #4752c4; color: #ffffff; padding: 7px 18px; border-radius: 10px; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 2px 8px rgba(88, 101, 242, 0.3);" onclick="saveDiscordPresenceSettings()">
-              <i class="fa-solid fa-floppy-disk"></i> <span>บันทึกและอัปเดตสถานะ Bot</span>
+              <i data-lucide="save"></i> <span>บันทึกและอัปเดตสถานะ Bot</span>
             </button>
           </div>
         </div>
@@ -4695,7 +4800,7 @@
         <div class="admin-card-body" style="padding: 22px;">
           <!-- Non-SuperAdmin Notice Banner -->
           <div id="discordPresenceNoPermBanner" style="display: none; margin-bottom: 20px; padding: 12px 16px; border-radius: 10px; background: #fff1f2; border: 1px solid #fecdd3; color: #9f1239; font-size: 0.84rem; font-weight: 600;">
-            <i class="fa-solid fa-lock" style="margin-right: 6px;"></i> การตั้งค่านี้สงวนสิทธิ์เฉพาะผู้ดูแลระบบระดับ Super Admin เท่านั้น (คุณสามารถดูการตั้งค่าปัจจุบันได้ แต่ไม่สามารถแก้ไขได้)
+            <i data-lucide="lock" style="margin-right: 6px;"></i> การตั้งค่านี้สงวนสิทธิ์เฉพาะผู้ดูแลระบบระดับ Super Admin เท่านั้น (คุณสามารถดูการตั้งค่าปัจจุบันได้ แต่ไม่สามารถแก้ไขได้)
           </div>
 
           <div style="display: grid; grid-template-columns: minmax(360px, 1.15fr) minmax(320px, 0.85fr); gap: 24px; align-items: start;">
@@ -4745,7 +4850,7 @@
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: #e0e7ff; color: #4338ca; font-size: 0.85rem;">
-                      <i class="fa-solid fa-comment-dots"></i>
+                      <i data-lucide="message-square"></i>
                     </span>
                     <div>
                       <div style="font-size: 0.86rem; font-weight: 800; color: #1e1b4b; display: flex; align-items: center; gap: 6px;">
@@ -4785,15 +4890,15 @@
                   <div style="background: #ffffff; border: 1px solid #e0e7ff; border-radius: 8px; padding: 8px 10px;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
                       <span style="font-size: 0.72rem; font-weight: 700; color: #4338ca; display: flex; align-items: center; gap: 5px;">
-                        <i class="fa-brands fa-discord" style="color: #5865F2;"></i>
+                        <i class="si si-discord" style="color: #5865F2;"></i>
                         <span>Discord Emojis ของบอท / เซิร์ฟเวอร์:</span>
                       </span>
                       <button type="button" class="btn" style="padding: 1px 7px; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 4px; font-size: 0.66rem; color: #64748b; cursor: pointer;" onclick="refreshDiscordEmojisUI()">
-                        <i class="fa-solid fa-arrows-rotate"></i> โหลดใหม่
+                        <i data-lucide="refresh-cw"></i> โหลดใหม่
                       </button>
                     </div>
                     <div id="discordCustomEmojiBar" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-height: 28px;">
-                      <span style="font-size: 0.7rem; color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดอิโมจิ Discord...</span>
+                      <span style="font-size: 0.7rem; color: #94a3b8;"><i data-lucide="loader-2" class="animate-spin"></i> กำลังโหลดอิโมจิ Discord...</span>
                     </div>
                   </div>
 
@@ -4819,7 +4924,7 @@
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: #dbeafe; color: #1d4ed8; font-size: 0.85rem;">
-                      <i class="fa-solid fa-gamepad"></i>
+                      <i data-lucide="gamepad-2"></i>
                     </span>
                     <div>
                       <div style="font-size: 0.86rem; font-weight: 800; color: #1e3a8a; display: flex; align-items: center; gap: 6px;">
@@ -4896,7 +5001,7 @@
               <!-- ================= SECTION: LARGE & SMALL IMAGE (ASSETS) ================= -->
               <div style="margin-bottom: 16px; border-top: 1.5px solid #e2e8f0; padding-top: 14px;">
                 <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                  <i class="fa-regular fa-image" style="color: #5865F2;"></i>
+                  <i data-lucide="image" style="color: #5865F2;"></i>
                   <span>การแสดงรูปภาพกิจกรรม (Large & Small Image)</span>
                 </div>
                 <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 10px;">
@@ -4939,7 +5044,7 @@
               <!-- ================= SECTION: ACTION BUTTONS (LINKS) ================= -->
               <div style="margin-bottom: 16px; border-top: 1.5px solid #e2e8f0; padding-top: 14px;">
                 <div style="font-size: 0.84rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-link" style="color: #5865F2;"></i>
+                  <i data-lucide="link" style="color: #5865F2;"></i>
                   <span>ปุ่มกดลิงก์ (Custom Presence Buttons)</span>
                 </div>
                 <div style="font-size: 0.72rem; color: #64748b; margin-bottom: 10px;">
@@ -5049,7 +5154,7 @@
               <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 16px; box-shadow: 0 3px 12px rgba(0,0,0,0.04);">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                   <span style="font-size: 0.84rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-brands fa-discord" style="color: #5865F2; font-size: 1rem;"></i>
+                    <i class="si si-discord" style="color: #5865F2; font-size: 1rem;"></i>
                     <span>ที่แสดงผล Discord Status (แยกต่างหาก)</span>
                   </span>
                   <span style="font-size: 0.68rem; font-weight: 700; color: #15803d; background: #dcfce7; padding: 2px 8px; border-radius: 99px;">
@@ -5077,7 +5182,7 @@
                   <!-- Streaming Mode Watch Button if Streaming -->
                   <div id="standaloneStreamWatchBtn" style="display: none; margin-top: 12px;">
                     <a id="standaloneStreamWatchLink" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: #5865F2; color: #ffffff; padding: 7px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(88, 101, 242, 0.4);">
-                      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.7rem;"></i>
+                      <i data-lucide="external-link" style="font-size: 0.7rem;"></i>
                       <span>Watch / รับชมสตรีม</span>
                     </a>
                   </div>
@@ -5087,7 +5192,7 @@
                 <div style="margin-top: 12px; background: #2b2d31; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 10px;">
                   <div style="position: relative; width: 32px; height: 32px; flex-shrink: 0;">
                     <div style="width: 32px; height: 32px; border-radius: 50%; background: #5865F2; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.85rem;">
-                      <i class="fa-solid fa-shield-halved"></i>
+                      <i data-lucide="shield"></i>
                     </div>
                     <span id="standaloneMiniDot" style="position: absolute; bottom: -1px; right: -1px; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid #2b2d31;"></span>
                   </div>
@@ -5127,7 +5232,7 @@
                     <div style="position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; background: rgba(88, 101, 242, 0.25); border-radius: 50%; filter: blur(20px);"></div>
                     <div style="position: absolute; bottom: 6px; right: 10px; display: flex; gap: 6px;">
                       <span style="background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 2px 6px; border-radius: 99px; font-size: 0.64rem; color: #cbd5e1; display: flex; align-items: center; gap: 4px;">
-                        <i class="fa-solid fa-server" style="color: #818cf8; font-size: 0.62rem;"></i> Sarawat Guild
+                        <i data-lucide="server" style="color: #818cf8; width: 10px; height: 10px; display: inline-block; vertical-align: middle;"></i> Sarawat Guild
                       </span>
                     </div>
                   </div>
@@ -5139,7 +5244,7 @@
                       <!-- Avatar circle overlapping banner -->
                       <div style="position: relative; width: 58px; height: 58px; flex-shrink: 0;">
                         <div style="width: 58px; height: 58px; border-radius: 50%; background: #5865F2; border: 4px solid #111214; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.4);">
-                          <i class="fa-solid fa-shield-halved"></i>
+                          <i data-lucide="shield"></i>
                         </div>
                         <!-- Status dot -->
                         <span id="previewStatusDot" style="position: absolute; bottom: 2px; right: 2px; width: 15px; height: 15px; border-radius: 50%; background: #22c55e; border: 3px solid #111214;"></span>
@@ -5176,7 +5281,7 @@
                       </div>
                       <div id="previewStreamWatchBtn" style="display: none; margin-top: 8px;">
                         <a id="previewStreamWatchLink" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: #5865F2; color: #ffffff; padding: 6px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; text-decoration: none;">
-                          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.68rem;"></i>
+                          <i data-lucide="external-link" style="font-size: 0.68rem;"></i>
                           <span>Watch / รับชมสตรีม</span>
                         </a>
                       </div>
@@ -5186,7 +5291,7 @@
                         <div style="display: flex; gap: 8px; align-items: flex-start;">
                           <div style="position: relative; width: 44px; height: 44px; flex-shrink: 0;" id="previewIconWrapper">
                             <div id="previewFallbackIconBox" style="width: 44px; height: 44px; border-radius: 8px; background: linear-gradient(135deg, #4f46e5 0%, #5865F2 100%); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff;">
-                              <i id="previewActivityIcon" class="fa-solid fa-eye"></i>
+                              <i id="previewActivityIcon" data-lucide="eye"></i>
                             </div>
                             <img id="previewLargeImg" src="" alt="Large Image" style="display: none; width: 44px; height: 44px; border-radius: 8px; object-fit: cover;" onerror="this.style.display='none'; document.getElementById('previewFallbackIconBox').style.display='flex';">
                             <div id="previewSmallImgContainer" style="display: none; position: absolute; bottom: -3px; right: -3px; width: 16px; height: 16px; border-radius: 50%; background: #111214; padding: 1px;">
@@ -5198,7 +5303,7 @@
                               ดูแลความปลอดภัย & ตรวจระเบียบวินัย
                             </div>
                             <div style="font-size: 0.70rem; color: #949ba4; display: flex; align-items: center; gap: 4px; margin-top: 2px;" id="previewActivityTimerContainer">
-                              <i class="fa-regular fa-clock" style="font-size: 0.65rem;"></i>
+                              <i data-lucide="clock" style="font-size: 0.65rem;"></i>
                               <span id="previewActivityTimer">00:00:00 elapsed</span>
                             </div>
                           </div>
@@ -5803,7 +5908,7 @@
         </div>
         <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;">
           <button type="button" id="btnApplyBulkStatus" style="background: #2563eb; color: #ffffff; border: none; padding: 7px 16px; font-size: 0.84rem; border-radius: 9999px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37,99,235,0.3); transition: all 0.15s ease;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
-            <i class="fa-solid fa-check-double" style="font-size: 13px;"></i>
+            <i data-lucide="check-check" style="font-size: 13px;"></i>
             <span>อัปเดตสถานะ</span>
           </button>
           <button type="button" id="btnClearBulkSelection" style="background: transparent; border: none; color: #94a3b8; font-size: 0.82rem; cursor: pointer; padding: 6px 10px; font-weight: 600; border-radius: 9999px; transition: color 0.15s ease;" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#94a3b8'">
@@ -6144,7 +6249,7 @@
                   <span>สถานะการเปิดรับสมัคร & กำหนดการเวลา</span>
                 </div>
                 <span id="badgeMasterSwitch" class="status-badge approved" style="font-size: 0.76rem; padding: 3px 12px;">
-                  <i class="fa-solid fa-circle-check"></i> เปิดรับสมัครอยู่
+                  <i data-lucide="check-circle-2"></i> เปิดรับสมัครอยู่
                 </span>
               </div>
 
@@ -7995,6 +8100,10 @@
       // Load Admins Data if Super Admin
       if (isSuper) {
         renderAdminsList();
+      }
+
+      if (typeof updateTrashCounterBadge === 'function') {
+        updateTrashCounterBadge();
       }
 
       if (window.lucide) lucide.createIcons();
@@ -10232,9 +10341,9 @@
             <h4 class="admin-news-title">${escapeHtml(item.title || item.desc || '')}</h4>
             <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
             <div class="admin-news-links-indicator">
-              ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i class="fa-brands fa-facebook" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Facebook Posts</span>` : ''}
+              ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i class="si si-facebook" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Facebook Posts</span>` : ''}
               ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" style="width:12px;height:12px;"></i> Facebook Reels</span>` : ''}
-              ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i class="fa-brands fa-instagram" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Instagram Posts</span>` : ''}
+              ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i class="si si-instagram" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Instagram Posts</span>` : ''}
               ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Instagram Reels</span>` : ''}
               ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> Google Photos</span>` : ''}
             </div>
@@ -10593,13 +10702,13 @@
 
     async function handleDeleteEvent(id) {
       const confirmResult = await Swal.fire({
-        title: 'ยืนยันการลบกิจกรรม?',
-        text: 'คุณต้องการลบกิจกรรมนี้ออกจากปฏิทินโรงเรียนใช่หรือไม่?',
+        title: 'ย้ายกิจกรรมลงถังขยะ?',
+        text: 'กิจกรรมนี้จะถูกย้ายไปอยู่ในถังขยะ และจะไม่แสดงบนปฏิทินโรงเรียน (คุณสามารถกู้คืนกลับมาได้ทุกเมื่อ)',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#dc2626',
+        confirmButtonColor: '#ef4444',
         cancelButtonColor: '#64748b',
-        confirmButtonText: 'ใช่, ลบกิจกรรม',
+        confirmButtonText: 'ย้ายลงถังขยะ',
         cancelButtonText: 'ยกเลิก',
         customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
       });
@@ -10621,12 +10730,13 @@
         saveEvents(localEvents);
 
         await renderAdminEvents();
-        showToast(deletedOnline ? 'ลบกิจกรรมออกจากระบบเรียบร้อยแล้ว' : 'ลบกิจกรรมออกจากเครื่องเรียบร้อยแล้ว', 'success');
+        if (typeof updateTrashCounterBadge === 'function') updateTrashCounterBadge();
+        showToast('ย้ายกิจกรรมลงถังขยะเรียบร้อยแล้ว', 'success');
       } catch (err) {
         console.error('Delete event error:', err);
         Swal.fire({
           icon: 'error',
-          title: 'เกิดข้อผิดพลาดในการลบ',
+          title: 'ย้ายลงถังขยะล้มเหลว',
           text: err.message,
           customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
         });
@@ -11696,13 +11806,13 @@
       if (container) {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        let iconHtml = '<i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 1.1rem;"></i>';
+        let iconHtml = '<i class="check-circle-2" style="color: #10b981; font-size: 1.1rem;"></i>';
         if (type === 'error') {
-          iconHtml = '<i class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 1.1rem;"></i>';
+          iconHtml = '<i class="x-circle" style="color: #ef4444; font-size: 1.1rem;"></i>';
         } else if (type === 'warning') {
-          iconHtml = '<i class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 1.1rem;"></i>';
+          iconHtml = '<i data-lucide="alert-triangle" style="color: #f59e0b; font-size: 1.1rem;"></i>';
         } else if (type === 'info') {
-          iconHtml = '<i class="fa-solid fa-circle-info" style="color: #3b82f6; font-size: 1.1rem;"></i>';
+          iconHtml = '<i data-lucide="info" style="color: #3b82f6; font-size: 1.1rem;"></i>';
         }
         toast.innerHTML = `${iconHtml}<div style="flex: 1; word-break: break-word;">${escapeHtml(msg)}</div>`;
         container.appendChild(toast);
@@ -12153,11 +12263,11 @@
       const txt = document.getElementById('textMonAudio');
       if (icon && txt) {
         if (monitorAudioEnabled) {
-          icon.className = 'fa-solid fa-volume-high';
+          icon.setAttribute('data-lucide', 'volume-2'); if (window.lucide) lucide.createIcons();
           icon.style.color = '#10b981';
           txt.textContent = 'เสียงเตือน: เปิด';
         } else {
-          icon.className = 'fa-solid fa-volume-xmark';
+          icon.setAttribute('data-lucide', 'volume-x'); if (window.lucide) lucide.createIcons();
           icon.style.color = '#94a3b8';
           txt.textContent = 'เสียงเตือน: ปิด';
         }
@@ -12196,7 +12306,7 @@
       const origHtml = btn ? btn.innerHTML : '';
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>กำลังส่ง Discord...</span>';
+        btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> <span>กำลังส่ง Discord...</span>';
       }
 
       try {
@@ -12222,7 +12332,7 @@
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = origHtml || '<i class="fa-brands fa-discord" style="font-size: 0.95rem;"></i> <span>ทดสอบส่ง Discord Alert</span>';
+          btn.innerHTML = origHtml || '<i class="si si-discord" style="font-size: 0.95rem;"></i> <span>ทดสอบส่ง Discord Alert</span>';
         }
       }
     }
@@ -12496,7 +12606,7 @@
       const btn = document.getElementById('btnSaveDiscordPresence');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>กำลังบันทึก...</span>';
+        btn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> <span>กำลังบันทึก...</span>';
       }
 
       try {
@@ -12583,7 +12693,7 @@
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>บันทึกและอัปเดตสถานะ Bot</span>';
+          btn.innerHTML = '<i data-lucide="save"></i> <span>บันทึกและอัปเดตสถานะ Bot</span>';
         }
       }
     }
@@ -12794,11 +12904,11 @@
       };
 
       const typeIcons = {
-        0: 'fa-solid fa-gamepad',
-        1: 'fa-solid fa-video',
-        2: 'fa-solid fa-headphones',
-        3: 'fa-solid fa-eye',
-        5: 'fa-solid fa-trophy'
+        0: 'gamepad-2',
+        1: 'video',
+        2: 'headphones',
+        3: 'eye',
+        5: 'trophy'
       };
 
       // 1. Custom Status Bubble Display in Profile Popout (Supports Discord Custom Emojis + Unicode)
@@ -12831,7 +12941,7 @@
       if (enabled && actEnabled) {
         if (mainCard) mainCard.style.display = 'block';
         if (header) header.textContent = discordTypeHeaders[type] || 'Watching';
-        if (pIcon) pIcon.className = typeIcons[type] || 'fa-solid fa-eye';
+        if (pIcon) { pIcon.setAttribute('data-lucide', typeIcons[type] || 'eye'); if (window.lucide) lucide.createIcons(); }
         if (pName) pName.textContent = name || 'สารวัตรนักเรียน เดชะปัตตนยานุกูล';
         if (pState) pState.textContent = state || 'พร้อมปฏิบัติหน้าที่ 🛡️';
         if (pDetails) pDetails.textContent = details || '';
@@ -13204,7 +13314,7 @@
         livePill.style.borderColor = '#fecaca';
         livePill.style.color = '#991b1b';
         livePill.innerHTML = `
-          <i id="monLivePillIcon" class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="x-circle" style="color: #ef4444; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ระบบมีปัญหาร้ายแรง (CRITICAL)'}</span>
         `;
       } else if (status === 'WARNING') {
@@ -13212,7 +13322,7 @@
         livePill.style.borderColor = '#fde68a';
         livePill.style.color = '#92400e';
         livePill.innerHTML = `
-          <i id="monLivePillIcon" class="fa-solid fa-triangle-exclamation" style="color: #f59e0b; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="alert-triangle" style="color: #f59e0b; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ระบบมีข้อความแจ้งเตือน (WARNING)'}</span>
         `;
       } else if (status === 'OFFLINE') {
@@ -13220,7 +13330,7 @@
         livePill.style.borderColor = '#cbd5e1';
         livePill.style.color = '#475569';
         livePill.innerHTML = `
-          <i id="monLivePillIcon" class="fa-solid fa-plug-circle-xmark" style="color: #64748b; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" data-lucide="power-off" style="color: #64748b; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (OFFLINE)'}</span>
         `;
       } else {
@@ -13229,7 +13339,7 @@
         livePill.style.borderColor = '#a7f3d0';
         livePill.style.color = '#065f46';
         livePill.innerHTML = `
-          <i id="monLivePillIcon" class="fa-solid fa-circle-check" style="color: #10b981; font-size: 0.95rem;"></i>
+          <i id="monLivePillIcon" class="check-circle-2" style="color: #10b981; font-size: 0.95rem;"></i>
           <span id="monLivePillText">${customText || 'ระบบทำงานเป็นปกติ (HEALTHY)'}</span>
         `;
       }
@@ -13408,7 +13518,7 @@
           banner.style.borderColor = '#fecaca';
           if (bIconWrap) {
             bIconWrap.style.background = '#fee2e2';
-            bIconWrap.innerHTML = '<i class="fa-solid fa-circle-exclamation" style="color: #dc2626; font-size: 1.15rem;"></i>';
+            bIconWrap.innerHTML = '<i data-lucide="alert-circle" style="color: #dc2626; font-size: 1.15rem;"></i>';
           }
           if (bTitle) { bTitle.textContent = 'ระบบตรวจพบปัญหาร้ายแรง (Critical Error)'; bTitle.style.color = '#991b1b'; }
           if (bDetails) { bDetails.textContent = health.issues && health.issues.length ? health.issues.join(' • ') : 'ระบบหรือฐานข้อมูลกำลังพบปัญหาเร่งด่วน โปรดตรวจสอบทันที'; bDetails.style.color = '#7f1d1d'; }
@@ -13424,7 +13534,7 @@
           banner.style.borderColor = '#fde68a';
           if (bIconWrap) {
             bIconWrap.style.background = '#fef3c7';
-            bIconWrap.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #d97706; font-size: 1.15rem;"></i>';
+            bIconWrap.innerHTML = '<i data-lucide="alert-triangle" style="color: #d97706; font-size: 1.15rem;"></i>';
           }
           if (bTitle) { bTitle.textContent = 'ระบบตรวจพบข้อควรระวัง (System Warning)'; bTitle.style.color = '#92400e'; }
           if (bDetails) { bDetails.textContent = health.issues && health.issues.length ? health.issues.join(' • ') : 'ประสิทธิภาพบางส่วนลดลง หรือมีความหน่วงสูงกว่าเกณฑ์'; bDetails.style.color = '#78350f'; }
@@ -13466,11 +13576,11 @@
       if (elDbPingVal) elDbPingVal.textContent = (dbPing !== null ? dbPing.toFixed(2) : '0.10') + ' ms';
       if (elDbPingBadge) {
         if (dbPing !== null && dbPing > 50) {
-          elDbPingBadge.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ช้า';
+          elDbPingBadge.innerHTML = '<i data-lucide="alert-triangle"></i> ช้า';
           elDbPingBadge.style.background = '#fef3c7';
           elDbPingBadge.style.color = '#d97706';
         } else {
-          elDbPingBadge.innerHTML = '<i class="fa-solid fa-circle-check"></i> ปกติ';
+          elDbPingBadge.innerHTML = '<i data-lucide="check-circle-2"></i> ปกติ';
           elDbPingBadge.style.background = '#ecfdf5';
           elDbPingBadge.style.color = '#065f46';
         }
@@ -13572,7 +13682,7 @@
             const rank = index + 1;
             let rankBadge = '';
             if (rank === 1) {
-              rankBadge = '<span style="font-size: 0.72rem; font-weight: 800; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 3px;"><i class="fa-solid fa-trophy" style="font-size: 0.65rem;"></i> #1</span>';
+              rankBadge = '<span style="font-size: 0.72rem; font-weight: 800; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 3px;"><i data-lucide="trophy" style="font-size: 0.65rem;"></i> #1</span>';
             } else if (rank === 2) {
               rankBadge = '<span style="font-size: 0.72rem; font-weight: 700; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 2px 7px; border-radius: 6px;">#2</span>';
             } else {
@@ -13649,7 +13759,7 @@
                 <!-- Left: Icon + Title + Path -->
                 <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1.2;">
                   <div style="width: 32px; height: 32px; border-radius: 8px; background: ${p.color || '#3b82f6'}18; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <i class="fa-solid ${p.icon || 'fa-file'}" style="color: ${p.color || '#3b82f6'}; font-size: 0.95rem;"></i>
+                    <i data-lucide="${p.icon || 'file-text'}" style="color: ${p.color || '#3b82f6'}; width: 15px; height: 15px;"></i>
                   </div>
                   <div style="min-width: 0;">
                     <div style="font-size: 0.82rem; font-weight: 800; color: #0f172a; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${p.title}">${p.title}</div>
@@ -13833,7 +13943,7 @@
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>กำลังส่ง...</span> <i class="fa-solid fa-spinner fa-spin" style="font-size: 12px;"></i>`;
+        submitBtn.innerHTML = `<span>กำลังส่ง...</span> <i data-lucide="loader-2" class="animate-spin" style="width: 12px; height: 12px;"></i>`;
         submitBtn.style.opacity = '0.8';
       }
 
@@ -13897,6 +14007,8 @@
 
             if (paneId === 'tab-tags') {
               loadAdminTags();
+            } else if (paneId === 'tab-trash') {
+              loadTrashData();
             } else if (paneId === 'tab-news') {
               renderAdminNews();
             } else if (paneId === 'tab-calendar') {
@@ -13973,6 +14085,390 @@
       setupTabs();
       checkAuth();
     });
+
+    // ==========================================
+    // TRASH BIN MANAGER (ระบบจัดการถังขยะและกู้คืนข้อมูล)
+    // ==========================================
+    let currentTrashSubTab = 'news'; // 'news' or 'events'
+    let trashNewsList = [];
+    let trashEventsList = [];
+    let trashSearchQuery = '';
+
+    async function updateTrashCounterBadge() {
+      try {
+        if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) return;
+        const res = await window.SarawatApi.getTrashStats();
+        if (res && res.success) {
+          const badge = document.getElementById('trashCounterBadge');
+          if (badge) {
+            badge.textContent = res.totalCount || 0;
+            badge.style.display = (res.totalCount > 0) ? 'inline-flex' : 'none';
+          }
+          const subNews = document.getElementById('trashSubCountNews');
+          if (subNews) subNews.textContent = `(${res.newsCount || 0})`;
+          const subEvents = document.getElementById('trashSubCountEvents');
+          if (subEvents) subEvents.textContent = `(${res.eventsCount || 0})`;
+        }
+      } catch (err) {
+        console.warn('Failed to update trash counter:', err);
+      }
+    }
+
+    function switchTrashSubTab(subTab) {
+      currentTrashSubTab = subTab;
+      const btnNews = document.getElementById('trashSubTabNewsBtn');
+      const btnEvents = document.getElementById('trashSubTabEventsBtn');
+      const contentNews = document.getElementById('trashContentNews');
+      const contentEvents = document.getElementById('trashContentEvents');
+
+      if (subTab === 'news') {
+        if (btnNews) btnNews.classList.add('active');
+        if (btnEvents) btnEvents.classList.remove('active');
+        if (contentNews) contentNews.style.display = 'block';
+        if (contentEvents) contentEvents.style.display = 'none';
+      } else {
+        if (btnNews) btnNews.classList.remove('active');
+        if (btnEvents) btnEvents.classList.add('active');
+        if (contentNews) contentNews.style.display = 'none';
+        if (contentEvents) contentEvents.style.display = 'block';
+      }
+
+      updateEmptyTrashBtnVisibility();
+      renderTrashTables();
+    }
+
+    function updateEmptyTrashBtnVisibility() {
+      const btnEmpty = document.getElementById('btnEmptyTrashCurrent');
+      if (!btnEmpty) return;
+      const isSuper = (typeof isCurrentSuperAdmin === 'function') && isCurrentSuperAdmin();
+      const currentCount = currentTrashSubTab === 'news' ? trashNewsList.length : trashEventsList.length;
+      if (isSuper && currentCount > 0) {
+        btnEmpty.style.display = 'inline-flex';
+        btnEmpty.innerHTML = `<i data-lucide="trash"></i> <span>ล้างถังขยะ${currentTrashSubTab === 'news' ? 'ข่าวสาร' : 'กิจกรรม'} (${currentCount})</span>`;
+        if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+      } else {
+        btnEmpty.style.display = 'none';
+      }
+    }
+
+    async function loadTrashData() {
+      try {
+        if (!window.SarawatApi || !window.SarawatApi.getBaseUrl()) return;
+        const [news, events] = await Promise.all([
+          window.SarawatApi.getTrashNews(),
+          window.SarawatApi.getTrashEvents()
+        ]);
+        trashNewsList = Array.isArray(news) ? news : [];
+        trashEventsList = Array.isArray(events) ? events : [];
+        renderTrashTables();
+        updateTrashCounterBadge();
+        updateEmptyTrashBtnVisibility();
+      } catch (err) {
+        console.error('Error loading trash data:', err);
+        showToast('เกิดข้อผิดพลาดในการโหลดรายการถังขยะ', 'error');
+      }
+    }
+
+    function handleTrashSearch(q) {
+      trashSearchQuery = (q || '').trim().toLowerCase();
+      renderTrashTables();
+    }
+
+    function renderTrashTables() {
+      const isSuper = (typeof isCurrentSuperAdmin === 'function') && isCurrentSuperAdmin();
+
+      // 1. Render News Trash
+      const newsTbody = document.getElementById('trashNewsTableBody');
+      if (newsTbody) {
+        let filteredNews = trashNewsList;
+        if (trashSearchQuery) {
+          filteredNews = filteredNews.filter(n => 
+            (n.title && n.title.toLowerCase().includes(trashSearchQuery)) ||
+            (n.desc && n.desc.toLowerCase().includes(trashSearchQuery)) ||
+            (n.tag && n.tag.toLowerCase().includes(trashSearchQuery))
+          );
+        }
+
+        if (filteredNews.length === 0) {
+          newsTbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 48px 20px; color: var(--dg-text-muted);">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                  <i data-lucide="check-circle-2" style="width: 42px; height: 42px; color: #10b981; stroke-width: 1.5;"></i>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: var(--dg-text-main);">ไม่มีข่าวสารในถังขยะ</span>
+                  <span style="font-size: 0.85rem; color: var(--dg-text-muted);">ข่าวสารทั้งหมดอยู่ในสถานะปกติ</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        } else {
+          newsTbody.innerHTML = filteredNews.map(item => {
+            const imgHtml = item.image
+              ? `<img src="${item.image}" alt="thumb" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid var(--dg-border-subtle); background: #ffffff;">`
+              : `<div style="width: 52px; height: 38px; border-radius: 6px; background: var(--dg-bg-subtle); display: flex; align-items: center; justify-content: center; color: var(--dg-text-muted);"><i data-lucide="image" style="width: 18px; height: 18px;"></i></div>`;
+
+            const dateStr = item.date || item.dateStart || '-';
+            const deletedTime = item.deletedAt ? new Date(item.deletedAt).toLocaleString('th-TH') : '-';
+
+            return `
+              <tr>
+                <td style="text-align: center; vertical-align: middle;">${imgHtml}</td>
+                <td>
+                  <div style="font-weight: 600; font-size: 0.95rem; color: var(--dg-text-main); line-height: 1.35; margin-bottom: 2px;">
+                    ${escapeHtml(item.title || 'ไม่มีชื่อ')}
+                  </div>
+                  <div style="font-size: 0.8rem; color: var(--dg-text-muted);">
+                    <i data-lucide="calendar" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 2px;"></i> วันที่เดิม: ${escapeHtml(dateStr)}
+                  </div>
+                </td>
+                <td>
+                  <span class="admin-badge" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 0.75rem; padding: 2px 8px;">
+                    ${escapeHtml(item.tag || 'ทั่วไป')}
+                  </span>
+                </td>
+                <td style="font-size: 0.85rem; color: var(--dg-text-main); font-weight: 500;">
+                  <i data-lucide="user" style="width: 13px; height: 13px; display: inline-block; vertical-align: middle; margin-right: 3px; color: #64748b;"></i>
+                  ${escapeHtml(item.deletedBy || 'Admin')}
+                </td>
+                <td style="font-size: 0.8rem; color: var(--dg-text-muted);">
+                  ${deletedTime}
+                </td>
+                <td style="text-align: center; vertical-align: middle;">
+                  <div style="display: inline-flex; align-items: center; gap: 6px;">
+                    <button type="button" class="btn btn-sm" onclick="handleRestoreTrashNews(${item.id})" title="กู้คืนข่าวสารนี้" style="padding: 6px 12px; font-size: 0.82rem; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+                      <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> <span>กู้คืน</span>
+                    </button>
+                    ${isSuper ? `
+                      <button type="button" class="btn btn-sm" onclick="handlePermanentDeleteTrashNews(${item.id})" title="ลบถาวร (Super Admin)" style="padding: 6px 10px; font-size: 0.82rem; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+                        <i data-lucide="trash" style="width: 14px; height: 14px;"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // 2. Render Events Trash
+      const eventsTbody = document.getElementById('trashEventsTableBody');
+      if (eventsTbody) {
+        let filteredEvents = trashEventsList;
+        if (trashSearchQuery) {
+          filteredEvents = filteredEvents.filter(ev => 
+            (ev.title && ev.title.toLowerCase().includes(trashSearchQuery)) ||
+            (ev.desc && ev.desc.toLowerCase().includes(trashSearchQuery)) ||
+            (ev.categoryLabel && ev.categoryLabel.toLowerCase().includes(trashSearchQuery))
+          );
+        }
+
+        if (filteredEvents.length === 0) {
+          eventsTbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 48px 20px; color: var(--dg-text-muted);">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                  <i data-lucide="check-circle-2" style="width: 42px; height: 42px; color: #10b981; stroke-width: 1.5;"></i>
+                  <span style="font-size: 1.05rem; font-weight: 600; color: var(--dg-text-main);">ไม่มีกิจกรรมโรงเรียนในถังขยะ</span>
+                  <span style="font-size: 0.85rem; color: var(--dg-text-muted);">กิจกรรมปฏิทินทั้งหมดอยู่ในสถานะปกติ</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        } else {
+          eventsTbody.innerHTML = filteredEvents.map(item => {
+            const dateStr = item.dateStart ? (item.dateEnd ? `${item.dateStart} ถึง ${item.dateEnd}` : item.dateStart) : (item.day ? `${item.day} ${item.month || ''}` : '-');
+            const deletedTime = item.deletedAt ? new Date(item.deletedAt).toLocaleString('th-TH') : '-';
+
+            return `
+              <tr>
+                <td style="font-size: 0.85rem; font-weight: 600; color: var(--dg-text-main);">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <i data-lucide="calendar" style="width: 13px; height: 13px; color: #2563eb;"></i>
+                    <span>${escapeHtml(dateStr)}</span>
+                  </div>
+                </td>
+                <td>
+                  <div style="font-weight: 600; font-size: 0.95rem; color: var(--dg-text-main); line-height: 1.35; margin-bottom: 2px;">
+                    ${escapeHtml(item.title || 'ไม่มีชื่อ')}
+                  </div>
+                  ${item.location ? `
+                    <div style="font-size: 0.8rem; color: var(--dg-text-muted);">
+                      <i data-lucide="map-pin" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 2px;"></i> ${escapeHtml(item.location)}
+                    </div>
+                  ` : ''}
+                </td>
+                <td>
+                  <span class="admin-badge" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 0.75rem; padding: 2px 8px;">
+                    ${escapeHtml(item.categoryLabel || item.category || 'ทั่วไป')}
+                  </span>
+                </td>
+                <td style="font-size: 0.85rem; color: var(--dg-text-main); font-weight: 500;">
+                  <i data-lucide="user" style="width: 13px; height: 13px; display: inline-block; vertical-align: middle; margin-right: 3px; color: #64748b;"></i>
+                  ${escapeHtml(item.deletedBy || 'Admin')}
+                </td>
+                <td style="font-size: 0.8rem; color: var(--dg-text-muted);">
+                  ${deletedTime}
+                </td>
+                <td style="text-align: center; vertical-align: middle;">
+                  <div style="display: inline-flex; align-items: center; gap: 6px;">
+                    <button type="button" class="btn btn-sm" onclick="handleRestoreTrashEvent(${item.id})" title="กู้คืนกิจกรรมนี้" style="padding: 6px 12px; font-size: 0.82rem; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+                      <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> <span>กู้คืน</span>
+                    </button>
+                    ${isSuper ? `
+                      <button type="button" class="btn btn-sm" onclick="handlePermanentDeleteTrashEvent(${item.id})" title="ลบถาวร (Super Admin)" style="padding: 6px 10px; font-size: 0.82rem; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+                        <i data-lucide="trash" style="width: 14px; height: 14px;"></i>
+                      </button>
+                    ` : ''}
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // Initialize Lucide icons
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    // Handler: Restore News
+    async function handleRestoreTrashNews(id) {
+      try {
+        const res = await window.SarawatApi.restoreTrashNews(id);
+        if (res && res.success) {
+          showToast('กู้คืนข่าวสารสำเร็จ ข่าวกลับมาแสดงบนหน้าเว็บแล้ว', 'success');
+          await loadTrashData();
+          if (typeof renderAdminNews === 'function') renderAdminNews();
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'กู้คืนไม่สำเร็จ',
+          text: err.message || 'เกิดข้อผิดพลาดในการกู้คืนข่าวสาร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+    }
+
+    // Handler: Permanent Delete News
+    async function handlePermanentDeleteTrashNews(id) {
+      const confirm = await Swal.fire({
+        title: 'ยืนยันลบข่าวสารอย่างถาวร?',
+        text: 'คำเตือน: การลบถาวรจะไม่สามารถกู้คืนข้อมูลและไฟล์รูปภาพกลับมาได้อีก คุณแน่ใจหรือไม่?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ลบถาวรทันที',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = await window.SarawatApi.permanentlyDeleteTrashNews(id);
+        if (res && res.success) {
+          showToast('ลบข่าวสารอย่างถาวรเรียบร้อยแล้ว', 'success');
+          await loadTrashData();
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'ลบล้มเหลว',
+          text: err.message || 'เกิดข้อผิดพลาดในการลบถาวร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+    }
+
+    // Handler: Restore Event
+    async function handleRestoreTrashEvent(id) {
+      try {
+        const res = await window.SarawatApi.restoreTrashEvent(id);
+        if (res && res.success) {
+          showToast('กู้คืนกิจกรรมสำเร็จ กิจกรรมกลับมาแสดงบนปฏิทินแล้ว', 'success');
+          await loadTrashData();
+          if (typeof renderAdminEvents === 'function') renderAdminEvents();
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'กู้คืนไม่สำเร็จ',
+          text: err.message || 'เกิดข้อผิดพลาดในการกู้คืนกิจกรรม',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+    }
+
+    // Handler: Permanent Delete Event
+    async function handlePermanentDeleteTrashEvent(id) {
+      const confirm = await Swal.fire({
+        title: 'ยืนยันลบกิจกรรมอย่างถาวร?',
+        text: 'คำเตือน: การลบถาวรจะไม่สามารถกู้คืนข้อมูลกิจกรรมกลับมาได้อีก คุณแน่ใจหรือไม่?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ลบถาวรทันที',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = await window.SarawatApi.permanentlyDeleteTrashEvent(id);
+        if (res && res.success) {
+          showToast('ลบกิจกรรมอย่างถาวรเรียบร้อยแล้ว', 'success');
+          await loadTrashData();
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'ลบล้มเหลว',
+          text: err.message || 'เกิดข้อผิดพลาดในการลบถาวร',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+    }
+
+    // Handler: Empty Trash Current SubTab
+    async function handleEmptyTrashCurrentTab() {
+      const isNews = currentTrashSubTab === 'news';
+      const typeLabel = isNews ? 'ข่าวสารทั้งหมด' : 'กิจกรรมโรงเรียนทั้งหมด';
+      const count = isNews ? trashNewsList.length : trashEventsList.length;
+
+      const confirm = await Swal.fire({
+        title: `ยืนยันล้างถังขยะ${typeLabel}?`,
+        html: `คุณกำลังจะลบข้อมูล <b>${count} รายการ</b> ออกจากระบบอย่างถาวรพร้อมไฟล์รูปภาพ<br><br><span style="color: #dc2626; font-weight: bold;">การดำเนินการนี้ไม่สามารถยกเลิกหรือกู้คืนได้</span>`,
+        icon: 'error',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ยืนยันล้างถังขยะทั้งหมด',
+        cancelButtonText: 'ยกเลิก',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+      });
+      if (!confirm.isConfirmed) return;
+
+      try {
+        const res = isNews ? await window.SarawatApi.emptyTrashNews() : await window.SarawatApi.emptyTrashEvents();
+        if (res && res.success) {
+          showToast(res.message || 'ล้างถังขยะเรียบร้อยแล้ว', 'success');
+          await loadTrashData();
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: 'error',
+          title: 'ล้างถังขยะล้มเหลว',
+          text: err.message || 'เกิดข้อผิดพลาดในการล้างถังขยะ',
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+    }
+
   </script>
   <script src="js/admin-team.js?v=2.7.7"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>

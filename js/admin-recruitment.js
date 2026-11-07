@@ -1029,7 +1029,7 @@
           html: `
             <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
               <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #BFDBFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.22);">
-                <i class="fa-solid fa-users-gear" style="font-size: 32px; color: #2563EB;"></i>
+                <i data-lucide="users" style="width: 32px; height: 32px; color: #2563EB;"></i>
               </div>
               <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ยืนยันการปรับสถานะแบบกลุ่ม</h2>
               <div style="color: #475569; font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px; width: 100%; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 14px 18px; border-radius: 14px; box-sizing: border-box; text-align: left;">
@@ -1071,7 +1071,7 @@
           html: `
             <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
               <div style="width: 76px; height: 76px; border-radius: 50%; background: #EFF6FF; border: 2px solid #BFDBFE; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);">
-                <i class="fa-solid fa-spinner fa-spin" style="font-size: 36px; color: #2563EB;"></i>
+                <i data-lucide="loader-2" class="animate-spin" style="width: 36px; height: 36px; color: #2563EB;"></i>
               </div>
               <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">กำลังอัปเดตสถานะ</h2>
               <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
@@ -1100,7 +1100,7 @@
               html: `
                 <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                   <div style="width: 76px; height: 76px; border-radius: 50%; background: #ECFDF5; border: 2px solid #A7F3D0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
-                    <i class="fa-solid fa-circle-check" style="font-size: 38px; color: #10B981;"></i>
+                    <i data-lucide="check-circle-2" style="width: 38px; height: 38px; color: #10B981;"></i>
                   </div>
                   <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">อัปเดตสถานะสำเร็จ</h2>
                   <div style="color: #64748B; font-size: 0.95rem; line-height: 1.5;">
@@ -1130,7 +1130,7 @@
             html: `
               <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                 <div style="width: 76px; height: 76px; border-radius: 50%; background: #FEF2F2; border: 2px solid #FECACA; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);">
-                  <i class="fa-solid fa-triangle-exclamation" style="font-size: 34px; color: #EF4444;"></i>
+                  <i data-lucide="alert-triangle" style="width: 34px; height: 34px; color: #EF4444;"></i>
                 </div>
                 <h2 style="color: #0F172A; font-weight: 800; font-size: 1.45rem; margin: 0 0 10px 0; letter-spacing: -0.3px;">ไม่สามารถอัปเดตสถานะได้</h2>
                 <div style="color: #991B1B; font-size: 0.92rem; line-height: 1.5; background: #FEF2F2; border: 1.5px solid #FCA5A5; padding: 12px 16px; border-radius: 12px; margin-top: 10px; width: 100%; box-sizing: border-box;">

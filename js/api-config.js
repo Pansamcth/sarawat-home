@@ -1562,6 +1562,126 @@
       const res = await fetch(`${base}/api/backup/logs?limit=${limit}`, { headers: this.getAuthHeaders() });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
+    },
+
+    // ==========================================
+    // TRASH BIN APIS (ระบบถังขยะรวมศูนย์)
+    // ==========================================
+    getTrashStats: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return { success: false, newsCount: 0, eventsCount: 0, totalCount: 0 };
+      const res = await fetch(`${base}/api/trash/stats`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    },
+
+    getTrashNews: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return [];
+      const res = await fetch(`${base}/api/trash/news`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    },
+
+    restoreTrashNews: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/trash/news/${encodeURIComponent(id)}/restore`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return await res.json();
+    },
+
+    permanentlyDeleteTrashNews: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/trash/news/${encodeURIComponent(id)}/permanent`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return await res.json();
+    },
+
+    emptyTrashNews: async function () {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/trash/news/empty`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return await res.json();
+    },
+
+    getTrashEvents: async function () {
+      const base = this.getBaseUrl();
+      if (!base) return [];
+      const res = await fetch(`${base}/api/trash/events`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    },
+
+    restoreTrashEvent: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/trash/events/${encodeURIComponent(id)}/restore`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return await res.json();
+    },
+
+    permanentlyDeleteTrashEvent: async function (id) {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/trash/events/${encodeURIComponent(id)}/permanent`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return await res.json();
+    },
+
+    emptyTrashEvents: async function () {
+      const base = this.getBaseUrl();
+      if (!base) throw new Error('ไม่พบการเชื่อมต่อระบบฐานข้อมูล');
+      const res = await fetch(`${base}/api/trash/events/empty`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return await res.json();
     }
   };
 
