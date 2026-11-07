@@ -8946,7 +8946,7 @@ body.dark-mode .signup-success-banner,
           const fullTitle = actTitle ? `${actTitle} | ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER)` : DEFAULT_ROSTER_TITLE;
           const actId = activity.id || activity.sheetName || '';
           const fullUrl = actId ? `https://roster.sarawatdc.site/?id=${encodeURIComponent(actId)}` : DEFAULT_ROSTER_URL;
-          const coverImage = DEFAULT_ROSTER_IMAGE;
+          const coverImage = actId ? `https://api.sarawatdc.site/api/roster/og-image?id=${encodeURIComponent(actId)}` : DEFAULT_ROSTER_IMAGE;
 
           document.title = fullTitle;
           if (ogTitle) ogTitle.setAttribute('content', actTitle || fullTitle);

@@ -86,14 +86,24 @@ function isMainSiteOnline() {
 module.exports = async function handler(req, res) {
   try {
     const host = (req.headers['x-forwarded-host'] || req.headers.host || '').toLowerCase();
-    if (/^rosters?\./i.test(host)) {
+    const userAgent = (req.headers['user-agent'] || '').toLowerCase();
+    const isBot = /([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp|Twitterbot|Discordbot)/i.test(userAgent);
+    const isRosterSubdomain = /^rosters?\./i.test(host);
+    const targetId = (req.query.id || req.query.activity || req.query.sheet || req.query.event || '').toString().trim();
+
+    // Only redirect regular human browsers on root/generic routes if no specific targetId is requested
+    if (isRosterSubdomain && !isBot && !targetId) {
       const online = await isMainSiteOnline();
       if (online) {
-        let reqUrl = req.url || '/si-roster';
-        if (!reqUrl.startsWith('/si-roster')) {
-          reqUrl = '/si-roster' + (reqUrl === '/' ? '' : reqUrl);
+        let reqUrl = req.url || '';
+        if (reqUrl === '/' || reqUrl === '/si-roster') {
+          reqUrl = '';
+        } else if (reqUrl.startsWith('/si-roster/')) {
+          reqUrl = reqUrl.substring('/si-roster'.length);
+        } else if (!reqUrl.startsWith('/')) {
+          reqUrl = '/' + reqUrl;
         }
-        res.setHeader('Location', 'https://www.sarawatdc.site' + reqUrl);
+        res.setHeader('Location', 'https://www.sarawatdc.site/si-roster' + reqUrl);
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         return res.status(307).end();
       }
@@ -109,7 +119,6 @@ module.exports = async function handler(req, res) {
       html = html.replace(/https:\/\/www\.sarawatdc\.site\/si-roster/g, 'https://roster.sarawatdc.site');
     }
 
-    const targetId = (req.query.id || req.query.activity || req.query.sheet || req.query.event || '').toString().trim();
     if (!targetId) {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       return res.status(200).send(html);
@@ -160,12 +169,26 @@ module.exports = async function handler(req, res) {
       found = activities.find(a => a.title && a.title.toLowerCase().includes(cleanTarget));
     }
 
+    // If still not found in live API (e.g. backend timeout or private activity), create dynamic fallback using targetId
+    if (!found && targetId) {
+      found = {
+        sheetName: targetId,
+        sheet_name: targetId,
+        id: targetId,
+        title: targetId,
+        description: DEFAULT_DESC,
+        updated_at: new Date().toISOString()
+      };
+    }
+
     if (found) {
       const modalTitle = found.title || targetId;
       const fullTitle = `${modalTitle} | ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER)`;
       const modalDesc = stripMarkdown(found.description) || DEFAULT_DESC;
-      const bannerImage = isRosterSubdomain ? 'https://roster.sarawatdc.site/assets/images/si-roster-cover.jpg' : DEFAULT_IMAGE;
-      const canonicalUrl = isRosterSubdomain ? `https://roster.sarawatdc.site/?id=${encodeURIComponent(found.sheetName || found.id || targetId)}` : `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(found.sheetName || found.id || targetId)}`;
+      const sheetName = found.sheet_name || found.sheetName || found.id || targetId;
+      const version = found.updated_at ? new Date(found.updated_at).getTime() : Date.now();
+      const dynamicOgImage = `https://api.sarawatdc.site/api/roster/og-image?id=${encodeURIComponent(sheetName)}&v=${version}`;
+      const canonicalUrl = isRosterSubdomain ? `https://roster.sarawatdc.site/?id=${encodeURIComponent(sheetName)}` : `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}`;
 
       // Replace Title
       html = html.replace(/<title\b[^>]*>.*?<\/title>/i, `<title id="pageTitle">${escapeHtml(fullTitle)}</title>`);
@@ -176,14 +199,17 @@ module.exports = async function handler(req, res) {
       // Replace Open Graph Tags
       html = html.replace(/(<meta\s+property=["']og:title["'][^>]*content=["']).*?(["'])/i, `$1${escapeHtml(modalTitle)}$2`);
       html = html.replace(/(<meta\s+property=["']og:description["'][^>]*content=["']).*?(["'])/i, `$1${escapeHtml(modalDesc)}$2`);
-      html = html.replace(/(<meta\s+property=["']og:image["'][^>]*content=["']).*?(["'])/i, `$1${bannerImage}$2`);
-      html = html.replace(/(<meta\s+property=["']og:image:secure_url["'][^>]*content=["']).*?(["'])/i, `$1${bannerImage}$2`);
+      html = html.replace(/(<meta\s+property=["']og:image["'][^>]*content=["']).*?(["'])/i, `$1${dynamicOgImage}$2`);
+      html = html.replace(/(<meta\s+property=["']og:image:secure_url["'][^>]*content=["']).*?(["'])/i, `$1${dynamicOgImage}$2`);
+      html = html.replace(/(<meta\s+property=["']og:image:type["'][^>]*content=["']).*?(["'])/i, `$1image/png$2`);
+      html = html.replace(/(<meta\s+property=["']og:image:width["'][^>]*content=["']).*?(["'])/i, `$11200$2`);
+      html = html.replace(/(<meta\s+property=["']og:image:height["'][^>]*content=["']).*?(["'])/i, `$1630$2`);
       html = html.replace(/(<meta\s+property=["']og:url["'][^>]*content=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
 
       // Replace Twitter Tags
       html = html.replace(/(<meta\s+name=["']twitter:title["'][^>]*content=["']).*?(["'])/i, `$1${escapeHtml(modalTitle)}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:description["'][^>]*content=["']).*?(["'])/i, `$1${escapeHtml(modalDesc)}$2`);
-      html = html.replace(/(<meta\s+name=["']twitter:image["'][^>]*content=["']).*?(["'])/i, `$1${bannerImage}$2`);
+      html = html.replace(/(<meta\s+name=["']twitter:image["'][^>]*content=["']).*?(["'])/i, `$1${dynamicOgImage}$2`);
       html = html.replace(/(<meta\s+name=["']twitter:url["'][^>]*content=["']).*?(["'])/i, `$1${canonicalUrl}$2`);
 
       // Replace Canonical

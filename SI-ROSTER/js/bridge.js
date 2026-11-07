@@ -258,4 +258,46 @@
     get: createGoogleScriptRunner,
     configurable: true
   });
+
+  // ---------------------------------------------------------------------------
+  // 🖼️ Dynamic OG Image Helper Functions for Admin UI
+  // ---------------------------------------------------------------------------
+  window.getRosterOgTemplates = async function () {
+    try {
+      const apiBase = getApiBase();
+      const res = await fetch(`${apiBase}/api/roster/og-templates`);
+      const data = await res.json().catch(() => ({}));
+      return (data && (data.templates || data.result)) || [];
+    } catch (err) {
+      console.warn('[Bridge] getRosterOgTemplates error:', err);
+      return [];
+    }
+  };
+
+  window.saveRosterOgTemplate = async function (templateData) {
+    const apiBase = getApiBase();
+    let currentRosterToken = '';
+    try {
+      const stored = localStorage.getItem('adminAuth');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && (!parsed.expires || Date.now() <= parsed.expires)) {
+          const decoded = decodeURIComponent(atob(parsed.data));
+          const authObj = JSON.parse(decoded);
+          if (authObj && authObj.token) currentRosterToken = authObj.token;
+        }
+      }
+    } catch (e) {}
+
+    const res = await fetch(`${apiBase}/api/roster/save-og-template`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Roster-Token': currentRosterToken,
+        'Authorization': 'Bearer ' + currentRosterToken
+      },
+      body: JSON.stringify({ template: templateData })
+    });
+    return await res.json();
+  };
 })();

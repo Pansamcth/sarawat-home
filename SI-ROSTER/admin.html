@@ -4247,6 +4247,12 @@ body.dark-mode .signup-success-banner,
                 ['table', 'link']
               ]
             });
+            actEditor.on('change', () => {
+              const val = actEditor.getMarkdown();
+              const txtEl = document.getElementById('actDesc');
+              if (txtEl) txtEl.value = val;
+              if (typeof updateModalOgPreview === 'function') updateModalOgPreview();
+            });
           }
         }
       } catch (err) {
@@ -4436,7 +4442,7 @@ body.dark-mode .signup-success-banner,
       <div class="modal-body">
         <div class="form-group">
           <label>ชื่อกิจกรรม</label>
-          <input type="text" id="actTitle" class="input-control" placeholder="เช่น กิจกรรมหน้าเสาธง">
+          <input type="text" id="actTitle" class="input-control" placeholder="เช่น กิจกรรมหน้าเสาธง" oninput="updateModalOgPreview()">
         </div>
         <div class="form-group">
           <label>รายละเอียดกิจกรรม</label>
@@ -4451,6 +4457,40 @@ body.dark-mode .signup-success-banner,
           <label>กำหนดเวลาลงชื่อสิ้นสุด (Deadline)</label>
           <input type="datetime-local" id="actDeadline" class="input-control">
           <small style="color:var(--text-dim)">* หากไม่กำหนด ระบบจะเปิดให้ลงชื่อตลอดเวลา</small>
+        </div>
+        <!-- Dynamic OG Image Preview Card in Modal -->
+        <div class="form-group" style="margin-top: 18px; border-top: 1px dashed var(--border-color); padding-top: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <label style="margin: 0; font-size: 13px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+              <i class="fa-solid fa-image" style="color: var(--primary);"></i> ตัวอย่างภาพแชร์ (OG Image Preview)
+            </label>
+            <button type="button" class="btn btn-sm btn-outline" id="btnCopyActShareLink" onclick="copyActivityShareLink()" style="font-size: 12px; padding: 4px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-link"></i> <span>คัดลอกลิงก์กิจกรรม</span>
+            </button>
+          </div>
+          <div id="actModalOgPreviewWrapper" style="width: 100%; aspect-ratio: 1200 / 630; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #0f172a; position: relative;">
+            <div id="actModalOgBgLayer" style="position: absolute; inset: 0; background-image: url('/uploads/templates/roster_og_default_banner.png'), url('../assets/images/roster_og_default_banner.png'); background-size: cover; background-position: center;"></div>
+            <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(15,23,42,0.45) 0%, rgba(15,23,42,0.7) 100%); padding: 12px 16px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <img src="../assets/icons/school-logo.png" style="height: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));" alt="Logo">
+                <img src="../assets/icons/sarawat-logo.png" style="height: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));" alt="Logo">
+                <span style="font-size: 11px; font-weight: 600; color: #f8fafc; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">องค์การสารวัตรนักเรียน</span>
+              </div>
+              <div>
+                <div id="actModalOgBadges" style="margin-bottom: 4px; display: flex; gap: 4px;">
+                  <span style="background: rgba(30,41,59,0.8); color: #38bdf8; font-size: 9px; padding: 2px 6px; border-radius: 9999px; font-weight: 600; border: 1px solid rgba(56,189,248,0.3);">
+                    <i class="fa-regular fa-calendar"></i> <span id="actModalOgDateText">-</span>
+                  </span>
+                </div>
+                <div id="actModalOgTitle" style="font-size: 15px; font-weight: 700; color: #fff; line-height: 1.25; text-shadow: 0 2px 8px rgba(0,0,0,0.9); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">ชื่อกิจกรรม</div>
+                <div id="actModalOgDesc" style="font-size: 11px; color: #e2e8f0; margin-top: 3px; line-height: 1.35; text-shadow: 0 1px 4px rgba(0,0,0,0.9); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">รายละเอียดกิจกรรม</div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 4px;">
+                <span style="font-size: 9px; color: #cbd5e1;">SI-ROSTER OFFICIAL</span>
+                <span style="font-size: 9px; color: #38bdf8; font-weight: 600;">roster.sarawatdc.site</span>
+              </div>
+            </div>
+          </div>
         </div>
         <button class="btn btn-block" id="btnSaveActivity" onclick="submitActivity()"><i
             class="fa-solid fa-floppy-disk"></i> บันทึกกิจกรรม</button>
@@ -4531,6 +4571,10 @@ body.dark-mode .signup-success-banner,
         <div class="sidebar-item" id="adminMenuAudio" onclick="switchDashTab('audio')">
           <i class="fa-solid fa-volume-high"></i>
           <span>ระบบเสียง & สั่นสัมผัส</span>
+        </div>
+        <div class="sidebar-item" id="adminMenuOg" onclick="switchDashTab('og-templates')">
+          <i class="fa-solid fa-image"></i>
+          <span>เทมเพลตภาพแชร์ (OG Image)</span>
         </div>
       </div>
 
@@ -5298,6 +5342,250 @@ body.dark-mode .signup-success-banner,
                       <i class="fa-solid fa-mobile-screen"></i> สั่นแอดมิน (2 กึ้ก)
                     </button>
                   </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic OG Image Template Tab -->
+        <div id="tab-og-templates" class="dash-tab">
+          <div class="data-panel">
+            <div class="data-panel-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <h2><i class="fa-solid fa-image" style="color: var(--primary);"></i> จัดการเทมเพลตภาพแชร์ (Dynamic OG Image Template)</h2>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline" onclick="openLiveServerOgImage()" title="ดูไฟล์ PNG จริงที่เรนเดอร์จากเซิร์ฟเวอร์">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> ดูภาพจริงจากเซิร์ฟเวอร์ (Live PNG)
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveOgTemplateFromForm()">
+                  <i class="fa-solid fa-floppy-disk"></i> บันทึกการตั้งค่าเทมเพลต
+                </button>
+              </div>
+            </div>
+
+            <div style="padding: 24px;">
+              <!-- Introduction / Notice -->
+              <div style="background: linear-gradient(135deg, rgba(30,41,59,0.5) 0%, rgba(15,23,42,0.7) 100%); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 18px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <i class="fa-solid fa-circle-info" style="color: #38bdf8; font-size: 1.3rem;"></i>
+                  <div>
+                    <div style="font-weight: 600; font-size: 0.95rem; color: #f8fafc;">ระบบ Dynamic OG Image (1200 × 630 px) มาตรฐานระดับ Social Sharing</div>
+                    <div style="font-size: 0.84rem; color: #94a3b8; margin-top: 2px;">ภาพพรีวิวลิงก์เมื่อนำไปแชร์ใน LINE, Facebook, Discord หรือ Twitter จะเรนเดอร์ข้อมูลกิจกรรมจริงลงบนแบนเนอร์โดยอัตโนมัติ</div>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <label style="font-size: 0.85rem; color: #cbd5e1; margin: 0;">เลือกกิจกรรมตัวอย่าง:</label>
+                  <select id="ogPreviewActivitySelect" class="input-control" onchange="changeOgPreviewActivity(this.value)" style="min-width: 220px; font-size: 0.85rem; padding: 6px 12px;">
+                    <option value="">-- กิจกรรมเริ่มต้น (Default Sample) --</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Main Grid: Live Preview & Form Controls -->
+              <div style="display: grid; grid-template-columns: minmax(360px, 1.25fr) minmax(320px, 1fr); gap: 24px; align-items: start;">
+                
+                <!-- Left Column: Interactive Live Preview (1200:630 ratio) -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                      <i class="fa-solid fa-eye" style="color: var(--primary);"></i> ตัวอย่างภาพจริง (Live Preview 1200 × 630 px)
+                    </span>
+                    <span id="ogPreviewDimensionTag" style="font-size: 0.75rem; background: rgba(56,189,248,0.15); color: #38bdf8; padding: 3px 8px; border-radius: 6px; font-weight: 600;">1200 × 630 px</span>
+                  </div>
+
+                  <!-- 1200x630 Responsive Container -->
+                  <div style="width: 100%; aspect-ratio: 1200 / 630; border-radius: 14px; overflow: hidden; border: 2px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.35); position: relative; background: #0f172a;">
+                    <!-- Background Layer -->
+                    <div id="ogLiveBgLayer" style="position: absolute; inset: 0; background-image: url('/uploads/templates/roster_og_default_banner.png'), url('../assets/images/roster_og_default_banner.png'); background-size: cover; background-position: center; transition: all 0.25s ease;"></div>
+                    <!-- Tint Layer -->
+                    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,15,30,0.40) 0%, rgba(15,23,42,0.65) 100%); pointer-events: none;"></div>
+                    
+                    <!-- Content Container -->
+                    <div id="ogLiveContentContainer" style="position: relative; z-index: 2; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 5% 6%; color: #ffffff; box-sizing: border-box;">
+                      <!-- Header -->
+                      <div id="ogLiveHeader" style="display: flex; align-items: center; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                          <img id="ogLiveSchoolLogo" src="../assets/icons/school-logo.png" style="height: 38px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));" alt="School Logo">
+                          <img id="ogLiveSarawatLogo" src="../assets/icons/sarawat-logo.png" style="height: 38px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));" alt="Sarawat Logo">
+                        </div>
+                        <div id="ogLiveHeaderText" style="display: flex; flex-direction: column;">
+                          <div style="font-size: 13px; font-weight: 600; color: #f8fafc; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">องค์การสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                          <div style="font-size: 9px; color: #94a3b8;">SI-ROSTER • ระบบลงหน้าที่ออนไลน์</div>
+                        </div>
+                      </div>
+
+                      <!-- Center Title & Badges (Direct Overlay) -->
+                      <div id="ogLiveBody" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin: auto 0; width: 100%;">
+                        <div id="ogLiveBadgesRow" style="display: flex; flex-wrap: gap: 8px; margin-bottom: 10px;">
+                          <span id="ogLiveDateBadge" style="display: inline-flex; align-items: center; gap: 5px; background: rgba(30,41,59,0.75); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 500;">
+                            <i class="fa-regular fa-calendar"></i> <span id="ogLiveDateText">27 ก.ค. – 7 ส.ค. 2569</span>
+                          </span>
+                          <span id="ogLiveTimeBadge" style="display: inline-flex; align-items: center; gap: 5px; background: rgba(30,41,59,0.75); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 500;">
+                            <i class="fa-regular fa-clock"></i> <span id="ogLiveTimeText">16:48 น.</span>
+                          </span>
+                          <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(52,211,153,0.4); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 500;">
+                            <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px #34d399;"></span>
+                            <span>เปิดลงชื่อปฏิบัติหน้าที่</span>
+                          </span>
+                        </div>
+                        <h1 id="ogLiveTitle" style="font-size: 26px; font-weight: 700; line-height: 1.25; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.6); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0; word-break: break-word;">
+                          Section 1 (ชุดขุดแผน)
+                        </h1>
+                        <p id="ogLiveDesc" style="font-size: 13px; font-weight: 400; line-height: 1.45; color: #e2e8f0; text-shadow: 0 2px 8px rgba(0,0,0,0.8); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 6px; word-break: break-word;">
+                          ขอความร่วมมือสารวัตรนักเรียนทุกนายเตรียมพร้อมและลงชื่อปฏิบัติหน้าที่ตามจุดที่ได้รับมอบหมาย
+                        </p>
+                      </div>
+
+                      <!-- Footer -->
+                      <div id="ogLiveFooter" style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 8px;">
+                        <span style="font-size: 10px; color: #cbd5e1; display: flex; align-items: center; gap: 4px;">
+                          <i class="fa-solid fa-shield-halved"></i> OFFICIAL ROSTER • กลุ่มงานกิจการนักเรียน
+                        </span>
+                        <span style="font-size: 11px; font-weight: 600; color: #38bdf8;">
+                          roster.sarawatdc.site
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Preview Action Links -->
+                  <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div style="font-size: 0.82rem; color: var(--text-dim);">
+                      URL ภาพแชร์: <code id="ogPreviewUrlDisplay" style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.78rem;">/api/roster/og-image</code>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline" onclick="copyOgImageUrl()" style="font-size: 0.8rem; padding: 4px 10px;">
+                      <i class="fa-solid fa-copy"></i> คัดลอกลิงก์ภาพ
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Right Column: Settings Form -->
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px;">
+                  <h3 style="font-size: 1.05rem; font-weight: 600; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> ปรับแต่งการแสดงผลเทมเพลต
+                  </h3>
+
+                  <!-- Template Name -->
+                  <div class="form-group" style="margin-bottom: 14px;">
+                    <label style="font-size: 0.85rem; font-weight: 600;">ชื่อเทมเพลต</label>
+                    <input type="text" id="ogFormTmplName" class="input-control" value="แบนเนอร์ทางการ Facebook Banner" placeholder="ระบุชื่อเทมเพลต">
+                  </div>
+
+                  <!-- Background Choice -->
+                  <div class="form-group" style="margin-bottom: 14px;">
+                    <label style="font-size: 0.85rem; font-weight: 600;">ภาพพื้นหลัง (Background)</label>
+                    <select id="ogFormBgType" class="input-control" onchange="toggleOgBgType(this.value)">
+                      <option value="default">แบนเนอร์ทางการ Canva (Default Clean Banner)</option>
+                      <option value="custom">อัปโหลดภาพพื้นหลังเอง (Custom Upload)</option>
+                    </select>
+                    <div id="ogCustomBgUploadBox" style="display: none; margin-top: 10px;">
+                      <input type="file" id="ogBgFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="handleOgBgFileUpload(this)">
+                      <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="text" id="ogFormBgUrl" class="input-control" placeholder="ที่อยู่ไฟล์ภาพ หรือกดอัปโหลด" readonly style="font-size: 0.8rem;">
+                        <button type="button" class="btn btn-outline" onclick="document.getElementById('ogBgFileInput').click()" style="white-space: nowrap; font-size: 0.85rem;">
+                          <i class="fa-solid fa-upload"></i> อัปโหลดภาพ
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Alignment & Font -->
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 0.85rem; font-weight: 600;">การจัดวางข้อความ</label>
+                      <select id="ogFormTextAlign" class="input-control" onchange="triggerOgLiveUpdate()">
+                        <option value="left">ชิดซ้าย (Left)</option>
+                        <option value="center">กึ่งกลาง (Center)</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 0.85rem; font-weight: 600;">รูปแบบฟอนต์</label>
+                      <select id="ogFormFontFamily" class="input-control" onchange="triggerOgLiveUpdate()">
+                        <option value="Kanit">Kanit (มาตรฐาน)</option>
+                        <option value="Prompt">Prompt</option>
+                        <option value="Sarabun">Sarabun</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Title Typography -->
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 0.85rem; font-weight: 600;">สีชื่อกิจกรรม</label>
+                      <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="ogFormTitleColorPicker" value="#ffffff" onchange="document.getElementById('ogFormTitleColor').value=this.value; triggerOgLiveUpdate();" style="width: 38px; height: 38px; padding: 0; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                        <input type="text" id="ogFormTitleColor" class="input-control" value="#ffffff" onchange="document.getElementById('ogFormTitleColorPicker').value=this.value; triggerOgLiveUpdate();">
+                      </div>
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                      <label style="font-size: 0.85rem; font-weight: 600;">ขนาดตัวอักษร (px)</label>
+                      <input type="number" id="ogFormTitleSize" class="input-control" value="50" min="36" max="72" onchange="triggerOgLiveUpdate()">
+                    </div>
+                  </div>
+
+                  <!-- Logos Switch Group -->
+                  <div style="margin-bottom: 16px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+                    <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px;">การแสดงผลตราสัญลักษณ์</label>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                        <input type="checkbox" id="ogFormShowSchoolLogo" checked onchange="triggerOgLiveUpdate()">
+                        <span>แสดงตราโรงเรียนเดชะปัตตนยานุกูล</span>
+                      </label>
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                        <input type="checkbox" id="ogFormShowSarawatLogo" checked onchange="triggerOgLiveUpdate()">
+                        <span>แสดงตราองค์การสารวัตรนักเรียน</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Description Settings -->
+                  <div style="margin-bottom: 16px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+                    <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px;">ข้อความคำอธิบายกิจกรรม</label>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                        <input type="checkbox" id="ogFormShowDesc" checked onchange="triggerOgLiveUpdate()">
+                        <span>แสดงคำอธิบายกิจกรรมบนแบนเนอร์</span>
+                      </label>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+                        <div>
+                          <label style="font-size: 0.78rem; color: var(--text-dim);">สีตัวอักษร</label>
+                          <div style="display: flex; gap: 6px; align-items: center;">
+                            <input type="color" id="ogFormDescColorPicker" value="#e2e8f0" onchange="document.getElementById('ogFormDescColor').value=this.value; triggerOgLiveUpdate();" style="width: 32px; height: 32px; padding: 0; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">
+                            <input type="text" id="ogFormDescColor" class="input-control" value="#e2e8f0" onchange="document.getElementById('ogFormDescColorPicker').value=this.value; triggerOgLiveUpdate();" style="font-size: 0.8rem; padding: 4px 8px;">
+                          </div>
+                        </div>
+                        <div>
+                          <label style="font-size: 0.78rem; color: var(--text-dim);">ตัดบรรทัดสูงสุด</label>
+                          <select id="ogFormDescMaxLines" class="input-control" onchange="triggerOgLiveUpdate()" style="font-size: 0.8rem; padding: 4px 8px;">
+                            <option value="2">2 บรรทัด</option>
+                            <option value="3" selected>3 บรรทัด</option>
+                            <option value="4">4 บรรทัด</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Badges Switch Group -->
+                  <div style="margin-bottom: 20px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+                    <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 8px;">ป้ายข้อมูลวันที่และเวลา</label>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                        <input type="checkbox" id="ogFormShowDateBadge" checked onchange="triggerOgLiveUpdate()">
+                        <span>ป้ายวันที่</span>
+                      </label>
+                      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                        <input type="checkbox" id="ogFormShowTimeBadge" checked onchange="triggerOgLiveUpdate()">
+                        <span>ป้ายเวลา</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Save Button -->
+                  <button type="button" class="btn btn-primary btn-block" onclick="saveOgTemplateFromForm()" style="padding: 10px; font-size: 0.95rem;">
+                    <i class="fa-solid fa-floppy-disk"></i> บันทึกการตั้งค่าเทมเพลต (Save Settings)
+                  </button>
                 </div>
 
               </div>
@@ -8390,7 +8678,8 @@ body.dark-mode .signup-success-banner,
         'admins': 'จัดการแอดมิน',
         'logs': 'ประวัติการแก้ไขกิจกรรม',
         'realtime': 'รายงานสรุป (แบบสด)',
-        'audio': 'ระบบเสียงและระบบสั่นสัมผัส (Sound & Haptic)'
+        'audio': 'ระบบเสียงและระบบสั่นสัมผัส (Sound & Haptic)',
+        'og-templates': 'เทมเพลตภาพแชร์ (Dynamic OG Image)'
       };
       const titleEl = document.getElementById('dashTitle');
       if (titleEl && titles[tabId]) titleEl.textContent = titles[tabId];
@@ -8420,6 +8709,7 @@ body.dark-mode .signup-success-banner,
       if (tabId === 'logs') loadAdminLogsTab();
       if (tabId === 'realtime') initDashRealtime();
       if (tabId === 'audio') { updateAdminSoundButtonUI(); updateAdminHapticButtonUI(); }
+      if (tabId === 'og-templates') loadOgTemplatesTab();
       if (tabId !== 'realtime' && typeof stopDashRealtimeSync === 'function') stopDashRealtimeSync();
     }
 
@@ -11150,6 +11440,7 @@ body.dark-mode .signup-success-banner,
         document.getElementById(`quota-${i}`).value = '0';
       });
 
+      updateModalOgPreview(null);
       document.getElementById('activityModal').classList.add('active');
     }
 
@@ -11182,6 +11473,7 @@ body.dark-mode .signup-success-banner,
         document.getElementById(`quota-${i}`).value = found ? found.quota : '0';
       });
 
+      updateModalOgPreview(act);
       document.getElementById('activityModal').classList.add('active');
     }
 
@@ -12899,6 +13191,334 @@ body.dark-mode .signup-success-banner,
 
       document.getElementById('diffModalContent').innerHTML = html;
       document.getElementById('diffLogsModal').classList.add('active');
+    }
+
+    // ---------------------------------------------------------------------------
+    // 🖼️ Dynamic OG Image Admin Controller & Live Preview
+    // ---------------------------------------------------------------------------
+    let currentOgTemplates = [];
+    let activeOgTemplate = null;
+    let selectedOgActivity = null;
+
+    async function loadOgTemplatesTab() {
+      // 1. Populate activity dropdown
+      const actSelect = document.getElementById('ogPreviewActivitySelect');
+      if (actSelect) {
+        let opts = '<option value="">-- กิจกรรมเริ่มต้น (Default Sample) --</option>';
+        if (typeof dashAllActivities !== 'undefined' && Array.isArray(dashAllActivities) && dashAllActivities.length > 0) {
+          dashAllActivities.forEach(a => {
+            const sid = a.sheetName || a.id;
+            opts += `<option value="${sid}">${escapeHtml(a.title || sid)} (${a.dateStr || ''})</option>`;
+          });
+        }
+        actSelect.innerHTML = opts;
+      }
+
+      // 2. Fetch templates
+      try {
+        if (typeof window.getRosterOgTemplates === 'function') {
+          currentOgTemplates = await window.getRosterOgTemplates();
+        } else if (typeof google !== 'undefined' && google.script) {
+          currentOgTemplates = await new Promise(resolve => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(() => resolve([])).getOgTemplates();
+          });
+        }
+      } catch (e) {
+        console.warn('Error loading OG templates:', e);
+      }
+
+      if (currentOgTemplates && currentOgTemplates.length > 0) {
+        activeOgTemplate = currentOgTemplates.find(t => t.is_default === 1) || currentOgTemplates[0];
+      } else {
+        activeOgTemplate = {
+          id: 1,
+          template_name: 'แบนเนอร์ทางการ Facebook Banner',
+          bg_image_url: '/uploads/templates/roster_og_default_banner.png',
+          font_family: 'Kanit',
+          text_align: 'left',
+          title_color: '#ffffff',
+          title_font_size: 50,
+          desc_color: '#e2e8f0',
+          desc_max_lines: 3,
+          show_description: 1,
+          show_school_logo: 1,
+          show_sarawat_logo: 1,
+          show_date_badge: 1,
+          show_time_badge: 1,
+          is_default: 1
+        };
+      }
+
+      populateOgTemplateForm(activeOgTemplate);
+      triggerOgLiveUpdate();
+    }
+
+    function populateOgTemplateForm(tmpl) {
+      if (!tmpl) return;
+      const el = id => document.getElementById(id);
+      if (el('ogFormTmplName')) el('ogFormTmplName').value = tmpl.template_name || '';
+      if (el('ogFormTextAlign')) el('ogFormTextAlign').value = tmpl.text_align || 'left';
+      if (el('ogFormFontFamily')) el('ogFormFontFamily').value = tmpl.font_family || 'Kanit';
+      if (el('ogFormTitleColor')) el('ogFormTitleColor').value = tmpl.title_color || '#ffffff';
+      if (el('ogFormTitleColorPicker')) el('ogFormTitleColorPicker').value = tmpl.title_color || '#ffffff';
+      if (el('ogFormTitleSize')) el('ogFormTitleSize').value = tmpl.title_font_size || 50;
+      if (el('ogFormShowSchoolLogo')) el('ogFormShowSchoolLogo').checked = tmpl.show_school_logo !== 0 && tmpl.show_school_logo !== false;
+      if (el('ogFormShowSarawatLogo')) el('ogFormShowSarawatLogo').checked = tmpl.show_sarawat_logo !== 0 && tmpl.show_sarawat_logo !== false;
+      if (el('ogFormShowDesc')) el('ogFormShowDesc').checked = tmpl.show_description !== 0 && tmpl.show_description !== false;
+      if (el('ogFormDescColor')) el('ogFormDescColor').value = tmpl.desc_color || '#e2e8f0';
+      if (el('ogFormDescColorPicker')) el('ogFormDescColorPicker').value = tmpl.desc_color || '#e2e8f0';
+      if (el('ogFormDescMaxLines')) el('ogFormDescMaxLines').value = tmpl.desc_max_lines || 3;
+      if (el('ogFormShowDateBadge')) el('ogFormShowDateBadge').checked = tmpl.show_date_badge !== 0 && tmpl.show_date_badge !== false;
+      if (el('ogFormShowTimeBadge')) el('ogFormShowTimeBadge').checked = tmpl.show_time_badge !== 0 && tmpl.show_time_badge !== false;
+
+      const isCustomBg = tmpl.bg_image_url && !tmpl.bg_image_url.includes('roster_og_default_banner.png');
+      if (el('ogFormBgType')) el('ogFormBgType').value = isCustomBg ? 'custom' : 'default';
+      toggleOgBgType(isCustomBg ? 'custom' : 'default');
+      if (el('ogFormBgUrl')) el('ogFormBgUrl').value = tmpl.bg_image_url || '';
+    }
+
+    function toggleOgBgType(type) {
+      const box = document.getElementById('ogCustomBgUploadBox');
+      if (box) box.style.display = type === 'custom' ? 'block' : 'none';
+      if (type === 'default') {
+        const urlInput = document.getElementById('ogFormBgUrl');
+        if (urlInput) urlInput.value = '/uploads/templates/roster_og_default_banner.png';
+      }
+      triggerOgLiveUpdate();
+    }
+
+    function triggerOgLiveUpdate() {
+      const el = id => document.getElementById(id);
+      const bgLayer = el('ogLiveBgLayer');
+      const titleEl = el('ogLiveTitle');
+      const descEl = el('ogLiveDesc');
+      const schoolLogo = el('ogLiveSchoolLogo');
+      const sarawatLogo = el('ogLiveSarawatLogo');
+      const dateBadge = el('ogLiveDateBadge');
+      const timeBadge = el('ogLiveTimeBadge');
+      const badgesRow = el('ogLiveBadgesRow');
+      const bodyEl = el('ogLiveBody');
+      const headerEl = el('ogLiveHeader');
+      const footerEl = el('ogLiveFooter');
+      const containerEl = el('ogLiveContentContainer');
+
+      const textAlign = el('ogFormTextAlign') ? el('ogFormTextAlign').value : 'left';
+      const isCenter = textAlign === 'center';
+      const fontFamily = el('ogFormFontFamily') ? el('ogFormFontFamily').value : 'Kanit';
+      const titleColor = el('ogFormTitleColor') ? el('ogFormTitleColor').value : '#ffffff';
+      const titleSize = parseInt(el('ogFormTitleSize') ? el('ogFormTitleSize').value : 50, 10);
+      const descColor = el('ogFormDescColor') ? el('ogFormDescColor').value : '#e2e8f0';
+      const descMaxLines = el('ogFormDescMaxLines') ? el('ogFormDescMaxLines').value : 3;
+      const showDesc = el('ogFormShowDesc') ? el('ogFormShowDesc').checked : true;
+      const showSchool = el('ogFormShowSchoolLogo') ? el('ogFormShowSchoolLogo').checked : true;
+      const showSarawat = el('ogFormShowSarawatLogo') ? el('ogFormShowSarawatLogo').checked : true;
+      const showDate = el('ogFormShowDateBadge') ? el('ogFormShowDateBadge').checked : true;
+      const showTime = el('ogFormShowTimeBadge') ? el('ogFormShowTimeBadge').checked : true;
+      const bgType = el('ogFormBgType') ? el('ogFormBgType').value : 'default';
+      const customBgUrl = el('ogFormBgUrl') ? el('ogFormBgUrl').value : '';
+
+      if (bgLayer) {
+        if (bgType === 'custom' && customBgUrl) {
+          bgLayer.style.backgroundImage = `url('${customBgUrl}')`;
+        } else {
+          bgLayer.style.backgroundImage = "url('/uploads/templates/roster_og_default_banner.png'), url('../assets/images/roster_og_default_banner.png')";
+        }
+      }
+
+      if (containerEl) {
+        containerEl.style.fontFamily = `'${fontFamily}', 'Prompt', sans-serif`;
+      }
+      if (headerEl) {
+        headerEl.style.justifyContent = isCenter ? 'center' : 'flex-start';
+      }
+      if (bodyEl) {
+        bodyEl.style.alignItems = isCenter ? 'center' : 'flex-start';
+        bodyEl.style.textAlign = textAlign;
+      }
+      if (badgesRow) {
+        badgesRow.style.justifyContent = isCenter ? 'center' : 'flex-start';
+      }
+      if (footerEl) {
+        footerEl.style.justifyContent = isCenter ? 'center' : 'space-between';
+      }
+
+      if (titleEl) {
+        titleEl.style.color = titleColor;
+        titleEl.style.fontSize = Math.round(titleSize * 0.52) + 'px';
+      }
+      if (descEl) {
+        descEl.style.display = showDesc ? '-webkit-box' : 'none';
+        descEl.style.color = descColor;
+        descEl.style.webkitLineClamp = descMaxLines;
+      }
+
+      if (schoolLogo) schoolLogo.style.display = showSchool ? 'block' : 'none';
+      if (sarawatLogo) sarawatLogo.style.display = showSarawat ? 'block' : 'none';
+      if (dateBadge) dateBadge.style.display = showDate ? 'inline-flex' : 'none';
+      if (timeBadge) timeBadge.style.display = showTime ? 'inline-flex' : 'none';
+
+      const actId = selectedOgActivity ? (selectedOgActivity.sheetName || selectedOgActivity.id) : (dashAllActivities && dashAllActivities[0] ? (dashAllActivities[0].sheetName || dashAllActivities[0].id) : 'SAMPLE');
+      const urlEl = el('ogPreviewUrlDisplay');
+      if (urlEl) {
+        urlEl.textContent = `/api/roster/og-image?id=${actId}`;
+      }
+    }
+
+    function changeOgPreviewActivity(sheetName) {
+      if (!sheetName) {
+        selectedOgActivity = null;
+        document.getElementById('ogLiveTitle').textContent = 'Section 1 (ชุดขุดแผน)';
+        document.getElementById('ogLiveDesc').textContent = 'ขอความร่วมมือสารวัตรนักเรียนทุกนายเตรียมพร้อมและลงชื่อปฏิบัติหน้าที่ตามจุดที่ได้รับมอบหมาย';
+        document.getElementById('ogLiveDateText').textContent = '27 ก.ค. – 7 ส.ค. 2569';
+        document.getElementById('ogLiveTimeText').textContent = '16:48 น.';
+      } else {
+        const found = (typeof dashAllActivities !== 'undefined' && Array.isArray(dashAllActivities)) ? dashAllActivities.find(a => (a.sheetName === sheetName || String(a.id) === sheetName)) : null;
+        if (found) {
+          selectedOgActivity = found;
+          document.getElementById('ogLiveTitle').textContent = found.title || sheetName;
+          document.getElementById('ogLiveDesc').textContent = (found.description || '').replace(/[#*`_]/g, '') || '';
+          document.getElementById('ogLiveDateText').textContent = found.dateStr || '';
+          document.getElementById('ogLiveTimeText').textContent = found.startTime ? (new Date(found.startTime).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.') : '16:48 น.';
+        }
+      }
+      triggerOgLiveUpdate();
+    }
+
+    async function handleOgBgFileUpload(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const formData = new FormData();
+      formData.append('bgImage', file);
+
+      try {
+        let currentRosterToken = '';
+        try {
+          const stored = localStorage.getItem('adminAuth');
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed && (!parsed.expires || Date.now() <= parsed.expires)) {
+              const decoded = decodeURIComponent(atob(parsed.data));
+              const authObj = JSON.parse(decoded);
+              if (authObj && authObj.token) currentRosterToken = authObj.token;
+            }
+          }
+        } catch (e) {}
+
+        const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
+        const res = await fetch(`${apiBase}/api/roster/upload-og-bg`, {
+          method: 'POST',
+          headers: {
+            'X-Roster-Token': currentRosterToken,
+            'Authorization': 'Bearer ' + currentRosterToken
+          },
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success && data.url) {
+          document.getElementById('ogFormBgUrl').value = data.url;
+          triggerOgLiveUpdate();
+          showToast('อัปโหลดภาพพื้นหลังสำเร็จ');
+        } else {
+          showToast(data.error || 'อัปโหลดภาพไม่สำเร็จ', 'error');
+        }
+      } catch (err) {
+        showToast('เกิดข้อผิดพลาดในการอัปโหลดภาพ', 'error');
+      }
+    }
+
+    async function saveOgTemplateFromForm() {
+      const el = id => document.getElementById(id);
+      const tmplData = {
+        id: activeOgTemplate ? activeOgTemplate.id : null,
+        template_name: el('ogFormTmplName') ? el('ogFormTmplName').value : 'เทมเพลตภาพแชร์',
+        bg_image_url: el('ogFormBgUrl') ? el('ogFormBgUrl').value : '/uploads/templates/roster_og_default_banner.png',
+        font_family: el('ogFormFontFamily') ? el('ogFormFontFamily').value : 'Kanit',
+        text_align: el('ogFormTextAlign') ? el('ogFormTextAlign').value : 'left',
+        title_color: el('ogFormTitleColor') ? el('ogFormTitleColor').value : '#ffffff',
+        title_font_size: parseInt(el('ogFormTitleSize') ? el('ogFormTitleSize').value : 50, 10),
+        title_max_lines: 2,
+        desc_color: el('ogFormDescColor') ? el('ogFormDescColor').value : '#e2e8f0',
+        desc_max_lines: parseInt(el('ogFormDescMaxLines') ? el('ogFormDescMaxLines').value : 3, 10),
+        show_description: el('ogFormShowDesc') ? (el('ogFormShowDesc').checked ? 1 : 0) : 1,
+        show_school_logo: el('ogFormShowSchoolLogo') ? (el('ogFormShowSchoolLogo').checked ? 1 : 0) : 1,
+        show_sarawat_logo: el('ogFormShowSarawatLogo') ? (el('ogFormShowSarawatLogo').checked ? 1 : 0) : 1,
+        show_date_badge: el('ogFormShowDateBadge') ? (el('ogFormShowDateBadge').checked ? 1 : 0) : 1,
+        show_time_badge: el('ogFormShowTimeBadge') ? (el('ogFormShowTimeBadge').checked ? 1 : 0) : 1,
+        is_default: 1
+      };
+
+      try {
+        let res;
+        if (typeof window.saveRosterOgTemplate === 'function') {
+          res = await window.saveRosterOgTemplate(tmplData);
+        } else if (typeof google !== 'undefined' && google.script) {
+          res = await new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).saveOgTemplate(tmplData);
+          });
+        }
+        if (res && res.success) {
+          showToast('บันทึกการตั้งค่าเทมเพลตภาพแชร์เรียบร้อยแล้ว');
+          if (activeOgTemplate) Object.assign(activeOgTemplate, tmplData);
+        } else {
+          showToast(res ? (res.message || res.error) : 'บันทึกไม่สำเร็จ', 'error');
+        }
+      } catch (err) {
+        showToast(err.message || 'บันทึกไม่สำเร็จ', 'error');
+      }
+    }
+
+    function openLiveServerOgImage() {
+      const actId = selectedOgActivity ? (selectedOgActivity.sheetName || selectedOgActivity.id) : (dashAllActivities && dashAllActivities[0] ? (dashAllActivities[0].sheetName || dashAllActivities[0].id) : 'SAMPLE');
+      const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
+      const url = `${apiBase}/api/roster/og-image?id=${encodeURIComponent(actId)}&preview=1&_t=${Date.now()}`;
+      window.open(url, '_blank');
+    }
+
+    function copyOgImageUrl() {
+      const actId = selectedOgActivity ? (selectedOgActivity.sheetName || selectedOgActivity.id) : (dashAllActivities && dashAllActivities[0] ? (dashAllActivities[0].sheetName || dashAllActivities[0].id) : 'SAMPLE');
+      const url = `https://api.sarawatdc.site/api/roster/og-image?id=${encodeURIComponent(actId)}`;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('คัดลอกลิงก์รูปภาพเรียบร้อยแล้ว');
+      }).catch(() => {
+        prompt('คัดลอกลิงก์รูปภาพ:', url);
+      });
+    }
+
+    function copyActivityShareLink() {
+      let sheetName = '';
+      if (selectedDateInfo && selectedDateInfo.activity) {
+        sheetName = selectedDateInfo.activity.sheetName || selectedDateInfo.activity.id || '';
+      }
+      if (!sheetName) {
+        showToast('กรุณากด "บันทึกกิจกรรม" ก่อนคัดลอกลิงก์แชร์เฉพาะกิจกรรมนี้', 'info');
+        return;
+      }
+      const shareUrl = `https://roster.sarawatdc.site/?id=${encodeURIComponent(sheetName)}`;
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showToast('คัดลอกลิงก์กิจกรรมเรียบร้อยแล้ว นำไปแชร์ได้ทันที');
+      }).catch(() => {
+        prompt('คัดลอกลิงก์กิจกรรม:', shareUrl);
+      });
+    }
+
+    function updateModalOgPreview(act) {
+      const titleEl = document.getElementById('actModalOgTitle');
+      const descEl = document.getElementById('actModalOgDesc');
+      const dateTextEl = document.getElementById('actModalOgDateText');
+      if (!titleEl) return;
+
+      if (act) {
+        titleEl.textContent = act.title || 'ชื่อกิจกรรม';
+        descEl.textContent = (act.description || '').replace(/[#*`_]/g, '') || 'รายละเอียดกิจกรรม';
+        dateTextEl.textContent = act.dateStr || '-';
+      } else {
+        const titleInput = document.getElementById('actTitle');
+        const descInput = document.getElementById('actDesc');
+        const dateInput = document.getElementById('actDateInput') || document.getElementById('actStartDate');
+        titleEl.textContent = (titleInput && titleInput.value) ? titleInput.value : 'ชื่อกิจกรรมใหม่';
+        descEl.textContent = (descInput && descInput.value) ? descInput.value.replace(/[#*`_]/g, '') : 'รายละเอียดกิจกรรม';
+        dateTextEl.textContent = (dateInput && dateInput.value) ? dateInput.value : '-';
+      }
     }
   </script>
 </body>
