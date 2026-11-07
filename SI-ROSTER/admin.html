@@ -13608,8 +13608,7 @@ body.dark-mode .signup-success-banner,
         return;
       }
 
-      const version = (act && act.updated_at) ? new Date(act.updated_at).getTime() : Date.now();
-      const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}&v=${version}`;
+      const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}`;
       const shareData = {
         title: `${(act && act.title) ? act.title : 'กิจกรรม'} | ระบบลงหน้าที่สารวัตรนักเรียน`,
         text: `ขอเชิญลงหน้าที่กิจกรรม "${(act && act.title) ? act.title : ''}" วันที่ ${(act && (act.dateStr || act.date)) ? (act.dateStr || act.date) : ''} (SI-ROSTER)`,

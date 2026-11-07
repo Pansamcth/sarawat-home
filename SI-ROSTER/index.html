@@ -9222,8 +9222,7 @@ body.dark-mode .signup-success-banner,
         showToast('ไม่พบรหัสกิจกรรมสำหรับแชร์', 'error');
         return;
       }
-      const version = act.updated_at ? new Date(act.updated_at).getTime() : Date.now();
-      const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}&v=${version}`;
+      const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}`;
       const shareData = {
         title: `${act.title} | ระบบลงหน้าที่สารวัตรนักเรียน`,
         text: `ขอเชิญลงหน้าที่กิจกรรม "${act.title}" วันที่ ${act.dateStr || act.date || ''} (SI-ROSTER)`,
