@@ -2198,6 +2198,46 @@
       margin-bottom: 0;
     }
 
+    .btn-share-modal {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      height: 32px;
+      box-sizing: border-box;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .btn-share-modal i {
+      color: #2563eb;
+      font-size: 0.85rem;
+    }
+
+    .btn-share-modal:hover {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .btn-share-modal:hover i {
+      color: #60a5fa;
+    }
+
+    .btn-share-modal:active {
+      transform: translateY(0);
+    }
+
     /* ===== DUTY CARD (DIEGO MINIMALIST) ===== */
     .duty-card {
       background: #ffffff;
@@ -5090,6 +5130,25 @@ body.dark-mode .signup-success-banner,
       color: #94a3b8 !important;
     }
 
+    [data-theme="dark"] .btn-share-modal,
+    body.dark-mode .btn-share-modal {
+      background: #1e293b !important;
+      color: #f8fafc !important;
+      border-color: #253046 !important;
+    }
+
+    [data-theme="dark"] .btn-share-modal i,
+    body.dark-mode .btn-share-modal i {
+      color: #60a5fa !important;
+    }
+
+    [data-theme="dark"] .btn-share-modal:hover,
+    body.dark-mode .btn-share-modal:hover {
+      background: #334155 !important;
+      color: #ffffff !important;
+      border-color: #475569 !important;
+    }
+
     [data-theme="dark"] .close-modal,
     body.dark-mode .close-modal {
       background: #1e293b !important;
@@ -6218,6 +6277,9 @@ body.dark-mode .signup-success-banner,
         <div class="modal-header-meta">
           <div class="modal-date" id="modalDate"><i class="fa-regular fa-calendar"></i> <span></span></div>
           <div class="status-badge" id="modalTimerContainer" style="display: none;"></div>
+          <button type="button" class="btn-share-modal" id="btnShareDetailModal" onclick="shareCurrentActivityUser()" title="แชร์กิจกรรมนี้">
+            <i class="fa-solid fa-share-nodes"></i> <span>แชร์กิจกรรม</span>
+          </button>
         </div>
         <h2 class="modal-title" id="modalTitle">รายละเอียดกิจกรรม</h2>
       </div>
@@ -9146,6 +9208,47 @@ body.dark-mode .signup-success-banner,
     } else {
       initRosterBottomSheetDrag('detailModal', '.modal-content', '.roster-modal-drag-handle', () => closeModal('detailModal'));
       initRosterBottomSheetDrag('statusSearchModal', '.modal-content', '.roster-modal-drag-handle', () => closeModal('statusSearchModal'));
+    }
+
+    // --- Share Activity Function ---
+    async function shareCurrentActivityUser() {
+      if (!selectedDateInfo || !selectedDateInfo.activity) {
+        showToast('ไม่พบข้อมูลกิจกรรมที่จะแชร์', 'error');
+        return;
+      }
+      const act = selectedDateInfo.activity;
+      const sheetName = act.sheetName || act.id || '';
+      if (!sheetName) {
+        showToast('ไม่พบรหัสกิจกรรมสำหรับแชร์', 'error');
+        return;
+      }
+      const version = act.updated_at ? new Date(act.updated_at).getTime() : Date.now();
+      const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}&v=${version}`;
+      const shareData = {
+        title: `${act.title} | ระบบลงหน้าที่สารวัตรนักเรียน`,
+        text: `ขอเชิญลงหน้าที่กิจกรรม "${act.title}" วันที่ ${act.dateStr || act.date || ''} (SI-ROSTER)`,
+        url: shareUrl
+      };
+
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+      if (navigator.share && isMobile) {
+        try {
+          await navigator.share(shareData);
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') return;
+        }
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('คัดลอกลิงก์สำหรับแชร์เรียบร้อยแล้ว', 'success');
+        }).catch(() => {
+          prompt('คัดลอกลิงก์กิจกรรม:', shareUrl);
+        });
+      } else {
+        prompt('คัดลอกลิงก์กิจกรรม:', shareUrl);
+      }
     }
 
     // --- Detail Modal ---

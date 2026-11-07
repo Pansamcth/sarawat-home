@@ -3585,6 +3585,47 @@ body.dark-mode .signup-success-banner,
       box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
     }
 
+    .btn-share-editor {
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #0284c7;
+      border: 1.5px solid #bae6fd;
+      background: #f0f9ff;
+      border-radius: var(--border-radius, 8px);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-share-editor:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-share-editor:active {
+      transform: translateY(0);
+    }
+
+    [data-theme="dark"] .btn-share-editor,
+    body.dark-mode .btn-share-editor {
+      background: rgba(2, 132, 199, 0.15);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+
+    [data-theme="dark"] .btn-share-editor:hover,
+    body.dark-mode .btn-share-editor:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
     .btn-delete-editor {
       padding: 12px 18px;
       font-size: 0.95rem;
@@ -4465,8 +4506,8 @@ body.dark-mode .signup-success-banner,
             <label style="margin: 0; font-size: 13px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
               <i class="fa-solid fa-image" style="color: var(--primary);"></i> ตัวอย่างภาพแชร์ (OG Image Preview)
             </label>
-            <button type="button" class="btn btn-sm btn-outline" id="btnCopyActShareLink" onclick="copyActivityShareLink()" style="font-size: 12px; padding: 4px 10px; border-radius: 6px;">
-              <i class="fa-solid fa-link"></i> <span>คัดลอกลิงก์กิจกรรม</span>
+            <button type="button" class="btn btn-sm btn-outline" id="btnCopyActShareLink" onclick="shareCurrentActivityAdmin()" style="font-size: 12px; padding: 4px 10px; border-radius: 6px;">
+              <i class="fa-solid fa-share-nodes"></i> <span>แชร์กิจกรรม</span>
             </button>
           </div>
           <div id="actModalOgPreviewWrapper" style="width: 100%; aspect-ratio: 1200 / 630; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #ffffff; position: relative;">
@@ -4812,6 +4853,9 @@ body.dark-mode .signup-success-banner,
             <div class="editor-modal-footer">
               <button type="button" class="btn btn-primary btn-save-editor" id="btnSaveActivityDash" onclick="submitActivityFromEditor()">
                 <i class="fa-solid fa-floppy-disk"></i> บันทึกกิจกรรม
+              </button>
+              <button type="button" class="btn btn-outline btn-share-editor" id="btnShareActivityDash" onclick="shareCurrentActivityAdmin()" style="display:none;" title="แชร์กิจกรรมนี้">
+                <i class="fa-solid fa-share-nodes"></i> <span>แชร์กิจกรรม</span>
               </button>
               <button type="button" class="btn btn-danger btn-delete-editor" id="btnDeleteActivityDash" onclick="deleteActivityFromEditor()" style="display:none;">
                 <i class="fa-solid fa-trash-can"></i> ลบกิจกรรมนี้
@@ -9490,6 +9534,7 @@ body.dark-mode .signup-success-banner,
 
       document.getElementById('btnSaveActivityDash').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> สร้างกิจกรรมใหม่';
       document.getElementById('btnDeleteActivityDash').style.display = 'none';
+      if (document.getElementById('btnShareActivityDash')) document.getElementById('btnShareActivityDash').style.display = 'none';
       document.getElementById('dashActivityEditorModal').classList.add('active');
     }
 
@@ -9547,6 +9592,7 @@ body.dark-mode .signup-success-banner,
 
       document.getElementById('btnSaveActivityDash').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> บันทึกการเปลี่ยนแปลง';
       document.getElementById('btnDeleteActivityDash').style.display = 'block';
+      if (document.getElementById('btnShareActivityDash')) document.getElementById('btnShareActivityDash').style.display = 'inline-flex';
       document.getElementById('dashActivityEditorModal').classList.add('active');
     }
 
@@ -13543,22 +13589,56 @@ body.dark-mode .signup-success-banner,
       });
     }
 
-    function copyActivityShareLink() {
+    async function shareCurrentActivityAdmin() {
+      let act = null;
       let sheetName = '';
-      if (selectedDateInfo && selectedDateInfo.activity) {
-        sheetName = selectedDateInfo.activity.sheetName || selectedDateInfo.activity.id || '';
+
+      if (selectedDashActivityStr && Array.isArray(dashAllActivities)) {
+        act = dashAllActivities.find(a => a.sheetName === selectedDashActivityStr);
       }
+      if (!act && selectedDateInfo && selectedDateInfo.activity) {
+        act = selectedDateInfo.activity;
+      }
+      if (act) {
+        sheetName = act.sheetName || act.id || '';
+      }
+
       if (!sheetName) {
-        showToast('กรุณากด "บันทึกกิจกรรม" ก่อนคัดลอกลิงก์แชร์เฉพาะกิจกรรมนี้', 'info');
+        showToast('กรุณากด "บันทึกกิจกรรม" ก่อนแชร์ลิงก์เฉพาะกิจกรรมนี้', 'info');
         return;
       }
-      const version = (selectedDateInfo && selectedDateInfo.activity && selectedDateInfo.activity.updated_at) ? new Date(selectedDateInfo.activity.updated_at).getTime() : Date.now();
+
+      const version = (act && act.updated_at) ? new Date(act.updated_at).getTime() : Date.now();
       const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}&v=${version}`;
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        showToast('คัดลอกลิงก์กิจกรรมเรียบร้อยแล้ว นำไปแชร์ได้ทันที');
-      }).catch(() => {
+      const shareData = {
+        title: `${(act && act.title) ? act.title : 'กิจกรรม'} | ระบบลงหน้าที่สารวัตรนักเรียน`,
+        text: `ขอเชิญลงหน้าที่กิจกรรม "${(act && act.title) ? act.title : ''}" วันที่ ${(act && (act.dateStr || act.date)) ? (act.dateStr || act.date) : ''} (SI-ROSTER)`,
+        url: shareUrl
+      };
+
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+      if (navigator.share && isMobile) {
+        try {
+          await navigator.share(shareData);
+          return;
+        } catch (e) {
+          if (e.name === 'AbortError') return;
+        }
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('คัดลอกลิงก์กิจกรรมเรียบร้อยแล้ว นำไปแชร์ได้ทันที');
+        }).catch(() => {
+          prompt('คัดลอกลิงก์กิจกรรม:', shareUrl);
+        });
+      } else {
         prompt('คัดลอกลิงก์กิจกรรม:', shareUrl);
-      });
+      }
+    }
+
+    function copyActivityShareLink() {
+      return shareCurrentActivityAdmin();
     }
 
     function updateModalOgPreview(act) {
