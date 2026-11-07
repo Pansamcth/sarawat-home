@@ -954,6 +954,7 @@
       letter-spacing: -0.5px;
       background: linear-gradient(135deg, #000000 0%, #1e1b4b 100%);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       color: #000000;
       /* Fallback */
@@ -4482,8 +4483,8 @@ body.dark-mode .signup-success-banner,
               </div>
               <div style="margin: auto 0; transform: translateY(-4px);">
                 <div id="actModalOgDateText" style="font-size: 12px; font-weight: 700; color: #000000; line-height: 1.2; margin-bottom: 2px;">{{activity_date}}</div>
-                <div id="actModalOgTitle" style="font-size: 20px; font-weight: 900; color: #000000; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 3px; word-break: break-word;">{{activity_name}}</div>
-                <div id="actModalOgDesc" style="font-size: 11px; font-weight: 600; color: #111111; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word;">{{activity_description}}</div>
+                <div id="actModalOgTitle" style="font-size: 20px; font-weight: 900; color: #000000; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 3px; word-break: break-word;">{{activity_name}}</div>
+                <div id="actModalOgDesc" style="font-size: 11px; font-weight: 600; color: #111111; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word;">{{activity_description}}</div>
               </div>
               <div>
                 <div style="border-top: 1px solid rgba(0, 0, 0, 0.4); margin-bottom: 4px;"></div>
@@ -4542,6 +4543,11 @@ body.dark-mode .signup-success-banner,
         <div class="sidebar-item" onclick="switchDashTab('history')">
           <i class="fa-solid fa-clock-rotate-left"></i>
           <span>ประวัติกิจกรรม</span>
+        </div>
+        <div class="sidebar-item" id="adminMenuTrash" onclick="switchDashTab('trash')">
+          <i class="fa-solid fa-trash-can" style="color: #ef4444;"></i>
+          <span>ถังขยะกิจกรรม</span>
+          <span class="badge" id="sidebarTrashBadge" style="margin-left: auto; background: #ef4444; color: #fff; font-size: 11px; padding: 2px 7px; border-radius: 9999px; display: none;">0</span>
         </div>
         <div class="sidebar-item" onclick="switchDashTab('students')">
           <i class="fa-solid fa-users"></i>
@@ -4817,6 +4823,44 @@ body.dark-mode .signup-success-banner,
           </div>
         </div>
 
+
+        <!-- Activity Trash Tab (Safety Bin) -->
+        <div id="tab-trash" class="dash-tab">
+          <div class="data-panel">
+            <div class="data-panel-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <h2><i class="fa-solid fa-trash-can" style="color: #ef4444;"></i> ถังขยะกิจกรรม (Activity Trash)</h2>
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-outline" onclick="loadTrashTab()" title="รีเฟรชรายการในถังขยะ">
+                  <i class="fa-solid fa-arrows-rotate"></i> รีเฟรช
+                </button>
+                <button type="button" class="btn btn-danger" onclick="confirmEmptyTrash()" id="btnEmptyTrash" style="display: none;">
+                  <i class="fa-solid fa-fire"></i> ล้างถังขยะทั้งหมด (Empty Trash)
+                </button>
+              </div>
+            </div>
+
+            <div style="padding: 24px;">
+              <!-- Safety info banner -->
+              <div style="background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(15,23,42,0.6) 100%); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 14px 18px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px;">
+                <i class="fa-solid fa-shield-halved" style="color: #ef4444; font-size: 1.6rem; flex-shrink: 0;"></i>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.98rem; color: #f8fafc;">ระบบป้องกันการลบข้อมูลผิดพลาด (Safety Trash Bin)</div>
+                  <div style="font-size: 0.86rem; color: #cbd5e1; margin-top: 2px;">
+                    กิจกรรมที่ถูกลบจะถูกย้ายมาเก็บไว้ที่นี่ชั่วคราว <strong>ข้อมูลและรายชื่อนักเรียนที่ลงหน้าที่ไว้จะไม่สูญหาย</strong> คุณสามารถกด <strong>"กู้คืน"</strong> เพื่อนำกิจกรรมและรายชื่อนักเรียนกลับไปใช้งานได้ทันที 100%
+                  </div>
+                </div>
+              </div>
+
+              <!-- Trashed Activities List Container -->
+              <div id="trashListContainer">
+                <div style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #ef4444; margin-bottom: 12px;"></i>
+                  <div>กำลังโหลดรายการในถังขยะ...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Activity History Tab -->
         <div id="tab-history" class="dash-tab">
@@ -5361,6 +5405,7 @@ body.dark-mode .signup-success-banner,
                 <button type="button" class="btn btn-outline" onclick="openLiveServerOgImage()" title="ดูไฟล์ PNG จริงที่เรนเดอร์จากเซิร์ฟเวอร์">
                   <i class="fa-solid fa-arrow-up-right-from-square"></i> ดูภาพจริงจากเซิร์ฟเวอร์ (Live PNG)
                 </button>
+                <button type="button" class="btn btn-outline" style="border-color: #f59e0b; color: #f59e0b;" onclick="purgeAllOgCacheAdmin()" title="ล้างไฟล์ภาพแคชทั้งหมดและเรนเดอร์ใหม่เป็นข้อมูลปัจจุบัน"><i class="fa-solid fa-arrows-rotate"></i> ล้างแคชภาพทั้งหมด (Purge Cache)</button>
                 <button type="button" class="btn btn-primary" onclick="saveOgTemplateFromForm()">
                   <i class="fa-solid fa-floppy-disk"></i> บันทึกการตั้งค่าเทมเพลต
                 </button>
@@ -5420,10 +5465,10 @@ body.dark-mode .signup-success-banner,
                       <!-- Center Title & Body (Direct Overlay) -->
                       <div id="ogLiveBody" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin: auto 0; transform: translateY(-4px); width: 100%;">
                         <div id="ogLiveDateText" style="font-size: 28px; font-weight: 700; color: #000000; line-height: 1.2; margin-bottom: 9px; font-family: 'Kanit', sans-serif;">{{activity_date}}</div>
-                        <h1 id="ogLiveTitle" style="font-size: 58px; font-weight: 900; line-height: 1.12; color: #000000; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 11px 0; word-break: break-word; font-family: 'Kanit', sans-serif;">
+                        <h1 id="ogLiveTitle" style="font-size: 58px; font-weight: 900; line-height: 1.12; color: #000000; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0 0 11px 0; word-break: break-word; font-family: 'Kanit', sans-serif;">
                           {{activity_name}}
                         </h1>
-                        <p id="ogLiveDesc" style="font-size: 23px; font-weight: 600; line-height: 1.35; color: #111111; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0; word-break: break-word; font-family: 'Kanit', sans-serif;">
+                        <p id="ogLiveDesc" style="font-size: 23px; font-weight: 600; line-height: 1.35; color: #111111; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0; word-break: break-word; font-family: 'Kanit', sans-serif;">
                           {{activity_description}}
                         </p>
                       </div>
@@ -8673,7 +8718,8 @@ body.dark-mode .signup-success-banner,
         'logs': 'ประวัติการแก้ไขกิจกรรม',
         'realtime': 'รายงานสรุป (แบบสด)',
         'audio': 'ระบบเสียงและระบบสั่นสัมผัส (Sound & Haptic)',
-        'og-templates': 'เทมเพลตภาพแชร์ (Dynamic OG Image)'
+        'og-templates': 'เทมเพลตภาพแชร์ (Dynamic OG Image)',
+        'trash': 'ถังขยะกิจกรรม (Activity Trash)'
       };
       const titleEl = document.getElementById('dashTitle');
       if (titleEl && titles[tabId]) titleEl.textContent = titles[tabId];
@@ -8704,6 +8750,7 @@ body.dark-mode .signup-success-banner,
       if (tabId === 'realtime') initDashRealtime();
       if (tabId === 'audio') { updateAdminSoundButtonUI(); updateAdminHapticButtonUI(); }
       if (tabId === 'og-templates') loadOgTemplatesTab();
+      if (tabId === 'trash') loadTrashTab();
       if (tabId !== 'realtime' && typeof stopDashRealtimeSync === 'function') stopDashRealtimeSync();
     }
 
@@ -9128,6 +9175,12 @@ body.dark-mode .signup-success-banner,
           const s4 = document.getElementById('stat-admins'); if (s4) s4.innerText = res.admins || 0;
           const s5 = document.getElementById('stat-signups'); if (s5) s5.innerText = res.signups || 0;
           const s6 = document.getElementById('stat-active-activities'); if (s6) s6.innerText = res.activeActivities || 0;
+          const trashedCount = res.trashedActivities || 0;
+          const trashBadge = document.getElementById('sidebarTrashBadge');
+          if (trashBadge) {
+            trashBadge.textContent = trashedCount;
+            trashBadge.style.display = trashedCount > 0 ? 'inline-block' : 'none';
+          }
           window.dbSheetUrl = res.sheetUrl;
         }).getDashboardStats();
       }
@@ -9606,7 +9659,7 @@ body.dark-mode .signup-success-banner,
 
     function deleteActivityFromEditor() {
       if (!selectedDashActivityStr) return;
-      showCustomConfirm('ยืนยันการลบกิจกรรมนี้? (ข้อมูลใน Sheet รายวันจะไม่ถูกลบ แต่หน้ากิจกรรมจะหายไป)', function () {
+      showCustomConfirm('คุณต้องการย้ายกิจกรรมนี้ไปยังถังขยะใช่หรือไม่?\n\n(ข้อมูลกิจกรรมและรายชื่อนักเรียนที่ลงหน้าที่ไว้จะไม่สูญหาย และสามารถกู้คืนได้เสมอที่เมนูถังขยะ)', function () {
         const btn = document.getElementById('btnDeleteActivityDash');
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังลบ...';
@@ -9614,7 +9667,7 @@ body.dark-mode .signup-success-banner,
         if (typeof google !== 'undefined' && google.script) {
           google.script.run
             .withSuccessHandler(function (res) {
-              showToast('ลบกิจกรรมออกจากระบบแล้ว');
+              showToast((res && res.message) || 'ย้ายกิจกรรมไปยังถังขยะเรียบร้อยแล้ว (สามารถกู้คืนได้ที่เมนูถังขยะ)', 'success');
               btn.disabled = false;
               clearActivityEditor();
               loadDashActivities();
@@ -13338,7 +13391,7 @@ body.dark-mode .signup-success-banner,
         descEl.style.display = showDesc ? '-webkit-box' : 'none';
         descEl.style.color = descColor;
         const isTwoLineTitle = titleEl && titleEl.textContent && titleEl.textContent.trim().length > 30;
-        descEl.style.webkitLineClamp = isTwoLineTitle ? Math.min(descMaxLines, 2) : descMaxLines;
+        descEl.style.webkitLineClamp = descEl.style.lineClamp = isTwoLineTitle ? Math.min(descMaxLines, 2) : descMaxLines;
       }
 
       if (schoolLogo) schoolLogo.style.display = showSchool ? 'block' : 'none';
@@ -13456,6 +13509,23 @@ body.dark-mode .signup-success-banner,
       }
     }
 
+    async function purgeAllOgCacheAdmin() {
+      const confirmed = confirm('คุณต้องการล้างแคชภาพ OG Image ทั้งหมดและสร้างใหม่ใช่หรือไม่?\n\nระบบจะลบไฟล์แคชทั้งหมด และเริ่มเรนเดอร์ภาพใหม่สำหรับทุกกิจกรรมให้เป็นปัจจุบัน');
+      if (!confirmed) return;
+      showToast('กำลังล้างแคชภาพทั้งหมด...', 'info');
+      try {
+        const res = await callBackendApi('purgeAllOgCache', []);
+        if (res && res.success) {
+          showToast('ล้างแคชภาพทั้งหมดสำเร็จ และระบบกำลังสร้างภาพใหม่ในเบื้องหลัง', 'success');
+          if (typeof updateOgPreviewUI === 'function') updateOgPreviewUI();
+        } else {
+          showToast((res && res.error) || 'เกิดข้อผิดพลาดในการล้างแคช', 'error');
+        }
+      } catch (err) {
+        showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+      }
+    }
+
     function openLiveServerOgImage() {
       const actId = selectedOgActivity ? (selectedOgActivity.sheetName || selectedOgActivity.id) : (dashAllActivities && dashAllActivities[0] ? (dashAllActivities[0].sheetName || dashAllActivities[0].id) : 'SAMPLE');
       const apiBase = (typeof window.getRosterApiBase === 'function') ? window.getRosterApiBase() : '';
@@ -13482,7 +13552,8 @@ body.dark-mode .signup-success-banner,
         showToast('กรุณากด "บันทึกกิจกรรม" ก่อนคัดลอกลิงก์แชร์เฉพาะกิจกรรมนี้', 'info');
         return;
       }
-      const shareUrl = `https://roster.sarawatdc.site/?id=${encodeURIComponent(sheetName)}`;
+      const version = (selectedDateInfo && selectedDateInfo.activity && selectedDateInfo.activity.updated_at) ? new Date(selectedDateInfo.activity.updated_at).getTime() : Date.now();
+      const shareUrl = `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}&v=${version}`;
       navigator.clipboard.writeText(shareUrl).then(() => {
         showToast('คัดลอกลิงก์กิจกรรมเรียบร้อยแล้ว นำไปแชร์ได้ทันที');
       }).catch(() => {
@@ -13509,7 +13580,179 @@ body.dark-mode .signup-success-banner,
         dateTextEl.textContent = (dateInput && dateInput.value) ? dateInput.value : '-';
       }
     }
+  
+
+    // =========================================================================
+    // 🗑️ Activity Trash Bin Manager (Safety Soft Delete & Recovery)
+    // =========================================================================
+    let trashedActivitiesList = [];
+
+    function loadTrashTab() {
+      const container = document.getElementById('trashListContainer');
+      if (container) {
+        container.innerHTML = `
+          <div style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #ef4444; margin-bottom: 12px;"></i>
+            <div>กำลังโหลดรายการในถังขยะ...</div>
+          </div>
+        `;
+      }
+
+      if (typeof google !== 'undefined' && google.script) {
+        google.script.run
+          .withSuccessHandler(function (activities) {
+            trashedActivitiesList = Array.isArray(activities) ? activities : [];
+            renderTrashList();
+            updateTrashBadge(trashedActivitiesList.length);
+          })
+          .withFailureHandler(function (err) {
+            if (container) {
+              container.innerHTML = `
+                <div class="empty-state" style="padding: 40px 20px; text-align: center;">
+                  <i class="fa-solid fa-triangle-exclamation" style="font-size: 2.2rem; color: #f59e0b; margin-bottom: 10px;"></i>
+                  <div style="color: var(--text-main); font-weight: 600;">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>
+                  <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">${escapeHtml(err.message)}</div>
+                </div>
+              `;
+            }
+          })
+          .getTrashedActivities();
+      }
+    }
+
+    function updateTrashBadge(count) {
+      const badge = document.getElementById('sidebarTrashBadge');
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'inline-block' : 'none';
+      }
+      const emptyBtn = document.getElementById('btnEmptyTrash');
+      if (emptyBtn) {
+        emptyBtn.style.display = count > 0 ? 'inline-flex' : 'none';
+      }
+    }
+
+    function renderTrashList() {
+      const container = document.getElementById('trashListContainer');
+      if (!container) return;
+
+      if (!trashedActivitiesList || trashedActivitiesList.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="padding: 60px 20px; text-align: center; background: rgba(15, 23, 42, 0.02); border: 2px dashed var(--border-color); border-radius: 16px;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); color: #10b981; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 14px;">
+              <i class="fa-solid fa-trash-can-arrow-up"></i>
+            </div>
+            <h3 style="font-weight: 700; font-size: 1.15rem; color: var(--text-main); margin-bottom: 6px;">ถังขยะว่างเปล่า</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); max-width: 420px; margin: 0 auto;">ไม่มีกิจกรรมที่อยู่ในถังขยะ หากมีการเผลอลบกิจกรรม ข้อมูลจะถูกนำมาเก็บไว้ที่นี่เพื่อกู้คืนได้เสมอ</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div style="display: flex; flex-direction: column; gap: 14px;">';
+
+      trashedActivitiesList.forEach(act => {
+        const deletedTimeStr = act.deletedAt ? new Date(act.deletedAt).toLocaleString('th-TH') : '-';
+        const dateDisplay = act.date ? (typeof formatThaiDate === 'function' ? formatThaiDate(act.date) : act.date) : '-';
+        const dutiesCount = Array.isArray(act.duties) ? act.duties.length : 0;
+        const signupsCount = Number(act.signupCount || 0);
+
+        html += `
+          <div class="card" style="padding: 18px 22px; border-radius: 14px; border: 1.5px solid rgba(239, 68, 68, 0.25); background: var(--bg-card); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; transition: all 0.2s ease;">
+            <div style="flex: 1; min-width: 280px;">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px;">
+                <span style="font-weight: 800; font-size: 1.15rem; color: var(--text-main); font-family: 'Kanit', sans-serif;">
+                  ${escapeHtml(act.title)}
+                </span>
+                <span class="badge" style="background: rgba(59, 130, 246, 0.12); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px;">
+                  <i class="fa-regular fa-calendar"></i> ${dateDisplay}
+                </span>
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px;">
+                  <i class="fa-solid fa-users"></i> บันทึกรายชื่อไว้ ${signupsCount} คน
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-muted);">
+                <span><i class="fa-solid fa-user-xmark" style="color: #ef4444;"></i> ลบโดย: <strong>${escapeHtml(act.deletedBy || 'Admin')}</strong></span>
+                <span><i class="fa-regular fa-clock"></i> เวลาที่ลบ: ${deletedTimeStr}</span>
+                <span><i class="fa-solid fa-list-check"></i> ${dutiesCount} หน้าที่</span>
+                <span><i class="fa-solid fa-barcode"></i> ${escapeHtml(act.sheetName || '')}</span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-sm btn-primary" onclick="restoreActivityFromTrash('${act.sheetName}', '${escapeHtml(act.title)}')" style="background: #10b981; border-color: #10b981; padding: 8px 14px; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                <i class="fa-solid fa-rotate-left"></i> <span>กู้คืนกิจกรรม</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" onclick="permanentDeleteActivity('${act.sheetName}', '${escapeHtml(act.title)}')" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4); padding: 8px 14px; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;" title="ลบออกจากระบบอย่างถาวร">
+                <i class="fa-solid fa-trash-can"></i> <span>ลบถาวร</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function restoreActivityFromTrash(sheetName, title) {
+      if (!sheetName) return;
+      showCustomConfirm(`ต้องการกู้คืนกิจกรรม "${title}" กลับสู่รายการปกติใช่หรือไม่?\n\nระบบจะนำกิจกรรมและข้อมูลผู้ลงหน้าที่ทั้งหมดกลับมาทันที`, function () {
+        showToast('กำลังกู้คืนกิจกรรม...', 'info');
+        if (typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function (res) {
+              showToast((res && res.message) || `กู้คืนกิจกรรม "${title}" เรียบร้อยแล้ว`, 'success');
+              loadTrashTab();
+              loadDashActivities();
+              loadDashStats();
+              loadUpcomingActivities();
+            })
+            .withFailureHandler(function (err) {
+              showToast('กู้คืนไม่สำเร็จ: ' + err.message, 'error');
+            })
+            .restoreActivity(sheetName, adminInfo ? adminInfo.name : 'Unknown');
+        }
+      });
+    }
+
+    function permanentDeleteActivity(sheetName, title) {
+      if (!sheetName) return;
+      showCustomConfirm(`⚠️ คำเตือน: คุณต้องการลบกิจกรรม "${title}" อย่างถาวรใช่หรือไม่?\n\nการลบถาวรจะทำลายข้อมูลกิจกรรมและรายชื่อนักเรียนที่ลงหน้าที่ทั้งหมด และไม่สามารถกู้คืนได้อีกต่อไป!`, function () {
+        showToast('กำลังลบกิจกรรมถาวร...', 'info');
+        if (typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function (res) {
+              showToast((res && res.message) || `ลบกิจกรรม "${title}" อย่างถาวรแล้ว`, 'success');
+              loadTrashTab();
+              loadDashStats();
+            })
+            .withFailureHandler(function (err) {
+              showToast('ลบถาวรไม่สำเร็จ: ' + err.message, 'error');
+            })
+            .deleteActivityPermanently(sheetName, adminInfo ? adminInfo.name : 'Unknown');
+        }
+      });
+    }
+
+    function confirmEmptyTrash() {
+      if (!trashedActivitiesList || trashedActivitiesList.length === 0) return;
+      showCustomConfirm(`⚠️ คำเตือนระดับสูงสุด: คุณต้องการล้างถังขยะกิจกรรมทั้งหมด (${trashedActivitiesList.length} รายการ) อย่างถาวรใช่หรือไม่?\n\nข้อมูลและรายชื่อผู้ลงชื่อในถังขยะจะถูกทำลายถาวรทั้งหมด!`, function () {
+        showToast('กำลังล้างถังขยะทั้งหมด...', 'info');
+        if (typeof google !== 'undefined' && google.script) {
+          google.script.run
+            .withSuccessHandler(function (res) {
+              showToast((res && res.message) || 'ล้างถังขยะเรียบร้อยแล้ว', 'success');
+              loadTrashTab();
+              loadDashStats();
+            })
+            .withFailureHandler(function (err) {
+              showToast('ล้างถังขยะไม่สำเร็จ: ' + err.message, 'error');
+            })
+            .emptyActivityTrash(adminInfo ? adminInfo.name : 'Unknown');
+        }
+      });
+    }
   </script>
 </body>
-
 </html>

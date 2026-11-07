@@ -186,7 +186,7 @@ module.exports = async function handler(req, res) {
       const fullTitle = `${modalTitle} | ระบบลงหน้าที่สารวัตรนักเรียน (SI-ROSTER)`;
       const modalDesc = stripMarkdown(found.description) || DEFAULT_DESC;
       const sheetName = found.sheet_name || found.sheetName || found.id || targetId;
-      const version = found.updated_at ? new Date(found.updated_at).getTime() : Date.now();
+      const version = (req.query.v || req.query.t || (found.updated_at ? new Date(found.updated_at).getTime() : Date.now())).toString().trim();
       const dynamicOgImage = `https://api.sarawatdc.site/api/roster/og-image?id=${encodeURIComponent(sheetName)}&v=${version}`;
       const canonicalUrl = isRosterSubdomain ? `https://roster.sarawatdc.site/?id=${encodeURIComponent(sheetName)}` : `https://www.sarawatdc.site/si-roster?id=${encodeURIComponent(sheetName)}`;
 
