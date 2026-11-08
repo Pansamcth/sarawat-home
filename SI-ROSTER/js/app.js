@@ -3477,7 +3477,7 @@
       }
 
       Swal.close();
-      let html = `
+      let innerHtml = `
         <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0;">
           <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
@@ -3620,11 +3620,33 @@
         advisorsHtml = gridHtml;
       }
 
-      html += advisorsHtml;
-      if (isUnofficial) {
-        html += '<div class="unofficial-watermark">ฉบับไม่เป็นทางการ</div>';
-      }
-      html += `</div>`;
+      innerHtml += advisorsHtml;
+      innerHtml += `</div>`;
+
+      let html = `
+        <table class="roster-print-outer">
+          ${isUnofficial ? `
+          <thead>
+            <tr>
+              <th>
+                <div class="watermark-page-anchor">
+                  <div class="watermark-page-box">
+                    <div class="watermark-badge">ฉบับไม่เป็นทางการ</div>
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          ` : ''}
+          <tbody>
+            <tr>
+              <td>
+                ${innerHtml}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      `;
 
       const printWin = window.open('', '_blank');
       if (!printWin) {
@@ -3658,35 +3680,19 @@
               tr { page-break-inside: avoid !important; break-inside: avoid !important; }
               td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
             }
-            .unofficial-watermark {
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%) rotate(-30deg);
-              font-size: 78px;
-              font-weight: 800;
-              color: rgba(220, 38, 38, 0.12);
-              text-align: center;
-              pointer-events: none;
-              z-index: 9999;
-              white-space: nowrap;
-              letter-spacing: 6px;
-              border: 4px dashed rgba(220, 38, 38, 0.22);
-              padding: 12px 40px;
-              border-radius: 12px;
-              user-select: none;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-            }
+            table.roster-print-outer { width: 100% !important; border-collapse: collapse !important; border: none !important; margin: 0 !important; padding: 0 !important; background: transparent !important; }
+            table.roster-print-outer > thead { display: table-header-group !important; border: none !important; background: transparent !important; }
+            table.roster-print-outer > thead > tr { border: none !important; background: transparent !important; }
+            table.roster-print-outer > thead > tr > th { border: none !important; padding: 0 !important; margin: 0 !important; height: 0 !important; max-height: 0 !important; line-height: 0 !important; font-weight: normal !important; overflow: visible !important; background: transparent !important; }
+            table.roster-print-outer > tbody > tr > td { border: none !important; padding: 0 !important; margin: 0 !important; vertical-align: top !important; background: transparent !important; }
+            .watermark-page-anchor { position: relative !important; width: 100% !important; height: 0 !important; line-height: 0 !important; overflow: visible !important; pointer-events: none !important; z-index: 9999 !important; }
+            .watermark-page-box { position: absolute !important; top: 110mm !important; left: 0 !important; right: 0 !important; width: 100% !important; display: flex !important; justify-content: center !important; align-items: center !important; pointer-events: none !important; line-height: normal !important; z-index: 9999 !important; }
+            .watermark-badge { transform: rotate(-25deg) !important; transform-origin: center center !important; font-size: 38px !important; font-weight: 700 !important; color: rgba(220, 38, 38, 0.14) !important; text-align: center !important; letter-spacing: 4px !important; border: 2px dashed rgba(220, 38, 38, 0.22) !important; padding: 6px 20px !important; border-radius: 8px !important; white-space: nowrap !important; user-select: none !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             @media print {
-              .unofficial-watermark {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) rotate(-30deg);
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-              }
+              table.roster-print-outer > thead { display: table-header-group !important; }
+              .watermark-page-anchor { overflow: visible !important; }
+              .watermark-page-box { display: flex !important; position: absolute !important; top: 110mm !important; left: 0 !important; width: 100% !important; }
+              .watermark-badge { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             }
           </style>
         </head>
