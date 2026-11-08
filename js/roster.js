@@ -3347,10 +3347,14 @@
       Swal.close();
 
       const watermarkHtml = isUnofficial ? `
-        <svg class="pdf-watermark-svg" viewBox="0 0 800 1130" xmlns="http://www.w3.org/2000/svg">
-          <text x="400" y="360" text-anchor="middle" dominant-baseline="middle" transform="rotate(-32, 400, 360)" fill="#dc2626" fill-opacity="0.12" font-family="'Prompt', 'Sarabun', sans-serif" font-size="82" font-weight="700" letter-spacing="14">ไม่เป็นทางการ</text>
-          <text x="400" y="820" text-anchor="middle" dominant-baseline="middle" transform="rotate(-32, 400, 820)" fill="#dc2626" fill-opacity="0.12" font-family="'Prompt', 'Sarabun', sans-serif" font-size="82" font-weight="700" letter-spacing="14">ไม่เป็นทางการ</text>
-        </svg>
+        <div class="pdf-watermark-layer">
+          <div class="pdf-watermark-box watermark-top">
+            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
+          </div>
+          <div class="pdf-watermark-box watermark-bottom">
+            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
+          </div>
+        </div>
       ` : '';
 
       let html = `
@@ -3512,11 +3516,11 @@
         <html>
         <head>
           <title>Export PDF - ${title}</title>
-          <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
           <style>
             @page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }
             * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            body { font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; background: white; }
+            html, body { width: 100%; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; color: #000; background: white; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto; }
             thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }
             tbody { display: table-row-group; }
@@ -3525,19 +3529,47 @@
             th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }
             th { text-align: center; font-weight: bold; }
             td { text-align: center; font-weight: normal; }
-            .pdf-watermark-svg {
+            .pdf-watermark-layer {
               position: fixed;
               top: 0;
               left: 0;
-              width: 100vw;
-              height: 100vh;
+              right: 0;
+              bottom: 0;
+              width: 100%;
+              height: 100%;
               pointer-events: none;
               z-index: 9999;
+              overflow: hidden;
+              mix-blend-mode: multiply;
+            }
+            .pdf-watermark-box {
+              position: absolute;
+              left: 0;
+              right: 0;
+              width: 100%;
+              text-align: center;
+            }
+            .watermark-top {
+              top: 25%;
+            }
+            .watermark-bottom {
+              top: 68%;
+            }
+            .pdf-watermark-text {
+              display: inline-block;
+              font-family: 'Prompt', 'Sarabun', -apple-system, sans-serif;
+              font-size: 130px;
+              font-weight: 800;
+              color: rgba(220, 38, 38, 0.14);
+              letter-spacing: 16px;
+              transform: rotate(-30deg);
+              transform-origin: center center;
+              white-space: nowrap;
               user-select: none;
             }
             @media print {
               body { background: white; }
-              .pdf-watermark-svg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+              .pdf-watermark-layer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; mix-blend-mode: multiply; }
               table { page-break-inside: auto; break-inside: auto; }
               thead { display: table-header-group !important; }
               tr { page-break-inside: avoid !important; break-inside: avoid !important; }
