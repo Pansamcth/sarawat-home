@@ -11225,7 +11225,9 @@ body.dark-mode .signup-success-banner,
       }
     }
 
-    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties) {
+    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
+      options = options || window.exportOptions || {};
+      const isUnofficial = !!options.isUnofficial;
       const grouped = {};
       signups.forEach(s => {
         if (!grouped[s.duty]) grouped[s.duty] = [];
@@ -11283,6 +11285,13 @@ body.dark-mode .signup-success-banner,
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
               </td>
+              ${isUnofficial ? `
+              <td style="border: none; vertical-align: middle; text-align: right; padding: 0 0 0 10px; white-space: nowrap;">
+                <div style="font-size: 11.5px; font-weight: 700; color: #dc2626; border: 1.5px solid #fca5a5; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff5f5;">
+                  ฉบับไม่เป็นทางการ
+                </div>
+              </td>
+              ` : ''}
             </tr>
           </table>
       `;
@@ -11353,7 +11362,7 @@ body.dark-mode .signup-success-banner,
       let advisorsHtml = '';
       if (typeof exportOptions !== 'undefined' && exportOptions && exportOptions.selectedAdvisors && exportOptions.selectedAdvisors.length > 0) {
         const advs = exportOptions.selectedAdvisors;
-        const useSig = exportOptions.sigType === 'digital';
+        const useSig = !isUnofficial && (exportOptions.sigType === 'digital');
 
         let gridHtml = '<table style="width: 100%; margin-top: 25px; page-break-inside: avoid; border: none; border-collapse: collapse;">';
         let rowOpen = false;
@@ -11404,6 +11413,9 @@ body.dark-mode .signup-success-banner,
       }
 
       html += advisorsHtml;
+      if (isUnofficial) {
+        html += '<div class="unofficial-watermark">ฉบับไม่เป็นทางการ</div>';
+      }
       html += `</div>`;
 
       const printWin = window.open('', '_blank');
@@ -11433,6 +11445,36 @@ body.dark-mode .signup-success-banner,
         '  thead { display: table-header-group !important; }' +
         '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
         '  td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
+        '}' +
+        '.unofficial-watermark {' +
+        '  position: fixed;' +
+        '  top: 50%;' +
+        '  left: 50%;' +
+        '  transform: translate(-50%, -50%) rotate(-30deg);' +
+        '  font-size: 78px;' +
+        '  font-weight: 800;' +
+        '  color: rgba(220, 38, 38, 0.12);' +
+        '  text-align: center;' +
+        '  pointer-events: none;' +
+        '  z-index: 9999;' +
+        '  white-space: nowrap;' +
+        '  letter-spacing: 6px;' +
+        '  border: 4px dashed rgba(220, 38, 38, 0.22);' +
+        '  padding: 12px 40px;' +
+        '  border-radius: 12px;' +
+        '  user-select: none;' +
+        '  -webkit-print-color-adjust: exact !important;' +
+        '  print-color-adjust: exact !important;' +
+        '}' +
+        '@media print {' +
+        '  .unofficial-watermark {' +
+        '    position: fixed;' +
+        '    top: 50%;' +
+        '    left: 50%;' +
+        '    transform: translate(-50%, -50%) rotate(-30deg);' +
+        '    -webkit-print-color-adjust: exact !important;' +
+        '    print-color-adjust: exact !important;' +
+        '  }' +
         '}' +
         '</style>' +
         '<' + '/head>' +
@@ -11472,15 +11514,16 @@ body.dark-mode .signup-success-banner,
       if (window.exportOptions && window.exportOptions.template === 'modern') {
         generateModernPdfPrintView(signups, title, dateDisplay, customOrderedDuties, window.exportOptions);
       } else {
-        generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties);
+        generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties, window.exportOptions);
       }
     }
 
     function generateModernPdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
-      options = options || {};
+      options = options || window.exportOptions || {};
+      const isUnofficial = !!options.isUnofficial;
       const showStats = options.showStats !== false;
       const showDualLogo = options.showDualLogo !== false;
-      const useSig = options.sigType === 'digital';
+      const useSig = !isUnofficial && (options.sigType === 'digital');
       const advs = options.selectedAdvisors || [];
 
       const grouped = {};
@@ -11574,9 +11617,15 @@ body.dark-mode .signup-success-banner,
                 </div>
               </td>
               <td style="vertical-align: middle; text-align: right; padding: 0 0 10px 0; border: none; white-space: nowrap;">
+                ${isUnofficial ? `
+                <div style="font-size: 11px; font-weight: 700; color: #dc2626; letter-spacing: 0.3px; border: 1.5px solid #fca5a5; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fef2f2;">
+                  SI-ROSTER • ฉบับไม่เป็นทางการ
+                </div>
+                ` : `
                 <div style="font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.3px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fafafa;">
                   SI-ROSTER • ทางการ
                 </div>
+                `}
               </td>
             </tr>
           </table>
@@ -11749,13 +11798,14 @@ body.dark-mode .signup-success-banner,
           <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 14px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
             <tr>
               <td style="text-align: left; border: none; padding: 4px 0;">
-                ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
+                ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp} ${isUnofficial ? '<span style="color: #dc2626; font-weight: 600; margin-left: 6px;">(ฉบับไม่เป็นทางการ)</span>' : ''}
               </td>
               <td style="text-align: right; border: none; padding: 4px 0;">
                 โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี
               </td>
             </tr>
           </table>
+          ${isUnofficial ? '<div class="unofficial-watermark">ฉบับไม่เป็นทางการ</div>' : ''}
         </div>
       `;
 
@@ -11779,6 +11829,36 @@ body.dark-mode .signup-success-banner,
         'tr { page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: auto; break-after: auto; }' +
         'td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
         '@media print { body { background: #ffffff; } table { page-break-inside: auto; break-inside: auto; } tr { page-break-inside: avoid !important; break-inside: avoid !important; } td, th { page-break-inside: avoid !important; break-inside: avoid !important; } }' +
+        '.unofficial-watermark {' +
+        '  position: fixed;' +
+        '  top: 50%;' +
+        '  left: 50%;' +
+        '  transform: translate(-50%, -50%) rotate(-30deg);' +
+        '  font-size: 78px;' +
+        '  font-weight: 800;' +
+        '  color: rgba(220, 38, 38, 0.12);' +
+        '  text-align: center;' +
+        '  pointer-events: none;' +
+        '  z-index: 9999;' +
+        '  white-space: nowrap;' +
+        '  letter-spacing: 6px;' +
+        '  border: 4px dashed rgba(220, 38, 38, 0.22);' +
+        '  padding: 12px 40px;' +
+        '  border-radius: 12px;' +
+        '  user-select: none;' +
+        '  -webkit-print-color-adjust: exact !important;' +
+        '  print-color-adjust: exact !important;' +
+        '}' +
+        '@media print {' +
+        '  .unofficial-watermark {' +
+        '    position: fixed;' +
+        '    top: 50%;' +
+        '    left: 50%;' +
+        '    transform: translate(-50%, -50%) rotate(-30deg);' +
+        '    -webkit-print-color-adjust: exact !important;' +
+        '    print-color-adjust: exact !important;' +
+        '  }' +
+        '}' +
         '</style>' +
         '<' + '/head>' +
         '<' + 'body>' +
@@ -13171,6 +13251,21 @@ body.dark-mode .signup-success-banner,
           </div>
         </div>
 
+        <!-- Unofficial Document Toggle (รองรับทุกเทมเพลต) -->
+        <div style="background:#fff5f5; border:1.5px dashed #fca5a5; border-radius:8px; padding:12px 14px; margin-bottom:16px;">
+          <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; margin:0;">
+            <input type="checkbox" id="pdfOptUnofficial" style="cursor:pointer; width:18px; height:18px; margin-top:2px;">
+            <div>
+              <div style="font-weight:600; font-size:0.92rem; color:#991b1b; display:flex; align-items:center; gap:6px;">
+                <i class="fa-solid fa-stamp"></i> พิมพ์เป็น "ฉบับไม่เป็นทางการ" (Draft / Unofficial)
+              </div>
+              <div style="font-size:0.8rem; color:#7f1d1d; margin-top:3px; line-height:1.35;">
+                แสดงลายน้ำตัวอักษรจางๆ เอียงพาดกลางหน้า, ปรับป้ายหัวเอกสารเป็นฉบับไม่เป็นทางการ และระงับการแนบลายเซ็นดิจิทัลอัตโนมัติ (บังคับเว้นว่างให้ลงนามด้วยมือเท่านั้น)
+              </div>
+            </div>
+          </label>
+        </div>
+
         <!-- Advisors List for Signature -->
         <div class="form-group" style="margin-bottom: 14px;">
           <label style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-weight:600; font-size: 0.92rem;">
@@ -13481,6 +13576,11 @@ body.dark-mode .signup-success-banner,
 
       togglePdfTemplateMode();
 
+      // Reset unofficial option to false (Off) by default every time modal opens
+      if (document.getElementById('pdfOptUnofficial')) {
+        document.getElementById('pdfOptUnofficial').checked = false;
+      }
+
       // Load advisors if empty
       if (advisorsList.length === 0) {
         loadAdvisors(renderPdfAdvisorsList);
@@ -13530,6 +13630,10 @@ body.dark-mode .signup-success-banner,
       window.exportOptions.selectedAdvisors = selectedAdvisors;
       const sigTypeRadio = document.querySelector('input[name="pdfSigType"]:checked');
       window.exportOptions.sigType = sigTypeRadio ? sigTypeRadio.value : 'digital';
+
+      // Unofficial mode
+      const isUnofficial = document.getElementById('pdfOptUnofficial') ? document.getElementById('pdfOptUnofficial').checked : false;
+      window.exportOptions.isUnofficial = isUnofficial;
 
       // Template & Custom options
       const tplRadio = document.querySelector('input[name="pdfTemplateMode"]:checked');

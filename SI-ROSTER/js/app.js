@@ -3438,7 +3438,9 @@
       }
     }
 
-    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties) {
+    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
+      options = options || window.exportOptions || {};
+      const isUnofficial = !!options.isUnofficial;
       const grouped = {};
       signups.forEach(s => {
         if (!grouped[s.duty]) grouped[s.duty] = [];
@@ -3491,6 +3493,13 @@
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
               </td>
+              ${isUnofficial ? `
+              <td style="border: none; vertical-align: middle; text-align: right; padding: 0 0 0 10px; white-space: nowrap;">
+                <div style="font-size: 11.5px; font-weight: 700; color: #dc2626; border: 1.5px solid #fca5a5; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff5f5;">
+                  ฉบับไม่เป็นทางการ
+                </div>
+              </td>
+              ` : ''}
             </tr>
           </table>
       `;
@@ -3561,7 +3570,7 @@
       let advisorsHtml = '';
       if (typeof exportOptions !== 'undefined' && exportOptions && exportOptions.selectedAdvisors && exportOptions.selectedAdvisors.length > 0) {
         const advs = exportOptions.selectedAdvisors;
-        const useSig = exportOptions.sigType === 'digital';
+        const useSig = !isUnofficial && (exportOptions.sigType === 'digital');
 
         let gridHtml = '<table style="width: 100%; margin-top: 25px; page-break-inside: avoid; border: none; border-collapse: collapse;">';
         let rowOpen = false;
@@ -3612,6 +3621,9 @@
       }
 
       html += advisorsHtml;
+      if (isUnofficial) {
+        html += '<div class="unofficial-watermark">ฉบับไม่เป็นทางการ</div>';
+      }
       html += `</div>`;
 
       const printWin = window.open('', '_blank');
@@ -3645,6 +3657,36 @@
               thead { display: table-header-group !important; }
               tr { page-break-inside: avoid !important; break-inside: avoid !important; }
               td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+            }
+            .unofficial-watermark {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%) rotate(-30deg);
+              font-size: 78px;
+              font-weight: 800;
+              color: rgba(220, 38, 38, 0.12);
+              text-align: center;
+              pointer-events: none;
+              z-index: 9999;
+              white-space: nowrap;
+              letter-spacing: 6px;
+              border: 4px dashed rgba(220, 38, 38, 0.22);
+              padding: 12px 40px;
+              border-radius: 12px;
+              user-select: none;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            @media print {
+              .unofficial-watermark {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-30deg);
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
             }
           </style>
         </head>
@@ -5180,6 +5222,9 @@
       window.exportOptions.selectedAdvisors = selectedAdvisors;
       const sigTypeRadio = document.querySelector('input[name="pdfSigType"]:checked');
       window.exportOptions.sigType = sigTypeRadio ? sigTypeRadio.value : 'digital';
+
+      const isUnofficial = document.getElementById('pdfOptUnofficial') ? document.getElementById('pdfOptUnofficial').checked : false;
+      window.exportOptions.isUnofficial = isUnofficial;
 
       closeModal('pdfExportModal');
 
