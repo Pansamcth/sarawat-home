@@ -3346,30 +3346,16 @@
 
       Swal.close();
 
-      const watermarkThead = isUnofficial ? `
-        <thead>
-          <tr>
-            <td class="roster-watermark-cell">
-              <div class="roster-watermark-anchor">
-                <div class="pdf-watermark-box watermark-top">
-                  <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-                </div>
-                <div class="pdf-watermark-box watermark-bottom">
-                  <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </thead>
+      const svgWatermark = '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="528" viewBox="0 0 800 528"><text x="400" y="264" text-anchor="middle" dominant-baseline="central" transform="rotate(-30 400 264)" fill="#dc2626" fill-opacity="0.14" font-family="Prompt, Sarabun, -apple-system, sans-serif" font-size="125" font-weight="800" letter-spacing="16">ไม่เป็นทางการ</text></svg>';
+      const svgWatermarkUri = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgWatermark);
+
+      const watermarkHtml = isUnofficial ? `
+        <div class="pdf-watermark-overlay"></div>
       ` : '';
 
       let html = `
-        <table class="roster-master-page-table">
-          ${watermarkThead}
-          <tbody>
-            <tr>
-              <td class="roster-master-content-cell">
-                <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; position: relative;">
+        ${watermarkHtml}
+        <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; position: relative;">
           <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
               <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
@@ -3512,7 +3498,7 @@
       }
 
       html += advisorsHtml;
-      html += `</div></td></tr></tbody></table>`;
+      html += `</div>`;
 
       const printWin = window.open('', '_blank');
       if (!printWin) {
@@ -3530,7 +3516,7 @@
           <style>
             @page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }
             * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            html, body { width: 100%; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; color: #000; background: white; }
+            html, body { width: 100%; min-height: 100%; margin: 0; padding: 0; font-family: 'Sarabun', sans-serif; color: #000; background: white; position: relative; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto; }
             thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }
             tbody { display: table-row-group; }
@@ -3539,81 +3525,44 @@
             th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }
             th { text-align: center; font-weight: bold; }
             td { text-align: center; font-weight: normal; }
-            table.roster-master-page-table {
-              width: 100%;
-              border-collapse: collapse;
-              border: none !important;
-              margin: 0 !important;
-              padding: 0 !important;
-            }
-            table.roster-master-page-table > thead {
-              display: table-header-group !important;
-              page-break-inside: avoid !important;
-              break-inside: avoid !important;
-              page-break-after: avoid !important;
-              break-after: avoid !important;
-              border: none !important;
-              padding: 0 !important;
-              margin: 0 !important;
-              height: 0 !important;
-              line-height: 0 !important;
-            }
-            table.roster-master-page-table > tbody {
-              display: table-row-group !important;
-            }
-            .roster-watermark-cell {
-              border: none !important;
-              padding: 0 !important;
-              margin: 0 !important;
-              height: 0 !important;
-              max-height: 0 !important;
-              line-height: 0 !important;
-              font-size: 0 !important;
-            }
-            .roster-watermark-anchor {
-              position: relative;
-              width: 100%;
-              height: 0;
-              max-height: 0;
-              line-height: 0;
-              overflow: visible;
-            }
-            .roster-master-content-cell {
-              border: none !important;
-              padding: 0 !important;
-              margin: 0 !important;
-              vertical-align: top !important;
-            }
-            .pdf-watermark-box {
+            .pdf-watermark-overlay {
               position: absolute;
+              top: 0;
               left: 0;
               right: 0;
+              bottom: 0;
               width: 100%;
-              text-align: center;
+              height: 100%;
+              min-height: 100%;
               pointer-events: none;
               z-index: 9999;
-            }
-            .watermark-top {
-              top: 260px;
-            }
-            .watermark-bottom {
-              top: 710px;
-            }
-            .pdf-watermark-text {
-              display: inline-block;
-              font-family: 'Prompt', 'Sarabun', -apple-system, sans-serif;
-              font-size: 130px;
-              font-weight: 800;
-              color: rgba(220, 38, 38, 0.14);
-              letter-spacing: 16px;
-              transform: rotate(-30deg);
-              transform-origin: center center;
-              white-space: nowrap;
-              user-select: none;
+              background-image: url('${svgWatermarkUri}');
+              background-repeat: repeat-y;
+              background-position: center top;
+              background-size: 100% 139.5mm;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
             }
             @media print {
-              body { background: white; }
-              table.roster-master-page-table > thead { display: table-header-group !important; }
+              body { background: white; position: relative; }
+              .pdf-watermark-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                min-height: 100%;
+                pointer-events: none;
+                z-index: 9999;
+                background-image: url('${svgWatermarkUri}');
+                background-repeat: repeat-y;
+                background-position: center top;
+                background-size: 100% 139.5mm;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
               table { page-break-inside: auto; break-inside: auto; }
               thead { display: table-header-group !important; }
               tr { page-break-inside: avoid !important; break-inside: avoid !important; }
