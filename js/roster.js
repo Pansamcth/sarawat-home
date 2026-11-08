@@ -3566,15 +3566,15 @@
       printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF - ' + title + '</title>' +
         '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
         '<style>' +
-        '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
+        '@page { size: A4 portrait; margin: 6mm 10mm 6mm 10mm; }' +
         '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
         'html, body { width: 100%; margin: 0; padding: 0; font-family: \'Sarabun\', sans-serif; color: #000; background: white; }' +
-        '.roster-page { position: relative; page-break-after: always; break-after: page; box-sizing: border-box; width: 100%; min-height: 255mm; }' +
+        '.roster-page { position: relative; page-break-after: always; break-after: page; box-sizing: border-box; width: 100%; min-height: 225mm; }' +
         '.roster-page:last-child { page-break-after: auto; break-after: auto; }' +
         '.pdf-page-watermark-layer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }' +
         '.pdf-watermark-box { position: absolute; left: 0; right: 0; width: 100%; text-align: center; }' +
-        '.watermark-top { top: 260px; }' +
-        '.watermark-bottom { top: 710px; }' +
+        '.watermark-top { top: 22%; }' +
+        '.watermark-bottom { top: 66%; }' +
         '.pdf-watermark-text { display: inline-block; font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; font-size: 130px; font-weight: 800; color: rgba(220, 38, 38, 0.14); letter-spacing: 16px; transform: rotate(-30deg); transform-origin: center center; white-space: nowrap; user-select: none; }' +
         'table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }' +
         'thead { display: table-header-group !important; }' +
@@ -3586,7 +3586,7 @@
         'td { text-align: center; font-weight: normal; }' +
         '@media print {' +
         '  body { background: white; }' +
-        '  .roster-page { page-break-after: always; break-after: page; min-height: 255mm; }' +
+        '  .roster-page { page-break-after: always; break-after: page; min-height: 225mm; }' +
         '  .roster-page:last-child { page-break-after: auto; break-after: auto; }' +
         '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
         '  td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
