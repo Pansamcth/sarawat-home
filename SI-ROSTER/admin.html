@@ -10944,15 +10944,18 @@ body.dark-mode .signup-success-banner,
         grouped[d].sort((a, b) => getClassNum(a) - getClassNum(b));
       }
 
-      // Thai formatted current date & print timestamp
-      const now = new Date();
-      const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-      const printTimestamp = `${now.getDate()} ${thaiMonths[now.getMonth()]} ${now.getFullYear() + 543} เวลา ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} น.`;
-
       Swal.close();
+
+      const watermarkHtml = isUnofficial ? `
+        <svg class="pdf-watermark-svg" viewBox="0 0 800 1130" xmlns="http://www.w3.org/2000/svg">
+          <text x="400" y="360" text-anchor="middle" dominant-baseline="middle" transform="rotate(-32, 400, 360)" fill="#dc2626" fill-opacity="0.12" font-family="'Prompt', 'Sarabun', sans-serif" font-size="82" font-weight="700" letter-spacing="14">ไม่เป็นทางการ</text>
+          <text x="400" y="820" text-anchor="middle" dominant-baseline="middle" transform="rotate(-32, 400, 820)" fill="#dc2626" fill-opacity="0.12" font-family="'Prompt', 'Sarabun', sans-serif" font-size="82" font-weight="700" letter-spacing="14">ไม่เป็นทางการ</text>
+        </svg>
+      ` : '';
+
       let html = `
+        ${watermarkHtml}
         <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; position: relative;">
-          ${isUnofficial ? `<div class="pdf-watermark-overlay">ไม่เป็นทางการ</div>` : ''}
           <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
               <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
@@ -10967,17 +10970,13 @@ body.dark-mode .signup-success-banner,
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
                 <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
               </td>
+              ${isUnofficial ? `
               <td style="border: none; vertical-align: top; text-align: right; padding: 0 0 0 10px; white-space: nowrap;">
-                ${isUnofficial ? `
-                  <div style="font-size: 11px; font-weight: bold; color: #dc2626; border: 1.5px solid #dc2626; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff;">
-                    ฉบับไม่เป็นทางการ
-                  </div>
-                ` : `
-                  <div style="font-size: 11px; font-weight: 600; color: #475569; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff;">
-                    ฉบับทางการ
-                  </div>
-                `}
+                <div style="font-size: 11px; font-weight: bold; color: #dc2626; border: 1.5px solid #dc2626; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff;">
+                  ฉบับไม่เป็นทางการ
+                </div>
               </td>
+              ` : ''}
             </tr>
           </table>
       `;
@@ -11099,23 +11098,6 @@ body.dark-mode .signup-success-banner,
       }
 
       html += advisorsHtml;
-
-      // Copyright & Print Timestamp Footer
-      html += `
-        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 18px; padding-top: 8px; border-top: 1px solid #cbd5e1; font-size: 10px; color: #64748b; page-break-inside: avoid;">
-          <tr>
-            <td style="text-align: left; border: none; padding: 4px 0;">
-              © 2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สงวนลิขสิทธิ์ทุกประการ พัฒนาโดย รุจิระ วัฒนกิจไพศาล
-            </td>
-            <td style="text-align: right; border: none; padding: 4px 0; color: #94a3b8;">
-              ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • วันที่และเวลาพิมพ์: ${printTimestamp}
-            </td>
-          </tr>
-        </table>
-        <div class="pdf-print-fixed-footer">
-          © 2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สงวนลิขสิทธิ์ทุกประการ พัฒนาโดย รุจิระ วัฒนกิจไพศาล • วันที่และเวลาพิมพ์: ${printTimestamp}
-        </div>
-      `;
       html += `</div>`;
 
       const printWin = window.open('', '_blank');
@@ -11126,11 +11108,11 @@ body.dark-mode .signup-success-banner,
 
       printWin.document.open();
       printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF - ' + title + '</title>' +
-        '<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
+        '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
         '<style>' +
-        '@page { size: A4 portrait; margin: 0; }' +
+        '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
         '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
-        'body { font-family: \'Sarabun\', sans-serif; padding: 10mm 12mm 14mm 12mm; color: #000; margin: 0; background: white; }' +
+        'body { font-family: \'Sarabun\', sans-serif; padding: 0; color: #000; margin: 0; background: white; }' +
         'table { width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto; }' +
         'thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }' +
         'tbody { display: table-row-group; }' +
@@ -11139,38 +11121,19 @@ body.dark-mode .signup-success-banner,
         'th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }' +
         'th { text-align: center; font-weight: bold; }' +
         'td { text-align: center; font-weight: normal; }' +
-        '.pdf-watermark-overlay {' +
+        '.pdf-watermark-svg {' +
         '  position: fixed;' +
-        '  top: 50%;' +
-        '  left: 50%;' +
-        '  transform: translate(-50%, -50%) rotate(-35deg);' +
-        '  font-family: \'Prompt\', \'Sarabun\', sans-serif;' +
-        '  font-size: 105px;' +
-        '  font-weight: 700;' +
-        '  color: rgba(148, 163, 184, 0.16);' +
-        '  letter-spacing: 16px;' +
-        '  white-space: nowrap;' +
+        '  top: 0;' +
+        '  left: 0;' +
+        '  width: 100vw;' +
+        '  height: 100vh;' +
         '  pointer-events: none;' +
         '  z-index: 9999;' +
         '  user-select: none;' +
         '}' +
-        '.pdf-print-fixed-footer {' +
-        '  position: fixed;' +
-        '  bottom: 3mm;' +
-        '  left: 0;' +
-        '  right: 0;' +
-        '  text-align: center;' +
-        '  font-size: 8.5px;' +
-        '  color: #64748b;' +
-        '  font-family: \'Sarabun\', sans-serif;' +
-        '  pointer-events: none;' +
-        '}' +
-        '@media screen {' +
-        '  .pdf-print-fixed-footer { display: none; }' +
-        '}' +
         '@media print {' +
-        '  body { background: white; padding: 10mm 12mm 14mm 12mm; }' +
-        '  .pdf-print-fixed-footer { display: block !important; }' +
+        '  body { background: white; }' +
+        '  .pdf-watermark-svg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }' +
         '  table { page-break-inside: auto; break-inside: auto; }' +
         '  thead { display: table-header-group !important; }' +
         '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
@@ -11285,9 +11248,16 @@ body.dark-mode .signup-success-banner,
 
       Swal.close();
 
+      const watermarkHtml = isUnofficial ? `
+        <svg class="pdf-watermark-svg" viewBox="0 0 800 1130" xmlns="http://www.w3.org/2000/svg">
+          <text x="400" y="360" text-anchor="middle" dominant-baseline="middle" transform="rotate(-32, 400, 360)" fill="#dc2626" fill-opacity="0.12" font-family="'Prompt', 'Sarabun', sans-serif" font-size="82" font-weight="700" letter-spacing="14">ไม่เป็นทางการ</text>
+          <text x="400" y="820" text-anchor="middle" dominant-baseline="middle" transform="rotate(-32, 400, 820)" fill="#dc2626" fill-opacity="0.12" font-family="'Prompt', 'Sarabun', sans-serif" font-size="82" font-weight="700" letter-spacing="14">ไม่เป็นทางการ</text>
+        </svg>
+      ` : '';
+
       let html = `
+        ${watermarkHtml}
         <div class="minimal-print-wrapper" style="font-family: 'Prompt', 'Sarabun', sans-serif; color: #0f172a; padding: 0; margin: 0; background: #ffffff; position: relative;">
-          ${isUnofficial ? `<div class="pdf-watermark-overlay">ไม่เป็นทางการ</div>` : ''}
           
           <!-- Minimalist Header Table: Logos together on left with subtle divider -->
           <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
@@ -11489,21 +11459,18 @@ body.dark-mode .signup-success-banner,
         html += sigGridHtml;
       }
 
-      // Minimalist Footer (Document End & Fixed Footer)
+      // Minimalist Footer
       html += `
-          <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 16px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #64748b; page-break-inside: avoid;">
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 14px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
             <tr>
               <td style="text-align: left; border: none; padding: 4px 0;">
-                © 2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สงวนลิขสิทธิ์ทุกประการ พัฒนาโดย รุจิระ วัฒนกิจไพศาล
+                ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
               </td>
-              <td style="text-align: right; border: none; padding: 4px 0; color: #94a3b8;">
-                ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • วันที่และเวลาพิมพ์: ${printTimestamp}
+              <td style="text-align: right; border: none; padding: 4px 0;">
+                โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี
               </td>
             </tr>
           </table>
-          <div class="pdf-print-fixed-footer">
-            © 2569 สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล สงวนลิขสิทธิ์ทุกประการ พัฒนาโดย รุจิระ วัฒนกิจไพศาล • วันที่และเวลาพิมพ์: ${printTimestamp}
-          </div>
         </div>
       `;
 
@@ -11517,47 +11484,28 @@ body.dark-mode .signup-success-banner,
       printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF (Minimal) - ' + title + '</title>' +
         '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
         '<style>' +
-        '@page { size: A4 portrait; margin: 0; }' +
+        '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
         '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
-        'body { font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; padding: 10mm 12mm 14mm 12mm; color: #0f172a; margin: 0; background: #ffffff; }' +
+        'body { font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; padding: 0; color: #0f172a; margin: 0; background: #ffffff; }' +
         'table { width: 100%; border-collapse: collapse; page-break-inside: auto; break-inside: auto; }' +
         'thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }' +
         'tbody { display: table-row-group; }' +
         'tfoot { display: table-footer-group; }' +
         'tr { page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: auto; break-after: auto; }' +
         'td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        '.pdf-watermark-overlay {' +
+        '.pdf-watermark-svg {' +
         '  position: fixed;' +
-        '  top: 50%;' +
-        '  left: 50%;' +
-        '  transform: translate(-50%, -50%) rotate(-35deg);' +
-        '  font-family: \'Prompt\', \'Sarabun\', sans-serif;' +
-        '  font-size: 105px;' +
-        '  font-weight: 700;' +
-        '  color: rgba(148, 163, 184, 0.16);' +
-        '  letter-spacing: 16px;' +
-        '  white-space: nowrap;' +
+        '  top: 0;' +
+        '  left: 0;' +
+        '  width: 100vw;' +
+        '  height: 100vh;' +
         '  pointer-events: none;' +
         '  z-index: 9999;' +
         '  user-select: none;' +
         '}' +
-        '.pdf-print-fixed-footer {' +
-        '  position: fixed;' +
-        '  bottom: 3mm;' +
-        '  left: 0;' +
-        '  right: 0;' +
-        '  text-align: center;' +
-        '  font-size: 8.5px;' +
-        '  color: #64748b;' +
-        '  font-family: \'Prompt\', \'Sarabun\', sans-serif;' +
-        '  pointer-events: none;' +
-        '}' +
-        '@media screen {' +
-        '  .pdf-print-fixed-footer { display: none; }' +
-        '}' +
         '@media print {' +
-        '  body { background: #ffffff; padding: 10mm 12mm 14mm 12mm; }' +
-        '  .pdf-print-fixed-footer { display: block !important; }' +
+        '  body { background: #ffffff; }' +
+        '  .pdf-watermark-svg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }' +
         '  table { page-break-inside: auto; break-inside: auto; }' +
         '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
         '  td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
