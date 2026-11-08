@@ -10905,10 +10905,7 @@ body.dark-mode .signup-success-banner,
       }
     }
 
-    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
-      options = options || window.exportOptions || {};
-      const isUnofficial = !!options.isUnofficial;
-
+    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties) {
       const grouped = {};
       signups.forEach(s => {
         if (!grouped[s.duty]) grouped[s.duty] = [];
@@ -10945,39 +10942,28 @@ body.dark-mode .signup-success-banner,
       }
 
       Swal.close();
-
-      const activityHeaderHtml = `
-        <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
-          <tr>
-            <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
-              <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 58px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
-              <span style="display: inline-block; width: 1px; height: 38px; background: #cbd5e1; margin: 0 8px; vertical-align: middle;"></span>
-              <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
-            </td>
-            <td style="border: none; vertical-align: middle; text-align: left; padding: 0;">
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 16px; font-weight: bold; color: #000;">สารวัตรนักเรียน</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 14px; font-weight: bold; color: #000;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">การปฏิบัติหน้าที่ : ${title}</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
-            </td>
-            ${isUnofficial ? `
-            <td style="border: none; vertical-align: top; text-align: right; padding: 0 0 0 10px; white-space: nowrap;">
-              <div style="font-size: 11px; font-weight: bold; color: #dc2626; border: 1.5px solid #dc2626; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff;">
-                ฉบับไม่เป็นทางการ
-              </div>
-            </td>
-            ` : ''}
-          </tr>
-        </table>
+      let html = `
+        <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0;">
+          <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
+            <tr>
+              <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
+                <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 58px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
+                <span style="display: inline-block; width: 1px; height: 38px; background: #cbd5e1; margin: 0 8px; vertical-align: middle;"></span>
+                <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
+              </td>
+              <td style="border: none; vertical-align: middle; text-align: left; padding: 0;">
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 16px; font-weight: bold; color: #000;">สารวัตรนักเรียน</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 14px; font-weight: bold; color: #000;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">การปฏิบัติหน้าที่ : ${title}</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
+              </td>
+            </tr>
+          </table>
       `;
 
-      const tableChunks = [];
       if (Object.keys(grouped).length === 0) {
-        tableChunks.push({
-          html: `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`,
-          rows: 3
-        });
+        html += `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`;
       } else {
         const CHUNK_SIZE = 18;
         orderedDuties.forEach((d, dutyIdx) => {
@@ -10998,8 +10984,8 @@ body.dark-mode .signup-success-banner,
               ? `หน้าที่ที่รับผิดชอบ: ${d} (ต่อ)`
               : `หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${allMembers.length} คน)</span>`;
 
-            let tblHtml = `
-               <table class="roster-duty-table" style="width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: avoid !important; break-inside: avoid !important;">
+            html += `
+               <table class="roster-duty-table" style="width: 100%; border-collapse: collapse; margin-bottom: 14px; page-break-inside: avoid !important; break-inside: avoid !important;">
                  <thead>
                    <tr style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important;">
                      <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
@@ -11026,7 +11012,7 @@ body.dark-mode .signup-success-banner,
                 justName = parts.join(' ');
               }
 
-              tblHtml += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+              html += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
                 <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${chunk.offset + idx + 1}</td>
                 <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"><div style="width: 13px; height: 13px; border: 1px solid #000; display: inline-block; vertical-align: middle;"></div></td>
                 <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: left; white-space: nowrap; page-break-inside: avoid !important; break-inside: avoid !important;">${justName}</td>
@@ -11034,11 +11020,7 @@ body.dark-mode .signup-success-banner,
                 <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"></td>
               </tr>`;
             });
-            tblHtml += `</tbody></table>`;
-            tableChunks.push({
-              html: tblHtml,
-              rows: chunk.members.length + 2
-            });
+            html += `</tbody></table>`;
           });
         });
       }
@@ -11048,7 +11030,7 @@ body.dark-mode .signup-success-banner,
         const advs = exportOptions.selectedAdvisors;
         const useSig = exportOptions.sigType === 'digital';
 
-        let gridHtml = '<table style="width: 100%; margin-top: 20px; page-break-inside: avoid; border: none; border-collapse: collapse;">';
+        let gridHtml = '<table style="width: 100%; margin-top: 25px; page-break-inside: avoid; border: none; border-collapse: collapse;">';
         let rowOpen = false;
 
         advs.forEach((adv, index) => {
@@ -11096,65 +11078,8 @@ body.dark-mode .signup-success-banner,
         advisorsHtml = gridHtml;
       }
 
-      // Pack into distinct pages to guarantee identical multi-page rendering across all devices
-      const pages = [];
-      let curPage = { items: [], totalRows: 5 }; // Page 1 starts with 5 rows reserved for activity header
-      const MAX_P1 = 31;
-      const MAX_OTHER = 30;
-
-      tableChunks.forEach(tc => {
-        const limit = pages.length === 0 ? MAX_P1 : MAX_OTHER;
-        if (curPage.items.length > 0 && (curPage.totalRows + tc.rows > limit)) {
-          pages.push(curPage);
-          curPage = { items: [tc.html], totalRows: tc.rows };
-        } else {
-          curPage.items.push(tc.html);
-          curPage.totalRows += tc.rows;
-        }
-      });
-
-      if (advisorsHtml) {
-        const advRows = 6;
-        const limit = pages.length === 0 ? MAX_P1 : MAX_OTHER;
-        if (curPage.totalRows + advRows > limit) {
-          pages.push(curPage);
-          curPage = { items: [advisorsHtml], totalRows: advRows };
-        } else {
-          curPage.items.push(advisorsHtml);
-          curPage.totalRows += advRows;
-        }
-      }
-
-      if (curPage.items.length > 0) {
-        pages.push(curPage);
-      }
-
-      const watermarkLayerHtml = isUnofficial ? `
-        <div class="pdf-page-watermark-layer">
-          <div class="pdf-watermark-box watermark-top">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-          <div class="pdf-watermark-box watermark-bottom">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-        </div>
-      ` : '';
-
-      let html = '';
-      pages.forEach((p, pageIdx) => {
-        const isFirst = pageIdx === 0;
-        const topHeader = isFirst ? activityHeaderHtml : '';
-
-        html += `
-          <div class="roster-page">
-            ${watermarkLayerHtml}
-            <div class="roster-page-content" style="position: relative; z-index: 1;">
-              ${topHeader}
-              ${p.items.join('')}
-            </div>
-          </div>
-        `;
-      });
+      html += advisorsHtml;
+      html += `</div>`;
 
       const printWin = window.open('', '_blank');
       if (!printWin) {
@@ -11164,30 +11089,23 @@ body.dark-mode .signup-success-banner,
 
       printWin.document.open();
       printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF - ' + title + '</title>' +
-        '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
+        '<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
         '<style>' +
-        '@page { size: A4 portrait; margin: 6mm 10mm 6mm 10mm; }' +
+        '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
         '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
-        'html, body { width: 100%; margin: 0; padding: 0; font-family: \'Sarabun\', sans-serif; color: #000; background: white; }' +
-        '.roster-page { position: relative; page-break-after: always; break-after: page; box-sizing: border-box; width: 100%; min-height: 225mm; }' +
-        '.roster-page:last-child { page-break-after: auto; break-after: auto; }' +
-        '.pdf-page-watermark-layer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }' +
-        '.pdf-watermark-box { position: absolute; left: 0; right: 0; width: 100%; text-align: center; }' +
-        '.watermark-top { top: 22%; }' +
-        '.watermark-bottom { top: 66%; }' +
-        '.pdf-watermark-text { display: inline-block; font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; font-size: 130px; font-weight: 800; color: rgba(220, 38, 38, 0.14); letter-spacing: 16px; transform: rotate(-30deg); transform-origin: center center; white-space: nowrap; user-select: none; }' +
-        'table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }' +
-        'thead { display: table-header-group !important; }' +
+        'body { font-family: \'Sarabun\', sans-serif; padding: 0; color: #000; margin: 0; background: white; }' +
+        'table { width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto; }' +
+        'thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }' +
         'tbody { display: table-row-group; }' +
         'tfoot { display: table-footer-group; }' +
-        'tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        'th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; }' +
+        'tr { page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: auto; break-after: auto; }' +
+        'th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }' +
         'th { text-align: center; font-weight: bold; }' +
         'td { text-align: center; font-weight: normal; }' +
         '@media print {' +
         '  body { background: white; }' +
-        '  .roster-page { page-break-after: always; break-after: page; min-height: 225mm; }' +
-        '  .roster-page:last-child { page-break-after: auto; break-after: auto; }' +
+        '  table { page-break-inside: auto; break-inside: auto; }' +
+        '  thead { display: table-header-group !important; }' +
         '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
         '  td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
         '}' +
@@ -11206,7 +11124,7 @@ body.dark-mode .signup-success-banner,
 
       const runPrint = () => {
         if (printWin.document.fonts && printWin.document.fonts.ready) {
-          printWin.document.fonts.ready.then(() => setTimeout(executePrint, 350));
+          printWin.document.fonts.ready.then(() => setTimeout(executePrint, 300));
         } else {
           setTimeout(executePrint, 1000);
         }
@@ -11229,13 +11147,12 @@ body.dark-mode .signup-success-banner,
       if (window.exportOptions && window.exportOptions.template === 'modern') {
         generateModernPdfPrintView(signups, title, dateDisplay, customOrderedDuties, window.exportOptions);
       } else {
-        generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties, window.exportOptions);
+        generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties);
       }
     }
 
     function generateModernPdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
-      options = options || window.exportOptions || {};
-      const isUnofficial = !!options.isUnofficial;
+      options = options || {};
       const showStats = options.showStats !== false;
       const showDualLogo = options.showDualLogo !== false;
       const useSig = options.sigType === 'digital';
@@ -11251,7 +11168,7 @@ body.dark-mode .signup-success-banner,
         const parts = name.trim().split(' ');
         const cls = parts[parts.length - 1];
         if (cls && cls.includes('/')) {
-          const cleanCls = cls.replace(/^ม\./, '');
+          const cleanCls = cls.replace(/^ม\\./, '');
           const cParts = cleanCls.split('/');
           return parseInt(cParts[0]) * 100 + parseInt(cParts[1]);
         }
@@ -11293,54 +11210,51 @@ body.dark-mode .signup-success-banner,
         else otherCount++;
       });
 
-      // Thai formatted current date & print timestamp
+      // Thai formatted current date
       const now = new Date();
       const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
       const printTimestamp = `${now.getDate()} ${thaiMonths[now.getMonth()]} ${now.getFullYear() + 543} เวลา ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} น.`;
 
       Swal.close();
 
-      const activityHeaderHtml = `
-        <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
-          <tr>
-            <td style="vertical-align: middle; text-align: left; padding: 0 14px 10px 0; border: none; width: 140px; white-space: nowrap;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 56px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
-                <span style="display: inline-block; width: 1px; height: 36px; background: #cbd5e1; margin: 0 2px;"></span>
-                <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 52px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
-              </div>
-            </td>
-            <td style="vertical-align: middle; text-align: left; padding: 0 0 10px 14px; border: none; border-left: 1px solid #cbd5e1;">
-              <div style="font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.25;">สารวัตรนักเรียน</div>
-              <div style="font-size: 13.5px; font-weight: 600; color: #334155; margin-top: 2px;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
-              <div style="font-size: 13px; font-weight: 600; color: #334155; margin-top: 2px;">
-                การปฏิบัติหน้าที่ : <span style="color: #0f172a;">${title}</span>
-              </div>
-              <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
-                วันที่จัดกิจกรรม : <span style="color: #1e293b; font-weight: 500;">${dateDisplay}</span>
-              </div>
-              <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
-                ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER
-              </div>
-            </td>
-            <td style="vertical-align: middle; text-align: right; padding: 0 0 10px 0; border: none; white-space: nowrap;">
-              ${isUnofficial ? `
-                <div style="font-size: 11px; font-weight: 700; color: #dc2626; letter-spacing: 0.3px; border: 1.5px solid #fca5a5; border-radius: 4px; padding: 4px 9px; display: inline-block; background: #fef2f2;">
-                  SI-ROSTER • ไม่เป็นทางการ
+      let html = `
+        <div class="minimal-print-wrapper" style="font-family: 'Prompt', 'Sarabun', sans-serif; color: #0f172a; padding: 0; margin: 0; background: #ffffff;">
+          
+          <!-- Minimalist Header Table: Logos together on left with subtle divider -->
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
+            <tr>
+              <td style="vertical-align: middle; text-align: left; padding: 0 14px 10px 0; border: none; width: 140px; white-space: nowrap;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 56px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
+                  <span style="display: inline-block; width: 1px; height: 36px; background: #cbd5e1; margin: 0 2px;"></span>
+                  <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 52px; width: auto; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
                 </div>
-              ` : `
+              </td>
+              <td style="vertical-align: middle; text-align: left; padding: 0 0 10px 14px; border: none; border-left: 1px solid #cbd5e1;">
+                <div style="font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.25;">สารวัตรนักเรียน</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: #334155; margin-top: 2px;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                <div style="font-size: 13px; font-weight: 600; color: #334155; margin-top: 2px;">
+                  การปฏิบัติหน้าที่ : <span style="color: #0f172a;">${title}</span>
+                </div>
+                <div style="font-size: 12px; color: #64748b; margin-top: 2px;">
+                  วันที่จัดกิจกรรม : <span style="color: #1e293b; font-weight: 500;">${dateDisplay}</span>
+                </div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 2px;">
+                  ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER
+                </div>
+              </td>
+              <td style="vertical-align: middle; text-align: right; padding: 0 0 10px 0; border: none; white-space: nowrap;">
                 <div style="font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.3px; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fafafa;">
                   SI-ROSTER • ทางการ
                 </div>
-              `}
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
       `;
 
-      let statsHtml = '';
+      // Minimalist Summary Metrics Strip
       if (showStats) {
-        statsHtml = `
+        html += `
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px; page-break-inside: avoid; border: 1px solid #e2e8f0; border-radius: 6px; background: #fafafa;">
             <tr>
               <td style="padding: 7px 12px; text-align: left; border: none; border-right: 1px solid #e2e8f0; width: 25%;">
@@ -11372,12 +11286,9 @@ body.dark-mode .signup-success-banner,
         `;
       }
 
-      const tableChunks = [];
+      // Minimalist Duty Tables
       if (Object.keys(grouped).length === 0) {
-        tableChunks.push({
-          html: `<p style="text-align:center; font-size: 15px; margin: 20px 0; color: #64748b;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`,
-          rows: 3
-        });
+        html += `<div style="text-align: center; padding: 25px; background: #fafafa; border: 1px dashed #cbd5e1; border-radius: 6px; color: #64748b; font-size: 13.5px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</div>`;
       } else {
         const CHUNK_SIZE = 18;
         orderedDuties.forEach((d, dutyIdx) => {
@@ -11395,28 +11306,31 @@ body.dark-mode .signup-success-banner,
 
           chunks.forEach(chunk => {
             const dutyTitle = chunk.isContinuation
-              ? `${d} (ต่อ)`
-              : d;
+              ? `หน้าที่: ${d} (ต่อ)`
+              : `หน้าที่: ${d}`;
 
-            let tblHtml = `
-              <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: avoid !important; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden;">
+            html += `
+              <table class="roster-duty-table-modern" style="width: 100%; border-collapse: collapse; border: 1px solid #cbd5e1; margin-bottom: 14px; page-break-inside: avoid !important; break-inside: avoid !important; background: #ffffff;">
                 <thead>
                   <tr style="background: #f8fafc; border-bottom: 1.5px solid #0f172a; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important;">
-                    <th colspan="5" style="padding: 7px 10px; font-size: 13.5px; font-weight: 700; color: #0f172a; text-align: left; border: none;">
+                    <th colspan="5" style="padding: 7px 12px; border: none; border-bottom: 1.5px solid #0f172a; text-align: left; vertical-align: middle;">
                       <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>${dutyTitle}</span>
-                        <span style="font-size: 11px; font-weight: 500; color: #64748b; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 2px 8px;">
-                          จำนวน ${allMembers.length} คน
+                        <span style="font-size: 13px; font-weight: 700; color: #0f172a;">
+                          <span style="display: inline-block; width: 3px; height: 12px; background: #0f172a; vertical-align: middle; margin-right: 6px; border-radius: 1px;"></span>
+                          ${dutyTitle}
                         </span>
+                        ${chunk.isContinuation ? '' : `<span style="font-size: 11px; font-weight: 600; color: #475569; background: #e2e8f0; padding: 2px 8px; border-radius: 4px;">
+                          จำนวน ${allMembers.length} คน
+                        </span>`}
                       </div>
                     </th>
                   </tr>
                   <tr style="background: #ffffff; border-bottom: 1px solid #cbd5e1; page-break-inside: avoid !important; break-inside: avoid !important;">
-                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; text-align: center; width: 7%; border: none; border-right: 1px solid #e2e8f0;">ลำดับ</th>
-                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; text-align: center; width: 7%; border: none; border-right: 1px solid #e2e8f0;">เช็คชื่อ</th>
-                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; text-align: left; width: 46%; border: none; border-right: 1px solid #e2e8f0;">ชื่อ - นามสกุล</th>
-                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; text-align: center; width: 14%; border: none; border-right: 1px solid #e2e8f0;">ชั้นเรียน</th>
-                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; text-align: left; width: 26%; border: none;">หมายเหตุ</th>
+                    <th style="padding: 5px 6px; font-size: 11.5px; font-weight: 600; color: #475569; width: 6%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">#</th>
+                    <th style="padding: 5px 6px; width: 8%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;"></th>
+                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 44%; text-align: left; border: none; border-bottom: 1px solid #cbd5e1;">ชื่อ - นามสกุล</th>
+                    <th style="padding: 5px 8px; font-size: 11.5px; font-weight: 600; color: #475569; width: 14%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">ระดับชั้น</th>
+                    <th style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; color: #475569; width: 28%; text-align: center; border: none; border-bottom: 1px solid #cbd5e1;">หมายเหตุ / การปฏิบัติงาน</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -11432,38 +11346,32 @@ body.dark-mode .signup-success-banner,
                 justName = parts.join(' ');
               }
 
-              const isEven = idx % 2 === 0;
-              const rowBg = isEven ? '#ffffff' : '#fafafa';
-
-              tblHtml += `
+              const rowBg = idx % 2 === 0 ? '#ffffff' : '#fafafa';
+              html += `
                 <tr style="background: ${rowBg}; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid !important; break-inside: avoid !important;">
-                  <td style="padding: 4px 6px; font-size: 12px; color: #64748b; text-align: center; border: none; border-right: 1px solid #f1f5f9;">
-                    ${chunk.offset + idx + 1}
+                  <td style="padding: 5px 6px; font-size: 12px; color: #64748b; text-align: center; border: none; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid !important; break-inside: avoid !important;">${chunk.offset + idx + 1}</td>
+                  <td style="padding: 5px 6px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid !important; break-inside: avoid !important;">
+                    <div style="width: 13px; height: 13px; border: 1.5px solid #64748b; border-radius: 2px; display: inline-block; vertical-align: middle; background: #ffffff;"></div>
                   </td>
-                  <td style="padding: 4px 6px; text-align: center; border: none; border-right: 1px solid #f1f5f9;">
-                    <div style="width: 14px; height: 14px; border: 1.5px solid #94a3b8; border-radius: 3px; display: inline-block; vertical-align: middle;"></div>
-                  </td>
-                  <td style="padding: 4px 10px; font-size: 12.5px; font-weight: 500; color: #0f172a; text-align: left; white-space: nowrap; border: none; border-right: 1px solid #f1f5f9;">
+                  <td style="padding: 5px 10px; font-size: 12.5px; font-weight: 500; color: #0f172a; text-align: left; border: none; border-bottom: 1px solid #f1f5f9; white-space: nowrap; page-break-inside: avoid !important; break-inside: avoid !important;">
                     ${justName}
                   </td>
-                  <td style="padding: 4px 6px; font-size: 12px; font-weight: 500; color: #334155; text-align: center; border: none; border-right: 1px solid #f1f5f9;">
-                    <span style="background: #f1f5f9; border-radius: 4px; padding: 1px 6px; display: inline-block;">${className}</span>
+                  <td style="padding: 5px 8px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid !important; break-inside: avoid !important;">
+                    <span style="display: inline-block; padding: 1px 7px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 3px; font-size: 11px; font-weight: 500;">${className || '-'}</span>
                   </td>
-                  <td style="padding: 4px 10px; font-size: 12px; color: #64748b; text-align: left; border: none;"></td>
+                  <td style="padding: 5px 10px; text-align: center; border: none; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid !important; break-inside: avoid !important;">
+                    <div style="border-bottom: 1px dotted #cbd5e1; height: 12px; width: 85%; margin: 0 auto;"></div>
+                  </td>
                 </tr>
               `;
             });
 
-            tblHtml += `</tbody></table>`;
-            tableChunks.push({
-              html: tblHtml,
-              rows: chunk.members.length + 2
-            });
+            html += `</tbody></table>`;
           });
         });
       }
 
-      let advisorsHtml = '';
+      // Minimalist Advisor Signature Blocks
       if (advs.length > 0) {
         let sigGridHtml = `
           <table style="width: 100%; margin-top: 20px; page-break-inside: avoid; border: none; border-collapse: separate; border-spacing: 16px 0;">
@@ -11503,80 +11411,23 @@ body.dark-mode .signup-success-banner,
         });
 
         sigGridHtml += `</tr></table>`;
-        advisorsHtml = sigGridHtml;
+        html += sigGridHtml;
       }
 
-      const footerTableHtml = `
-        <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 14px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
-          <tr>
-            <td style="text-align: left; border: none; padding: 4px 0;">
-              ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
-            </td>
-            <td style="text-align: right; border: none; padding: 4px 0;">
-              โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี
-            </td>
-          </tr>
-        </table>
-      `;
-
-      // Pack into distinct pages
-      const pages = [];
-      const p1HeaderCost = showStats ? 7 : 5;
-      let curPage = { items: [], totalRows: p1HeaderCost };
-      const MAX_P1 = showStats ? 29 : 31;
-      const MAX_OTHER = 30;
-
-      tableChunks.forEach(tc => {
-        const limit = pages.length === 0 ? MAX_P1 : MAX_OTHER;
-        if (curPage.items.length > 0 && (curPage.totalRows + tc.rows > limit)) {
-          pages.push(curPage);
-          curPage = { items: [tc.html], totalRows: tc.rows };
-        } else {
-          curPage.items.push(tc.html);
-          curPage.totalRows += tc.rows;
-        }
-      });
-
-      const advTotalRows = (advisorsHtml ? 6 : 0) + 2; // +2 for footer
-      const limit = pages.length === 0 ? MAX_P1 : MAX_OTHER;
-      if (curPage.totalRows + advTotalRows > limit) {
-        pages.push(curPage);
-        curPage = { items: [advisorsHtml + footerTableHtml], totalRows: advTotalRows };
-      } else {
-        curPage.items.push(advisorsHtml + footerTableHtml);
-        curPage.totalRows += advTotalRows;
-      }
-
-      if (curPage.items.length > 0) {
-        pages.push(curPage);
-      }
-
-      const watermarkLayerHtml = isUnofficial ? `
-        <div class="pdf-page-watermark-layer">
-          <div class="pdf-watermark-box watermark-top">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-          <div class="pdf-watermark-box watermark-bottom">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
+      // Minimalist Footer
+      html += `
+          <table style="width: 100%; border: none; border-collapse: collapse; margin-top: 14px; padding-top: 8px; border-top: 1px solid #e2e8f0; font-size: 10.5px; color: #94a3b8; page-break-inside: avoid;">
+            <tr>
+              <td style="text-align: left; border: none; padding: 4px 0;">
+                ระบบสารวัตรนักเรียนอิเล็กทรอนิกส์ (SI-ROSTER) • พิมพ์เมื่อ: ${printTimestamp}
+              </td>
+              <td style="text-align: right; border: none; padding: 4px 0;">
+                โรงเรียนเดชะปัตตนยานุกูล จ.ปัตตานี
+              </td>
+            </tr>
+          </table>
         </div>
-      ` : '';
-
-      let html = '';
-      pages.forEach((p, pageIdx) => {
-        const isFirst = pageIdx === 0;
-        const topHeader = isFirst ? (activityHeaderHtml + statsHtml) : '';
-
-        html += `
-          <div class="roster-page">
-            ${watermarkLayerHtml}
-            <div class="minimal-print-wrapper" style="position: relative; z-index: 1; font-family: 'Prompt', 'Sarabun', -apple-system, sans-serif; color: #0f172a; padding: 0; margin: 0; background: transparent;">
-              ${topHeader}
-              ${p.items.join('')}
-            </div>
-          </div>
-        `;
-      });
+      `;
 
       const printWin = window.open('', '_blank');
       if (!printWin) {
@@ -11586,32 +11437,18 @@ body.dark-mode .signup-success-banner,
 
       printWin.document.open();
       printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF (Minimal) - ' + title + '</title>' +
-        '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
+        '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
         '<style>' +
-        '@page { size: A4 portrait; margin: 6mm 10mm 6mm 10mm; }' +
+        '@page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }' +
         '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
-        'html, body { width: 100%; margin: 0; padding: 0; font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; color: #0f172a; background: #ffffff; }' +
-        '.roster-page { position: relative; page-break-after: always; break-after: page; box-sizing: border-box; width: 100%; min-height: 225mm; }' +
-        '.roster-page:last-child { page-break-after: auto; break-after: auto; }' +
-        '.pdf-page-watermark-layer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }' +
-        '.pdf-watermark-box { position: absolute; left: 0; right: 0; width: 100%; text-align: center; }' +
-        '.watermark-top { top: 22%; }' +
-        '.watermark-bottom { top: 66%; }' +
-        '.pdf-watermark-text { display: inline-block; font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; font-size: 130px; font-weight: 800; color: rgba(220, 38, 38, 0.14); letter-spacing: 16px; transform: rotate(-30deg); transform-origin: center center; white-space: nowrap; user-select: none; }' +
+        'body { font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; padding: 0; color: #0f172a; margin: 0; background: #ffffff; }' +
         'table { width: 100%; border-collapse: collapse; page-break-inside: auto; break-inside: auto; }' +
-        'thead { display: table-header-group !important; }' +
+        'thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }' +
         'tbody { display: table-row-group; }' +
         'tfoot { display: table-footer-group; }' +
-        'tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
+        'tr { page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: auto; break-after: auto; }' +
         'td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        '@media print {' +
-        '  body { background: #ffffff; }' +
-        '  .roster-page { page-break-after: always; break-after: page; min-height: 225mm; }' +
-        '  .roster-page:last-child { page-break-after: auto; break-after: auto; }' +
-        '  table { page-break-inside: auto; break-inside: auto; }' +
-        '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        '  td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        '}' +
+        '@media print { body { background: #ffffff; } table { page-break-inside: auto; break-inside: auto; } tr { page-break-inside: avoid !important; break-inside: avoid !important; } td, th { page-break-inside: avoid !important; break-inside: avoid !important; } }' +
         '</style>' +
         '<' + '/head>' +
         '<' + 'body>' +
@@ -11636,24 +11473,21 @@ body.dark-mode .signup-success-banner,
       // Check images
       const imgs = printWin.document.querySelectorAll('img');
       if (imgs.length > 0) {
-        let loaded = 0;
-        const total = imgs.length;
-        const onDone = () => {
-          loaded++;
-          if (loaded >= total) runPrint();
+        let loadedCount = 0;
+        const checkAllLoaded = () => {
+          loadedCount++;
+          if (loadedCount >= imgs.length) {
+            runPrint();
+          }
         };
-        imgs.forEach(im => {
-          if (im.complete) {
-            loaded++;
+        imgs.forEach(img => {
+          if (img.complete) {
+            checkAllLoaded();
           } else {
-            im.onload = im.onerror = onDone;
+            img.onload = img.onerror = checkAllLoaded;
           }
         });
-        if (loaded >= total) {
-          runPrint();
-        } else {
-          setTimeout(runPrint, 2500); // safety fallback
-        }
+        setTimeout(runPrint, 2500); // safety fallback
       } else {
         runPrint();
       }
@@ -13007,21 +12841,6 @@ body.dark-mode .signup-success-banner,
           </div>
         </div>
 
-        <!-- Document Status / Watermark Option (Applies to all templates) -->
-        <div style="margin-bottom: 16px; padding: 10px 14px; background: var(--bg, #f8fafc); border: 1px solid var(--border-light, #e2e8f0); border-radius: 8px;">
-          <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
-            <input type="checkbox" id="pdfOptUnofficial" style="cursor: pointer; width: 17px; height: 17px; accent-color: #dc2626;">
-            <div>
-              <span style="font-weight: 600; color: #dc2626; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-stamp"></i> ระบุเป็นเอกสาร "ไม่เป็นทางการ" (ฉบับร่าง)
-              </span>
-              <div style="font-size: 0.75rem; color: var(--text-muted, #64748b); margin-top: 2px; line-height: 1.3;">
-                แสดงลายน้ำสีเทาพาดกลางหน้ากระดาษและปรับป้ายกำกับเป็น "ไม่เป็นทางการ" สำหรับตรวจเช็กรายชื่อเบื้องต้น
-              </div>
-            </div>
-          </label>
-        </div>
-
         <!-- Advisors List for Signature -->
         <div class="form-group" style="margin-bottom: 14px;">
           <label style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-weight:600; font-size: 0.92rem;">
@@ -13055,9 +12874,6 @@ body.dark-mode .signup-success-banner,
           <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeModal('pdfExportModal')">ยกเลิก</button>
           <button type="button" class="btn btn-primary btn-block" style="flex:2; margin:0;" onclick="confirmPdfExport()"><i class="fa-solid fa-print"></i>
             ยืนยันและพิมพ์ PDF</button>
-        </div>
-        <div style="font-size: 0.73rem; color: var(--text-muted, #94a3b8); text-align: center; margin-top: 10px; line-height: 1.4;">
-          <i class="fa-solid fa-circle-info" style="color: var(--primary);"></i> ในหน้าต่างพิมพ์ ให้เปิด "กราฟิกพื้นหลัง" (Background graphics) และหากมี "ส่วนหัวและส่วนท้าย" (Headers and footers) แนะนำให้ปิด
         </div>
       </div>
     </div>
@@ -13314,12 +13130,6 @@ body.dark-mode .signup-success-banner,
       document.getElementById('pdfExportTarget').value = targetFnName;
       document.getElementById('pdfExportArgs').value = JSON.stringify(argsArray);
 
-      // Always reset unofficial watermark checkbox to false (unchecked) by default
-      const unofficialCb = document.getElementById('pdfOptUnofficial');
-      if (unofficialCb) {
-        unofficialCb.checked = false;
-      }
-
       // Restore saved preferences
       const savedMode = localStorage.getItem('roster_pdf_template_mode') || 'modern';
       const modeRadio = document.querySelector(`input[name="pdfTemplateMode"][value="${savedMode}"]`);
@@ -13396,7 +13206,6 @@ body.dark-mode .signup-success-banner,
       window.exportOptions.template = tplRadio ? tplRadio.value : 'modern';
       window.exportOptions.showStats = document.getElementById('pdfOptShowStats') ? document.getElementById('pdfOptShowStats').checked : true;
       window.exportOptions.showDualLogo = document.getElementById('pdfOptShowDualLogo') ? document.getElementById('pdfOptShowDualLogo').checked : true;
-      window.exportOptions.isUnofficial = document.getElementById('pdfOptUnofficial') ? document.getElementById('pdfOptUnofficial').checked : false;
 
       // Save preferences to localStorage
       try {

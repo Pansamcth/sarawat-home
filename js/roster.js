@@ -3305,10 +3305,7 @@
       }
     }
 
-    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties, options) {
-      options = options || window.exportOptions || {};
-      const isUnofficial = !!options.isUnofficial;
-
+    function generatePdfPrintView(signups, title, dateDisplay, customOrderedDuties) {
       const grouped = {};
       signups.forEach(s => {
         if (!grouped[s.duty]) grouped[s.duty] = [];
@@ -3345,39 +3342,28 @@
       }
 
       Swal.close();
-
-      const activityHeaderHtml = `
-        <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
-          <tr>
-            <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
-              <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 58px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
-              <span style="display: inline-block; width: 1px; height: 38px; background: #cbd5e1; margin: 0 8px; vertical-align: middle;"></span>
-              <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
-            </td>
-            <td style="border: none; vertical-align: middle; text-align: left; padding: 0;">
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 16px; font-weight: bold; color: #000;">สารวัตรนักเรียน</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 14px; font-weight: bold; color: #000;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">การปฏิบัติหน้าที่ : ${title}</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
-              <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
-            </td>
-            ${isUnofficial ? `
-            <td style="border: none; vertical-align: top; text-align: right; padding: 0 0 0 10px; white-space: nowrap;">
-              <div style="font-size: 11px; font-weight: bold; color: #dc2626; border: 1.5px solid #dc2626; border-radius: 4px; padding: 4px 8px; display: inline-block; background: #fff;">
-                ฉบับไม่เป็นทางการ
-              </div>
-            </td>
-            ` : ''}
-          </tr>
-        </table>
+      let html = `
+        <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0;">
+          <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
+            <tr>
+              <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
+                <img src="https://www.sarawatdc.site/assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล" style="height: 58px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/school-logo.png';">
+                <span style="display: inline-block; width: 1px; height: 38px; background: #cbd5e1; margin: 0 8px; vertical-align: middle;"></span>
+                <img src="https://www.sarawatdc.site/assets/icons/sarawat_glow.png" alt="สารวัตรนักเรียน" style="height: 54px; width: auto; vertical-align: middle; object-fit: contain;" onerror="this.onerror=null;this.src='../assets/icons/sarawat_glow.png';">
+              </td>
+              <td style="border: none; vertical-align: middle; text-align: left; padding: 0;">
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 16px; font-weight: bold; color: #000;">สารวัตรนักเรียน</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 14px; font-weight: bold; color: #000;">กลุ่มงานกิจการนักเรียน โรงเรียนเดชะปัตตนยานุกูล</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">การปฏิบัติหน้าที่ : ${title}</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 13.5px; font-weight: bold; color: #000;">วันที่จัดกิจกรรม : ${dateDisplay}</div>
+                <div style="margin: 1px 0; line-height: 1.25; font-size: 12px; font-weight: normal; color: #475569;">ระบบลงหน้าที่สารวัตรนักเรียนออนไลน์ | SI-ROSTER</div>
+              </td>
+            </tr>
+          </table>
       `;
 
-      const tableChunks = [];
       if (Object.keys(grouped).length === 0) {
-        tableChunks.push({
-          html: `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`,
-          rows: 3
-        });
+        html += `<p style="text-align:center; font-size: 15px; margin: 20px 0;">-- ไม่มีผู้ลงชื่อในกิจกรรมนี้ --</p>`;
       } else {
         const CHUNK_SIZE = 18;
         orderedDuties.forEach((d, dutyIdx) => {
@@ -3398,8 +3384,8 @@
               ? `หน้าที่ที่รับผิดชอบ: ${d} (ต่อ)`
               : `หน้าที่ที่รับผิดชอบ: ${d} <span style="font-weight: normal; font-size: 12px; float: right;">(จำนวน ${allMembers.length} คน)</span>`;
 
-            let tblHtml = `
-               <table class="roster-duty-table" style="width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: avoid !important; break-inside: avoid !important;">
+            html += `
+               <table class="roster-duty-table" style="width: 100%; border-collapse: collapse; margin-bottom: 14px; page-break-inside: avoid !important; break-inside: avoid !important;">
                  <thead>
                    <tr style="page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important;">
                      <th colspan="5" style="border: 1px solid #000; background: #f8fafc; padding: 6px 8px; font-size: 14px; line-height: 1.3; font-weight: bold; text-align: left;">
@@ -3426,7 +3412,7 @@
                 justName = parts.join(' ');
               }
 
-              tblHtml += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
+              html += `<tr style="page-break-inside: avoid !important; break-inside: avoid !important;">
                 <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;">${chunk.offset + idx + 1}</td>
                 <td style="border: 1px solid #000; padding: 4px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"><div style="width: 13px; height: 13px; border: 1px solid #000; display: inline-block; vertical-align: middle;"></div></td>
                 <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: left; white-space: nowrap; page-break-inside: avoid !important; break-inside: avoid !important;">${justName}</td>
@@ -3434,11 +3420,7 @@
                 <td style="border: 1px solid #000; padding: 4px 6px; font-size: 12.5px; line-height: 1.25; text-align: center; page-break-inside: avoid !important; break-inside: avoid !important;"></td>
               </tr>`;
             });
-            tblHtml += `</tbody></table>`;
-            tableChunks.push({
-              html: tblHtml,
-              rows: chunk.members.length + 2
-            });
+            html += `</tbody></table>`;
           });
         });
       }
@@ -3448,7 +3430,7 @@
         const advs = exportOptions.selectedAdvisors;
         const useSig = exportOptions.sigType === 'digital';
 
-        let gridHtml = '<table style="width: 100%; margin-top: 20px; page-break-inside: avoid; border: none; border-collapse: collapse;">';
+        let gridHtml = '<table style="width: 100%; margin-top: 25px; page-break-inside: avoid; border: none; border-collapse: collapse;">';
         let rowOpen = false;
 
         advs.forEach((adv, index) => {
@@ -3496,65 +3478,8 @@
         advisorsHtml = gridHtml;
       }
 
-      // Pack into distinct pages to guarantee identical multi-page rendering across all devices
-      const pages = [];
-      let curPage = { items: [], totalRows: 5 }; // Page 1 starts with 5 rows reserved for activity header
-      const MAX_P1 = 31;
-      const MAX_OTHER = 30;
-
-      tableChunks.forEach(tc => {
-        const limit = pages.length === 0 ? MAX_P1 : MAX_OTHER;
-        if (curPage.items.length > 0 && (curPage.totalRows + tc.rows > limit)) {
-          pages.push(curPage);
-          curPage = { items: [tc.html], totalRows: tc.rows };
-        } else {
-          curPage.items.push(tc.html);
-          curPage.totalRows += tc.rows;
-        }
-      });
-
-      if (advisorsHtml) {
-        const advRows = 6;
-        const limit = pages.length === 0 ? MAX_P1 : MAX_OTHER;
-        if (curPage.totalRows + advRows > limit) {
-          pages.push(curPage);
-          curPage = { items: [advisorsHtml], totalRows: advRows };
-        } else {
-          curPage.items.push(advisorsHtml);
-          curPage.totalRows += advRows;
-        }
-      }
-
-      if (curPage.items.length > 0) {
-        pages.push(curPage);
-      }
-
-      const watermarkLayerHtml = isUnofficial ? `
-        <div class="pdf-page-watermark-layer">
-          <div class="pdf-watermark-box watermark-top">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-          <div class="pdf-watermark-box watermark-bottom">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-        </div>
-      ` : '';
-
-      let html = '';
-      pages.forEach((p, pageIdx) => {
-        const isFirst = pageIdx === 0;
-        const topHeader = isFirst ? activityHeaderHtml : '';
-
-        html += `
-          <div class="roster-page">
-            ${watermarkLayerHtml}
-            <div class="roster-page-content" style="position: relative; z-index: 1;">
-              ${topHeader}
-              ${p.items.join('')}
-            </div>
-          </div>
-        `;
-      });
+      html += advisorsHtml;
+      html += `</div>`;
 
       const printWin = window.open('', '_blank');
       if (!printWin) {
@@ -3563,40 +3488,38 @@
       }
 
       printWin.document.open();
-      printWin.document.write('<!DOCTYPE html><html><head><title>Export PDF - ' + title + '</title>' +
-        '<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700;800&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
-        '<style>' +
-        '@page { size: A4 portrait; margin: 6mm 10mm 6mm 10mm; }' +
-        '* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }' +
-        'html, body { width: 100%; margin: 0; padding: 0; font-family: \'Sarabun\', sans-serif; color: #000; background: white; }' +
-        '.roster-page { position: relative; page-break-after: always; break-after: page; box-sizing: border-box; width: 100%; min-height: 225mm; }' +
-        '.roster-page:last-child { page-break-after: auto; break-after: auto; }' +
-        '.pdf-page-watermark-layer { position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }' +
-        '.pdf-watermark-box { position: absolute; left: 0; right: 0; width: 100%; text-align: center; }' +
-        '.watermark-top { top: 22%; }' +
-        '.watermark-bottom { top: 66%; }' +
-        '.pdf-watermark-text { display: inline-block; font-family: \'Prompt\', \'Sarabun\', -apple-system, sans-serif; font-size: 130px; font-weight: 800; color: rgba(220, 38, 38, 0.14); letter-spacing: 16px; transform: rotate(-30deg); transform-origin: center center; white-space: nowrap; user-select: none; }' +
-        'table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }' +
-        'thead { display: table-header-group !important; }' +
-        'tbody { display: table-row-group; }' +
-        'tfoot { display: table-footer-group; }' +
-        'tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        'th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; }' +
-        'th { text-align: center; font-weight: bold; }' +
-        'td { text-align: center; font-weight: normal; }' +
-        '@media print {' +
-        '  body { background: white; }' +
-        '  .roster-page { page-break-after: always; break-after: page; min-height: 225mm; }' +
-        '  .roster-page:last-child { page-break-after: auto; break-after: auto; }' +
-        '  tr { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        '  td, th { page-break-inside: avoid !important; break-inside: avoid !important; }' +
-        '}' +
-        '</style>' +
-        '<' + '/head>' +
-        '<' + 'body>' +
-        html +
-        '<' + '/body>' +
-        '<' + '/html>');
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Export PDF - ${title}</title>
+          <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+          <style>
+            @page { size: A4 portrait; margin: 8mm 10mm 10mm 10mm; }
+            * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; background: white; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 12px; page-break-inside: auto; break-inside: auto; }
+            thead { display: table-header-group !important; page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: avoid !important; break-after: avoid !important; }
+            tbody { display: table-row-group; }
+            tfoot { display: table-footer-group; }
+            tr { page-break-inside: avoid !important; break-inside: avoid !important; page-break-after: auto; break-after: auto; }
+            th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }
+            th { text-align: center; font-weight: bold; }
+            td { text-align: center; font-weight: normal; }
+            @media print {
+              body { background: white; }
+              table { page-break-inside: auto; break-inside: auto; }
+              thead { display: table-header-group !important; }
+              tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+              td, th { page-break-inside: avoid !important; break-inside: avoid !important; }
+            }
+          </style>
+        </head>
+        <body>
+          ${html}
+        </body>
+        </html>
+      `);
       printWin.document.close();
 
       const executePrint = () => {
@@ -3606,7 +3529,7 @@
 
       const runPrint = () => {
         if (printWin.document.fonts && printWin.document.fonts.ready) {
-          printWin.document.fonts.ready.then(() => setTimeout(executePrint, 350));
+          printWin.document.fonts.ready.then(() => setTimeout(executePrint, 300));
         } else {
           setTimeout(executePrint, 1000);
         }
@@ -5080,12 +5003,6 @@
       document.getElementById('pdfExportTarget').value = targetFnName;
       document.getElementById('pdfExportArgs').value = JSON.stringify(argsArray);
 
-      // Reset Unofficial watermark to false (unchecked) by default
-      const unofficialCb = document.getElementById('pdfOptUnofficial');
-      if (unofficialCb) {
-        unofficialCb.checked = false;
-      }
-
       // Load advisors if empty
       if (advisorsList.length === 0) {
         loadAdvisors(renderPdfAdvisorsList);
@@ -5135,7 +5052,6 @@
       window.exportOptions.selectedAdvisors = selectedAdvisors;
       const sigTypeRadio = document.querySelector('input[name="pdfSigType"]:checked');
       window.exportOptions.sigType = sigTypeRadio ? sigTypeRadio.value : 'digital';
-      window.exportOptions.isUnofficial = document.getElementById('pdfOptUnofficial') ? document.getElementById('pdfOptUnofficial').checked : false;
 
       closeModal('pdfExportModal');
 
