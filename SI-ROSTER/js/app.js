@@ -1466,7 +1466,7 @@
               ${timeRemainingBadge}
             </div>
             <div class="card-title">${act.title}</div>
-            <div class="card-desc toastui-editor-contents" style="margin-bottom: 5px;">${act.description ? marked.parse(act.description) : ''}</div>
+            <div class="card-desc toastui-editor-contents" style="margin-bottom: 5px;">${act.description ? marked.parse(act.description.trim()) : ''}</div>
             ${(() => {
             if (!act.creatorName) return '';
             const parts = act.creatorName.split('|');
@@ -1525,7 +1525,7 @@
       if (activity.description && activity.description.trim() !== '') {
         document.getElementById('modalDescTitle').style.display = 'block';
         document.getElementById('modalDesc').style.display = 'block';
-        document.getElementById('modalDesc').innerHTML = marked.parse(activity.description);
+        document.getElementById('modalDesc').innerHTML = marked.parse((activity.description || '').trim());
       } else {
         document.getElementById('modalDescTitle').style.display = 'none';
         document.getElementById('modalDesc').style.display = 'none';
@@ -2889,7 +2889,7 @@
                 ${r.description && r.description.trim() !== '' ? `
                 <div style="flex:1; min-width:200px;">
                   <strong style="color:var(--text-main)">รายละเอียด:</strong>
-                  <div style="color:var(--text-muted); margin: 5px 0 0 0; font-size: 0.95rem;" class="toastui-editor-contents">${marked.parse(r.description)}</div>
+                  <div style="color:var(--text-muted); margin: 5px 0 0 0; font-size: 0.95rem;" class="toastui-editor-contents">${marked.parse((r.description || '').trim())}</div>
                 </div>
                 ` : '<div style="flex:1; min-width:200px;"></div>'}
                 <div style="background:rgba(52,211,153,0.1); color:var(--success); padding: 10px 15px; border-radius: 8px; text-align:center; min-width: 120px;">

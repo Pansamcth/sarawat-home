@@ -1061,11 +1061,24 @@
       color: var(--text-main);
       margin-bottom: 12px;
       line-height: 1.6;
-      font-size: 1.05rem;
+      font-size: 0.96rem;
       background: rgba(15, 23, 42, 0.03);
-      padding: 20px;
+      padding: 16px 20px;
       border-radius: 16px;
-      white-space: pre-wrap;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .modal-desc > :last-child,
+    .modal-desc p:last-child,
+    .modal-desc ul:last-child,
+    .modal-desc ol:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .modal-desc > :first-child {
+      margin-top: 0 !important;
     }
 
     /* Timer */

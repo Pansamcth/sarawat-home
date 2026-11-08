@@ -187,6 +187,11 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    if (typeof marked !== 'undefined' && marked.setOptions) {
+      marked.setOptions({ breaks: true, gfm: true });
+    }
+  </script>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
@@ -212,6 +217,39 @@
     .toastui-editor-contents {
       background-color: transparent !important;
       font-size: 0.95rem !important;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .toastui-editor-contents p {
+      margin: 0 0 8px 0;
+      line-height: 1.6;
+    }
+
+    .toastui-editor-contents ul,
+    .toastui-editor-contents ol {
+      margin: 4px 0 8px 0;
+      padding-left: 20px;
+    }
+
+    .toastui-editor-contents li {
+      margin-bottom: 4px;
+      line-height: 1.55;
+    }
+
+    .toastui-editor-contents li:last-child {
+      margin-bottom: 0;
+    }
+
+    .toastui-editor-contents > :last-child,
+    .toastui-editor-contents p:last-child,
+    .toastui-editor-contents ul:last-child,
+    .toastui-editor-contents ol:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .toastui-editor-contents > :first-child {
+      margin-top: 0 !important;
     }
 
     .toastui-editor-contents p:empty {
@@ -2120,13 +2158,26 @@
     .modal-desc {
       color: #334155;
       margin-bottom: 18px;
-      line-height: 1.65;
-      font-size: 0.98rem;
+      line-height: 1.6;
+      font-size: 0.96rem;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      padding: 18px 22px;
+      padding: 16px 20px;
       border-radius: 14px;
-      white-space: pre-wrap;
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .modal-desc > :last-child,
+    .modal-desc p:last-child,
+    .modal-desc ul:last-child,
+    .modal-desc ol:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .modal-desc > :first-child {
+      margin-top: 0 !important;
     }
 
     /* Timer */
@@ -9148,7 +9199,7 @@ body.dark-mode .signup-success-banner,
               ${timeRemainingBadge}
             </div>
             <div class="card-title">${act.title}</div>
-            <div class="card-desc toastui-editor-contents">${act.description ? marked.parse(act.description) : ''}</div>
+            <div class="card-desc toastui-editor-contents">${act.description ? marked.parse(act.description.trim()) : ''}</div>
             ${(() => {
             if (!act.creatorName) return '';
             const parts = act.creatorName.split('|');
@@ -9507,7 +9558,7 @@ body.dark-mode .signup-success-banner,
       if (activity.description && activity.description.trim() !== '') {
         document.getElementById('modalDescTitle').style.display = 'block';
         document.getElementById('modalDesc').style.display = 'block';
-        document.getElementById('modalDesc').innerHTML = marked.parse(activity.description);
+        document.getElementById('modalDesc').innerHTML = marked.parse((activity.description || '').trim());
       } else {
         document.getElementById('modalDescTitle').style.display = 'none';
         document.getElementById('modalDesc').style.display = 'none';
