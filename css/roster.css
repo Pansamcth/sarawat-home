@@ -2424,9 +2424,92 @@
       font-size: 0.9rem;
     }
 
+    .dynamic-duty-row {
+      position: relative;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+    }
+
+    .duty-drag-handle {
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .dynamic-duty-row.dragging {
+      opacity: 0.45;
+      background: rgba(59, 130, 246, 0.05);
+    }
+
     .dynamic-duty-row.over {
       border: 2px dashed var(--primary) !important;
-      background: rgba(59, 130, 246, 0.1) !important;
+      background: rgba(59, 130, 246, 0.08) !important;
+    }
+
+    .dynamic-duty-row.drop-insert-above {
+      border-top: 3px solid var(--primary, #3b82f6) !important;
+      box-shadow: 0 -4px 10px rgba(59, 130, 246, 0.25);
+    }
+
+    .dynamic-duty-row.drop-insert-above::before {
+      content: 'แทรกด้านบน';
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: var(--primary, #3b82f6);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 8px;
+      border-radius: 10px;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      line-height: 1.4;
+    }
+
+    .dynamic-duty-row.drop-insert-below {
+      border-bottom: 3px solid var(--primary, #3b82f6) !important;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+    }
+
+    .dynamic-duty-row.drop-insert-below::after {
+      content: 'แทรกด้านล่าง';
+      position: absolute;
+      bottom: -12px;
+      left: 18px;
+      background: var(--primary, #3b82f6);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 8px;
+      border-radius: 10px;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      line-height: 1.4;
+    }
+
+    .dynamic-duty-row.drop-swap {
+      border: 2px dashed #f59e0b !important;
+      background: rgba(245, 158, 11, 0.12) !important;
+      transform: scale(0.995);
+    }
+
+    .dynamic-duty-row.drop-swap::after {
+      content: '🔄 สลับตำแหน่ง';
+      position: absolute;
+      top: -11px;
+      right: 16px;
+      background: #f59e0b;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.35);
+      pointer-events: none;
+      line-height: 1.4;
     }
 
     .duty-custom-select {

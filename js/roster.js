@@ -652,11 +652,86 @@
     }
 
     let dragSrcEl = null;
+    let currentDropAction = null;
+
+    function getDropActionFromEvent(e, targetRow) {
+      if (!targetRow) return null;
+      const rect = targetRow.getBoundingClientRect();
+      const clientY = (e.clientY !== undefined)
+        ? e.clientY
+        : (e.touches && e.touches[0] ? e.touches[0].clientY : (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : 0));
+      const offsetY = clientY - rect.top;
+      const ratio = rect.height > 0 ? (offsetY / rect.height) : 0.5;
+      if (ratio < 0.28) {
+        return 'insert-above';
+      } else if (ratio > 0.72) {
+        return 'insert-below';
+      } else {
+        return 'swap';
+      }
+    }
+
+    function clearDutyDropIndicators() {
+      const rows = document.querySelectorAll('.dynamic-duty-row');
+      rows.forEach(function (row) {
+        row.classList.remove('drop-insert-above', 'drop-insert-below', 'drop-swap', 'over', 'dragging');
+      });
+      currentDropAction = null;
+    }
+
+    function applyDropIndicator(targetRow, action) {
+      targetRow.classList.remove('drop-insert-above', 'drop-insert-below', 'drop-swap', 'over');
+      if (action === 'insert-above') {
+        targetRow.classList.add('drop-insert-above');
+      } else if (action === 'insert-below') {
+        targetRow.classList.add('drop-insert-below');
+      } else if (action === 'swap') {
+        targetRow.classList.add('drop-swap');
+      }
+      currentDropAction = action;
+    }
+
+    function executeDutyMoveOrSwap(srcRow, tgtRow, action) {
+      if (!srcRow || !tgtRow || srcRow === tgtRow) return;
+
+      const container = tgtRow.parentElement;
+      if (!container) return;
+
+      if (action === 'swap') {
+        // Swap values 1:1 between src and tgt
+        const srcSelect = srcRow.querySelector('.duty-select');
+        const srcInput = srcRow.querySelector('.duty-quota');
+        const tgtSelect = tgtRow.querySelector('.duty-select');
+        const tgtInput = tgtRow.querySelector('.duty-quota');
+
+        if (srcSelect && srcInput && tgtSelect && tgtInput) {
+          const tempSelectVal = srcSelect.value;
+          const tempInputVal = srcInput.value;
+
+          srcSelect.value = tgtSelect.value;
+          srcInput.value = tgtInput.value;
+
+          tgtSelect.value = tempSelectVal;
+          tgtInput.value = tempInputVal;
+        }
+      } else if (action === 'insert-above') {
+        container.insertBefore(srcRow, tgtRow);
+      } else if (action === 'insert-below') {
+        container.insertBefore(srcRow, tgtRow.nextSibling);
+      }
+
+      if (window.RosterAudio && typeof window.RosterAudio.playTap === 'function') {
+        try { window.RosterAudio.playTap(); } catch (err) {}
+      }
+
+      updateDutySummary();
+    }
 
     function handleDragStart(e) {
       dragSrcEl = this;
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
+      e.dataTransfer.setData('text/plain', '');
+      this.classList.add('dragging');
       this.style.opacity = '0.4';
     }
 
@@ -665,48 +740,119 @@
         e.preventDefault();
       }
       e.dataTransfer.dropEffect = 'move';
+      if (!dragSrcEl || dragSrcEl === this) return false;
+
+      const action = getDropActionFromEvent(e, this);
+      applyDropIndicator(this, action);
       return false;
     }
 
     function handleDragEnter(e) {
-      this.classList.add('over');
+      if (dragSrcEl && dragSrcEl !== this) {
+        const action = getDropActionFromEvent(e, this);
+        applyDropIndicator(this, action);
+      }
     }
 
     function handleDragLeave(e) {
-      this.classList.remove('over');
+      if (e.relatedTarget && this.contains(e.relatedTarget)) {
+        return;
+      }
+      this.classList.remove('drop-insert-above', 'drop-insert-below', 'drop-swap', 'over');
     }
 
     function handleDrop(e) {
       if (e.stopPropagation) {
         e.stopPropagation();
       }
-      if (dragSrcEl !== this) {
-        // Swap values manually instead of HTML because inputs lose state
-        const srcSelect = dragSrcEl.querySelector('.duty-select');
-        const srcInput = dragSrcEl.querySelector('.duty-quota');
-        const tgtSelect = this.querySelector('.duty-select');
-        const tgtInput = this.querySelector('.duty-quota');
-
-        const tempSelectVal = srcSelect.value;
-        const tempInputVal = srcInput.value;
-
-        srcSelect.value = tgtSelect.value;
-        srcInput.value = tgtInput.value;
-
-        tgtSelect.value = tempSelectVal;
-        tgtInput.value = tempInputVal;
-
-        updateDutySummary();
+      if (dragSrcEl && dragSrcEl !== this) {
+        const action = currentDropAction || getDropActionFromEvent(e, this);
+        executeDutyMoveOrSwap(dragSrcEl, this, action);
       }
+      clearDutyDropIndicators();
       return false;
     }
 
     function handleDragEnd(e) {
       this.style.opacity = '1';
-      const rows = document.querySelectorAll('.dynamic-duty-row');
-      rows.forEach(function (row) {
-        row.classList.remove('over');
-      });
+      clearDutyDropIndicators();
+      dragSrcEl = null;
+    }
+
+    function initDutyTouchDrag(handleEl, rowEl) {
+      if (!handleEl || !rowEl) return;
+      let touchStartY = 0;
+      let touchStartX = 0;
+      let activeTgtRow = null;
+      let touchAction = null;
+      let isDragging = false;
+
+      handleEl.addEventListener('touchstart', function (e) {
+        if (!e.touches || e.touches.length === 0) return;
+        const touch = e.touches[0];
+        touchStartY = touch.clientY;
+        touchStartX = touch.clientX;
+        isDragging = false;
+        activeTgtRow = null;
+        touchAction = null;
+        dragSrcEl = rowEl;
+      }, { passive: true });
+
+      handleEl.addEventListener('touchmove', function (e) {
+        if (!e.touches || e.touches.length === 0 || !dragSrcEl) return;
+        const touch = e.touches[0];
+        const dy = Math.abs(touch.clientY - touchStartY);
+        const dx = Math.abs(touch.clientX - touchStartX);
+
+        if (dy > 6 || dx > 6) {
+          isDragging = true;
+          if (e.cancelable) e.preventDefault();
+
+          dragSrcEl.classList.add('dragging');
+          dragSrcEl.style.opacity = '0.45';
+
+          if (typeof hideDutyDropdowns === 'function') {
+            hideDutyDropdowns();
+          }
+
+          const hitEl = document.elementFromPoint(touch.clientX, touch.clientY);
+          const tgtRow = hitEl ? hitEl.closest('.dynamic-duty-row') : null;
+
+          if (tgtRow && tgtRow !== dragSrcEl && tgtRow.parentElement === dragSrcEl.parentElement) {
+            if (activeTgtRow && activeTgtRow !== tgtRow) {
+              activeTgtRow.classList.remove('drop-insert-above', 'drop-insert-below', 'drop-swap', 'over');
+            }
+            activeTgtRow = tgtRow;
+            touchAction = getDropActionFromEvent(e, tgtRow);
+            applyDropIndicator(tgtRow, touchAction);
+          } else {
+            if (activeTgtRow) {
+              activeTgtRow.classList.remove('drop-insert-above', 'drop-insert-below', 'drop-swap', 'over');
+              activeTgtRow = null;
+              touchAction = null;
+            }
+          }
+        }
+      }, { passive: false });
+
+      function endTouchDrag(e) {
+        if (isDragging && dragSrcEl) {
+          if (activeTgtRow && touchAction) {
+            executeDutyMoveOrSwap(dragSrcEl, activeTgtRow, touchAction);
+          }
+        }
+        if (dragSrcEl) {
+          dragSrcEl.style.opacity = '1';
+        }
+        clearDutyDropIndicators();
+        isDragging = false;
+        activeTgtRow = null;
+        touchAction = null;
+        dragSrcEl = null;
+      }
+
+      handleEl.addEventListener('touchend', endTouchDrag, { passive: true });
+      handleEl.addEventListener('touchcancel', endTouchDrag, { passive: true });
     }
 
     function addDynamicDutyRow(dutyName = '', quota = 0) {
@@ -735,7 +881,7 @@
       div.addEventListener('dragend', handleDragEnd, false);
 
       div.innerHTML = `
-        <div style="cursor: grab; color: var(--text-dim); padding: 0 5px;" title="จับลากเพื่อเรียงลำดับ">
+        <div class="duty-drag-handle" style="cursor: grab; color: var(--text-dim); padding: 0 5px;" title="จับลากเพื่อแทรกหรือสลับตำแหน่ง">
           <i class="fa-solid fa-grip-vertical"></i>
         </div>
         <div class="duty-custom-select">
@@ -748,6 +894,12 @@
           <i class="fa-solid fa-trash"></i>
         </button>
       `;
+
+      const dragHandle = div.querySelector('.duty-drag-handle');
+      if (dragHandle) {
+        initDutyTouchDrag(dragHandle, div);
+      }
+
       container.appendChild(div);
       updateDutySummary();
     }
