@@ -6446,12 +6446,15 @@ body.dark-mode .signup-success-banner,
         if (srcSelect && srcInput && tgtSelect && tgtInput) {
           const tempSelectVal = srcSelect.value;
           const tempInputVal = srcInput.value;
+          const tempOrigDuty = srcRow.dataset.originalDuty || '';
 
           srcSelect.value = tgtSelect.value;
           srcInput.value = tgtInput.value;
+          srcRow.dataset.originalDuty = tgtRow.dataset.originalDuty || '';
 
           tgtSelect.value = tempSelectVal;
           tgtInput.value = tempInputVal;
+          tgtRow.dataset.originalDuty = tempOrigDuty;
         }
       } else if (action === 'insert-above') {
         container.insertBefore(srcRow, tgtRow);
@@ -6612,6 +6615,7 @@ body.dark-mode .signup-success-banner,
       const div = document.createElement('div');
       div.className = 'dynamic-duty-row';
       div.setAttribute('draggable', 'true');
+      div.dataset.originalDuty = (dutyName || '').trim();
 
       // Drag events
       div.addEventListener('dragstart', handleDragStart, false);
@@ -9865,10 +9869,15 @@ body.dark-mode .signup-success-banner,
           const select = row.querySelector('.duty-select');
           const input = row.querySelector('.duty-quota');
           if (select && input) {
-            const duty = select.value;
+            const duty = select.value.trim();
             const q = parseInt(input.value) || 0;
+            const originalDuty = (row.dataset.originalDuty || '').trim();
             if (duty && q > 0) {
-              selectedDuties.push({ duty: duty, quota: q });
+              const dutyObj = { duty: duty, quota: q };
+              if (originalDuty && originalDuty !== duty) {
+                dutyObj.renamedFrom = originalDuty;
+              }
+              selectedDuties.push(dutyObj);
             }
           }
         });
@@ -9928,6 +9937,9 @@ body.dark-mode .signup-success-banner,
             loadDashActivities(); // Refresh dash list
             loadDashStats(); // Refresh count
             loadUpcomingActivities(); // Refresh feed
+            if (typeof loadHistoryActivities === 'function') {
+              loadHistoryActivities(true); // Refresh history tab
+            }
             closeModal('dashActivityEditorModal');
           })
           .withFailureHandler(function (error) {
@@ -9977,8 +9989,20 @@ body.dark-mode .signup-success-banner,
       if (dutiesStr) {
         try {
           const actDuties = JSON.parse(decodeURIComponent(dutiesStr));
-          customOrderedDuties = actDuties.map(d => d.duty);
+          customOrderedDuties = actDuties.map(d => (d.duty || d.name || '').trim()).filter(Boolean);
         } catch (e) { }
+      }
+      if (customOrderedDuties.length === 0 && typeof dashAllActivities !== 'undefined' && Array.isArray(dashAllActivities)) {
+        const foundAct = dashAllActivities.find(a => a.sheetName === sheetName);
+        if (foundAct && Array.isArray(foundAct.duties)) {
+          customOrderedDuties = foundAct.duties.map(d => (d.duty || d.name || '').trim()).filter(Boolean);
+        }
+      }
+      if (customOrderedDuties.length === 0 && typeof historyAllActivities !== 'undefined' && Array.isArray(historyAllActivities)) {
+        const foundAct = historyAllActivities.find(a => a.sheetName === sheetName);
+        if (foundAct && Array.isArray(foundAct.duties)) {
+          customOrderedDuties = foundAct.duties.map(d => (d.duty || d.name || '').trim()).filter(Boolean);
+        }
       }
 
       if (typeof google !== 'undefined' && google.script) {
@@ -11124,10 +11148,21 @@ body.dark-mode .signup-success-banner,
 
       showToast('กำลังเตรียมข้อมูลสำหรับสร้าง PDF...', 'success');
 
+      let actDutiesNames = [];
+      if (act && Array.isArray(act.duties)) {
+        actDutiesNames = act.duties.map(d => (d.duty || d.name || '').trim()).filter(Boolean);
+      }
+      if (actDutiesNames.length === 0 && typeof dashAllActivities !== 'undefined' && Array.isArray(dashAllActivities)) {
+        const sName = (act && act.sheetName) || selectedDateInfo.sheetName;
+        const foundAct = dashAllActivities.find(a => a.sheetName === sName);
+        if (foundAct && Array.isArray(foundAct.duties)) {
+          actDutiesNames = foundAct.duties.map(d => (d.duty || d.name || '').trim()).filter(Boolean);
+        }
+      }
+
       if (typeof google !== 'undefined' && google.script) {
         google.script.run
           .withSuccessHandler(function (signups) {
-            const actDutiesNames = act.duties ? act.duties.map(d => d.duty) : [];
             renderRosterPdf(signups, act.title, dateDisplay, actDutiesNames);
           })
           .withFailureHandler(function (err) {
@@ -11135,7 +11170,6 @@ body.dark-mode .signup-success-banner,
           })
           .getSignupsForActivity(act.sheetName);
       } else {
-        const actDutiesNames = act.duties ? act.duties.map(d => d.duty) : [];
         renderRosterPdf(selectedDateInfo.signups || [], act.title, dateDisplay, actDutiesNames);
       }
     }
@@ -11160,7 +11194,12 @@ body.dark-mode .signup-success-banner,
 
       let orderedDuties = [];
       if (customOrderedDuties && customOrderedDuties.length > 0) {
-        orderedDuties = customOrderedDuties;
+        orderedDuties = [...customOrderedDuties];
+        for (let d in grouped) {
+          if (!orderedDuties.includes(d)) {
+            orderedDuties.push(d);
+          }
+        }
       } else {
         systemDuties.forEach(d => {
           if (grouped[d]) orderedDuties.push(d);
@@ -11412,7 +11451,12 @@ body.dark-mode .signup-success-banner,
 
       let orderedDuties = [];
       if (customOrderedDuties && customOrderedDuties.length > 0) {
-        orderedDuties = customOrderedDuties;
+        orderedDuties = [...customOrderedDuties];
+        for (let d in grouped) {
+          if (!orderedDuties.includes(d)) {
+            orderedDuties.push(d);
+          }
+        }
       } else {
         systemDuties.forEach(d => {
           if (grouped[d]) orderedDuties.push(d);

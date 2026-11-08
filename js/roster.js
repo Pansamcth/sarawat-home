@@ -707,12 +707,15 @@
         if (srcSelect && srcInput && tgtSelect && tgtInput) {
           const tempSelectVal = srcSelect.value;
           const tempInputVal = srcInput.value;
+          const tempOrigDuty = srcRow.dataset.originalDuty || '';
 
           srcSelect.value = tgtSelect.value;
           srcInput.value = tgtInput.value;
+          srcRow.dataset.originalDuty = tgtRow.dataset.originalDuty || '';
 
           tgtSelect.value = tempSelectVal;
           tgtInput.value = tempInputVal;
+          tgtRow.dataset.originalDuty = tempOrigDuty;
         }
       } else if (action === 'insert-above') {
         container.insertBefore(srcRow, tgtRow);
@@ -862,6 +865,7 @@
       const div = document.createElement('div');
       div.className = 'dynamic-duty-row';
       div.setAttribute('draggable', 'true');
+      div.dataset.originalDuty = (dutyName || '').trim();
       div.style.display = 'flex';
       div.style.gap = '10px';
       div.style.alignItems = 'center';
@@ -3299,10 +3303,15 @@
           const select = row.querySelector('.duty-select');
           const input = row.querySelector('.duty-quota');
           if (select && input) {
-            const duty = select.value;
+            const duty = select.value.trim();
             const q = parseInt(input.value) || 0;
+            const originalDuty = (row.dataset.originalDuty || '').trim();
             if (duty && q > 0) {
-              selectedDuties.push({ duty: duty, quota: q });
+              const dutyObj = { duty: duty, quota: q };
+              if (originalDuty && originalDuty !== duty) {
+                dutyObj.renamedFrom = originalDuty;
+              }
+              selectedDuties.push(dutyObj);
             }
           }
         });
