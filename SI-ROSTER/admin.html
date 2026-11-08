@@ -11269,7 +11269,7 @@ body.dark-mode .signup-success-banner,
       }
 
       Swal.close();
-      let innerHtml = `
+      let html = `
         <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0;">
           <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
@@ -11412,10 +11412,10 @@ body.dark-mode .signup-success-banner,
         advisorsHtml = gridHtml;
       }
 
-      innerHtml += advisorsHtml;
-      innerHtml += `</div>`;
+      html += advisorsHtml;
+      html += `</div>`;
 
-      let html = `
+      const finalHtml = `
         <table class="roster-print-outer">
           ${isUnofficial ? `
           <thead>
@@ -11433,7 +11433,7 @@ body.dark-mode .signup-success-banner,
           <tbody>
             <tr>
               <td>
-                ${innerHtml}
+                ${html}
               </td>
             </tr>
           </tbody>
@@ -11485,7 +11485,7 @@ body.dark-mode .signup-success-banner,
         '</style>' +
         '<' + '/head>' +
         '<' + 'body>' +
-        html +
+        finalHtml +
         '<' + '/body>' +
         '<' + '/html>');
       printWin.document.close();
@@ -11596,7 +11596,7 @@ body.dark-mode .signup-success-banner,
 
       Swal.close();
 
-      let innerHtml = `
+      let html = `
         <div class="minimal-print-wrapper" style="font-family: 'Prompt', 'Sarabun', sans-serif; color: #0f172a; padding: 0; margin: 0; background: #ffffff;">
           
           <!-- Minimalist Header Table: Logos together on left with subtle divider -->
@@ -11814,7 +11814,7 @@ body.dark-mode .signup-success-banner,
         </div>
       `;
 
-      let html = `
+      const finalHtml = `
         <table class="roster-print-outer">
           ${isUnofficial ? `
           <thead>
@@ -11832,7 +11832,7 @@ body.dark-mode .signup-success-banner,
           <tbody>
             <tr>
               <td>
-                ${innerHtml}
+                ${html}
               </td>
             </tr>
           </tbody>
@@ -11876,7 +11876,7 @@ body.dark-mode .signup-success-banner,
         '</style>' +
         '<' + '/head>' +
         '<' + 'body>' +
-        html +
+        finalHtml +
         '<' + '/body>' +
         '<' + '/html>');
       printWin.document.close();

@@ -3477,7 +3477,7 @@
       }
 
       Swal.close();
-      let innerHtml = `
+      let html = `
         <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0;">
           <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
@@ -3620,10 +3620,10 @@
         advisorsHtml = gridHtml;
       }
 
-      innerHtml += advisorsHtml;
-      innerHtml += `</div>`;
+      html += advisorsHtml;
+      html += `</div>`;
 
-      let html = `
+      const finalHtml = `
         <table class="roster-print-outer">
           ${isUnofficial ? `
           <thead>
@@ -3641,7 +3641,7 @@
           <tbody>
             <tr>
               <td>
-                ${innerHtml}
+                ${html}
               </td>
             </tr>
           </tbody>
@@ -3697,7 +3697,7 @@
           </style>
         </head>
         <body>
-          ${html}
+          ${finalHtml}
         </body>
         </html>
       `);
