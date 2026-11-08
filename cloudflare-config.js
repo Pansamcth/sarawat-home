@@ -78,5 +78,45 @@ _global.CLOUDFLARE_TUNNEL_URL = 'https://api.sarawatdc.site';
   root.getRosterApiBase = function () {
     return typeof root.SARAWAT_API_BASE === 'string' ? root.SARAWAT_API_BASE : resolveApiBase();
   };
+
+  /**
+   * Helper function to get an asset URL from the API backend
+   * Example: getSarawatAssetUrl('icons/sarawat-logo.png') -> 'https://api.sarawatdc.site/assets/icons/sarawat-logo.png'
+   */
+  root.getSarawatAssetUrl = function (subPath) {
+    const base = (typeof root.SARAWAT_API_BASE === 'string' && root.SARAWAT_API_BASE)
+      ? root.SARAWAT_API_BASE
+      : (root.CLOUDFLARE_TUNNEL_URL || 'https://api.sarawatdc.site');
+    const clean = String(subPath || '').replace(/^[\\/]+/, '').replace(/^assets[\\/]+/i, '');
+    return `${base.replace(/\/+$/, '')}/assets/${clean}`;
+  };
+
+  // Smart Logo & Asset Loader (Auto-enhancer with Fallback)
+  if (typeof document !== 'undefined') {
+    const applyApiAssets = function () {
+      try {
+        const logoImgs = document.querySelectorAll('img[src*="sarawat-logo.png"], img[src*="school-logo.png"]');
+        logoImgs.forEach(img => {
+          if (img.dataset.apiAssetEnhanced) return;
+          img.dataset.apiAssetEnhanced = 'true';
+          const originalSrc = img.getAttribute('src');
+          if (originalSrc && !originalSrc.startsWith('http') && !originalSrc.startsWith('data:')) {
+            const apiSrc = root.getSarawatAssetUrl(originalSrc);
+            img.onerror = function () {
+              this.onerror = null;
+              this.src = originalSrc;
+            };
+            img.src = apiSrc;
+          }
+        });
+      } catch (e) {}
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyApiAssets);
+    } else {
+      applyApiAssets();
+    }
+  }
 })();
 
