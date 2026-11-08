@@ -3346,20 +3346,30 @@
 
       Swal.close();
 
-      const watermarkHtml = isUnofficial ? `
-        <div class="pdf-watermark-layer">
-          <div class="pdf-watermark-box watermark-top">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-          <div class="pdf-watermark-box watermark-bottom">
-            <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
-          </div>
-        </div>
+      const watermarkThead = isUnofficial ? `
+        <thead>
+          <tr>
+            <td class="roster-watermark-cell">
+              <div class="roster-watermark-anchor">
+                <div class="pdf-watermark-box watermark-top">
+                  <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
+                </div>
+                <div class="pdf-watermark-box watermark-bottom">
+                  <div class="pdf-watermark-text">ไม่เป็นทางการ</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </thead>
       ` : '';
 
       let html = `
-        ${watermarkHtml}
-        <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; position: relative;">
+        <table class="roster-master-page-table">
+          ${watermarkThead}
+          <tbody>
+            <tr>
+              <td class="roster-master-content-cell">
+                <div style="font-family: 'Sarabun', sans-serif; padding: 0; color: #000; margin: 0; position: relative;">
           <table style="width: 100%; margin-bottom: 16px; border: none; border-collapse: collapse;">
             <tr>
               <td style="width: 140px; border: none; vertical-align: middle; text-align: left; padding: 0 14px 0 0; white-space: nowrap;">
@@ -3502,7 +3512,7 @@
       }
 
       html += advisorsHtml;
-      html += `</div>`;
+      html += `</div></td></tr></tbody></table>`;
 
       const printWin = window.open('', '_blank');
       if (!printWin) {
@@ -3529,18 +3539,50 @@
             th, td { border: 1px solid #000; padding: 4px 5px; font-size: 12.5px; line-height: 1.25; color: #000; vertical-align: middle; page-break-inside: avoid !important; break-inside: avoid !important; }
             th { text-align: center; font-weight: bold; }
             td { text-align: center; font-weight: normal; }
-            .pdf-watermark-layer {
-              position: fixed;
-              top: 0;
-              left: 0;
-              right: 0;
-              bottom: 0;
+            table.roster-master-page-table {
               width: 100%;
-              height: 100%;
-              pointer-events: none;
-              z-index: 9999;
-              overflow: hidden;
-              mix-blend-mode: multiply;
+              border-collapse: collapse;
+              border: none !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
+            table.roster-master-page-table > thead {
+              display: table-header-group !important;
+              page-break-inside: avoid !important;
+              break-inside: avoid !important;
+              page-break-after: avoid !important;
+              break-after: avoid !important;
+              border: none !important;
+              padding: 0 !important;
+              margin: 0 !important;
+              height: 0 !important;
+              line-height: 0 !important;
+            }
+            table.roster-master-page-table > tbody {
+              display: table-row-group !important;
+            }
+            .roster-watermark-cell {
+              border: none !important;
+              padding: 0 !important;
+              margin: 0 !important;
+              height: 0 !important;
+              max-height: 0 !important;
+              line-height: 0 !important;
+              font-size: 0 !important;
+            }
+            .roster-watermark-anchor {
+              position: relative;
+              width: 100%;
+              height: 0;
+              max-height: 0;
+              line-height: 0;
+              overflow: visible;
+            }
+            .roster-master-content-cell {
+              border: none !important;
+              padding: 0 !important;
+              margin: 0 !important;
+              vertical-align: top !important;
             }
             .pdf-watermark-box {
               position: absolute;
@@ -3548,12 +3590,14 @@
               right: 0;
               width: 100%;
               text-align: center;
+              pointer-events: none;
+              z-index: 9999;
             }
             .watermark-top {
-              top: 25%;
+              top: 260px;
             }
             .watermark-bottom {
-              top: 68%;
+              top: 710px;
             }
             .pdf-watermark-text {
               display: inline-block;
@@ -3569,7 +3613,7 @@
             }
             @media print {
               body { background: white; }
-              .pdf-watermark-layer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; mix-blend-mode: multiply; }
+              table.roster-master-page-table > thead { display: table-header-group !important; }
               table { page-break-inside: auto; break-inside: auto; }
               thead { display: table-header-group !important; }
               tr { page-break-inside: avoid !important; break-inside: avoid !important; }
