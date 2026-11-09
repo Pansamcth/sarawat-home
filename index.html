@@ -1908,7 +1908,12 @@
               <span class="dg-field-step-badge">3</span>
               <span>จุดหรือบริเวณที่เกี่ยวข้อง <span class="dg-optional-tag">(ไม่บังคับ)</span></span>
             </label>
-            <input type="text" id="fbLocation" class="dg-form-input" maxlength="150" placeholder="เช่น บริเวณโรงอาหาร, ประตู 1, อาคาร 3 (สูงสุด 150 ตัวอักษร)" />
+            <input type="text" id="fbLocation" class="dg-form-input" maxlength="150" placeholder="เช่น บริเวณโรงอาหาร, ประตู 1, อาคาร 3" />
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="fbLocationCount" style="font-weight: 600; color: #64748b;">0</span> / 150 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-wizard-actions">
@@ -1939,9 +1944,14 @@
           <div class="dg-form-group">
             <label class="dg-form-label" for="fbSender">
               <span class="dg-field-step-badge">5</span>
-              <span>ชื่อผู้ส่ง หรือระดับชั้น <span class="dg-optional-tag">(ระบุหรือไม่ระบุก็ได้)</span></span>
+              <span>ชื่อผู้ส่ง หรือระดับชั้น <span class="dg-optional-tag">(ไม่บังคับ)</span></span>
             </label>
-            <input type="text" id="fbSender" class="dg-form-input" maxlength="100" placeholder="เช่น ตัวแทน ม.4/1 หรือเว้นว่างเพื่อส่งแบบไม่ระบุชื่อ (สูงสุด 100 ตัวอักษร)" />
+            <input type="text" id="fbSender" class="dg-form-input" maxlength="100" placeholder="เช่น ตัวแทน ม.4/1 หรือเว้นว่างเพื่อส่งแบบไม่ระบุชื่อ" />
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="fbSenderCount" style="font-weight: 600; color: #64748b;">0</span> / 100 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-form-group">
@@ -1949,7 +1959,12 @@
               <span class="dg-field-step-badge">6</span>
               <span>ช่องทางติดต่อกลับ <span class="dg-optional-tag">(ไม่บังคับ)</span></span>
             </label>
-            <input type="text" id="fbContact" class="dg-form-input" maxlength="100" placeholder="LINE ID หรือ เบอร์โทร หากต้องการให้สารวัตรติดต่อกลับ (สูงสุด 100 ตัวอักษร)" />
+            <input type="text" id="fbContact" class="dg-form-input" maxlength="100" placeholder="LINE ID หรือ เบอร์โทร หากต้องการให้สารวัตรติดต่อกลับ" />
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="fbContactCount" style="font-weight: 600; color: #64748b;">0</span> / 100 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-wizard-actions">
@@ -2074,7 +2089,12 @@
               <span>วันที่และจุดเกิดเหตุ <span class="dg-required-mark">*</span></span>
             </label>
             <input type="text" id="cpLocation" class="dg-form-input" maxlength="150"
-              placeholder="เช่น วันจันทร์ที่ผ่านมา ช่วงเช้า บริเวณหน้าประตู 1 (สูงสุด 150 ตัวอักษร)" required />
+              placeholder="เช่น วันจันทร์ที่ผ่านมา ช่วงเช้า บริเวณหน้าประตู 1" required />
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="cpLocationCount" style="font-weight: 600; color: #64748b;">0</span> / 150 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-wizard-actions">
@@ -2091,9 +2111,14 @@
           <div class="dg-form-group">
             <label class="dg-form-label" for="cpTarget">
               <span class="dg-field-step-badge theme-complaint">4</span>
-              <span>สารวัตรหรือเจ้าหน้าที่ที่เกี่ยวข้อง <span class="dg-optional-tag">(ถ้าทราบ / ไม่บังคับ)</span></span>
+              <span>สารวัตรหรือเจ้าหน้าที่ที่เกี่ยวข้อง <span class="dg-optional-tag">(ไม่บังคับ)</span></span>
             </label>
-            <input type="text" id="cpTarget" class="dg-form-input" maxlength="150" placeholder="ระบุชื่อหรือลักษณะสารวัตรที่เกี่ยวข้อง (เว้นว่างได้, สูงสุด 150 ตัวอักษร)" />
+            <input type="text" id="cpTarget" class="dg-form-input" maxlength="150" placeholder="ระบุชื่อหรือลักษณะสารวัตรที่เกี่ยวข้อง (เว้นว่างได้)" />
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="cpTargetCount" style="font-weight: 600; color: #64748b;">0</span> / 150 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-form-group">
@@ -2441,18 +2466,28 @@
       update();
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        bindCharCounter('fbTitle', 'fbTitleCount');
-        bindCharCounter('fbDetail', 'fbDetailCount');
-        bindCharCounter('cpTitle', 'cpTitleCount');
-        bindCharCounter('cpDetail', 'cpDetailCount');
+    const charCounterBindings = [
+      ['fbTitle', 'fbTitleCount'],
+      ['fbLocation', 'fbLocationCount'],
+      ['fbDetail', 'fbDetailCount'],
+      ['fbSender', 'fbSenderCount'],
+      ['fbContact', 'fbContactCount'],
+      ['cpTitle', 'cpTitleCount'],
+      ['cpLocation', 'cpLocationCount'],
+      ['cpTarget', 'cpTargetCount'],
+      ['cpDetail', 'cpDetailCount']
+    ];
+
+    function initAllCharCounters() {
+      charCounterBindings.forEach(([inputId, counterId]) => {
+        bindCharCounter(inputId, counterId);
       });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAllCharCounters);
     } else {
-      bindCharCounter('fbTitle', 'fbTitleCount');
-      bindCharCounter('fbDetail', 'fbDetailCount');
-      bindCharCounter('cpTitle', 'cpTitleCount');
-      bindCharCounter('cpDetail', 'cpDetailCount');
+      initAllCharCounters();
     }
 
     // Initialize bottom sheet drag handlers on mobile
@@ -2551,8 +2586,10 @@
       if (form) form.style.display = 'block';
       const success = document.getElementById('fbSuccessView');
       if (success) success.style.display = 'none';
-      const tc = document.getElementById('fbTitleCount'); if (tc) tc.textContent = '0';
-      const dc = document.getElementById('fbDetailCount'); if (dc) dc.textContent = '0';
+      ['fbTitleCount', 'fbLocationCount', 'fbDetailCount', 'fbSenderCount', 'fbContactCount'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '0';
+      });
       goFeedbackStep(1);
     }
 
@@ -2604,8 +2641,10 @@
       if (form) form.style.display = 'block';
       const success = document.getElementById('cpSuccessView');
       if (success) success.style.display = 'none';
-      const tc = document.getElementById('cpTitleCount'); if (tc) tc.textContent = '0';
-      const dc = document.getElementById('cpDetailCount'); if (dc) dc.textContent = '0';
+      ['cpTitleCount', 'cpLocationCount', 'cpTargetCount', 'cpDetailCount'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '0';
+      });
       goComplaintStep(1);
     }
 
