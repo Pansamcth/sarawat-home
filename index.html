@@ -1009,6 +1009,111 @@
         justify-content: center !important;
       }
     }
+
+    /* ========================================================
+       UNDER DEVELOPMENT WIDE BANNER (MATCHING PAGE GUARD STYLE)
+       ======================================================== */
+    @keyframes dgGuardScaleIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .dg-under-dev-card-wide {
+      background: #ffffff;
+      border: 1.5px solid #edf2f7;
+      border-radius: 28px;
+      padding: 48px 36px 42px;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      animation: dgGuardScaleIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);
+    }
+
+    .dg-under-dev-card-wide h3 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 14px 0;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .dg-under-dev-card-wide p {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #475569;
+      line-height: 1.65;
+      margin: 0 auto 32px;
+      max-width: 580px;
+    }
+
+    .dg-under-dev-btn {
+      border-radius: 9999px;
+      background: #000000;
+      color: #ffffff !important;
+      padding: 13px 34px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .dg-under-dev-btn:hover {
+      transform: translateY(-2px);
+      background: #1f2937;
+    }
+
+    .dg-under-dev-admin-link {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .dg-under-dev-admin-link:hover {
+      color: #64748b;
+      text-decoration: underline;
+    }
+
+    /* Dark Mode Overrides */
+    [data-theme="dark"] .dg-under-dev-card-wide {
+      background: #161e2e !important;
+      border-color: #253046 !important;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    [data-theme="dark"] .dg-under-dev-card-wide h3 {
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .dg-under-dev-card-wide p {
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .dg-under-dev-btn {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+
+    [data-theme="dark"] .dg-under-dev-btn:hover {
+      background: #e2e8f0 !important;
+    }
+
+    [data-theme="dark"] .dg-under-dev-admin-link {
+      color: #64748b !important;
+    }
+
+    [data-theme="dark"] .dg-under-dev-admin-link:hover {
+      color: #94a3b8 !important;
+    }
   </style>
 </head>
 
@@ -2836,21 +2941,72 @@
       const isActivitiesOpen = localStorage.getItem('dg_page_status_activities') !== '0';
 
       if (!isActivitiesOpen && !isAdmin) {
+        // Hide carousel nav buttons & view all link
+        const nav = document.getElementById('newsCarouselNav');
+        if (nav) nav.style.display = 'none';
+        const viewAll = document.querySelector('.dg-news-view-all-link');
+        if (viewAll) viewAll.style.display = 'none';
+
+        // Stretch track and wrap so the card is wide (ยาวๆ) across the container
+        track.style.padding = '0';
+        track.style.display = 'block';
+        track.style.width = '100%';
+        const wrap = document.getElementById('newsTrackWrap');
+        if (wrap) {
+          wrap.style.overflow = 'visible';
+          wrap.style.padding = '0';
+        }
+
         track.innerHTML = `
-          <div style="background: var(--dg-bg, #ffffff); border: 1px solid var(--dg-border, #e2e8f0); border-radius: var(--dg-radius-lg, 24px); padding: 48px 24px; text-align: center; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.03); font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
-            <div style="width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 18px; background: linear-gradient(135deg, #fef3c7 0%, #fee2e2 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px rgba(245,158,11,0.18);">
-              <i data-lucide="wrench" style="width: 30px; height: 30px; color: #d97706;"></i>
+          <div class="dg-under-dev-card-wide">
+            <!-- Yellow Circle with Wrench Icon -->
+            <div style="width: 76px; height: 76px; border-radius: 50%; background: #fef3c7; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path>
+              </svg>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 99px; background: #fef3c7; color: #b45309; font-size: 0.76rem; font-weight: 700; margin-bottom: 14px;">
-              <span style="width: 7px; height: 7px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
-              UNDER DEVELOPMENT • อยู่ระหว่างดำเนินการ
+
+            <!-- Main Title -->
+            <h3>ระบบกำลังพัฒนา</h3>
+
+            <!-- Subtitle / Message -->
+            <p>
+              ระบบกิจกรรมและข่าวสารอยู่ระหว่างการพัฒนา<br>โปรดติดตามการอัปเดตในภายหลัง
+            </p>
+
+            <!-- Pill Button -->
+            <div style="display: flex; justify-content: center;">
+              <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="dg-under-dev-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 12H5"></path>
+                  <path d="m12 19-7-7 7-7"></path>
+                </svg>
+                <span>กลับสู่หน้าหลัก</span>
+              </a>
             </div>
-            <h4 style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 1.3rem; font-weight: 800; color: var(--dg-black, #0f172a); margin: 0 0 8px 0;">ระบบกิจกรรมและข่าวสารกำลังพัฒนา</h4>
-            <p style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 0.92rem; color: var(--dg-text-secondary, #64748b); line-height: 1.6; margin: 0 auto; max-width: 500px;">ข้อมูลภาพกิจกรรมและข่าวสารประชาสัมพันธ์อยู่ระหว่างการปรับปรุงและเตรียมความพร้อมด้านเอกสารภายในโรงเรียน จึงยังไม่เปิดให้เข้าชมในขณะนี้</p>
+
+            <!-- Discreet Admin Portal Link -->
+            <div style="margin-top: 20px;">
+              <a href="/admin" class="dg-under-dev-admin-link">เข้าสู่ระบบผู้ดูแลระบบ (Admin)</a>
+            </div>
           </div>
         `;
         if (window.lucide) lucide.createIcons();
         return;
+      } else {
+        // Restore track & nav styles when active
+        const nav = document.getElementById('newsCarouselNav');
+        if (nav) nav.style.display = '';
+        const viewAll = document.querySelector('.dg-news-view-all-link');
+        if (viewAll) viewAll.style.display = '';
+        track.style.padding = '';
+        track.style.display = '';
+        track.style.width = '';
+        const wrap = document.getElementById('newsTrackWrap');
+        if (wrap) {
+          wrap.style.overflow = '';
+          wrap.style.padding = '';
+        }
       }
 
       const allItems = getNewsData();
@@ -3969,23 +4125,36 @@
       function renderCalendarUnderDevUI() {
         if (moreWrap) moreWrap.style.display = 'none';
         container.innerHTML = `
-          <div class="dg-calendar-under-dev-card" style="background: var(--dg-bg, #ffffff); border: 1px solid var(--dg-border, #e2e8f0); border-radius: var(--dg-radius-lg, 24px); padding: 50px 24px; text-align: center; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.03); animation: dgGuardScaleIn 0.3s ease; font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
-            <div style="width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 22px; background: linear-gradient(135deg, #fef3c7 0%, #fee2e2 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(245,158,11,0.18);">
-              <i data-lucide="wrench" style="width: 34px; height: 34px; color: #d97706;"></i>
+          <div class="dg-under-dev-card-wide">
+            <!-- Yellow Circle with Wrench Icon -->
+            <div style="width: 76px; height: 76px; border-radius: 50%; background: #fef3c7; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path>
+              </svg>
             </div>
-            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 99px; background: #fef3c7; color: #b45309; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 14px;">
-              <span style="width: 7px; height: 7px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
-              UNDER DEVELOPMENT • อยู่ระหว่างดำเนินการ
-            </div>
-            <h3 style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 1.35rem; font-weight: 800; color: var(--dg-black, #0f172a); margin: 0 0 10px 0; letter-spacing: -0.3px;">
-              ระบบปฏิทินปฏิบัติงานและตารางกิจกรรมกำลังพัฒนา
-            </h3>
-            <p style="font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif); font-size: 0.92rem; color: var(--dg-text-secondary, #64748b); line-height: 1.6; margin: 0 auto 20px; max-width: 500px;">
-              ข้อมูลปฏิทินและตารางกิจกรรมโรงเรียนอยู่ระหว่างการปรับปรุงและเตรียมความพร้อมด้านเอกสารภายใน จึงยังไม่เปิดให้เข้าชมในขณะนี้ ขออภัยในความไม่สะดวก
+
+            <!-- Main Title -->
+            <h3>ระบบกำลังพัฒนา</h3>
+
+            <!-- Subtitle / Message -->
+            <p>
+              ระบบปฏิทินกิจกรรมโรงเรียนอยู่ระหว่างการพัฒนา<br>โปรดติดตามการอัปเดตในภายหลัง
             </p>
-            <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--dg-text-muted, #94a3b8); background: var(--dg-bg-card, #f8fafc); padding: 7px 18px; border-radius: 99px; border: 1px solid var(--dg-border, #e2e8f0); font-family: var(--dg-font-sans, 'Plus Jakarta Sans', 'Kanit', sans-serif);">
-              <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
-              <span>โปรดติดตามกำหนดการและประกาศอย่างเป็นทางการเร็ว ๆ นี้</span>
+
+            <!-- Pill Button -->
+            <div style="display: flex; justify-content: center;">
+              <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="dg-under-dev-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 12H5"></path>
+                  <path d="m12 19-7-7 7-7"></path>
+                </svg>
+                <span>กลับสู่หน้าหลัก</span>
+              </a>
+            </div>
+
+            <!-- Discreet Admin Portal Link -->
+            <div style="margin-top: 20px;">
+              <a href="/admin" class="dg-under-dev-admin-link">เข้าสู่ระบบผู้ดูแลระบบ (Admin)</a>
             </div>
           </div>
         `;
