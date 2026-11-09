@@ -1889,16 +1889,18 @@
           </div>
 
           <div class="dg-form-group">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-              <label class="dg-form-label" for="fbTitle">
-                <span class="dg-field-step-badge">2</span>
-                <span>หัวข้อเรื่อง <span class="dg-required-mark">*</span></span>
-              </label>
-              <span class="dg-field-hint" style="font-size: 0.8rem; margin: 0;"><span id="fbTitleCount">0</span>/100</span>
-            </div>
+            <label class="dg-form-label" for="fbTitle">
+              <span class="dg-field-step-badge">2</span>
+              <span>หัวข้อเรื่อง <span class="dg-required-mark">*</span></span>
+            </label>
             <input type="text" id="fbTitle" class="dg-form-input" maxlength="100"
               placeholder="เช่น อยากให้มีสารวัตรช่วยดูแลช่วงข้ามถนน, เสนอจัดกิจกรรมสัปดาห์สอบ" required />
-            <div class="dg-field-hint">ระบุประเด็นสั้นๆ ให้เข้าใจง่ายและตรงจุด (สูงสุด 100 ตัวอักษร)</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div class="dg-field-hint" style="margin: 0;">ระบุประเด็นสั้นๆ ให้เข้าใจง่ายและตรงจุด</div>
+              <div style="margin-left: auto; white-space: nowrap;">
+                <span id="fbTitleCount" style="font-weight: 600; color: #64748b;">0</span> / 100 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-form-group">
@@ -1921,16 +1923,17 @@
         <!-- Step 2 View: รายละเอียดและข้อมูลผู้ส่ง -->
         <div class="dg-wizard-step" id="fbStep2View" style="display: none;">
           <div class="dg-form-group">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-              <label class="dg-form-label" for="fbDetail">
-                <span class="dg-field-step-badge">4</span>
-                <span>รายละเอียดข้อเสนอแนะ <span class="dg-required-mark">*</span></span>
-              </label>
-              <span class="dg-field-hint" style="font-size: 0.8rem; margin: 0;"><span id="fbDetailCount">0</span>/1500</span>
-            </div>
+            <label class="dg-form-label" for="fbDetail">
+              <span class="dg-field-step-badge">4</span>
+              <span>รายละเอียดข้อเสนอแนะ <span class="dg-required-mark">*</span></span>
+            </label>
             <textarea id="fbDetail" class="dg-form-textarea" rows="4" maxlength="1500"
               placeholder="บอกสิ่งที่คุณอยากให้ทำ หรือข้อเสนอแนะอย่างละเอียด..." required></textarea>
-            <div class="dg-field-hint">ระบุรายละเอียดอย่างชัดเจน (สูงสุด 1,500 ตัวอักษร)</div>
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="fbDetailCount" style="font-weight: 600; color: #64748b;">0</span> / 1500 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-form-group">
@@ -2051,16 +2054,18 @@
           </div>
 
           <div class="dg-form-group">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-              <label class="dg-form-label" for="cpTitle">
-                <span class="dg-field-step-badge theme-complaint">2</span>
-                <span>หัวข้อเรื่อง <span class="dg-required-mark">*</span></span>
-              </label>
-              <span class="dg-field-hint" style="font-size: 0.8rem; margin: 0;"><span id="cpTitleCount">0</span>/100</span>
-            </div>
+            <label class="dg-form-label" for="cpTitle">
+              <span class="dg-field-step-badge theme-complaint">2</span>
+              <span>หัวข้อเรื่อง <span class="dg-required-mark">*</span></span>
+            </label>
             <input type="text" id="cpTitle" class="dg-form-input" maxlength="100"
               placeholder="เช่น การปฏิบัติหน้าที่ไม่สุภาพ, การตรวจระเบียบไม่เป็นธรรม" required />
-            <div class="dg-field-hint">ระบุหัวข้อปัญหาอย่างกระชับ (สูงสุด 100 ตัวอักษร)</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div class="dg-field-hint" style="margin: 0;">ระบุหัวข้อปัญหาอย่างกระชับ</div>
+              <div style="margin-left: auto; white-space: nowrap;">
+                <span id="cpTitleCount" style="font-weight: 600; color: #64748b;">0</span> / 100 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-form-group">
@@ -2092,16 +2097,17 @@
           </div>
 
           <div class="dg-form-group">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-              <label class="dg-form-label" for="cpDetail">
-                <span class="dg-field-step-badge theme-complaint">5</span>
-                <span>รายละเอียดเหตุการณ์ <span class="dg-required-mark">*</span></span>
-              </label>
-              <span class="dg-field-hint" style="font-size: 0.8rem; margin: 0;"><span id="cpDetailCount">0</span>/1500</span>
-            </div>
+            <label class="dg-form-label" for="cpDetail">
+              <span class="dg-field-step-badge theme-complaint">5</span>
+              <span>รายละเอียดเหตุการณ์ <span class="dg-required-mark">*</span></span>
+            </label>
             <textarea id="cpDetail" class="dg-form-textarea" rows="4" maxlength="1500"
               placeholder="ระบุเหตุการณ์อย่างละเอียด เพื่อการตรวจสอบที่โปร่งใสและเป็นธรรม..." required></textarea>
-            <div class="dg-field-hint">ระบุเหตุการณ์อย่างละเอียด (สูงสุด 1,500 ตัวอักษร)</div>
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px; font-size: 0.78rem; color: #94a3b8;">
+              <div>
+                <span id="cpDetailCount" style="font-weight: 600; color: #64748b;">0</span> / 1500 ตัวอักษร
+              </div>
+            </div>
           </div>
 
           <div class="dg-wizard-actions">
