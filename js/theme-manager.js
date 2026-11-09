@@ -57,10 +57,10 @@
 
     // Sync mobile browser status bar / theme-color
     try {
-      var metaTheme = document.querySelector('meta[name="theme-color"]');
-      if (metaTheme) {
-        metaTheme.setAttribute('content', target === 'dark' ? '#0b0f17' : '#ffffff');
-      }
+      var metaThemes = document.querySelectorAll('meta[name="theme-color"]');
+      metaThemes.forEach(function (m) {
+        m.setAttribute('content', target === 'dark' ? '#0b0f17' : '#ffffff');
+      });
     } catch (e) {}
 
     // Notify listeners if any

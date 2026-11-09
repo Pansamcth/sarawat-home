@@ -252,6 +252,17 @@ ol {
   transition: all var(--transition-base);
   box-sizing: border-box;
 }
+.navbar::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: -50vw;
+  right: -50vw;
+  height: 100vh;
+  background: #ffffff !important;
+  pointer-events: none;
+  z-index: -1;
+}
 
 .navbar.scrolled {
   box-shadow: var(--shadow-md);
