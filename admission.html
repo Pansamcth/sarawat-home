@@ -115,7 +115,7 @@
 
   <!-- SweetAlert2 & Audio Feedback -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="/SI-ROSTER/js/roster-audio.js"></script>
+  <script src="/js/roster-audio.js" onerror="this.onerror=null;this.src='/SI-ROSTER/js/roster-audio.js';"></script>
 
   <!-- Central API Config -->
   <script src="/cloudflare-config.js?v=2.7.3"></script>
@@ -4964,12 +4964,47 @@
   <script src="js/theme-manager.js"></script>
 
   <script>
-    // Lucide MutationObserver for dynamic modal icons
+    // Safe Lucide initialization and observer for dynamic modal icons (SweetAlert / Modals)
     document.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) window.lucide.createIcons();
-      const observer = new MutationObserver(() => {
-        if (window.lucide) window.lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      let isUpdating = false;
+      const observer = new MutationObserver((mutations) => {
+        if (isUpdating || !window.lucide) return;
+        let hasNewIcons = false;
+
+        for (let i = 0; i < mutations.length; i++) {
+          const added = mutations[i].addedNodes;
+          for (let j = 0; j < added.length; j++) {
+            const node = added[j];
+            if (node.nodeType === 1) { // ELEMENT_NODE
+              if (node.tagName === 'I' && node.hasAttribute('data-lucide')) {
+                hasNewIcons = true;
+                break;
+              }
+              if (node.querySelector && node.querySelector('i[data-lucide]')) {
+                hasNewIcons = true;
+                break;
+              }
+            }
+          }
+          if (hasNewIcons) break;
+        }
+
+        if (hasNewIcons) {
+          isUpdating = true;
+          try {
+            window.lucide.createIcons();
+          } catch (e) {
+            console.warn('Lucide createIcons error:', e);
+          } finally {
+            setTimeout(() => { isUpdating = false; }, 60);
+          }
+        }
       });
+
       observer.observe(document.body, { childList: true, subtree: true });
     });
   </script>
