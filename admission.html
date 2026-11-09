@@ -1929,9 +1929,14 @@
                     <div class="recruit-form-group">
                       <label class="recruit-label" for="inpPhone">
                         <span>เบอร์โทรศัพท์ที่ติดต่อได้ <span class="req">*</span></span>
+                        <span class="opt" style="font-family: 'Outfit', monospace; font-size: 0.8rem; letter-spacing: 0.5px; color: #64748b;">(0XX-XXX-XXXX)</span>
                       </label>
                       <input type="tel" class="recruit-input" id="inpPhone" maxlength="12"
-                        placeholder="0XX-XXX-XXXX" value="0" autocomplete="tel" />
+                        placeholder="0XX-XXX-XXXX" autocomplete="tel" />
+                      <div class="recruit-field-guide" id="guidePhone" style="font-size: 0.8rem; color: #64748b; margin-top: 5px; display: flex; align-items: center; gap: 5px;">
+                        <i data-lucide="info" style="width: 13px; height: 13px; color: #0284c7; flex-shrink: 0;"></i>
+                        <span>ไกด์รูปแบบ: <strong style="font-family: 'Outfit', 'Kanit', monospace; font-size: 0.82rem; color: #0284c7; background: #f0f9ff; padding: 1px 6px; border-radius: 4px; border: 1px solid #bae6fd; letter-spacing: 0.5px;">0XX-XXX-XXXX</strong></span>
+                      </div>
                       <div class="recruit-field-error" id="errPhone">กรุณากรอกเบอร์โทรศัพท์ 10 หลักขึ้นต้นด้วย 0</div>
                     </div>
                   </div>
@@ -2859,7 +2864,7 @@
           }
         }
         const pResetEl = document.getElementById('inpPhone');
-        if (pResetEl) pResetEl.value = '0';
+        if (pResetEl) pResetEl.value = '';
 
         stepPane1.style.display = 'block';
         stepPane2.style.display = 'none';
@@ -3969,8 +3974,9 @@
       // 📞 PHONE NUMBER AUTO-FORMAT (0XX-XXX-XXXX)
       // ==========================================
       function formatPhoneNumber(val) {
-        if (!val) return "0";
+        if (!val || val === "") return "";
         let digits = String(val).replace(/\D/g, "");
+        if (digits === "") return "";
         if (digits.startsWith("66")) {
           digits = "0" + digits.slice(2);
         }
@@ -3993,29 +3999,13 @@
       function attachPhoneAutoFormat(inputEl) {
         if (!inputEl) return;
         inputEl.maxLength = 12;
-        if (!inputEl.value || inputEl.value === "") {
-          inputEl.value = "0";
-        } else {
+        if (inputEl.value && inputEl.value !== "") {
           inputEl.value = formatPhoneNumber(inputEl.value);
         }
 
         inputEl.addEventListener("keydown", function(e) {
           const selStart = this.selectionStart;
           const selEnd = this.selectionEnd;
-
-          // ป้องกันการลบเลข 0 ตัวแรก
-          if (e.key === "Backspace" && selStart <= 1 && selEnd <= 1) {
-            e.preventDefault();
-            return;
-          }
-
-          // หากคลุมดำทั้งหมดแล้วกด Backspace/Delete ให้คงเลข 0 ไว้
-          if ((e.key === "Backspace" || e.key === "Delete") && selStart === 0 && selEnd === this.value.length) {
-            e.preventDefault();
-            this.value = "0";
-            this.setSelectionRange(1, 1);
-            return;
-          }
 
           // หากกด Backspace อยู่หลังขีดพอดี ให้ลบตัวเลขก่อนหน้าขีด
           if (e.key === "Backspace" && selStart === selEnd && (selStart === 4 || selStart === 8)) {
@@ -4040,20 +4030,22 @@
           const formatted = formatPhoneNumber(oldVal);
           this.value = formatted;
 
-          // จัดตำแหน่งเคอร์เซอร์อัจฉริยะตามจำนวนตัวเลข
-          let newPos = 0;
-          let countedDigits = 0;
-          for (let i = 0; i < formatted.length; i++) {
-            if (/\d/.test(formatted[i])) {
-              countedDigits++;
+          if (formatted) {
+            // จัดตำแหน่งเคอร์เซอร์อัจฉริยะตามจำนวนตัวเลข
+            let newPos = 0;
+            let countedDigits = 0;
+            for (let i = 0; i < formatted.length; i++) {
+              if (/\d/.test(formatted[i])) {
+                countedDigits++;
+              }
+              if (countedDigits >= digitsBefore) {
+                newPos = i + 1;
+                break;
+              }
             }
-            if (countedDigits >= digitsBefore) {
-              newPos = i + 1;
-              break;
-            }
+            newPos = Math.max(1, Math.min(newPos, formatted.length));
+            this.setSelectionRange(newPos, newPos);
           }
-          newPos = Math.max(1, Math.min(newPos, formatted.length));
-          this.setSelectionRange(newPos, newPos);
 
           const digits = formatted.replace(/\D/g, "");
           if (digits.length === 10 && digits.startsWith("0")) {
@@ -4066,9 +4058,13 @@
         inputEl.addEventListener("focus", function() {
           if (!this.value || this.value === "") {
             this.value = "0";
-          }
-          if (this.value === "0") {
             setTimeout(() => this.setSelectionRange(1, 1), 0);
+          }
+        });
+
+        inputEl.addEventListener("blur", function() {
+          if (this.value === "0") {
+            this.value = ""; // คืนค่าว่างเพื่อให้ placeholder ไกด์ 0XX-XXX-XXXX แสดง
           }
         });
 
@@ -4895,7 +4891,8 @@
                   <label style="font-size: 0.84rem; font-weight: 700; color: #334155; display: block; margin-bottom: 5px;">
                     2. ยืนยันเบอร์โทรศัพท์ 10 หลักที่ใช้สมัคร <span style="color: #DC2626;">*</span>:
                   </label>
-                  <input type="tel" id="swalWithdrawPhoneInput" maxlength="12" placeholder="0XX-XXX-XXXX" value="0" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.92rem; font-family: monospace; font-weight: 700; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" autocomplete="off" />
+                  <input type="tel" id="swalWithdrawPhoneInput" maxlength="12" placeholder="0XX-XXX-XXXX" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.92rem; font-family: monospace; font-weight: 700; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" autocomplete="off" />
+                  <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px; text-align: left;">ไกด์รูปแบบ: <strong style="font-family: monospace; color: #0284c7;">0XX-XXX-XXXX</strong></div>
                 </div>
 
                 <div style="width: 100%; text-align: left;">
