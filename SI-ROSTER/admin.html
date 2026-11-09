@@ -2847,7 +2847,7 @@ body.dark-mode .signup-success-banner,
 
     .dashboard-header {
       background: #FFFFFF;
-      padding: 14px 28px;
+      padding: calc(14px + env(safe-area-inset-top, 0px)) calc(28px + env(safe-area-inset-right, 0px)) 14px calc(28px + env(safe-area-inset-left, 0px));
       border-bottom: 1px solid var(--border-light);
       display: flex;
       justify-content: space-between;

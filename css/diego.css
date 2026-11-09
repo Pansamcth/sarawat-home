@@ -165,19 +165,21 @@ svg:not([data-lucide]),
   top: 0;
   left: 0;
   right: 0;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  height: calc(80px + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  background: #ffffff !important;
   border-bottom: 1px solid var(--dg-border);
   z-index: 1000;
   display: flex;
   align-items: center;
   transition: var(--dg-transition);
+  box-sizing: border-box;
 }
 
 .dg-nav.scrolled {
-  height: 70px;
+  height: calc(70px + env(safe-area-inset-top, 0px));
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
@@ -4818,7 +4820,7 @@ svg:not([data-lucide]),
    ALL ACTIVITIES ARCHIVE PAGE (.dg-activities-page)
    ========================================================== */
 .dg-act-page-header {
-  padding: 120px 0 40px;
+  padding: calc(120px + env(safe-area-inset-top, 0px)) env(safe-area-inset-right, 0px) 40px env(safe-area-inset-left, 0px);
   background: #ffffff;
   border-bottom: 1px solid var(--dg-border);
 }
@@ -5768,10 +5770,10 @@ svg:not([data-lucide]),
 
   /* --- Navigation Bar --- */
   .dg-nav {
-    height: 66px;
+    height: calc(66px + env(safe-area-inset-top, 0px));
   }
   .dg-nav.scrolled {
-    height: 60px;
+    height: calc(60px + env(safe-area-inset-top, 0px));
   }
   .dg-nav-container {
     padding: 0 16px;
@@ -5829,12 +5831,10 @@ svg:not([data-lucide]),
   .dg-nav-links {
     display: none;
     position: absolute;
-    top: 66px;
+    top: 100% !important;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #ffffff !important;
     flex-direction: column;
     padding: 16px 16px 22px;
     gap: 6px;
@@ -5843,7 +5843,7 @@ svg:not([data-lucide]),
     z-index: 999;
   }
   .dg-nav.scrolled .dg-nav-links {
-    top: 60px;
+    top: 100% !important;
   }
   .dg-nav-links.active {
     display: flex;
@@ -5898,7 +5898,7 @@ svg:not([data-lucide]),
   }
 
   .dg-hero-section {
-    padding-top: 66px; /* Offset for fixed top navbar */
+    padding-top: calc(66px + env(safe-area-inset-top, 0px)); /* Offset for fixed top navbar */
     padding-bottom: 0;
     position: relative;
     overflow: visible;
@@ -5906,8 +5906,8 @@ svg:not([data-lucide]),
 
   /* Full Screen Viewport (Screen 1): Text in middle, photo at bottom */
   .dg-hero-mobile-viewport {
-    height: calc(100dvh - 66px);
-    min-height: calc(100dvh - 66px);
+    height: calc(100dvh - 66px - env(safe-area-inset-top, 0px));
+    min-height: calc(100dvh - 66px - env(safe-area-inset-top, 0px));
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -7048,7 +7048,7 @@ svg:not([data-lucide]),
 
   /* Activities Archive Page Mobile: EXACT 2 COLUMNS AS REQUESTED */
   .dg-act-page-header {
-    padding: 96px 0 28px;
+    padding: calc(96px + env(safe-area-inset-top, 0px)) env(safe-area-inset-right, 0px) 28px env(safe-area-inset-left, 0px);
   }
   .dg-act-main-title {
     font-size: 1.85rem;
@@ -7948,12 +7948,12 @@ body,
 
 /* 1. Navigation Bar in Dark Mode */
 [data-theme="dark"] .dg-nav {
-  background: rgba(11, 15, 23, 0.88) !important;
+  background: #0b0f17 !important;
   border-bottom-color: var(--dg-border) !important;
 }
 
 [data-theme="dark"] .dg-nav.scrolled {
-  background: rgba(11, 15, 23, 0.96) !important;
+  background: #0b0f17 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
 }
 
@@ -9298,7 +9298,7 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
 @media (max-width: 900px) {
   [data-theme="dark"] .dg-nav-links,
   [data-theme="dark"] .dg-nav-links.active {
-    background: rgba(16, 23, 38, 0.98) !important;
+    background: #0b0f17 !important;
     border-bottom: 1px solid var(--dg-border) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
   }
