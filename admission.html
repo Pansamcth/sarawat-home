@@ -1930,8 +1930,8 @@
                       <label class="recruit-label" for="inpPhone">
                         <span>เบอร์โทรศัพท์ที่ติดต่อได้ <span class="req">*</span></span>
                       </label>
-                      <input type="tel" class="recruit-input" id="inpPhone" maxlength="10"
-                        placeholder="เช่น 0812345678" />
+                      <input type="tel" class="recruit-input" id="inpPhone" maxlength="12"
+                        placeholder="0XX-XXX-XXXX" value="0" autocomplete="tel" />
                       <div class="recruit-field-error" id="errPhone">กรุณากรอกเบอร์โทรศัพท์ 10 หลักขึ้นต้นด้วย 0</div>
                     </div>
                   </div>
@@ -2858,6 +2858,8 @@
             selClub.value = defClub.name;
           }
         }
+        const pResetEl = document.getElementById('inpPhone');
+        if (pResetEl) pResetEl.value = '0';
 
         stepPane1.style.display = 'block';
         stepPane2.style.display = 'none';
@@ -2908,7 +2910,7 @@
             selG.value = app.gradeLevel || '';
           }
           if (document.getElementById('inpClassroom')) document.getElementById('inpClassroom').value = app.classroom || '';
-          if (document.getElementById('inpPhone')) document.getElementById('inpPhone').value = app.phone || '';
+          if (document.getElementById('inpPhone')) document.getElementById('inpPhone').value = formatPhoneNumber(app.phone || '0');
           if (document.getElementById('inpGpax')) document.getElementById('inpGpax').value = app.gpax || '';
           if (document.getElementById('selClub')) document.getElementById('selClub').value = app.club || '';
           const elSelAff = document.getElementById('selAffiliation');
@@ -3964,6 +3966,123 @@
       }
 
       // ==========================================
+      // 📞 PHONE NUMBER AUTO-FORMAT (0XX-XXX-XXXX)
+      // ==========================================
+      function formatPhoneNumber(val) {
+        if (!val) return "0";
+        let digits = String(val).replace(/\D/g, "");
+        if (digits.startsWith("66")) {
+          digits = "0" + digits.slice(2);
+        }
+        if (!digits.startsWith("0")) {
+          digits = "0" + digits;
+        }
+        // ตัดเลข 0 ซ้ำที่เกินมาทิ้ง
+        digits = digits.replace(/^0+/, "0");
+        digits = digits.slice(0, 10);
+
+        if (digits.length <= 3) {
+          return digits;
+        } else if (digits.length <= 6) {
+          return digits.slice(0, 3) + "-" + digits.slice(3);
+        } else {
+          return digits.slice(0, 3) + "-" + digits.slice(3, 6) + "-" + digits.slice(6);
+        }
+      }
+
+      function attachPhoneAutoFormat(inputEl) {
+        if (!inputEl) return;
+        inputEl.maxLength = 12;
+        if (!inputEl.value || inputEl.value === "") {
+          inputEl.value = "0";
+        } else {
+          inputEl.value = formatPhoneNumber(inputEl.value);
+        }
+
+        inputEl.addEventListener("keydown", function(e) {
+          const selStart = this.selectionStart;
+          const selEnd = this.selectionEnd;
+
+          // ป้องกันการลบเลข 0 ตัวแรก
+          if (e.key === "Backspace" && selStart <= 1 && selEnd <= 1) {
+            e.preventDefault();
+            return;
+          }
+
+          // หากคลุมดำทั้งหมดแล้วกด Backspace/Delete ให้คงเลข 0 ไว้
+          if ((e.key === "Backspace" || e.key === "Delete") && selStart === 0 && selEnd === this.value.length) {
+            e.preventDefault();
+            this.value = "0";
+            this.setSelectionRange(1, 1);
+            return;
+          }
+
+          // หากกด Backspace อยู่หลังขีดพอดี ให้ลบตัวเลขก่อนหน้าขีด
+          if (e.key === "Backspace" && selStart === selEnd && (selStart === 4 || selStart === 8)) {
+            e.preventDefault();
+            let raw = this.value.replace(/\D/g, "");
+            if (selStart === 4) {
+              raw = raw.slice(0, 2) + raw.slice(3);
+            } else if (selStart === 8) {
+              raw = raw.slice(0, 5) + raw.slice(6);
+            }
+            this.value = formatPhoneNumber(raw);
+            const newPos = selStart - 1;
+            this.setSelectionRange(newPos, newPos);
+          }
+        });
+
+        inputEl.addEventListener("input", function() {
+          const curPos = this.selectionStart;
+          const oldVal = this.value;
+          const digitsBefore = (oldVal.slice(0, curPos).match(/\d/g) || []).length;
+
+          const formatted = formatPhoneNumber(oldVal);
+          this.value = formatted;
+
+          // จัดตำแหน่งเคอร์เซอร์อัจฉริยะตามจำนวนตัวเลข
+          let newPos = 0;
+          let countedDigits = 0;
+          for (let i = 0; i < formatted.length; i++) {
+            if (/\d/.test(formatted[i])) {
+              countedDigits++;
+            }
+            if (countedDigits >= digitsBefore) {
+              newPos = i + 1;
+              break;
+            }
+          }
+          newPos = Math.max(1, Math.min(newPos, formatted.length));
+          this.setSelectionRange(newPos, newPos);
+
+          const digits = formatted.replace(/\D/g, "");
+          if (digits.length === 10 && digits.startsWith("0")) {
+            this.classList.remove("has-error");
+            const err = document.getElementById(this.id === "inpPhone" ? "errPhone" : "errWithdrawPhone");
+            if (err) err.style.display = "none";
+          }
+        });
+
+        inputEl.addEventListener("focus", function() {
+          if (!this.value || this.value === "") {
+            this.value = "0";
+          }
+          if (this.value === "0") {
+            setTimeout(() => this.setSelectionRange(1, 1), 0);
+          }
+        });
+
+        inputEl.addEventListener("paste", function(e) {
+          e.preventDefault();
+          const pasted = (e.clipboardData || window.clipboardData).getData("text");
+          this.value = formatPhoneNumber(pasted);
+          this.dispatchEvent(new Event("input"));
+        });
+      }
+
+      attachPhoneAutoFormat(document.getElementById("inpPhone"));
+
+      // ==========================================
       // CLOUDFLARE TURNSTILE CAPTCHA HELPER
       function initOrRenderTurnstile() {
         const container = document.getElementById('cfTurnstileWidget');
@@ -4200,7 +4319,7 @@
         document.getElementById('reviewFullName').textContent = `${prefix}${firstName} ${lastName}`;
         document.getElementById('reviewStudentId').textContent = studentId;
         document.getElementById('reviewGradeRoom').textContent = `${grade}/${room}`;
-        document.getElementById('reviewPhone').textContent = phone;
+        document.getElementById('reviewPhone').textContent = formatPhoneNumber(phone);
 
         const isBelowMinGpax = gpaxVal < systemSettings.minGpax;
         const elReviewGpax = document.getElementById('reviewGpax');
@@ -4776,7 +4895,7 @@
                   <label style="font-size: 0.84rem; font-weight: 700; color: #334155; display: block; margin-bottom: 5px;">
                     2. ยืนยันเบอร์โทรศัพท์ 10 หลักที่ใช้สมัคร <span style="color: #DC2626;">*</span>:
                   </label>
-                  <input type="tel" id="swalWithdrawPhoneInput" maxlength="10" placeholder="0XXXXXXXXX" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.92rem; font-family: monospace; font-weight: 700; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" autocomplete="off" />
+                  <input type="tel" id="swalWithdrawPhoneInput" maxlength="12" placeholder="0XX-XXX-XXXX" value="0" style="width: 100%; box-sizing: border-box; padding: 10px 14px; font-size: 0.92rem; font-family: monospace; font-weight: 700; border-radius: 10px; border: 1.5px solid #CBD5E1; background: #FFFFFF; color: #0F172A;" autocomplete="off" />
                 </div>
 
                 <div style="width: 100%; text-align: left;">
@@ -4800,6 +4919,9 @@
               cancelButton: 'custom-swal-btn'
             },
             buttonsStyling: true,
+            didOpen: () => {
+              attachPhoneAutoFormat(document.getElementById('swalWithdrawPhoneInput'));
+            },
             preConfirm: () => {
               const enteredCode = (document.getElementById('swalWithdrawCodeInput')?.value || '').trim().toUpperCase();
               const enteredPhone = (document.getElementById('swalWithdrawPhoneInput')?.value || '').trim().replace(/[-\s]/g, '');
