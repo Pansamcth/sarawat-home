@@ -1985,7 +1985,7 @@
                         <span>ชุมนุมที่เลือก <span class="req">*</span></span>
                       </label>
                       <select class="recruit-select" id="selClub">
-                        <option value="">-- กำลังโหลดรายชื่อชุมนุม... --</option>
+                        <option value="สารวัตรนักเรียนเสมารักษ์" selected>สารวัตรนักเรียนเสมารักษ์</option>
                       </select>
                       <div class="recruit-field-error" id="errClub">กรุณาเลือกชุมนุม</div>
                     </div>
@@ -2852,6 +2852,12 @@
             selSubdistrict.disabled = true;
           }
         }
+        if (selClub && availableClubs && availableClubs.length > 0) {
+          const defClub = availableClubs.find(c => !c.isFull && (c.name === 'สารวัตรนักเรียนเสมารักษ์' || c.name.includes('เสมารักษ์'))) || (availableClubs.length === 1 && !availableClubs[0].isFull ? availableClubs[0] : null);
+          if (defClub) {
+            selClub.value = defClub.name;
+          }
+        }
 
         stepPane1.style.display = 'block';
         stepPane2.style.display = 'none';
@@ -3276,6 +3282,8 @@
 
           if (clubsRes.clubs && clubsRes.clubs.length > 0) {
             availableClubs = clubsRes.clubs;
+            let matchedDefaultClub = null;
+
             clubsRes.clubs.forEach(c => {
               const opt = document.createElement('option');
               opt.value = c.name;
@@ -3285,6 +3293,40 @@
                 opt.textContent += ' [เต็มแล้ว]';
               }
               selClub.appendChild(opt);
+
+              // ตรวจหาชุมนุม 'สารวัตรนักเรียนเสมารักษ์' อิงระบบ
+              if (!matchedDefaultClub && !c.isFull && (c.name === 'สารวัตรนักเรียนเสมารักษ์' || c.name.includes('เสมารักษ์'))) {
+                matchedDefaultClub = c.name;
+              }
+            });
+
+            // หากไม่มีชื่อเสมารักษ์ตรงๆ แต่มีเพียง 1 ชุมนุม ให้ใช้ชุมนุมนั้น
+            if (!matchedDefaultClub && availableClubs.length === 1 && !availableClubs[0].isFull) {
+              matchedDefaultClub = availableClubs[0].name;
+            }
+
+            // ตั้งค่าเริ่มต้นเป็น สารวัตรนักเรียนเสมารักษ์ อิงระบบ
+            if (matchedDefaultClub && !isEditingMode) {
+              selClub.value = matchedDefaultClub;
+              Array.from(selClub.options).forEach(opt => {
+                if (opt.value === matchedDefaultClub) {
+                  opt.selected = true;
+                }
+              });
+              const errClub = document.getElementById('errClub');
+              if (errClub) errClub.style.display = 'none';
+              selClub.classList.remove('has-error');
+            }
+          }
+
+          if (selClub && !selClub.dataset.boundChange) {
+            selClub.dataset.boundChange = 'true';
+            selClub.addEventListener('change', () => {
+              if (selClub.value) {
+                selClub.classList.remove('has-error');
+                const errClub = document.getElementById('errClub');
+                if (errClub) errClub.style.display = 'none';
+              }
             });
           }
         } catch (err) {
