@@ -14018,7 +14018,12 @@
           const paneId = btn.getAttribute('data-tab');
           if (paneId) {
             const pane = document.getElementById(paneId);
-            if (pane) pane.style.display = 'block';
+            if (pane) {
+              pane.style.display = 'block';
+              pane.style.animation = 'none';
+              void pane.offsetWidth; // trigger reflow
+              pane.style.animation = 'cardEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both';
+            }
 
             if (paneId === 'tab-tags') {
               loadAdminTags();

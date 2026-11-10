@@ -3003,10 +3003,18 @@
       // TAB SWITCHING (Apply vs Status)
       // ==========================================
       function switchTab(mode) {
+        const triggerViewEntrance = (el) => {
+          if (!el) return;
+          el.style.animation = 'none';
+          void el.offsetWidth; // trigger reflow
+          el.style.animation = 'cardEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both';
+        };
+
         if (mode === 'apply') {
           tabBtnApply.classList.add('active');
           tabBtnStatus.classList.remove('active');
           viewApplication.style.display = 'block';
+          triggerViewEntrance(viewApplication);
           viewStatus.style.display = 'none';
           updateFormLockState();
         } else {
@@ -3014,6 +3022,7 @@
           tabBtnStatus.classList.add('active');
           viewApplication.style.display = 'none';
           viewStatus.style.display = 'block';
+          triggerViewEntrance(viewStatus);
         }
       }
 

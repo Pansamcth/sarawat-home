@@ -2199,14 +2199,27 @@
       if (btnList) btnList.classList.toggle('active', mode === 'list');
       if (btnPast) btnPast.classList.toggle('active', mode === 'past');
 
+      const triggerViewEntrance = (el) => {
+        if (!el) return;
+        el.style.animation = 'none';
+        void el.offsetWidth; // trigger reflow
+        el.style.animation = 'cardEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both';
+      };
+
       if (mode === 'month') {
-        if (monthWrap) monthWrap.style.display = 'block';
+        if (monthWrap) {
+          monthWrap.style.display = 'block';
+          triggerViewEntrance(monthWrap);
+        }
         if (listWrap) listWrap.style.display = 'none';
         if (monthNav) monthNav.style.display = 'inline-flex';
         renderMonthCalendar();
       } else {
         if (monthWrap) monthWrap.style.display = 'none';
-        if (listWrap) listWrap.style.display = 'block';
+        if (listWrap) {
+          listWrap.style.display = 'block';
+          triggerViewEntrance(listWrap);
+        }
         if (monthNav) monthNav.style.display = 'none';
         renderCalendarEvents();
       }

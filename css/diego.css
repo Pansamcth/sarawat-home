@@ -10649,3 +10649,200 @@ body.dark-mode #membersListContainer > div > div > div:hover h4 {
   border-left: 3.5px solid #94a3b8 !important;
 }
 [data-theme="dark"] .dg-cal-event-bar.is-timed.cat-general .dg-cal-bar-dot { background: #94a3b8 !important; }
+
+
+/* ==========================================================
+   SI-ROSTER SWITCH & VIEW TRANSITION ANIMATION SYSTEM
+   อนิเมชั่นการสลับสวิตช์และมุมมองแบบเดียวกับ SI-ROSTER
+   ========================================================== */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dgViewFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SI-ROSTER Signature Smooth Transitions on all Switches & Toggles */
+.dg-cal-view-switch,
+.dg-theme-switch-group,
+.recruit-tabs,
+.admin-tabs-list {
+  position: relative;
+}
+
+.dg-cal-view-btn,
+.dg-theme-switch-btn,
+.recruit-tab-btn,
+.admin-tab-btn,
+.trash-subtab-btn,
+.dg-act-pill-btn {
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.dg-cal-view-btn.active,
+.dg-theme-switch-btn.active,
+.recruit-tab-btn.active,
+.admin-tab-btn.active,
+.trash-subtab-btn.active {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Modern Slider Switches (Toggle On/Off) with SI-ROSTER Bezier */
+.modern-switch .switch-slider,
+.modern-switch .switch-slider:before,
+.switch-slider {
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* View Content Animated Entrance Class & Feed Cards (SI-ROSTER Easing) */
+.dg-view-entrance,
+.card-entrance-animate,
+.dg-act-card,
+.dg-cal-event-card {
+  animation: cardEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+
+/* ==========================================================
+   UNIFIED UI ICON SYSTEM (DIEGO SWISS MODERN)
+   มาตรฐานระบบไอคอน UI ทั่วทั้งเว็บไซต์ (2px Stroke & Alignment)
+   ========================================================== */
+svg.lucide,
+i[data-lucide] {
+  stroke-width: 2px !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
+
+/* Icon T-shirt Sizing Utilities */
+.dg-icon-xs,
+svg.lucide.dg-icon-xs {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.dg-icon-sm,
+svg.lucide.dg-icon-sm {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.dg-icon-md,
+svg.lucide.dg-icon-md {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.dg-icon-lg,
+svg.lucide.dg-icon-lg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.dg-icon-xl,
+svg.lucide.dg-icon-xl {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Contextual Button Icon Sizing & Micro-Interactions */
+.dg-btn svg.lucide,
+.dg-btn-black svg.lucide,
+.dg-btn-outline svg.lucide,
+.dg-btn-sm-outline svg.lucide,
+.dg-btn-primary svg.lucide {
+  width: 16px !important;
+  height: 16px !important;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+@media (max-width: 768px) {
+  .dg-btn svg.lucide,
+  .dg-btn-black svg.lucide,
+  .dg-btn-outline svg.lucide,
+  .dg-btn-sm-outline svg.lucide {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+.dg-btn:hover svg.lucide-arrow-right,
+.dg-btn-black:hover svg.lucide-arrow-right,
+.dg-btn-outline:hover svg.lucide-arrow-right,
+.dg-arrow-link:hover svg.lucide-arrow-right,
+.dg-arrow-link:hover i[data-lucide="arrow-right"] {
+  transform: translateX(3px) !important;
+}
+
+.dg-btn:hover svg.lucide-arrow-up-right,
+.dg-news-modal-btn:hover svg.lucide-arrow-up-right {
+  transform: translate(2px, -2px) !important;
+}
+
+/* Breadcrumb Icons */
+.dg-act-breadcrumb a svg.lucide,
+.dg-act-breadcrumb a i[data-lucide] {
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--dg-text-secondary) !important;
+  transition: color 0.15s ease !important;
+}
+
+.dg-act-breadcrumb a:hover svg.lucide,
+.dg-act-breadcrumb a:hover i[data-lucide] {
+  color: var(--dg-black) !important;
+}
+
+/* Meta & Badge Icons */
+.dg-act-card-date svg.lucide,
+.dg-news-modal-date svg.lucide,
+.sarawat-tag-badge svg.lucide {
+  width: 13px !important;
+  height: 13px !important;
+}
+
+/* Dark Mode Contrast Tuning for Status Icons */
+[data-theme="dark"] svg.lucide-check,
+[data-theme="dark"] svg.lucide-shield-check,
+[data-theme="dark"] .dg-icon-success {
+  color: #4ade80 !important;
+  stroke: #4ade80 !important;
+}
+
+[data-theme="dark"] svg.lucide-alert-triangle,
+[data-theme="dark"] svg.lucide-clock,
+[data-theme="dark"] .dg-icon-warning {
+  color: #fbbf24 !important;
+  stroke: #fbbf24 !important;
+}
+
+[data-theme="dark"] svg.lucide-alert-circle,
+[data-theme="dark"] svg.lucide-x-circle,
+[data-theme="dark"] .dg-icon-danger {
+  color: #f87171 !important;
+  stroke: #f87171 !important;
+}
+
+[data-theme="dark"] svg.lucide-info,
+[data-theme="dark"] svg.lucide-help-circle,
+[data-theme="dark"] .dg-icon-info {
+  color: #60a5fa !important;
+  stroke: #60a5fa !important;
+}
