@@ -10750,6 +10750,12 @@ svg.lucide.dg-icon-md {
   height: 16px !important;
 }
 
+.dg-icon-base,
+svg.lucide.dg-icon-base {
+  width: 18px !important;
+  height: 18px !important;
+}
+
 .dg-icon-lg,
 svg.lucide.dg-icon-lg {
   width: 20px !important;
@@ -10760,6 +10766,27 @@ svg.lucide.dg-icon-lg {
 svg.lucide.dg-icon-xl {
   width: 24px !important;
   height: 24px !important;
+}
+
+/* Status Icon Colors (Light Mode) */
+.dg-icon-success {
+  color: #16a34a !important;
+  stroke: #16a34a !important;
+}
+
+.dg-icon-warning {
+  color: #d97706 !important;
+  stroke: #d97706 !important;
+}
+
+.dg-icon-danger {
+  color: #dc2626 !important;
+  stroke: #dc2626 !important;
+}
+
+.dg-icon-info {
+  color: #2563eb !important;
+  stroke: #2563eb !important;
 }
 
 /* Contextual Button Icon Sizing & Micro-Interactions */
@@ -10820,29 +10847,41 @@ svg.lucide.dg-icon-xl {
 
 /* Dark Mode Contrast Tuning for Status Icons */
 [data-theme="dark"] svg.lucide-check,
+body.dark-mode svg.lucide-check,
 [data-theme="dark"] svg.lucide-shield-check,
-[data-theme="dark"] .dg-icon-success {
+body.dark-mode svg.lucide-shield-check,
+[data-theme="dark"] .dg-icon-success,
+body.dark-mode .dg-icon-success {
   color: #4ade80 !important;
   stroke: #4ade80 !important;
 }
 
 [data-theme="dark"] svg.lucide-alert-triangle,
+body.dark-mode svg.lucide-alert-triangle,
 [data-theme="dark"] svg.lucide-clock,
-[data-theme="dark"] .dg-icon-warning {
+body.dark-mode svg.lucide-clock,
+[data-theme="dark"] .dg-icon-warning,
+body.dark-mode .dg-icon-warning {
   color: #fbbf24 !important;
   stroke: #fbbf24 !important;
 }
 
 [data-theme="dark"] svg.lucide-alert-circle,
+body.dark-mode svg.lucide-alert-circle,
 [data-theme="dark"] svg.lucide-x-circle,
-[data-theme="dark"] .dg-icon-danger {
+body.dark-mode svg.lucide-x-circle,
+[data-theme="dark"] .dg-icon-danger,
+body.dark-mode .dg-icon-danger {
   color: #f87171 !important;
   stroke: #f87171 !important;
 }
 
 [data-theme="dark"] svg.lucide-info,
+body.dark-mode svg.lucide-info,
 [data-theme="dark"] svg.lucide-help-circle,
-[data-theme="dark"] .dg-icon-info {
+body.dark-mode svg.lucide-help-circle,
+[data-theme="dark"] .dg-icon-info,
+body.dark-mode .dg-icon-info {
   color: #60a5fa !important;
   stroke: #60a5fa !important;
 }

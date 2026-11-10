@@ -360,7 +360,7 @@
       <!-- Breadcrumb -->
       <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
         <a href="index.html">
-          <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+          <i data-lucide="home" class="dg-icon-sm"></i>
           <span>หน้าแรก</span>
         </a>
         <span class="sep">/</span>
@@ -380,7 +380,7 @@
           </p>
         </div>
         <div class="dg-act-stats-badge" id="actStatsBadge">
-          <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="layers" class="dg-icon-md"></i>
           <span>กิจกรรมในระบบทั้งหมด:</span>
           <strong id="actTotalBadge">0 รายการ</strong>
         </div>
@@ -1265,7 +1265,7 @@
 
           <div class="dg-news-modal-footer">
             <button type="button" class="dg-btn-sm-outline" onclick="copyNewsDetailLink('${escapeHtml(item.id)}', this)" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill); cursor: pointer;">
-              <i data-lucide="share-2" style="width: 14px; height: 14px;"></i>
+              <i data-lucide="share-2" class="dg-icon-sm"></i>
               <span>คัดลอกลิงก์</span>
             </button>
             <button type="button" class="dg-btn-black" onclick="closeModal('newsDetailModal')" style="padding: 9px 24px; font-size: 0.9rem; font-weight: 750; border-radius: var(--dg-radius-pill); cursor: pointer;">
@@ -1311,7 +1311,7 @@
       const originalHtml = btn.innerHTML;
       btn.style.borderColor = '#10b981';
       btn.style.color = '#10b981';
-      btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>คัดลอกแล้ว!</span>';
+      btn.innerHTML = '<i data-lucide="check" class="dg-icon-sm dg-icon-success"></i><span>คัดลอกแล้ว!</span>';
       if (window.lucide) window.lucide.createIcons();
       setTimeout(function() {
         btn.style.borderColor = '';

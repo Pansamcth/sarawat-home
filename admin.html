@@ -3180,13 +3180,13 @@
             <div class="auth-input-wrapper">
               <input type="password" id="loginPasswordInput" class="auth-input" placeholder="กรอกรหัสผ่าน" required autocomplete="current-password" />
               <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('loginPasswordInput', 'loginEyeIcon')" title="แสดง/ซ่อนรหัสผ่าน">
-                <i data-lucide="eye" id="loginEyeIcon" style="width: 18px; height: 18px;"></i>
+                <i data-lucide="eye" id="loginEyeIcon" class="dg-icon-base"></i>
               </button>
             </div>
           </div>
 
           <div id="loginErrorMsg" class="auth-alert-error" style="display: none;">
-            <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+            <i data-lucide="alert-circle" class="dg-icon-md"></i>
             <span id="loginErrorText">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</span>
           </div>
 
@@ -3220,7 +3220,7 @@
             style="width: 52px; height: 52px; object-fit: contain;" />
         </div>
         <div style="display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 999px; font-size: 0.76rem; font-weight: 800; margin-bottom: 10px; border: 1px solid #fde68a;">
-          <i data-lucide="crown" style="width: 14px; height: 14px;"></i>
+          <i data-lucide="crown" class="dg-icon-sm"></i>
           <span>ตั้งค่าระบบครั้งแรก (First-Time Setup)</span>
         </div>
         <h2 style="font-family: var(--dg-font-sans); font-size: 1.4rem; font-weight: 800; margin: 0 0 6px; color: #0f172a;">
@@ -3244,7 +3244,7 @@
           <div class="auth-input-wrapper">
             <input type="password" id="setupPasswordInput" class="auth-input" placeholder="อย่างน้อย 4 ตัวอักษร" required minlength="4" />
             <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('setupPasswordInput', 'setupEyeIcon1')" title="แสดง/ซ่อนรหัสผ่าน">
-              <i data-lucide="eye" id="setupEyeIcon1" style="width: 18px; height: 18px;"></i>
+              <i data-lucide="eye" id="setupEyeIcon1" class="dg-icon-base"></i>
             </button>
           </div>
         </div>
@@ -3254,13 +3254,13 @@
           <div class="auth-input-wrapper">
             <input type="password" id="setupConfirmPasswordInput" class="auth-input" placeholder="พิมพ์รหัสผ่านซ้ำอีกครั้ง" required minlength="4" />
             <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('setupConfirmPasswordInput', 'setupEyeIcon2')" title="แสดง/ซ่อนรหัสผ่าน">
-              <i data-lucide="eye" id="setupEyeIcon2" style="width: 18px; height: 18px;"></i>
+              <i data-lucide="eye" id="setupEyeIcon2" class="dg-icon-base"></i>
             </button>
           </div>
         </div>
 
         <div id="setupErrorMsg" class="auth-alert-error" style="display: none;">
-          <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+          <i data-lucide="alert-circle" class="dg-icon-md"></i>
           <span id="setupErrorText">กรุณากรอกข้อมูลให้ครบถ้วน</span>
         </div>
 
@@ -3298,7 +3298,7 @@
       <div class="admin-nav-actions">
         <!-- Role Badge -->
         <span id="adminUserRoleBadge" class="admin-role-badge super">
-          <i data-lucide="crown" id="adminUserRoleIcon" style="width: 14px; height: 14px;"></i>
+          <i data-lucide="crown" id="adminUserRoleIcon" class="dg-icon-sm"></i>
           <span id="adminUserRoleText">Super Admin</span>
         </span>
 
@@ -3442,7 +3442,7 @@
             <span style="display: inline-flex; width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
           </div>
           <div style="font-size: 0.78rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 6px;">
-            <i data-lucide="shield" style="width: 13px; height: 13px; color: #2563eb;"></i>
+            <i data-lucide="shield" class="dg-icon-xs dg-icon-info"></i>
             <span>แผงควบคุมระบบหลัก</span>
           </div>
         </div>
@@ -3461,8 +3461,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="users" style="width: 13px; height: 13px;"></i> EXECUTIVE TEAM • คณะกรรมการ</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: team.html, index.html</span>
+            <span class="admin-section-pill"><i data-lucide="users" class="dg-icon-xs"></i> EXECUTIVE TEAM • คณะกรรมการ</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> หน้าที่เชื่อมโยง: team.html, index.html</span>
           </div>
           <h2>ระบบจัดการทำเนียบและคณะกรรมการสารวัตรนักเรียน</h2>
           <p>ปรับปรุงข้อมูล รายชื่อ ประธาน รองประธาน หัวหน้าฝ่าย และสมาชิกสารวัตรนักเรียนทุกสังกัด</p>
@@ -3525,8 +3525,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="newspaper" style="width: 13px; height: 13px;"></i> NEWS & ACTIVITIES • ข่าวสารและกิจกรรม</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: index.html, activities.html</span>
+            <span class="admin-section-pill"><i data-lucide="newspaper" class="dg-icon-xs"></i> NEWS & ACTIVITIES • ข่าวสารและกิจกรรม</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> หน้าที่เชื่อมโยง: index.html, activities.html</span>
           </div>
           <h2>ระบบจัดการข่าวสารและกิจกรรมภาพถ่าย</h2>
           <p>เพิ่ม แก้ไข และจัดหมวดหมู่ข่าวสารประชาสัมพันธ์ กิจกรรมสารวัตร และอัลบั้มรูปภาพที่จะนำไปแสดงในหน้าหลักและหน้ากิจกรรม</p>
@@ -3631,8 +3631,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="calendar" style="width: 13px; height: 13px;"></i> SCHOOL CALENDAR • ปฏิทินและวาระงาน</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: calendar.html, index.html</span>
+            <span class="admin-section-pill"><i data-lucide="calendar" class="dg-icon-xs"></i> SCHOOL CALENDAR • ปฏิทินและวาระงาน</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> หน้าที่เชื่อมโยง: calendar.html, index.html</span>
           </div>
           <h2>ระบบจัดการตารางกิจกรรมและวาระงานโรงเรียน</h2>
           <p>กำหนดการ วันสำคัญ ภารกิจปฏิบัติงาน และกิจกรรมสำคัญของโรงเรียนและสารวัตรนักเรียน</p>
@@ -3649,21 +3649,21 @@
       <div class="admin-stats-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
         <div class="admin-stat-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="font-size: 0.85rem; color: #64748b; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="layers" style="width: 16px; height: 16px; color: #0284c7;"></i>
+            <i data-lucide="layers" class="dg-icon-md dg-icon-info"></i>
             <span>กิจกรรมทั้งหมดในระบบ</span>
           </div>
           <div id="statTotalEvents" style="font-size: 1.8rem; font-weight: 800; color: #0f172a;">0</div>
         </div>
         <div class="admin-stat-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="font-size: 0.85rem; color: #16a34a; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="clock" style="width: 16px; height: 16px; color: #16a34a;"></i>
+            <i data-lucide="clock" class="dg-icon-md dg-icon-success"></i>
             <span>กิจกรรมเร็ว ๆ นี้ (Upcoming)</span>
           </div>
           <div id="statUpcomingEvents" style="font-size: 1.8rem; font-weight: 800; color: #16a34a;">0</div>
         </div>
         <div class="admin-stat-card" style="background: #ffffff; border: 1px solid var(--dg-border); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <div style="font-size: 0.85rem; color: #64748b; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="check-circle" style="width: 16px; height: 16px; color: #64748b;"></i>
+            <i data-lucide="check-circle" class="dg-icon-md"></i>
             <span>กิจกรรมที่ผ่านมาแล้ว</span>
           </div>
           <div id="statPastEvents" style="font-size: 1.8rem; font-weight: 800; color: #64748b;">0</div>
@@ -3742,8 +3742,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="tags" style="width: 13px; height: 13px;"></i> TAGS & TAXONOMY • ระบบแท็กและสไตล์</span>
-            <span class="admin-file-badge"><i data-lucide="database" style="width: 13px; height: 13px;"></i> ตาราง: tags & item_tags</span>
+            <span class="admin-section-pill"><i data-lucide="tags" class="dg-icon-xs"></i> TAGS & TAXONOMY • ระบบแท็กและสไตล์</span>
+            <span class="admin-file-badge"><i data-lucide="database" class="dg-icon-xs"></i> ตาราง: tags & item_tags</span>
           </div>
           <h2>จัดการแท็กและสไตล์แสดงผล (Tag Management)</h2>
           <p>สร้าง แก้ไข และกำหนดสี ไอคอน Lucide และรูปแบบ Badge ของแท็กสำหรับติดในกิจกรรมและข่าวสาร</p>
@@ -3797,8 +3797,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="trash-2" style="width: 13px; height: 13px;"></i> TRASH BIN • ระบบถังขยะและกู้คืน</span>
-            <span class="admin-file-badge"><i data-lucide="database" style="width: 13px; height: 13px;"></i> Soft-Delete: is_deleted = 1</span>
+            <span class="admin-section-pill"><i data-lucide="trash-2" class="dg-icon-xs"></i> TRASH BIN • ระบบถังขยะและกู้คืน</span>
+            <span class="admin-file-badge"><i data-lucide="database" class="dg-icon-xs"></i> Soft-Delete: is_deleted = 1</span>
           </div>
           <h2>ถังขยะและกู้คืนข้อมูล (Trash & Recovery)</h2>
           <p>รายการข่าวสารและกิจกรรมที่ถูกลบออกจากระบบ สามารถตรวจสอบ กู้คืน หรือลบอย่างถาวรโดย Super Admin</p>
@@ -3819,12 +3819,12 @@
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 20px; padding: 12px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
         <div style="display: flex; gap: 8px;">
           <button type="button" id="trashSubTabNewsBtn" class="trash-subtab-btn active" onclick="switchTrashSubTab('news')" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 0.86rem; font-weight: 700; cursor: pointer; border: 1.5px solid #cbd5e1; background: #fff; color: #1e293b; transition: all 0.2s ease;">
-            <i data-lucide="newspaper" style="width: 16px; height: 16px;"></i>
+            <i data-lucide="newspaper" class="dg-icon-md"></i>
             <span>ข่าวสารในหน้าหลัก</span>
             <span id="trashSubCountNews" style="font-size: 0.78rem; opacity: 0.8;">(0)</span>
           </button>
           <button type="button" id="trashSubTabEventsBtn" class="trash-subtab-btn" onclick="switchTrashSubTab('events')" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 0.86rem; font-weight: 700; cursor: pointer; border: 1.5px solid #cbd5e1; background: #fff; color: #1e293b; transition: all 0.2s ease;">
-            <i data-lucide="calendar" style="width: 16px; height: 16px;"></i>
+            <i data-lucide="calendar" class="dg-icon-md"></i>
             <span>ตารางกิจกรรมโรงเรียน</span>
             <span id="trashSubCountEvents" style="font-size: 0.78rem; opacity: 0.8;">(0)</span>
           </button>
@@ -3895,8 +3895,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="message-square" style="width: 13px; height: 13px;"></i> FEEDBACK & REPORTS • รับเรื่องและข้อเสนอแนะ</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> รับข้อมูลจาก: index.html (#feedback)</span>
+            <span class="admin-section-pill"><i data-lucide="message-square" class="dg-icon-xs"></i> FEEDBACK & REPORTS • รับเรื่องและข้อเสนอแนะ</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> รับข้อมูลจาก: index.html (#feedback)</span>
           </div>
           <h2>ระบบรับเรื่องร้องเรียนและข้อเสนอแนะนักเรียน (Inbox)</h2>
           <p>ตรวจสอบสิ่งที่นักเรียนต้องการให้สารวัตรทำ ข้อเสนอแนะเบาะแสความปลอดภัย และบันทึกผลการติดตามการแก้ไขปัญหา</p>
@@ -4021,8 +4021,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="settings" style="width: 13px; height: 13px;"></i> SYSTEM SETTINGS • ตั้งค่าระบบส่วนกลาง</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> การตั้งค่ากลาง: cloudflare-config.js, js/api-config.js</span>
+            <span class="admin-section-pill"><i data-lucide="settings" class="dg-icon-xs"></i> SYSTEM SETTINGS • ตั้งค่าระบบส่วนกลาง</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> การตั้งค่ากลาง: cloudflare-config.js, js/api-config.js</span>
           </div>
           <h2>การตั้งค่าระบบและสภาพแวดล้อมการทำงาน</h2>
           <p>ตรวจสอบสถานะการเชื่อมต่อ API กำหนดค่าวันเริ่มต้นปฏิบัติหน้าที่ (Duty Uptime) และเปลี่ยนรหัสผ่านผู้ใช้</p>
@@ -4037,7 +4037,7 @@
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span class="admin-section-pill" style="background: #f1f5f9; color: #334155;">
-                  <i data-lucide="shield-alert" style="width: 13px; height: 13px;"></i> PAGE ACCESS CONTROL • ควบคุมการเข้าถึงหน้าเว็บ
+                  <i data-lucide="shield-alert" class="dg-icon-xs"></i> PAGE ACCESS CONTROL • ควบคุมการเข้าถึงหน้าเว็บ
                 </span>
                 <span style="font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: #e0f2fe; color: #0369a1;">
                   บันทึกลงฐานข้อมูล SQLite
@@ -4048,7 +4048,7 @@
               </h3>
             </div>
             <button type="button" class="dg-btn-black" id="btnSavePageAccess" style="padding: 9px 20px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;" onclick="handleSavePageAccessSettings()">
-              <i data-lucide="save" style="width: 16px; height: 16px;"></i> <span>บันทึกการตั้งค่าทั้งหมด</span>
+              <i data-lucide="save" class="dg-icon-md"></i> <span>บันทึกการตั้งค่าทั้งหมด</span>
             </button>
           </div>
           <div class="admin-card-body">
@@ -4060,7 +4060,7 @@
             <div style="background: #fffbeb; border: 1.5px solid #fde68a; border-radius: 12px; padding: 18px 20px; margin-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 14px;">
                 <div style="width: 44px; height: 44px; border-radius: 12px; background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i data-lucide="wrench" style="width: 24px; height: 24px;"></i>
+                  <i data-lucide="wrench" class="dg-icon-xl"></i>
                 </div>
                 <div>
                   <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
@@ -4293,7 +4293,7 @@
           <div class="admin-card-body" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 22px 24px;">
             <div style="display: flex; align-items: center; gap: 16px;">
               <div style="width: 48px; height: 48px; border-radius: 12px; background: #fef3c7; color: #92400e; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+                <i data-lucide="users" class="dg-icon-xl"></i>
               </div>
               <div>
                 <div style="font-weight: 800; font-size: 1.02rem; color: #0f172a; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;">
@@ -4321,8 +4321,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="activity" style="width: 13px; height: 13px;"></i> SYSTEM MONITOR • มอนิเตอร์และเฝ้าระวังระบบ</span>
-            <span class="admin-file-badge"><i data-lucide="server" style="width: 13px; height: 13px;"></i> Real-time Telemetry & Security Engine</span>
+            <span class="admin-section-pill"><i data-lucide="activity" class="dg-icon-xs"></i> SYSTEM MONITOR • มอนิเตอร์และเฝ้าระวังระบบ</span>
+            <span class="admin-file-badge"><i data-lucide="server" class="dg-icon-xs"></i> Real-time Telemetry & Security Engine</span>
             <span class="admin-role-badge super" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
           </div>
           <h2>ระบบตรวจสอบและเฝ้าระวังประสิทธิภาพเซิร์ฟเวอร์ (System Monitor)</h2>
@@ -4372,7 +4372,7 @@
 
             <!-- Manual Refresh Button -->
             <button type="button" class="btn" onclick="loadSystemMonitorData(true)" style="background: #0f172a; border: 1px solid #0f172a; color: #ffffff; font-size: 0.82rem; font-weight: 700; padding: 7px 14px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-              <i data-lucide="rotate-cw" style="width: 14px; height: 14px;"></i>
+              <i data-lucide="rotate-cw" class="dg-icon-sm"></i>
               <span>รีเฟรช</span>
             </button>
           </div>
@@ -4532,7 +4532,7 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <div>
               <h3 style="font-size: 0.96rem; font-weight: 800; color: #0f172a; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;">
-                <i data-lucide="trending-up" style="width: 17px; height: 17px; color: #2563eb;"></i>
+                <i data-lucide="trending-up" class="dg-icon-base dg-icon-info"></i>
                 <span>แนวโน้มปริมาณคำขอ (Req/s) และความหน่วง (ms)</span>
               </h3>
               <p style="font-size: 0.76rem; color: #64748b; margin: 0;">บันทึกแบบ Real-time ทุก 2 วินาที (30 จุดข้อมูลล่าสุด)</p>
@@ -4570,7 +4570,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; flex-wrap: wrap; gap: 8px;">
               <div>
                 <h3 style="font-size: 0.94rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; display: flex; align-items: center; gap: 8px;">
-                  <i data-lucide="map-pin" style="width: 17px; height: 17px; color: #2563eb;"></i>
+                  <i data-lucide="map-pin" class="dg-icon-base dg-icon-info"></i>
                   <span>สถิติจังหวัดของผู้ใช้งาน (Province Geo Traffic)</span>
                 </h3>
                 <p style="font-size: 0.74rem; color: #64748b; margin: 0;">ตรวจจับผ่าน Cloudflare Header & IP Geolocation (77 จังหวัด)</p>
@@ -4719,7 +4719,7 @@
             <input type="text" id="monConsoleInput" placeholder="พิมพ์คำสั่ง เช่น /backup, /status, /help..." autocomplete="off" spellcheck="false" style="flex: 1; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 8px; color: #0f172a; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.85rem; outline: none; padding: 7px 12px; transition: border-color 0.2s, box-shadow 0.2s;" onfocus="this.style.borderColor='#2563eb'; this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.1)'" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='none'" onkeydown="handleConsoleInputKey(event)">
             <button type="button" id="monConsoleSubmitBtn" onclick="submitConsoleCommand()" style="background: #2563eb; color: #ffffff; border: none; border-radius: 8px; padding: 8px 20px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', 'Kanit', sans-serif; transition: all 0.2s; white-space: nowrap; box-shadow: 0 1px 3px rgba(37,99,235,0.25);" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
               <span>ส่งคำสั่ง</span>
-              <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+              <i data-lucide="send" class="dg-icon-sm"></i>
             </button>
           </div>
         </div>
@@ -5351,8 +5351,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="database" style="width: 13px; height: 13px;"></i> DATA MANAGEMENT • สำรองและกู้คืนข้อมูล</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> ฐานข้อมูลรวม: ทุกไฟล์ HTML ในระบบ</span>
+            <span class="admin-section-pill"><i data-lucide="database" class="dg-icon-xs"></i> DATA MANAGEMENT • สำรองและกู้คืนข้อมูล</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> ฐานข้อมูลรวม: ทุกไฟล์ HTML ในระบบ</span>
             <span class="admin-role-badge super" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
           </div>
           <h2>ระบบสำรองและกู้คืนข้อมูลส่วนกลาง (Backup & Restore)</h2>
@@ -5416,11 +5416,11 @@
               <div id="serverBackupPaginationMeta">แสดง 0 รายการ</div>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button type="button" class="btn-step-prev" id="btnPrevPageBackup" style="padding: 6px 14px; font-size: 0.8rem; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;" onclick="changeBackupPage(currentBackupPage - 1)" disabled>
-                  <i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i> หน้าก่อนหน้า
+                  <i data-lucide="chevron-left" class="dg-icon-sm"></i> หน้าก่อนหน้า
                 </button>
                 <div id="serverBackupPageButtons" style="display: flex; gap: 4px;"></div>
                 <button type="button" class="btn-step-prev" id="btnNextPageBackup" style="padding: 6px 14px; font-size: 0.8rem; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;" onclick="changeBackupPage(currentBackupPage + 1)" disabled>
-                  หน้าถัดไป <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+                  หน้าถัดไป <i data-lucide="chevron-right" class="dg-icon-sm"></i>
                 </button>
               </div>
             </div>
@@ -5506,8 +5506,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="shield-check" style="width: 13px; height: 13px;"></i> ACCESS CONTROL • บัญชีผู้ดูแลระบบ</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> ควบคุมความปลอดภัย: admin.html</span>
+            <span class="admin-section-pill"><i data-lucide="shield-check" class="dg-icon-xs"></i> ACCESS CONTROL • บัญชีผู้ดูแลระบบ</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> ควบคุมความปลอดภัย: admin.html</span>
             <span class="admin-role-badge super" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin</span>
           </div>
           <h2>ระบบจัดการบัญชีผู้ดูแลระบบ (Admin Accounts)</h2>
@@ -5525,7 +5525,7 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 28px;">
         <div class="admin-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 16px;">
           <div style="width: 50px; height: 50px; border-radius: 12px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #0f172a; flex-shrink: 0;">
-            <i data-lucide="users" style="width: 24px; height: 24px;"></i>
+            <i data-lucide="users" class="dg-icon-xl"></i>
           </div>
           <div>
             <div style="font-size: 0.8rem; color: #64748b; font-weight: 700; text-transform: uppercase;">ผู้ดูแลทั้งหมด</div>
@@ -5535,7 +5535,7 @@
 
         <div class="admin-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 16px; border-color: #fde68a;">
           <div style="width: 50px; height: 50px; border-radius: 12px; background: #fef3c7; display: flex; align-items: center; justify-content: center; color: #92400e; flex-shrink: 0;">
-            <i data-lucide="crown" style="width: 24px; height: 24px;"></i>
+            <i data-lucide="crown" class="dg-icon-xl"></i>
           </div>
           <div>
             <div style="font-size: 0.8rem; color: #92400e; font-weight: 700; text-transform: uppercase;">Super Admin</div>
@@ -5545,7 +5545,7 @@
 
         <div class="admin-card" style="margin-bottom: 0; padding: 20px; display: flex; align-items: center; gap: 16px; border-color: #bae6fd;">
           <div style="width: 50px; height: 50px; border-radius: 12px; background: #e0f2fe; display: flex; align-items: center; justify-content: center; color: #0369a1; flex-shrink: 0;">
-            <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+            <i data-lucide="shield" class="dg-icon-xl"></i>
           </div>
           <div>
             <div style="font-size: 0.8rem; color: #0369a1; font-weight: 700; text-transform: uppercase;">Admin ธรรมดา</div>
@@ -5575,7 +5575,7 @@
                 <div class="auth-input-wrapper">
                   <input type="password" id="newAdminPassword" class="auth-input" required minlength="4" placeholder="กำหนดรหัสผ่าน (อย่างน้อย 4 ตัวอักษร)" />
                   <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('newAdminPassword', 'newAdminEyeIcon1')" title="แสดง/ซ่อนรหัสผ่าน">
-                    <i data-lucide="eye" id="newAdminEyeIcon1" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="eye" id="newAdminEyeIcon1" class="dg-icon-base"></i>
                   </button>
                 </div>
               </div>
@@ -5585,7 +5585,7 @@
                 <div class="auth-input-wrapper">
                   <input type="password" id="newAdminConfirmPassword" class="auth-input" required minlength="4" placeholder="พิมพ์รหัสผ่านซ้ำอีกครั้ง" />
                   <button type="button" class="auth-input-toggle" onclick="togglePasswordVisibility('newAdminConfirmPassword', 'newAdminEyeIcon2')" title="แสดง/ซ่อนรหัสผ่าน">
-                    <i data-lucide="eye" id="newAdminEyeIcon2" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="eye" id="newAdminEyeIcon2" class="dg-icon-base"></i>
                   </button>
                 </div>
               </div>
@@ -5614,7 +5614,7 @@
           <div class="admin-card-body" style="font-size: 0.88rem; line-height: 1.65; color: #334155;">
             <div style="padding: 14px; background: #fefce8; border: 1px solid #fef08a; border-radius: 10px; margin-bottom: 14px;">
               <div style="font-weight: 800; color: #854d0e; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                <i data-lucide="crown" style="width: 16px; height: 16px;"></i>
+                <i data-lucide="crown" class="dg-icon-md"></i>
                 <span>👑 Super Admin (ผู้ดูแลระบบสูงสุด)</span>
               </div>
               <ul style="margin: 0; padding-left: 20px; color: #713f12; font-size: 0.84rem;">
@@ -5626,7 +5626,7 @@
 
             <div style="padding: 14px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px;">
               <div style="font-weight: 800; color: #0369a1; display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+                <i data-lucide="shield" class="dg-icon-md"></i>
                 <span>🛡️ Admin ธรรมดา (ผู้ดูแลทั่วไป)</span>
               </div>
               <ul style="margin: 0; padding-left: 20px; color: #0c4a6e; font-size: 0.84rem;">
@@ -5648,7 +5648,7 @@
             <i data-lucide="list-ordered"></i> รายชื่อผู้ดูแลระบบทั้งหมดในระบบ
           </h3>
           <button type="button" class="dg-btn-sm-outline" onclick="renderAdminsList()">
-            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+            <i data-lucide="refresh-cw" class="dg-icon-sm"></i>
             <span>รีเฟรชข้อมูล</span>
           </button>
         </div>
@@ -5681,8 +5681,8 @@
       <div class="admin-section-header">
         <div class="admin-section-title">
           <div class="admin-section-badges">
-            <span class="admin-section-pill"><i data-lucide="user-check" style="width: 13px; height: 13px;"></i> RECRUITMENT 2570 • รับสมัครสารวัตรนักเรียน</span>
-            <span class="admin-file-badge"><i data-lucide="file-code" style="width: 13px; height: 13px;"></i> หน้าที่เชื่อมโยง: admission.html</span>
+            <span class="admin-section-pill"><i data-lucide="user-check" class="dg-icon-xs"></i> RECRUITMENT 2570 • รับสมัครสารวัตรนักเรียน</span>
+            <span class="admin-file-badge"><i data-lucide="file-code" class="dg-icon-xs"></i> หน้าที่เชื่อมโยง: admission.html</span>
             <span class="schedule-badge-status open" id="adminRecruitStatusPill" style="padding: 2px 10px; font-size: 0.74rem;">
               <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>
               <span id="txtAdminRecruitStatus">เปิดรับสมัคร</span>
@@ -5714,7 +5714,7 @@
           </button>
 
           <button type="button" class="dg-btn-black" id="btnOpenRecruitSettings" onclick="openRecruitSettingsModal()" style="border-radius: 99px; padding: 9px 20px; font-size: 0.86rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
-            <i data-lucide="sliders" style="width: 15px; height: 15px;"></i>
+            <i data-lucide="sliders" class="dg-icon-sm"></i>
             <span>ตั้งค่าระบบ & โควตา</span>
           </button>
         </div>
@@ -5787,7 +5787,7 @@
           </select>
 
           <button type="button" class="btn-step-prev" id="btnResetApplicantFilters" style="padding: 8px 16px; font-size: 0.82rem; height: 40px;">
-            <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+            <i data-lucide="rotate-ccw" class="dg-icon-sm"></i>
             <span>รีเซ็ต</span>
           </button>
         </div>
@@ -5942,7 +5942,7 @@
         <div class="dg-modal-header">
           <div style="display: flex; align-items: center; gap: 14px;">
             <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-              <i data-lucide="file-badge-2" style="width: 20px; height: 20px;"></i>
+              <i data-lucide="file-badge-2" class="dg-icon-lg"></i>
             </div>
             <div>
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -5961,7 +5961,7 @@
             </div>
           </div>
           <button type="button" class="dg-modal-close" id="btnCloseApplicantReview" onclick="closeApplicantReviewModal()" title="ปิดหน้าต่าง">
-            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+            <i data-lucide="x" class="dg-icon-base"></i>
           </button>
         </div>
 
@@ -5973,7 +5973,7 @@
               <div class="app-review-photo-wrapper">
                 <img id="mdlAppPhoto" src="" alt="รูปถ่ายผู้สมัคร" />
                 <a id="mdlAppPhotoLink" href="#" target="_blank" class="app-review-photo-zoom" title="เปิดดูรูปขนาดเต็ม">
-                  <i data-lucide="external-link" style="width: 12px; height: 12px;"></i>
+                  <i data-lucide="external-link" class="dg-icon-xs"></i>
                   <span>ดูรูปเต็ม</span>
                 </a>
               </div>
@@ -5986,15 +5986,15 @@
               <!-- Meta Pill Group -->
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
                 <span style="display: inline-flex; align-items: center; gap: 5px; background: #0f172a; color: #ffffff; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 600;">
-                  <i data-lucide="id-card" style="width: 13px; height: 13px;"></i>
+                  <i data-lucide="id-card" class="dg-icon-xs"></i>
                   <span>รหัส นร. <strong id="mdlAppStudentId" style="color: #38bdf8;">-</strong></span>
                 </span>
                 <span style="display: inline-flex; align-items: center; gap: 5px; background: #e2e8f0; color: #1e293b; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 600;">
-                  <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
+                  <i data-lucide="graduation-cap" class="dg-icon-xs"></i>
                   <span>ชั้น <strong id="mdlAppGradeRoom">-</strong></span>
                 </span>
                 <span style="display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 4px 12px; border-radius: 9999px; font-size: 0.78rem; font-weight: 700;">
-                  <i data-lucide="award" style="width: 13px; height: 13px;"></i>
+                  <i data-lucide="award" class="dg-icon-xs"></i>
                   <span>GPAX <strong id="mdlAppGpax">-</strong></span>
                 </span>
               </div>
@@ -6004,7 +6004,7 @@
                 <!-- Club Selection (Highlight) -->
                 <div class="app-bento-card highlight-blue" style="grid-column: span 2;">
                   <div class="app-bento-icon">
-                    <i data-lucide="flag" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="flag" class="dg-icon-base"></i>
                   </div>
                   <div style="flex: 1;">
                     <div class="app-bento-label">ชุมนุมที่เลือก (ปีการศึกษา 2570)</div>
@@ -6015,7 +6015,7 @@
                 <!-- Phone -->
                 <div class="app-bento-card">
                   <div class="app-bento-icon">
-                    <i data-lucide="phone-call" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="phone-call" class="dg-icon-base"></i>
                   </div>
                   <div>
                     <div class="app-bento-label">เบอร์โทรศัพท์ติดต่อ</div>
@@ -6030,7 +6030,7 @@
                 <!-- Submission Time -->
                 <div class="app-bento-card">
                   <div class="app-bento-icon">
-                    <i data-lucide="clock" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="clock" class="dg-icon-base"></i>
                   </div>
                   <div>
                     <div class="app-bento-label">วันที่ส่งใบสมัคร</div>
@@ -6041,7 +6041,7 @@
                 <!-- Address -->
                 <div class="app-bento-card" style="grid-column: span 2;">
                   <div class="app-bento-icon">
-                    <i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="map-pin" class="dg-icon-base"></i>
                   </div>
                   <div style="flex: 1;">
                     <div class="app-bento-label">ที่อยู่ปัจจุบัน (Text Only)</div>
@@ -6057,7 +6057,7 @@
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
               <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="width: 34px; height: 34px; border-radius: 10px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center;">
-                  <i data-lucide="message-square-quote" style="width: 18px; height: 18px;"></i>
+                  <i data-lucide="message-square-quote" class="dg-icon-base"></i>
                 </div>
                 <div>
                   <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0;">
@@ -6124,7 +6124,7 @@
             <div id="mdlCorrectionNoteGroup" style="display: none; margin-bottom: 16px;">
               <div style="background: #fffbeb; border: 1.5px solid #fed7aa; border-radius: 14px; padding: 16px;">
                 <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #c2410c; margin-bottom: 8px; font-size: 0.88rem;">
-                  <i data-lucide="alert-triangle" style="width: 16px; height: 16px;"></i>
+                  <i data-lucide="alert-triangle" class="dg-icon-md"></i>
                   <span>ข้อความแจ้งให้นักเรียนแก้ไขข้อมูล (จะแสดงผลในหน้าตรวจสอบสถานะของนักเรียน) *</span>
                 </div>
                 <textarea id="mdlCorrectionNote" class="recruit-input" style="height: 80px; padding: 10px 14px; background: #ffffff; border-color: #fdba74;" placeholder="ระบุสิ่งที่ต้องการให้ผู้สมัครแก้ไขอย่างชัดเจน เช่น รูปถ่ายไม่ชัดเจน หรือที่อยู่ไม่ครบถ้วน"></textarea>
@@ -6162,7 +6162,7 @@
                   <span>ปิดหน้าต่าง</span>
                 </button>
                 <button type="button" class="dg-btn-black" id="btnSaveApplicantDecision" style="padding: 10px 26px; font-size: 0.92rem; height: 44px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);">
-                  <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                  <i data-lucide="check" class="dg-icon-md"></i>
                   <span>บันทึกผลการพิจารณา</span>
                 </button>
               </div>
@@ -6172,7 +6172,7 @@
           <!-- Status History Log (Audit Trail) -->
           <div class="app-timeline-box">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
-              <i data-lucide="history" style="width: 16px; height: 16px; color: #64748b;"></i>
+              <i data-lucide="history" class="dg-icon-md"></i>
               <h4 style="font-size: 0.95rem; font-weight: 700; color: #334155; margin: 0;">
                 ประวัติการเปลี่ยนแปลงสถานะ (Audit Trail)
               </h4>
@@ -6213,7 +6213,7 @@
         <div class="dg-modal-header">
           <div style="display: flex; align-items: center; gap: 12px;">
             <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
-              <i data-lucide="sliders-horizontal" style="width: 20px; height: 20px;"></i>
+              <i data-lucide="sliders-horizontal" class="dg-icon-lg"></i>
             </div>
             <div>
               <h3 style="font-size: 1.2rem; font-weight: 700; color: #0f172a; margin: 0;">
@@ -6225,7 +6225,7 @@
             </div>
           </div>
           <button type="button" class="dg-modal-close" id="btnCloseRecruitSettings" onclick="closeRecruitSettingsModal()" title="ปิดหน้าต่าง">
-            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+            <i data-lucide="x" class="dg-icon-base"></i>
           </button>
         </div>
 
@@ -6233,19 +6233,19 @@
           <!-- Segmented Navigation Tabs -->
           <div class="recruit-nav-tabs">
             <button type="button" class="recruit-tab-btn active" id="tabBtnSetGeneral" onclick="switchRecruitSettingsTab('gen')">
-              <i data-lucide="calendar-clock" style="width: 16px; height: 16px;"></i>
+              <i data-lucide="calendar-clock" class="dg-icon-md"></i>
               <span>ทั่วไป & กำหนดการ</span>
             </button>
             <button type="button" class="recruit-tab-btn" id="tabBtnSetClubs" onclick="switchRecruitSettingsTab('clubs')">
-              <i data-lucide="users" style="width: 16px; height: 16px;"></i>
+              <i data-lucide="users" class="dg-icon-md"></i>
               <span>จัดการชุมนุม & โควตา</span>
             </button>
             <button type="button" class="recruit-tab-btn" id="tabBtnSetQuestions" onclick="switchRecruitSettingsTab('questions')">
-              <i data-lucide="message-square-quote" style="width: 16px; height: 16px;"></i>
+              <i data-lucide="message-square-quote" class="dg-icon-md"></i>
               <span>คำถามวัดทัศนคติ</span>
             </button>
             <button type="button" class="recruit-tab-btn" id="tabBtnSetLogs" onclick="switchRecruitSettingsTab('logs')">
-              <i data-lucide="shield-alert" style="width: 16px; height: 16px;"></i>
+              <i data-lucide="shield-alert" class="dg-icon-md"></i>
               <span>Audit Log ประวัติระบบ</span>
             </button>
           </div>
@@ -6259,7 +6259,7 @@
               <div class="recruit-bento-header">
                 <div class="recruit-bento-title">
                   <div class="recruit-bento-icon" style="background: #e0f2fe; color: #0369a1;">
-                    <i data-lucide="power" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="power" class="dg-icon-base"></i>
                   </div>
                   <span>สถานะการเปิดรับสมัคร & กำหนดการเวลา</span>
                 </div>
@@ -6272,7 +6272,7 @@
               <div class="recruit-toggle-card is-active" id="cardMasterSwitch" onclick="toggleMasterRecruitmentSwitch()">
                 <div style="display: flex; align-items: center; gap: 14px;">
                   <div class="recruit-bento-icon" id="iconMasterSwitch" style="width: 40px; height: 40px; border-radius: 12px; background: #dcfce7; color: #15803d;">
-                    <i data-lucide="power" style="width: 20px; height: 20px;"></i>
+                    <i data-lucide="power" class="dg-icon-lg"></i>
                   </div>
                   <div>
                     <div style="font-weight: 700; font-size: 0.96rem; color: #0f172a;" id="txtMasterSwitchTitle">
@@ -6298,7 +6298,7 @@
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
                 <div class="recruit-form-group">
                   <label class="recruit-label">
-                    <span><i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> วัน-เวลาเปิดรับสมัคร (อัตโนมัติ)</span>
+                    <span><i data-lucide="calendar" class="dg-icon-sm" style="display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> วัน-เวลาเปิดรับสมัคร (อัตโนมัติ)</span>
                   </label>
                   <input type="datetime-local" id="cfgStartDatetime" class="recruit-input" onclick="try{this.showPicker()}catch(e){}" />
                   <div style="font-size: 0.74rem; color: #94a3b8;">เว้นว่างได้ = เปิดรับสมัครทันที</div>
@@ -6306,7 +6306,7 @@
 
                 <div class="recruit-form-group">
                   <label class="recruit-label">
-                    <span><i data-lucide="clock" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> วัน-เวลาปิดรับสมัคร (อัตโนมัติ)</span>
+                    <span><i data-lucide="clock" class="dg-icon-sm" style="display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> วัน-เวลาปิดรับสมัคร (อัตโนมัติ)</span>
                   </label>
                   <input type="datetime-local" id="cfgEndDatetime" class="recruit-input" onclick="try{this.showPicker()}catch(e){}" />
                   <div style="font-size: 0.74rem; color: #94a3b8;">เว้นว่างได้ = เปิดตลอดเวลาไม่มีกำหนดสิ้นสุด</div>
@@ -6319,7 +6319,7 @@
               <div class="recruit-bento-header">
                 <div class="recruit-bento-title">
                   <div class="recruit-bento-icon" style="background: #fef3c7; color: #92400e;">
-                    <i data-lucide="graduation-cap" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="graduation-cap" class="dg-icon-base"></i>
                   </div>
                   <span>คุณสมบัติและเกณฑ์รับสมัคร</span>
                 </div>
@@ -6360,7 +6360,7 @@
               <div class="recruit-form-group" style="margin-bottom: 16px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
                   <label class="recruit-label" style="margin-bottom: 0;">
-                    <span><i data-lucide="check-square" style="width: 14px; height: 14px; display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> ระดับชั้นที่เปิดรับสมัคร (เลือกได้หลายตัวเลือก ม.1 - ม.6) *</span>
+                    <span><i data-lucide="check-square" class="dg-icon-sm" style="display: inline-block; vertical-align: -2px; margin-right: 4px;"></i> ระดับชั้นที่เปิดรับสมัคร (เลือกได้หลายตัวเลือก ม.1 - ม.6) *</span>
                   </label>
                   <div style="display: flex; gap: 10px; font-size: 0.78rem;">
                     <a href="javascript:void(0)" onclick="selectAllGrades(true)" style="color: #2563eb; font-weight: 600; text-decoration: none;">✓ เลือกทั้งหมด (ม.1-ม.6)</a>
@@ -6417,7 +6417,7 @@
               <div class="recruit-toggle-card" style="margin-top: 14px; margin-bottom: 0; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                   <div class="recruit-bento-icon" style="width: 36px; height: 36px; border-radius: 10px; background: #fee2e2; color: #dc2626;">
-                    <i data-lucide="user-x" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="user-x" class="dg-icon-base"></i>
                   </div>
                   <div>
                     <div style="font-weight: 700; font-size: 0.90rem; color: #0f172a;">
@@ -6440,7 +6440,7 @@
               <div class="recruit-bento-header">
                 <div class="recruit-bento-title">
                   <div class="recruit-bento-icon" style="background: #ede9fe; color: #6d28d9;">
-                    <i data-lucide="megaphone" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="megaphone" class="dg-icon-base"></i>
                   </div>
                   <span>ข้อความประกาศหน้าเว็บ & นโยบายความเป็นส่วนตัว (PDPA)</span>
                 </div>
@@ -6464,7 +6464,7 @@
             <!-- Save Action Button -->
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
               <button type="button" class="dg-btn-black" id="btnSaveGeneralSettings" style="padding: 12px 28px; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2); display: inline-flex; align-items: center; gap: 8px;">
-                <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                <i data-lucide="check" class="dg-icon-md"></i>
                 <span>บันทึกการตั้งค่า</span>
               </button>
             </div>
@@ -6478,12 +6478,12 @@
               <div class="recruit-bento-header">
                 <div class="recruit-bento-title">
                   <div class="recruit-bento-icon" style="background: #e0e7ff; color: #4338ca;">
-                    <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="users" class="dg-icon-base"></i>
                   </div>
                   <span>รายชื่อชุมนุมและโควตาที่เปิดรับ</span>
                 </div>
                 <button type="button" class="dg-btn-black" id="btnAddNewClubRow" style="padding: 8px 16px; font-size: 0.82rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;">
-                  <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                  <i data-lucide="plus" class="dg-icon-sm"></i>
                   <span>เพิ่มรายการใหม่</span>
                 </button>
               </div>
@@ -6558,7 +6558,7 @@
               <div class="recruit-bento-header">
                 <div class="recruit-bento-title">
                   <div class="recruit-bento-icon" style="background: #fdf2f8; color: #be185d;">
-                    <i data-lucide="message-square-quote" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="message-square-quote" class="dg-icon-base"></i>
                   </div>
                   <div>
                     <span style="font-size: 0.96rem; font-weight: 700; color: #0f172a;">คำถามประเมินทัศนคติ อุดมคติ และแรงจูงใจ</span>
@@ -6568,7 +6568,7 @@
                   </div>
                 </div>
                 <button type="button" class="dg-btn-black" id="btnOpenAddQuestionModal" style="padding: 8px 16px; font-size: 0.82rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;">
-                  <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                  <i data-lucide="plus" class="dg-icon-sm"></i>
                   <span>เพิ่มคำถามใหม่</span>
                 </button>
               </div>
@@ -6664,7 +6664,7 @@
               <div class="recruit-bento-header">
                 <div class="recruit-bento-title">
                   <div class="recruit-bento-icon" style="background: #fee2e2; color: #b91c1c;">
-                    <i data-lucide="shield-alert" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="shield-alert" class="dg-icon-base"></i>
                   </div>
                   <span>Audit Log ประวัติการแก้ไขระบบรับสมัคร</span>
                 </div>
@@ -6722,7 +6722,7 @@
       <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
-            <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+            <i data-lucide="user" class="dg-icon-lg"></i>
           </div>
           <div>
             <h3 id="modalTitle" style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">จัดการข้อมูลสมาชิก</h3>
@@ -6730,7 +6730,7 @@
           </div>
         </div>
         <button type="button" class="dg-modal-close" onclick="closeMemberModal()" title="ปิดหน้าต่าง">
-          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          <i data-lucide="x" class="dg-icon-base"></i>
         </button>
       </div>
 
@@ -6740,7 +6740,7 @@
         <!-- Quick Selector from SQLite -->
         <div class="student-picker-wrap" style="margin-bottom: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px 14px;">
           <div class="student-picker-label" style="font-size: 0.84rem; font-weight: 700; color: #166534; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-            <i data-lucide="search" style="width: 15px; height: 15px;"></i>
+            <i data-lucide="search" class="dg-icon-sm"></i>
             <span>เลือกจากฐานข้อมูลนักเรียน</span>
           </div>
           <select class="student-picker-select" id="modalStudentSelect" onchange="if(typeof onModalStudentSelect==='function')onModalStudentSelect(this.value)" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #86efac; background: #ffffff; font-family: inherit; font-size: 0.9rem; color: #0f172a; outline: none;">
@@ -6773,7 +6773,7 @@
       <div class="dg-modal-actions" style="padding: 14px 22px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px;">
         <button type="button" class="btn-step-prev" style="padding: 10px 18px; border-radius: 8px; font-size: 0.88rem; border: 1px solid #cbd5e1; background: #fff; cursor: pointer;" onclick="closeMemberModal()">ยกเลิก</button>
         <button type="button" class="dg-btn-black" style="padding: 10px 24px; border-radius: 8px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;" onclick="saveMemberModal()">
-          <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="check" class="dg-icon-md"></i>
           <span>บันทึกข้อมูล</span>
         </button>
       </div>
@@ -6789,7 +6789,7 @@
       <div class="bento-modal-header">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #475569 0%, #0f172a 100%); color: #fff;">
-            <i data-lucide="tag" style="width: 20px; height: 20px;"></i>
+            <i data-lucide="tag" class="dg-icon-lg"></i>
           </div>
           <div>
             <h3 id="adminTagModalTitle" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">สร้างแท็กใหม่</h3>
@@ -6797,7 +6797,7 @@
           </div>
         </div>
         <button class="dg-modal-close" type="button" onclick="closeModal('adminTagModal')" title="ปิดหน้าต่าง">
-          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          <i data-lucide="x" class="dg-icon-base"></i>
         </button>
       </div>
 
@@ -6814,7 +6814,7 @@
             </div>
             <div id="adminTagLivePreview" style="display: flex; justify-content: center; align-items: center; min-height: 44px;">
               <span class="sarawat-tag-badge" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;">
-                <i data-lucide="tag" style="width: 13px; height: 13px;"></i>
+                <i data-lucide="tag" class="dg-icon-xs"></i>
                 <span>ชื่อแท็กตัวอย่าง</span>
               </span>
             </div>
@@ -6824,7 +6824,7 @@
           <div class="bento-card">
             <div class="bento-card-header">
               <div class="bento-card-title">
-                <i data-lucide="edit-3" style="width: 16px; height: 16px; color: #0284c7;"></i>
+                <i data-lucide="edit-3" class="dg-icon-md dg-icon-info"></i>
                 <span>ข้อมูลพื้นฐานของแท็ก</span>
               </div>
             </div>
@@ -6916,7 +6916,7 @@
               <div style="display: flex; align-items: center; gap: 6px;">
                 <span style="font-size: 0.76rem; color: #64748b;">ไอคอนที่เลือก:</span>
                 <div id="adminTagIconPreview" style="width: 28px; height: 28px; border: 1.5px solid #cbd5e1; border-radius: 6px; display: flex; align-items: center; justify-content: center; background: #f8fafc;">
-                  <i data-lucide="tag" style="width: 16px; height: 16px;"></i>
+                  <i data-lucide="tag" class="dg-icon-md"></i>
                 </div>
               </div>
             </div>
@@ -6953,7 +6953,7 @@
         <div class="bento-modal-actions">
           <button type="button" class="dg-btn-outline" onclick="closeModal('adminTagModal')" style="padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer;">ยกเลิก</button>
           <button type="submit" class="dg-btn-black" id="adminTagSubmitBtn" style="padding: 10px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
-            <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+            <i data-lucide="check" class="dg-icon-md"></i>
             <span>บันทึกแท็ก</span>
           </button>
         </div>
@@ -6970,7 +6970,7 @@
       <div class="bento-modal-header">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff;">
-            <i data-lucide="newspaper" style="width: 20px; height: 20px;"></i>
+            <i data-lucide="newspaper" class="dg-icon-lg"></i>
           </div>
           <div>
             <h3 id="adminNewsModalTitle" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
@@ -6982,7 +6982,7 @@
           </div>
         </div>
         <button class="dg-modal-close" type="button" onclick="closeModal('adminNewsModal')" title="ปิดหน้าต่าง">
-          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          <i data-lucide="x" class="dg-icon-base"></i>
         </button>
       </div>
 
@@ -7153,7 +7153,7 @@
             <div id="adminNewsImgPreviewWrap" class="admin-preview-card" style="display: none; margin-top: 14px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
               <div class="admin-preview-header" style="background: #f8fafc; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
                 <span style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #16a34a; font-size: 0.85rem;">
-                  <i data-lucide="check-circle" style="width: 15px; height: 15px;"></i>
+                  <i data-lucide="check-circle" class="dg-icon-sm"></i>
                   <span>รูปภาพที่แนบ:</span>
                   <span id="adminPreviewStateLabel" style="font-weight: 600; color: #64748b; font-size: 0.74rem;"></span>
                 </span>
@@ -7235,7 +7235,7 @@
         <div class="bento-modal-actions">
           <button type="button" class="dg-btn-outline" onclick="closeModal('adminNewsModal')" style="padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer;">ยกเลิก</button>
           <button type="submit" id="adminNewsSubmitBtn" class="dg-btn-black" style="padding: 10px 28px; border-radius: 8px; font-size: 0.92rem; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
-            <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+            <i data-lucide="save" class="dg-icon-md"></i>
             <span>บันทึกข่าวสาร</span>
           </button>
         </div>
@@ -7252,7 +7252,7 @@
       <div class="bento-modal-header">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #fff;">
-            <i data-lucide="calendar-plus" style="width: 20px; height: 20px;"></i>
+            <i data-lucide="calendar-plus" class="dg-icon-lg"></i>
           </div>
           <div>
             <h3 id="adminEventModalTitle" style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
@@ -7264,7 +7264,7 @@
           </div>
         </div>
         <button class="dg-modal-close" type="button" onclick="closeModal('adminEventModal')" title="ปิดหน้าต่าง">
-          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          <i data-lucide="x" class="dg-icon-base"></i>
         </button>
       </div>
       
@@ -7392,7 +7392,7 @@
                     <span style="font-size: 0.78rem; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">เวลาเริ่มต้น</span>
                     <input type="time" id="adminEventStartTime" value="08:30" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; font-size: 0.95rem;" onchange="handleEventTimeCustomChange()" />
                   </div>
-                  <span style="color: #94a3b8; font-weight: 800; margin-top: 18px;"><i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
+                  <span style="color: #94a3b8; font-weight: 800; margin-top: 18px;"><i data-lucide="arrow-right" class="dg-icon-md"></i></span>
                   <div style="flex: 1;">
                     <span style="font-size: 0.78rem; color: #475569; display: block; margin-bottom: 4px; font-weight: 700;">เวลาสิ้นสุด</span>
                     <input type="time" id="adminEventEndTime" value="16:30" style="width: 100%; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 6px; background: #ffffff; font-family: inherit; font-size: 0.95rem;" onchange="handleEventTimeCustomChange()" />
@@ -7476,7 +7476,7 @@
             ยกเลิก
           </button>
           <button type="submit" id="adminEventSubmitBtn" style="padding: 10px 28px; border-radius: 8px; border: none; background: #0f172a; color: #ffffff; font-weight: 800; font-size: 0.92rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); transition: all 0.2s;">
-            <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+            <i data-lucide="save" class="dg-icon-md"></i>
             <span>บันทึกกิจกรรม</span>
           </button>
         </div>
@@ -7492,7 +7492,7 @@
       <div class="dg-modal-header">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);">
-            <i data-lucide="inbox" style="width: 20px; height: 20px;"></i>
+            <i data-lucide="inbox" class="dg-icon-lg"></i>
           </div>
           <div>
             <h3 style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0;">
@@ -7504,7 +7504,7 @@
           </div>
         </div>
         <button class="dg-modal-close" type="button" onclick="closeModal('adminFeedbackModal')" title="ปิดหน้าต่าง">
-          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          <i data-lucide="x" class="dg-icon-base"></i>
         </button>
       </div>
 
@@ -7555,7 +7555,7 @@
         <!-- Management Box -->
         <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 18px 20px; margin-bottom: 20px;">
           <h4 style="margin: 0 0 14px; font-size: 0.92rem; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="check-square" style="width: 16px; height: 16px;"></i> การดำเนินการของผู้ดูแลระบบ
+            <i data-lucide="check-square" class="dg-icon-md"></i> การดำเนินการของผู้ดูแลระบบ
           </h4>
           <div class="dg-form-group" style="margin-bottom: 14px;">
             <label style="font-weight: 700; color: #166534; font-size: 0.84rem; display: block; margin-bottom: 6px;">เปลี่ยนสถานะการดำเนินการ</label>
@@ -7575,7 +7575,7 @@
         <!-- Action Buttons -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid #e2e8f0;">
           <button type="button" onclick="deleteAdminFeedback(document.getElementById('modalFbId').value)" style="padding: 10px 16px; border-radius: 8px; border: 1px solid #fee2e2; background: #fef2f2; color: #dc2626; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+            <i data-lucide="trash-2" class="dg-icon-sm"></i>
             <span>ลบรายการนี้</span>
           </button>
 
@@ -7584,7 +7584,7 @@
               ปิด
             </button>
             <button type="submit" style="padding: 10px 24px; border-radius: 8px; border: none; background: #0f172a; color: #ffffff; font-weight: 800; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
-              <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+              <i data-lucide="save" class="dg-icon-md"></i>
               <span>บันทึกสถานะ</span>
             </button>
           </div>
@@ -8170,8 +8170,8 @@
         const isSuper = (item.role === 'Super Admin');
         const isSelf = (item.username && currentAdminUser.username && item.username.toLowerCase() === currentAdminUser.username.toLowerCase());
         const badgeHtml = isSuper
-          ? '<span class="admin-role-badge super"><i data-lucide="crown" style="width: 12px; height: 12px;"></i> Super Admin</span>'
-          : '<span class="admin-role-badge regular"><i data-lucide="shield" style="width: 12px; height: 12px;"></i> Admin ธรรมดา</span>';
+          ? '<span class="admin-role-badge super"><i data-lucide="crown" class="dg-icon-xs"></i> Super Admin</span>'
+          : '<span class="admin-role-badge regular"><i data-lucide="shield" class="dg-icon-xs"></i> Admin ธรรมดา</span>';
 
         const scopeHtml = isSuper
           ? '<span style="font-size: 0.82rem; color: #92400e; font-weight: 600;">🌐 สิทธิ์สูงสุด + จัดการระบบฐานข้อมูล</span>'
@@ -8195,11 +8195,11 @@
               ${isSelf ? '<span style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">กำลังเข้าสู่ระบบ</span>' : `
                 <div style="display: inline-flex; gap: 6px;">
                   <button type="button" class="dg-btn-sm-outline" onclick="handleResetOtherAdminPassword(${item.id || `'${item.username}'`}, '${escapeHtml(item.username)}')" style="padding: 5px 10px; font-size: 0.78rem;">
-                    <i data-lucide="key-round" style="width: 13px; height: 13px;"></i>
+                    <i data-lucide="key-round" class="dg-icon-xs"></i>
                     <span>รีเซ็ตรหัส</span>
                   </button>
                   <button type="button" class="dg-btn-sm-outline" onclick="handleDeleteAdminAccount(${item.id || `'${item.username}'`}, '${escapeHtml(item.username)}', '${item.role}')" style="color: #ef4444; border-color: #fee2e2; padding: 5px 10px; font-size: 0.78rem;">
-                    <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                    <i data-lucide="trash-2" class="dg-icon-xs"></i>
                     <span>ลบ</span>
                   </button>
                 </div>
@@ -9461,17 +9461,17 @@
             </td>
             <td style="padding: 14px 18px; vertical-align: middle;">
               <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.8rem; color: #475569;">
-                <i data-lucide="${escapeHtml(tag.icon || 'tag')}" style="width: 15px; height: 15px;"></i>
+                <i data-lucide="${escapeHtml(tag.icon || 'tag')}" class="dg-icon-sm"></i>
                 <span>${escapeHtml(tag.icon || 'tag')}</span>
               </div>
             </td>
             <td style="padding: 14px 18px; text-align: right; vertical-align: middle; white-space: nowrap;">
               <button type="button" class="dg-btn-sm-outline" onclick="openEditTagModal(${tag.id})" title="แก้ไขแท็ก" style="padding: 5px 10px; margin-right: 6px; font-size: 0.78rem;">
-                <i data-lucide="edit-3" style="width: 13px; height: 13px;"></i>
+                <i data-lucide="edit-3" class="dg-icon-xs"></i>
                 <span>แก้ไข</span>
               </button>
               <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteTag(${tag.id}, '${escapeHtml(tag.name)}')" title="ลบแท็ก" style="padding: 5px 10px; font-size: 0.78rem; background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer;">
-                <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                <i data-lucide="trash-2" class="dg-icon-xs"></i>
                 <span>ลบ</span>
               </button>
             </td>
@@ -10357,14 +10357,14 @@
             <div class="admin-news-desc">${escapeHtml(item.desc || item.detail || '')}</div>
             <div class="admin-news-links-indicator">
               ${(item.fbUrl || item.linkFb) ? `<span class="link-tag has-fb"><i class="si si-facebook" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Facebook Posts</span>` : ''}
-              ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" style="width:12px;height:12px;"></i> Facebook Reels</span>` : ''}
+              ${(item.fbReelsUrl || item.linkFbReels || item.fb_reels_url) ? `<span class="link-tag has-fb-reels"><i data-lucide="film" class="dg-icon-xs"></i> Facebook Reels</span>` : ''}
               ${(item.igUrl || item.linkIg) ? `<span class="link-tag has-ig"><i class="si si-instagram" style="font-size:12px; width:12px; height:12px; display:inline-flex; align-items:center; justify-content:center;"></i> Instagram Posts</span>` : ''}
-              ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" style="width:12px;height:12px;"></i> Instagram Reels</span>` : ''}
-              ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" style="width:12px;height:12px;"></i> Google Photos</span>` : ''}
+              ${(item.reelsUrl || item.linkReels) ? `<span class="link-tag has-reels"><i data-lucide="video" class="dg-icon-xs"></i> Instagram Reels</span>` : ''}
+              ${(item.photoUrl || item.linkPhoto) ? `<span class="link-tag has-photo"><i data-lucide="image" class="dg-icon-xs"></i> Google Photos</span>` : ''}
             </div>
             <div class="admin-card-actions">
-              <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" style="width:14px;height:14px;"></i> แก้ไข</button>
-              <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" style="width:14px;height:14px;"></i> ลบ</button>
+              <button type="button" class="dg-btn-sm-outline" onclick="openEditNewsModal('${item.id}')"><i data-lucide="edit-3" class="dg-icon-sm"></i> แก้ไข</button>
+              <button type="button" class="dg-btn-sm-danger" onclick="handleDeleteNews('${item.id}')"><i data-lucide="trash-2" class="dg-icon-sm"></i> ลบ</button>
             </div>
           </div>
         </div>
@@ -10549,14 +10549,14 @@
             </td>
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #334155; font-size: 0.88rem;">
               <span style="display: inline-flex; align-items: center; gap: 4px;">
-                <i data-lucide="clock" style="width: 14px; height: 14px; color: #94a3b8;"></i>
+                <i data-lucide="clock" class="dg-icon-sm"></i>
                 <span>${escapeHtml(evt.time || 'เต็มวัน')}</span>
               </span>
             </td>
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #475569; font-size: 0.88rem;">
               ${evt.location ? `
                 <span style="display: inline-flex; align-items: center; gap: 4px;">
-                  <i data-lucide="map-pin" style="width: 14px; height: 14px; color: #94a3b8;"></i>
+                  <i data-lucide="map-pin" class="dg-icon-sm"></i>
                   <span>${escapeHtml(evt.location)}</span>
                 </span>
               ` : '<span style="color:#cbd5e1;">-</span>'}
@@ -10564,7 +10564,7 @@
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); color: #475569; font-size: 0.88rem;">
               ${evt.audience ? `
                 <span style="display: inline-flex; align-items: center; gap: 4px;">
-                  <i data-lucide="users" style="width: 14px; height: 14px; color: #94a3b8;"></i>
+                  <i data-lucide="users" class="dg-icon-sm"></i>
                   <span>${escapeHtml(evt.audience)}</span>
                 </span>
               ` : '<span style="color:#cbd5e1;">ทุกระดับชั้น</span>'}
@@ -10572,10 +10572,10 @@
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border);">${statusBadge}</td>
             <td style="padding: 14px 18px; border-bottom: 1px solid var(--dg-border); text-align: right; white-space: nowrap;">
               <button type="button" class="dg-btn-sm-outline" onclick="openEditEventModal('${evt.id}')" title="แก้ไขกิจกรรม" style="margin-right: 6px; padding: 6px 10px; border-radius: 6px;">
-                <i data-lucide="edit-3" style="width:14px; height:14px;"></i>
+                <i data-lucide="edit-3" class="dg-icon-sm"></i>
               </button>
               <button type="button" class="dg-btn-sm-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2; padding: 6px 10px; border-radius: 6px;" onclick="handleDeleteEvent('${evt.id}')" title="ลบกิจกรรม">
-                <i data-lucide="trash-2" style="width:14px; height:14px;"></i>
+                <i data-lucide="trash-2" class="dg-icon-sm"></i>
               </button>
             </td>
           </tr>
@@ -10781,7 +10781,7 @@
       if (titleModal) {
         titleModal.innerHTML = `
           <div style="background: #38bdf8; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="calendar-plus" style="width: 18px; height: 18px;"></i>
+            <i data-lucide="calendar-plus" class="dg-icon-base"></i>
           </div>
           เพิ่มกิจกรรมในตาราง
         `;
@@ -10886,7 +10886,7 @@
       if (titleModal) {
         titleModal.innerHTML = `
           <div style="background: #38bdf8; color: #fff; width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
-            <i data-lucide="edit-3" style="width: 18px; height: 18px;"></i>
+            <i data-lucide="edit-3" class="dg-icon-base"></i>
           </div>
           แก้ไขข้อมูลกิจกรรม
         `;
@@ -12011,11 +12011,11 @@
             <td style="padding: 14px 18px; vertical-align: top; text-align: right;">
               <div style="display: flex; gap: 6px; justify-content: flex-end;">
                 <button type="button" class="dg-btn-outline" onclick="openAdminFeedbackDetail('${item.id}')" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700;" title="ดูและจัดการ">
-                  <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                  <i data-lucide="eye" class="dg-icon-sm"></i>
                   <span>ดู</span>
                 </button>
                 <button type="button" class="dg-btn-outline" onclick="deleteAdminFeedback('${item.id}')" style="padding: 6px 10px; font-size: 0.78rem; color: #dc2626; border-color: #fee2e2;" title="ลบรายการนี้">
-                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                  <i data-lucide="trash-2" class="dg-icon-sm"></i>
                 </button>
               </div>
             </td>
@@ -13958,7 +13958,7 @@
 
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>กำลังส่ง...</span> <i data-lucide="loader-2" class="animate-spin" style="width: 12px; height: 12px;"></i>`;
+        submitBtn.innerHTML = `<span>กำลังส่ง...</span> <i data-lucide="loader-2" class="animate-spin dg-icon-xs"></i>`;
         submitBtn.style.opacity = '0.8';
       }
 
@@ -13993,7 +13993,7 @@
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `<span>ส่งคำสั่ง</span> <i data-lucide="send" style="width: 13px; height: 13px;"></i>`;
+          submitBtn.innerHTML = `<span>ส่งคำสั่ง</span> <i data-lucide="send" class="dg-icon-xs"></i>`;
           submitBtn.style.opacity = '1';
           if (window.lucide) lucide.createIcons();
         }
@@ -14225,7 +14225,7 @@
           newsTbody.innerHTML = filteredNews.map(item => {
             const imgHtml = item.image
               ? `<img src="${item.image}" alt="thumb" style="width: 52px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid var(--dg-border-subtle); background: #ffffff;">`
-              : `<div style="width: 52px; height: 38px; border-radius: 6px; background: var(--dg-bg-subtle); display: flex; align-items: center; justify-content: center; color: var(--dg-text-muted);"><i data-lucide="image" style="width: 18px; height: 18px;"></i></div>`;
+              : `<div style="width: 52px; height: 38px; border-radius: 6px; background: var(--dg-bg-subtle); display: flex; align-items: center; justify-content: center; color: var(--dg-text-muted);"><i data-lucide="image" class="dg-icon-base"></i></div>`;
 
             const dateStr = item.date || item.dateStart || '-';
             const deletedTime = item.deletedAt ? new Date(item.deletedAt).toLocaleString('th-TH') : '-';
@@ -14256,11 +14256,11 @@
                 <td style="text-align: center; vertical-align: middle;">
                   <div style="display: inline-flex; align-items: center; gap: 6px;">
                     <button type="button" class="btn btn-sm" onclick="handleRestoreTrashNews(${item.id})" title="กู้คืนข่าวสารนี้" style="padding: 6px 12px; font-size: 0.82rem; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
-                      <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> <span>กู้คืน</span>
+                      <i data-lucide="rotate-ccw" class="dg-icon-sm"></i> <span>กู้คืน</span>
                     </button>
                     ${isSuper ? `
                       <button type="button" class="btn btn-sm" onclick="handlePermanentDeleteTrashNews(${item.id})" title="ลบถาวร (Super Admin)" style="padding: 6px 10px; font-size: 0.82rem; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
-                        <i data-lucide="trash" style="width: 14px; height: 14px;"></i>
+                        <i data-lucide="trash" class="dg-icon-sm"></i>
                       </button>
                     ` : ''}
                   </div>
@@ -14304,7 +14304,7 @@
               <tr>
                 <td style="font-size: 0.85rem; font-weight: 600; color: var(--dg-text-main);">
                   <div style="display: flex; align-items: center; gap: 4px;">
-                    <i data-lucide="calendar" style="width: 13px; height: 13px; color: #2563eb;"></i>
+                    <i data-lucide="calendar" class="dg-icon-xs dg-icon-info"></i>
                     <span>${escapeHtml(dateStr)}</span>
                   </div>
                 </td>
@@ -14333,11 +14333,11 @@
                 <td style="text-align: center; vertical-align: middle;">
                   <div style="display: inline-flex; align-items: center; gap: 6px;">
                     <button type="button" class="btn btn-sm" onclick="handleRestoreTrashEvent(${item.id})" title="กู้คืนกิจกรรมนี้" style="padding: 6px 12px; font-size: 0.82rem; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
-                      <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> <span>กู้คืน</span>
+                      <i data-lucide="rotate-ccw" class="dg-icon-sm"></i> <span>กู้คืน</span>
                     </button>
                     ${isSuper ? `
                       <button type="button" class="btn btn-sm" onclick="handlePermanentDeleteTrashEvent(${item.id})" title="ลบถาวร (Super Admin)" style="padding: 6px 10px; font-size: 0.82rem; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
-                        <i data-lucide="trash" style="width: 14px; height: 14px;"></i>
+                        <i data-lucide="trash" class="dg-icon-sm"></i>
                       </button>
                     ` : ''}
                   </div>

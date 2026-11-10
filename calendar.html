@@ -1349,7 +1349,7 @@
       <!-- Breadcrumb -->
       <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
         <a href="index.html">
-          <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+          <i data-lucide="home" class="dg-icon-sm"></i>
           <span>หน้าแรก</span>
         </a>
         <span class="sep">/</span>
@@ -1415,17 +1415,17 @@
         <!-- View Mode Switcher -->
         <div class="dg-cal-view-switch">
           <button type="button" class="dg-cal-view-btn active" id="btnViewMonth" onclick="switchCalendarView('month')" title="มุมมองปฏิทินรายเดือน">
-            <i data-lucide="calendar" style="width: 15px; height: 15px;"></i>
+            <i data-lucide="calendar" class="dg-icon-sm"></i>
             <span class="dg-btn-text-full">ปฏิทินรายเดือน</span>
             <span class="dg-btn-text-short">ปฏิทิน</span>
           </button>
           <button type="button" class="dg-cal-view-btn" id="btnViewList" onclick="switchCalendarView('list')" title="มุมมองกำหนดการปัจจุบัน">
-            <i data-lucide="list" style="width: 15px; height: 15px;"></i>
+            <i data-lucide="list" class="dg-icon-sm"></i>
             <span class="dg-btn-text-full">กำหนดการปัจจุบัน</span>
             <span class="dg-btn-text-short">กำหนดการ</span>
           </button>
           <button type="button" class="dg-cal-view-btn" id="btnViewPast" onclick="switchCalendarView('past')" title="มุมมองกิจกรรมที่ผ่านมา">
-            <i data-lucide="history" style="width: 15px; height: 15px;"></i>
+            <i data-lucide="history" class="dg-icon-sm"></i>
             <span class="dg-btn-text-full">กิจกรรมที่ผ่านมา</span>
             <span class="dg-btn-text-short">ที่ผ่านมา</span>
             <span class="dg-cal-count-pill" id="calPastCountBadge" style="display:none; font-size: 0.72rem; padding: 1px 7px; border-radius: 999px; background: rgba(0,0,0,0.08); margin-left: 2px;">0</span>
@@ -1435,13 +1435,13 @@
         <!-- Month Navigation Toolbar (Shown when Month View is active) -->
         <div class="dg-cal-month-nav" id="calMonthNavToolbar">
           <button type="button" class="dg-cal-nav-btn" onclick="onCalendarPrevMonth()" title="เดือนก่อนหน้า">
-            <i data-lucide="chevron-left" style="width: 18px; height: 18px;"></i>
+            <i data-lucide="chevron-left" class="dg-icon-md"></i>
           </button>
           <button type="button" class="dg-cal-today-btn" onclick="onCalendarGoToday()" title="กลับไปเดือนปัจจุบัน">
             <span>วันนี้</span>
           </button>
           <button type="button" class="dg-cal-nav-btn" onclick="onCalendarNextMonth()" title="เดือนถัดไป">
-            <i data-lucide="chevron-right" style="width: 18px; height: 18px;"></i>
+            <i data-lucide="chevron-right" class="dg-icon-md"></i>
           </button>
           <div class="dg-cal-title-box">
             <span class="dg-cal-month-title" id="calCurrentMonthTitle"></span>
@@ -1537,7 +1537,7 @@
               </span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px; font-weight: 600;">
-              <i data-lucide="info" style="width: 14px; height: 14px; color: #64748b;"></i>
+              <i data-lucide="info" class="dg-icon-sm"></i>
               <span>คลิกที่แถบกิจกรรมเพื่อดูรายละเอียดฉบับเต็ม</span>
             </div>
           </div>
@@ -1617,7 +1617,7 @@
   <div class="dg-modal-backdrop" id="eventDetailModal" onclick="if(event.target === this) closeModal('eventDetailModal')">
     <div class="dg-modal-box" style="padding: 0 !important; overflow-y: auto !important; overflow-x: hidden !important; border-radius: 24px !important;">
       <button class="dg-modal-close" type="button" onclick="closeModal('eventDetailModal')" aria-label="ปิดหน้าต่าง">
-        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        <i data-lucide="x" class="dg-icon-md"></i>
       </button>
 
       <div id="eventDetailModalContent">
@@ -2059,7 +2059,7 @@
       // Fallback ปลอดภัยในตัว ไม่มีการเรียกซ้ำวนลูป 100%
       try {
         const escaped = escapeHtml(text);
-        const SVG_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align: -1px; margin-left: 3px; opacity: 0.85;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>';
+        const SVG_ICON = '<i data-lucide="external-link" class="dg-icon-xs" style="display:inline-block; vertical-align: -1px; margin-left: 3px; opacity: 0.85;"></i>';
         return escaped.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/gi, function(matched) {
           let url = matched;
           let trailing = '';
@@ -2589,12 +2589,12 @@
 
       if (eventsToRender.length === 0) {
         if (currentViewMode === 'past') {
-          container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 50px 24px; text-align: center;"><div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;"><i data-lucide="archive" style="width: 26px; height: 26px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.15rem; font-weight: 800; color: var(--dg-black); margin-bottom: 6px;">ไม่มีกิจกรรมที่สิ้นสุดแล้ว</h3><p style="font-size: 0.9rem; color: var(--dg-text-secondary); margin-bottom: 18px;">ยังไม่มีกิจกรรมใดที่จัดเสร็จสิ้นไปแล้วในหมวดหมู่นี้</p><button type="button" class="dg-btn-black" onclick="switchCalendarView(\'list\')" style="padding: 9px 20px; font-size: 0.86rem; cursor: pointer;"><span>ดูกำหนดการปัจจุบัน</span></button></div>';
+          container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 50px 24px; text-align: center;"><div style="width: 52px; height: 52px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;"><i data-lucide="archive" class="dg-icon-xl" style="width: 26px; height: 26px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.15rem; font-weight: 800; color: var(--dg-black); margin-bottom: 6px;">ไม่มีกิจกรรมที่สิ้นสุดแล้ว</h3><p style="font-size: 0.9rem; color: var(--dg-text-secondary); margin-bottom: 18px;">ยังไม่มีกิจกรรมใดที่จัดเสร็จสิ้นไปแล้วในหมวดหมู่นี้</p><button type="button" class="dg-btn-black" onclick="switchCalendarView(\'list\')" style="padding: 9px 20px; font-size: 0.86rem; cursor: pointer;"><span>ดูกำหนดการปัจจุบัน</span></button></div>';
         } else {
           const hasPastOption = pastEvents.length > 0 ?
-            '<div style="margin-top: 18px;"><button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'past\')" style="padding: 8px 18px; font-size: 0.86rem; border-radius: 8px;"><i data-lucide="history" style="width: 14px; height: 14px; margin-right: 6px;"></i><span>ดูกิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span></button></div>' : '';
+            '<div style="margin-top: 18px;"><button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'past\')" style="padding: 8px 18px; font-size: 0.86rem; border-radius: 8px;"><i data-lucide="history" class="dg-icon-sm" style="margin-right: 6px;"></i><span>ดูกิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span></button></div>' : '';
 
-          container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 60px 24px; text-align: center;"><div style="width: 56px; height: 56px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;"><i data-lucide="calendar-x-2" style="width: 28px; height: 28px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.2rem; font-weight: 800; color: var(--dg-black); margin-bottom: 8px;">ไม่มีกำหนดการกิจกรรมในปัจจุบัน</h3><p style="font-size: 0.92rem; color: var(--dg-text-secondary); margin-bottom: 14px; max-width: 460px; margin-left: auto; margin-right: auto;">ไม่มีกิจกรรมที่กำลังดำเนินการหรือกำลังจะมาถึงในหมวดหมู่นี้</p><div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;"><button type="button" class="dg-btn-black" onclick="resetCalendarFilters()" style="padding: 10px 22px; font-size: 0.88rem; cursor: pointer;"><span>แสดงกิจกรรมทั้งหมด</span></button></div>' + hasPastOption + '</div>';
+          container.innerHTML = '<div style="background: #ffffff; border: 1.5px dashed var(--dg-border); border-radius: var(--dg-radius-md); padding: 60px 24px; text-align: center;"><div style="width: 56px; height: 56px; border-radius: 50%; background: #f8fafc; color: #94a3b8; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;"><i data-lucide="calendar-x-2" class="dg-icon-xl" style="width: 28px; height: 28px;"></i></div><h3 style="font-family: var(--dg-font-sans); font-size: 1.2rem; font-weight: 800; color: var(--dg-black); margin-bottom: 8px;">ไม่มีกำหนดการกิจกรรมในปัจจุบัน</h3><p style="font-size: 0.92rem; color: var(--dg-text-secondary); margin-bottom: 14px; max-width: 460px; margin-left: auto; margin-right: auto;">ไม่มีกิจกรรมที่กำลังดำเนินการหรือกำลังจะมาถึงในหมวดหมู่นี้</p><div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;"><button type="button" class="dg-btn-black" onclick="resetCalendarFilters()" style="padding: 10px 22px; font-size: 0.88rem; cursor: pointer;"><span>แสดงกิจกรรมทั้งหมด</span></button></div>' + hasPastOption + '</div>';
         }
         if (window.lucide) window.lucide.createIcons();
         return;
@@ -2604,11 +2604,11 @@
       if (currentViewMode === 'past') {
         cardsHtml += '<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">' +
           '<div style="display: flex; align-items: center; gap: 8px; color: #475569; font-weight: 750; font-size: 0.94rem;">' +
-            '<i data-lucide="archive" style="width: 18px; height: 18px; color: #64748b;"></i>' +
+            '<i data-lucide="archive" class="dg-icon-md"></i>' +
             '<span>กิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span>' +
           '</div>' +
           '<button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'list\')" style="font-size: 0.84rem; padding: 6px 14px; border-radius: 8px; background: #fff;">' +
-            '<i data-lucide="arrow-left" style="width: 14px; height: 14px; margin-right: 4px;"></i>' +
+            '<i data-lucide="arrow-left" class="dg-icon-sm" style="margin-right: 4px;"></i>' +
             '<span>กลับไปดูกำหนดการปัจจุบัน</span>' +
           '</button>' +
         '</div>';
@@ -2643,9 +2643,9 @@
         );
 
         const statusHtml = '<span class="dg-event-status-pill" style="font-size: 0.70rem; padding: 2px 7px; border-radius: var(--dg-radius-pill); ' + status.style + '">' + escapeHtml(status.label) + '</span>';
-        const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
-        const locHtml = evt.location ? '<span class="dg-event-meta-loc"><i data-lucide="map-pin" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '';
-        const audienceHtml = evt.audience ? '<span class="dg-event-meta-audience"><i data-lucide="users" style="width: 14px; height: 14px;"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '';
+        const timeHtml = evt.time ? '<span class="dg-event-meta-time"><i data-lucide="clock" class="dg-icon-sm"></i><span>' + escapeHtml(evt.time || 'เต็มวัน') + '</span></span>' : '';
+        const locHtml = evt.location ? '<span class="dg-event-meta-loc"><i data-lucide="map-pin" class="dg-icon-sm"></i><span>' + escapeHtml(evt.location) + '</span></span>' : '';
+        const audienceHtml = evt.audience ? '<span class="dg-event-meta-audience"><i data-lucide="users" class="dg-icon-sm"></i><span>' + escapeHtml(evt.audience) + '</span></span>' : '';
         const descHtml = evt.desc ? '<p class="dg-event-desc">' + linkifyText(evt.desc) + '</p>' : '';
 
         return '<div class="dg-event-card" style="cursor: pointer;" onclick="openEventDetailModal(\'' + evt.id + '\')">' +
@@ -2668,7 +2668,7 @@
           '<div class="dg-event-action-col">' +
             '<button type="button" class="dg-btn-sm-outline dg-event-action-btn" onclick="event.stopPropagation(); openEventDetailModal(\'' + evt.id + '\')" title="ดูรายละเอียดกิจกรรม" aria-label="ดูรายละเอียดกิจกรรม">' +
               '<span>รายละเอียด</span>' +
-              '<i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>' +
+              '<i data-lucide="arrow-up-right" class="dg-icon-sm"></i>' +
             '</button>' +
           '</div>' +
         '</div>';
@@ -2680,7 +2680,7 @@
             'มีกิจกรรมที่จัดเสร็จสิ้นไปแล้ว <strong>' + pastEvents.length + '</strong> รายการ' +
           '</p>' +
           '<button type="button" class="dg-btn-sm-outline" onclick="switchCalendarView(\'past\')" style="padding: 8px 22px; font-size: 0.88rem; border-radius: 8px; background: #fff; cursor: pointer;">' +
-            '<i data-lucide="history" style="width: 15px; height: 15px; margin-right: 6px;"></i>' +
+            '<i data-lucide="history" class="dg-icon-sm" style="margin-right: 6px;"></i>' +
             '<span>ดูกิจกรรมที่สิ้นสุดแล้ว (' + pastEvents.length + ' รายการ)</span>' +
           '</button>' +
         '</div>';
@@ -2907,7 +2907,7 @@
         const originalHtml = btn.innerHTML;
         btn.style.borderColor = '#10b981';
         btn.style.color = '#10b981';
-        btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i><span>คัดลอกแล้ว!</span>';
+        btn.innerHTML = '<i data-lucide="check" class="dg-icon-sm dg-icon-success"></i><span>คัดลอกแล้ว!</span>';
         if (window.lucide) window.lucide.createIcons();
         setTimeout(function() {
           btn.style.borderColor = '';
@@ -2963,7 +2963,7 @@
       if (evt.tags && evt.tags.length > 0) {
         modalTagsHtml = window.renderTagBadgesHtml(evt.tags);
       } else {
-        modalTagsHtml = '<span class="dg-event-category-badge ' + catClass + '" style="font-size: 0.76rem; padding: 3px 12px; border-radius: var(--dg-radius-pill); font-weight: 700; background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.22); display: inline-flex; align-items: center; gap: 5px;"><i data-lucide="flag" style="width: 13px; height: 13px;"></i><span>' + escapeHtml(catLabel) + '</span></span>';
+        modalTagsHtml = '<span class="dg-event-category-badge ' + catClass + '" style="font-size: 0.76rem; padding: 3px 12px; border-radius: var(--dg-radius-pill); font-weight: 700; background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.22); display: inline-flex; align-items: center; gap: 5px;"><i data-lucide="flag" class="dg-icon-xs"></i><span>' + escapeHtml(catLabel) + '</span></span>';
       }
 
       const googleCalUrl = generateGoogleCalendarUrl(evt);
@@ -2987,7 +2987,7 @@
           '<div class="dg-event-modal-bento-grid" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-family: \'Kanit\', var(--dg-font-sans);">' +
             '<div style="grid-column: 1 / -1; background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
               '<div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(2, 132, 199, 0.12); color: #0284c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-                '<i data-lucide="calendar" style="width: 20px; height: 20px;"></i>' +
+                '<i data-lucide="calendar" class="dg-icon-lg"></i>' +
               '</div>' +
               '<div style="min-width: 0; flex: 1;">' +
                 '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">กำหนดการ / วันที่จัดกิจกรรม</span>' +
@@ -2997,7 +2997,7 @@
 
             '<div style="background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
               '<div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(217, 119, 6, 0.12); color: #d97706; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-                '<i data-lucide="clock" style="width: 18px; height: 18px;"></i>' +
+                '<i data-lucide="clock" class="dg-icon-md"></i>' +
               '</div>' +
               '<div style="min-width: 0; flex: 1;">' +
                 '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">เวลาปฏิบัติงาน</span>' +
@@ -3007,7 +3007,7 @@
 
             '<div style="background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
               '<div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(219, 39, 119, 0.12); color: #db2777; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-                '<i data-lucide="map-pin" style="width: 18px; height: 18px;"></i>' +
+                '<i data-lucide="map-pin" class="dg-icon-md"></i>' +
               '</div>' +
               '<div style="min-width: 0; flex: 1;">' +
                 '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">สถานที่จัดกิจกรรม</span>' +
@@ -3017,7 +3017,7 @@
 
             '<div style="grid-column: 1 / -1; background: var(--dg-bg-card); border: 1px solid var(--dg-border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">' +
               '<div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(22, 163, 74, 0.12); color: #16a34a; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">' +
-                '<i data-lucide="users" style="width: 18px; height: 18px;"></i>' +
+                '<i data-lucide="users" class="dg-icon-md"></i>' +
               '</div>' +
               '<div style="min-width: 0; flex: 1;">' +
                 '<span style="font-size: 0.74rem; font-weight: 700; color: var(--dg-text-muted); text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px;">กลุ่มเป้าหมาย / ผู้เข้าร่วม</span>' +
@@ -3031,7 +3031,7 @@
           '<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">' +
             '<h4 style="font-size: 0.92rem; font-weight: 800; color: var(--dg-text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">' +
               '<span style="width: 28px; height: 28px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); color: #6366f1; display: inline-flex; align-items: center; justify-content: center;">' +
-                '<i data-lucide="file-text" style="width: 15px; height: 15px;"></i>' +
+                '<i data-lucide="file-text" class="dg-icon-sm"></i>' +
               '</span>' +
               '<span>รายละเอียดกิจกรรมและข้อปฏิบัติ</span>' +
             '</h4>' +
@@ -3043,7 +3043,7 @@
           :
             '<div style="background: var(--dg-bg); border: 1.5px dashed var(--dg-border); border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; color: var(--dg-text-muted);">' +
               '<div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(100, 116, 139, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--dg-text-muted);">' +
-                '<i data-lucide="info" style="width: 18px; height: 18px;"></i>' +
+                '<i data-lucide="info" class="dg-icon-md"></i>' +
               '</div>' +
               '<div style="font-size: 0.88rem; line-height: 1.5; color: var(--dg-text-secondary);">' +
                 'ไม่มีรายละเอียดหรือข้อปฏิบัติเพิ่มเติมสำหรับกิจกรรมนี้' +
@@ -3055,11 +3055,11 @@
         '<div class="dg-modal-footer-row" style="padding: 16px 24px; background: var(--dg-bg); border-top: 1px solid var(--dg-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-family: \'Kanit\', var(--dg-font-sans);">' +
           '<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">' +
             '<button type="button" class="dg-btn-sm-outline" onclick="copyEventDetailLink(\'' + escapeHtml(evt.id) + '\', this)" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill); cursor: pointer;">' +
-              '<i data-lucide="share-2" style="width: 14px; height: 14px;"></i>' +
+              '<i data-lucide="share-2" class="dg-icon-sm"></i>' +
               '<span>คัดลอกลิงก์</span>' +
             '</button>' +
             '<a href="' + googleCalUrl + '" target="_blank" rel="noopener noreferrer" class="dg-btn-sm-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.84rem; font-weight: 700; border-radius: var(--dg-radius-pill);">' +
-              '<i data-lucide="calendar-plus" style="width: 14px; height: 14px; color: #2563eb;"></i>' +
+              '<i data-lucide="calendar-plus" class="dg-icon-sm dg-icon-info"></i>' +
               '<span>Google Calendar</span>' +
             '</a>' +
           '</div>' +
