@@ -60,6 +60,22 @@
       "has": [
         {
           "type": "host",
+          "value": "^dsd\\.sarawat(dc)?\\.site$"
+        },
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*([Bb]ot|[Cc]rawler|[Ss]pider|[Ff]acebookexternalhit|[Ff]acebot|[Ll]ine-poker|[Ll]inespider|WhatsApp/).*"
+        }
+      ],
+      "destination": "/api/dsd",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
           "value": "^admissions?\\.sarawat(dc)?\\.site$"
         },
         {
@@ -1169,6 +1185,34 @@
         }
       ],
       "destination": "/api/activities"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "^dsd\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/dsd.html"
+    },
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^dsd\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/dsd.html"
+    },
+    {
+      "source": "/dsd",
+      "destination": "/dsd.html"
+    },
+    {
+      "source": "/dsd.html",
+      "destination": "/dsd.html"
     },
     {
       "source": "/api/:path*",

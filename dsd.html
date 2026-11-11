@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- Theme Init (Zero-Flicker Dark Mode) -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('dg_theme');
+        if (t === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.style.colorScheme = 'dark';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.documentElement.style.colorScheme = 'light';
+        }
+      } catch (e) { }
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ฝ่ายพัฒนาระบบดิจิทัล (DSD) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)</title>
+  <meta name="description"
+    content="ทำความรู้จักฝ่ายพัฒนาระบบดิจิทัล (Digital Systems Development Division: DSD) คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล รวบรวมรายชื่อ ตำแหน่ง และข้อมูลผู้พัฒนาระบบสารสนเทศ เว็บไซต์ และนวัตกรรมดิจิทัลขององค์กร" />
+  <meta name="keywords"
+    content="ฝ่ายพัฒนาระบบดิจิทัล, DSD, Digital Systems Development, คณะทำงาน, สารวัตรนักเรียน, ผู้พัฒนาระบบ, โรงเรียนเดชะปัตตนยานุกูล, Truant Patrol" />
+  <meta name="author" content="ฝ่ายพัฒนาระบบดิจิทัล (DSD) สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dsd.sarawatdc.site" />
+
+  <!-- Open Graph / Facebook / Discord Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dsd.sarawatdc.site" />
+  <meta property="og:title" content="ฝ่ายพัฒนาระบบดิจิทัล (DSD) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta property="og:description"
+    content="ทำความรู้จักฝ่ายพัฒนาระบบดิจิทัล (Digital Systems Development Division: DSD) คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล รวบรวมรายชื่อ ตำแหน่ง และข้อมูลผู้พัฒนาระบบสารสนเทศ เว็บไซต์ และนวัตกรรมดิจิทัลขององค์กร" />
+  <meta property="og:image" content="https://www.sarawatdc.site/assets/images/team-cover.jpg" />
+  <meta property="og:image:secure_url" content="https://www.sarawatdc.site/assets/images/team-cover.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1920" />
+  <meta property="og:image:height" content="1080" />
+  <meta property="og:image:alt" content="ฝ่ายพัฒนาระบบดิจิทัล (DSD) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta property="og:site_name" content="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)" />
+  <meta property="og:locale" content="th_TH" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://dsd.sarawatdc.site" />
+  <meta name="twitter:title" content="ฝ่ายพัฒนาระบบดิจิทัล (DSD) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta name="twitter:description"
+    content="ทำความรู้จักฝ่ายพัฒนาระบบดิจิทัล (Digital Systems Development Division: DSD) คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล" />
+  <meta name="twitter:image" content="https://www.sarawatdc.site/assets/images/team-cover.jpg" />
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "ฝ่ายพัฒนาระบบดิจิทัล (DSD) | สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล (Truant Patrol)",
+    "url": "https://dsd.sarawatdc.site",
+    "description": "ทำความรู้จักฝ่ายพัฒนาระบบดิจิทัล (Digital Systems Development Division: DSD) คณะสารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล รวบรวมรายชื่อ ตำแหน่ง และข้อมูลผู้พัฒนาระบบสารสนเทศ",
+    "image": "https://www.sarawatdc.site/assets/images/team-cover.jpg",
+    "publisher": {
+      "@type": "Organization",
+      "name": "โรงเรียนเดชะปัตตนยานุกูล",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.sarawatdc.site/assets/icons/sarawat-logo.png"
+      }
+    }
+  }
+  </script>
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b0f17" media="(prefers-color-scheme: dark)" />
+
+  <!-- Google Fonts: Plus Jakarta Sans + Outfit + Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;850;900&display=swap"
+    rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- API & Cloudflare Tunnel Config -->
+  <script src="cloudflare-config.js"></script>
+  <script src="js/api-config.js?v=2.8.1"></script>
+  <script src="js/skeletons.js"></script>
+
+  <!-- Diego Minimalist Swiss Agency Design System -->
+  <link rel="stylesheet" href="css/diego.css?v=2.4.5" />
+
+  <!-- Favicon & App Icons -->
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261025" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=20261025" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=20261025" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=20261025" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=20261025" />
+  <link rel="manifest" href="/site.webmanifest?v=20261025" />
+
+  <style>
+    /* ==========================================================
+       DSD MINIMALIST BENTO & MARQUEE TOOL SLIDER
+       ========================================================== */
+
+    /* Personnel Bento Grid Container */
+    .dsd-bento-wrapper {
+      display: grid;
+      grid-template-columns: 1.15fr 1.85fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-bottom: 70px;
+    }
+
+    /* Head of DSD Card (4:3 Ratio Portrait) */
+    .dsd-head-card {
+      background: var(--dg-bg);
+      border: 1px solid var(--dg-border);
+      border-radius: var(--dg-radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      transition: var(--dg-transition);
+      position: relative;
+    }
+
+    .dsd-head-card:hover {
+      border-color: var(--dg-black);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .dsd-head-photo-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--dg-bg-subtle);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--dg-border);
+    }
+
+    .dsd-head-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dsd-head-card:hover .dsd-head-photo-wrap img {
+      transform: scale(1.03);
+    }
+
+    .dsd-head-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: var(--dg-radius-pill);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .dsd-head-content {
+      padding: 24px 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .dsd-head-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--dg-text-primary);
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+
+    .dsd-role-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--dg-primary, #1e40af);
+      margin-bottom: 12px;
+    }
+
+    .dsd-role-tag.head-tag {
+      color: var(--dg-text-primary);
+      background: var(--dg-bg-subtle);
+      border: 1px solid var(--dg-border);
+      padding: 4px 10px;
+      border-radius: var(--dg-radius-pill);
+      font-size: 0.78rem;
+    }
+
+    .dsd-head-bio {
+      font-size: 0.92rem;
+      color: var(--dg-text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* Sub-members Grid (1:1 Ratio Square Cards) */
+    .dsd-members-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      align-content: start;
+    }
+
+    .dsd-member-card {
+      background: var(--dg-bg);
+      border: 1px solid var(--dg-border);
+      border-radius: var(--dg-radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      transition: var(--dg-transition);
+    }
+
+    .dsd-member-card:hover {
+      border-color: var(--dg-black);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .dsd-member-photo-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: var(--dg-bg-subtle);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--dg-border);
+    }
+
+    .dsd-member-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      transition: transform 0.5s ease;
+    }
+
+    .dsd-member-card:hover .dsd-member-photo-wrap img {
+      transform: scale(1.04);
+    }
+
+    .dsd-member-content {
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .dsd-member-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dg-text-primary);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+
+    .dsd-member-role {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--dg-primary, #1e40af);
+      margin-bottom: 8px;
+    }
+
+    .dsd-member-desc {
+      font-size: 0.84rem;
+      color: var(--dg-text-secondary);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .dsd-card-meta-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px dashed var(--dg-border);
+      font-size: 0.76rem;
+      color: var(--dg-text-muted);
+    }
+
+    .dsd-github-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--dg-text-primary);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: var(--dg-radius-pill);
+      border: 1px solid var(--dg-border);
+      background: var(--dg-bg-subtle);
+      transition: var(--dg-transition);
+    }
+
+    .dsd-github-btn:hover {
+      background: var(--dg-black);
+      color: var(--dg-white);
+      border-color: var(--dg-black);
+    }
+
+    .dsd-avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dg-bg-subtle);
+      color: #cbd5e1;
+    }
+
+    /* ==========================================================
+       INFINITE SLIDING MARQUEE: AUTHENTIC LOGOS (BORDERLESS)
+       แถบสไลด์เลื่อนแสดงโลโก้ของจริง ไร้กรอบ
+       ========================================================== */
+    .dsd-marquee-section {
+      margin-top: 40px;
+      margin-bottom: 70px;
+      padding: 26px 0;
+      border-top: 1px solid var(--dg-border);
+      border-bottom: 1px solid var(--dg-border);
+      background: var(--dg-bg-subtle);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dsd-marquee-track-wrap {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+
+    .dsd-marquee-track {
+      display: flex;
+      width: max-content;
+      gap: 52px;
+      align-items: center;
+      animation: dsdMarqueeScroll 38s linear infinite;
+    }
+
+    .dsd-marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes dsdMarqueeScroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .dsd-logo-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      cursor: pointer;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+      opacity: 0.88;
+    }
+
+    .dsd-logo-item:hover {
+      transform: translateY(-4px) scale(1.18);
+      opacity: 1;
+    }
+
+    .dsd-logo-item img {
+      height: 44px;
+      width: auto;
+      max-width: 58px;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.04));
+      transition: filter 0.28s ease;
+    }
+
+    .dsd-logo-item:hover img {
+      filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.16));
+    }
+
+    /* Dark mode invert for monochrome black logos (Vercel & GitHub) */
+    html[data-theme="dark"] .dsd-logo-invert {
+      filter: invert(1) brightness(1.2) drop-shadow(0 2px 8px rgba(255, 255, 255, 0.12));
+    }
+
+    html[data-theme="dark"] .dsd-logo-item:hover .dsd-logo-invert {
+      filter: invert(1) brightness(1.3) drop-shadow(0 8px 20px rgba(255, 255, 255, 0.25));
+    }
+
+    @media (max-width: 768px) {
+      .dsd-marquee-track {
+        gap: 36px;
+      }
+      .dsd-logo-item img {
+        height: 36px;
+        max-width: 48px;
+      }
+    }
+
+    /* Footer Visibility Guarantee */
+    .dg-footer-floating-card,
+    .dg-footer-floating-card[data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+    }
+
+    /* Responsive Breakdown */
+    @media (max-width: 960px) {
+      .dsd-bento-wrapper {
+        grid-template-columns: 1fr;
+      }
+      .dsd-members-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dsd-members-grid {
+        grid-template-columns: 1fr;
+      }
+      .dsd-head-content {
+        padding: 18px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body class="dg-activities-page">
+  <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
+  <div class="dg-scroll-progress" id="scrollProgress"></div>
+
+  <!-- ============ NAVIGATION BAR (EXACT FROM TEAM.HTML) ============ -->
+  <nav class="dg-nav" id="dgNav">
+    <div class="dg-nav-container">
+      <a href="https://www.sarawatdc.site" class="dg-brand" aria-label="สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล">
+        <img src="assets/icons/school-logo.png" alt="โรงเรียนเดชะปัตตนยานุกูล"
+          style="width: 36px; height: 36px; object-fit: contain;" onerror="this.onerror=null;this.src='assets/icons/school-logo.png';" />
+        <span class="dg-brand-divider" aria-hidden="true"></span>
+        <img src="assets/icons/sarawat-logo.png" alt="สารวัตรนักเรียน"
+          style="width: 36px; height: 36px; object-fit: contain;" onerror="this.onerror=null;this.src='assets/icons/sarawat-logo.png';" />
+        <span class="dg-brand-text">SARAWAT</span>
+      </a>
+
+      <div class="dg-nav-links" id="dgNavLinks">
+        <a href="https://www.sarawatdc.site">หน้าแรก</a>
+        <a href="https://www.sarawatdc.site/activities">ข่าวสารกิจกรรม</a>
+        <a href="https://www.sarawatdc.site/calendar">ตารางกิจกรรม</a>
+        <a href="https://www.sarawatdc.site/team">คณะทำงาน</a>
+        <a href="https://dsd.sarawatdc.site" class="active" style="font-weight: 700;">ฝ่าย DSD</a>
+      </div>
+
+      <div class="dg-nav-actions">
+        <a href="#contact" class="dg-btn-black">
+          <span>ติดต่อเรา</span>
+          <i data-lucide="arrow-right"></i>
+        </a>
+        <button class="dg-nav-toggle" id="dgNavToggle" aria-label="Toggle menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ DSD PAGE HEADER (EXACT FROM TEAM.HTML) ============ -->
+  <header class="dg-act-page-header">
+    <div class="dg-container">
+      <!-- Breadcrumb -->
+      <nav class="dg-act-breadcrumb" aria-label="Breadcrumb">
+        <a href="https://www.sarawatdc.site">
+          <i data-lucide="home" class="dg-icon-sm"></i>
+          <span>หน้าแรก</span>
+        </a>
+        <span class="sep">/</span>
+        <a href="https://www.sarawatdc.site/team" class="item">
+          <span>คณะทำงาน</span>
+        </a>
+        <span class="sep">/</span>
+        <span style="color: var(--dg-black); font-weight: 750;">ฝ่ายพัฒนาระบบดิจิทัล (DSD)</span>
+      </nav>
+
+      <div class="dg-act-title-row">
+        <div>
+          <span class="dg-section-tag">OUR TEAM • ฝ่ายพัฒนาระบบดิจิทัล</span>
+          <h1 class="dg-act-main-title">
+            <span class="dg-title-en">Digital Systems Development Division.</span><br>
+            <span class="dg-title-th">ฝ่ายพัฒนาระบบดิจิทัล สารวัตรนักเรียน</span>
+          </h1>
+          <p class="dg-act-subtitle">
+            ทำเนียบบุคลากรและคณะผู้พัฒนาระบบสารสนเทศ สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ MAIN CONTENT AREA ============ -->
+  <main class="dg-container" style="padding-top: 50px; padding-bottom: 30px;">
+
+    <!-- ==========================================================
+         PERSONNEL BENTO GRID SECTION
+         Head 4:3 Left + Members 1:1 Right
+         ========================================================== -->
+    <section id="teamApp">
+      <!-- Skeleton Loading Placeholder -->
+      <div class="dsd-bento-wrapper" id="dsdTeamSkeleton" aria-hidden="true">
+        <!-- Head Skeleton -->
+        <div class="dsd-head-card">
+          <div class="dg-skeleton-shimmer" style="width: 100%; aspect-ratio: 4 / 3;"></div>
+          <div style="padding: 24px;">
+            <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 60%; margin-bottom: 12px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 180px; height: 26px; margin-bottom: 16px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 90%; margin-bottom: 8px;"></div>
+            <div class="dg-skeleton-shimmer dg-sk-line" style="width: 70%;"></div>
+          </div>
+        </div>
+        <!-- Members Subgrid Skeleton -->
+        <div class="dsd-members-grid">
+          <div class="dsd-member-card">
+            <div class="dg-skeleton-shimmer" style="width: 100%; aspect-ratio: 1 / 1;"></div>
+            <div style="padding: 16px;">
+              <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 65%; margin-bottom: 8px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 130px; height: 22px;"></div>
+            </div>
+          </div>
+          <div class="dsd-member-card">
+            <div class="dg-skeleton-shimmer" style="width: 100%; aspect-ratio: 1 / 1;"></div>
+            <div style="padding: 16px;">
+              <div class="dg-skeleton-shimmer dg-sk-line lg" style="width: 65%; margin-bottom: 8px;"></div>
+              <div class="dg-skeleton-shimmer dg-sk-pill" style="width: 130px; height: 22px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Dynamic Bento Grid will be injected here -->
+      <div id="dsdTeamDynamicContainer"></div>
+    </section>
+
+    <!-- ==========================================================
+         INFINITE LOGO MARQUEE (AUTHENTIC LOGOS - BORDERLESS)
+         ========================================================== -->
+    <section class="dsd-marquee-section" aria-label="Development Technologies and Tools">
+      <div class="dsd-marquee-track-wrap">
+        <div class="dsd-marquee-track">
+          <!-- Set 1: Authentic Project Logos -->
+          <!-- Visual Studio Code -->
+          <div class="dsd-logo-item" title="Visual Studio Code">
+            <img src="assets/tech/vscode.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg';" alt="Visual Studio Code" loading="lazy" />
+          </div>
+          <!-- HTML5 -->
+          <div class="dsd-logo-item" title="HTML5">
+            <img src="assets/tech/html5.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg';" alt="HTML5" loading="lazy" />
+          </div>
+          <!-- CSS3 -->
+          <div class="dsd-logo-item" title="CSS3">
+            <img src="assets/tech/css3.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg';" alt="CSS3" loading="lazy" />
+          </div>
+          <!-- JavaScript -->
+          <div class="dsd-logo-item" title="JavaScript">
+            <img src="assets/tech/javascript.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg';" alt="JavaScript" loading="lazy" />
+          </div>
+          <!-- Node.js -->
+          <div class="dsd-logo-item" title="Node.js">
+            <img src="assets/tech/nodejs.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg';" alt="Node.js" loading="lazy" />
+          </div>
+          <!-- Express.js -->
+          <div class="dsd-logo-item" title="Express.js">
+            <img src="assets/tech/express.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg';" alt="Express.js" class="dsd-logo-invert" loading="lazy" />
+          </div>
+          <!-- SQLite 3 -->
+          <div class="dsd-logo-item" title="SQLite 3">
+            <img src="assets/tech/sqlite.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg';" alt="SQLite 3" loading="lazy" />
+          </div>
+          <!-- Vercel -->
+          <div class="dsd-logo-item" title="Vercel">
+            <img src="assets/tech/vercel.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg';" alt="Vercel" class="dsd-logo-invert" loading="lazy" />
+          </div>
+          <!-- Cloudflare -->
+          <div class="dsd-logo-item" title="Cloudflare">
+            <img src="assets/tech/cloudflare.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cloudflare/cloudflare-original.svg';" alt="Cloudflare" loading="lazy" />
+          </div>
+          <!-- Figma -->
+          <div class="dsd-logo-item" title="Figma">
+            <img src="assets/tech/figma.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg';" alt="Figma" loading="lazy" />
+          </div>
+          <!-- Adobe Photoshop -->
+          <div class="dsd-logo-item" title="Adobe Photoshop">
+            <img src="assets/tech/photoshop.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg';" alt="Adobe Photoshop" loading="lazy" />
+          </div>
+          <!-- Canva -->
+          <div class="dsd-logo-item" title="Canva">
+            <img src="assets/tech/canva.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg';" alt="Canva" loading="lazy" />
+          </div>
+          <!-- Postman -->
+          <div class="dsd-logo-item" title="Postman">
+            <img src="assets/tech/postman.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg';" alt="Postman" loading="lazy" />
+          </div>
+          <!-- Git -->
+          <div class="dsd-logo-item" title="Git">
+            <img src="assets/tech/git.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg';" alt="Git" loading="lazy" />
+          </div>
+          <!-- GitHub -->
+          <div class="dsd-logo-item" title="GitHub">
+            <img src="assets/tech/github.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg';" alt="GitHub" class="dsd-logo-invert" loading="lazy" />
+          </div>
+          <!-- Set 2: Duplicate for Seamless Infinite Loop -->
+          <!-- Visual Studio Code -->
+          <div class="dsd-logo-item" title="Visual Studio Code">
+            <img src="assets/tech/vscode.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg';" alt="Visual Studio Code" loading="lazy" />
+          </div>
+          <!-- HTML5 -->
+          <div class="dsd-logo-item" title="HTML5">
+            <img src="assets/tech/html5.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg';" alt="HTML5" loading="lazy" />
+          </div>
+          <!-- CSS3 -->
+          <div class="dsd-logo-item" title="CSS3">
+            <img src="assets/tech/css3.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg';" alt="CSS3" loading="lazy" />
+          </div>
+          <!-- JavaScript -->
+          <div class="dsd-logo-item" title="JavaScript">
+            <img src="assets/tech/javascript.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg';" alt="JavaScript" loading="lazy" />
+          </div>
+          <!-- Node.js -->
+          <div class="dsd-logo-item" title="Node.js">
+            <img src="assets/tech/nodejs.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg';" alt="Node.js" loading="lazy" />
+          </div>
+          <!-- Express.js -->
+          <div class="dsd-logo-item" title="Express.js">
+            <img src="assets/tech/express.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg';" alt="Express.js" class="dsd-logo-invert" loading="lazy" />
+          </div>
+          <!-- SQLite 3 -->
+          <div class="dsd-logo-item" title="SQLite 3">
+            <img src="assets/tech/sqlite.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg';" alt="SQLite 3" loading="lazy" />
+          </div>
+          <!-- Vercel -->
+          <div class="dsd-logo-item" title="Vercel">
+            <img src="assets/tech/vercel.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg';" alt="Vercel" class="dsd-logo-invert" loading="lazy" />
+          </div>
+          <!-- Cloudflare -->
+          <div class="dsd-logo-item" title="Cloudflare">
+            <img src="assets/tech/cloudflare.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cloudflare/cloudflare-original.svg';" alt="Cloudflare" loading="lazy" />
+          </div>
+          <!-- Figma -->
+          <div class="dsd-logo-item" title="Figma">
+            <img src="assets/tech/figma.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg';" alt="Figma" loading="lazy" />
+          </div>
+          <!-- Adobe Photoshop -->
+          <div class="dsd-logo-item" title="Adobe Photoshop">
+            <img src="assets/tech/photoshop.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg';" alt="Adobe Photoshop" loading="lazy" />
+          </div>
+          <!-- Canva -->
+          <div class="dsd-logo-item" title="Canva">
+            <img src="assets/tech/canva.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg';" alt="Canva" loading="lazy" />
+          </div>
+          <!-- Postman -->
+          <div class="dsd-logo-item" title="Postman">
+            <img src="assets/tech/postman.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg';" alt="Postman" loading="lazy" />
+          </div>
+          <!-- Git -->
+          <div class="dsd-logo-item" title="Git">
+            <img src="assets/tech/git.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg';" alt="Git" loading="lazy" />
+          </div>
+          <!-- GitHub -->
+          <div class="dsd-logo-item" title="GitHub">
+            <img src="assets/tech/github.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg';" alt="GitHub" class="dsd-logo-invert" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ PRE-FOOTER CTA & FOOTER (FLOATING ELEVATED CARD - EXACT FROM TEAM.HTML) ============ -->
+  <footer class="dg-footer dg-footer-wrap" id="contact">
+    <div class="dg-footer-floating-card is-revealed" data-reveal="fade">
+      <!-- Giant Watermark Typography Inside the Card (Fading Bottom to Top) -->
+      <div class="dg-footer-card-watermark" aria-hidden="true">
+        <span>SARAWAT DECHA</span>
+      </div>
+
+      <!-- Pre-Footer CTA (Exact Diego Layout) -->
+      <div class="dg-pre-footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
+            <img src="/assets/icons/school-logo.png" onerror="this.onerror=null;this.src='assets/icons/school-logo.png';" alt="โรงเรียนเดชะปัตตนยานุกูล"
+              style="height: 52px; width: auto; object-fit: contain;" />
+            <span class="dg-footer-logo-divider" aria-hidden="true"></span>
+            <img src="/assets/icons/sarawat-logo.png" onerror="this.onerror=null;this.src='assets/icons/sarawat-logo.png';" alt="สารวัตรนักเรียน"
+              style="height: 50px; width: auto; object-fit: contain;" />
+          </div>
+          <h2 class="dg-pre-footer-title">
+            Have any questions<br>
+            in your mind!
+          </h2>
+          <a href="mailto:truant_patrol@decha.ac.th" class="dg-arrow-link" title="ส่งอีเมลหาเรา: truant_patrol@decha.ac.th">
+            <span>ส่งอีเมลหาเรา: truant_patrol@decha.ac.th</span>
+            <i data-lucide="arrow-right"></i>
+          </a>
+
+          <!-- ช่องทางติดต่อแบบไอคอน เพื่อเพิ่มพื้นที่ว่าง -->
+          <div class="dg-footer-social-icons">
+            <a href="https://web.facebook.com/sarawatdechaa" target="_blank" rel="noopener noreferrer"
+              class="dg-social-icon-btn" title="Facebook Page สารวัตรนักเรียน" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/sarawat_decha/" target="_blank" rel="noopener noreferrer"
+              class="dg-social-icon-btn" title="Instagram สารวัตรนักเรียน" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </a>
+            <a href="https://decha.ac.th" target="_blank" rel="noopener noreferrer"
+              class="dg-social-icon-btn" title="เว็บไซต์โรงเรียนเดชะปัตตนยานุกูล" aria-label="Website">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- 2-Column Footer Links (Spacious) -->
+        <div class="dg-footer-columns">
+          <div class="dg-footer-col">
+            <h5>ส่วนสำคัญ</h5>
+            <div class="dg-footer-nav-list">
+              <a href="index.html#hero">หน้าหลัก</a>
+              <a href="index.html#about">เกี่ยวกับเรา (วิสัยทัศน์ & พันธกิจ)</a>
+              <a href="index.html#news">ข่าวสารกิจกรรมล่าสุด</a>
+              <a href="activities.html">คลังกิจกรรมทั้งหมด</a>
+              <a href="index.html#operations">รวมระบบออนไลน์</a>
+              <a href="index.html#team">วิสัยทัศน์ประธาน</a>
+              <a href="calendar.html">ตารางกิจกรรมโรงเรียน</a>
+              <a href="team.html">หน้าคณะทำงาน</a>
+              <a href="https://dsd.sarawatdc.site">ฝ่ายพัฒนาระบบดิจิทัล (DSD)</a>
+              <a href="terms-of-service.html">ข้อตกลงการใช้บริการ (TOS)</a>
+              <a href="privacy-policy.html">นโยบายความเป็นส่วนตัว (PP)</a>
+              <a href="#contact">ติดต่อเรา</a>
+            </div>
+          </div>
+
+          <div class="dg-footer-col">
+            <h5>บริการออนไลน์</h5>
+            <div class="dg-footer-service-list">
+              <a href="index.html?feedback" onclick="if(window.openModal && document.getElementById('feedbackModal')){openModal('feedbackModal'); return false;}"
+                class="dg-footer-arrow-link" title="สิ่งที่อยากให้สารวัตรทำ">
+                <span>สิ่งที่อยากให้สารวัตรทำ</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="index.html?complaint" onclick="if(window.openModal && document.getElementById('complaintModal')){openModal('complaintModal'); return false;}"
+                class="dg-footer-arrow-link" title="รายงานการทำงาน / ร้องเรียน">
+                <span>รายงานการทำงาน / ร้องเรียน</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="/admission" onclick="handleAdmissionFooterClick(event)"
+                class="dg-footer-arrow-link" title="SARAWAT ADMISSION 70 (ระบบปิดปรับปรุง)">
+                <span>SARAWAT ADMISSION 70</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+              <a href="/si-roster" target="_blank" rel="noopener noreferrer"
+                class="dg-footer-arrow-link" title="ระบบลงหน้าที่ (SI-ROSTER)">
+                <span>ระบบลงหน้าที่ (SI-ROSTER)</span>
+                <i data-lucide="arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="dg-footer-bottom">
+        <div class="dg-footer-bottom-copy">
+          <span>© 2569 Truant Patrol Decha. All rights reserved.</span>
+        </div>
+        <div class="dg-footer-bottom-meta">
+          <!-- Theme Switcher Segmented Control -->
+          <div class="dg-theme-switch-group" role="group" aria-label="สลับธีมสี">
+            <button type="button" class="dg-theme-switch-btn" data-theme-set="light" aria-label="โหมดสว่าง">
+              <i data-lucide="sun"></i>
+              <span>สว่าง</span>
+            </button>
+            <button type="button" class="dg-theme-switch-btn" data-theme-set="dark" aria-label="โหมดมืด">
+              <i data-lucide="moon"></i>
+              <span>มืด</span>
+            </button>
+          </div>
+          <span class="dg-footer-meta-sep">•</span>
+          <span>Developed by <a href="https://www.instagram.com/pansa.jpeg" target="_blank" rel="noopener noreferrer">Rujira
+              Wattanakitpaisan</a></span>
+          <span class="dg-footer-meta-sep">•</span>
+          <a href="admin.html" class="dg-footer-admin-link" title="ระบบจัดการข้อมูลสารวัตรนักเรียน (สำหรับผู้ดูแล)">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span>ระบบจัดการหน้าเว็บ (Admin)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================
+       DSD CLIENT DATA FETCHER & DYNAMIC RENDERER
+       ========================================================== -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Mobile Nav Toggle
+      const toggle = document.getElementById('dgNavToggle');
+      const menu = document.getElementById('dgNavLinks');
+      if (toggle && menu) {
+        toggle.addEventListener('click', () => {
+          menu.classList.toggle('active');
+        });
+      }
+
+      // Scroll Progress Bar
+      window.addEventListener('scroll', () => {
+        const bar = document.getElementById('scrollProgress');
+        if (bar) {
+          const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const progress = h > 0 ? (window.scrollY / h) * 100 : 0;
+          bar.style.width = progress + '%';
+        }
+      }, { passive: true });
+
+      // Fetch and Render DSD Members
+      loadDsdPersonnel();
+    });
+
+    async function loadDsdPersonnel() {
+      const apiBase = (window.SarawatApi && typeof window.SarawatApi.getBaseUrl === 'function')
+        ? window.SarawatApi.getBaseUrl()
+        : (window.SARAWAT_API_BASE || '');
+
+      let members = [];
+      try {
+        const res = await fetch((apiBase || '') + '/api/dsd/members');
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
+            members = json.data;
+            try { localStorage.setItem('dg_sarawat_dsd_members_cache', JSON.stringify(members)); } catch (e) {}
+          }
+        }
+      } catch (err) {
+        console.warn('API error, using cached fallback:', err);
+      }
+
+      if (!members || members.length === 0) {
+        try {
+          const cached = localStorage.getItem('dg_sarawat_dsd_members_cache');
+          if (cached) members = JSON.parse(cached);
+        } catch (e) {}
+      }
+
+      if (!members || members.length === 0) {
+        members = [
+          {
+            id: 1,
+            name: 'นายคุณากร ศรีสุวรรณ',
+            nickname: 'กร',
+            role: 'หัวหน้าฝ่ายพัฒนาระบบดิจิทัล',
+            is_head: 1,
+            grade: 'ม.5/1',
+            image_url: '',
+            bio: 'ผู้พัฒนาระบบสารสนเทศ โครงสร้างฐานข้อมูล และระบบบริหารจัดการภายในองค์กรสารวัตรนักเรียน',
+            github_url: 'https://github.com'
+          },
+          {
+            id: 2,
+            name: 'นายธนภัทร วัฒนศิริ',
+            nickname: 'ภัทร',
+            role: 'รองหัวหน้าฝ่ายพัฒนาระบบดิจิทัล',
+            is_head: 0,
+            grade: 'ม.5/2',
+            image_url: '',
+            bio: 'ดูแลระบบงานเบื้องหลัง สถาปัตยกรรมเซิร์ฟเวอร์ และระบบฐานข้อมูลความเร็วสูง',
+            github_url: 'https://github.com'
+          },
+          {
+            id: 3,
+            name: 'นางสาวณิชากานต์ พงษ์สถิตย์',
+            nickname: 'ณิชา',
+            role: 'นักพัฒนาระบบสารสนเทศ (Frontend)',
+            is_head: 0,
+            grade: 'ม.4/1',
+            image_url: '',
+            bio: 'ออกแบบและพัฒนาส่วนต่อประสานผู้ใช้ (UI/UX) และระบบเว็บแอปพลิเคชัน',
+            github_url: 'https://github.com'
+          }
+        ];
+      }
+
+      renderDsdBento(members);
+    }
+
+    function renderDsdBento(members) {
+      const container = document.getElementById('dsdTeamDynamicContainer');
+      const skeleton = document.getElementById('dsdTeamSkeleton');
+      if (skeleton) skeleton.style.display = 'none';
+      if (!container) return;
+
+      const resolveImg = (url) => {
+        if (!url) return '';
+        if (window.resolveImageUrl) return window.resolveImageUrl(url);
+        if (url.startsWith('/')) {
+          const base = (window.SarawatApi && typeof window.SarawatApi.getBaseUrl === 'function') ? window.SarawatApi.getBaseUrl() : '';
+          return (base || '') + url;
+        }
+        return url;
+      };
+
+      // Identify Head (is_head === 1 or role has 'หัวหน้า')
+      let head = members.find(m => Number(m.is_head) === 1);
+      if (!head) head = members.find(m => (m.role || '').includes('หัวหน้าฝ่าย') && !(m.role || '').includes('รอง'));
+      if (!head && members.length > 0) head = members[0];
+
+      const subMembers = members.filter(m => m !== head);
+
+      // Render Head Card (4:3 portrait)
+      let headImgHtml = '';
+      const headImg = resolveImg(head?.image_url);
+      if (headImg) {
+        headImgHtml = `<img src="${headImg}" alt="${head.name}" onerror="this.parentElement.innerHTML='<div class=\\'dsd-avatar-placeholder\\'><i data-lucide=\\'user\\' style=\\'width:64px;height:64px;\\'></i></div>';" />`;
+      } else {
+        headImgHtml = `<div class="dsd-avatar-placeholder"><i data-lucide="user" style="width: 64px; height: 64px;"></i></div>`;
+      }
+
+      const headNick = head?.nickname ? ` <span style="font-weight: 500; font-size: 1.1rem; color: var(--dg-text-secondary);">(${head.nickname})</span>` : '';
+      const headGrade = head?.grade ? `<span style="font-size: 0.8rem; font-weight: 600; color: var(--dg-text-muted); background: var(--dg-bg-subtle); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--dg-border);">${head.grade}</span>` : '';
+      const headBio = head?.bio ? `<p class="dsd-head-bio">${head.bio}</p>` : '';
+      const headGithub = head?.github_url ? `
+        <a href="${head.github_url}" target="_blank" rel="noopener noreferrer" class="dsd-github-btn">
+          <i data-lucide="github" style="width: 13px; height: 13px;"></i> <span>GitHub</span>
+        </a>
+      ` : '';
+
+      const headCardHtml = `
+        <div class="dsd-head-card">
+          <div class="dsd-head-badge">
+            <i data-lucide="shield-check" style="width: 12px; height: 12px;"></i>
+            <span>HEAD OF DIVISION</span>
+          </div>
+          <div class="dsd-head-photo-wrap">
+            ${headImgHtml}
+          </div>
+          <div class="dsd-head-content">
+            <div>
+              <h3 class="dsd-head-title">${head?.name || 'หัวหน้าฝ่าย'}${headNick}</h3>
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span class="dsd-role-tag head-tag">${head?.role || 'หัวหน้าฝ่ายพัฒนาระบบดิจิทัล'}</span>
+                ${headGrade}
+              </div>
+              ${headBio}
+            </div>
+            <div class="dsd-card-meta-bottom">
+              <span>ผู้พัฒนาระบบสารสนเทศ</span>
+              ${headGithub}
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Render Sub-Members (1:1 Square Cards)
+      let subMembersHtml = '';
+      if (subMembers.length > 0) {
+        subMembersHtml = `<div class="dsd-members-grid">`;
+        subMembers.forEach(m => {
+          const mImg = resolveImg(m.image_url);
+          let imgHtml = '';
+          if (mImg) {
+            imgHtml = `<img src="${mImg}" alt="${m.name}" onerror="this.parentElement.innerHTML='<div class=\\'dsd-avatar-placeholder\\'><i data-lucide=\\'user\\' style=\\'width:48px;height:48px;\\'></i></div>';" />`;
+          } else {
+            imgHtml = `<div class="dsd-avatar-placeholder"><i data-lucide="user" style="width: 48px; height: 48px;"></i></div>`;
+          }
+
+          const mNick = m.nickname ? ` <span style="font-weight: 400; font-size: 0.88rem; color: var(--dg-text-secondary);">(${m.nickname})</span>` : '';
+          const mGrade = m.grade ? `<span style="font-size: 0.74rem; font-weight: 600; color: var(--dg-text-muted); background: var(--dg-bg-subtle); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--dg-border);">${m.grade}</span>` : '';
+          const mBio = m.bio ? `<p class="dsd-member-desc">${m.bio}</p>` : '';
+          const mGithub = m.github_url ? `
+            <a href="${m.github_url}" target="_blank" rel="noopener noreferrer" class="dsd-github-btn">
+              <i data-lucide="github" style="width: 12px; height: 12px;"></i>
+            </a>
+          ` : '';
+
+          subMembersHtml += `
+            <div class="dsd-member-card">
+              <div class="dsd-member-photo-wrap">
+                ${imgHtml}
+              </div>
+              <div class="dsd-member-content">
+                <div>
+                  <h4 class="dsd-member-name">${m.name}${mNick}</h4>
+                  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px;">
+                    <span class="dsd-member-role">${m.role || 'สมาชิกฝ่าย'}</span>
+                    ${mGrade}
+                  </div>
+                  ${mBio}
+                </div>
+                <div class="dsd-card-meta-bottom">
+                  <span>ผู้ร่วมพัฒนา</span>
+                  ${mGithub}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        subMembersHtml += `</div>`;
+      } else {
+        subMembersHtml = `
+          <div style="background: var(--dg-bg); border: 1px dashed var(--dg-border); border-radius: var(--dg-radius-lg); padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <i data-lucide="users" style="width: 38px; height: 38px; color: var(--dg-text-muted); margin-bottom: 12px;"></i>
+            <div style="font-size: 1rem; font-weight: 700; color: var(--dg-text-primary); margin-bottom: 4px;">คณะทำงานฝ่าย DSD</div>
+            <div style="font-size: 0.85rem; color: var(--dg-text-secondary); max-width: 320px;">สามารถเพิ่มหรือแก้ไขข้อมูลสมาชิกได้ผ่านระบบผู้ดูแลระบบ (Admin)</div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="dsd-bento-wrapper">
+          ${headCardHtml}
+          ${subMembersHtml}
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+    }
+  </script>
+
+  <!-- Image Protection & Anti-Copy System -->
+  <script src="js/image-protection.js"></script>
+  <!-- Theme Manager System (Exact from team.html) -->
+  <script src="js/theme-manager.js"></script>
+</body>
+
+</html>

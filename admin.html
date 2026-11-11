@@ -3378,6 +3378,12 @@
             <span>จัดการคณะทำงาน</span>
           </div>
         </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-dsd">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="terminal"></i>
+            <span>ฝ่ายพัฒนาระบบดิจิทัล (DSD)</span>
+          </div>
+        </button>
 
         <!-- หมวดหมู่ที่ 2: งานรับสมัคร & รับเรื่อง -->
         <div class="admin-nav-group-title" style="margin-top: 8px;">งานรับสมัคร & รับเรื่อง</div>
@@ -3518,6 +3524,67 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ================= DSD TAB ================= -->
+    <div class="admin-pane" id="tab-dsd">
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill"><i data-lucide="terminal" class="dg-icon-xs"></i> DSD DIVISION • ฝ่ายพัฒนาระบบดิจิทัล</span>
+            <span class="admin-file-badge"><i data-lucide="globe" class="dg-icon-xs"></i> โดเมน: dsd.sarawatdc.site | Path: /dsd</span>
+          </div>
+          <h2>ระบบจัดการสมาชิกฝ่ายพัฒนาระบบดิจิทัล (DSD)</h2>
+          <p>บริหารจัดการรายชื่อ ตำแหน่ง หัวหน้าฝ่าย ลำดับการแสดงผล และรูปภาพบุคลากรของฝ่าย DSD</p>
+        </div>
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-outline" onclick="loadDsdAdmin()" style="padding: 10px 16px; font-size: 0.85rem;">
+            <i data-lucide="refresh-cw"></i> <span>รีเฟรช</span>
+          </button>
+          <button type="button" class="dg-btn-black" onclick="openAddDsdMemberModal()">
+            <i data-lucide="user-plus"></i> <span>+ เพิ่มสมาชิก DSD</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Toolbar for DSD -->
+      <div class="admin-action-toolbar" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex: 1; max-width: 480px;">
+          <div class="admin-search-box" style="width: 100%;">
+            <i data-lucide="search"></i>
+            <input type="text" id="dsdSearchInput" placeholder="ค้นหาชื่อ, ตำแหน่ง, ชื่อเล่น..." oninput="handleDsdSearch(this.value)" />
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div class="admin-filter-pill-group" style="display: flex; gap: 4px; background: var(--dg-bg-subtle); padding: 3px; border-radius: var(--dg-radius-pill); border: 1px solid var(--dg-border);">
+            <button type="button" class="dsd-filter-btn active dg-btn-outline" data-filter="ALL" onclick="setDsdStatusFilter('ALL')" style="padding: 5px 12px; font-size: 0.76rem; border-radius: var(--dg-radius-pill);">ทั้งหมด</button>
+            <button type="button" class="dsd-filter-btn dg-btn-outline" data-filter="active" onclick="setDsdStatusFilter('active')" style="padding: 5px 12px; font-size: 0.76rem; border-radius: var(--dg-radius-pill);">กำลังแสดงผล</button>
+            <button type="button" class="dsd-filter-btn dg-btn-outline" data-filter="hidden" onclick="setDsdStatusFilter('hidden')" style="padding: 5px 12px; font-size: 0.76rem; border-radius: var(--dg-radius-pill);">ซ่อนอยู่</button>
+          </div>
+          <span class="admin-counter-badge" id="dsdCountBadge"><i data-lucide="users"></i> สมาชิก 0 คน</span>
+          <span class="admin-counter-badge" id="dsdCurrentHeadBadge" style="background: var(--dg-bg);"><i data-lucide="shield-check"></i> กำลังตรวจสอบ...</span>
+        </div>
+      </div>
+
+      <!-- Table of DSD Members -->
+      <div class="admin-table-container" style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: var(--dg-radius-lg); overflow-x: auto;">
+        <table class="admin-data-table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: var(--dg-bg-subtle); border-bottom: 1px solid var(--dg-border); text-align: left; font-size: 0.78rem; text-transform: uppercase; color: var(--dg-text-muted);">
+              <th style="padding: 14px 16px; text-align: center;">ลำดับ</th>
+              <th style="padding: 14px 16px;">ภาพ</th>
+              <th style="padding: 14px 16px;">ชื่อ-นามสกุล / ข้อมูล</th>
+              <th style="padding: 14px 16px;">ตำแหน่งในฝ่าย</th>
+              <th style="padding: 14px 16px;">สถานะ</th>
+              <th style="padding: 14px 16px; text-align: right;">การจัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="dsdMembersTableBody">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -6717,6 +6784,123 @@
     <!-- ==========================================
        MODAL: TEAM MEMBER EDIT / ADD
        ========================================== -->
+  <!-- ==========================================
+     MODAL: DSD MEMBER ADD / EDIT
+     ========================================== -->
+  <div class="dg-modal-backdrop" id="adminDsdMemberModal" style="display: none; z-index: 9680;" onclick="if(event.target === this) closeDsdMemberModal()">
+    <div class="dg-modal-box" style="max-width: 560px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
+            <i data-lucide="terminal" class="dg-icon-lg"></i>
+          </div>
+          <div>
+            <h3 id="dsdMemberModalTitle" style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">จัดการสมาชิก DSD</h3>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">ฝ่ายพัฒนาระบบดิจิทัล (Digital Systems Development)</div>
+          </div>
+        </div>
+        <button type="button" class="dg-modal-close" onclick="closeDsdMemberModal()" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="dg-icon-base"></i>
+        </button>
+      </div>
+
+      <div class="dg-modal-body" style="padding: 22px; background: #ffffff; overflow-y: auto; flex: 1;">
+        <!-- Name & Nickname Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อ-นามสกุล <span style="color: #ef4444;">*</span></label>
+            <input type="text" id="dsdMemberName" placeholder="เช่น นายคุณากร ศรีสุวรรณ" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          </div>
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ชื่อเล่น</label>
+            <input type="text" id="dsdMemberNickname" placeholder="เช่น กร" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          </div>
+        </div>
+
+        <!-- Role & Head Switch -->
+        <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 12px; margin-bottom: 14px; align-items: end;">
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ตำแหน่งภายในฝ่าย <span style="color: #ef4444;">*</span></label>
+            <input type="text" id="dsdMemberRole" list="dsdRolesDatalist" placeholder="เช่น หัวหน้าฝ่ายพัฒนาระบบดิจิทัล" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+            <datalist id="dsdRolesDatalist">
+              <option value="หัวหน้าฝ่ายพัฒนาระบบดิจิทัล">
+              <option value="รองหัวหน้าฝ่ายพัฒนาระบบดิจิทัล">
+              <option value="นักพัฒนาระบบสารสนเทศ (Backend)">
+              <option value="นักพัฒนาระบบสารสนเทศ (Frontend)">
+              <option value="วิศวกรฐานข้อมูลและโครงสร้างพื้นฐาน">
+              <option value="สมาชิกฝ่ายพัฒนาระบบดิจิทัล">
+            </datalist>
+          </div>
+          <div class="dg-form-group" style="padding-bottom: 6px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
+              <input type="checkbox" id="dsdMemberIsHead" style="width: 18px; height: 18px; accent-color: #0f172a;" />
+              <span style="font-size: 0.86rem; font-weight: 700; color: #0f172a;">👑 เป็นหัวหน้าฝ่าย</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Grade & Order Index -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ระดับชั้น</label>
+            <input type="text" id="dsdMemberGrade" placeholder="เช่น ม.5/1 หรือ ม.4/2" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          </div>
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ลำดับการแสดงผล (Order Index)</label>
+            <input type="number" id="dsdMemberOrder" value="1" min="1" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          </div>
+        </div>
+
+        <!-- Photo Upload & URL -->
+        <div class="dg-form-group" style="margin-bottom: 14px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">รูปภาพสมาชิก (ภาพถ่าย)</label>
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 8px;">
+            <div style="width: 70px; height: 70px; border-radius: 12px; border: 1px solid #cbd5e1; overflow: hidden; background: #f8fafc; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+              <img id="dsdMemberImagePreview" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;" />
+              <div id="dsdMemberImagePlaceholder" style="color: #94a3b8; display: flex; align-items: center; justify-content: center;"><i data-lucide="image" style="width: 26px; height: 26px;"></i></div>
+            </div>
+            <div style="flex: 1;">
+              <input type="file" id="dsdMemberPhotoFile" accept="image/*" onchange="handleDsdPhotoUpload(this)" style="display: none;" />
+              <button type="button" class="dg-btn-outline" onclick="document.getElementById('dsdMemberPhotoFile').click()" style="padding: 8px 14px; font-size: 0.82rem; border-radius: 8px; margin-bottom: 6px;">
+                <i data-lucide="upload"></i> <span>เลือกรูปภาพจากเครื่อง...</span>
+              </button>
+              <div id="dsdUploadStatusText" style="font-size: 0.76rem; color: #64748b;">รองรับไฟล์ JPG, PNG, WebP (สูงสุด 25MB)</div>
+            </div>
+          </div>
+          <input type="text" id="dsdMemberImageUrl" placeholder="หรือใส่ URL รูปภาพโดยตรง (เช่น /uploads/... หรือ https://...)" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+        </div>
+
+        <!-- Bio / Quote -->
+        <div class="dg-form-group" style="margin-bottom: 14px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">คำอธิบายประวัติย่อ / ความรับผิดชอบ (Bio)</label>
+          <textarea id="dsdMemberBio" rows="2" placeholder="เช่น ดูแลระบบงานหลังบ้าน และโครงสร้างฐานข้อมูล..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;"></textarea>
+        </div>
+
+        <!-- GitHub / Portfolio URL & Status -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 10px;">
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ลิงก์ GitHub / Portfolio</label>
+            <input type="url" id="dsdMemberGithub" placeholder="https://github.com/username" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;" />
+          </div>
+          <div class="dg-form-group">
+            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">สถานะการแสดงผล</label>
+            <select id="dsdMemberStatus" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;">
+              <option value="active">กำลังแสดงผล (Active)</option>
+              <option value="hidden">ซ่อนจากหน้าเว็บ (Hidden)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="dg-modal-footer" style="padding: 16px 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; background: #f8fafc;">
+        <button type="button" class="dg-btn-outline" onclick="closeDsdMemberModal()" style="padding: 10px 18px; font-size: 0.88rem; border-radius: 8px;">ยกเลิก</button>
+        <button type="button" class="dg-btn-black" onclick="saveDsdMemberForm()" style="padding: 10px 20px; font-size: 0.88rem; border-radius: 8px;">
+          <i data-lucide="check"></i> <span>บันทึกข้อมูลสมาชิก</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="dg-modal-backdrop" id="memberModal" style="display: none; z-index: 9650;" onclick="if(event.target === this) closeMemberModal()">
     <div class="dg-modal-box" style="max-width: 520px; width: 95%; background: #ffffff !important; opacity: 1 !important; transform: none !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35);">
       <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
@@ -14035,6 +14219,8 @@
               renderAdminEvents();
             } else if (paneId === 'tab-team' && typeof loadTeamAdmin === 'function') {
               loadTeamAdmin();
+            } else if (paneId === 'tab-dsd' && typeof loadDsdAdmin === 'function') {
+              loadDsdAdmin();
             } else if (paneId === 'tab-feedbacks') {
               renderAdminFeedbacks();
             } else if (paneId === 'tab-recruitment' && typeof loadRecruitmentAdmin === 'function') {
@@ -14492,6 +14678,7 @@
   </script>
   <script src="js/admin-team.js?v=2.7.7"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
+  <script src="js/admin-dsd.js?v=1.0.0"></script>
 </body>
 
 </html>

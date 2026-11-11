@@ -51,6 +51,7 @@ flowchart TD
 | `admission.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 🎒 ระบบรับสมัครสารวัตรนักเรียน ประจำปีการศึกษา 2570 | `admission.html` |
 | `admin.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 🎛️ ระบบบริหารจัดการข้อมูลและควบคุมเว็บไซต์หลัก (โอนย้ายสู่เว็บหลักอัตโนมัติ) | `admin.html` |
 | `roster.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 📋 ระบบลงเวลาและมอบหมายงานเวร (โอนย้ายสู่เว็บหลักอัตโนมัติ) | `SI-ROSTER/index.html` |
+| `dsd.sarawatdc.site` | 🟢 **เปิดใช้งาน (Active)** | 💻 ฝ่ายพัฒนาระบบดิจิทัล (Digital Systems Development Division: DSD) | `dsd.html` |
 | `www.sarawatdc.site` | 🔴 **สแตนด์บาย (Standby)** | 🏛️ เว็บไซต์สารสนเทศหลัก (ไม่พบ DNS ในปัจจุบัน) | `index.html` |
 | `sarawat-home.vercel.app` | 🧪 **ทดสอบภายใน (Internal)** | 💻 สภาพแวดล้อมทดสอบการทำงานข้ามระบบสำหรับผู้พัฒนา | ทุกระบบในโปรเจกต์ |
 
