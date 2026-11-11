@@ -193,7 +193,12 @@
               <span style="font-size: 0.85rem; font-weight: 600; color: var(--dg-text-secondary);">${escapeHtml(m.role)}</span>
               ${headBadgeHtml}
             </div>
-            ${m.github_url ? `<a href="${escapeHtml(m.github_url)}" target="_blank" style="font-size: 0.75rem; color: var(--dg-text-muted); text-decoration: none; display: inline-flex; align-items: center; gap: 3px; margin-top: 2px;"><i data-lucide="github" style="width: 11px; height: 11px;"></i> GitHub</a>` : ''}
+            <div style="display: flex; gap: 6px; margin-top: 4px;">
+              ${m.github_url ? `<a href="${escapeHtml(m.github_url)}" target="_blank" title="GitHub" style="color: var(--dg-text-secondary);"><i data-lucide="github" style="width: 12px; height: 12px;"></i></a>` : ''}
+              ${m.instagram_url ? `<a href="${escapeHtml(m.instagram_url)}" target="_blank" title="Instagram" style="color: #e1306c;"><i data-lucide="instagram" style="width: 12px; height: 12px;"></i></a>` : ''}
+              ${m.facebook_url ? `<a href="${escapeHtml(m.facebook_url)}" target="_blank" title="Facebook" style="color: #1877f2;"><i data-lucide="facebook" style="width: 12px; height: 12px;"></i></a>` : ''}
+              ${m.website_url ? `<a href="${escapeHtml(m.website_url)}" target="_blank" title="Website" style="color: #10b981;"><i data-lucide="globe" style="width: 12px; height: 12px;"></i></a>` : ''}
+            </div>
           </td>
           <td>${statusHtml}</td>
           <td style="text-align: right; width: 170px;">
@@ -252,6 +257,9 @@
     document.getElementById('dsdMemberImageUrl').value = '';
     document.getElementById('dsdMemberBio').value = '';
     document.getElementById('dsdMemberGithub').value = '';
+    document.getElementById('dsdMemberInstagram').value = '';
+    document.getElementById('dsdMemberFacebook').value = '';
+    document.getElementById('dsdMemberWebsite').value = '';
     document.getElementById('dsdMemberOrder').value = (dsdMembersList.length + 1);
     document.getElementById('dsdMemberStatus').value = 'active';
 
@@ -291,6 +299,9 @@
     document.getElementById('dsdMemberImageUrl').value = member.image_url || '';
     document.getElementById('dsdMemberBio').value = member.bio || '';
     document.getElementById('dsdMemberGithub').value = member.github_url || '';
+    document.getElementById('dsdMemberInstagram').value = member.instagram_url || '';
+    document.getElementById('dsdMemberFacebook').value = member.facebook_url || '';
+    document.getElementById('dsdMemberWebsite').value = member.website_url || '';
     document.getElementById('dsdMemberOrder').value = member.order_index || 1;
     document.getElementById('dsdMemberStatus').value = member.status || 'active';
 
@@ -386,6 +397,9 @@
     const imageUrl = (document.getElementById('dsdMemberImageUrl').value || '').trim();
     const bio = (document.getElementById('dsdMemberBio').value || '').trim();
     const githubUrl = (document.getElementById('dsdMemberGithub').value || '').trim();
+    const instagramUrl = (document.getElementById('dsdMemberInstagram').value || '').trim();
+    const facebookUrl = (document.getElementById('dsdMemberFacebook').value || '').trim();
+    const websiteUrl = (document.getElementById('dsdMemberWebsite').value || '').trim();
     const orderIndex = Number(document.getElementById('dsdMemberOrder').value) || 1;
     const status = document.getElementById('dsdMemberStatus').value || 'active';
 
@@ -409,6 +423,9 @@
       image_url: imageUrl,
       bio,
       github_url: githubUrl,
+      instagram_url: instagramUrl,
+      facebook_url: facebookUrl,
+      website_url: websiteUrl,
       order_index: orderIndex,
       status
     };

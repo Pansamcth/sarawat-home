@@ -6876,19 +6876,49 @@
           <textarea id="dsdMemberBio" rows="2" placeholder="เช่น ดูแลระบบงานหลังบ้าน และโครงสร้างฐานข้อมูล..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;"></textarea>
         </div>
 
-        <!-- GitHub / Portfolio URL & Status -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 10px;">
-          <div class="dg-form-group">
-            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">ลิงก์ GitHub / Portfolio</label>
-            <input type="url" id="dsdMemberGithub" placeholder="https://github.com/username" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;" />
+        <!-- Social Media Links (GitHub, Instagram, Facebook, Website) -->
+        <div style="margin-bottom: 14px; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+          <label style="font-weight: 700; font-size: 0.86rem; color: #1e293b; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="share-2" style="width: 15px; height: 15px; color: var(--dg-primary, #1e40af);"></i>
+            <span>ลิงก์โซเชียลมีเดีย & ช่องทางติดต่อ (Social Media)</span>
+          </label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div class="dg-form-group">
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
+                <i data-lucide="github" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> GitHub URL
+              </label>
+              <input type="url" id="dsdMemberGithub" placeholder="https://github.com/username" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+            </div>
+            <div class="dg-form-group">
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
+                <i data-lucide="instagram" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Instagram URL
+              </label>
+              <input type="url" id="dsdMemberInstagram" placeholder="https://instagram.com/username" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+            </div>
           </div>
-          <div class="dg-form-group">
-            <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">สถานะการแสดงผล</label>
-            <select id="dsdMemberStatus" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;">
-              <option value="active">กำลังแสดงผล (Active)</option>
-              <option value="hidden">ซ่อนจากหน้าเว็บ (Hidden)</option>
-            </select>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="dg-form-group">
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
+                <i data-lucide="facebook" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Facebook URL
+              </label>
+              <input type="url" id="dsdMemberFacebook" placeholder="https://facebook.com/username" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+            </div>
+            <div class="dg-form-group">
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
+                <i data-lucide="globe" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Website / Portfolio
+              </label>
+              <input type="url" id="dsdMemberWebsite" placeholder="https://yourportfolio.com" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+            </div>
           </div>
+        </div>
+
+        <!-- Status -->
+        <div class="dg-form-group" style="margin-bottom: 10px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">สถานะการแสดงผล</label>
+          <select id="dsdMemberStatus" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; font-family: inherit; background: #fff;">
+            <option value="active">กำลังแสดงผล (Active)</option>
+            <option value="hidden">ซ่อนจากหน้าเว็บ (Hidden)</option>
+          </select>
         </div>
       </div>
 

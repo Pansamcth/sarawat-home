@@ -983,6 +983,34 @@
       "has": [
         {
           "type": "host",
+          "value": "^dsd\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/dsd"
+    },
+    {
+      "source": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "^dsd\\.sarawat(dc)?\\.site$"
+        }
+      ],
+      "destination": "/api/dsd"
+    },
+    {
+      "source": "/dsd",
+      "destination": "/api/dsd"
+    },
+    {
+      "source": "/dsd.html",
+      "destination": "/api/dsd"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
           "value": "^admin\\.sarawat(dc)?\\.site$"
         }
       ],
@@ -1185,34 +1213,6 @@
         }
       ],
       "destination": "/api/activities"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "^dsd\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/dsd.html"
-    },
-    {
-      "source": "/index.html",
-      "has": [
-        {
-          "type": "host",
-          "value": "^dsd\\.sarawat(dc)?\\.site$"
-        }
-      ],
-      "destination": "/dsd.html"
-    },
-    {
-      "source": "/dsd",
-      "destination": "/dsd.html"
-    },
-    {
-      "source": "/dsd.html",
-      "destination": "/dsd.html"
     },
     {
       "source": "/api/:path*",

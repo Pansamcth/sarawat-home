@@ -116,7 +116,7 @@
       margin-bottom: 70px;
     }
 
-    /* Head of DSD Card (4:3 Ratio Portrait) */
+    /* Head of DSD Card (Bento Left Card) */
     .dsd-head-card {
       background: var(--dg-bg);
       border: 1px solid var(--dg-border);
@@ -137,7 +137,7 @@
 
     .dsd-head-photo-wrap {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 1 / 1;
       background: var(--dg-bg-subtle);
       position: relative;
       overflow: hidden;
@@ -148,7 +148,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 20%;
+      object-position: center 15%;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -160,20 +160,22 @@
       position: absolute;
       top: 14px;
       left: 14px;
-      background: rgba(10, 10, 12, 0.88);
+      background: rgba(15, 23, 42, 0.88);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       color: #ffffff;
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: var(--dg-radius-pill);
       font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       z-index: 2;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .dsd-head-content {
@@ -192,29 +194,18 @@
       line-height: 1.25;
     }
 
-    .dsd-role-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.84rem;
+    .dsd-head-role {
+      font-size: 0.95rem;
       font-weight: 700;
       color: var(--dg-primary, #1e40af);
       margin-bottom: 12px;
-    }
-
-    .dsd-role-tag.head-tag {
-      color: var(--dg-text-primary);
-      background: var(--dg-bg-subtle);
-      border: 1px solid var(--dg-border);
-      padding: 4px 10px;
-      border-radius: var(--dg-radius-pill);
-      font-size: 0.78rem;
+      line-height: 1.4;
     }
 
     .dsd-head-bio {
       font-size: 0.92rem;
       color: var(--dg-text-secondary);
-      line-height: 1.6;
+      line-height: 1.65;
       margin-bottom: 20px;
     }
 
@@ -256,7 +247,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 20%;
+      object-position: center 15%;
       transition: transform 0.5s ease;
     }
 
@@ -273,7 +264,7 @@
     }
 
     .dsd-member-name {
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       font-weight: 700;
       color: var(--dg-text-primary);
       margin-bottom: 4px;
@@ -290,7 +281,7 @@
     .dsd-member-desc {
       font-size: 0.84rem;
       color: var(--dg-text-secondary);
-      line-height: 1.5;
+      line-height: 1.55;
       margin-bottom: 12px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -302,41 +293,75 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 10px;
-      border-top: 1px dashed var(--dg-border);
-      font-size: 0.76rem;
+      padding-top: 12px;
+      border-top: 1px solid var(--dg-border);
+      font-size: 0.78rem;
       color: var(--dg-text-muted);
     }
 
-    .dsd-github-btn {
+    .dsd-social-group {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: var(--dg-text-primary);
-      text-decoration: none;
-      padding: 4px 10px;
+      gap: 6px;
+    }
+
+    .dsd-social-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
       border-radius: var(--dg-radius-pill);
       border: 1px solid var(--dg-border);
       background: var(--dg-bg-subtle);
+      color: var(--dg-text-secondary);
+      text-decoration: none;
       transition: var(--dg-transition);
     }
 
-    .dsd-github-btn:hover {
+    .dsd-social-btn:hover {
       background: var(--dg-black);
-      color: var(--dg-white);
+      color: #ffffff !important;
       border-color: var(--dg-black);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
 
     .dsd-avatar-placeholder {
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 10px;
+      background: linear-gradient(180deg, var(--dg-bg-subtle) 0%, var(--dg-bg) 100%);
+      user-select: none;
+    }
+
+    .dsd-avatar-circle {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: var(--dg-bg);
+      border: 1px solid var(--dg-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      color: var(--dg-text-muted);
+    }
+
+    .dsd-avatar-tag {
+      font-size: 0.68rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dg-text-muted);
       background: var(--dg-bg-subtle);
-      color: #cbd5e1;
+      border: 1px solid var(--dg-border);
+      padding: 2px 8px;
+      border-radius: var(--dg-radius-pill);
     }
 
     /* ==========================================================
@@ -526,7 +551,7 @@
             <span class="dg-title-th">ฝ่ายพัฒนาระบบดิจิทัล สารวัตรนักเรียน</span>
           </h1>
           <p class="dg-act-subtitle">
-            ทำเนียบบุคลากรและคณะผู้พัฒนาระบบสารสนเทศ สารวัตรนักเรียน โรงเรียนเดชะปัตตนยานุกูล
+            รับผิดชอบในการออกแบบ พัฒนา และปรับปรุงระบบดิจิทัล รวมถึงเว็บไซต์และระบบสารสนเทศที่สนับสนุนการดำเนินงานภายในองค์กร โดยมุ่งเน้นการประยุกต์ใช้เทคโนโลยีและนวัตกรรมเพื่อเพิ่มประสิทธิภาพในการบริหารจัดการ การสื่อสาร และการปฏิบัติงานของสารวัตรนักเรียน
           </p>
         </div>
       </div>
@@ -905,12 +930,12 @@
         members = [
           {
             id: 1,
-            name: 'นายคุณากร ศรีสุวรรณ',
-            nickname: 'กร',
+            name: 'นายรุจิระ วัฒนกิจไพศาล',
+            nickname: 'พรรษา',
             role: 'หัวหน้าฝ่ายพัฒนาระบบดิจิทัล',
             is_head: 1,
-            grade: 'ม.5/1',
-            image_url: '',
+            grade: 'ม.5/5',
+            image_url: 'assets/images/Rujira.png',
             bio: 'ผู้พัฒนาระบบสารสนเทศ โครงสร้างฐานข้อมูล และระบบบริหารจัดการภายในองค์กรสารวัตรนักเรียน',
             github_url: 'https://github.com'
           },
@@ -923,7 +948,7 @@
             grade: 'ม.5/2',
             image_url: '',
             bio: 'ดูแลระบบงานเบื้องหลัง สถาปัตยกรรมเซิร์ฟเวอร์ และระบบฐานข้อมูลความเร็วสูง',
-            github_url: 'https://github.com'
+            github_url: ''
           },
           {
             id: 3,
@@ -934,7 +959,7 @@
             grade: 'ม.4/1',
             image_url: '',
             bio: 'ออกแบบและพัฒนาส่วนต่อประสานผู้ใช้ (UI/UX) และระบบเว็บแอปพลิเคชัน',
-            github_url: 'https://github.com'
+            github_url: ''
           }
         ];
       }
@@ -948,14 +973,57 @@
       if (skeleton) skeleton.style.display = 'none';
       if (!container) return;
 
-      const resolveImg = (url) => {
-        if (!url) return '';
-        if (window.resolveImageUrl) return window.resolveImageUrl(url);
-        if (url.startsWith('/')) {
-          const base = (window.SarawatApi && typeof window.SarawatApi.getBaseUrl === 'function') ? window.SarawatApi.getBaseUrl() : '';
-          return (base || '') + url;
+      const ICONS = {
+        github: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>',
+        instagram: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>',
+        facebook: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+        website: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
+      };
+
+      const isValidSocial = (u) => {
+        if (!u || typeof u !== 'string') return false;
+        const s = u.trim().toLowerCase();
+        if (!s || s === '#' || s === 'https://github.com' || s === 'https://github.com/' || s === 'https://instagram.com' || s === 'https://facebook.com') return false;
+        return s.startsWith('http://') || s.startsWith('https://');
+      };
+
+      const resolveImg = (url, name) => {
+        if (!url && name && (name.includes('รุจิระ') || name.includes('พรรษา'))) {
+          return 'assets/images/Rujira.png';
         }
-        return url;
+        if (!url || typeof url !== 'string' || url.trim() === '') return '';
+        const clean = url.trim();
+        if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('data:')) {
+          return clean;
+        }
+        if (clean.startsWith('/')) {
+          const base = (window.SarawatApi && typeof window.SarawatApi.getBaseUrl === 'function')
+            ? window.SarawatApi.getBaseUrl()
+            : (window.SARAWAT_API_BASE || '');
+          return (base || '') + clean;
+        }
+        return clean;
+      };
+
+      const renderSocialLinks = (m) => {
+        if (!m) return '';
+        const links = [];
+
+        if (isValidSocial(m.github_url)) {
+          links.push('<a href="' + m.github_url + '" target="_blank" rel="noopener noreferrer" class="dsd-social-btn" title="GitHub">' + ICONS.github + '</a>');
+        }
+        if (isValidSocial(m.instagram_url)) {
+          links.push('<a href="' + m.instagram_url + '" target="_blank" rel="noopener noreferrer" class="dsd-social-btn" title="Instagram" style="color: #e1306c;">' + ICONS.instagram + '</a>');
+        }
+        if (isValidSocial(m.facebook_url)) {
+          links.push('<a href="' + m.facebook_url + '" target="_blank" rel="noopener noreferrer" class="dsd-social-btn" title="Facebook" style="color: #1877f2;">' + ICONS.facebook + '</a>');
+        }
+        if (isValidSocial(m.website_url)) {
+          links.push('<a href="' + m.website_url + '" target="_blank" rel="noopener noreferrer" class="dsd-social-btn" title="Website / Portfolio" style="color: #10b981;">' + ICONS.website + '</a>');
+        }
+
+        if (links.length === 0) return '';
+        return '<div class="dsd-social-group">' + links.join('') + '</div>';
       };
 
       // Identify Head (is_head === 1 or role has 'หัวหน้า')
@@ -965,71 +1033,68 @@
 
       const subMembers = members.filter(m => m !== head);
 
-      // Render Head Card (4:3 portrait)
+      // Render Head Card (Bento Left Card - Frameless Photo & Frameless Role & No Class)
       let headImgHtml = '';
-      const headImg = resolveImg(head?.image_url);
+      const headImg = resolveImg(head?.image_url, head?.name);
       if (headImg) {
-        headImgHtml = `<img src="${headImg}" alt="${head.name}" onerror="this.parentElement.innerHTML='<div class=\\'dsd-avatar-placeholder\\'><i data-lucide=\\'user\\' style=\\'width:64px;height:64px;\\'></i></div>';" />`;
+        headImgHtml = `<img src="${headImg}" alt="${head.name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block;" onerror="this.onerror=null; this.src='assets/images/Rujira.png';" />`;
       } else {
-        headImgHtml = `<div class="dsd-avatar-placeholder"><i data-lucide="user" style="width: 64px; height: 64px;"></i></div>`;
+        headImgHtml = `
+          <div class="dsd-avatar-placeholder">
+            <div class="dsd-avatar-circle">
+              <i data-lucide="user" style="width: 32px; height: 32px; stroke-width: 1.75;"></i>
+            </div>
+            <span class="dsd-avatar-tag">HEAD OF DIVISION</span>
+          </div>
+        `;
       }
 
-      const headNick = head?.nickname ? ` <span style="font-weight: 500; font-size: 1.1rem; color: var(--dg-text-secondary);">(${head.nickname})</span>` : '';
-      const headGrade = head?.grade ? `<span style="font-size: 0.8rem; font-weight: 600; color: var(--dg-text-muted); background: var(--dg-bg-subtle); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--dg-border);">${head.grade}</span>` : '';
+      const headNick = head?.nickname ? ` <span style="font-weight: 500; font-size: 1.05rem; color: var(--dg-text-secondary);">(${head.nickname})</span>` : '';
       const headBio = head?.bio ? `<p class="dsd-head-bio">${head.bio}</p>` : '';
-      const headGithub = head?.github_url ? `
-        <a href="${head.github_url}" target="_blank" rel="noopener noreferrer" class="dsd-github-btn">
-          <i data-lucide="github" style="width: 13px; height: 13px;"></i> <span>GitHub</span>
-        </a>
-      ` : '';
+      const headSocial = renderSocialLinks(head);
 
       const headCardHtml = `
         <div class="dsd-head-card">
-          <div class="dsd-head-badge">
-            <i data-lucide="shield-check" style="width: 12px; height: 12px;"></i>
-            <span>HEAD OF DIVISION</span>
-          </div>
           <div class="dsd-head-photo-wrap">
             ${headImgHtml}
           </div>
           <div class="dsd-head-content">
             <div>
               <h3 class="dsd-head-title">${head?.name || 'หัวหน้าฝ่าย'}${headNick}</h3>
-              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span class="dsd-role-tag head-tag">${head?.role || 'หัวหน้าฝ่ายพัฒนาระบบดิจิทัล'}</span>
-                ${headGrade}
-              </div>
+              <div class="dsd-head-role">${head?.role || 'หัวหน้าฝ่ายพัฒนาระบบดิจิทัล'}</div>
               ${headBio}
             </div>
             <div class="dsd-card-meta-bottom">
               <span>ผู้พัฒนาระบบสารสนเทศ</span>
-              ${headGithub}
+              ${headSocial}
             </div>
           </div>
         </div>
       `;
 
-      // Render Sub-Members (1:1 Square Cards)
+      // Render Sub-Members (Bento Right Grid: 1:1 Cards)
       let subMembersHtml = '';
       if (subMembers.length > 0) {
         subMembersHtml = `<div class="dsd-members-grid">`;
         subMembers.forEach(m => {
-          const mImg = resolveImg(m.image_url);
+          const mImg = resolveImg(m.image_url, m.name);
           let imgHtml = '';
           if (mImg) {
-            imgHtml = `<img src="${mImg}" alt="${m.name}" onerror="this.parentElement.innerHTML='<div class=\\'dsd-avatar-placeholder\\'><i data-lucide=\\'user\\' style=\\'width:48px;height:48px;\\'></i></div>';" />`;
+            imgHtml = `<img src="${mImg}" alt="${m.name}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\\'dsd-avatar-placeholder\\\'><div class=\\\'dsd-avatar-circle\\\'><i data-lucide=\\\'user\\\' style=\\\'width:28px;height:28px;stroke-width:1.75;\\\'></i></div><span class=\\\'dsd-avatar-tag\\\'>DSD MEMBER</span></div>'; if (window.lucide) lucide.createIcons();" />`;
           } else {
-            imgHtml = `<div class="dsd-avatar-placeholder"><i data-lucide="user" style="width: 48px; height: 48px;"></i></div>`;
+            imgHtml = `
+              <div class="dsd-avatar-placeholder">
+                <div class="dsd-avatar-circle">
+                  <i data-lucide="user" style="width: 28px; height: 28px; stroke-width: 1.75;"></i>
+                </div>
+                <span class="dsd-avatar-tag">DSD MEMBER</span>
+              </div>
+            `;
           }
 
-          const mNick = m.nickname ? ` <span style="font-weight: 400; font-size: 0.88rem; color: var(--dg-text-secondary);">(${m.nickname})</span>` : '';
-          const mGrade = m.grade ? `<span style="font-size: 0.74rem; font-weight: 600; color: var(--dg-text-muted); background: var(--dg-bg-subtle); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--dg-border);">${m.grade}</span>` : '';
+          const mNick = m.nickname ? ` <span style="font-weight: 500; font-size: 0.92rem; color: var(--dg-text-secondary);">(${m.nickname})</span>` : '';
           const mBio = m.bio ? `<p class="dsd-member-desc">${m.bio}</p>` : '';
-          const mGithub = m.github_url ? `
-            <a href="${m.github_url}" target="_blank" rel="noopener noreferrer" class="dsd-github-btn">
-              <i data-lucide="github" style="width: 12px; height: 12px;"></i>
-            </a>
-          ` : '';
+          const mSocial = renderSocialLinks(m);
 
           subMembersHtml += `
             <div class="dsd-member-card">
@@ -1039,15 +1104,12 @@
               <div class="dsd-member-content">
                 <div>
                   <h4 class="dsd-member-name">${m.name}${mNick}</h4>
-                  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px;">
-                    <span class="dsd-member-role">${m.role || 'สมาชิกฝ่าย'}</span>
-                    ${mGrade}
-                  </div>
+                  <div class="dsd-member-role">${m.role || 'สมาชิกฝ่าย'}</div>
                   ${mBio}
                 </div>
                 <div class="dsd-card-meta-bottom">
                   <span>ผู้ร่วมพัฒนา</span>
-                  ${mGithub}
+                  ${mSocial}
                 </div>
               </div>
             </div>
@@ -1056,7 +1118,7 @@
         subMembersHtml += `</div>`;
       } else {
         subMembersHtml = `
-          <div style="background: var(--dg-bg); border: 1px dashed var(--dg-border); border-radius: var(--dg-radius-lg); padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+          <div style="background: var(--dg-bg); border: 1px solid var(--dg-border); border-radius: var(--dg-radius-lg); padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
             <i data-lucide="users" style="width: 38px; height: 38px; color: var(--dg-text-muted); margin-bottom: 12px;"></i>
             <div style="font-size: 1rem; font-weight: 700; color: var(--dg-text-primary); margin-bottom: 4px;">คณะทำงานฝ่าย DSD</div>
             <div style="font-size: 0.85rem; color: var(--dg-text-secondary); max-width: 320px;">สามารถเพิ่มหรือแก้ไขข้อมูลสมาชิกได้ผ่านระบบผู้ดูแลระบบ (Admin)</div>
