@@ -344,7 +344,10 @@
     const container = document.getElementById('year70PodiumContainer');
     if (!container) return;
 
-    if (!year70Candidates || year70Candidates.length === 0) {
+    // เฉพาะผู้ที่มีคะแนนมากกว่า 0 เท่านั้นที่มีสิทธิ์ขึ้นโพเดียม (ถ้าคะแนนเป็น 0 ไม่แสดง)
+    const topScorers = (year70Candidates || []).filter(c => (Number(c.total_points) || 0) > 0);
+
+    if (topScorers.length === 0) {
       container.innerHTML = '';
       container.style.display = 'none';
       return;
@@ -352,7 +355,7 @@
 
     container.style.display = 'grid';
 
-    const top3 = year70Candidates.slice(0, 3);
+    const top3 = topScorers.slice(0, 3);
     const podiumStyles = [
       {
         rank: 1,
@@ -540,19 +543,34 @@
           <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 14px; margin-bottom: 24px;">
         `;
 
-        deptCandidates.forEach((cand, idx) => {
-          const rank = idx + 1;
-          let rankLabel = `#${rank}`;
-          let rankGlassStyle = 'background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255, 255, 255, 0.22); color: #ffffff;';
-          if (rank === 1) {
-            rankLabel = '🥇 อันดับ 1';
-            rankGlassStyle = 'background: rgba(245, 158, 11, 0.35); border: 1px solid rgba(245, 158, 11, 0.65); color: #fef08a; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);';
-          } else if (rank === 2) {
-            rankLabel = '🥈 อันดับ 2';
-            rankGlassStyle = 'background: rgba(148, 163, 184, 0.3); border: 1px solid rgba(255, 255, 255, 0.35); color: #f8fafc;';
-          } else if (rank === 3) {
-            rankLabel = '🥉 อันดับ 3';
-            rankGlassStyle = 'background: rgba(217, 119, 6, 0.35); border: 1px solid rgba(251, 146, 60, 0.5); color: #ffedd5;';
+        let deptRankCounter = 0;
+        deptCandidates.forEach((cand) => {
+          const points = Number(cand.total_points) || 0;
+          const hasPoints = points > 0;
+          let rankPillHtml = '';
+
+          // ถ้าแต้ม > 0 ถึงจะแสดงลำดับ (ถ้าแต้มเป็น 0 ไม่ต้องขึ้นลำดับ)
+          if (hasPoints) {
+            deptRankCounter += 1;
+            const rank = deptRankCounter;
+            let rankLabel = `#${rank}`;
+            let rankGlassStyle = 'background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255, 255, 255, 0.22); color: #ffffff;';
+            if (rank === 1) {
+              rankLabel = '🥇 อันดับ 1';
+              rankGlassStyle = 'background: rgba(245, 158, 11, 0.35); border: 1px solid rgba(245, 158, 11, 0.65); color: #fef08a; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);';
+            } else if (rank === 2) {
+              rankLabel = '🥈 อันดับ 2';
+              rankGlassStyle = 'background: rgba(148, 163, 184, 0.3); border: 1px solid rgba(255, 255, 255, 0.35); color: #f8fafc;';
+            } else if (rank === 3) {
+              rankLabel = '🥉 อันดับ 3';
+              rankGlassStyle = 'background: rgba(217, 119, 6, 0.35); border: 1px solid rgba(251, 146, 60, 0.5); color: #ffedd5;';
+            }
+
+            rankPillHtml = `
+              <div style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9999px; padding: 4px 10px; font-size: 0.72rem; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); ${rankGlassStyle}">
+                ${rankLabel}
+              </div>
+            `;
           }
 
           // Full Bleed Photo Background (รูปเต็มบล็อก)
@@ -583,11 +601,9 @@
               <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0) 35%, rgba(15, 23, 42, 0.2) 60%, rgba(15, 23, 42, 0.75) 100%); z-index: 1; pointer-events: none;"></div>
 
               <!-- Top Floating Frosted Pills -->
-              <div style="position: relative; z-index: 2; padding: 12px 12px 0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <!-- Rank Pill (Liquid Frosted Glass) -->
-                <div style="backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 9999px; padding: 4px 10px; font-size: 0.72rem; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); ${rankGlassStyle}">
-                  ${rankLabel}
-                </div>
+              <div style="position: relative; z-index: 2; padding: 12px 12px 0; display: flex; align-items: center; justify-content: ${rankPillHtml ? 'space-between' : 'flex-end'}; gap: 8px;">
+                <!-- Rank Pill (Liquid Frosted Glass - แสดงเฉพาะเมื่อมีคะแนน > 0) -->
+                ${rankPillHtml}
 
                 <!-- Points Pill (Liquid Amber Frosted Glass) -->
                 <div style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 9999px; padding: 4px 12px; font-size: 0.82rem; font-weight: 800; color: #fbbf24; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);">
@@ -678,13 +694,21 @@
 
     const isSuper = isSuperAdmin();
 
+    let tableRankCounter = 0;
     let html = '';
-    year70Candidates.forEach((cand, idx) => {
-      const rank = idx + 1;
-      let rankBadge = `<span style="font-weight: 700; color: #64748b;">${rank}</span>`;
-      if (rank === 1) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 1">🥇</span>`;
-      else if (rank === 2) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 2">🥈</span>`;
-      else if (rank === 3) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 3">🥉</span>`;
+    year70Candidates.forEach((cand) => {
+      const points = Number(cand.total_points) || 0;
+      let rankBadge = `<span style="color: #cbd5e1; font-weight: 600;">-</span>`;
+
+      // ถ้าแต้ม > 0 ถึงจะมีลำดับ (ถ้าแต้มเป็น 0 ไม่ต้องขึ้นลำดับ แสดงเป็น -)
+      if (points > 0) {
+        tableRankCounter += 1;
+        const rank = tableRankCounter;
+        if (rank === 1) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 1">🥇</span>`;
+        else if (rank === 2) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 2">🥈</span>`;
+        else if (rank === 3) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 3">🥉</span>`;
+        else rankBadge = `<span style="font-weight: 700; color: #64748b;">${rank}</span>`;
+      }
 
       const pointsColor = cand.total_points > 0 ? '#f59e0b' : (cand.total_points < 0 ? '#ef4444' : '#64748b');
 
