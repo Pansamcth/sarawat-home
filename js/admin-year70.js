@@ -543,7 +543,7 @@
         deptCandidates.forEach((cand, idx) => {
           const rank = idx + 1;
           let rankLabel = `#${rank}`;
-          let rankGlassStyle = 'background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff;';
+          let rankGlassStyle = 'background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255, 255, 255, 0.22); color: #ffffff;';
           if (rank === 1) {
             rankLabel = '🥇 อันดับ 1';
             rankGlassStyle = 'background: rgba(245, 158, 11, 0.35); border: 1px solid rgba(245, 158, 11, 0.65); color: #fef08a; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);';
@@ -573,38 +573,14 @@
             `;
           }
 
-          // Latest Score Status (สถานะการให้คะแนนล่าสุด ในชิปแก้วลิควิด)
-          const timeAgo = cand.last_scored_at ? formatThaiShortDateTime(cand.last_scored_at) : '';
-          let latestScoreContent = '';
-          if (cand.last_points !== null && cand.last_points !== undefined) {
-            const isPos = cand.last_points > 0;
-            const ptsSign = isPos ? `+${cand.last_points}` : `${cand.last_points}`;
-            latestScoreContent = `
-              <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                <span style="font-weight: 800; font-size: 0.74rem; color: ${isPos ? '#34d399' : '#f87171'}; background: ${isPos ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)'}; border: 1px solid ${isPos ? 'rgba(52, 211, 153, 0.4)' : 'rgba(248, 113, 113, 0.4)'}; padding: 1px 6px; border-radius: 4px;">
-                  ${ptsSign}
-                </span>
-                <span style="color: #cbd5e1; font-weight: 500; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;" title="${escapeHtml(cand.last_reason)}">
-                  ${escapeHtml(cand.last_reason || 'บันทึกคะแนน')}
-                </span>
-              </div>
-            `;
-          } else {
-            latestScoreContent = `
-              <div style="color: rgba(255, 255, 255, 0.45); font-style: italic; font-size: 0.74rem; text-align: center; margin-top: 2px;">
-                ยังไม่มีประวัติคะแนน
-              </div>
-            `;
-          }
-
           html += `
-            <!-- Candidate Card: Full Bleed Photo + Modern Liquid Glass -->
-            <div class="year70-candidate-block" style="position: relative; border-radius: 20px; overflow: hidden; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 14px 34px -10px rgba(15, 23, 42, 0.35); background: #0f172a; transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);">
-              <!-- Background Image (เต็มบล็อก) -->
+            <!-- Candidate Card: Full Bleed Photo + Ethereal Frosted Glass (แสดงชื่อเต็ม ไร้บล็อกทึบ) -->
+            <div class="year70-candidate-block" style="position: relative; border-radius: 20px; overflow: hidden; min-height: 350px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 14px 34px -10px rgba(15, 23, 42, 0.35); background: #0f172a; transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);">
+              <!-- Background Image (รูปเต็มบล็อก) -->
               ${bgImageHtml}
 
-              <!-- Vignette & Dark Gradient Overlay (ให้ภาพและตัวหนังสือชัดเจน) -->
-              <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.1) 25%, rgba(15, 23, 42, 0.6) 60%, rgba(15, 23, 42, 0.96) 100%); z-index: 1; pointer-events: none;"></div>
+              <!-- Gentle Vignette (คุมความสว่างให้โปร่งตา) -->
+              <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0) 35%, rgba(15, 23, 42, 0.2) 60%, rgba(15, 23, 42, 0.75) 100%); z-index: 1; pointer-events: none;"></div>
 
               <!-- Top Floating Frosted Pills -->
               <div style="position: relative; z-index: 2; padding: 12px 12px 0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
@@ -614,46 +590,38 @@
                 </div>
 
                 <!-- Points Pill (Liquid Amber Frosted Glass) -->
-                <div style="background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 9999px; padding: 4px 12px; font-size: 0.82rem; font-weight: 800; color: #fbbf24; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);">
+                <div style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 9999px; padding: 4px 12px; font-size: 0.82rem; font-weight: 800; color: #fbbf24; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);">
                   <span>${cand.total_points}</span>
                   <span style="font-size: 0.74rem; color: #fde68a;">แต้ม ⭐</span>
                 </div>
               </div>
 
-              <!-- Bottom Liquid Glass Panel (โมเดิร์นผสมลิควิดกลาส เบลอๆ) -->
-              <div style="position: relative; z-index: 2; margin: 10px; background: rgba(15, 23, 42, 0.76); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 16px; padding: 13px 14px 11px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25); display: flex; flex-direction: column; gap: 8px;">
+              <!-- Bottom Frosted Text Overlay (เบลอเนียนบนรูป ไร้บล็อกทึบ แสดงชื่อเต็ม) -->
+              <div style="position: relative; z-index: 2; width: 100%; padding: 26px 14px 14px; background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.42) 28%, rgba(15, 23, 42, 0.85) 100%); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; gap: 10px; box-sizing: border-box;">
                 
-                <!-- Candidate Name & Grade -->
-                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
-                  <div style="overflow: hidden; flex: 1;">
-                    <h4 style="margin: 0; font-size: 1.02rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em; line-height: 1.3; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(cand.student_name)}">
-                      ${escapeHtml(cand.student_name)}
-                    </h4>
+                <!-- Grade Tag & Full Candidate Name -->
+                <div>
+                  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 5px;">
+                    <span style="background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 700; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                      ชั้น ${escapeHtml(cand.grade)}
+                    </span>
                   </div>
-                  <span style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 700; color: #e2e8f0; white-space: nowrap; flex-shrink: 0;">
-                    ชั้น ${escapeHtml(cand.grade)}
-                  </span>
-                </div>
-
-                <!-- Latest Scoring Status (สถานะการให้คะแนนล่าสุด ในชิปแก้วลิควิด) -->
-                <div style="background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px; padding: 7px 10px; font-size: 0.74rem;">
-                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
-                    <span style="font-size: 0.68rem; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-transform: uppercase;">สถานะคะแนนล่าสุด</span>
-                    <span style="font-size: 0.68rem; color: rgba(255, 255, 255, 0.5);">${timeAgo}</span>
-                  </div>
-                  ${latestScoreContent}
+                  <!-- แสดงชื่อเต็มชัดเจน ไม่ตัดคำ -->
+                  <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em; line-height: 1.38; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85); white-space: normal; word-break: break-word;">
+                    ${escapeHtml(cand.student_name)}
+                  </h4>
                 </div>
 
                 <!-- Glassmorphic Action Buttons -->
-                <div style="display: flex; gap: 6px; width: 100%; margin-top: 2px;">
-                  <button type="button" onclick="openAdjustPointsModal(${cand.id})" style="flex: 1; padding: 8px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 10px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.95) 100%); color: #ffffff; border: 1px solid rgba(52, 211, 153, 0.5); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); display: inline-flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; transition: all 0.18s ease;" title="บันทึกแต้ม / ตัดแต้ม">
-                    <i data-lucide="plus-circle" style="width: 13px; height: 13px; color: #fff;"></i> <span>ปรับแต้ม</span>
+                <div style="display: flex; gap: 6px; width: 100%; margin-top: 2px; align-items: center;">
+                  <button type="button" onclick="openAdjustPointsModal(${cand.id})" style="flex: 1; padding: 8px 12px; font-size: 0.8rem; font-weight: 700; border-radius: 10px; background: rgba(16, 185, 129, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); display: inline-flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; transition: all 0.18s ease;" title="บันทึกแต้ม / ตัดแต้ม">
+                    <i data-lucide="plus-circle" style="width: 14px; height: 14px; color: #fff;"></i> <span>ปรับแต้ม</span>
                   </button>
-                  <button type="button" onclick="openPointLogsModal(${cand.id})" style="padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.18s ease;" title="ดูประวัติแต้ม">
-                    <i data-lucide="history" style="width: 13px; height: 13px;"></i>
+                  <button type="button" onclick="openPointLogsModal(${cand.id})" style="padding: 8px 11px; border-radius: 10px; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.28); color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.18s ease;" title="ดูประวัติแต้ม">
+                    <i data-lucide="history" style="width: 14px; height: 14px;"></i>
                   </button>
-                  <button type="button" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); color: #818cf8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.18s ease;" title="แก้ไขรูปโปรไฟล์ / โน้ต">
-                    <i data-lucide="edit-3" style="width: 13px; height: 13px;"></i>
+                  <button type="button" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 8px 11px; border-radius: 10px; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.28); color: #c7d2fe; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.18s ease;" title="แก้ไขรูปโปรไฟล์ / โน้ต">
+                    <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
                   </button>
                 </div>
 
