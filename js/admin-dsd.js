@@ -20,7 +20,7 @@
     { name: 'TypeScript', slug: 'typescript', icon: 'https://cdn.simpleicons.org/typescript', category: 'Language' },
     { name: 'HTML5', slug: 'html5', icon: 'assets/tech/html5.svg', category: 'Frontend' },
     { name: 'CSS3', slug: 'css3', icon: 'assets/tech/css3.svg', category: 'Frontend' },
-    { name: 'Python', slug: 'python', icon: 'https://cdn.simpleicons.org/python', category: 'Language' },
+    { name: 'Python', slug: 'python', icon: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1280px-Python-logo-notext.svg.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail', category: 'Language' },
     { name: 'PHP', slug: 'php', icon: 'https://cdn.simpleicons.org/php', category: 'Language' },
     { name: 'Dart', slug: 'dart', icon: 'https://cdn.simpleicons.org/dart', category: 'Language' },
     { name: 'Go', slug: 'go', icon: 'https://cdn.simpleicons.org/go', category: 'Language' },

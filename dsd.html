@@ -2,6 +2,24 @@
 <html lang="th">
 
 <head>
+  <script>
+    (function () {
+      try {
+        if (window.location.protocol === 'file:') return;
+        var h = window.location.hostname || '';
+        var p = window.location.pathname || '';
+        var isLocal = h === 'localhost' || h === '127.0.0.1' || h.endsWith('.local');
+        var isDsdSubdomain = /^dsd\./i.test(h);
+
+        // เมื่ออยู่บนซับโดเมน dsd ให้คง URL ในแถบแอดเดรสเป็นลิงก์เพียว ๆ (/)
+        if (isDsdSubdomain && window.history && typeof window.history.replaceState === 'function') {
+          if (p === '/dsd' || p === '/dsd.html') {
+            window.history.replaceState(null, '', '/' + window.location.search + window.location.hash);
+          }
+        }
+      } catch (e) { }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <!-- Theme Init (Zero-Flicker Dark Mode) -->
   <script>
@@ -1091,14 +1109,17 @@
           const slug = typeof s === 'string'
             ? s.toLowerCase().replace(/[^a-z0-9]/g, '')
             : (s.slug || (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
+          const pythonLogoUrl = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1280px-Python-logo-notext.svg.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail';
+          const canvaLogoUrl = 'https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg';
+
           let icon = typeof s === 'string'
-            ? (slug === 'canva' ? 'https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg' : 'assets/tech/' + slug + '.svg')
-            : (slug === 'canva' ? 'https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg' : (s.icon || ('assets/tech/' + slug + '.svg')));
+            ? (slug === 'canva' ? canvaLogoUrl : (slug === 'python' ? pythonLogoUrl : 'assets/tech/' + slug + '.svg'))
+            : (slug === 'canva' ? canvaLogoUrl : (slug === 'python' ? pythonLogoUrl : (s.icon || ('assets/tech/' + slug + '.svg'))));
 
           const isMonochrome = monochromeSlugs.includes(slug) ? ' dsd-skill-invert' : '';
           const fallbackCdn = slug === 'canva'
             ? 'assets/tech/canva.svg'
-            : ('https://cdn.simpleicons.org/' + slug);
+            : (slug === 'python' ? 'assets/tech/python.png' : ('https://cdn.simpleicons.org/' + slug));
 
           html += '<span class="dsd-skill-logo" title="' + name + '">' +
             '<img src="' + icon + '" alt="' + name + '" class="' + isMonochrome + '" loading="lazy" ' +
