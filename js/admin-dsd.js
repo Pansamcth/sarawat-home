@@ -102,6 +102,18 @@
       .replace(/'/g, '&#39;');
   }
 
+  function isSuperAdmin() {
+    try {
+      if (typeof isCurrentSuperAdmin === 'function') return isCurrentSuperAdmin();
+      if (window.currentAdminUser && window.currentAdminUser.role === 'Super Admin') return true;
+      const apiUser = (window.SarawatApi && typeof window.SarawatApi.getAuthUser === 'function') ? window.SarawatApi.getAuthUser() : null;
+      if (apiUser && apiUser.role === 'Super Admin') return true;
+      const storedRole = localStorage.getItem('dg_sarawat_admin_role');
+      if (storedRole === 'Super Admin') return true;
+    } catch (e) {}
+    return false;
+  }
+
   // ==========================================================
   // SOCIAL INPUT NORMALIZATION & CLIPBOARD PASTE
   // ==========================================================
@@ -431,8 +443,20 @@
       }
     }
 
+    const isSuper = isSuperAdmin();
+    const addBtn = document.getElementById('dsdBtnAddMember');
+    if (addBtn) {
+      if (!isSuper) {
+        addBtn.style.opacity = '0.6';
+        addBtn.title = 'สงวนสิทธิ์เฉพาะผู้ดูแลระบบสูงสุด (Super Admin)';
+      } else {
+        addBtn.style.opacity = '1';
+        addBtn.title = '';
+      }
+    }
+
     if (filtered.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 48px 20px; color: var(--dg-text-muted);"><i data-lucide="users" style="width: 36px; height: 36px; margin-bottom: 10px; color: var(--dg-border);"></i><div style="font-weight: 700; font-size: 1rem; color: var(--dg-text-primary); margin-bottom: 4px;">ไม่พบข้อมูลสมาชิก</div><div style="font-size: 0.85rem;">คลิกปุ่ม "+ เพิ่มสมาชิก DSD" เพื่อเพิ่มข้อมูลสมาชิกใหม่เข้าสู่ระบบ</div></td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 48px 20px; color: var(--dg-text-muted);"><i data-lucide="users" style="width: 36px; height: 36px; margin-bottom: 10px; color: var(--dg-border);"></i><div style="font-weight: 700; font-size: 1rem; color: var(--dg-text-primary); margin-bottom: 4px;">ไม่พบข้อมูลสมาชิก</div><div style="font-size: 0.85rem;">' + (isSuper ? 'คลิกปุ่ม "+ เพิ่มสมาชิก DSD" เพื่อเพิ่มข้อมูลสมาชิกใหม่เข้าสู่ระบบ' : 'ไม่มีข้อมูลสมาชิกในระบบ') + '</div></td></tr>';
       if (window.lucide) lucide.createIcons();
       return;
     }
@@ -472,19 +496,38 @@
         skillsLogosPreview += '</div>';
       }
 
+      const reorderBtns = isSuper ? `
+        <div style="display: flex; gap: 2px;">
+          <button type="button" class="dg-btn-outline" style="padding: 2px 4px; border-radius: 3px;" onclick="moveDsdMemberOrder(${m.id}, -1)" title="เลื่อนขึ้น">
+            <i data-lucide="chevron-up" style="width: 12px; height: 12px;"></i>
+          </button>
+          <button type="button" class="dg-btn-outline" style="padding: 2px 4px; border-radius: 3px;" onclick="moveDsdMemberOrder(${m.id}, 1)" title="เลื่อนลง">
+            <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
+          </button>
+        </div>
+      ` : '';
+
+      const actionsHtml = isSuper ? `
+        <div style="display: inline-flex; align-items: center; gap: 6px;">
+          <button type="button" class="dg-btn-outline" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 6px;" onclick="openEditDsdMemberModal(${m.id})">
+            <i data-lucide="edit-3"></i> <span>แก้ไข</span>
+          </button>
+          <button type="button" class="dg-btn-outline" style="padding: 6px 10px; font-size: 0.82rem; border-radius: 6px; color: #ef4444; border-color: #fca5a5;" onclick="deleteDsdMember(${m.id}, '${escapeHtml(m.name)}')" title="ลบข้อมูล">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      ` : `
+        <span style="font-size: 0.78rem; color: #94a3b8; display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;" title="สงวนสิทธิ์เฉพาะผู้ดูแลระบบสูงสุด (Super Admin)">
+          <i data-lucide="lock" style="width: 12px; height: 12px;"></i> เฉพาะ Super Admin
+        </span>
+      `;
+
       html += `
         <tr>
           <td style="width: 70px; text-align: center;">
             <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
               <span style="font-size: 0.82rem; font-weight: 700; color: var(--dg-text-muted);">${m.order_index || (idx + 1)}</span>
-              <div style="display: flex; gap: 2px;">
-                <button type="button" class="dg-btn-outline" style="padding: 2px 4px; border-radius: 3px;" onclick="moveDsdMemberOrder(${m.id}, -1)" title="เลื่อนขึ้น">
-                  <i data-lucide="chevron-up" style="width: 12px; height: 12px;"></i>
-                </button>
-                <button type="button" class="dg-btn-outline" style="padding: 2px 4px; border-radius: 3px;" onclick="moveDsdMemberOrder(${m.id}, 1)" title="เลื่อนลง">
-                  <i data-lucide="chevron-down" style="width: 12px; height: 12px;"></i>
-                </button>
-              </div>
+              ${reorderBtns}
             </div>
           </td>
           <td style="width: 60px;">${imgHtml}</td>
@@ -509,14 +552,7 @@
           </td>
           <td>${statusHtml}</td>
           <td style="text-align: right; width: 170px;">
-            <div style="display: inline-flex; align-items: center; gap: 6px;">
-              <button type="button" class="dg-btn-outline" style="padding: 6px 12px; font-size: 0.82rem; border-radius: 6px;" onclick="openEditDsdMemberModal(${m.id})">
-                <i data-lucide="edit-3"></i> <span>แก้ไข</span>
-              </button>
-              <button type="button" class="dg-btn-outline" style="padding: 6px 10px; font-size: 0.82rem; border-radius: 6px; color: #ef4444; border-color: #fca5a5;" onclick="deleteDsdMember(${m.id}, '${escapeHtml(m.name)}')" title="ลบข้อมูล">
-                <i data-lucide="trash-2"></i>
-              </button>
-            </div>
+            ${actionsHtml}
           </td>
         </tr>
       `;
@@ -530,6 +566,20 @@
   // MODAL MANAGEMENT: ADD / EDIT
   // ==========================================================
   window.openAddDsdMemberModal = function () {
+    if (!isSuperAdmin()) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ไม่มีสิทธิ์เข้าถึง',
+          text: 'เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่สามารถเพิ่มหรือแก้ไขข้อมูลสมาชิกฝ่าย DSD ได้',
+          confirmButtonColor: '#0f172a'
+        });
+      } else {
+        alert('เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่สามารถเพิ่มหรือแก้ไขข้อมูลสมาชิกฝ่าย DSD ได้');
+      }
+      return;
+    }
+
     currentEditingMemberId = null;
     currentSelectedSkills = [];
 
@@ -573,6 +623,20 @@
   };
 
   window.openEditDsdMemberModal = function (memberId) {
+    if (!isSuperAdmin()) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ไม่มีสิทธิ์เข้าถึง',
+          text: 'เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่สามารถแก้ไขข้อมูลสมาชิกฝ่าย DSD ได้',
+          confirmButtonColor: '#0f172a'
+        });
+      } else {
+        alert('เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่สามารถแก้ไขข้อมูลสมาชิกฝ่าย DSD ได้');
+      }
+      return;
+    }
+
     const member = dsdMembersList.find(m => m.id === memberId);
     if (!member) return;
 
@@ -700,6 +764,20 @@
   // SAVE MEMBER FORM (CREATE / UPDATE)
   // ==========================================================
   window.saveDsdMemberForm = async function () {
+    if (!isSuperAdmin()) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ไม่มีสิทธิ์เข้าถึง',
+          text: 'เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่มีสิทธิ์บันทึกข้อมูลสมาชิกฝ่าย DSD',
+          confirmButtonColor: '#0f172a'
+        });
+      } else {
+        alert('เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่มีสิทธิ์บันทึกข้อมูลสมาชิกฝ่าย DSD');
+      }
+      return;
+    }
+
     const saveBtn = document.querySelector('#adminDsdMemberModal .dg-btn-black');
     const origBtnHtml = saveBtn ? saveBtn.innerHTML : '';
 
@@ -812,6 +890,20 @@
   // DELETE & REORDER
   // ==========================================================
   window.deleteDsdMember = async function (memberId, memberName) {
+    if (!isSuperAdmin()) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ไม่มีสิทธิ์เข้าถึง',
+          text: 'เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่มีสิทธิ์ลบข้อมูลสมาชิกฝ่าย DSD',
+          confirmButtonColor: '#0f172a'
+        });
+      } else {
+        alert('เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่มีสิทธิ์ลบข้อมูลสมาชิกฝ่าย DSD');
+      }
+      return;
+    }
+
     if (!confirm(`คุณต้องการลบข้อมูล "${memberName}" ออกจากฝ่าย DSD ใช่หรือไม่?`)) {
       return;
     }
@@ -845,6 +937,20 @@
   };
 
   window.moveDsdMemberOrder = async function (memberId, direction) {
+    if (!isSuperAdmin()) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ไม่มีสิทธิ์เข้าถึง',
+          text: 'เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่มีสิทธิ์จัดลำดับสมาชิกฝ่าย DSD',
+          confirmButtonColor: '#0f172a'
+        });
+      } else {
+        alert('เฉพาะผู้ดูแลระบบสูงสุด (Super Admin) เท่านั้นที่มีสิทธิ์จัดลำดับสมาชิกฝ่าย DSD');
+      }
+      return;
+    }
+
     const idx = dsdMembersList.findIndex(m => m.id === memberId);
     if (idx === -1) return;
     const targetIdx = idx + direction;

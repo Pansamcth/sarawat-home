@@ -3534,6 +3534,7 @@
           <div class="admin-section-badges">
             <span class="admin-section-pill"><i data-lucide="terminal" class="dg-icon-xs"></i> DSD DIVISION • ฝ่ายพัฒนาระบบดิจิทัล</span>
             <span class="admin-file-badge"><i data-lucide="globe" class="dg-icon-xs"></i> โดเมน: dsd.sarawatdc.site | Path: /dsd</span>
+            <span class="admin-role-badge super" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px;">👑 เฉพาะ Super Admin แก้ไข</span>
           </div>
           <h2>ระบบจัดการสมาชิกฝ่ายพัฒนาระบบดิจิทัล (DSD)</h2>
           <p>บริหารจัดการรายชื่อ ตำแหน่ง หัวหน้าฝ่าย ลำดับการแสดงผล และรูปภาพบุคลากรของฝ่าย DSD</p>
@@ -3542,7 +3543,7 @@
           <button type="button" class="dg-btn-outline" onclick="loadDsdAdmin()" style="padding: 10px 16px; font-size: 0.85rem;">
             <i data-lucide="refresh-cw"></i> <span>รีเฟรช</span>
           </button>
-          <button type="button" class="dg-btn-black" onclick="openAddDsdMemberModal()">
+          <button type="button" class="dg-btn-black" id="dsdBtnAddMember" onclick="openAddDsdMemberModal()">
             <i data-lucide="user-plus"></i> <span>+ เพิ่มสมาชิก DSD</span>
           </button>
         </div>
@@ -14757,7 +14758,7 @@
   </script>
   <script src="js/admin-team.js?v=2.7.8"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
-  <script src="js/admin-dsd.js?v=2.1.0"></script>
+  <script src="js/admin-dsd.js?v=2.2.0"></script>
 </body>
 
 </html>
