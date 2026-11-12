@@ -6878,36 +6878,84 @@
 
         <!-- Social Media Links (GitHub, Instagram, Facebook, Website) -->
         <div style="margin-bottom: 14px; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
-          <label style="font-weight: 700; font-size: 0.86rem; color: #1e293b; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-            <i data-lucide="share-2" style="width: 15px; height: 15px; color: var(--dg-primary, #1e40af);"></i>
-            <span>ลิงก์โซเชียลมีเดีย & ช่องทางติดต่อ (Social Media)</span>
+          <label style="font-weight: 700; font-size: 0.86rem; color: #1e293b; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <span style="display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="share-2" style="width: 15px; height: 15px; color: var(--dg-primary, #1e40af);"></i>
+              <span>ลิงก์โซเชียลมีเดีย & ช่องทางติดต่อ (แปะลิงก์หรือพิมพ์ @username ได้ทันที)</span>
+            </span>
           </label>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
             <div class="dg-form-group">
-              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
-                <i data-lucide="github" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> GitHub URL
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                <span><i data-lucide="github" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> GitHub URL</span>
+                <button type="button" class="dg-btn-outline" onclick="pasteToSocialInput('dsdMemberGithub', 'github')" style="padding: 1px 6px; font-size: 0.72rem; border-radius: 4px;" title="วางจากคลิปบอร์ด">📋 วาง</button>
               </label>
-              <input type="url" id="dsdMemberGithub" placeholder="https://github.com/username" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+              <input type="text" id="dsdMemberGithub" placeholder="เช่น https://github.com/Pansamcth หรือ username" autocomplete="off" spellcheck="false" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" onblur="normalizeSocialInput(this, 'github')" />
             </div>
             <div class="dg-form-group">
-              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
-                <i data-lucide="instagram" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Instagram URL
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                <span><i data-lucide="instagram" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; color: #e1306c;"></i> Instagram URL</span>
+                <button type="button" class="dg-btn-outline" onclick="pasteToSocialInput('dsdMemberInstagram', 'instagram')" style="padding: 1px 6px; font-size: 0.72rem; border-radius: 4px;" title="วางจากคลิปบอร์ด">📋 วาง</button>
               </label>
-              <input type="url" id="dsdMemberInstagram" placeholder="https://instagram.com/username" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+              <input type="text" id="dsdMemberInstagram" placeholder="เช่น https://instagram.com/pansa.jpeg หรือ @pansa" autocomplete="off" spellcheck="false" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" onblur="normalizeSocialInput(this, 'instagram')" />
             </div>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="dg-form-group">
-              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
-                <i data-lucide="facebook" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Facebook URL
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                <span><i data-lucide="facebook" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; color: #1877f2;"></i> Facebook URL</span>
+                <button type="button" class="dg-btn-outline" onclick="pasteToSocialInput('dsdMemberFacebook', 'facebook')" style="padding: 1px 6px; font-size: 0.72rem; border-radius: 4px;" title="วางจากคลิปบอร์ด">📋 วาง</button>
               </label>
-              <input type="url" id="dsdMemberFacebook" placeholder="https://facebook.com/username" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+              <input type="text" id="dsdMemberFacebook" placeholder="เช่น https://facebook.com/username หรือชื่อโปรไฟล์" autocomplete="off" spellcheck="false" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" onblur="normalizeSocialInput(this, 'facebook')" />
             </div>
             <div class="dg-form-group">
-              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block;">
-                <i data-lucide="globe" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> Website / Portfolio
+              <label style="font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                <span><i data-lucide="globe" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; color: #10b981;"></i> Website / Portfolio</span>
+                <button type="button" class="dg-btn-outline" onclick="pasteToSocialInput('dsdMemberWebsite', 'website')" style="padding: 1px 6px; font-size: 0.72rem; border-radius: 4px;" title="วางจากคลิปบอร์ด">📋 วาง</button>
               </label>
-              <input type="url" id="dsdMemberWebsite" placeholder="https://yourportfolio.com" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" />
+              <input type="text" id="dsdMemberWebsite" placeholder="เช่น https://portfolio.site หรือ domain.com" autocomplete="off" spellcheck="false" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: #fff;" onblur="normalizeSocialInput(this, 'website')" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills & Tech Stack Section (Brand Logo API / Selector) -->
+        <div style="margin-bottom: 14px; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="font-weight: 700; font-size: 0.86rem; color: #1e293b; display: flex; align-items: center; gap: 6px; margin: 0;">
+              <i data-lucide="cpu" style="width: 15px; height: 15px; color: var(--dg-primary, #1e40af);"></i>
+              <span>ทักษะและเทคโนโลยี (Skills & Tech Stack)</span>
+            </label>
+            <span id="dsdSkillsCountBadge" style="font-size: 0.74rem; font-weight: 700; color: #64748b; background: #e2e8f0; padding: 2px 8px; border-radius: 9999px;">0 สกิล</span>
+          </div>
+          <div style="font-size: 0.78rem; color: #64748b; margin-bottom: 10px;">
+            เลือกหรือค้นหาเทคโนโลยีเพื่อแสดงโลโก้ของแท้ใต้ประวัติย่อ (Bio) ของสมาชิก
+          </div>
+
+          <!-- Selected Skills Chips Container -->
+          <div id="dsdSelectedSkillsContainer" style="display: flex; flex-wrap: wrap; gap: 8px; min-height: 42px; padding: 8px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 8px; margin-bottom: 12px; align-items: center;">
+            <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">ยังไม่ได้เลือกสกิล (คลิกสกิลยอดนิยมด้านล่างหรือค้นหาเพื่อเพิ่ม)</span>
+          </div>
+
+          <!-- Search Input & Custom Add -->
+          <div style="position: relative; margin-bottom: 12px;">
+            <div style="display: flex; gap: 8px;">
+              <div style="position: relative; flex: 1;">
+                <input type="text" id="dsdSkillSearchInput" placeholder="🔍 ค้นหาสกิล เช่น Figma, React, Python, Docker, Node.js..." autocomplete="off" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.84rem; font-family: inherit; background: #fff;" oninput="handleDsdSkillSearchInput(this.value)" onfocus="handleDsdSkillSearchInput(this.value)" />
+              </div>
+              <button type="button" class="dg-btn-outline" onclick="addCustomSkillFromInput()" style="padding: 8px 14px; font-size: 0.82rem; border-radius: 6px; white-space: nowrap;">
+                <i data-lucide="plus"></i> <span>เพิ่มสกิล</span>
+              </button>
+            </div>
+            <!-- Live Search Suggestions Dropdown -->
+            <div id="dsdSkillSuggestionsDropdown" style="display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; max-height: 220px; overflow-y: auto; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 12px 30px rgba(0,0,0,0.12); z-index: 9999; padding: 6px;">
+            </div>
+          </div>
+
+          <!-- Popular One-Click Tags -->
+          <div>
+            <div style="font-size: 0.74rem; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">สกิลยอดนิยม (คลิกเพื่อเลือกทันที):</div>
+            <div id="dsdPopularSkillsTags" style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <!-- Populated dynamically via JS -->
             </div>
           </div>
         </div>
@@ -14708,7 +14756,7 @@
   </script>
   <script src="js/admin-team.js?v=2.7.7"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
-  <script src="js/admin-dsd.js?v=1.0.0"></script>
+  <script src="js/admin-dsd.js?v=2.0.0"></script>
 </body>
 
 </html>

@@ -326,6 +326,58 @@
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
+    /* ==========================================================
+       MEMBER SKILLS & TECH LOGOS (AUTHENTIC BRAND LOGOS BELOW BIO)
+       ========================================================== */
+    .dsd-skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    .dsd-skill-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      padding: 2px;
+      background: transparent;
+      border: none;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      opacity: 0.9;
+      cursor: default;
+      user-select: none;
+      border-radius: 4px;
+    }
+
+    .dsd-skill-logo:hover {
+      transform: translateY(-2px) scale(1.22);
+      opacity: 1;
+    }
+
+    .dsd-skill-logo img {
+      width: 100%;
+      height: 100%;
+      max-width: 22px;
+      max-height: 22px;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+      transition: filter 0.2s ease;
+    }
+
+    .dsd-skill-logo:hover img {
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
+    }
+
+    /* Dark mode invert for monochrome black logos (Vercel, GitHub, Express, etc.) */
+    html[data-theme="dark"] .dsd-skill-logo .dsd-skill-invert {
+      filter: invert(1) brightness(1.25) drop-shadow(0 1px 3px rgba(255, 255, 255, 0.18));
+    }
+
 
     .dsd-avatar-placeholder {
       width: 100%;
@@ -937,7 +989,23 @@
             grade: 'ม.5/5',
             image_url: 'assets/images/Rujira.png',
             bio: 'ผู้พัฒนาระบบสารสนเทศ โครงสร้างฐานข้อมูล และระบบบริหารจัดการภายในองค์กรสารวัตรนักเรียน',
-            github_url: 'https://github.com'
+            github_url: 'https://github.com/Pansamcth',
+            instagram_url: 'https://www.instagram.com/pansa.jpeg',
+            skills: JSON.stringify([
+              {"name":"JavaScript","slug":"javascript","icon":"assets/tech/javascript.svg"},
+              {"name":"Node.js","slug":"nodejs","icon":"assets/tech/nodejs.svg"},
+              {"name":"Express.js","slug":"express","icon":"assets/tech/express.svg"},
+              {"name":"SQLite","slug":"sqlite","icon":"assets/tech/sqlite.svg"},
+              {"name":"HTML5","slug":"html5","icon":"assets/tech/html5.svg"},
+              {"name":"CSS3","slug":"css3","icon":"assets/tech/css3.svg"},
+              {"name":"Vercel","slug":"vercel","icon":"assets/tech/vercel.svg"},
+              {"name":"Cloudflare","slug":"cloudflare","icon":"assets/tech/cloudflare.svg"},
+              {"name":"Figma","slug":"figma","icon":"assets/tech/figma.svg"},
+              {"name":"Adobe Photoshop","slug":"photoshop","icon":"assets/tech/photoshop.svg"},
+              {"name":"Canva","slug":"canva","icon":"assets/tech/canva.svg"},
+              {"name":"Git","slug":"git","icon":"assets/tech/git.svg"},
+              {"name":"GitHub","slug":"github","icon":"assets/tech/github.svg"}
+            ])
           },
           {
             id: 2,
@@ -1005,6 +1073,40 @@
         return clean;
       };
 
+      const renderSkillLogos = (skillsData) => {
+        if (!skillsData) return '';
+        let skills = [];
+        try {
+          skills = Array.isArray(skillsData) ? skillsData : JSON.parse(skillsData || '[]');
+        } catch (e) {
+          skills = [];
+        }
+        if (!Array.isArray(skills) || skills.length === 0) return '';
+
+        const monochromeSlugs = ['github', 'vercel', 'express', 'nextdotjs', 'apple', 'prisma', 'socketdotio', 'flask'];
+
+        let html = '<div class="dsd-skills-row" aria-label="ทักษะและความสามารถ">';
+        skills.forEach(s => {
+          const name = typeof s === 'string' ? s : (s.name || '');
+          const slug = typeof s === 'string'
+            ? s.toLowerCase().replace(/[^a-z0-9]/g, '')
+            : (s.slug || (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
+          let icon = typeof s === 'string'
+            ? ('assets/tech/' + slug + '.svg')
+            : (s.icon || ('assets/tech/' + slug + '.svg'));
+
+          const isMonochrome = monochromeSlugs.includes(slug) ? ' dsd-skill-invert' : '';
+          const fallbackCdn = 'https://cdn.simpleicons.org/' + slug;
+
+          html += '<span class="dsd-skill-logo" title="' + name + '">' +
+            '<img src="' + icon + '" alt="' + name + '" class="' + isMonochrome + '" loading="lazy" ' +
+            'onerror="if(this.src!=\'' + fallbackCdn + '\'){this.src=\'' + fallbackCdn + '\';}else{this.style.display=\'none\';}" />' +
+            '</span>';
+        });
+        html += '</div>';
+        return html;
+      };
+
       const renderSocialLinks = (m) => {
         if (!m) return '';
         const links = [];
@@ -1051,6 +1153,7 @@
 
       const headNick = head?.nickname ? ` <span style="font-weight: 500; font-size: 1.05rem; color: var(--dg-text-secondary);">(${head.nickname})</span>` : '';
       const headBio = head?.bio ? `<p class="dsd-head-bio">${head.bio}</p>` : '';
+      const headSkills = renderSkillLogos(head?.skills);
       const headSocial = renderSocialLinks(head);
 
       const headCardHtml = `
@@ -1063,6 +1166,7 @@
               <h3 class="dsd-head-title">${head?.name || 'หัวหน้าฝ่าย'}${headNick}</h3>
               <div class="dsd-head-role">${head?.role || 'หัวหน้าฝ่ายพัฒนาระบบดิจิทัล'}</div>
               ${headBio}
+              ${headSkills}
             </div>
             <div class="dsd-card-meta-bottom">
               <span>ผู้พัฒนาระบบสารสนเทศ</span>
@@ -1094,6 +1198,7 @@
 
           const mNick = m.nickname ? ` <span style="font-weight: 500; font-size: 0.92rem; color: var(--dg-text-secondary);">(${m.nickname})</span>` : '';
           const mBio = m.bio ? `<p class="dsd-member-desc">${m.bio}</p>` : '';
+          const mSkills = renderSkillLogos(m.skills);
           const mSocial = renderSocialLinks(m);
 
           subMembersHtml += `
@@ -1106,6 +1211,7 @@
                   <h4 class="dsd-member-name">${m.name}${mNick}</h4>
                   <div class="dsd-member-role">${m.role || 'สมาชิกฝ่าย'}</div>
                   ${mBio}
+                  ${mSkills}
                 </div>
                 <div class="dsd-card-meta-bottom">
                   <span>ผู้ร่วมพัฒนา</span>
