@@ -471,11 +471,11 @@
           <!-- Quick Points Buttons -->
           <td style="padding: 14px 16px; text-align: center;">
             <div style="display: inline-flex; align-items: center; gap: 4px;">
-              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 1, 'ปฏิบัติหน้าที่เรียบร้อย (+1)')" title="+1 แต้ม (ปฏิบัติหน้าที่เรียบร้อย)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+1</button>
-              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 3, 'เข้าเวรตรงเวลา / ทำหน้าที่เรียบร้อย (+3)')" title="+3 แต้ม (เข้าเวรตรงเวลา)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+3</button>
-              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 5, 'ช่วยเหลืองานกิจกรรมโรงเรียน (+5)')" title="+5 แต้ม (ช่วยเหลืองานกิจกรรม)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+5</button>
-              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 10, 'ทุ่มเทรับผิดชอบงานเป็นพิเศษ (+10)')" title="+10 แต้ม (ทุ่มเทพิเศษ)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; cursor: pointer; transition: transform 0.1s ease;">+10</button>
-              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id})" title="กำหนดแต้มและเหตุผลเอง" style="padding: 4px 7px; border-radius: 6px; font-size: 0.78rem; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; cursor: pointer;">
+              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id}, 1, 'ปฏิบัติหน้าที่เรียบร้อย')" title="+1 แต้ม (เปิดระบุเหตุผล/แนบหลักฐาน)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+1</button>
+              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id}, 3, 'เข้าเวรตรงเวลา / ปฏิบัติหน้าที่เรียบร้อย')" title="+3 แต้ม (เปิดระบุเหตุผล/แนบหลักฐาน)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+3</button>
+              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id}, 5, 'ช่วยเหลืองานกิจกรรมโรงเรียน / เสียสละเวลา')" title="+5 แต้ม (เปิดระบุเหตุผล/แนบหลักฐาน)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+5</button>
+              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id}, 10, 'ทุ่มเทและรับผิดชอบงานเป็นพิเศษ / ภาวะผู้นำยอดเยี่ยม')" title="+10 แต้ม (เปิดระบุเหตุผล/แนบหลักฐาน)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; cursor: pointer; transition: transform 0.1s ease;">+10</button>
+              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id})" title="กำหนดแต้ม เหตุผล และแนบหลักฐาน" style="padding: 4px 7px; border-radius: 6px; font-size: 0.78rem; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; cursor: pointer;">
                 <i data-lucide="plus-circle" style="width: 13px; height: 13px; color: #10b981;"></i>
               </button>
             </div>
@@ -969,9 +969,98 @@
   };
 
   // ==========================================================
+  // 8.1 EVIDENCE UPLOAD & PREVIEW HELPERS (POINTS LOGS)
+  // ==========================================================
+  window.handleYear70EvidenceUpload = async function (fileInput) {
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) return;
+    const file = fileInput.files[0];
+    const token = getAuthToken();
+
+    const statusEl = document.getElementById('year70PointsEvidenceStatus');
+    const previewWrap = document.getElementById('year70PointsEvidencePreviewWrap');
+    const previewImg = document.getElementById('year70PointsEvidencePreview');
+    const filenameEl = document.getElementById('year70PointsEvidenceFilename');
+    const urlInput = document.getElementById('year70PointsEvidenceUrl');
+
+    if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">⏳ กำลังอัปโหลดหลักฐาน...</span>';
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch(`${getApiBase()}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'อัปโหลดหลักฐานล้มเหลว');
+      }
+
+      const uploadedUrl = json.url || json.imageUrl;
+      if (urlInput) urlInput.value = uploadedUrl;
+
+      let fullUrl = uploadedUrl;
+      if (fullUrl.startsWith('/')) fullUrl = getApiBase() + fullUrl;
+
+      if (previewImg) previewImg.src = fullUrl;
+      if (filenameEl) filenameEl.textContent = file.name || 'หลักฐานแนบ';
+      if (previewWrap) previewWrap.style.display = 'flex';
+      if (statusEl) statusEl.innerHTML = '<span style="color: #16a34a; font-weight: 700;">✓ แนบหลักฐานเรียบร้อย</span>';
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      if (statusEl) statusEl.innerHTML = `<span style="color: #dc2626; font-weight: 600;">❌ ${escapeHtml(err.message)}</span>`;
+    }
+  };
+
+  window.clearYear70Evidence = function () {
+    const fileInput = document.getElementById('year70PointsEvidenceFile');
+    const urlInput = document.getElementById('year70PointsEvidenceUrl');
+    const previewWrap = document.getElementById('year70PointsEvidencePreviewWrap');
+    const previewImg = document.getElementById('year70PointsEvidencePreview');
+    const statusEl = document.getElementById('year70PointsEvidenceStatus');
+
+    if (fileInput) fileInput.value = '';
+    if (urlInput) urlInput.value = '';
+    if (previewImg) previewImg.src = '';
+    if (previewWrap) previewWrap.style.display = 'none';
+    if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">รองรับ JPG, PNG, WebP</span>';
+  };
+
+  window.previewYear70Evidence = function (rawUrl) {
+    if (!rawUrl) return;
+    let fullUrl = rawUrl;
+    if (fullUrl.startsWith('/')) fullUrl = getApiBase() + fullUrl;
+
+    if (fullUrl.match(/\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i) || fullUrl.startsWith('data:image/')) {
+      Swal.fire({
+        title: 'หลักฐานการปฏิบัติหน้าที่ / การประเมิน',
+        imageUrl: fullUrl,
+        imageAlt: 'หลักฐานแนบ',
+        showCloseButton: true,
+        confirmButtonText: '🔗 เปิดภาพขนาดเต็มในแท็บใหม่',
+        confirmButtonColor: '#0f172a',
+        showCancelButton: true,
+        cancelButtonText: 'ปิด',
+        customClass: { popup: 'custom-swal-popup' }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open(fullUrl, '_blank');
+        }
+      });
+    } else {
+      window.open(fullUrl, '_blank');
+    }
+  };
+
+  // ==========================================================
   // 9. MODAL: ADJUST POINTS & REASON
   // ==========================================================
-  window.openAdjustPointsModal = function (candidateId) {
+  window.openAdjustPointsModal = function (candidateId, defaultDelta, defaultReason) {
     const cand = year70Candidates.find(c => c.id === candidateId);
     if (!cand) return;
 
@@ -987,11 +1076,22 @@
     if (nameEl) nameEl.textContent = cand.student_name;
     if (metaEl) metaEl.textContent = `${cand.grade} • ${cand.target_position}`;
     if (totalEl) totalEl.textContent = `${cand.total_points} แต้ม ⭐`;
-    if (scoreInput) scoreInput.value = '3';
-    if (reasonInput) reasonInput.value = '';
+    if (scoreInput) scoreInput.value = (defaultDelta !== undefined && defaultDelta !== null) ? defaultDelta : '3';
+    if (reasonInput) reasonInput.value = defaultReason || '';
+
+    // Clear previous evidence
+    window.clearYear70Evidence();
 
     showYear70Modal('adminYear70PointsModal');
-    if (scoreInput) setTimeout(() => scoreInput.focus(), 120);
+    if (scoreInput) {
+      setTimeout(() => {
+        if (defaultReason && reasonInput) {
+          reasonInput.focus();
+        } else {
+          scoreInput.focus();
+        }
+      }, 120);
+    }
   };
 
   window.closeAdjustPointsModal = function () {
@@ -1016,9 +1116,11 @@
 
     const scoreInput = document.getElementById('year70PointsDeltaInput');
     const reasonInput = document.getElementById('year70PointsReasonInput');
+    const evidenceInput = document.getElementById('year70PointsEvidenceUrl');
 
     const points = parseInt(scoreInput ? scoreInput.value : 0, 10);
     const reason = (reasonInput ? reasonInput.value : '').trim();
+    const evidenceUrl = (evidenceInput ? evidenceInput.value : '').trim();
 
     if (isNaN(points) || points === 0) {
       Swal.fire({
@@ -1033,10 +1135,11 @@
     if (!reason) {
       Swal.fire({
         icon: 'warning',
-        title: 'กรุณาระบุเหตุผล',
-        text: 'กรุณาระบุภารกิจหรือเหตุผลในการให้/ตัดแต้ม เพื่อเก็บบันทึกประวัติที่โปร่งใส',
+        title: 'กรุณาระบุเหตุผลหรือการกระทำ',
+        text: 'จำเป็นต้องระบุเหตุผลหรือการกระทำ/ภารกิจที่ปฏิบัติ เพื่อความโปร่งใสในการให้แต้ม',
         customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
       });
+      if (reasonInput) reasonInput.focus();
       return;
     }
 
@@ -1050,7 +1153,8 @@
         },
         body: JSON.stringify({
           points: points,
-          reason: reason
+          reason: reason,
+          evidence_url: evidenceUrl
         })
       });
 
@@ -1144,6 +1248,18 @@
         const ptsBg = isPositive ? '#ecfdf5' : '#fef2f2';
         const ptsBorder = isPositive ? '#a7f3d0' : '#fecaca';
 
+        let evidenceHtml = '';
+        if (log.evidence_url) {
+          evidenceHtml = `
+            <div style="margin-top: 6px;">
+              <button type="button" onclick="previewYear70Evidence('${escapeHtml(log.evidence_url)}')" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 0.78rem; font-weight: 600; color: #16a34a; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#dcfce7'" onmouseout="this.style.background='#f0fdf4'" title="คลิกเพื่อดูรูปภาพหลักฐาน">
+                <i data-lucide="image" style="width: 13px; height: 13px;"></i>
+                <span>📷 ดูรูปหลักฐานแนบ</span>
+              </button>
+            </div>
+          `;
+        }
+
         html += `
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); transition: border-color 0.15s ease;" onmouseover="this.style.borderColor='#cbd5e1'" onmouseout="this.style.borderColor='#e2e8f0'">
             <div style="display: flex; align-items: flex-start; gap: 12px;">
@@ -1154,6 +1270,7 @@
                 <div style="font-weight: 600; color: #0f172a; font-size: 0.92rem; line-height: 1.4;">
                   ${escapeHtml(log.reason)}
                 </div>
+                ${evidenceHtml}
                 <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px; display: flex; align-items: center; gap: 8px;">
                   <span><i data-lucide="user" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> บันทึกโดย: <strong>${escapeHtml(log.admin_username)}</strong></span>
                   <span style="color: #cbd5e1;">•</span>
