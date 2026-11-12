@@ -16,7 +16,7 @@ const DEPARTMENTS = [
   'ฝ่ายสารวัตรพยาบาล',
   'ฝ่ายการเงิน',
   'ฝ่ายกิจกรรม',
-  'ฝ่ายอุปกรณ์และ IT',
+  'ฝ่ายอุปกรณ์',
   'ฝ่ายวินัย',
   'สมาชิกทั่วไป'
 ];
@@ -27,7 +27,7 @@ const FIXED_DEPTS = [
   'ฝ่ายสารวัตรพยาบาล',
   'ฝ่ายการเงิน',
   'ฝ่ายกิจกรรม',
-  'ฝ่ายอุปกรณ์และ IT',
+  'ฝ่ายอุปกรณ์',
   'ฝ่ายวินัย'
 ];
 
@@ -327,6 +327,7 @@ window.resetToSqliteDefaults = async function() {
     'ฝ่ายสารวัตรพยาบาล': 78,
     'ฝ่ายการเงิน': 71,
     'ฝ่ายกิจกรรม': 100,
+    'ฝ่ายอุปกรณ์': 111,
     'ฝ่ายอุปกรณ์และ IT': 111,
     'ฝ่ายวินัย': 116
   };
@@ -350,6 +351,9 @@ window.resetToSqliteDefaults = async function() {
       role = 'เลขานุการ';
     } else if (s.rank === 'ฝ่ายโสตฯ') {
       dept = 'ฝ่ายโสตทัศนศิลป์';
+      role = (defaultHeads[dept] === s.order_no) ? 'หัวหน้าฝ่าย' : 'สมาชิกฝ่าย';
+    } else if (s.rank === 'ฝ่ายอุปกรณ์และ IT') {
+      dept = 'ฝ่ายอุปกรณ์';
       role = (defaultHeads[dept] === s.order_no) ? 'หัวหน้าฝ่าย' : 'สมาชิกฝ่าย';
     } else if (FIXED_DEPTS.includes(s.rank)) {
       dept = s.rank;
