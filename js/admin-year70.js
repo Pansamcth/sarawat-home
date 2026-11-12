@@ -103,6 +103,77 @@
     }
   }
 
+  function formatThaiShortDateTime(dateStr) {
+    if (!dateStr) return '';
+    try {
+      const d = new Date(dateStr.replace(' ', 'T'));
+      if (isNaN(d.getTime())) return dateStr;
+
+      const now = new Date();
+      const diffMs = now - d;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMins / 60);
+      const diffDays = Math.floor(diffHours / 24);
+
+      if (diffMins < 1) return 'เมื่อสักครู่';
+      if (diffMins < 60) return `${diffMins} นาทีที่แล้ว`;
+      if (diffHours < 24) return `${diffHours} ชม. ที่แล้ว`;
+      if (diffDays === 1) return 'เมื่อวานนี้';
+      if (diffDays < 7) return `${diffDays} วันที่แล้ว`;
+
+      return d.toLocaleDateString('th-TH', {
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  // View Mode: 'blocks' (default) or 'table'
+  let currentYear70ViewMode = localStorage.getItem('dg_year70_view_mode') || 'blocks';
+
+  window.setYear70ViewMode = function (mode) {
+    currentYear70ViewMode = mode;
+    localStorage.setItem('dg_year70_view_mode', mode);
+    updateYear70ViewModeUI();
+  };
+
+  function updateYear70ViewModeUI() {
+    const blocksContainer = document.getElementById('year70DepartmentsContainer');
+    const tableWrapper = document.getElementById('year70TableWrapper');
+    const btnBlocks = document.getElementById('year70ViewBtnBlocks');
+    const btnTable = document.getElementById('year70ViewBtnTable');
+
+    if (currentYear70ViewMode === 'table') {
+      if (blocksContainer) blocksContainer.style.display = 'none';
+      if (tableWrapper) tableWrapper.style.display = 'block';
+      if (btnBlocks) {
+        btnBlocks.style.background = 'transparent';
+        btnBlocks.style.color = '#64748b';
+      }
+      if (btnTable) {
+        btnTable.style.background = '#0f172a';
+        btnTable.style.color = '#ffffff';
+      }
+    } else {
+      if (blocksContainer) blocksContainer.style.display = 'block';
+      if (tableWrapper) tableWrapper.style.display = 'none';
+      if (btnBlocks) {
+        btnBlocks.style.background = '#0f172a';
+        btnBlocks.style.color = '#ffffff';
+      }
+      if (btnTable) {
+        btnTable.style.background = 'transparent';
+        btnTable.style.color = '#64748b';
+      }
+    }
+    if (window.lucide) lucide.createIcons();
+  }
+
+
   // ==========================================================
   // MODAL UTILITIES (FROSTED BLUR & ACCESSIBILITY)
   // ==========================================================
@@ -190,8 +261,10 @@
       // Render all sections
       renderTabs();
       renderPodium();
+      renderDepartmentBlocks();
       renderCandidatesTable();
       updateSummaryCounts();
+      updateYear70ViewModeUI();
     } catch (err) {
       console.error('Failed to load Year 70 points data:', err);
       if (tableBody) {
@@ -370,6 +443,221 @@
         </div>
       `;
     });
+
+    container.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  }
+
+
+  // ==========================================================
+  // 3.5 RENDER DEPARTMENT SQUARE BLOCKS (บล็อกสี่เหลี่ยมแยกฝ่าย)
+  // ==========================================================
+  function renderDepartmentBlocks() {
+    const container = document.getElementById('year70DepartmentsContainer');
+    if (!container) return;
+
+    if (!year70Candidates) year70Candidates = [];
+
+    // Positions to display
+    let positionsToDisplay = [];
+    if (currentPositionFilter === 'ALL') {
+      positionsToDisplay = VALID_POSITIONS.slice();
+    } else if (VALID_POSITIONS.includes(currentPositionFilter)) {
+      positionsToDisplay = [currentPositionFilter];
+    } else {
+      positionsToDisplay = VALID_POSITIONS.slice();
+    }
+
+    const titleEl = document.getElementById('year70CurrentViewTitle');
+    if (titleEl) {
+      if (currentPositionFilter === 'ALL') {
+        titleEl.textContent = `รายชื่อผู้สมัครแยกตามฝ่าย (${positionsToDisplay.length} ฝ่าย)`;
+      } else {
+        titleEl.textContent = `รายชื่อผู้สมัคร: ${currentPositionFilter}`;
+      }
+    }
+
+    const searchTerm = currentSearchQuery.trim().toLowerCase();
+    let html = '';
+
+    positionsToDisplay.forEach(deptName => {
+      let deptCandidates = year70Candidates.filter(c => c.target_position === deptName);
+
+      if (searchTerm) {
+        deptCandidates = deptCandidates.filter(c =>
+          (c.student_name || '').toLowerCase().includes(searchTerm) ||
+          (c.grade || '').toLowerCase().includes(searchTerm) ||
+          (c.notes || '').toLowerCase().includes(searchTerm)
+        );
+      }
+
+      if (searchTerm && deptCandidates.length === 0) {
+        return;
+      }
+
+      const icon = POSITION_ICONS[deptName] || 'award';
+      const deptTotalPoints = deptCandidates.reduce((sum, c) => sum + (c.total_points || 0), 0);
+
+      html += `
+        <div class="year70-dept-section" style="margin-bottom: 28px;">
+          <!-- Department Section Header (หัวข้อฝ่าย) -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; margin-bottom: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 38px; height: 38px; border-radius: 10px; background: #f8fafc; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; color: #0f172a;">
+                <i data-lucide="${icon}" style="width: 20px; height: 20px;"></i>
+              </div>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h3 style="margin: 0; font-size: 1.08rem; font-weight: 800; color: #0f172a; letter-spacing: -0.01em;">${escapeHtml(deptName)}</h3>
+                  <span style="font-size: 0.76rem; font-weight: 700; padding: 2px 8px; border-radius: 9999px; background: #f1f5f9; color: #475569;">${deptCandidates.length} คน</span>
+                </div>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+                  คะแนนสะสมรวม: <strong style="color: #f59e0b;">${deptTotalPoints} แต้ม ⭐</strong>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="button" class="dg-btn-outline" onclick="openAddYear70CandidateModal('${escapeHtml(deptName)}')" style="padding: 6px 12px; font-size: 0.78rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; background: #ffffff;" title="เพิ่มผู้สมัครใน${deptName}">
+                <i data-lucide="plus" style="width: 14px; height: 14px;"></i> <span>+ เพิ่มผู้สมัคร</span>
+              </button>
+            </div>
+          </div>
+      `;
+
+      if (deptCandidates.length === 0) {
+        html += `
+          <!-- Empty State (ถ้าไม่มีข้อมูลให้เขียนว่าไม่มีข้อมูล) -->
+          <div style="padding: 30px 16px; text-align: center; background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 14px; margin-bottom: 22px;">
+            <i data-lucide="inbox" style="width: 30px; height: 30px; margin-bottom: 6px; color: #cbd5e1;"></i>
+            <div style="font-size: 0.92rem; font-weight: 700; color: #64748b;">ไม่มีข้อมูล</div>
+            <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;">ยังไม่มีผู้สมัครลงทะเบียนในตำแหน่ง "${escapeHtml(deptName)}"</div>
+          </div>
+        </div>
+        `;
+      } else {
+        html += `
+          <!-- Candidate Square Blocks Grid (บล็อกสี่เหลี่ยม) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 14px; margin-bottom: 24px;">
+        `;
+
+        deptCandidates.forEach((cand, idx) => {
+          const rank = idx + 1;
+          let rankLabel = `#${rank}`;
+          let rankBg = 'background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;';
+          if (rank === 1) {
+            rankLabel = '🥇 อันดับ 1';
+            rankBg = 'background: #fef3c7; color: #b45309; border: 1px solid #fde68a;';
+          } else if (rank === 2) {
+            rankLabel = '🥈 อันดับ 2';
+            rankBg = 'background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;';
+          } else if (rank === 3) {
+            rankLabel = '🥉 อันดับ 3';
+            rankBg = 'background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa;';
+          }
+
+          // Photo / Avatar (Square with Rounded Corners)
+          const photoUrl = cand.image_url ? (cand.image_url.startsWith('/') ? getApiBase() + cand.image_url : cand.image_url) : '';
+          let avatarHtml = '';
+          if (photoUrl) {
+            avatarHtml = `<img src="${photoUrl}" alt="${escapeHtml(cand.student_name)}" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;background:linear-gradient(135deg,#0f172a,#334155);color:#fff;font-weight:700;font-size:1.4rem;display:flex;align-items:center;justify-content:center;\\'>${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>';" />`;
+          } else {
+            avatarHtml = `<div style="width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; font-weight: 700; font-size: 1.4rem; display: flex; align-items: center; justify-content: center;">${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>`;
+          }
+
+          // Latest Score Status (สถานะการให้คะแนนล่าสุด)
+          let latestScoreHtml = '';
+          if (cand.last_points !== null && cand.last_points !== undefined) {
+            const isPos = cand.last_points > 0;
+            const ptsSign = isPos ? `+${cand.last_points}` : `${cand.last_points}`;
+            const timeAgo = formatThaiShortDateTime(cand.last_scored_at);
+            latestScoreHtml = `
+              <div style="font-size: 0.74rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 9px; width: 100%; text-align: left; box-sizing: border-box;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                  <span style="font-weight: 800; font-size: 0.72rem; color: ${isPos ? '#059669' : '#dc2626'}; background: ${isPos ? '#ecfdf5' : '#fef2f2'}; padding: 1px 6px; border-radius: 4px; border: 1px solid ${isPos ? '#a7f3d0' : '#fecaca'};">
+                    ${ptsSign}
+                  </span>
+                  <span style="font-size: 0.68rem; color: #94a3b8;">${timeAgo}</span>
+                </div>
+                <div style="font-size: 0.74rem; color: #475569; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px;" title="${escapeHtml(cand.last_reason)}">
+                  ${escapeHtml(cand.last_reason || 'บันทึกคะแนน')}
+                </div>
+              </div>
+            `;
+          } else {
+            latestScoreHtml = `
+              <div style="font-size: 0.74rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 9px; width: 100%; color: #94a3b8; font-style: italic; text-align: center; box-sizing: border-box;">
+                ยังไม่มีประวัติคะแนน
+              </div>
+            `;
+          }
+
+          html += `
+            <div class="year70-candidate-block" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px 14px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);">
+              <!-- Corner Rank -->
+              <div style="position: absolute; left: 10px; top: 10px; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; ${rankBg}">
+                ${rankLabel}
+              </div>
+
+              <!-- Candidate Photo (Square with Rounded Corners) -->
+              <div style="width: 76px; height: 76px; border-radius: 16px; overflow: hidden; margin-top: 6px; margin-bottom: 10px; border: 2px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.06); flex-shrink: 0; background: #f8fafc;">
+                ${avatarHtml}
+              </div>
+
+              <!-- Name -->
+              <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a; line-height: 1.35; margin-bottom: 4px; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(cand.student_name)}">
+                ${escapeHtml(cand.student_name)}
+              </div>
+
+              <!-- Grade -->
+              <div style="margin-bottom: 8px;">
+                <span style="display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.74rem; font-weight: 600; background: #f1f5f9; color: #475569;">
+                  ชั้น ${escapeHtml(cand.grade)}
+                </span>
+              </div>
+
+              <!-- Total Points -->
+              <div style="margin-bottom: 10px; display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 9999px; background: #fffbeb; border: 1px solid #fde68a;">
+                <span style="font-size: 1.15rem; font-weight: 800; color: #f59e0b; line-height: 1;">${cand.total_points}</span>
+                <span style="font-size: 0.78rem; color: #d97706; font-weight: 700;">แต้ม ⭐</span>
+              </div>
+
+              <!-- Latest Scoring Status (สถานะการให้คะแนนล่าสุด) -->
+              <div style="width: 100%; margin-bottom: 12px;">
+                ${latestScoreHtml}
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; gap: 6px; width: 100%; margin-top: auto;">
+                <button type="button" class="dg-btn-black" onclick="openAdjustPointsModal(${cand.id})" style="flex: 1; padding: 7px 8px; font-size: 0.78rem; border-radius: 8px; justify-content: center; gap: 4px; background: #0f172a;" title="บันทึกแต้ม / ตัดแต้ม">
+                  <i data-lucide="plus-circle" style="width: 13px; height: 13px; color: #10b981;"></i> <span>ปรับแต้ม</span>
+                </button>
+                <button type="button" class="dg-btn-outline" onclick="openPointLogsModal(${cand.id})" style="padding: 7px 9px; font-size: 0.78rem; border-radius: 8px; background: #fff;" title="ดูประวัติแต้ม">
+                  <i data-lucide="history" style="width: 13px; height: 13px;"></i>
+                </button>
+                <button type="button" class="dg-btn-outline" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 7px 9px; font-size: 0.78rem; border-radius: 8px; background: #fff;" title="แก้ไขรูปโปรไฟล์ / โน้ต">
+                  <i data-lucide="edit-3" style="width: 13px; height: 13px; color: #6366f1;"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+          </div>
+        </div>
+        `;
+      }
+    });
+
+    if (positionsToDisplay.length === 0 || (searchTerm && html.trim() === '')) {
+      html = `
+        <div style="text-align: center; padding: 48px 20px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; color: #94a3b8;">
+          <i data-lucide="search-x" style="width: 36px; height: 36px; margin-bottom: 8px; color: #cbd5e1;"></i>
+          <div style="font-weight: 700; color: #475569; font-size: 1rem;">ไม่พบข้อมูลผู้สมัครที่ค้นหา</div>
+          <div style="font-size: 0.85rem; margin-top: 4px;">ลองเปลี่ยนคำค้นหา หรือรีเซ็ตการค้นหา</div>
+        </div>
+      `;
+    }
 
     container.innerHTML = html;
     if (window.lucide) lucide.createIcons();
@@ -627,7 +915,7 @@
   // ==========================================================
   // 7. MODAL: ADD CANDIDATE FROM ROSTER (143 Students)
   // ==========================================================
-  window.openAddYear70CandidateModal = async function () {
+  window.openAddYear70CandidateModal = async function (targetPosition) {
     selectedStudentForAdd = null;
 
     // Reset inputs
@@ -662,11 +950,15 @@
       dropdown.innerHTML = '';
     }
 
-    // Set position select default to current tab filter if not ALL
+    // Set position select default
     if (posSelect) {
-      posSelect.value = (currentPositionFilter !== 'ALL' && VALID_POSITIONS.includes(currentPositionFilter))
-        ? currentPositionFilter
-        : VALID_POSITIONS[0];
+      if (targetPosition && VALID_POSITIONS.includes(targetPosition)) {
+        posSelect.value = targetPosition;
+      } else if (currentPositionFilter !== 'ALL' && VALID_POSITIONS.includes(currentPositionFilter)) {
+        posSelect.value = currentPositionFilter;
+      } else {
+        posSelect.value = VALID_POSITIONS[0];
+      }
     }
 
     // Load 143 students from /api/students if not cached

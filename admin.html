@@ -6068,8 +6068,29 @@
         </div>
       </div>
 
-      <!-- Candidates Table Card -->
-      <div class="admin-card" style="padding: 0; overflow: hidden; border-radius: 14px; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);">
+      <!-- View Mode Switcher & Summary Info -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 0.95rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="layout-grid" style="width: 18px; height: 18px; color: #475569;"></i>
+          <span id="year70CurrentViewTitle">รายชื่อผู้สมัครแยกตามฝ่าย</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 3px; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <button type="button" id="year70ViewBtnBlocks" onclick="setYear70ViewMode('blocks')" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; border: none; cursor: pointer; background: #0f172a; color: #fff; display: inline-flex; align-items: center; gap: 5px;">
+            <i data-lucide="grid" style="width: 13px; height: 13px;"></i> <span>บล็อกสี่เหลี่ยมแยกฝ่าย</span>
+          </button>
+          <button type="button" id="year70ViewBtnTable" onclick="setYear70ViewMode('table')" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #64748b; display: inline-flex; align-items: center; gap: 5px;">
+            <i data-lucide="table" style="width: 13px; height: 13px;"></i> <span>ตารางข้อมูล</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Container: Department Square Blocks (Default View) -->
+      <div id="year70DepartmentsContainer" style="display: block;">
+        <!-- Dynamically rendered department sections with square blocks or ไม่มีข้อมูล -->
+      </div>
+
+      <!-- Container: Candidates Table (Alternate View) -->
+      <div id="year70TableWrapper" class="admin-card" style="display: none; padding: 0; overflow: hidden; border-radius: 14px; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);">
         <div class="table-responsive" style="overflow-x: auto;">
           <table class="admin-table" style="width: 100%; margin: 0; border-collapse: collapse;">
             <thead>
