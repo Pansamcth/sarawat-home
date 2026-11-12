@@ -6839,6 +6839,25 @@
           </div>
         </div>
 
+        <!-- Sub-Role / Bottom Tagline Label -->
+        <div class="dg-form-group" style="margin-bottom: 14px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+            <span>ข้อความท้ายการ์ด (Bottom Label)</span>
+            <span style="font-size: 0.76rem; color: #64748b; font-weight: normal;">มุมล่างซ้ายของการ์ด ข้างปุ่มโซเชียล</span>
+          </label>
+          <input type="text" id="dsdMemberSubRole" list="dsdSubRolesDatalist" placeholder="เช่น ผู้พัฒนาระบบสารสนเทศ, ผู้ร่วมพัฒนา, Lead Developer (ค่าเริ่มต้นตามบทบาท)" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          <datalist id="dsdSubRolesDatalist">
+            <option value="ผู้พัฒนาระบบสารสนเทศ">
+            <option value="ผู้ร่วมพัฒนา">
+            <option value="Lead Developer">
+            <option value="Frontend Developer">
+            <option value="Backend Developer">
+            <option value="Fullstack Developer">
+            <option value="UI/UX Designer">
+            <option value="DevOps & Cloud Engineer">
+          </datalist>
+        </div>
+
         <!-- Grade & Order Index -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
           <div class="dg-form-group">
@@ -14756,7 +14775,7 @@
   </script>
   <script src="js/admin-team.js?v=2.7.7"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
-  <script src="js/admin-dsd.js?v=2.0.0"></script>
+  <script src="js/admin-dsd.js?v=2.1.0"></script>
 </body>
 
 </html>

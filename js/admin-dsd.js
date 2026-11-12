@@ -539,6 +539,8 @@
     document.getElementById('dsdMemberName').value = '';
     document.getElementById('dsdMemberNickname').value = '';
     document.getElementById('dsdMemberRole').value = 'สมาชิกฝ่ายพัฒนาระบบดิจิทัล';
+    const subRoleEl = document.getElementById('dsdMemberSubRole');
+    if (subRoleEl) subRoleEl.value = '';
     document.getElementById('dsdMemberIsHead').checked = false;
     document.getElementById('dsdMemberGrade').value = '';
     document.getElementById('dsdMemberImageUrl').value = '';
@@ -581,6 +583,8 @@
     document.getElementById('dsdMemberName').value = member.name || '';
     document.getElementById('dsdMemberNickname').value = member.nickname || '';
     document.getElementById('dsdMemberRole').value = member.role || '';
+    const editSubRoleEl = document.getElementById('dsdMemberSubRole');
+    if (editSubRoleEl) editSubRoleEl.value = member.sub_role || '';
     document.getElementById('dsdMemberIsHead').checked = Number(member.is_head) === 1;
     document.getElementById('dsdMemberGrade').value = member.grade || '';
     document.getElementById('dsdMemberImageUrl').value = member.image_url || '';
@@ -702,6 +706,8 @@
     const name = (document.getElementById('dsdMemberName').value || '').trim();
     const nickname = (document.getElementById('dsdMemberNickname').value || '').trim();
     const role = (document.getElementById('dsdMemberRole').value || '').trim();
+    const subRoleInput = document.getElementById('dsdMemberSubRole');
+    const subRole = subRoleInput ? subRoleInput.value.trim() : '';
     const isHead = document.getElementById('dsdMemberIsHead').checked ? 1 : 0;
     const grade = (document.getElementById('dsdMemberGrade').value || '').trim();
     const imageUrl = (document.getElementById('dsdMemberImageUrl').value || '').trim();
@@ -736,6 +742,7 @@
       name,
       nickname,
       role,
+      sub_role: subRole,
       is_head: isHead,
       grade,
       image_url: imageUrl,
