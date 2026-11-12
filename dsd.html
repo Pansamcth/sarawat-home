@@ -706,7 +706,7 @@
           </div>
           <!-- Canva -->
           <div class="dsd-logo-item" title="Canva">
-            <img src="assets/tech/canva.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg';" alt="Canva" loading="lazy" />
+            <img src="https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg" onerror="this.onerror=null;this.src='assets/tech/canva.svg';" alt="Canva" loading="lazy" />
           </div>
           <!-- Postman -->
           <div class="dsd-logo-item" title="Postman">
@@ -767,7 +767,7 @@
           </div>
           <!-- Canva -->
           <div class="dsd-logo-item" title="Canva">
-            <img src="assets/tech/canva.svg" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg';" alt="Canva" loading="lazy" />
+            <img src="https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg" onerror="this.onerror=null;this.src='assets/tech/canva.svg';" alt="Canva" loading="lazy" />
           </div>
           <!-- Postman -->
           <div class="dsd-logo-item" title="Postman">
@@ -1002,7 +1002,7 @@
               {"name":"Cloudflare","slug":"cloudflare","icon":"assets/tech/cloudflare.svg"},
               {"name":"Figma","slug":"figma","icon":"assets/tech/figma.svg"},
               {"name":"Adobe Photoshop","slug":"photoshop","icon":"assets/tech/photoshop.svg"},
-              {"name":"Canva","slug":"canva","icon":"assets/tech/canva.svg"},
+              {"name":"Canva","slug":"canva","icon":"https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg"},
               {"name":"Git","slug":"git","icon":"assets/tech/git.svg"},
               {"name":"GitHub","slug":"github","icon":"assets/tech/github.svg"}
             ])
@@ -1092,11 +1092,13 @@
             ? s.toLowerCase().replace(/[^a-z0-9]/g, '')
             : (s.slug || (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, ''));
           let icon = typeof s === 'string'
-            ? ('assets/tech/' + slug + '.svg')
-            : (s.icon || ('assets/tech/' + slug + '.svg'));
+            ? (slug === 'canva' ? 'https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg' : 'assets/tech/' + slug + '.svg')
+            : (slug === 'canva' ? 'https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg' : (s.icon || ('assets/tech/' + slug + '.svg')));
 
           const isMonochrome = monochromeSlugs.includes(slug) ? ' dsd-skill-invert' : '';
-          const fallbackCdn = 'https://cdn.simpleicons.org/' + slug;
+          const fallbackCdn = slug === 'canva'
+            ? 'assets/tech/canva.svg'
+            : ('https://cdn.simpleicons.org/' + slug);
 
           html += '<span class="dsd-skill-logo" title="' + name + '">' +
             '<img src="' + icon + '" alt="' + name + '" class="' + isMonochrome + '" loading="lazy" ' +

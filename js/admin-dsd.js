@@ -70,7 +70,7 @@
     { name: 'Figma', slug: 'figma', icon: 'assets/tech/figma.svg', category: 'Design' },
     { name: 'Adobe Photoshop', slug: 'photoshop', icon: 'assets/tech/photoshop.svg', category: 'Design' },
     { name: 'Adobe Illustrator', slug: 'adobeillustrator', icon: 'https://cdn.simpleicons.org/adobeillustrator', category: 'Design' },
-    { name: 'Canva', slug: 'canva', icon: 'assets/tech/canva.svg', category: 'Design' },
+    { name: 'Canva', slug: 'canva', icon: 'https://logo-teka.com/wp-content/uploads/2025/09/canva-icon-logo.svg', category: 'Design' },
     { name: 'Adobe Premiere Pro', slug: 'adobepremierepro', icon: 'https://cdn.simpleicons.org/adobepremierepro', category: 'Design' },
     { name: 'Adobe After Effects', slug: 'adobeaftereffects', icon: 'https://cdn.simpleicons.org/adobeaftereffects', category: 'Design' },
     { name: 'Blender', slug: 'blender', icon: 'https://cdn.simpleicons.org/blender', category: '3D' },
