@@ -2,7 +2,8 @@
  * Year 70 Committee Points & Scoring Management Frontend
  * ========================================================
  * ระบบสะสมแต้มคณะทำงานสารวัตรนักเรียน ปีการศึกษา 2570
- * รองรับ: บันทึกแต้ม, ตรวจสอบประวัติ Log, จัดอันดับ Leaderboard, ย้ายฝ่าย, ลบ, Export CSV & Print
+ * รองรับ: บันทึกแต้ม, ตรวจสอบประวัติ Log, จัดอันดับ Leaderboard,
+ * อัปโหลดรูปโปรไฟล์, โน้ตสำหรับแอดมิน, ย้ายฝ่าย, ลบ, Export CSV & Print
  */
 
 (function () {
@@ -46,6 +47,7 @@
   let currentActiveCandidateForPoints = null;
   let currentActiveCandidateForLogs = null;
   let currentActiveCandidateForMove = null;
+  let currentActiveCandidateForEdit = null;
 
   // Helpers
   function getApiBase() {
@@ -99,6 +101,35 @@
     } catch (e) {
       return dateStr;
     }
+  }
+
+  // ==========================================================
+  // MODAL UTILITIES (FROSTED BLUR & ACCESSIBILITY)
+  // ==========================================================
+  function showYear70Modal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) {
+      console.error(`Year 70 Modal #${modalId} not found in DOM!`);
+      return;
+    }
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.visibility = 'visible';
+    modal.style.pointerEvents = 'auto';
+    document.body.style.overflow = 'hidden';
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function hideYear70Modal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.style.opacity = '';
+    modal.style.visibility = '';
+    modal.style.pointerEvents = '';
+    document.body.style.overflow = '';
   }
 
   // ==========================================================
@@ -282,13 +313,21 @@
     let html = '';
     top3.forEach((cand, idx) => {
       const style = podiumStyles[idx];
+      const photoUrl = cand.image_url ? (cand.image_url.startsWith('/') ? getApiBase() + cand.image_url : cand.image_url) : '';
+      let avatarHtml = '';
+      if (photoUrl) {
+        avatarHtml = `<img src="${photoUrl}" alt="${escapeHtml(cand.student_name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.12);" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\\'width:44px;height:44px;border-radius:50%;background:#0f172a;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;\\\'>${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>';" />`;
+      } else {
+        avatarHtml = `<div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>`;
+      }
+
       html += `
         <div style="border-radius: 16px; padding: 18px 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease; ${style.border} ${style.bg} ${style.glow}">
           <div style="position: absolute; right: 12px; top: 10px; font-size: 2.4rem; opacity: 0.25; user-select: none;">
             ${style.medal}
           </div>
           <div>
-            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
               <span style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 9999px; ${style.badgeBg}">
                 ${style.rankLabel}
               </span>
@@ -296,21 +335,37 @@
                 ${escapeHtml(cand.target_position)}
               </span>
             </div>
-            <div style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              ${escapeHtml(cand.student_name)}
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+              ${avatarHtml}
+              <div style="overflow: hidden;">
+                <div style="font-size: 1.12rem; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  ${escapeHtml(cand.student_name)}
+                </div>
+                <div style="font-size: 0.8rem; color: #64748b;">
+                  ระดับชั้น: <strong style="color: #334155;">${escapeHtml(cand.grade)}</strong>
+                </div>
+              </div>
             </div>
-            <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 12px;">
-              ระดับชั้น: <strong style="color: #334155;">${escapeHtml(cand.grade)}</strong>
-            </div>
+            ${cand.notes ? `
+              <div style="font-size: 0.78rem; color: #475569; background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 4px;" title="Admin Note: ${escapeHtml(cand.notes)}">
+                <i data-lucide="file-text" style="width: 12px; height: 12px; color: #64748b; flex-shrink: 0;"></i>
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(cand.notes)}</span>
+              </div>
+            ` : ''}
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed rgba(0, 0, 0, 0.08);">
             <div style="display: flex; align-items: baseline; gap: 4px;">
               <span style="font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1;">${cand.total_points}</span>
               <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">แต้ม ⭐</span>
             </div>
-            <button type="button" class="dg-btn-outline" onclick="openAdjustPointsModal(${cand.id})" style="padding: 6px 12px; font-size: 0.8rem; background: #fff; border-radius: 8px;" title="ให้หรือตัดแต้ม">
-              <i data-lucide="plus-circle" style="width: 14px; height: 14px; color: #10b981;"></i> <span>ปรับแต้ม</span>
-            </button>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="dg-btn-outline" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 6px 8px; font-size: 0.78rem; background: #fff; border-radius: 8px;" title="แก้ไขรูปโปรไฟล์ / โน้ต">
+                <i data-lucide="edit-3" style="width: 13px; height: 13px;"></i>
+              </button>
+              <button type="button" class="dg-btn-outline" onclick="openAdjustPointsModal(${cand.id})" style="padding: 6px 12px; font-size: 0.8rem; background: #fff; border-radius: 8px;" title="ให้หรือตัดแต้ม">
+                <i data-lucide="plus-circle" style="width: 14px; height: 14px; color: #10b981;"></i> <span>ปรับแต้ม</span>
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -356,6 +411,15 @@
 
       const pointsColor = cand.total_points > 0 ? '#f59e0b' : (cand.total_points < 0 ? '#ef4444' : '#64748b');
 
+      // Candidate Avatar
+      const photoUrl = cand.image_url ? (cand.image_url.startsWith('/') ? getApiBase() + cand.image_url : cand.image_url) : '';
+      let avatarHtml = '';
+      if (photoUrl) {
+        avatarHtml = `<img src="${photoUrl}" alt="${escapeHtml(cand.student_name)}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1.5px solid #e2e8f0; flex-shrink: 0;" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\\'width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#0f172a,#334155);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;\\\'>${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>';" />`;
+      } else {
+        avatarHtml = `<div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>`;
+      }
+
       html += `
         <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
           <!-- Rank -->
@@ -366,14 +430,17 @@
           <!-- Candidate Info -->
           <td style="padding: 14px 16px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
-                ${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}
-              </div>
+              ${avatarHtml}
               <div>
                 <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem;">
                   ${escapeHtml(cand.student_name)}
                 </div>
-                ${cand.notes ? `<div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;"><i data-lucide="info" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> ${escapeHtml(cand.notes)}</div>` : ''}
+                ${cand.notes ? `
+                  <div style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; color: #475569; background: #f1f5f9; padding: 2px 8px; border-radius: 6px; margin-top: 3px; max-width: 280px;" title="Admin Note: ${escapeHtml(cand.notes)}">
+                    <i data-lucide="file-text" style="width: 11px; height: 11px; color: #64748b; flex-shrink: 0;"></i>
+                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(cand.notes)}</span>
+                  </div>
+                ` : ''}
               </div>
             </div>
           </td>
@@ -409,7 +476,7 @@
               <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 5, 'ช่วยเหลืองานกิจกรรมโรงเรียน (+5)')" title="+5 แต้ม (ช่วยเหลืองานกิจกรรม)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+5</button>
               <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 10, 'ทุ่มเทรับผิดชอบงานเป็นพิเศษ (+10)')" title="+10 แต้ม (ทุ่มเทพิเศษ)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; cursor: pointer; transition: transform 0.1s ease;">+10</button>
               <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id})" title="กำหนดแต้มและเหตุผลเอง" style="padding: 4px 7px; border-radius: 6px; font-size: 0.78rem; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; cursor: pointer;">
-                <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
+                <i data-lucide="plus-circle" style="width: 13px; height: 13px; color: #10b981;"></i>
               </button>
             </div>
           </td>
@@ -417,7 +484,10 @@
           <!-- Actions -->
           <td style="padding: 14px 16px; text-align: right;">
             <div style="display: inline-flex; align-items: center; gap: 6px;">
-              <button type="button" class="dg-btn-outline" onclick="openPointLogsModal(${cand.id})" style="padding: 6px 10px; font-size: 0.78rem; border-radius: 6px;" title="ดูประวัติแต้มทั้งหมด">
+              <button type="button" class="dg-btn-outline" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 6px 10px; font-size: 0.78rem; border-radius: 6px;" title="แก้ไขรูปโปรไฟล์ / เพิ่มโน้ตแอดมิน">
+                <i data-lucide="edit-3" style="width: 13px; height: 13px; color: #6366f1;"></i> <span>แก้ไข/โน้ต</span>
+              </button>
+              <button type="button" class="dg-btn-outline" onclick="openPointLogsModal(${cand.id})" style="padding: 6px 9px; font-size: 0.78rem; border-radius: 6px;" title="ดูประวัติแต้มทั้งหมด">
                 <i data-lucide="history" style="width: 13px; height: 13px;"></i> <span>ประวัติ</span>
               </button>
 
@@ -500,12 +570,65 @@
   };
 
   // ==========================================================
-  // 6. MODAL: ADD CANDIDATE FROM ROSTER (143 Students)
+  // 6. PHOTO UPLOAD HELPER (ADD & EDIT)
+  // ==========================================================
+  window.handleYear70PhotoUpload = async function (fileInput, mode) {
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) return;
+    const file = fileInput.files[0];
+    const token = getAuthToken();
+
+    const isEdit = mode === 'edit';
+    const statusEl = document.getElementById(isEdit ? 'year70EditUploadStatus' : 'year70AddUploadStatus');
+    const previewEl = document.getElementById(isEdit ? 'year70EditImagePreview' : 'year70AddImagePreview');
+    const iconEl = document.getElementById(isEdit ? 'year70EditPhotoIcon' : 'year70AddPhotoIcon');
+    const urlInput = document.getElementById(isEdit ? 'year70EditImageUrl' : 'year70AddImageUrl');
+
+    if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">⏳ กำลังอัปโหลดและประมวลผลรูปภาพ...</span>';
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch(`${getApiBase()}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'อัปโหลดรูปภาพล้มเหลว');
+      }
+
+      const uploadedUrl = json.url || json.imageUrl;
+      if (urlInput) urlInput.value = uploadedUrl;
+
+      let fullUrl = uploadedUrl;
+      if (fullUrl.startsWith('/')) fullUrl = getApiBase() + fullUrl;
+
+      if (previewEl) {
+        previewEl.src = fullUrl;
+        previewEl.style.display = 'block';
+      }
+      if (iconEl) iconEl.style.display = 'none';
+
+      if (statusEl) {
+        statusEl.innerHTML = '<span style="color: #16a34a; font-weight: 700;">✓ อัปโหลดรูปภาพสำเร็จ</span>';
+      }
+    } catch (err) {
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color: #dc2626; font-weight: 600;">❌ ${escapeHtml(err.message)}</span>`;
+      }
+    }
+  };
+
+  // ==========================================================
+  // 7. MODAL: ADD CANDIDATE FROM ROSTER (143 Students)
   // ==========================================================
   window.openAddYear70CandidateModal = async function () {
     selectedStudentForAdd = null;
-    const modal = document.getElementById('adminYear70AddModal');
-    if (!modal) return;
 
     // Reset inputs
     const searchInput = document.getElementById('year70StudentSearchInput');
@@ -513,9 +636,23 @@
     const posSelect = document.getElementById('year70AddPositionSelect');
     const notesInput = document.getElementById('year70AddNotesInput');
     const dropdown = document.getElementById('year70StudentSuggestionsDropdown');
+    const previewEl = document.getElementById('year70AddImagePreview');
+    const iconEl = document.getElementById('year70AddPhotoIcon');
+    const urlInput = document.getElementById('year70AddImageUrl');
+    const statusEl = document.getElementById('year70AddUploadStatus');
+    const fileInput = document.getElementById('year70AddPhotoInput');
 
     if (searchInput) searchInput.value = '';
     if (notesInput) notesInput.value = '';
+    if (urlInput) urlInput.value = '';
+    if (fileInput) fileInput.value = '';
+    if (previewEl) {
+      previewEl.src = '';
+      previewEl.style.display = 'none';
+    }
+    if (iconEl) iconEl.style.display = 'block';
+    if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">รองรับ JPG, PNG, WebP (บีบอัดอัตโนมัติ)</span>';
+
     if (selectedBadge) {
       selectedBadge.style.display = 'none';
       selectedBadge.innerHTML = '';
@@ -545,14 +682,12 @@
       }
     }
 
-    modal.style.display = 'flex';
-    if (searchInput) setTimeout(() => searchInput.focus(), 100);
-    if (window.lucide) lucide.createIcons();
+    showYear70Modal('adminYear70AddModal');
+    if (searchInput) setTimeout(() => searchInput.focus(), 120);
   };
 
   window.closeAddYear70CandidateModal = function () {
-    const modal = document.getElementById('adminYear70AddModal');
-    if (modal) modal.style.display = 'none';
+    hideYear70Modal('adminYear70AddModal');
   };
 
   // Handle student autocomplete input
@@ -663,9 +798,11 @@
 
     const posSelect = document.getElementById('year70AddPositionSelect');
     const notesInput = document.getElementById('year70AddNotesInput');
+    const imageUrlInput = document.getElementById('year70AddImageUrl');
 
     const targetPosition = posSelect ? posSelect.value : '';
     const notes = notesInput ? notesInput.value.trim() : '';
+    const imageUrl = imageUrlInput ? imageUrlInput.value.trim() : '';
 
     if (!targetPosition || !VALID_POSITIONS.includes(targetPosition)) {
       Swal.fire({
@@ -688,7 +825,8 @@
         body: JSON.stringify({
           student_id: selectedStudentForAdd.order_no || selectedStudentForAdd.id,
           target_position: targetPosition,
-          notes: notes
+          notes: notes,
+          image_url: imageUrl
         })
       });
 
@@ -721,15 +859,123 @@
   };
 
   // ==========================================================
-  // 7. MODAL: ADJUST POINTS & REASON
+  // 8. MODAL: EDIT CANDIDATE PROFILE & ADMIN NOTES
+  // ==========================================================
+  window.openEditYear70CandidateModal = function (candidateId) {
+    const cand = year70Candidates.find(c => c.id === candidateId);
+    if (!cand) return;
+
+    currentActiveCandidateForEdit = cand;
+
+    const nameEl = document.getElementById('year70EditCandidateName');
+    const metaEl = document.getElementById('year70EditCandidateMeta');
+    const totalEl = document.getElementById('year70EditCandidateTotal');
+    const notesInput = document.getElementById('year70EditNotesInput');
+    const imageUrlInput = document.getElementById('year70EditImageUrl');
+    const previewEl = document.getElementById('year70EditImagePreview');
+    const iconEl = document.getElementById('year70EditPhotoIcon');
+    const statusEl = document.getElementById('year70EditUploadStatus');
+    const fileInput = document.getElementById('year70EditPhotoInput');
+
+    if (nameEl) nameEl.textContent = cand.student_name;
+    if (metaEl) metaEl.textContent = `${cand.grade} • ${cand.target_position}`;
+    if (totalEl) totalEl.textContent = `${cand.total_points} แต้ม ⭐`;
+    if (notesInput) notesInput.value = cand.notes || '';
+    if (imageUrlInput) imageUrlInput.value = cand.image_url || '';
+    if (fileInput) fileInput.value = '';
+    if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">รูปภาพจะถูกปรับขนาดและบีบอัดอัตโนมัติ</span>';
+
+    if (cand.image_url) {
+      let fullUrl = cand.image_url;
+      if (fullUrl.startsWith('/')) fullUrl = getApiBase() + fullUrl;
+      if (previewEl) {
+        previewEl.src = fullUrl;
+        previewEl.style.display = 'block';
+      }
+      if (iconEl) iconEl.style.display = 'none';
+    } else {
+      if (previewEl) {
+        previewEl.src = '';
+        previewEl.style.display = 'none';
+      }
+      if (iconEl) iconEl.style.display = 'block';
+    }
+
+    showYear70Modal('adminYear70EditModal');
+    if (notesInput) setTimeout(() => notesInput.focus(), 120);
+  };
+
+  window.closeEditYear70CandidateModal = function () {
+    hideYear70Modal('adminYear70EditModal');
+  };
+
+  window.removeYear70EditPhoto = function () {
+    const imageUrlInput = document.getElementById('year70EditImageUrl');
+    const previewEl = document.getElementById('year70EditImagePreview');
+    const iconEl = document.getElementById('year70EditPhotoIcon');
+    const statusEl = document.getElementById('year70EditUploadStatus');
+
+    if (imageUrlInput) imageUrlInput.value = '';
+    if (previewEl) {
+      previewEl.src = '';
+      previewEl.style.display = 'none';
+    }
+    if (iconEl) iconEl.style.display = 'block';
+    if (statusEl) statusEl.innerHTML = '<span style="color: #dc2626; font-weight: 600;">ลบรูปแล้ว (กดบันทึกเพื่อยืนยัน)</span>';
+  };
+
+  window.submitEditYear70Candidate = async function () {
+    if (!currentActiveCandidateForEdit) return;
+
+    const notesInput = document.getElementById('year70EditNotesInput');
+    const imageUrlInput = document.getElementById('year70EditImageUrl');
+
+    const notes = notesInput ? notesInput.value.trim() : '';
+    const imageUrl = imageUrlInput ? imageUrlInput.value.trim() : '';
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates/${currentActiveCandidateForEdit.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          notes: notes,
+          image_url: imageUrl
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'บันทึกการแก้ไขไม่สำเร็จ');
+      }
+
+      window.closeEditYear70CandidateModal();
+      if (typeof showToast === 'function') {
+        showToast(json.message, 'success');
+      }
+
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'บันทึกไม่สำเร็จ',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 9. MODAL: ADJUST POINTS & REASON
   // ==========================================================
   window.openAdjustPointsModal = function (candidateId) {
     const cand = year70Candidates.find(c => c.id === candidateId);
     if (!cand) return;
 
     currentActiveCandidateForPoints = cand;
-    const modal = document.getElementById('adminYear70PointsModal');
-    if (!modal) return;
 
     // Set Candidate Details in Modal Header
     const nameEl = document.getElementById('year70PointsCandidateName');
@@ -744,14 +990,12 @@
     if (scoreInput) scoreInput.value = '3';
     if (reasonInput) reasonInput.value = '';
 
-    modal.style.display = 'flex';
-    if (scoreInput) setTimeout(() => scoreInput.focus(), 100);
-    if (window.lucide) lucide.createIcons();
+    showYear70Modal('adminYear70PointsModal');
+    if (scoreInput) setTimeout(() => scoreInput.focus(), 120);
   };
 
   window.closeAdjustPointsModal = function () {
-    const modal = document.getElementById('adminYear70PointsModal');
-    if (modal) modal.style.display = 'none';
+    hideYear70Modal('adminYear70PointsModal');
   };
 
   window.setAdjustPointsDelta = function (delta) {
@@ -818,13 +1062,6 @@
       window.closeAdjustPointsModal();
       if (typeof showToast === 'function') {
         showToast(json.message, 'success');
-      } else {
-        Swal.fire({
-          icon: 'success',
-          title: 'สำเร็จ',
-          text: json.message,
-          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
-        });
       }
 
       window.loadYear70Admin();
@@ -839,13 +1076,10 @@
   };
 
   // ==========================================================
-  // 8. MODAL: POINT LOGS TIMELINE
+  // 10. MODAL: POINT LOGS TIMELINE
   // ==========================================================
   window.openPointLogsModal = async function (candidateId) {
     const cand = year70Candidates.find(c => c.id === candidateId);
-    const modal = document.getElementById('adminYear70LogsModal');
-    if (!modal) return;
-
     currentActiveCandidateForLogs = cand;
 
     const nameEl = document.getElementById('year70LogsCandidateName');
@@ -869,7 +1103,7 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    modal.style.display = 'flex';
+    showYear70Modal('adminYear70LogsModal');
 
     const token = getAuthToken();
     try {
@@ -895,7 +1129,7 @@
           <div style="text-align: center; padding: 48px 20px; color: #94a3b8;">
             <i data-lucide="inbox" style="width: 36px; height: 36px; margin-bottom: 8px; color: #cbd5e1;"></i>
             <div style="font-weight: 600; color: #475569;">ยังไม่มีประวัติการให้หรือตัดแต้ม</div>
-            <div style="font-size: 0.82rem; margin-top: 4px;">แต้มเริ่มต้นของทุกคนคือ 0 แต้ม</div>
+            <div style="font-size: 0.82rem; margin-top: 4px;">แต้มเริ่มต้นของผู้สมัครคือ 0 แต้ม</div>
           </div>
         `;
         if (window.lucide) lucide.createIcons();
@@ -952,8 +1186,7 @@
   };
 
   window.closePointLogsModal = function () {
-    const modal = document.getElementById('adminYear70LogsModal');
-    if (modal) modal.style.display = 'none';
+    hideYear70Modal('adminYear70LogsModal');
   };
 
   // Delete point log entry (Super Admin Only)
@@ -1007,7 +1240,7 @@
   };
 
   // ==========================================================
-  // 9. MODAL: MOVE POSITION (Super Admin Only)
+  // 11. MODAL: MOVE POSITION (Super Admin Only)
   // ==========================================================
   window.openMovePositionModal = function (candidateId) {
     if (!isSuperAdmin()) {
@@ -1019,8 +1252,6 @@
     if (!cand) return;
 
     currentActiveCandidateForMove = cand;
-    const modal = document.getElementById('adminYear70MoveModal');
-    if (!modal) return;
 
     const nameEl = document.getElementById('year70MoveCandidateName');
     const oldPosEl = document.getElementById('year70MoveOldPosition');
@@ -1037,13 +1268,11 @@
       `).join('');
     }
 
-    modal.style.display = 'flex';
-    if (window.lucide) lucide.createIcons();
+    showYear70Modal('adminYear70MoveModal');
   };
 
   window.closeMovePositionModal = function () {
-    const modal = document.getElementById('adminYear70MoveModal');
-    if (modal) modal.style.display = 'none';
+    hideYear70Modal('adminYear70MoveModal');
   };
 
   window.submitMovePosition = async function () {
@@ -1081,13 +1310,6 @@
       window.closeMovePositionModal();
       if (typeof showToast === 'function') {
         showToast(json.message, 'success');
-      } else {
-        Swal.fire({
-          icon: 'success',
-          title: 'สำเร็จ',
-          text: json.message,
-          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
-        });
       }
 
       window.loadYear70Admin();
@@ -1102,7 +1324,7 @@
   };
 
   // ==========================================================
-  // 10. DELETE CANDIDATE (Super Admin Only)
+  // 12. DELETE CANDIDATE (Super Admin Only)
   // ==========================================================
   window.deleteYear70Candidate = async function (candidateId, name) {
     if (!isSuperAdmin()) {
@@ -1152,7 +1374,7 @@
   };
 
   // ==========================================================
-  // 11. EXPORT CSV
+  // 13. EXPORT CSV
   // ==========================================================
   window.exportYear70Csv = async function () {
     const token = getAuthToken();
@@ -1194,7 +1416,7 @@
   };
 
   // ==========================================================
-  // 12. PRINT SUMMARY REPORT
+  // 14. PRINT SUMMARY REPORT
   // ==========================================================
   window.printYear70Summary = function () {
     if (!year70Candidates || year70Candidates.length === 0) {

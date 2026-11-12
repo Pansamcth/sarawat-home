@@ -6080,7 +6080,7 @@
                 <th style="padding: 12px 16px; width: 160px;">ตำแหน่งเป้าหมาย</th>
                 <th style="padding: 12px 16px; width: 110px; text-align: center;">คะแนนสะสม</th>
                 <th style="padding: 12px 16px; width: 220px; text-align: center;">ปรับแต้มด่วน</th>
-                <th style="padding: 12px 16px; width: 160px; text-align: right;">การจัดการ</th>
+                <th style="padding: 12px 16px; width: 220px; text-align: right;">การจัดการ</th>
               </tr>
             </thead>
             <tbody id="year70CandidatesTableBody">
@@ -7137,7 +7137,7 @@
 <!-- ==========================================
        MODAL: YEAR 70 ADD CANDIDATE
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminYear70AddModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closeAddYear70CandidateModal()">
+  <div class="dg-modal-backdrop" id="adminYear70AddModal" onclick="if(event.target === this) closeAddYear70CandidateModal()">
     <div class="dg-modal-box" style="max-width: 540px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
       <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -7187,10 +7187,34 @@
           </select>
         </div>
 
-        <!-- Optional Notes -->
+        <!-- Photo Upload -->
+        <div class="dg-form-group" style="margin-bottom: 16px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            รูปโปรไฟล์ผู้สมัคร (ถ้ามี)
+          </label>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div id="year70AddPhotoPreviewWrap" style="width: 58px; height: 58px; border-radius: 50%; overflow: hidden; background: #f1f5f9; border: 2px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <img id="year70AddImagePreview" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;" />
+              <i id="year70AddPhotoIcon" data-lucide="user" style="width: 24px; height: 24px; color: #94a3b8;"></i>
+            </div>
+            <div>
+              <label class="dg-btn-outline" style="padding: 7px 14px; font-size: 0.82rem; cursor: pointer; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                <i data-lucide="camera" style="width: 14px; height: 14px;"></i>
+                <span>เลือกรูปภาพ</span>
+                <input type="file" id="year70AddPhotoInput" accept="image/*" style="display: none;" onchange="handleYear70PhotoUpload(this, 'add')" />
+              </label>
+              <input type="hidden" id="year70AddImageUrl" value="" />
+              <div id="year70AddUploadStatus" style="font-size: 0.76rem; color: #64748b; margin-top: 4px;">รองรับ JPG, PNG, WebP (บีบอัดอัตโนมัติ)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Notes -->
         <div class="dg-form-group" style="margin-bottom: 6px;">
-          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
-          <input type="text" id="year70AddNotesInput" placeholder="เช่น ผู้สมัครตัวเต็ง, อดีตสารวัตรแถว ม.4" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            โน้ตของผู้ดูแลระบบ (Admin Note)
+          </label>
+          <textarea id="year70AddNotesInput" rows="2" placeholder="เช่น แคนดิเดตตัวเต็ง, มีประสบการณ์จัดกิจกรรม, อดีตสารวัตร ม.4 (เห็นเฉพาะแอดมิน)" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff; resize: vertical;"></textarea>
         </div>
       </div>
 
@@ -7204,9 +7228,85 @@
   </div>
 
   <!-- ==========================================
+       MODAL: YEAR 70 EDIT CANDIDATE PROFILE & NOTES
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminYear70EditModal" onclick="if(event.target === this) closeEditYear70CandidateModal()">
+    <div class="dg-modal-box" style="max-width: 520px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="edit-3" class="dg-icon-lg"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">แก้ไขข้อมูล & โน้ตผู้สมัคร</h3>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">อัปโหลดรูปโปรไฟล์และบันทึกโน้ตสำหรับแอดมิน</div>
+          </div>
+        </div>
+        <button type="button" class="dg-modal-close" onclick="closeEditYear70CandidateModal()" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="dg-icon-base"></i>
+        </button>
+      </div>
+
+      <div class="dg-modal-body" style="padding: 22px; background: #ffffff; overflow-y: auto; flex: 1;">
+        <!-- Candidate info summary -->
+        <div style="margin-bottom: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div id="year70EditCandidateName" style="font-weight: 800; color: #0f172a; font-size: 1rem;">-</div>
+            <div id="year70EditCandidateMeta" style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">-</div>
+          </div>
+          <div id="year70EditCandidateTotal" style="font-size: 1.15rem; font-weight: 800; color: #f59e0b;">0 แต้ม ⭐</div>
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="dg-form-group" style="margin-bottom: 18px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            รูปโปรไฟล์ผู้สมัคร
+          </label>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div id="year70EditPhotoPreviewWrap" style="width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: #f1f5f9; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+              <img id="year70EditImagePreview" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; display: none;" />
+              <i id="year70EditPhotoIcon" data-lucide="user" style="width: 28px; height: 28px; color: #94a3b8;"></i>
+            </div>
+            <div>
+              <div style="display: flex; gap: 8px;">
+                <label class="dg-btn-outline" style="padding: 7px 14px; font-size: 0.82rem; cursor: pointer; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                  <i data-lucide="upload" style="width: 14px; height: 14px;"></i>
+                  <span>อัปโหลดรูปใหม่</span>
+                  <input type="file" id="year70EditPhotoInput" accept="image/*" style="display: none;" onchange="handleYear70PhotoUpload(this, 'edit')" />
+                </label>
+                <button type="button" class="dg-btn-outline" onclick="removeYear70EditPhoto()" style="padding: 7px 12px; font-size: 0.82rem; border-radius: 8px; color: #ef4444; border-color: #fca5a5;" title="ลบรูปโปรไฟล์">
+                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+              <input type="hidden" id="year70EditImageUrl" value="" />
+              <div id="year70EditUploadStatus" style="font-size: 0.76rem; color: #64748b; margin-top: 6px;">รูปภาพจะถูกปรับขนาดและบีบอัดอัตโนมัติ</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Notes -->
+        <div class="dg-form-group" style="margin-bottom: 6px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            โน้ตของผู้ดูแลระบบ (สำหรับแอดมินเท่านั้น)
+          </label>
+          <textarea id="year70EditNotesInput" rows="3" placeholder="ระบุข้อสังเกต ความคิดเห็น หรือบันทึกการประเมินของผู้ดูแลระบบ..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff; resize: vertical;"></textarea>
+          <div style="font-size: 0.76rem; color: #94a3b8; margin-top: 4px;">* บันทึกนี้มองเห็นและแก้ไขได้เฉพาะบัญชี Admin & Super Admin เท่านั้น</div>
+        </div>
+      </div>
+
+      <div class="dg-modal-footer" style="padding: 16px 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; background: #f8fafc;">
+        <button type="button" class="dg-btn-outline" onclick="closeEditYear70CandidateModal()" style="padding: 10px 18px; font-size: 0.88rem; border-radius: 8px;">ยกเลิก</button>
+        <button type="button" class="dg-btn-black" onclick="submitEditYear70Candidate()" style="padding: 10px 20px; font-size: 0.88rem; border-radius: 8px; background: #0f172a;">
+          <i data-lucide="check"></i> <span>บันทึกการแก้ไข</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
        MODAL: YEAR 70 ADJUST POINTS & REASON
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminYear70PointsModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closeAdjustPointsModal()">
+  <div class="dg-modal-backdrop" id="adminYear70PointsModal" onclick="if(event.target === this) closeAdjustPointsModal()">
     <div class="dg-modal-box" style="max-width: 520px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
       <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -7306,7 +7406,7 @@
   <!-- ==========================================
        MODAL: YEAR 70 POINT LOGS TIMELINE
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminYear70LogsModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closePointLogsModal()">
+  <div class="dg-modal-backdrop" id="adminYear70LogsModal" onclick="if(event.target === this) closePointLogsModal()">
     <div class="dg-modal-box" style="max-width: 580px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
       <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -7351,7 +7451,7 @@
   <!-- ==========================================
        MODAL: YEAR 70 MOVE POSITION (SUPER ADMIN ONLY)
        ========================================== -->
-  <div class="dg-modal-backdrop" id="adminYear70MoveModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closeMovePositionModal()">
+  <div class="dg-modal-backdrop" id="adminYear70MoveModal" onclick="if(event.target === this) closeMovePositionModal()">
     <div class="dg-modal-box" style="max-width: 480px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
       <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
         <div style="display: flex; align-items: center; gap: 12px;">
@@ -7398,7 +7498,7 @@
     </div>
   </div>
 
-  <!-- ==========================================
+    <!-- ==========================================
        MODAL 0: TAG CREATE / EDIT (BENTO REDESIGN)
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminTagModal" style="display: none; z-index: 9600;">
@@ -15115,7 +15215,7 @@
   <script src="js/admin-team.js?v=2.7.8"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
   <script src="js/admin-dsd.js?v=2.2.0"></script>
-  <script src="js/admin-year70.js?v=1.0.0"></script>
+  <script src="js/admin-year70.js?v=1.1.0"></script>
 </body>
 
 </html>
