@@ -3395,6 +3395,13 @@
           </div>
           <span class="admin-badge" id="recruitmentCounterBadge" style="background: #2563eb; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
         </button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-year70" id="tabBtnYear70">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="award"></i>
+            <span>สะสมแต้ม ปี 70</span>
+          </div>
+          <span class="admin-badge" id="year70CounterBadge" style="background: #f59e0b; color: #fff; display: none; font-size: 0.68rem; padding: 1px 7px;">0</span>
+        </button>
         <button type="button" class="admin-tab-btn" data-tab="tab-feedbacks" id="tabBtnFeedbacks">
           <div class="admin-tab-btn-content">
             <i data-lucide="inbox"></i>
@@ -6002,6 +6009,89 @@
     </div>
 
     <!-- ==========================================
+         TAB: YEAR 70 COMMITTEE POINTS & SCORING
+         ========================================== -->
+    <div class="admin-pane" id="tab-year70" style="display: none;">
+      <!-- Year 70 Header -->
+      <div class="admin-section-header">
+        <div class="admin-section-title">
+          <div class="admin-section-badges">
+            <span class="admin-section-pill" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; border: 1px solid #fcd34d;">
+              <i data-lucide="award" class="dg-icon-xs"></i> คณะทำงานสารวัตรนักเรียน ปี 2570
+            </span>
+            <span class="admin-file-badge"><i data-lucide="sparkles" class="dg-icon-xs"></i> ระบบประเมินและสะสมแต้ม</span>
+            <span class="admin-role-badge" style="font-size: 0.74rem; padding: 2px 10px; border-radius: 99px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0;">
+              ⭐ แอดมินทุกคนให้แต้มได้
+            </span>
+          </div>
+          <h2>ระบบสะสมแต้มคณะทำงานสารวัตรนักเรียน ปี 70</h2>
+          <p>บันทึกผลงาน ประเมินการปฏิบัติหน้าที่ ให้/ตัดแต้ม และจัดอันดับผู้สมัครคณะกรรมการนักเรียน รุ่นปี 2570</p>
+        </div>
+        <div class="admin-section-actions">
+          <button type="button" class="dg-btn-outline" onclick="loadYear70Admin()" style="padding: 10px 16px; font-size: 0.85rem;" title="รีเฟรชข้อมูล">
+            <i data-lucide="refresh-cw"></i> <span>รีเฟรช</span>
+          </button>
+          <button type="button" class="dg-btn-outline" onclick="printYear70Summary()" style="padding: 10px 16px; font-size: 0.85rem;" title="พิมพ์รายงานสรุปผล">
+            <i data-lucide="printer"></i> <span>พิมพ์สรุป</span>
+          </button>
+          <button type="button" class="dg-btn-outline" onclick="exportYear70Csv()" style="padding: 10px 16px; font-size: 0.85rem;" title="ดาวน์โหลดไฟล์ CSV">
+            <i data-lucide="download"></i> <span>ส่งออก CSV</span>
+          </button>
+          <button type="button" class="dg-btn-black" onclick="openAddYear70CandidateModal()" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <i data-lucide="user-plus"></i> <span>+ เพิ่มผู้สมัครปี 70</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Department Tabs Bar -->
+      <div class="year70-tabs-bar" id="year70TabsContainer" style="display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 14px; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0;">
+        <!-- Dynamically rendered tabs -->
+      </div>
+
+      <!-- Top 3 Podium Highlights -->
+      <div id="year70PodiumContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px;">
+        <!-- Dynamically rendered top 3 cards -->
+      </div>
+
+      <!-- Filter / Search Row & Summary Stats -->
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 260px; max-width: 480px;">
+          <div style="position: relative; width: 100%;">
+            <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #94a3b8;"></i>
+            <input type="text" id="year70SearchInput" placeholder="ค้นหาชื่อ, ระดับชั้น, หมายเหตุ..." oninput="handleYear70Search(this.value)" style="width: 100%; padding: 9px 12px 9px 36px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.88rem; background: #fff; font-family: inherit;" />
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #64748b;">
+          <span>แสดงผู้สมัคร: <strong id="year70TotalCountText" style="color: #0f172a;">0</strong> คน</span>
+          <span style="color: #cbd5e1;">•</span>
+          <span>แต้มสะสมรวม: <strong id="year70TotalPointsSumText" style="color: #f59e0b;">0</strong> แต้ม</span>
+        </div>
+      </div>
+
+      <!-- Candidates Table Card -->
+      <div class="admin-card" style="padding: 0; overflow: hidden; border-radius: 14px; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);">
+        <div class="table-responsive" style="overflow-x: auto;">
+          <table class="admin-table" style="width: 100%; margin: 0; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: #64748b;">
+                <th style="padding: 12px 16px; width: 70px; text-align: center;">อันดับ</th>
+                <th style="padding: 12px 16px;">ผู้สมัคร</th>
+                <th style="padding: 12px 16px; width: 120px;">ระดับชั้น</th>
+                <th style="padding: 12px 16px; width: 160px;">ตำแหน่งเป้าหมาย</th>
+                <th style="padding: 12px 16px; width: 110px; text-align: center;">คะแนนสะสม</th>
+                <th style="padding: 12px 16px; width: 220px; text-align: center;">ปรับแต้มด่วน</th>
+                <th style="padding: 12px 16px; width: 160px; text-align: right;">การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="year70CandidatesTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
          MODAL: APPLICANT REVIEW & STATUS DECISION
          ========================================== -->
     <div class="dg-modal-backdrop" id="adminApplicantReviewModal" style="display: none; z-index: 9500;" onclick="if(event.target === this) closeApplicantReviewModal()">
@@ -7045,6 +7135,270 @@
   </div>
 
 <!-- ==========================================
+       MODAL: YEAR 70 ADD CANDIDATE
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminYear70AddModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closeAddYear70CandidateModal()">
+    <div class="dg-modal-box" style="max-width: 540px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);">
+            <i data-lucide="award" class="dg-icon-lg"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">เพิ่มผู้สมัครสะสมแต้ม ปี 70</h3>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">เลือกนักเรียนจากฐานข้อมูลสารวัตร 143 คน</div>
+          </div>
+        </div>
+        <button type="button" class="dg-modal-close" onclick="closeAddYear70CandidateModal()" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="dg-icon-base"></i>
+        </button>
+      </div>
+
+      <div class="dg-modal-body" style="padding: 22px; background: #ffffff; overflow-y: auto; flex: 1;">
+        <!-- Search & Select Student from Roster -->
+        <div class="dg-form-group" style="margin-bottom: 16px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            ค้นหาและเลือกนักเรียน (143 คน) <span style="color: #ef4444;">*</span>
+          </label>
+          <div style="position: relative;">
+            <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #94a3b8;"></i>
+            <input type="text" id="year70StudentSearchInput" placeholder="พิมพ์ชื่อ, ชั้น, หรือลำดับ เช่น กฤตมุข, ม.5/2, #1" oninput="handleYear70StudentSearchInput(this.value)" autocomplete="off" style="width: 100%; padding: 10px 14px 10px 36px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+          </div>
+          <div id="year70StudentSuggestionsDropdown" style="display: none; border: 1px solid #e2e8f0; border-radius: 8px; margin-top: 4px; max-height: 200px; overflow-y: auto; background: #fff; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); position: relative; z-index: 10;"></div>
+          <div id="year70SelectedStudentBadge" style="display: none; margin-top: 10px;"></div>
+        </div>
+
+        <!-- Target Position Select -->
+        <div class="dg-form-group" style="margin-bottom: 16px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            ตำแหน่งที่ต้องการสมัครสะสมแต้ม <span style="color: #ef4444;">*</span>
+          </label>
+          <select id="year70AddPositionSelect" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;">
+            <option value="ประธาน">ประธาน</option>
+            <option value="รองประธาน">รองประธาน</option>
+            <option value="ฝ่ายเลขานุการ">ฝ่ายเลขานุการ</option>
+            <option value="ฝ่ายเอกสาร">ฝ่ายเอกสาร</option>
+            <option value="ฝ่ายกิจกรรม">ฝ่ายกิจกรรม</option>
+            <option value="ฝ่ายโสตทัศนศิลป์">ฝ่ายโสตทัศนศิลป์</option>
+            <option value="ฝ่ายการเงิน">ฝ่ายการเงิน</option>
+            <option value="ฝ่ายวินัย">ฝ่ายวินัย</option>
+            <option value="ฝ่ายอุปกรณ์">ฝ่ายอุปกรณ์</option>
+            <option value="ฝ่ายสารวัตรพยาบาล">ฝ่ายสารวัตรพยาบาล</option>
+          </select>
+        </div>
+
+        <!-- Optional Notes -->
+        <div class="dg-form-group" style="margin-bottom: 6px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">หมายเหตุเพิ่มเติม (ถ้ามี)</label>
+          <input type="text" id="year70AddNotesInput" placeholder="เช่น ผู้สมัครตัวเต็ง, อดีตสารวัตรแถว ม.4" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;" />
+        </div>
+      </div>
+
+      <div class="dg-modal-footer" style="padding: 16px 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; background: #f8fafc;">
+        <button type="button" class="dg-btn-outline" onclick="closeAddYear70CandidateModal()" style="padding: 10px 18px; font-size: 0.88rem; border-radius: 8px;">ยกเลิก</button>
+        <button type="button" class="dg-btn-black" onclick="submitAddYear70Candidate()" style="padding: 10px 20px; font-size: 0.88rem; border-radius: 8px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+          <i data-lucide="check"></i> <span>บันทึกเพิ่มผู้สมัคร</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: YEAR 70 ADJUST POINTS & REASON
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminYear70PointsModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closeAdjustPointsModal()">
+    <div class="dg-modal-box" style="max-width: 520px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+            <i data-lucide="plus-circle" class="dg-icon-lg"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">บันทึกแต้ม / ตัดแต้ม</h3>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">ให้คะแนนผลงานและบันทึกประวัติการประเมิน</div>
+          </div>
+        </div>
+        <button type="button" class="dg-modal-close" onclick="closeAdjustPointsModal()" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="dg-icon-base"></i>
+        </button>
+      </div>
+
+      <div class="dg-modal-body" style="padding: 22px; background: #ffffff; overflow-y: auto; flex: 1;">
+        <!-- Candidate Target Summary Header -->
+        <div style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div id="year70PointsCandidateName" style="font-weight: 800; color: #0f172a; font-size: 1.05rem;">-</div>
+            <div id="year70PointsCandidateMeta" style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">-</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.72rem; color: #64748b; text-transform: uppercase; font-weight: 700;">คะแนนปัจจุบัน</div>
+            <div id="year70PointsCurrentTotal" style="font-size: 1.3rem; font-weight: 800; color: #f59e0b;">0 แต้ม ⭐</div>
+          </div>
+        </div>
+
+        <!-- Quick Score Selectors -->
+        <div class="dg-form-group" style="margin-bottom: 14px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 8px; display: block;">
+            เลือกจำนวนแต้มด่วน
+          </label>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" onclick="setAdjustPointsDelta(1)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer;">+1</button>
+            <button type="button" onclick="setAdjustPointsDelta(3)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer;">+3</button>
+            <button type="button" onclick="setAdjustPointsDelta(5)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer;">+5</button>
+            <button type="button" onclick="setAdjustPointsDelta(10)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; cursor: pointer;">+10</button>
+            <button type="button" onclick="setAdjustPointsDelta(-1)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; cursor: pointer;">-1</button>
+            <button type="button" onclick="setAdjustPointsDelta(-3)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; cursor: pointer;">-3</button>
+            <button type="button" onclick="setAdjustPointsDelta(-5)" style="padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; cursor: pointer;">-5</button>
+          </div>
+        </div>
+
+        <!-- Custom Score Input -->
+        <div class="dg-form-group" style="margin-bottom: 16px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            จำนวนแต้มที่ต้องการบันทึก (+ หรือ -) <span style="color: #ef4444;">*</span>
+          </label>
+          <input type="number" id="year70PointsDeltaInput" value="3" step="1" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1.1rem; font-weight: 700; font-family: inherit; background: #fff;" />
+          <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">* ใส่ค่าบวกเพื่อเพิ่มแต้ม (เช่น 5) หรือใส่เครื่องหมายลบเพื่อตัดแต้ม (เช่น -3)</div>
+        </div>
+
+        <!-- Preset Reason Chips -->
+        <div class="dg-form-group" style="margin-bottom: 12px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            ข้อความเหตุผลแนะนำ (คลิกเพื่อเลือก)
+          </label>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <button type="button" onclick="setAdjustPointsReasonPreset('เข้าเวรตรงเวลา / ปฏิบัติหน้าที่เรียบร้อย', 3)" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; cursor: pointer;">
+              ⭐ เข้าเวรตรงเวลา / ปฏิบัติหน้าที่เรียบร้อย (+3)
+            </button>
+            <button type="button" onclick="setAdjustPointsReasonPreset('ช่วยเหลืองานกิจกรรมโรงเรียน / เสียสละเวลา', 5)" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; cursor: pointer;">
+              ⭐ ช่วยเหลืองานกิจกรรมโรงเรียน / เสียสละเวลา (+5)
+            </button>
+            <button type="button" onclick="setAdjustPointsReasonPreset('ทุ่มเทและรับผิดชอบงานเป็นพิเศษ / ภาวะผู้นำยอดเยี่ยม', 10)" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; cursor: pointer;">
+              👑 ทุ่มเทและรับผิดชอบงานเป็นพิเศษ / ภาวะผู้นำยอดเยี่ยม (+10)
+            </button>
+            <button type="button" onclick="setAdjustPointsReasonPreset('ขาดเวรปฏิบัติหน้าที่โดยไม่แจ้งล่วงหน้า', -3)" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; background: #fff5f5; border: 1px solid #fed7d7; color: #c53030; cursor: pointer;">
+              ⚠️ ขาดเวรปฏิบัติหน้าที่โดยไม่แจ้งล่วงหน้า (-3)
+            </button>
+            <button type="button" onclick="setAdjustPointsReasonPreset('ละเลยการปฏิบัติหน้าที่ / ปฏิบัติตนไม่เหมาะสม', -5)" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; background: #fff5f5; border: 1px solid #fed7d7; color: #c53030; cursor: pointer;">
+              ⚠️ ละเลยการปฏิบัติหน้าที่ / ปฏิบัติตนไม่เหมาะสม (-5)
+            </button>
+          </div>
+        </div>
+
+        <!-- Reason Input -->
+        <div class="dg-form-group" style="margin-bottom: 6px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            ระบุเหตุผลหรือภารกิจที่ปฏิบัติ <span style="color: #ef4444;">*</span>
+          </label>
+          <textarea id="year70PointsReasonInput" rows="2" placeholder="เช่น ช่วยจัดระเบียบแถวนักเรียนช่วงเช้า, ช่วยงานวันเปิดบ้านวิชาการ..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff; resize: vertical;"></textarea>
+        </div>
+      </div>
+
+      <div class="dg-modal-footer" style="padding: 16px 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; background: #f8fafc;">
+        <button type="button" class="dg-btn-outline" onclick="closeAdjustPointsModal()" style="padding: 10px 18px; font-size: 0.88rem; border-radius: 8px;">ยกเลิก</button>
+        <button type="button" class="dg-btn-black" onclick="submitAdjustPoints()" style="padding: 10px 20px; font-size: 0.88rem; border-radius: 8px; background: #0f172a;">
+          <i data-lucide="check"></i> <span>บันทึกแต้ม</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: YEAR 70 POINT LOGS TIMELINE
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminYear70LogsModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closePointLogsModal()">
+    <div class="dg-modal-box" style="max-width: 580px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="history" class="dg-icon-lg"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">ประวัติการให้และตัดแต้ม</h3>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">Timeline ประวัติบันทึกคะแนนสะสมย้อนหลัง</div>
+          </div>
+        </div>
+        <button type="button" class="dg-modal-close" onclick="closePointLogsModal()" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="dg-icon-base"></i>
+        </button>
+      </div>
+
+      <div class="dg-modal-body" style="padding: 22px; background: #f8fafc; overflow-y: auto; flex: 1;">
+        <!-- Candidate Profile Mini Card -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);">
+          <div>
+            <div id="year70LogsCandidateName" style="font-weight: 800; color: #0f172a; font-size: 1.05rem;">-</div>
+            <div id="year70LogsCandidateMeta" style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">-</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.72rem; color: #64748b; text-transform: uppercase; font-weight: 700;">แต้มสะสมรวม</div>
+            <div id="year70LogsCurrentTotal" style="font-size: 1.3rem; font-weight: 800; color: #f59e0b;">0 แต้ม ⭐</div>
+          </div>
+        </div>
+
+        <!-- Timeline Container -->
+        <div id="year70LogsTimelineContainer">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <div class="dg-modal-footer" style="padding: 14px 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; background: #ffffff;">
+        <button type="button" class="dg-btn-outline" onclick="closePointLogsModal()" style="padding: 9px 18px; font-size: 0.88rem; border-radius: 8px;">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL: YEAR 70 MOVE POSITION (SUPER ADMIN ONLY)
+       ========================================== -->
+  <div class="dg-modal-backdrop" id="adminYear70MoveModal" style="display: none; z-index: 9690;" onclick="if(event.target === this) closeMovePositionModal()">
+    <div class="dg-modal-box" style="max-width: 480px; width: 95%; background: #ffffff !important; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 70px -15px rgba(15, 23, 42, 0.35); max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="dg-modal-header" style="padding: 18px 22px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div class="dg-modal-header-icon" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="arrow-right-left" class="dg-icon-lg"></i>
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0f172a;">ย้ายฝ่าย / เปลี่ยนตำแหน่ง</h3>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">👑 สิทธิ์เฉพาะ Super Admin</div>
+          </div>
+        </div>
+        <button type="button" class="dg-modal-close" onclick="closeMovePositionModal()" title="ปิดหน้าต่าง">
+          <i data-lucide="x" class="dg-icon-base"></i>
+        </button>
+      </div>
+
+      <div class="dg-modal-body" style="padding: 22px; background: #ffffff; overflow-y: auto; flex: 1;">
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 4px;">ผู้สมัคร</div>
+          <div id="year70MoveCandidateName" style="font-size: 1.05rem; font-weight: 700; color: #0f172a;">-</div>
+        </div>
+
+        <div style="margin-bottom: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 14px;">
+          <div style="font-size: 0.78rem; color: #64748b;">ตำแหน่งปัจจุบัน</div>
+          <div id="year70MoveOldPosition" style="font-weight: 700; color: #334155; font-size: 0.95rem; margin-top: 2px;">-</div>
+        </div>
+
+        <div class="dg-form-group" style="margin-bottom: 6px;">
+          <label style="font-weight: 600; font-size: 0.86rem; color: #334155; margin-bottom: 6px; display: block;">
+            เลือกตำแหน่งเป้าหมายใหม่ <span style="color: #ef4444;">*</span>
+          </label>
+          <select id="year70MoveNewPositionSelect" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; background: #fff;">
+            <!-- Options populated dynamically -->
+          </select>
+        </div>
+      </div>
+
+      <div class="dg-modal-footer" style="padding: 16px 22px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; background: #f8fafc;">
+        <button type="button" class="dg-btn-outline" onclick="closeMovePositionModal()" style="padding: 10px 18px; font-size: 0.88rem; border-radius: 8px;">ยกเลิก</button>
+        <button type="button" class="dg-btn-black" onclick="submitMovePosition()" style="padding: 10px 20px; font-size: 0.88rem; border-radius: 8px; background: #2563eb;">
+          <i data-lucide="check"></i> <span>ยืนยันการย้ายฝ่าย</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
        MODAL 0: TAG CREATE / EDIT (BENTO REDESIGN)
        ========================================== -->
   <div class="dg-modal-backdrop" id="adminTagModal" style="display: none; z-index: 9600;">
@@ -14305,6 +14659,8 @@
               renderAdminFeedbacks();
             } else if (paneId === 'tab-recruitment' && typeof loadRecruitmentAdmin === 'function') {
               loadRecruitmentAdmin();
+            } else if (paneId === 'tab-year70' && typeof loadYear70Admin === 'function') {
+              loadYear70Admin();
             } else if (paneId === 'tab-admins') {
               renderAdminsList();
             } else if (paneId === 'tab-settings') {
@@ -14759,6 +15115,7 @@
   <script src="js/admin-team.js?v=2.7.8"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
   <script src="js/admin-dsd.js?v=2.2.0"></script>
+  <script src="js/admin-year70.js?v=1.0.0"></script>
 </body>
 
 </html>

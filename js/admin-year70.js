@@ -1,0 +1,1327 @@
+/**
+ * Year 70 Committee Points & Scoring Management Frontend
+ * ========================================================
+ * ระบบสะสมแต้มคณะทำงานสารวัตรนักเรียน ปีการศึกษา 2570
+ * รองรับ: บันทึกแต้ม, ตรวจสอบประวัติ Log, จัดอันดับ Leaderboard, ย้ายฝ่าย, ลบ, Export CSV & Print
+ */
+
+(function () {
+  'use strict';
+
+  // Constants
+  const VALID_POSITIONS = [
+    'ประธาน',
+    'รองประธาน',
+    'ฝ่ายเลขานุการ',
+    'ฝ่ายเอกสาร',
+    'ฝ่ายกิจกรรม',
+    'ฝ่ายโสตทัศนศิลป์',
+    'ฝ่ายการเงิน',
+    'ฝ่ายวินัย',
+    'ฝ่ายอุปกรณ์',
+    'ฝ่ายสารวัตรพยาบาล'
+  ];
+
+  const POSITION_ICONS = {
+    'ALL': 'trophy',
+    'ประธาน': 'crown',
+    'รองประธาน': 'shield-check',
+    'ฝ่ายเลขานุการ': 'clipboard-list',
+    'ฝ่ายเอกสาร': 'file-text',
+    'ฝ่ายกิจกรรม': 'sparkles',
+    'ฝ่ายโสตทัศนศิลป์': 'camera',
+    'ฝ่ายการเงิน': 'wallet',
+    'ฝ่ายวินัย': 'shield-alert',
+    'ฝ่ายอุปกรณ์': 'wrench',
+    'ฝ่ายสารวัตรพยาบาล': 'heart-pulse'
+  };
+
+  // State
+  let year70Positions = [];
+  let year70Candidates = [];
+  let currentPositionFilter = 'ALL';
+  let currentSearchQuery = '';
+  let allStudentsRoster = []; // 143 students
+  let selectedStudentForAdd = null;
+  let currentActiveCandidateForPoints = null;
+  let currentActiveCandidateForLogs = null;
+  let currentActiveCandidateForMove = null;
+
+  // Helpers
+  function getApiBase() {
+    return (window.SarawatApi && typeof window.SarawatApi.getBaseUrl === 'function')
+      ? window.SarawatApi.getBaseUrl()
+      : (window.SARAWAT_API_BASE || '');
+  }
+
+  function getAuthToken() {
+    if (window.SarawatApi && typeof window.SarawatApi.getAuthToken === 'function') {
+      const t = window.SarawatApi.getAuthToken();
+      if (t) return t;
+    }
+    return localStorage.getItem('dg_sarawat_admin_token') || '';
+  }
+
+  function isSuperAdmin() {
+    try {
+      if (typeof isCurrentSuperAdmin === 'function') return isCurrentSuperAdmin();
+      if (window.currentAdminUser && window.currentAdminUser.role === 'Super Admin') return true;
+      const apiUser = (window.SarawatApi && typeof window.SarawatApi.getAuthUser === 'function') ? window.SarawatApi.getAuthUser() : null;
+      if (apiUser && apiUser.role === 'Super Admin') return true;
+      const storedRole = localStorage.getItem('dg_sarawat_admin_role');
+      if (storedRole === 'Super Admin') return true;
+    } catch (e) {}
+    return false;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatThaiDateTime(dateStr) {
+    if (!dateStr) return '-';
+    try {
+      const d = new Date(dateStr.replace(' ', 'T'));
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString('th-TH', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  // ==========================================================
+  // 1. DATA LOADING
+  // ==========================================================
+  window.loadYear70Admin = async function () {
+    const tableBody = document.getElementById('year70CandidatesTableBody');
+    if (tableBody) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 48px; color: #64748b;">
+            <i data-lucide="loader" class="dg-spin" style="width: 28px; height: 28px; margin-bottom: 10px; color: #f59e0b;"></i>
+            <div style="font-size: 0.95rem; font-weight: 600;">กำลังโหลดข้อมูลระบบสะสมแต้ม ปี 70...</div>
+          </td>
+        </tr>
+      `;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    const token = getAuthToken();
+    try {
+      // 1. Load Positions & Stats
+      const posRes = await fetch(`${getApiBase()}/api/year70/positions`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (posRes.ok) {
+        const posData = await posRes.json();
+        if (posData && posData.success && Array.isArray(posData.positions)) {
+          year70Positions = posData.positions;
+        }
+      }
+
+      // 2. Load Candidates
+      let candUrl = `${getApiBase()}/api/year70/candidates?position=${encodeURIComponent(currentPositionFilter)}`;
+      if (currentSearchQuery.trim()) {
+        candUrl += `&search=${encodeURIComponent(currentSearchQuery.trim())}`;
+      }
+      const candRes = await fetch(candUrl, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (candRes.ok) {
+        const candData = await candRes.json();
+        if (candData && candData.success && Array.isArray(candData.data)) {
+          year70Candidates = candData.data;
+        } else {
+          year70Candidates = [];
+        }
+      }
+
+      // Update badge in sidebar
+      const badge = document.getElementById('year70CounterBadge');
+      if (badge) {
+        const totalCandidates = year70Positions.reduce((acc, p) => acc + (p.count || 0), 0);
+        badge.textContent = totalCandidates;
+        badge.style.display = totalCandidates > 0 ? 'inline-block' : 'none';
+      }
+
+      // Render all sections
+      renderTabs();
+      renderPodium();
+      renderCandidatesTable();
+      updateSummaryCounts();
+    } catch (err) {
+      console.error('Failed to load Year 70 points data:', err);
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: #ef4444;">
+              <i data-lucide="alert-circle" style="width: 32px; height: 32px; margin-bottom: 8px;"></i>
+              <div>เกิดข้อผิดพลาดในการโหลดข้อมูล: ${escapeHtml(err.message)}</div>
+              <button type="button" class="dg-btn-outline" onclick="loadYear70Admin()" style="margin-top: 12px; font-size: 0.85rem;">
+                ลองใหม่อีกครั้ง
+              </button>
+            </td>
+          </tr>
+        `;
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+  };
+
+  // ==========================================================
+  // 2. RENDER DEPARTMENT TABS
+  // ==========================================================
+  function renderTabs() {
+    const container = document.getElementById('year70TabsContainer');
+    if (!container) return;
+
+    const totalCount = year70Positions.reduce((acc, p) => acc + (p.count || 0), 0);
+    const totalPoints = year70Positions.reduce((acc, p) => acc + (p.total_points || 0), 0);
+
+    const tabs = [
+      { name: 'ALL', label: 'ภาพรวม (Leaderboard)', icon: 'trophy', count: totalCount, points: totalPoints },
+      ...VALID_POSITIONS.map(pos => {
+        const pInfo = year70Positions.find(p => p.name === pos) || { count: 0, total_points: 0 };
+        return {
+          name: pos,
+          label: pos,
+          icon: POSITION_ICONS[pos] || 'award',
+          count: pInfo.count,
+          points: pInfo.total_points
+        };
+      })
+    ];
+
+    let html = '';
+    tabs.forEach(tab => {
+      const isActive = currentPositionFilter === tab.name;
+      const activeStyle = isActive
+        ? 'background: #0f172a; color: #ffffff; border-color: #0f172a; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);'
+        : 'background: #ffffff; color: #475569; border-color: #e2e8f0;';
+
+      const badgeStyle = isActive
+        ? 'background: rgba(255, 255, 255, 0.2); color: #ffffff;'
+        : 'background: #f1f5f9; color: #475569;';
+
+      html += `
+        <button type="button" class="year70-tab-pill" onclick="switchYear70Position('${escapeHtml(tab.name)}')" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 9999px; font-size: 0.84rem; font-weight: 600; cursor: pointer; border: 1px solid; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap; ${activeStyle}">
+          <i data-lucide="${tab.icon}" style="width: 15px; height: 15px;"></i>
+          <span>${escapeHtml(tab.label)}</span>
+          <span style="font-size: 0.72rem; padding: 1px 7px; border-radius: 9999px; font-weight: 700; ${badgeStyle}">${tab.count}</span>
+        </button>
+      `;
+    });
+
+    container.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  window.switchYear70Position = function (pos) {
+    currentPositionFilter = pos;
+    window.loadYear70Admin();
+  };
+
+  // ==========================================================
+  // 3. RENDER TOP 3 PODIUM
+  // ==========================================================
+  function renderPodium() {
+    const container = document.getElementById('year70PodiumContainer');
+    if (!container) return;
+
+    if (!year70Candidates || year70Candidates.length === 0) {
+      container.innerHTML = '';
+      container.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'grid';
+
+    const top3 = year70Candidates.slice(0, 3);
+    const podiumStyles = [
+      {
+        rank: 1,
+        medal: '🥇',
+        rankLabel: 'อันดับ 1 (Gold)',
+        border: 'border: 2px solid #f59e0b;',
+        bg: 'background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);',
+        badgeBg: 'background: #f59e0b; color: #fff;',
+        glow: 'box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25);'
+      },
+      {
+        rank: 2,
+        medal: '🥈',
+        rankLabel: 'อันดับ 2 (Silver)',
+        border: 'border: 1.5px solid #94a3b8;',
+        bg: 'background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);',
+        badgeBg: 'background: #64748b; color: #fff;',
+        glow: 'box-shadow: 0 6px 18px -4px rgba(100, 116, 139, 0.15);'
+      },
+      {
+        rank: 3,
+        medal: '🥉',
+        rankLabel: 'อันดับ 3 (Bronze)',
+        border: 'border: 1.5px solid #d97706;',
+        bg: 'background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);',
+        badgeBg: 'background: #d97706; color: #fff;',
+        glow: 'box-shadow: 0 6px 18px -4px rgba(217, 119, 6, 0.15);'
+      }
+    ];
+
+    let html = '';
+    top3.forEach((cand, idx) => {
+      const style = podiumStyles[idx];
+      html += `
+        <div style="border-radius: 16px; padding: 18px 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease; ${style.border} ${style.bg} ${style.glow}">
+          <div style="position: absolute; right: 12px; top: 10px; font-size: 2.4rem; opacity: 0.25; user-select: none;">
+            ${style.medal}
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+              <span style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 9999px; ${style.badgeBg}">
+                ${style.rankLabel}
+              </span>
+              <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">
+                ${escapeHtml(cand.target_position)}
+              </span>
+            </div>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #0f172a; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${escapeHtml(cand.student_name)}
+            </div>
+            <div style="font-size: 0.82rem; color: #64748b; margin-bottom: 12px;">
+              ระดับชั้น: <strong style="color: #334155;">${escapeHtml(cand.grade)}</strong>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed rgba(0, 0, 0, 0.08);">
+            <div style="display: flex; align-items: baseline; gap: 4px;">
+              <span style="font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1;">${cand.total_points}</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">แต้ม ⭐</span>
+            </div>
+            <button type="button" class="dg-btn-outline" onclick="openAdjustPointsModal(${cand.id})" style="padding: 6px 12px; font-size: 0.8rem; background: #fff; border-radius: 8px;" title="ให้หรือตัดแต้ม">
+              <i data-lucide="plus-circle" style="width: 14px; height: 14px; color: #10b981;"></i> <span>ปรับแต้ม</span>
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // ==========================================================
+  // 4. RENDER CANDIDATES TABLE
+  // ==========================================================
+  function renderCandidatesTable() {
+    const tableBody = document.getElementById('year70CandidatesTableBody');
+    if (!tableBody) return;
+
+    if (!year70Candidates || year70Candidates.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 60px 20px; color: #94a3b8;">
+            <i data-lucide="users" style="width: 44px; height: 44px; margin-bottom: 12px; color: #cbd5e1;"></i>
+            <h4 style="margin: 0 0 6px 0; font-size: 1.05rem; font-weight: 700; color: #334155;">ยังไม่มีผู้สมัครในฝ่ายนี้</h4>
+            <p style="margin: 0 0 16px 0; font-size: 0.85rem; color: #64748b;">กดปุ่ม "+ เพิ่มผู้สมัครปี 70" เพื่อเริ่มบันทึกรายชื่อและสะสมแต้ม</p>
+            <button type="button" class="dg-btn-black" onclick="openAddYear70CandidateModal()" style="font-size: 0.85rem; padding: 8px 16px;">
+              <i data-lucide="user-plus"></i> <span>+ เพิ่มผู้สมัคร</span>
+            </button>
+          </td>
+        </tr>
+      `;
+      if (window.lucide) lucide.createIcons();
+      return;
+    }
+
+    const isSuper = isSuperAdmin();
+
+    let html = '';
+    year70Candidates.forEach((cand, idx) => {
+      const rank = idx + 1;
+      let rankBadge = `<span style="font-weight: 700; color: #64748b;">${rank}</span>`;
+      if (rank === 1) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 1">🥇</span>`;
+      else if (rank === 2) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 2">🥈</span>`;
+      else if (rank === 3) rankBadge = `<span style="font-size: 1.25rem;" title="อันดับ 3">🥉</span>`;
+
+      const pointsColor = cand.total_points > 0 ? '#f59e0b' : (cand.total_points < 0 ? '#ef4444' : '#64748b');
+
+      html += `
+        <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+          <!-- Rank -->
+          <td style="padding: 14px 16px; text-align: center;">
+            ${rankBadge}
+          </td>
+
+          <!-- Candidate Info -->
+          <td style="padding: 14px 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+                ${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}
+              </div>
+              <div>
+                <div style="font-weight: 700; color: #0f172a; font-size: 0.94rem;">
+                  ${escapeHtml(cand.student_name)}
+                </div>
+                ${cand.notes ? `<div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;"><i data-lucide="info" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> ${escapeHtml(cand.notes)}</div>` : ''}
+              </div>
+            </div>
+          </td>
+
+          <!-- Grade -->
+          <td style="padding: 14px 16px;">
+            <span style="display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; background: #f1f5f9; color: #334155;">
+              ${escapeHtml(cand.grade)}
+            </span>
+          </td>
+
+          <!-- Target Position -->
+          <td style="padding: 14px 16px;">
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; font-size: 0.82rem; font-weight: 600; background: #eef2ff; color: #4338ca; border: 1px solid #e0e7ff;">
+              <i data-lucide="${POSITION_ICONS[cand.target_position] || 'award'}" style="width: 13px; height: 13px;"></i>
+              ${escapeHtml(cand.target_position)}
+            </span>
+          </td>
+
+          <!-- Total Points -->
+          <td style="padding: 14px 16px; text-align: center;">
+            <div style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 9999px; background: #fffbeb; border: 1px solid #fde68a; box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);">
+              <span style="font-size: 1.05rem; font-weight: 800; color: ${pointsColor};">${cand.total_points}</span>
+              <span style="font-size: 0.78rem; color: #f59e0b;">⭐</span>
+            </div>
+          </td>
+
+          <!-- Quick Points Buttons -->
+          <td style="padding: 14px 16px; text-align: center;">
+            <div style="display: inline-flex; align-items: center; gap: 4px;">
+              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 1, 'ปฏิบัติหน้าที่เรียบร้อย (+1)')" title="+1 แต้ม (ปฏิบัติหน้าที่เรียบร้อย)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+1</button>
+              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 3, 'เข้าเวรตรงเวลา / ทำหน้าที่เรียบร้อย (+3)')" title="+3 แต้ม (เข้าเวรตรงเวลา)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+3</button>
+              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 5, 'ช่วยเหลืองานกิจกรรมโรงเรียน (+5)')" title="+5 แต้ม (ช่วยเหลืองานกิจกรรม)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; cursor: pointer; transition: transform 0.1s ease;">+5</button>
+              <button type="button" class="year70-quick-btn" onclick="quickGivePoints(${cand.id}, 10, 'ทุ่มเทรับผิดชอบงานเป็นพิเศษ (+10)')" title="+10 แต้ม (ทุ่มเทพิเศษ)" style="padding: 4px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; background: #fef3c7; color: #b45309; border: 1px solid #fde68a; cursor: pointer; transition: transform 0.1s ease;">+10</button>
+              <button type="button" class="year70-quick-btn" onclick="openAdjustPointsModal(${cand.id})" title="กำหนดแต้มและเหตุผลเอง" style="padding: 4px 7px; border-radius: 6px; font-size: 0.78rem; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; cursor: pointer;">
+                <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i>
+              </button>
+            </div>
+          </td>
+
+          <!-- Actions -->
+          <td style="padding: 14px 16px; text-align: right;">
+            <div style="display: inline-flex; align-items: center; gap: 6px;">
+              <button type="button" class="dg-btn-outline" onclick="openPointLogsModal(${cand.id})" style="padding: 6px 10px; font-size: 0.78rem; border-radius: 6px;" title="ดูประวัติแต้มทั้งหมด">
+                <i data-lucide="history" style="width: 13px; height: 13px;"></i> <span>ประวัติ</span>
+              </button>
+
+              ${isSuper ? `
+                <button type="button" class="dg-btn-outline" onclick="openMovePositionModal(${cand.id})" style="padding: 6px 8px; font-size: 0.78rem; border-radius: 6px;" title="ย้ายฝ่าย (เฉพาะ Super Admin)">
+                  <i data-lucide="arrow-right-left" style="width: 13px; height: 13px; color: #3b82f6;"></i>
+                </button>
+                <button type="button" class="dg-btn-outline" onclick="deleteYear70Candidate(${cand.id}, '${escapeHtml(cand.student_name)}')" style="padding: 6px 8px; font-size: 0.78rem; border-radius: 6px; border-color: #fca5a5; color: #dc2626;" title="ลบผู้สมัคร (เฉพาะ Super Admin)">
+                  <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                </button>
+              ` : ''}
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    tableBody.innerHTML = html;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function updateSummaryCounts() {
+    const totalCountText = document.getElementById('year70TotalCountText');
+    const totalPointsText = document.getElementById('year70TotalPointsSumText');
+
+    if (totalCountText) totalCountText.textContent = year70Candidates.length;
+    if (totalPointsText) {
+      const sum = year70Candidates.reduce((acc, c) => acc + (c.total_points || 0), 0);
+      totalPointsText.textContent = sum;
+    }
+  }
+
+  // Search debounce
+  let searchTimer = null;
+  window.handleYear70Search = function (val) {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      currentSearchQuery = val || '';
+      window.loadYear70Admin();
+    }, 280);
+  };
+
+  // ==========================================================
+  // 5. QUICK GIVE POINTS
+  // ==========================================================
+  window.quickGivePoints = async function (candidateId, points, defaultReason) {
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates/${candidateId}/points`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          points: points,
+          reason: defaultReason
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'บันทึกแต้มไม่สำเร็จ');
+      }
+
+      if (typeof showToast === 'function') {
+        showToast(json.message, 'success');
+      }
+
+      // Reload data
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'บันทึกแต้มล้มเหลว',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 6. MODAL: ADD CANDIDATE FROM ROSTER (143 Students)
+  // ==========================================================
+  window.openAddYear70CandidateModal = async function () {
+    selectedStudentForAdd = null;
+    const modal = document.getElementById('adminYear70AddModal');
+    if (!modal) return;
+
+    // Reset inputs
+    const searchInput = document.getElementById('year70StudentSearchInput');
+    const selectedBadge = document.getElementById('year70SelectedStudentBadge');
+    const posSelect = document.getElementById('year70AddPositionSelect');
+    const notesInput = document.getElementById('year70AddNotesInput');
+    const dropdown = document.getElementById('year70StudentSuggestionsDropdown');
+
+    if (searchInput) searchInput.value = '';
+    if (notesInput) notesInput.value = '';
+    if (selectedBadge) {
+      selectedBadge.style.display = 'none';
+      selectedBadge.innerHTML = '';
+    }
+    if (dropdown) {
+      dropdown.style.display = 'none';
+      dropdown.innerHTML = '';
+    }
+
+    // Set position select default to current tab filter if not ALL
+    if (posSelect) {
+      posSelect.value = (currentPositionFilter !== 'ALL' && VALID_POSITIONS.includes(currentPositionFilter))
+        ? currentPositionFilter
+        : VALID_POSITIONS[0];
+    }
+
+    // Load 143 students from /api/students if not cached
+    if (allStudentsRoster.length === 0) {
+      try {
+        const res = await fetch(`${getApiBase()}/api/students`);
+        if (res.ok) {
+          const list = await res.json();
+          if (Array.isArray(list)) allStudentsRoster = list;
+        }
+      } catch (e) {
+        console.warn('Could not load students roster:', e);
+      }
+    }
+
+    modal.style.display = 'flex';
+    if (searchInput) setTimeout(() => searchInput.focus(), 100);
+    if (window.lucide) lucide.createIcons();
+  };
+
+  window.closeAddYear70CandidateModal = function () {
+    const modal = document.getElementById('adminYear70AddModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  // Handle student autocomplete input
+  window.handleYear70StudentSearchInput = function (query) {
+    const dropdown = document.getElementById('year70StudentSuggestionsDropdown');
+    if (!dropdown) return;
+
+    const term = (query || '').trim().toLowerCase();
+    if (!term) {
+      dropdown.style.display = 'none';
+      dropdown.innerHTML = '';
+      return;
+    }
+
+    const matches = allStudentsRoster.filter(s => {
+      const name = (s.name || '').toLowerCase();
+      const grade = (s.grade || '').toLowerCase();
+      const orderNo = String(s.order_no || '');
+      return name.includes(term) || grade.includes(term) || orderNo === term;
+    }).slice(0, 8);
+
+    if (matches.length === 0) {
+      dropdown.innerHTML = '<div style="padding: 12px; color: #94a3b8; font-size: 0.85rem; text-align: center;">ไม่พบนักเรียนที่ตรงกับคำค้นหาใน 143 คน</div>';
+      dropdown.style.display = 'block';
+      return;
+    }
+
+    let html = '';
+    matches.forEach(s => {
+      html += `
+        <div onclick="selectYear70Student(${s.order_no || s.id})" style="padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; transition: background 0.15s ease;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
+          <div>
+            <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem;">
+              <span style="color: #64748b; font-size: 0.8rem; margin-right: 6px;">#${s.order_no}</span>
+              ${escapeHtml(s.name)}
+            </div>
+            <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">
+              ${escapeHtml(s.grade)} • ${escapeHtml(s.rank || 'สารวัตรนักเรียน')}
+            </div>
+          </div>
+          <span style="font-size: 0.75rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 6px; font-weight: 600;">เลือก</span>
+        </div>
+      `;
+    });
+
+    dropdown.innerHTML = html;
+    dropdown.style.display = 'block';
+  };
+
+  window.selectYear70Student = function (studentId) {
+    const student = allStudentsRoster.find(s => (s.order_no === studentId || s.id === studentId));
+    if (!student) return;
+
+    selectedStudentForAdd = student;
+
+    const dropdown = document.getElementById('year70StudentSuggestionsDropdown');
+    const searchInput = document.getElementById('year70StudentSearchInput');
+    const selectedBadge = document.getElementById('year70SelectedStudentBadge');
+
+    if (dropdown) dropdown.style.display = 'none';
+    if (searchInput) searchInput.value = '';
+
+    if (selectedBadge) {
+      selectedBadge.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 10px 14px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+              ✓
+            </div>
+            <div>
+              <div style="font-weight: 700; color: #166534; font-size: 0.92rem;">
+                ${escapeHtml(student.name)}
+              </div>
+              <div style="font-size: 0.78rem; color: #15803d;">
+                #${student.order_no} • ระดับชั้น: ${escapeHtml(student.grade)} • ${escapeHtml(student.rank || 'สารวัตร')}
+              </div>
+            </div>
+          </div>
+          <button type="button" onclick="clearSelectedYear70Student()" style="background: transparent; border: none; color: #dc2626; cursor: pointer; padding: 4px;" title="ยกเลิกการเลือก">
+            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      `;
+      selectedBadge.style.display = 'block';
+      if (window.lucide) lucide.createIcons();
+    }
+  };
+
+  window.clearSelectedYear70Student = function () {
+    selectedStudentForAdd = null;
+    const selectedBadge = document.getElementById('year70SelectedStudentBadge');
+    if (selectedBadge) {
+      selectedBadge.style.display = 'none';
+      selectedBadge.innerHTML = '';
+    }
+  };
+
+  window.submitAddYear70Candidate = async function () {
+    if (!selectedStudentForAdd) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณาเลือกนักเรียน',
+        text: 'กรุณาพิมพ์ค้นหาและเลือกนักเรียนจากฐานข้อมูล 143 คน',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      return;
+    }
+
+    const posSelect = document.getElementById('year70AddPositionSelect');
+    const notesInput = document.getElementById('year70AddNotesInput');
+
+    const targetPosition = posSelect ? posSelect.value : '';
+    const notes = notesInput ? notesInput.value.trim() : '';
+
+    if (!targetPosition || !VALID_POSITIONS.includes(targetPosition)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'ตำแหน่งไม่ถูกต้อง',
+        text: 'กรุณาเลือกตำแหน่งที่ต้องการสะสมแต้ม',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      return;
+    }
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          student_id: selectedStudentForAdd.order_no || selectedStudentForAdd.id,
+          target_position: targetPosition,
+          notes: notes
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'เพิ่มผู้สมัครไม่สำเร็จ');
+      }
+
+      window.closeAddYear70CandidateModal();
+      if (typeof showToast === 'function') {
+        showToast(json.message, 'success');
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'สำเร็จ',
+          text: json.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'เพิ่มผู้สมัครไม่สำเร็จ',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 7. MODAL: ADJUST POINTS & REASON
+  // ==========================================================
+  window.openAdjustPointsModal = function (candidateId) {
+    const cand = year70Candidates.find(c => c.id === candidateId);
+    if (!cand) return;
+
+    currentActiveCandidateForPoints = cand;
+    const modal = document.getElementById('adminYear70PointsModal');
+    if (!modal) return;
+
+    // Set Candidate Details in Modal Header
+    const nameEl = document.getElementById('year70PointsCandidateName');
+    const metaEl = document.getElementById('year70PointsCandidateMeta');
+    const totalEl = document.getElementById('year70PointsCurrentTotal');
+    const scoreInput = document.getElementById('year70PointsDeltaInput');
+    const reasonInput = document.getElementById('year70PointsReasonInput');
+
+    if (nameEl) nameEl.textContent = cand.student_name;
+    if (metaEl) metaEl.textContent = `${cand.grade} • ${cand.target_position}`;
+    if (totalEl) totalEl.textContent = `${cand.total_points} แต้ม ⭐`;
+    if (scoreInput) scoreInput.value = '3';
+    if (reasonInput) reasonInput.value = '';
+
+    modal.style.display = 'flex';
+    if (scoreInput) setTimeout(() => scoreInput.focus(), 100);
+    if (window.lucide) lucide.createIcons();
+  };
+
+  window.closeAdjustPointsModal = function () {
+    const modal = document.getElementById('adminYear70PointsModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.setAdjustPointsDelta = function (delta) {
+    const scoreInput = document.getElementById('year70PointsDeltaInput');
+    if (scoreInput) scoreInput.value = delta;
+  };
+
+  window.setAdjustPointsReasonPreset = function (reason, delta) {
+    const scoreInput = document.getElementById('year70PointsDeltaInput');
+    const reasonInput = document.getElementById('year70PointsReasonInput');
+
+    if (reasonInput) reasonInput.value = reason;
+    if (scoreInput && delta !== undefined) scoreInput.value = delta;
+  };
+
+  window.submitAdjustPoints = async function () {
+    if (!currentActiveCandidateForPoints) return;
+
+    const scoreInput = document.getElementById('year70PointsDeltaInput');
+    const reasonInput = document.getElementById('year70PointsReasonInput');
+
+    const points = parseInt(scoreInput ? scoreInput.value : 0, 10);
+    const reason = (reasonInput ? reasonInput.value : '').trim();
+
+    if (isNaN(points) || points === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'ระบุคะแนนไม่ถูกต้อง',
+        text: 'กรุณาระบุจำนวนแต้มที่เป็นตัวเลข (ไม่เท่ากับ 0 เช่น +3, +5 หรือ -3)',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      return;
+    }
+
+    if (!reason) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'กรุณาระบุเหตุผล',
+        text: 'กรุณาระบุภารกิจหรือเหตุผลในการให้/ตัดแต้ม เพื่อเก็บบันทึกประวัติที่โปร่งใส',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      return;
+    }
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates/${currentActiveCandidateForPoints.id}/points`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          points: points,
+          reason: reason
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'บันทึกแต้มไม่สำเร็จ');
+      }
+
+      window.closeAdjustPointsModal();
+      if (typeof showToast === 'function') {
+        showToast(json.message, 'success');
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'สำเร็จ',
+          text: json.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'บันทึกแต้มล้มเหลว',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 8. MODAL: POINT LOGS TIMELINE
+  // ==========================================================
+  window.openPointLogsModal = async function (candidateId) {
+    const cand = year70Candidates.find(c => c.id === candidateId);
+    const modal = document.getElementById('adminYear70LogsModal');
+    if (!modal) return;
+
+    currentActiveCandidateForLogs = cand;
+
+    const nameEl = document.getElementById('year70LogsCandidateName');
+    const metaEl = document.getElementById('year70LogsCandidateMeta');
+    const totalEl = document.getElementById('year70LogsCurrentTotal');
+    const timelineEl = document.getElementById('year70LogsTimelineContainer');
+
+    if (cand) {
+      if (nameEl) nameEl.textContent = cand.student_name;
+      if (metaEl) metaEl.textContent = `${cand.grade} • ${cand.target_position}`;
+      if (totalEl) totalEl.textContent = `${cand.total_points} แต้ม ⭐`;
+    }
+
+    if (timelineEl) {
+      timelineEl.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #64748b;">
+          <i data-lucide="loader" class="dg-spin" style="width: 24px; height: 24px; margin-bottom: 8px; color: #f59e0b;"></i>
+          <div>กำลังโหลดประวัติคะแนน...</div>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    modal.style.display = 'flex';
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates/${candidateId}/logs`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+
+      if (!json || !json.success || !Array.isArray(json.logs)) {
+        throw new Error('ไม่สามารถดึงประวัติได้');
+      }
+
+      const isSuper = isSuperAdmin();
+
+      if (json.candidate) {
+        if (totalEl) totalEl.textContent = `${json.candidate.total_points} แต้ม ⭐`;
+      }
+
+      if (json.logs.length === 0) {
+        timelineEl.innerHTML = `
+          <div style="text-align: center; padding: 48px 20px; color: #94a3b8;">
+            <i data-lucide="inbox" style="width: 36px; height: 36px; margin-bottom: 8px; color: #cbd5e1;"></i>
+            <div style="font-weight: 600; color: #475569;">ยังไม่มีประวัติการให้หรือตัดแต้ม</div>
+            <div style="font-size: 0.82rem; margin-top: 4px;">แต้มเริ่มต้นของทุกคนคือ 0 แต้ม</div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      let html = '<div style="display: flex; flex-direction: column; gap: 12px;">';
+      json.logs.forEach(log => {
+        const isPositive = log.points > 0;
+        const ptsSign = isPositive ? `+${log.points}` : `${log.points}`;
+        const ptsColor = isPositive ? '#059669' : '#dc2626';
+        const ptsBg = isPositive ? '#ecfdf5' : '#fef2f2';
+        const ptsBorder = isPositive ? '#a7f3d0' : '#fecaca';
+
+        html += `
+          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); transition: border-color 0.15s ease;" onmouseover="this.style.borderColor='#cbd5e1'" onmouseout="this.style.borderColor='#e2e8f0'">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <div style="padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 1.05rem; background: ${ptsBg}; color: ${ptsColor}; border: 1px solid ${ptsBorder}; flex-shrink: 0; min-width: 52px; text-align: center;">
+                ${ptsSign}
+              </div>
+              <div>
+                <div style="font-weight: 600; color: #0f172a; font-size: 0.92rem; line-height: 1.4;">
+                  ${escapeHtml(log.reason)}
+                </div>
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px; display: flex; align-items: center; gap: 8px;">
+                  <span><i data-lucide="user" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> บันทึกโดย: <strong>${escapeHtml(log.admin_username)}</strong></span>
+                  <span style="color: #cbd5e1;">•</span>
+                  <span><i data-lucide="clock" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle;"></i> ${formatThaiDateTime(log.created_at)}</span>
+                </div>
+              </div>
+            </div>
+
+            ${isSuper ? `
+              <button type="button" onclick="deletePointLogEntry(${log.id}, ${candidateId})" style="background: transparent; border: none; color: #ef4444; padding: 4px; cursor: pointer; border-radius: 6px; flex-shrink: 0;" title="ลบรายการนี้และคืนค่าแต้ม (Super Admin Only)">
+                <i data-lucide="trash-2" style="width: 15px; height: 15px;"></i>
+              </button>
+            ` : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
+
+      timelineEl.innerHTML = html;
+      if (window.lucide) lucide.createIcons();
+    } catch (err) {
+      timelineEl.innerHTML = `
+        <div style="text-align: center; padding: 32px; color: #ef4444;">
+          <i data-lucide="alert-circle" style="width: 28px; height: 28px; margin-bottom: 6px;"></i>
+          <div>โหลดประวัติล้มเหลว: ${escapeHtml(err.message)}</div>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+    }
+  };
+
+  window.closePointLogsModal = function () {
+    const modal = document.getElementById('adminYear70LogsModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  // Delete point log entry (Super Admin Only)
+  window.deletePointLogEntry = async function (logId, candidateId) {
+    if (!isSuperAdmin()) {
+      showToast('เฉพาะ Super Admin เท่านั้นที่สามารถลบประวัติแต้มได้', 'error');
+      return;
+    }
+
+    const confirm = await Swal.fire({
+      title: 'ยกเลิกรายการแต้มนี้?',
+      text: 'เมื่อลบรายการนี้ คะแนนรวมของผู้สมัครจะถูกคำนวณใหม่และคืนค่าโดยอัตโนมัติ',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'ยืนยันลบรายการ',
+      cancelButtonText: 'ยกเลิก',
+      customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/logs/${logId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'ลบรายการแต้มไม่สำเร็จ');
+      }
+
+      if (typeof showToast === 'function') {
+        showToast('ยกเลิกรายการคะแนนและคืนค่าแต้มรวมเรียบร้อยแล้ว', 'success');
+      }
+
+      // Refresh modal timeline and main table
+      window.openPointLogsModal(candidateId);
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ลบรายการแต้มล้มเหลว',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 9. MODAL: MOVE POSITION (Super Admin Only)
+  // ==========================================================
+  window.openMovePositionModal = function (candidateId) {
+    if (!isSuperAdmin()) {
+      showToast('เฉพาะ Super Admin เท่านั้นที่สามารถย้ายตำแหน่งผู้สมัครได้', 'error');
+      return;
+    }
+
+    const cand = year70Candidates.find(c => c.id === candidateId);
+    if (!cand) return;
+
+    currentActiveCandidateForMove = cand;
+    const modal = document.getElementById('adminYear70MoveModal');
+    if (!modal) return;
+
+    const nameEl = document.getElementById('year70MoveCandidateName');
+    const oldPosEl = document.getElementById('year70MoveOldPosition');
+    const newPosSelect = document.getElementById('year70MoveNewPositionSelect');
+
+    if (nameEl) nameEl.textContent = cand.student_name;
+    if (oldPosEl) oldPosEl.textContent = cand.target_position;
+
+    if (newPosSelect) {
+      newPosSelect.innerHTML = VALID_POSITIONS.map(p => `
+        <option value="${p}" ${p === cand.target_position ? 'selected disabled' : ''}>
+          ${p} ${p === cand.target_position ? '(ตำแหน่งปัจจุบัน)' : ''}
+        </option>
+      `).join('');
+    }
+
+    modal.style.display = 'flex';
+    if (window.lucide) lucide.createIcons();
+  };
+
+  window.closeMovePositionModal = function () {
+    const modal = document.getElementById('adminYear70MoveModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.submitMovePosition = async function () {
+    if (!currentActiveCandidateForMove) return;
+
+    const newPosSelect = document.getElementById('year70MoveNewPositionSelect');
+    const newPos = newPosSelect ? newPosSelect.value : '';
+
+    if (!newPos || !VALID_POSITIONS.includes(newPos)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'ตำแหน่งไม่ถูกต้อง',
+        text: 'กรุณาเลือกตำแหน่งเป้าหมายใหม่',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      return;
+    }
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates/${currentActiveCandidateForMove.id}/position`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ target_position: newPos })
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'ย้ายฝ่ายไม่สำเร็จ');
+      }
+
+      window.closeMovePositionModal();
+      if (typeof showToast === 'function') {
+        showToast(json.message, 'success');
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'สำเร็จ',
+          text: json.message,
+          customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+        });
+      }
+
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ย้ายฝ่ายล้มเหลว',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 10. DELETE CANDIDATE (Super Admin Only)
+  // ==========================================================
+  window.deleteYear70Candidate = async function (candidateId, name) {
+    if (!isSuperAdmin()) {
+      showToast('เฉพาะ Super Admin เท่านั้นที่สามารถลบผู้สมัครออกจากระบบได้', 'error');
+      return;
+    }
+
+    const confirm = await Swal.fire({
+      title: `ยืนยันลบ "${name}"?`,
+      html: `คุณกำลังจะลบผู้สมัครคนนี้ออกจากระบบสะสมแต้มปี 70<br><span style="color: #dc2626; font-size: 0.85rem;">ประวัติแต้มทั้งหมดของบุคคลนี้จะถูกลบไปด้วยและไม่สามารถกู้คืนได้</span>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'ยืนยันลบผู้สมัคร',
+      cancelButtonText: 'ยกเลิก',
+      customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn', cancelButton: 'custom-swal-btn' }
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    const token = getAuthToken();
+    try {
+      const res = await fetch(`${getApiBase()}/api/year70/candidates/${candidateId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'ลบผู้สมัครไม่สำเร็จ');
+      }
+
+      if (typeof showToast === 'function') {
+        showToast(json.message, 'success');
+      }
+
+      window.loadYear70Admin();
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ลบผู้สมัครล้มเหลว',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 11. EXPORT CSV
+  // ==========================================================
+  window.exportYear70Csv = async function () {
+    const token = getAuthToken();
+    const pos = currentPositionFilter;
+    const url = `${getApiBase()}/api/year70/export?position=${encodeURIComponent(pos)}`;
+
+    try {
+      if (typeof showToast === 'function') {
+        showToast('กำลังสร้างและดาวน์โหลดไฟล์ CSV...', 'info');
+      }
+
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      const blob = await res.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `sarawat_year70_points_${pos}_${Date.now()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+
+      if (typeof showToast === 'function') {
+        showToast('ดาวน์โหลดไฟล์ CSV เรียบร้อยแล้ว', 'success');
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ส่งออก CSV ล้มเหลว',
+        text: err.message,
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+    }
+  };
+
+  // ==========================================================
+  // 12. PRINT SUMMARY REPORT
+  // ==========================================================
+  window.printYear70Summary = function () {
+    if (!year70Candidates || year70Candidates.length === 0) {
+      Swal.fire({
+        icon: 'info',
+        title: 'ไม่มีข้อมูล',
+        text: 'ยังไม่มีข้อมูลผู้สมัครสำหรับพิมพ์รายงาน',
+        customClass: { popup: 'custom-swal-popup', confirmButton: 'custom-swal-btn' }
+      });
+      return;
+    }
+
+    const printWin = window.open('', '_blank');
+    if (!printWin) {
+      alert('กรุณาอนุญาตป๊อปอัปเพื่อเปิดหน้าต่างพิมพ์รายงาน');
+      return;
+    }
+
+    const posTitle = currentPositionFilter === 'ALL' ? 'ทุกฝ่าย (ภาพรวม Leaderboard)' : currentPositionFilter;
+    const nowStr = new Date().toLocaleDateString('th-TH', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    let rowsHtml = '';
+    year70Candidates.forEach((c, idx) => {
+      rowsHtml += `
+        <tr>
+          <td style="text-align: center; padding: 8px; border: 1px solid #cbd5e1;">${idx + 1}</td>
+          <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: 600;">${escapeHtml(c.student_name)}</td>
+          <td style="text-align: center; padding: 8px; border: 1px solid #cbd5e1;">${escapeHtml(c.grade)}</td>
+          <td style="padding: 8px; border: 1px solid #cbd5e1;">${escapeHtml(c.target_position)}</td>
+          <td style="text-align: center; padding: 8px; border: 1px solid #cbd5e1; font-weight: bold; font-size: 1.1rem; color: #b45309;">${c.total_points}</td>
+          <td style="padding: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; color: #64748b;">${escapeHtml(c.notes || '-')}</td>
+        </tr>
+      `;
+    });
+
+    const docContent = `
+      <!DOCTYPE html>
+      <html lang="th">
+      <head>
+        <meta charset="utf-8">
+        <title>รายงานสรุปคะแนนสะสมคณะทำงานสารวัตรนักเรียน ปี 2570</title>
+        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+        <style>
+          body {
+            font-family: 'Sarabun', sans-serif;
+            margin: 25px;
+            color: #0f172a;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 16px;
+          }
+          h1 { margin: 0 0 6px 0; font-size: 1.5rem; }
+          .meta { font-size: 0.9rem; color: #475569; }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 0.92rem;
+          }
+          th {
+            background: #f1f5f9;
+            padding: 10px 8px;
+            border: 1px solid #94a3b8;
+            font-weight: 700;
+          }
+          .footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+          }
+          @media print {
+            body { margin: 15mm; }
+            button { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>สรุปผลคะแนนสะสมคณะทำงานสารวัตรนักเรียน ประจำปีการศึกษา 2570</h1>
+          <div class="meta">
+            ฝ่ายที่เลือก: <strong>${posTitle}</strong> | ข้อมูล ณ วันที่: ${nowStr}
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">อันดับ</th>
+              <th>ชื่อ-นามสกุล</th>
+              <th style="width: 80px;">ชั้น</th>
+              <th style="width: 160px;">ตำแหน่งเป้าหมาย</th>
+              <th style="width: 100px;">คะแนนสะสม</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+
+        <div class="footer">
+          <div>ผู้พิมพ์รายงาน: _____________________</div>
+          <div>ผู้รับรองผลการประเมิน: _____________________</div>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWin.document.open();
+    printWin.document.write(docContent);
+    printWin.document.close();
+  };
+
+})();
