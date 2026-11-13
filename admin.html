@@ -3139,6 +3139,28 @@
     .year70-candidate-block:hover img {
       transform: scale(1.05) !important;
     }
+    /* Year 70 Podium Liquid Glass Cards (Gold, Silver, Bronze Sheen) */
+    .year70-podium-card.rank-1 {
+      box-shadow: 0 16px 40px -10px rgba(245, 158, 11, 0.4), 0 0 24px rgba(245, 158, 11, 0.22) !important;
+    }
+    .year70-podium-card.rank-1:hover {
+      box-shadow: 0 26px 55px -10px rgba(245, 158, 11, 0.55), 0 0 35px rgba(245, 158, 11, 0.35) !important;
+      border-color: rgba(245, 158, 11, 0.9) !important;
+    }
+    .year70-podium-card.rank-2 {
+      box-shadow: 0 14px 34px -10px rgba(148, 163, 184, 0.35), 0 0 20px rgba(148, 163, 184, 0.18) !important;
+    }
+    .year70-podium-card.rank-2:hover {
+      box-shadow: 0 24px 50px -10px rgba(148, 163, 184, 0.5), 0 0 30px rgba(148, 163, 184, 0.3) !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
+    }
+    .year70-podium-card.rank-3 {
+      box-shadow: 0 14px 34px -10px rgba(217, 119, 6, 0.35), 0 0 20px rgba(217, 119, 6, 0.18) !important;
+    }
+    .year70-podium-card.rank-3:hover {
+      box-shadow: 0 24px 50px -10px rgba(217, 119, 6, 0.5), 0 0 30px rgba(217, 119, 6, 0.3) !important;
+      border-color: rgba(251, 146, 60, 0.85) !important;
+    }
 
   </style>
   <!-- Chart.js for System Monitor -->
@@ -6067,7 +6089,7 @@
       </div>
 
       <!-- Top 3 Podium Highlights -->
-      <div id="year70PodiumContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px;">
+      <div id="year70PodiumContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px;">
         <!-- Dynamically rendered top 3 cards -->
       </div>
 
@@ -15356,7 +15378,7 @@
   <script src="js/admin-team.js?v=2.7.8"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
   <script src="js/admin-dsd.js?v=2.2.0"></script>
-  <script src="js/admin-year70.js?v=1.1.0"></script>
+  <script src="js/admin-year70.js?v=1.2.0"></script>
 </body>
 
 </html>

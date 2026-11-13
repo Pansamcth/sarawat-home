@@ -340,6 +340,9 @@
   // ==========================================================
   // 3. RENDER TOP 3 PODIUM
   // ==========================================================
+  // ==========================================================
+  // 3. RENDER TOP 3 PODIUM (Liquid Glass Full-Bleed Photo Style)
+  // ==========================================================
   function renderPodium() {
     const container = document.getElementById('year70PodiumContainer');
     if (!container) return;
@@ -360,29 +363,35 @@
       {
         rank: 1,
         medal: '🥇',
-        rankLabel: 'อันดับ 1 (Gold)',
-        border: 'border: 2px solid #f59e0b;',
-        bg: 'background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);',
-        badgeBg: 'background: #f59e0b; color: #fff;',
-        glow: 'box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.25);'
+        rankClass: 'rank-1',
+        rankLabel: 'อันดับ 1 (GOLD)',
+        border: 'border: 1.5px solid rgba(245, 158, 11, 0.75);',
+        glow: 'box-shadow: 0 16px 40px -10px rgba(245, 158, 11, 0.4), 0 0 24px rgba(245, 158, 11, 0.22);',
+        rankGlassStyle: 'background: rgba(245, 158, 11, 0.38); border: 1px solid rgba(251, 191, 36, 0.75); color: #fef08a; text-shadow: 0 0 10px rgba(245, 158, 11, 0.6); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);',
+        pointsGlassStyle: 'background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(245, 158, 11, 0.6); color: #fbbf24; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);',
+        accentGradient: 'radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.35) 0%, rgba(15, 23, 42, 0) 65%)'
       },
       {
         rank: 2,
         medal: '🥈',
-        rankLabel: 'อันดับ 2 (Silver)',
-        border: 'border: 1.5px solid #94a3b8;',
-        bg: 'background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);',
-        badgeBg: 'background: #64748b; color: #fff;',
-        glow: 'box-shadow: 0 6px 18px -4px rgba(100, 116, 139, 0.15);'
+        rankClass: 'rank-2',
+        rankLabel: 'อันดับ 2 (SILVER)',
+        border: 'border: 1.5px solid rgba(203, 213, 225, 0.65);',
+        glow: 'box-shadow: 0 14px 34px -10px rgba(148, 163, 184, 0.35), 0 0 18px rgba(148, 163, 184, 0.18);',
+        rankGlassStyle: 'background: rgba(148, 163, 184, 0.3); border: 1px solid rgba(255, 255, 255, 0.5); color: #f8fafc; box-shadow: 0 4px 14px rgba(148, 163, 184, 0.25);',
+        pointsGlassStyle: 'background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(203, 213, 225, 0.45); color: #e2e8f0; box-shadow: 0 4px 14px rgba(148, 163, 184, 0.2);',
+        accentGradient: 'radial-gradient(circle at 80% 20%, rgba(148, 163, 184, 0.25) 0%, rgba(15, 23, 42, 0) 65%)'
       },
       {
         rank: 3,
         medal: '🥉',
-        rankLabel: 'อันดับ 3 (Bronze)',
-        border: 'border: 1.5px solid #d97706;',
-        bg: 'background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);',
-        badgeBg: 'background: #d97706; color: #fff;',
-        glow: 'box-shadow: 0 6px 18px -4px rgba(217, 119, 6, 0.15);'
+        rankClass: 'rank-3',
+        rankLabel: 'อันดับ 3 (BRONZE)',
+        border: 'border: 1.5px solid rgba(217, 119, 6, 0.65);',
+        glow: 'box-shadow: 0 14px 34px -10px rgba(217, 119, 6, 0.32), 0 0 18px rgba(217, 119, 6, 0.15);',
+        rankGlassStyle: 'background: rgba(217, 119, 6, 0.32); border: 1px solid rgba(251, 146, 60, 0.6); color: #ffedd5; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);',
+        pointsGlassStyle: 'background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(251, 146, 60, 0.45); color: #fed7aa; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2);',
+        accentGradient: 'radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.25) 0%, rgba(15, 23, 42, 0) 65%)'
       }
     ];
 
@@ -390,59 +399,96 @@
     top3.forEach((cand, idx) => {
       const style = podiumStyles[idx];
       const photoUrl = cand.image_url ? (cand.image_url.startsWith('/') ? getApiBase() + cand.image_url : cand.image_url) : '';
-      let avatarHtml = '';
+      let bgImageHtml = '';
       if (photoUrl) {
-        avatarHtml = `<img src="${photoUrl}" alt="${escapeHtml(cand.student_name)}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.12);" onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\\\'width:44px;height:44px;border-radius:50%;background:#0f172a;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;\\\'>${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>';" />`;
+        bgImageHtml = `
+          <img src="${photoUrl}" alt="${escapeHtml(cand.student_name)}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; z-index: 0; transition: transform 0.4s ease;" onerror="this.onerror=null; this.parentElement.querySelector('.year70-bg-fallback').style.display='flex'; this.style.display='none';" />
+          <div class="year70-bg-fallback" style="display: none; position: absolute; inset: 0; background: radial-gradient(circle at 75% 20%, #4338ca 0%, #1e1b4b 55%, #0f172a 100%); z-index: 0; align-items: center; justify-content: center; color: rgba(255,255,255,0.18); font-size: 6rem; font-weight: 800;">
+            ${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}
+          </div>
+        `;
       } else {
-        avatarHtml = `<div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); color: #fff; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}</div>`;
+        bgImageHtml = `
+          <div style="position: absolute; inset: 0; background: radial-gradient(circle at 75% 20%, #3b82f6 0%, #1e1b4b 55%, #0f172a 100%); z-index: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.18); font-size: 6rem; font-weight: 800; user-select: none;">
+            ${cand.student_name ? cand.student_name.trim().charAt(0) : '?'}
+          </div>
+        `;
       }
 
       html += `
-        <div style="border-radius: 16px; padding: 18px 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease; ${style.border} ${style.bg} ${style.glow}">
-          <div style="position: absolute; right: 12px; top: 10px; font-size: 2.4rem; opacity: 0.25; user-select: none;">
+        <!-- Podium Card: Full-Bleed Photo + Ethereal Liquid Glass (สไตล์เดียวกับบล็อกบุคคล สวยหรูระดับโพเดียม) -->
+        <div class="year70-candidate-block year70-podium-card ${style.rankClass}" style="position: relative; border-radius: 22px; overflow: hidden; min-height: 360px; display: flex; flex-direction: column; justify-content: space-between; background: #0f172a; transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1); ${style.border} ${style.glow}">
+          <!-- Full Bleed Photo Background (รูปเต็มบล็อก) -->
+          ${bgImageHtml}
+
+          <!-- Ambient Glow Sheen (ออร่าสีตามระดับเหรียญ) -->
+          <div style="position: absolute; inset: 0; background: ${style.accentGradient}; z-index: 1; pointer-events: none;"></div>
+
+          <!-- Gentle Vignette (คุมความสว่างให้โปร่งตา ดูมิติสวยงาม) -->
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15, 23, 42, 0.38) 0%, rgba(15, 23, 42, 0) 30%, rgba(15, 23, 42, 0.22) 58%, rgba(15, 23, 42, 0.88) 100%); z-index: 1; pointer-events: none;"></div>
+
+          <!-- Big Translucent Medal Watermark (เหรียญรางวัลโปร่งแสงมุมบนขวา) -->
+          <div style="position: absolute; right: 14px; top: 12px; font-size: 3.4rem; opacity: 0.32; user-select: none; z-index: 1; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));">
             ${style.medal}
           </div>
-          <div>
-            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
-              <span style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 9999px; ${style.badgeBg}">
-                ${style.rankLabel}
+
+          <!-- Top Floating Frosted Pills -->
+          <div style="position: relative; z-index: 2; padding: 14px 14px 0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <!-- Rank Pill (Liquid Frosted Glass) -->
+            <div style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 9999px; padding: 5px 12px; font-size: 0.76rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); ${style.rankGlassStyle}">
+              <span>${style.medal}</span>
+              <span>${style.rankLabel}</span>
+            </div>
+
+            <!-- Points Pill (Liquid Frosted Glass) -->
+            <div style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-radius: 9999px; padding: 5px 14px; font-size: 0.88rem; font-weight: 800; display: inline-flex; align-items: center; gap: 5px; ${style.pointsGlassStyle}">
+              <span style="font-size: 1.15rem; line-height: 1;">${cand.total_points}</span>
+              <span style="font-size: 0.74rem;">แต้ม ⭐</span>
+            </div>
+          </div>
+
+          <!-- Bottom Frosted Text Overlay (เบลอเนียนบนรูป ไร้บล็อกทึบ แสดงชื่อเต็ม) -->
+          <div style="position: relative; z-index: 2; width: 100%; padding: 28px 16px 16px; background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.5) 26%, rgba(15, 23, 42, 0.92) 100%); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); display: flex; flex-direction: column; gap: 10px; box-sizing: border-box;">
+            
+            <!-- Target Position Pill & Grade Tag -->
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+              <span style="background: rgba(99, 102, 241, 0.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(165, 180, 252, 0.45); border-radius: 9999px; padding: 3px 10px; font-size: 0.74rem; font-weight: 700; color: #e0e7ff; display: inline-flex; align-items: center; gap: 4px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                <i data-lucide="${POSITION_ICONS[cand.target_position] || 'award'}" style="width: 12px; height: 12px;"></i>
+                <span>${escapeHtml(cand.target_position)}</span>
               </span>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">
-                ${escapeHtml(cand.target_position)}
+
+              <span style="background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-weight: 700; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                ชั้น ${escapeHtml(cand.grade)}
               </span>
             </div>
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-              ${avatarHtml}
-              <div style="overflow: hidden;">
-                <div style="font-size: 1.12rem; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                  ${escapeHtml(cand.student_name)}
-                </div>
-                <div style="font-size: 0.8rem; color: #64748b;">
-                  ระดับชั้น: <strong style="color: #334155;">${escapeHtml(cand.grade)}</strong>
-                </div>
-              </div>
-            </div>
+
+            <!-- Full Candidate Name (แสดงชื่อเต็ม สวยเด่น ไม่ตัดคำ) -->
+            <h4 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em; line-height: 1.35; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85); white-space: normal; word-break: break-word;">
+              ${escapeHtml(cand.student_name)}
+            </h4>
+
             ${cand.notes ? `
-              <div style="font-size: 0.78rem; color: #475569; background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.06); padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 4px;" title="Admin Note: ${escapeHtml(cand.notes)}">
-                <i data-lucide="file-text" style="width: 12px; height: 12px; color: #64748b; flex-shrink: 0;"></i>
+              <div style="font-size: 0.76rem; color: #cbd5e1; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(6px);" title="Admin Note: ${escapeHtml(cand.notes)}">
+                <i data-lucide="file-text" style="width: 11px; height: 11px; color: #94a3b8; flex-shrink: 0;"></i>
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(cand.notes)}</span>
               </div>
             ` : ''}
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed rgba(0, 0, 0, 0.08);">
-            <div style="display: flex; align-items: baseline; gap: 4px;">
-              <span style="font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1;">${cand.total_points}</span>
-              <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">แต้ม ⭐</span>
-            </div>
-            <div style="display: flex; gap: 6px;">
-              <button type="button" class="dg-btn-outline" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 6px 8px; font-size: 0.78rem; background: #fff; border-radius: 8px;" title="แก้ไขรูปโปรไฟล์ / โน้ต">
-                <i data-lucide="edit-3" style="width: 13px; height: 13px;"></i>
+
+            <!-- Glassmorphic Action Buttons -->
+            <div style="display: flex; gap: 6px; width: 100%; margin-top: 2px; align-items: center;">
+              <button type="button" onclick="openAdjustPointsModal(${cand.id})" style="flex: 1; padding: 9px 12px; font-size: 0.82rem; font-weight: 700; border-radius: 10px; background: rgba(16, 185, 129, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); display: inline-flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; transition: all 0.18s ease;" title="บันทึกแต้ม / ตัดแต้ม">
+                <i data-lucide="plus-circle" style="width: 14px; height: 14px; color: #fff;"></i> <span>ปรับแต้ม</span>
               </button>
-              <button type="button" class="dg-btn-outline" onclick="openAdjustPointsModal(${cand.id})" style="padding: 6px 12px; font-size: 0.8rem; background: #fff; border-radius: 8px;" title="ให้หรือตัดแต้ม">
-                <i data-lucide="plus-circle" style="width: 14px; height: 14px; color: #10b981;"></i> <span>ปรับแต้ม</span>
+              <button type="button" onclick="openPointLogsModal(${cand.id})" style="padding: 9px 11px; border-radius: 10px; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.28); color: #ffffff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.18s ease;" title="ดูประวัติแต้ม">
+                <i data-lucide="history" style="width: 14px; height: 14px;"></i>
+              </button>
+              <button type="button" onclick="openEditYear70CandidateModal(${cand.id})" style="padding: 9px 11px; border-radius: 10px; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.28); color: #c7d2fe; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.18s ease;" title="แก้ไขรูปโปรไฟล์ / โน้ต">
+                <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
               </button>
             </div>
+
           </div>
+
         </div>
       `;
     });
