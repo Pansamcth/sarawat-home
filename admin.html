@@ -746,6 +746,8 @@
       box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
     }
 
+    #tabBtnDsd[style*="inline-flex"],
+    #tabBtnDsd[style*="flex"],
     #tabBtnDiscordBot[style*="inline-flex"],
     #tabBtnDiscordBot[style*="flex"],
     #tabBtnAdminUsers[style*="inline-flex"],
@@ -3392,12 +3394,7 @@
             <span>จัดการคณะทำงาน</span>
           </div>
         </button>
-        <button type="button" class="admin-tab-btn" data-tab="tab-dsd">
-          <div class="admin-tab-btn-content">
-            <i data-lucide="terminal"></i>
-            <span>ฝ่ายพัฒนาระบบดิจิทัล (DSD)</span>
-          </div>
-        </button>
+
 
         <!-- หมวดหมู่ที่ 2: งานรับสมัคร & รับเรื่อง -->
         <div class="admin-nav-group-title" style="margin-top: 8px;">งานรับสมัคร & รับเรื่อง</div>
@@ -3431,6 +3428,13 @@
             <i data-lucide="sliders"></i>
             <span>เวลาปฏิบัติหน้าที่ & ตั้งค่า</span>
           </div>
+        </button>
+        <button type="button" class="admin-tab-btn" id="tabBtnDsd" data-tab="tab-dsd" style="display: none;">
+          <div class="admin-tab-btn-content">
+            <i data-lucide="terminal"></i>
+            <span>ฝ่ายพัฒนาระบบดิจิทัล (DSD)</span>
+          </div>
+          <span class="admin-role-badge super" style="font-size: 0.62rem; padding: 1px 6px;">👑 Super</span>
         </button>
         <button type="button" class="admin-tab-btn" id="tabBtnDiscordBot" data-tab="tab-discord" style="display: none;">
           <div class="admin-tab-btn-content">
@@ -4121,7 +4125,7 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
         <!-- Database settings card removed (configured centrally via cloudflare-config.js) -->
         <!-- Page Access Control / Feature Flags (Maintenance Mode) -->
-        <div class="admin-card" style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+        <div class="admin-card" id="cardPageAccessSettings" style="grid-column: 1 / -1; border-color: #cbd5e1; box-shadow: 0 4px 20px rgba(0,0,0,0.03); display: none;">
           <div class="admin-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
@@ -8875,13 +8879,30 @@
         tabBtnSystemMonitor.style.display = isSuper ? 'inline-flex' : 'none';
       }
 
-      // If regular admin is on tab-admins or tab-backup, switch to tab-news
+      // DSD Tab Button for Super Admin only
+      const tabBtnDsd = document.getElementById('tabBtnDsd');
+      if (tabBtnDsd) {
+        tabBtnDsd.style.display = isSuper ? 'inline-flex' : 'none';
+      }
+
+      // Feature Flags / Maintenance Mode Card in Settings Tab for Super Admin only
+      const cardPageAccess = document.getElementById('cardPageAccessSettings');
+      if (cardPageAccess) {
+        cardPageAccess.style.display = isSuper ? 'block' : 'none';
+      }
+
+      // If regular admin is on super admin tabs (admins, backup, system-monitor, discord, dsd), switch to tab-news
       if (!isSuper) {
         const adminsPane = document.getElementById('tab-admins');
         const backupPane = document.getElementById('tab-backup');
         const monPane = document.getElementById('tab-system-monitor');
         const discordPane = document.getElementById('tab-discord');
-        if ((adminsPane && adminsPane.classList.contains('active')) || (backupPane && backupPane.classList.contains('active')) || (monPane && monPane.classList.contains('active')) || (discordPane && discordPane.classList.contains('active'))) {
+        const dsdPane = document.getElementById('tab-dsd');
+        if ((adminsPane && adminsPane.classList.contains('active')) || 
+            (backupPane && backupPane.classList.contains('active')) || 
+            (monPane && monPane.classList.contains('active')) || 
+            (discordPane && discordPane.classList.contains('active')) ||
+            (dsdPane && dsdPane.classList.contains('active'))) {
           const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
           if (newsTabBtn) newsTabBtn.click();
         }
@@ -14821,6 +14842,13 @@
             } else if (paneId === 'tab-team' && typeof loadTeamAdmin === 'function') {
               loadTeamAdmin();
             } else if (paneId === 'tab-dsd' && typeof loadDsdAdmin === 'function') {
+              const role = (window.currentAdminUser && window.currentAdminUser.role) || (window.SarawatApi && window.SarawatApi.getCurrentUser && window.SarawatApi.getCurrentUser()?.role) || localStorage.getItem('dg_sarawat_admin_role') || '';
+              const isSuper = (role === 'superadmin' || role === 'super_admin' || role === 'SUPER_ADMIN' || role === 'super' || role === 'Super Admin');
+              if (!isSuper) {
+                const defaultNews = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
+                if (defaultNews) defaultNews.click();
+                return;
+              }
               loadDsdAdmin();
             } else if (paneId === 'tab-feedbacks') {
               renderAdminFeedbacks();
