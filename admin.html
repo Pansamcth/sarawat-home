@@ -3136,6 +3136,12 @@
       box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.45), 0 0 25px rgba(59, 130, 246, 0.2) !important;
       border-color: rgba(255, 255, 255, 0.35) !important;
     }
+    .year70-podium-photo-wrap img {
+      transition: transform 0.35s ease !important;
+    }
+    .year70-podium-card:hover .year70-podium-photo-wrap img {
+      transform: scale(1.06) !important;
+    }
     .year70-candidate-block:hover img {
       transform: scale(1.05) !important;
     }
@@ -6089,7 +6095,7 @@
       </div>
 
       <!-- Top 3 Podium Highlights -->
-      <div id="year70PodiumContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 24px;">
+      <div id="year70PodiumContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 16px; margin-bottom: 24px;">
         <!-- Dynamically rendered top 3 cards -->
       </div>
 
@@ -15378,7 +15384,7 @@
   <script src="js/admin-team.js?v=2.7.8"></script>
   <script src="js/admin-recruitment.js?v=2.7.14"></script>
   <script src="js/admin-dsd.js?v=2.2.0"></script>
-  <script src="js/admin-year70.js?v=1.2.0"></script>
+  <script src="js/admin-year70.js?v=1.3.0"></script>
 </body>
 
 </html>
