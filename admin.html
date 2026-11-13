@@ -8445,6 +8445,44 @@
       username: '',
       role: 'Admin' // 'Super Admin' | 'Admin'
     };
+    window.currentAdminUser = currentAdminUser;
+
+    function isCurrentSuperAdmin() {
+      try {
+        const checkRole = (r) => {
+          if (!r) return false;
+          const s = String(r).trim().toLowerCase();
+          return s === 'super admin' || s === 'superadmin' || s === 'super_admin' || s === 'super';
+        };
+
+        if (window.currentAdminUser && checkRole(window.currentAdminUser.role)) return true;
+        if (typeof currentAdminUser !== 'undefined' && currentAdminUser && checkRole(currentAdminUser.role)) return true;
+        
+        const apiUser = (window.SarawatApi && typeof window.SarawatApi.getAuthUser === 'function') ? window.SarawatApi.getAuthUser() : null;
+        if (apiUser && checkRole(apiUser.role)) return true;
+
+        const sessUser = sessionStorage.getItem('sarawat_admin_user');
+        if (sessUser) {
+          try {
+            const parsed = JSON.parse(sessUser);
+            if (parsed && checkRole(parsed.role)) return true;
+          } catch (e) {}
+        }
+
+        const localUser = localStorage.getItem('dg_sarawat_auth_user');
+        if (localUser) {
+          try {
+            const parsed = JSON.parse(localUser);
+            if (parsed && checkRole(parsed.role)) return true;
+          } catch (e) {}
+        }
+
+        const storedRole = localStorage.getItem('dg_sarawat_admin_role') || sessionStorage.getItem('dg_sarawat_admin_role');
+        if (checkRole(storedRole)) return true;
+      } catch (e) {}
+      return false;
+    }
+    window.isCurrentSuperAdmin = isCurrentSuperAdmin;
 
     function getLocalAdmins() {
       try {
@@ -8468,6 +8506,7 @@
     }
 
     function enterAdminDashboard() {
+      window.currentAdminUser = currentAdminUser;
       document.body.classList.remove('is-auth-locked');
       document.body.classList.add('is-authenticated');
       const overlay = document.getElementById('pinOverlay');
@@ -8510,6 +8549,7 @@
               username: authCheck.user.username || 'Admin',
               role: authCheck.user.role || 'Admin'
             };
+            window.currentAdminUser = currentAdminUser;
             sessionStorage.setItem('sarawat_admin_auth', 'true');
             sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
             enterAdminDashboard();
@@ -8544,8 +8584,10 @@
             username: userObj.username || 'Admin',
             role: userObj.role || 'Admin'
           };
+          window.currentAdminUser = currentAdminUser;
         } catch (e) {
           currentAdminUser = { username: 'Admin', role: 'Admin' };
+          window.currentAdminUser = currentAdminUser;
         }
         enterAdminDashboard();
         return;
@@ -8801,6 +8843,7 @@
       if (authenticatedUser) {
         if (adminLoginLockoutTimer) clearInterval(adminLoginLockoutTimer);
         currentAdminUser = authenticatedUser;
+        window.currentAdminUser = currentAdminUser;
         sessionStorage.setItem('sarawat_admin_auth', 'true');
         sessionStorage.setItem('sarawat_admin_user', JSON.stringify(currentAdminUser));
 
@@ -8839,7 +8882,13 @@
 
     // Role-Based UI Permissions
     function applyRolePermissions(role, username) {
-      const isSuper = (role === 'Super Admin');
+      const isSuper = (
+        role === 'Super Admin' ||
+        role === 'superadmin' ||
+        role === 'super_admin' ||
+        role === 'super' ||
+        (typeof isCurrentSuperAdmin === 'function' && isCurrentSuperAdmin())
+      );
 
       // Topbar Badge
       const roleBadge = document.getElementById('adminUserRoleBadge');
@@ -13162,15 +13211,7 @@
     // ==========================================
     // DISCORD BOT CUSTOM ACTIVITY / RICH PRESENCE CONTROLLER (CustomRP Engine with Image & Links)
     // ==========================================
-    function isCurrentSuperAdmin() {
-      try {
-        if (window.currentAdminUser && window.currentAdminUser.role === 'Super Admin') return true;
-        if (typeof currentAdminUser !== 'undefined' && currentAdminUser && currentAdminUser.role === 'Super Admin') return true;
-        const apiUser = (window.SarawatApi && typeof window.SarawatApi.getAuthUser === 'function') ? window.SarawatApi.getAuthUser() : null;
-        if (apiUser && apiUser.role === 'Super Admin') return true;
-      } catch (e) {}
-      return false;
-    }
+    // Note: Core isCurrentSuperAdmin is defined above in RBAC section and exported to window.isCurrentSuperAdmin
 
     let presenceElapsedTimerId = null;
     let presenceTimerSeconds = 142; // default starting preview elapsed seconds
@@ -14816,7 +14857,10 @@
           }
 
           document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-          document.querySelectorAll('.admin-pane').forEach(p => p.style.display = 'none');
+          document.querySelectorAll('.admin-pane').forEach(p => {
+            p.style.display = 'none';
+            p.classList.remove('active');
+          });
           btn.classList.add('active');
           if (btn.getAttribute('data-tab') !== 'tab-system-monitor' && typeof stopSystemMonitorPolling === 'function') {
             stopSystemMonitorPolling();
@@ -14825,6 +14869,7 @@
           if (paneId) {
             const pane = document.getElementById(paneId);
             if (pane) {
+              pane.classList.add('active');
               pane.style.display = 'block';
               pane.style.animation = 'none';
               void pane.offsetWidth; // trigger reflow
@@ -14841,15 +14886,16 @@
               renderAdminEvents();
             } else if (paneId === 'tab-team' && typeof loadTeamAdmin === 'function') {
               loadTeamAdmin();
-            } else if (paneId === 'tab-dsd' && typeof loadDsdAdmin === 'function') {
-              const role = (window.currentAdminUser && window.currentAdminUser.role) || (window.SarawatApi && window.SarawatApi.getCurrentUser && window.SarawatApi.getCurrentUser()?.role) || localStorage.getItem('dg_sarawat_admin_role') || '';
-              const isSuper = (role === 'superadmin' || role === 'super_admin' || role === 'SUPER_ADMIN' || role === 'super' || role === 'Super Admin');
-              if (!isSuper) {
-                const defaultNews = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
-                if (defaultNews) defaultNews.click();
+            } else if (paneId === 'tab-dsd') {
+              if (typeof isCurrentSuperAdmin === 'function' && !isCurrentSuperAdmin()) {
+                showToast('เฉพาะ Super Admin เท่านั้นที่สามารถเข้าถึงระบบจัดการสมาชิกฝ่ายพัฒนาระบบดิจิทัล (DSD) ได้', 'warning');
+                const newsTabBtn = document.querySelector('.admin-tab-btn[data-tab="tab-news"]');
+                if (newsTabBtn) newsTabBtn.click();
                 return;
               }
-              loadDsdAdmin();
+              if (typeof loadDsdAdmin === 'function') {
+                loadDsdAdmin();
+              }
             } else if (paneId === 'tab-feedbacks') {
               renderAdminFeedbacks();
             } else if (paneId === 'tab-recruitment' && typeof loadRecruitmentAdmin === 'function') {

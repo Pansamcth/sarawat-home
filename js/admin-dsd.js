@@ -105,11 +105,31 @@
   function isSuperAdmin() {
     try {
       if (typeof isCurrentSuperAdmin === 'function') return isCurrentSuperAdmin();
-      if (window.currentAdminUser && window.currentAdminUser.role === 'Super Admin') return true;
+      if (typeof window.isCurrentSuperAdmin === 'function') return window.isCurrentSuperAdmin();
+      const checkRole = (r) => {
+        if (!r) return false;
+        const s = String(r).trim().toLowerCase();
+        return s === 'super admin' || s === 'superadmin' || s === 'super_admin' || s === 'super';
+      };
+      if (window.currentAdminUser && checkRole(window.currentAdminUser.role)) return true;
       const apiUser = (window.SarawatApi && typeof window.SarawatApi.getAuthUser === 'function') ? window.SarawatApi.getAuthUser() : null;
-      if (apiUser && apiUser.role === 'Super Admin') return true;
+      if (apiUser && checkRole(apiUser.role)) return true;
+      const sess = sessionStorage.getItem('sarawat_admin_user');
+      if (sess) {
+        try {
+          const p = JSON.parse(sess);
+          if (p && checkRole(p.role)) return true;
+        } catch (e) {}
+      }
+      const authU = localStorage.getItem('dg_sarawat_auth_user');
+      if (authU) {
+        try {
+          const p = JSON.parse(authU);
+          if (p && checkRole(p.role)) return true;
+        } catch (e) {}
+      }
       const storedRole = localStorage.getItem('dg_sarawat_admin_role');
-      if (storedRole === 'Super Admin') return true;
+      if (checkRole(storedRole)) return true;
     } catch (e) {}
     return false;
   }
@@ -1002,6 +1022,7 @@
     });
     renderDsdAdminUI();
   };
+  window.setDsdStatusFilter = window.handleDsdFilter;
 
   // Init on DOM ready
   document.addEventListener('DOMContentLoaded', () => {
