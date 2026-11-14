@@ -606,16 +606,22 @@
       return await res.json();
     },
 
-    // อัปโหลดไฟล์รูปภาพ (บันทึกลงโฟลเดอร์ uploads ของเซิร์ฟเวอร์จริง ไม่เปลือง Quota localStorage)
-    uploadImage: async function (file) {
+    // อัปโหลดไฟล์รูปภาพแยกตามหมวดหมู่ (บันทึกลงโฟลเดอร์ uploads/<category> ของเซิร์ฟเวอร์จริง)
+    uploadImage: async function (file, category = 'news') {
       const base = this.getBaseUrl();
       if (!base) throw new Error('เซิร์ฟเวอร์ยังไม่ได้เชื่อมต่อ ไม่สามารถอัปโหลดไฟล์ได้');
+      const safeCat = encodeURIComponent(String(category || 'news').trim());
       const formData = new FormData();
+      formData.append('category', category || 'news');
       formData.append('image', file);
 
-      const res = await fetch(`${base}/api/upload`, {
+      const headers = Object.assign({}, this.getAuthHeaders(), {
+        'X-Upload-Category': category || 'news'
+      });
+
+      const res = await fetch(`${base}/api/upload?category=${safeCat}`, {
         method: 'POST',
-        headers: this.getAuthHeaders(),
+        headers: headers,
         body: formData
       });
 
@@ -623,7 +629,7 @@
         const errJson = await res.json().catch(() => ({}));
         throw new Error(errJson.error || `อัปโหลดไม่สำเร็จ (HTTP ${res.status})`);
       }
-      return await res.json(); // { success: true, url: '/uploads/activity_xxx.jpg', ... }
+      return await res.json(); // { success: true, category: 'news', url: '/uploads/news/news_xxx.jpg', ... }
     },
 
     // ดึงตารางกิจกรรมปฏิทินโรงเรียน

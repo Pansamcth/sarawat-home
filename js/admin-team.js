@@ -755,7 +755,7 @@ async function handleImageSelect(id, target = 'default') {
   const file = fileInput.files[0];
 
   try {
-    const res = await window.SarawatApi.uploadImage(file);
+    const res = await window.SarawatApi.uploadImage(file, 'team');
     if (res && res.url) {
       let m = allMembers.find(x => x.id === id);
       if (!m) return;

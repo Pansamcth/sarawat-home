@@ -743,24 +743,27 @@
     const token = getAuthToken();
 
     const formData = new FormData();
+    formData.append('category', 'dsd');
     formData.append('image', file);
 
     const uploadStatus = document.getElementById('dsdUploadStatusText');
     if (uploadStatus) uploadStatus.textContent = 'กำลังอัปโหลดรูปภาพ...';
 
     try {
-      const res = await fetch(getApiBase() + '/api/upload', {
+      const res = await fetch(getApiBase() + '/api/upload?category=dsd', {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + token
+          'Authorization': 'Bearer ' + token,
+          'X-Upload-Category': 'dsd'
         },
         body: formData
       });
 
       const json = await res.json();
-      if (res.ok && json.success && json.imageUrl) {
-        document.getElementById('dsdMemberImageUrl').value = json.imageUrl;
-        let fullUrl = json.imageUrl;
+      const uploadedUrl = json.url || json.imageUrl;
+      if (res.ok && json.success && uploadedUrl) {
+        document.getElementById('dsdMemberImageUrl').value = uploadedUrl;
+        let fullUrl = uploadedUrl;
         if (fullUrl.startsWith('/')) fullUrl = getApiBase() + fullUrl;
         const preview = document.getElementById('dsdMemberImagePreview');
         if (preview) {

@@ -5503,9 +5503,25 @@
           </div>
         </div>
         <div class="admin-card-body">
-          <p style="font-size: 0.88rem; color: #475569; line-height: 1.6; margin-bottom: 16px;">
-            ระบบจะสร้างไฟล์ <code>.zip</code> ที่ประกอบด้วยฐานข้อมูลสมบูรณ์ (<code>sarawat.db</code>), โฟลเดอร์รูปภาพ (<code>uploads/</code>), และล็อกความปลอดภัยทั้งหมด (<code>logs/</code>) พร้อมบันทึก <strong>IP Address</strong> ของผู้ดำเนินการอย่างเคร่งครัด
+          <p style="font-size: 0.88rem; color: #475569; line-height: 1.6; margin-bottom: 12px;">
+            ระบบจะสร้างไฟล์ <code>.zip</code> แยกตามหมวดหมู่การสั่งงาน (<code>backups/scheduled/</code>, <code>backups/manual/</code>, <code>backups/startup/</code>) โดยภายในประกอบด้วยฐานข้อมูลสมบูรณ์ (<code>sarawat.db</code>), โฟลเดอร์รูปภาพแยกตามระบบงาน (<code>uploads/news/</code>, <code>uploads/year70-candidates/</code>, <code>uploads/dsd/</code>, <code>uploads/team/</code>, ฯลฯ) และล็อกความปลอดภัยดิบ 100% (<code>logs/</code>)
           </p>
+
+          <!-- Backup Category Filter Pills -->
+          <div id="serverBackupCategoryFilters" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+            <button type="button" class="backup-cat-filter-btn active" data-cat="ALL" onclick="filterBackupCategory('ALL')" style="padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; border: 1px solid #2563eb; background: #2563eb; color: #fff; cursor: pointer;">
+              📁 ทั้งหมด (<span id="backupCatCount_ALL">0</span>)
+            </button>
+            <button type="button" class="backup-cat-filter-btn" data-cat="manual" onclick="filterBackupCategory('manual')" style="padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">
+              👑 กดสำรองเอง / Console (<span id="backupCatCount_manual">0</span>)
+            </button>
+            <button type="button" class="backup-cat-filter-btn" data-cat="scheduled" onclick="filterBackupCategory('scheduled')" style="padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">
+              ⏰ อัตโนมัติทุก 6 ชม. (<span id="backupCatCount_scheduled">0</span>)
+            </button>
+            <button type="button" class="backup-cat-filter-btn" data-cat="startup" onclick="filterBackupCategory('startup')" style="padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; border: 1px solid #cbd5e1; background: #fff; color: #334155; cursor: pointer;">
+              🚀 ตอนเปิดระบบ (<span id="backupCatCount_startup">0</span>)
+            </button>
+          </div>
 
           <!-- Backup Archives Table -->
           <div style="border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; margin-bottom: 20px; overflow: hidden;">
@@ -10793,21 +10809,27 @@
         if (!desc) throw new Error('กรุณาระบุรายละเอียดกิจกรรม');
 
         const fileInput = document.getElementById('adminNewsImgFile');
-        if (fileInput && fileInput.files && fileInput.files[0] && currentNewsImageState?.mode === 'upload') {
-          let fileToUpload = fileInput.files[0];
+        const pendingUploadFile = (fileInput && fileInput.files && fileInput.files[0])
+          ? fileInput.files[0]
+          : (currentNewsImageState?.isCustom && currentNewsImageState?.file ? currentNewsImageState.file : null);
+
+        if (pendingUploadFile && currentNewsImageState?.mode === 'upload') {
+          let fileToUpload = pendingUploadFile;
           if (submitBtn) submitBtn.innerHTML = '<span>กำลังประมวลผลรูปภาพ...</span>';
-          try {
-            const comp = await compressImageFile(fileInput.files[0]);
-            if (comp && comp.file) fileToUpload = comp.file;
-            if (comp && comp.base64) img = comp.base64;
-          } catch (cErr) {
-            console.warn('Compression error:', cErr);
+          if (fileInput && fileInput.files && fileInput.files[0]) {
+            try {
+              const comp = await compressImageFile(fileInput.files[0]);
+              if (comp && comp.file) fileToUpload = comp.file;
+              if (comp && comp.base64) img = comp.base64;
+            } catch (cErr) {
+              console.warn('Compression error:', cErr);
+            }
           }
 
           if (window.SarawatApi && typeof window.SarawatApi.uploadImage === 'function' && window.SarawatApi.getBaseUrl()) {
             if (submitBtn) submitBtn.innerHTML = '<span>กำลังอัปโหลดรูปภาพไปยังเซิร์ฟเวอร์...</span>';
             try {
-              const upRes = await window.SarawatApi.uploadImage(fileToUpload);
+              const upRes = await window.SarawatApi.uploadImage(fileToUpload, 'news');
               if (upRes && upRes.url) {
                 img = upRes.url;
               }
@@ -12154,7 +12176,46 @@
 
     let allAuditLogs = [];
     let currentAuditLogPage = 1;
+    let currentBackupCategoryFilter = 'ALL';
     const AUDIT_LOGS_PER_PAGE = 10;
+
+    function getBackupItemCategory(b) {
+      if (b.category && ['manual', 'scheduled', 'startup'].includes(b.category)) return b.category;
+      const t = String(b.triggerType || '').toUpperCase();
+      if (t.includes('MANUAL') || t.includes('CONSOLE') || t.includes('TEST')) return 'manual';
+      if (t.includes('STARTUP')) return 'startup';
+      return 'scheduled';
+    }
+
+    function updateBackupCategoryFilterCounts() {
+      const counts = { ALL: allBackupFiles.length, manual: 0, scheduled: 0, startup: 0 };
+      allBackupFiles.forEach(b => {
+        const cat = getBackupItemCategory(b);
+        if (counts[cat] !== undefined) counts[cat]++;
+      });
+      ['ALL', 'manual', 'scheduled', 'startup'].forEach(cat => {
+        const el = document.getElementById('backupCatCount_' + cat);
+        if (el) el.textContent = counts[cat] || 0;
+      });
+      document.querySelectorAll('.backup-cat-filter-btn').forEach(btn => {
+        const isAct = btn.getAttribute('data-cat') === currentBackupCategoryFilter;
+        btn.style.background = isAct ? '#2563eb' : '#fff';
+        btn.style.color = isAct ? '#fff' : '#334155';
+        btn.style.borderColor = isAct ? '#2563eb' : '#cbd5e1';
+        btn.style.fontWeight = isAct ? '700' : '600';
+      });
+    }
+
+    function filterBackupCategory(cat) {
+      currentBackupCategoryFilter = cat || 'ALL';
+      updateBackupCategoryFilterCounts();
+      renderBackupFilesPage(1);
+    }
+
+    function getFilteredBackupFiles() {
+      if (currentBackupCategoryFilter === 'ALL') return allBackupFiles;
+      return allBackupFiles.filter(b => getBackupItemCategory(b) === currentBackupCategoryFilter);
+    }
 
     function renderBackupFilesPage(page = 1) {
       const tbody = document.getElementById('serverBackupsTableBody');
@@ -12164,12 +12225,14 @@
       const btnContainer = document.getElementById('serverBackupPageButtons');
       if (!tbody) return;
 
-      const totalItems = allBackupFiles.length;
+      updateBackupCategoryFilterCounts();
+      const filteredFiles = getFilteredBackupFiles();
+      const totalItems = filteredFiles.length;
       const totalPages = Math.max(1, Math.ceil(totalItems / BACKUPS_PER_PAGE));
       currentBackupPage = Math.min(Math.max(1, page), totalPages);
 
       if (totalItems === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">ยังไม่มีไฟล์สำรองข้อมูลในระบบ (กดปุ่ม "สั่งสำรองข้อมูลทันที" ด้านบน)</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#64748b;">ไม่พบไฟล์สำรองข้อมูลในหมวดหมู่นี้</td></tr>';
         if (meta) meta.textContent = 'แสดง 0 รายการ';
         if (btnPrev) btnPrev.disabled = true;
         if (btnNext) btnNext.disabled = true;
@@ -12179,20 +12242,26 @@
 
       const start = (currentBackupPage - 1) * BACKUPS_PER_PAGE;
       const end = Math.min(start + BACKUPS_PER_PAGE, totalItems);
-      const pageItems = allBackupFiles.slice(start, end);
+      const pageItems = filteredFiles.slice(start, end);
 
       tbody.innerHTML = pageItems.map(b => {
         const dlUrl = window.SarawatApi.getBackupDownloadUrl(b.filename);
-        const isManual = b.triggerType && b.triggerType.includes('MANUAL');
-        const typeBadge = isManual
-          ? `<span style="background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-weight:700;">${escapeHtml(b.triggerType)}</span>`
-          : `<span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px; font-weight:600;">${escapeHtml(b.triggerType || 'AUTO')}</span>`;
+        const cat = getBackupItemCategory(b);
+        let typeBadge = '';
+        if (cat === 'manual') {
+          typeBadge = `<span style="background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:4px; font-weight:700; font-size:0.75rem;">👑 ${escapeHtml(b.triggerType || 'MANUAL')}</span>`;
+        } else if (cat === 'startup') {
+          typeBadge = `<span style="background:#f3e8ff; color:#6b21a8; padding:2px 8px; border-radius:4px; font-weight:700; font-size:0.75rem;">🚀 ${escapeHtml(b.triggerType || 'STARTUP')}</span>`;
+        } else {
+          typeBadge = `<span style="background:#e0f2fe; color:#0369a1; padding:2px 8px; border-radius:4px; font-weight:600; font-size:0.75rem;">⏰ ${escapeHtml(b.triggerType || 'SCHEDULED_6H')}</span>`;
+        }
+        const folderBadge = `<span style="background:#f1f5f9; color:#475569; padding:1px 6px; border-radius:4px; font-size:0.72rem; margin-right:4px; border:1px solid #cbd5e1;">${escapeHtml(cat)}/</span>`;
 
         return `
           <tr style="border-bottom: 1px solid #f1f5f9;">
             <td style="padding: 10px 14px; font-weight: 600; color: #0f172a; font-family: monospace;">
               <i data-lucide="file-archive" style="width:14px; height:14px; vertical-align:middle; color:#3b82f6;"></i>
-              ${escapeHtml(b.filename)}
+              ${folderBadge}${escapeHtml(b.filename)}
             </td>
             <td style="padding: 10px 14px; color: #334155;">${b.sizeMb} MB</td>
             <td style="padding: 10px 14px; color: #64748b;">${escapeHtml(b.localTime || b.createdAt)}</td>
@@ -12259,7 +12328,8 @@
     }
 
     function changeBackupPage(page) {
-      const totalPages = Math.max(1, Math.ceil(allBackupFiles.length / BACKUPS_PER_PAGE));
+      const filteredFiles = getFilteredBackupFiles();
+      const totalPages = Math.max(1, Math.ceil(filteredFiles.length / BACKUPS_PER_PAGE));
       if (page < 1 || page > totalPages) return;
       renderBackupFilesPage(page);
     }

@@ -917,13 +917,15 @@
     if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">⏳ กำลังอัปโหลดและประมวลผลรูปภาพ...</span>';
 
     const formData = new FormData();
+    formData.append('category', 'year70-candidates');
     formData.append('image', file);
 
     try {
-      const res = await fetch(`${getApiBase()}/api/upload`, {
+      const res = await fetch(`${getApiBase()}/api/upload?category=year70-candidates`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'X-Upload-Category': 'year70-candidates'
         },
         body: formData
       });
@@ -1320,13 +1322,15 @@
     if (statusEl) statusEl.innerHTML = '<span style="color: #64748b;">⏳ กำลังอัปโหลดหลักฐาน...</span>';
 
     const formData = new FormData();
+    formData.append('category', 'year70-evidence');
     formData.append('image', file);
 
     try {
-      const res = await fetch(`${getApiBase()}/api/upload`, {
+      const res = await fetch(`${getApiBase()}/api/upload?category=year70-evidence`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'X-Upload-Category': 'year70-evidence'
         },
         body: formData
       });
